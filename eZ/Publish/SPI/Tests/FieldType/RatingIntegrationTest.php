@@ -58,7 +58,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezsrrating',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Rating(),
+            new Legacy\Content\FieldValue\Converter\RatingConverter(),
             new FieldType\NullStorage()
         );
     }

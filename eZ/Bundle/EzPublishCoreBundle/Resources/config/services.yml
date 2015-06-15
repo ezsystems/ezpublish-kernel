@@ -8,7 +8,14 @@ parameters:
     ezpublish.controller.base.class: eZ\Publish\Core\MVC\Symfony\Controller\Controller
     ezpublish.controller.content.view.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController
     ezpublish.controller.content.preview.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController
+    ezpublish.controller.content.download.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\DownloadController
     ezpublish.controller.page.view.class: eZ\Bundle\EzPublishCoreBundle\Controller\PageController
+
+    # Param converters
+    ezpublish.param_converter.content.class: eZ\Bundle\EzPublishCoreBundle\Converter\ContentParamConverter
+    ezpublish.param_converter.content.priority: -2
+    ezpublish.param_converter.location.class: eZ\Bundle\EzPublishCoreBundle\Converter\LocationParamConverter
+    ezpublish.param_converter.location.priority: -2
 
     # FragmentRenderer overrides
     ezpublish.decorated_fragment_renderer.inline.class: eZ\Bundle\EzPublishCoreBundle\Fragment\InlineFragmentRenderer
@@ -23,8 +30,7 @@ services:
     # Siteaccess is injected in the container at runtime
     ezpublish.siteaccess:
         class: %ezpublish.siteaccess.class%
-        arguments: [%ezpublish.siteaccess.default.name%]
-        synchronized: true
+        arguments: [%ezpublish.siteaccess.default.name%, 'uninitialized']
 
     ezpublish.config.resolver.core:
         class: %ezpublish.config.resolver.dynamic.class%
@@ -55,7 +61,7 @@ services:
         class: %ezpublish.controller.content.view.class%
         arguments:
             - @ezpublish.view_manager
-            - @security.context
+            - @security.authorization_checker
         parent: ezpublish.controller.base
 
     ezpublish.controller.content.preview.core:
@@ -64,12 +70,19 @@ services:
             - @ezpublish.api.service.content
             - @http_kernel
             - @ezpublish.content_preview_helper
-            - @security.context
-        calls:
-            - [setRequest, [@?request=]]
+            - @security.authorization_checker
+            - @ezpublish.content_preview.location_provider
 
     ezpublish.controller.content.preview:
         alias: ezpublish.controller.content.preview.core
+
+    ezpublish.controller.content.download:
+        class: %ezpublish.controller.content.download.class%
+        arguments:
+            - @ezpublish.api.service.content
+            - @ezpublish.fieldType.ezbinaryfile.io_service
+            - @ezpublish.translation_helper
+        parent: ezpublish.controller.base
 
     ezpublish.controller.page.view:
         class: %ezpublish.controller.page.view.class%
@@ -78,7 +91,7 @@ services:
         scope: request
 
     # This alias allows easier management for subrequests
-    # {{ render( controller( "ez_content:viewLocation", {"locationId": 123, "viewMode": "line"} ) ) }
+    # {{ render( controller( "ez_content:viewLocation", {"locationId": 123, "viewType": "line"} ) ) }
     ez_content:
         alias: ezpublish.controller.content.view
 
@@ -107,7 +120,7 @@ services:
         class: %ezpublish.fragment_listener.factory.class%
         arguments: [%fragment.path%]
         calls:
-            - [setRequest, [@?request=]]
+            - [setRequestStack, [@request_stack]]
 
     ezpublish.decorated_fragment_renderer:
         class: %ezpublish.decorated_fragment_renderer.class%
@@ -117,3 +130,18 @@ services:
             - [setFragmentPath, [%fragment.path%]]
             - [setSiteAccess, [@ezpublish.siteaccess]]
         abstract: true
+
+    ezpublish.param_converter.content:
+        class: %ezpublish.param_converter.content.class%
+        arguments:
+            - @ezpublish.api.service.content
+        tags:
+            - { name: request.param_converter, priority: %ezpublish.param_converter.content.priority%, converter: ez_content_converter }
+
+    ezpublish.param_converter.location:
+        class: %ezpublish.param_converter.location.class%
+        arguments:
+            - @ezpublish.api.service.location
+        tags:
+            - { name: request.param_converter, priority: %ezpublish.param_converter.location.priority%, converter: ez_location_converter }
+

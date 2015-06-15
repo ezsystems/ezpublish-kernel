@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentPreviewHelper class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -9,28 +9,16 @@
 
 namespace eZ\Publish\Core\Helper;
 
-use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\LocationService;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use eZ\Publish\Core\Repository\Values\Content\Location;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ContentPreviewHelper implements SiteAccessAware
 {
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
-    protected $contentService;
-
-    /**
-     * @var \eZ\Publish\API\Repository\LocationService
-     */
-    protected $locationService;
-
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
@@ -42,22 +30,23 @@ class ContentPreviewHelper implements SiteAccessAware
     protected $originalSiteAccess;
 
     /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     * @var bool
      */
-    private $configResolver;
+    private $previewActive = false;
 
-    public function __construct(
-        ContentService $contentService,
-        LocationService $locationService,
-        EventDispatcherInterface $eventDispatcher,
-        ConfigResolverInterface $configResolver
-    )
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private $previewedContent;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Location
+     */
+    private $previewedLocation;
+
+    public function __construct( EventDispatcherInterface $eventDispatcher )
     {
-        $this->contentService = $contentService;
-        $this->locationService = $locationService;
-
         $this->eventDispatcher = $eventDispatcher;
-        $this->configResolver = $configResolver;
     }
 
     public function setSiteAccess( SiteAccess $siteAccess = null )
@@ -104,38 +93,50 @@ class ContentPreviewHelper implements SiteAccessAware
     }
 
     /**
-     * Returns a valid Location object for $contentId.
-     * Will either load mainLocationId (if available) or build a virtual Location object.
-     *
-     * @param mixed $contentId
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location|null Null when content does not have location
+     * @return boolean
      */
-    public function getPreviewLocation( $contentId )
+    public function isPreviewActive()
     {
-        // contentInfo must be reloaded as content is not published yet (e.g. no mainLocationId)
-        $contentInfo = $this->contentService->loadContentInfo( $contentId );
-        // mainLocationId already exists, content has been published at least once.
-        if ( $contentInfo->mainLocationId )
-        {
-            $location = $this->locationService->loadLocation( $contentInfo->mainLocationId );
-        }
-        // New Content, never published, create a virtual location object.
-        else
-        {
-            // @todo In future releases this will be a full draft location when this feature
-            // is implemented. Or it might return null when content does not have location,
-            // but for now we can't detect that so we return a virtual draft location
-            $location = new Location(
-                array(
-                    // Faking using root locationId
-                    'id' => $this->configResolver->getParameter( 'content.tree_root.location_id' ),
-                    'contentInfo' => $contentInfo,
-                    'status' => Location::STATUS_DRAFT
-                )
-            );
-        }
+        return $this->previewActive;
+    }
 
-        return $location;
+    /**
+     * @param boolean $previewActive
+     */
+    public function setPreviewActive( $previewActive )
+    {
+        $this->previewActive = (bool)$previewActive;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    public function getPreviewedContent()
+    {
+        return $this->previewedContent;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $previewedContent
+     */
+    public function setPreviewedContent( Content $previewedContent)
+    {
+        $this->previewedContent = $previewedContent;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     */
+    public function getPreviewedLocation()
+    {
+        return $this->previewedLocation;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $previewedLocation
+     */
+    public function setPreviewedLocation( Location $previewedLocation )
+    {
+        $this->previewedLocation = $previewedLocation;
     }
 }

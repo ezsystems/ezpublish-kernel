@@ -41,8 +41,7 @@ services:
 
     ezpublish.persistence.field_type_registry:
         class: %ezpublish.persistence.field_type_registry.class%
-        factory_service: ezpublish.persistence.field_type_registry.factory
-        factory_method: buildFieldTypeRegistry
+        factory: ["@ezpublish.persistence.field_type_registry.factory", buildFieldTypeRegistry]
         arguments:
             - %ezpublish.persistence.field_type_registry.class%
             - @ezpublish.field_type_collection.factory
@@ -54,8 +53,7 @@ services:
 
     ezpublish.persistence.external_storage_registry:
         class: %ezpublish.persistence.external_storage_registry.class%
-        factory_service: ezpublish.persistence.external_storage_registry.factory
-        factory_method: buildExternalStorageRegistry
+        factory: ["@ezpublish.persistence.external_storage_registry.factory", buildExternalStorageRegistry]
         arguments:
             - %ezpublish.persistence.external_storage_registry.class%
 

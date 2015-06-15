@@ -77,9 +77,6 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
                 ->cannotBeEmpty()
                 ->info( 'Directory where binary files (from ezbinaryfile field type) are stored. Default value is "original"' )
             ->end()
-            ->booleanNode( 'legacy_mode' )
-                ->info( 'Whether to use legacy mode or not. If true, will let the legacy kernel handle url aliases.' )
-            ->end()
             // @deprecated since 5.3. Will be removed in 6.x.
             ->scalarNode( 'session_name' )
                 ->info( 'DEPRECATED. Use session.name instead.' )
@@ -148,11 +145,6 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
             $this->addDatabaseConfigSuggestion( $currentScope, $scopeSettings['database'] );
         if ( isset( $scopeSettings['repository'] ) )
             $contextualizer->setContextualParameter( 'repository', $currentScope, $scopeSettings['repository'] );
-        if ( isset( $scopeSettings['legacy_mode'] ) )
-        {
-            $contextualizer->setContextualParameter( 'legacy_mode', $currentScope, $scopeSettings['legacy_mode'] );
-            $contextualizer->setContextualParameter( 'url_alias_router', $currentScope, !$scopeSettings['legacy_mode'] );
-        }
         if ( isset( $scopeSettings['cache_pool_name'] ) )
             $contextualizer->setContextualParameter( 'cache_pool_name', $currentScope, $scopeSettings['cache_pool_name'] );
         if ( isset( $scopeSettings['var_dir'] ) )
@@ -258,7 +250,16 @@ EOT
                 ),
                 'ezpublish' => array(
                     'repositories' => array(
-                        'my_repository' => array( 'engine' => 'legacy', 'connection' => 'default' )
+                        'my_repository' => array(
+                            'storage' => array(
+                                'engine' => 'legacy',
+                                'connection' => 'default',
+                            ),
+                            'search' => array(
+                                'engine' => 'legacy',
+                                'connection' => 'default',
+                            ),
+                        ),
                     ),
                     'system' => array(
                         $sa => array(

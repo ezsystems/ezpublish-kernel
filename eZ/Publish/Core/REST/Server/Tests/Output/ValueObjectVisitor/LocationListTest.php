@@ -54,7 +54,7 @@ class LocationListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLocationListElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'LocationList',
             ),
@@ -73,7 +73,7 @@ class LocationListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLocationListAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'LocationList',
                 'attributes' => array(

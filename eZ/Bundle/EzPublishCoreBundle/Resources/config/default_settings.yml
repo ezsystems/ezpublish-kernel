@@ -17,7 +17,6 @@ parameters:
     ezpublish.session_name.default: "eZSESSID{siteaccess_hash}"
     ezsettings.default.session_name: %ezpublish.session_name.default%    # Using "{siteaccess_hash}" in session name makes it unique per siteaccess
     ezsettings.default.session: { name: %ezpublish.session_name.default% } # Session options that will override options from framework
-    ezsettings.default.legacy_mode: false
     ezsettings.default.url_alias_router: true                       # Use UrlAliasRouter by default
     ezsettings.default.index_page: ~                    # The page to show when accessing IndexPage (/)
     ezsettings.default.default_page: ~                  # The default page to show, e.g. after user login this will be used for default redirection
@@ -35,7 +34,7 @@ parameters:
     ezsettings.default.io.binarydata_handler: "default"
     ezsettings.default.io.url_prefix: "$var_dir$/$storage_dir$"
     ezsettings.default.io.legacy_url_prefix: "$var_dir$/$storage_dir$"
-    ezsettings.default.io.root_dir: "%ezpublish_legacy.root_dir%/$var_dir$/$storage_dir$"
+    ezsettings.default.io.root_dir: "%webroot_dir%/$var_dir$/$storage_dir$"
 
     # Content settings
     ezsettings.default.content.view_cache: true         # Whether to use content view cache or not (Etag/Last-Modified based)
@@ -107,9 +106,15 @@ parameters:
     ezsettings.default.field_templates:
         - {template: EzPublishCoreBundle::content_fields.html.twig, priority: 0}
 
+    # Templates for Field edition. Follows the same structure than for field_templates
+    ezsettings.default.field_edit_templates: []
+
     # Templates to use while rendering field definition settings
     ezsettings.default.fielddefinition_settings_templates:
         - {template: EzPublishCoreBundle::fielddefinition_settings.html.twig, priority: 0}
+
+    # Templates for FieldDefinition edition. Follows the same structure than for field_templates
+    ezsettings.default.fielddefinition_edit_templates: []
 
     # Security settings
     ezsettings.default.security.login_template: "EzPublishCoreBundle:Security:login.html.twig"

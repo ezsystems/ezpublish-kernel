@@ -14,7 +14,7 @@ use eZ\Publish\SPI\FieldType\Indexable;
 use eZ\Publish\SPI\Search;
 
 /**
- * Indexable definition for TextLine field type
+ * Indexable definition for Integer field type
  */
 class SearchField implements Indexable
 {
@@ -46,5 +46,20 @@ class SearchField implements Indexable
         return array(
             'value' => new Search\FieldType\IntegerField(),
         );
+    }
+
+    /**
+     * Get name of the default field to be used for query and sort.
+     *
+     * As field types can index multiple fields (see MapLocation field type's
+     * implementation of this interface), this method is used to define default
+     * field for query and sort. Default field is typically used by Field
+     * criterion and sort clause.
+     *
+     * @return string
+     */
+    public function getDefaultField()
+    {
+        return "value";
     }
 }

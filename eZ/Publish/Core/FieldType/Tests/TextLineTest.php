@@ -28,7 +28,7 @@ class TextLineTest extends FieldTypeTest
      * NOT take care for test case wide caching of the field type, just return
      * a new instance from this method!
      *
-     * @return FieldType
+     * @return \eZ\Publish\Core\FieldType\FieldType
      */
     protected function createFieldTypeUnderTest()
     {
@@ -53,7 +53,7 @@ class TextLineTest extends FieldTypeTest
                 ),
                 'maxStringLength' => array(
                     'type' => 'int',
-                    'default' => false
+                    'default' => null
                 )
             )
         );
@@ -72,7 +72,7 @@ class TextLineTest extends FieldTypeTest
     /**
      * Returns the empty value expected from the field type.
      *
-     * @return void
+     * @return \eZ\Publish\Core\FieldType\TextLine\Value
      */
     protected function getEmptyValueExpectation()
     {
@@ -331,7 +331,7 @@ class TextLineTest extends FieldTypeTest
             array(
                 array(
                     'StringLengthValidator' => array(
-                        'minStringLength' => false,
+                        'minStringLength' => null,
                     )
                 )
             ),
@@ -345,7 +345,7 @@ class TextLineTest extends FieldTypeTest
             array(
                 array(
                     'StringLengthValidator' => array(
-                        'maxStringLength' => false,
+                        'maxStringLength' => null,
                     )
                 )
             ),
@@ -609,7 +609,8 @@ class TextLineTest extends FieldTypeTest
                         "The string can not be shorter than %size% characters.",
                         array(
                             "size" => 5
-                        )
+                        ),
+                        'text'
                     ),
                 ),
             ),
@@ -629,7 +630,8 @@ class TextLineTest extends FieldTypeTest
                         "The string can not exceed %size% characters.",
                         array(
                             "size" => 10
-                        )
+                        ),
+                        'text'
                     ),
                 ),
             ),
@@ -649,14 +651,16 @@ class TextLineTest extends FieldTypeTest
                         "The string can not exceed %size% characters.",
                         array(
                             "size" => 5
-                        )
+                        ),
+                        'text'
                     ),
                     new ValidationError(
                         "The string can not be shorter than %size% character.",
                         "The string can not be shorter than %size% characters.",
                         array(
                             "size" => 10
-                        )
+                        ),
+                        'text'
                     ),
                 ),
             ),

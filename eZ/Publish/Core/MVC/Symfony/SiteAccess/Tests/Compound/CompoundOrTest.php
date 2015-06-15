@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests\Compound;
 
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound\LogicalOr;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
@@ -319,5 +320,18 @@ class CompoundOrTest extends PHPUnit_Framework_TestCase
         {
             $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher', $subMatcher );
         }
+    }
+
+    public function testSerialize()
+    {
+        $matcher = new LogicalOr( array() );
+        $matcher->setRequest( new SimplifiedRequest( array( 'pathinfo' => '/foo/bar' ) ) );
+        $sa = new SiteAccess( 'test', 'test', $matcher );
+        $serializedSA1 = serialize( $sa );
+
+        $matcher->setRequest( new SimplifiedRequest( array( 'pathinfo' => '/foo/bar/baz' ) ) );
+        $serializedSA2 = serialize( $sa );
+
+        $this->assertSame( $serializedSA1, $serializedSA2 );
     }
 }

@@ -24,7 +24,7 @@ use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterfac
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\TokenNotFoundException;
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 use Symfony\Component\Security\Http\Logout\LogoutHandlerInterface;
@@ -54,9 +54,9 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
     private $providerKey;
 
     /**
-     * @var \Symfony\Component\Security\Core\SecurityContextInterface
+     * @var \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface
      */
-    private $securityContext;
+    private $tokenStorage;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
@@ -79,7 +79,7 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
     private $logoutHandlers = array();
 
     public function __construct(
-        SecurityContextInterface $securityContext,
+        TokenStorageInterface $tokenStorage,
         AuthenticationManagerInterface $authenticationManager,
         $providerKey,
         EventDispatcherInterface $dispatcher,
@@ -88,7 +88,7 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
         LoggerInterface $logger = null
     )
     {
-        $this->securityContext = $securityContext;
+        $this->tokenStorage = $tokenStorage;
         $this->authenticationManager = $authenticationManager;
         $this->providerKey = $providerKey;
         $this->dispatcher = $dispatcher;
@@ -112,7 +112,7 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
     {
         // If a token already exists and username is the same as the one we request authentication for,
         // then return it and mark it as coming from session.
-        $previousToken = $this->securityContext->getToken();
+        $previousToken = $this->tokenStorage->getToken();
         if (
             $previousToken instanceof TokenInterface
             && $previousToken->getUsername() === $request->attributes->get( 'username' )
@@ -133,7 +133,7 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
             throw new TokenNotFoundException();
         }
 
-        $this->securityContext->setToken( $token );
+        $this->tokenStorage->setToken( $token );
         $this->dispatcher->dispatch(
             SecurityEvents::INTERACTIVE_LOGIN,
             new InteractiveLoginEvent( $request, $token )
@@ -142,7 +142,7 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
         // Re-fetch token from SecurityContext since an INTERACTIVE_LOGIN listener might have changed it
         // i.e. when using multiple user providers.
         // @see \eZ\Publish\Core\MVC\Symfony\Security\EventListener\SecurityListener::onInteractiveLogin()
-        $token = $this->securityContext->getToken();
+        $token = $this->tokenStorage->getToken();
         $user = $token->getUser();
         if ( !$user instanceof EzUser )
         {
@@ -159,7 +159,7 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
         // Check if newly logged in user differs from previous one.
         if ( $this->isUserConflict( $user, $previousToken ) )
         {
-            $this->securityContext->setToken( $previousToken );
+            $this->tokenStorage->setToken( $previousToken );
             throw new UserConflictException();
         }
 
@@ -204,6 +204,7 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
         }
 
         $wasAnonymous = $previousUser->getAPIUser()->id == $this->configResolver->getParameter( 'anonymous_user_id' );
+        // TODO: isEqualTo is not on the interface
         return ( !$wasAnonymous && !$user->isEqualTo( $previousUser ) );
     }
 
@@ -223,7 +224,7 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
         // See \eZ\Publish\Core\REST\Server\Security\RestLogoutHandler
         $this->sessionStorage->clear();
 
-        $token = $this->securityContext->getToken();
+        $token = $this->tokenStorage->getToken();
         foreach ( $this->logoutHandlers as $handler )
         {
             // Explicitly ignore SessionLogoutHandler as we do session invalidation manually here,

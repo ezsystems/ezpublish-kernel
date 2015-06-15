@@ -677,18 +677,15 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Returns field mapping data
-     *
-     * Returns an associative array with ContentType and FieldDefinition identifiers as
-     * first and second level keys respectively, and FieldDefinition ID as value.
+     * Returns searchable field mapping data
      *
      * @return array
      */
-    public function getFieldMap()
+    public function getSearchableFieldMapData()
     {
         try
         {
-            return $this->innerGateway->getFieldMap();
+            return $this->innerGateway->getSearchableFieldMapData();
         }
         catch ( DBALException $e )
         {

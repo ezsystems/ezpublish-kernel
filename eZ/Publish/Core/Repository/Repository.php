@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
 use Exception;
 use RuntimeException;
@@ -32,6 +33,13 @@ class Repository implements RepositoryInterface
      * @var \eZ\Publish\SPI\Persistence\Handler
      */
     protected $persistenceHandler;
+
+    /**
+     * Instance of main Search Handler
+     *
+     * @var \eZ\Publish\SPI\Search\Handler
+     */
+    protected $searchHandler;
 
     /**
      * Currently logged in user object for permission purposes
@@ -215,12 +223,19 @@ class Repository implements RepositoryInterface
      * Construct repository object with provided storage engine
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
+     * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param array $serviceSettings
      * @param \eZ\Publish\API\Repository\Values\User\User|null $user
      */
-    public function __construct( PersistenceHandler $persistenceHandler, array $serviceSettings = array(), User $user = null )
+    public function __construct(
+        PersistenceHandler $persistenceHandler,
+        SearchHandler $searchHandler,
+        array $serviceSettings = array(),
+        User $user = null
+    )
     {
         $this->persistenceHandler = $persistenceHandler;
+        $this->searchHandler = $searchHandler;
         $this->serviceSettings = $serviceSettings + array(
             'content' => array(),
             'contentType' => array(),
@@ -291,7 +306,7 @@ class Repository implements RepositoryInterface
      *
      * Example use:
      *     $location = $repository->sudo(
-     *         function ( $repo ) use ( $locationId )
+     *         function ( Repository $repo ) use ( $locationId )
      *         {
      *             return $repo->getLocationService()->loadLocation( $locationId )
      *         }
@@ -761,8 +776,8 @@ class Repository implements RepositoryInterface
 
         $this->searchService = new SearchService(
             $this,
-            $this->persistenceHandler->searchHandler(),
-            $this->persistenceHandler->locationSearchHandler(),
+            $this->searchHandler->contentSearchHandler(),
+            $this->searchHandler->locationSearchHandler(),
             $this->getDomainMapper(),
             $this->getPermissionsCriterionHandler(),
             $this->serviceSettings['search']

@@ -14,7 +14,7 @@ use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Time as TimeConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TimeConverter;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use PHPUnit_Framework_TestCase;
@@ -29,7 +29,7 @@ use DateTime;
 class TimeTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Time
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TimeConverter
      */
     protected $converter;
 
@@ -46,7 +46,7 @@ class TimeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Time::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TimeConverter::toStorageValue
      */
     public function testToStorageValue()
     {
@@ -62,7 +62,7 @@ class TimeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Time::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TimeConverter::toFieldValue
      */
     public function testToFieldValue()
     {
@@ -79,7 +79,7 @@ class TimeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Time::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TimeConverter::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinitionDefaultEmpty()
     {
@@ -103,7 +103,7 @@ class TimeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Time::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TimeConverter::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinitionDefaultCurrentTime()
     {
@@ -127,7 +127,7 @@ class TimeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Time::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TimeConverter::toFieldDefinition
      */
     public function testToFieldDefinitionDefaultEmpty()
     {
@@ -153,7 +153,7 @@ class TimeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Time::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TimeConverter::toFieldDefinition
      */
     public function testToFieldDefinitionDefaultCurrentTime()
     {

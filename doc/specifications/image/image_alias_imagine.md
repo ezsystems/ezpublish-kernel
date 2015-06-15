@@ -46,7 +46,7 @@ ezpublish:
 * `filters`: array of filter definitions (hashes containing `name` and `params` keys). See possible values below.
 
 ### Available filters
-In addition to [filters exposed by LiipImagineBundle](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/configuration.md),
+In addition to [filters exposed by LiipImagineBundle](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/configuration.rst),
 the following are available:
 
 | Filter name                  | Parameters                               | Description                                                                                        |
@@ -66,7 +66,7 @@ the following are available:
 | resize                       | {size: [width, height]}                  | Simple resize filter (provided by LiipImagineBundle).                                              |
 | colorspace/gray              | N/A                                      | Converts an image to grayscale.                                                                    |
 
-> *Tip:* It is possible to combine filters from the list above to [the ones provided in LiipImagineBundle](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/filters.md)
+> *Tip:* It is possible to combine filters from the list above to [the ones provided in LiipImagineBundle](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/filters.rst)
 and custom ones.
 
 ### Discarded filters
@@ -79,11 +79,11 @@ The following filters have been discarded due to incompatibility:
 * `colorspace`
 
 ### Custom filters
-Please refer to [LiipImagineBundle documentation on custom filters](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/filters.md#load-your-custom-filters).
+Please refer to [LiipImagineBundle documentation on custom filters](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/filters.rst#load-your-custom-filters).
 [Imagine library documentation](http://imagine.readthedocs.org/en/latest/) may also be useful ;-).
 
 ### Post-Processors
-LiipImagineBundle supports [post-processors on image aliases](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/filters.md#post-processors).
+LiipImagineBundle supports [post-processors on image aliases](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/filters.rst#post-processors).
 It is possible to specify them in image alias configuration:
 
 ```yaml
@@ -99,11 +99,11 @@ ezpublish:
                         jpegoptim: {}
 ```
 
-Please refer to [post-processors documentation in LiipImagineBundle](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/filters.md#post-processors) for details.
+Please refer to [post-processors documentation in LiipImagineBundle](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/filters.rst#post-processors) for details.
 
 ### Drivers
 LiipImagineBundle supports GD (default), Imagick and GMagick PHP extensions and only work on image blobs (no command line tool is needed).
-See the [bundle's documentation to learn more on that topic](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/configuration.md).
+See the [bundle's documentation to learn more on that topic](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/configuration.rst).
 
 ## Upgrade
 * Instantiate `LiipImagineBundle` in your kernel class

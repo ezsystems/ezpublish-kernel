@@ -604,15 +604,9 @@ class RoleService implements APIRoleService, Sessionable
     }
 
     /**
-     * Returns the roles assigned to the given user
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[]
+     * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUser()
      */
-    public function getRoleAssignmentsForUser( User $user )
+    public function getRoleAssignmentsForUser( User $user, $inherited = false )
     {
         $response = $this->client->request(
             'GET',

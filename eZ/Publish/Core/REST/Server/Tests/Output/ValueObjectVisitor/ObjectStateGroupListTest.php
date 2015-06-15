@@ -56,7 +56,7 @@ class ObjectStateGroupListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsObjectStateGroupListElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'ObjectStateGroupList',
             ),
@@ -75,7 +75,7 @@ class ObjectStateGroupListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsObjectStateGroupListAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'ObjectStateGroupList',
                 'attributes' => array(

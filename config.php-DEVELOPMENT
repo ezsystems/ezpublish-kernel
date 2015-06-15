@@ -12,9 +12,6 @@
  * @doc Copy this file to config.php to get started!
  */
 
-// Optional: only for development, comment in production
-error_reporting( E_ALL | E_STRICT );
-
 // Required: Settings bellow are runtime settings that needs to be set here, you can
 // optionally also override any other setting here.
 return array(
@@ -23,13 +20,5 @@ return array(
     // Path to the containerBuilder.php file used by service container
     'container_builder_path' => __DIR__ . "/eZ/Publish/Core/settings/containerBuilder.php",
     // The cache directory
-    'cache_dir' => __DIR__ . "/var/cache",
-
-    // The Legacy Kernel installation directory, detect legacy location
-    'legacy_dir' => (
-        is_dir( './ezpublish_legacy' ) ?
-            getcwd() . '/ezpublish_legacy' :
-            __DIR__ . '/vendor/ezsystems/ezpublish-legacy'
-    ),
-    'imagemagick_convert_path' => '/usr/bin/convert'
+    'cache_dir' => __DIR__ . "/var/cache"
 );

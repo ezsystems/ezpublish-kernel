@@ -72,7 +72,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRoleElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Role',
                 'children' => array(
@@ -94,7 +94,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRoleAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Role',
                 'attributes' => array(
@@ -117,7 +117,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsIdentifierValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'identifier',
                 'content'  => 'some-role'
@@ -138,7 +138,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
     public function testResultContainsMainLanguageCodeValueElement( $result )
     {
         $this->markTestSkipped( '@todo uncomment when support for multilingual names and descriptions is added' );
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'mainLanguageCode',
                 'content'  => 'eng-GB'
@@ -159,7 +159,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
     public function testResultContainsNamesElement( $result )
     {
         $this->markTestSkipped( '@todo uncomment when support for multilingual names and descriptions is added' );
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'names',
                 'children' => array(
@@ -182,7 +182,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
     public function testResultContainsDescriptionsElement( $result )
     {
         $this->markTestSkipped( '@todo uncomment when support for multilingual names and descriptions is added' );
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'descriptions',
                 'children' => array(
@@ -204,7 +204,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPoliciesElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Policies'
             ),
@@ -223,7 +223,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPoliciesAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Policies',
                 'attributes' => array(

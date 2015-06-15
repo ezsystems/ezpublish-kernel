@@ -13,7 +13,7 @@ use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country as CountryConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\CountryConverter;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use PHPUnit_Framework_TestCase;
@@ -24,7 +24,7 @@ use PHPUnit_Framework_TestCase;
 class CountryTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\CountryConverter
      */
     protected $converter;
 
@@ -46,7 +46,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group country
      * @dataProvider providerForTestToStorageValue
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\CountryConverter::toStorageValue
      */
     public function testToStorageValue( $data, $sortKey, $dataText, $sortKeyString )
     {
@@ -72,7 +72,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group country
      * @dataProvider providerForTestToFieldValue
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\CountryConverter::toFieldValue
      */
     public function testToFieldValue( $dataText, $sortKeyString, $data )
     {
@@ -88,7 +88,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group country
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\CountryConverter::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinitionMultiple()
     {
@@ -124,7 +124,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group country
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\CountryConverter::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinitionSingle()
     {
@@ -156,7 +156,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group country
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\CountryConverter::toFieldDefinition
      */
     public function testToFieldDefinitionMultiple()
     {
@@ -184,7 +184,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group country
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\CountryConverter::toFieldDefinition
      */
     public function testToFieldDefinitionSingle()
     {

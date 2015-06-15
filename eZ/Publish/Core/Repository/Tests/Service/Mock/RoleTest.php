@@ -52,7 +52,6 @@ class RoleTest extends BaseServiceMockTest
 
         $roleServiceMock = $this->getPartlyMockedRoleService( array( "loadRoleByIdentifier" ), $settings );
 
-
         $repository = $this->getRepositoryMock();
         /** @var \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStructMock */
         $roleCreateStructMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\User\\RoleCreateStruct" );

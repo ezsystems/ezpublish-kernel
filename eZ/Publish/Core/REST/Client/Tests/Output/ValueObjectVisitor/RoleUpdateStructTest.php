@@ -54,7 +54,7 @@ class RoleUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRoleInputElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'RoleInput',
                 'children' => array(
@@ -76,7 +76,7 @@ class RoleUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRoleInputAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'RoleInput',
                 'attributes' => array(
@@ -98,7 +98,7 @@ class RoleUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsIdentifierValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'identifier',
                 'content'  => 'some-role',

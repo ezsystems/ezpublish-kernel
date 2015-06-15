@@ -9,10 +9,16 @@ _ezpublishLocation:
 _ezpublishPreviewContent:
     path: /content/versionview/{contentId}/{versionNo}/{language}/site_access/{siteAccessName}
     defaults: { _controller: ezpublish.controller.content.preview:previewContentAction }
+    methods:  [GET]
 
 _ezpublishPreviewContentDefaultSa:
     path: /content/versionview/{contentId}/{versionNo}/{language}
     defaults: { _controller: ezpublish.controller.content.preview:previewContentAction }
+    methods:  [GET]
 
 _ez_user_hash:
     path: /_fos_user_context_hash
+
+ez_content_download:
+    path: /content/download/{contentId}/{fieldIdentifier}/{filename}
+    defaults: { _controller: ezpublish.controller.content.download:downloadBinaryFileAction }

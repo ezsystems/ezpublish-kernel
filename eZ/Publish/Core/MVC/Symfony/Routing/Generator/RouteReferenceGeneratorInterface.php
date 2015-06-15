@@ -9,20 +9,11 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 
-use Symfony\Component\HttpFoundation\Request;
-
 /**
  * Interface for RouteReference generators.
  */
 interface RouteReferenceGeneratorInterface
 {
-    /**
-     * Injects the current request.
-     *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     */
-    public function setRequest( Request $request = null );
-
     /**
      * Generates a RouteReference, based on the given resource and associated params.
      * If $resource is null, generated route reference will be based on current request's route and parameters.

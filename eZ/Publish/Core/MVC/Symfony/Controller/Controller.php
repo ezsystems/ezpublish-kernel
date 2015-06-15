@@ -101,7 +101,7 @@ abstract class Controller extends ContainerAware
      */
     public function getRequest()
     {
-        return $this->container->get( 'request' );
+        return $this->container->get( 'request_stack' )->getCurrentRequest();
     }
 
     /**
@@ -121,6 +121,6 @@ abstract class Controller extends ContainerAware
      */
     public function isGranted( AuthorizationAttribute $attribute )
     {
-        return $this->container->get( 'security.context' )->isGranted( $attribute );
+        return $this->container->get( 'security.authorization_checker' )->isGranted( $attribute );
     }
 }

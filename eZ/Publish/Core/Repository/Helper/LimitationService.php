@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Repository\Helper;
 
-
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;

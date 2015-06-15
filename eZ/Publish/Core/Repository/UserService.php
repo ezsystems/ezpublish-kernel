@@ -162,12 +162,14 @@ class UserService implements UserServiceInterface
      * Loads the sub groups of a user group
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
+     * @param int $offset the start offset for paging
+     * @param int $limit the number of user groups returned
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
-    public function loadSubUserGroups( APIUserGroup $userGroup )
+    public function loadSubUserGroups( APIUserGroup $userGroup, $offset = 0, $limit = 10 )
     {
         $locationService = $this->repository->getLocationService();
 
@@ -185,7 +187,9 @@ class UserService implements UserServiceInterface
         $searchResult = $this->searchSubGroups(
             $mainGroupLocation->id,
             $mainGroupLocation->sortField,
-            $mainGroupLocation->sortOrder
+            $mainGroupLocation->sortOrder,
+            $offset,
+            $limit
         );
         if ( $searchResult->totalCount == 0 )
             return array();
@@ -210,12 +214,12 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    protected function searchSubGroups( $locationId, $sortField = null, $sortOrder = Location::SORT_ORDER_ASC, $offset = 0, $limit = -1 )
+    protected function searchSubGroups( $locationId, $sortField = null, $sortOrder = Location::SORT_ORDER_ASC, $offset = 0, $limit = 10 )
     {
         $searchQuery = new Query();
 
-        $searchQuery->offset = $offset >= 0 ? (int)$offset : 0;
-        $searchQuery->limit = $limit >= 0 ? (int)$limit  : null;
+        $searchQuery->offset = $offset;
+        $searchQuery->limit = $limit;
 
         $searchQuery->filter = new CriterionLogicalAnd(
             array(
@@ -894,10 +898,12 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed read the user or user group
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param int $offset the start offset for paging
+     * @param int $limit the number of user groups returned
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
-    public function loadUserGroupsOfUser( APIUser $user )
+    public function loadUserGroupsOfUser( APIUser $user, $offset = 0, $limit = 10 )
     {
         $locationService = $this->repository->getLocationService();
 
@@ -917,8 +923,9 @@ class UserService implements UserServiceInterface
 
         $searchQuery = new Query();
 
-        $searchQuery->offset = 0;
-        $searchQuery->limit = null;
+        $searchQuery->offset = $offset;
+        $searchQuery->limit = $limit;
+        $searchQuery->performCount = false;
 
         $searchQuery->filter = new CriterionLogicalAnd(
             array(
@@ -944,12 +951,12 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param int $offset
-     * @param int $limit
+     * @param int $offset the start offset for paging
+     * @param int $limit the number of users returned
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersOfUserGroup( APIUserGroup $userGroup, $offset = 0, $limit = -1 )
+    public function loadUsersOfUserGroup( APIUserGroup $userGroup, $offset = 0, $limit = 10 )
     {
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
 
@@ -969,8 +976,9 @@ class UserService implements UserServiceInterface
             )
         );
 
-        $searchQuery->offset = $offset > 0 ? (int)$offset : 0;
-        $searchQuery->limit = $limit >= 1 ? (int)$limit : null;
+        $searchQuery->offset = $offset;
+        $searchQuery->limit = $limit;
+        $searchQuery->performCount = false;
 
         $searchQuery->sortClauses = array(
             $this->getSortClauseBySortField( $mainGroupLocation->sortField, $mainGroupLocation->sortOrder )

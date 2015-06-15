@@ -173,4 +173,14 @@ class FlysystemTest extends PHPUnit_Framework_TestCase
             $this->handler->getUri( 'prefix/my/file.png' )
         );
     }
+
+    public function testDeleteDirectory()
+    {
+        $this->filesystem
+            ->expects( $this->once() )
+            ->method( 'deleteDir' )
+            ->with( 'some/path' );
+
+        $this->handler->deleteDirectory( 'some/path' );
+    }
 }

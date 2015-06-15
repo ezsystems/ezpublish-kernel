@@ -11,45 +11,33 @@ namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use eZ\Publish\Core\FieldType\RichText\Type;
+use eZ\Publish\Core\FieldType\RichText\Converter;
+use DOMDocument;
 
 class RichTextProcessor extends FieldTypeProcessor
 {
     /**
-     * {@inheritDoc}
+     * @var \eZ\Publish\Core\FieldType\RichText\Converter
      */
-    public function preProcessFieldSettingsHash( $incomingSettingsHash )
+    protected $docbookToXhtml5EditConverter;
+
+    public function __construct( Converter $docbookToXhtml5EditConverter )
     {
-        if ( isset( $incomingSettingsHash["tagPreset"] ) )
-        {
-            switch ( $incomingSettingsHash["tagPreset"] )
-            {
-                case 'TAG_PRESET_DEFAULT':
-                    $incomingSettingsHash["tagPreset"] = Type::TAG_PRESET_DEFAULT;
-                    break;
-                case 'TAG_PRESET_SIMPLE_FORMATTING':
-                    $incomingSettingsHash["tagPreset"] = Type::TAG_PRESET_SIMPLE_FORMATTING;
-            }
-        }
-        return $incomingSettingsHash;
+        $this->docbookToXhtml5EditConverter = $docbookToXhtml5EditConverter;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function postProcessFieldSettingsHash( $outgoingSettingsHash )
+    public function postProcessValueHash( $outgoingValueHash )
     {
-        if ( isset( $outgoingSettingsHash["tagPreset"] ) )
-        {
-            switch ( $outgoingSettingsHash["tagPreset"] )
-            {
-                case Type::TAG_PRESET_DEFAULT:
-                    $outgoingSettingsHash["tagPreset"] = 'TAG_PRESET_DEFAULT';
-                    break;
-                case Type::TAG_PRESET_SIMPLE_FORMATTING:
-                    $outgoingSettingsHash["tagPreset"] = 'TAG_PRESET_SIMPLE_FORMATTING';
-            }
-        }
+        $document = new DOMDocument();
+        $document->loadXML( $outgoingValueHash["xml"] );
 
-        return $outgoingSettingsHash;
+        $outgoingValueHash["xhtml5edit"] = $this->docbookToXhtml5EditConverter
+            ->convert( $document )
+            ->saveXML();
+
+        return $outgoingValueHash;
     }
 }

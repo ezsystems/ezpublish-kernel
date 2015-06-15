@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author as AuthorConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\AuthorConverter;
 use PHPUnit_Framework_TestCase;
 use DOMDocument;
 
@@ -24,7 +24,7 @@ use DOMDocument;
 class AuthorTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\AuthorConverter
      */
     protected $converter;
 
@@ -51,7 +51,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\AuthorConverter::toStorageValue
      */
     public function testToStorageValue()
     {
@@ -87,7 +87,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\AuthorConverter::toFieldValue
      */
     public function testToFieldValue()
     {

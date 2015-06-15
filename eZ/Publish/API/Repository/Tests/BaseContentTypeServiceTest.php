@@ -98,7 +98,7 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $bodyFieldCreate->fieldSettings = array(
             'textRows' => 80
         );
-        $bodyFieldCreate->isSearchable = true;
+        $bodyFieldCreate->isSearchable = false;
 
         $typeCreate->addFieldDefinition( $bodyFieldCreate );
 

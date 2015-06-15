@@ -17,6 +17,7 @@ use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\API\Repository\LocationService;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * URLAlias controller
@@ -81,7 +82,7 @@ class URLAlias extends RestController
      *
      * @return \eZ\Publish\Core\REST\Server\Values\URLAliasRefList
      */
-    public function listLocationURLAliases( $locationPath )
+    public function listLocationURLAliases( $locationPath, Request $request )
     {
         $locationPathParts = explode( '/', $locationPath );
 
@@ -89,12 +90,12 @@ class URLAlias extends RestController
             array_pop( $locationPathParts )
         );
 
-        $custom = $this->request->query->has( 'custom' ) && $this->request->query->get( 'custom' ) === 'false' ? false : true;
+        $custom = $request->query->has( 'custom' ) && $request->query->get( 'custom' ) === 'false' ? false : true;
 
         return new Values\CachedValue(
             new Values\URLAliasRefList(
                 $this->urlAliasService->listLocationAliases( $location, $custom ),
-                $this->request->getPathInfo()
+                $request->getPathInfo()
             ),
             array( 'locationId' => $location->id )
         );
@@ -106,12 +107,12 @@ class URLAlias extends RestController
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedURLAlias
      */
-    public function createURLAlias()
+    public function createURLAlias( Request $request )
     {
         $urlAliasCreate = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                $this->request->getContent()
+                array( 'Content-Type' => $request->headers->get( 'Content-Type' ) ),
+                $request->getContent()
             )
         );
 

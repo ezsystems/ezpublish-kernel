@@ -63,7 +63,7 @@ class BuzzDriver implements DriverInterface
     /**
      * Get request
      *
-     * @return \Buzz\Message\Response
+     * @return \Buzz\Message\Request
      */
     protected function getRequest()
     {
@@ -165,7 +165,10 @@ class BuzzDriver implements DriverInterface
             $value = implode( ';', $value );
         }
 
-        $this->getRequest()->addHeader( "$header: $value" );
+        // Buzz can only add/append header, so we need to (re-)set all headers
+        $headers = $this->unFormatHeaders( $this->getRequest()->getHeaders() );
+        $headers[$header] = $value;
+        $this->getRequest()->setHeaders( $headers );
     }
 
     /**

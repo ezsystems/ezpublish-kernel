@@ -29,20 +29,31 @@ class ValidationError implements ValidationErrorInterface
     protected $plural;
 
     /**
-     * @var string
+     * @var array
      */
     protected $values;
+
+    /**
+     * Element on which the error occurred
+     * e.g. property name or property path compatible with Symfony PropertyAccess component.
+     *
+     * Example: StringLengthValidator[minStringLength]
+     *
+     * @var string
+     */
+    protected $target;
 
     /**
      * @param string $singular
      * @param string $plural
      * @param array $values
      */
-    public function __construct( $singular, $plural = null, array $values = array() )
+    public function __construct( $singular, $plural = null, array $values = array(), $target = null )
     {
         $this->singular = $singular;
         $this->plural = $plural;
         $this->values = $values;
+        $this->target = $target;
     }
 
     /**
@@ -67,5 +78,15 @@ class ValidationError implements ValidationErrorInterface
                 $this->values
             );
         }
+    }
+
+    public function setTarget( $target )
+    {
+        $this->target = $target;
+    }
+
+    public function getTarget()
+    {
+        return $this->target;
     }
 }

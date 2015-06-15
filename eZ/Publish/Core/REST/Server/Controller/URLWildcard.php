@@ -16,6 +16,7 @@ use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\API\Repository\URLWildcardService;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * URLWildcard controller
@@ -69,12 +70,12 @@ class URLWildcard extends RestController
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedURLWildcard
      */
-    public function createURLWildcard()
+    public function createURLWildcard( Request $request )
     {
         $urlWildcardCreate = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                $this->request->getContent()
+                array( 'Content-Type' => $request->headers->get( 'Content-Type' ) ),
+                $request->getContent()
             )
         );
 

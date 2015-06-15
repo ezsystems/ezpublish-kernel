@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-
 use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy as LegacySetupFactory;
 
 /**

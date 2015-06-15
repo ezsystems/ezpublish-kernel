@@ -111,7 +111,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRootElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array( 'tag' => 'Root' ),
             $result,
             'Invalid <Root> element.',
@@ -128,7 +128,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRootAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Root',
                 'attributes' => array(
@@ -146,7 +146,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'content'
             ),
@@ -161,7 +161,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'content',
                 'attributes' => array(
@@ -180,7 +180,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentByRemoteIdTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'contentByRemoteId'
             ),
@@ -195,7 +195,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentByRemoteIdTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'contentByRemoteId',
                 'attributes' => array(
@@ -214,7 +214,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTypesTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'contentTypes'
             ),
@@ -229,7 +229,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTypesTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'contentTypes',
                 'attributes' => array(
@@ -248,7 +248,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTypeByIdentifierTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'contentTypeByIdentifier'
             ),
@@ -263,7 +263,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTypeByIdentifierTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'contentTypeByIdentifier',
                 'attributes' => array(
@@ -282,7 +282,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTypeGroupsTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'contentTypeGroups'
             ),
@@ -297,7 +297,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTypeGroupsTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'contentTypeGroups',
                 'attributes' => array(
@@ -316,7 +316,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTypeGroupByIdentifierTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'contentTypeGroupByIdentifier'
             ),
@@ -331,7 +331,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTypeGroupByIdentifierTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'contentTypeGroupByIdentifier',
                 'attributes' => array(
@@ -350,7 +350,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUsersTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'users'
             ),
@@ -365,7 +365,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUsersTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'users',
                 'attributes' => array(
@@ -384,7 +384,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRolesTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'roles'
             ),
@@ -399,7 +399,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRolesTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'roles',
                 'attributes' => array(
@@ -418,7 +418,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRootLocationTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'rootLocation'
             ),
@@ -433,7 +433,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRootLocationTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'rootLocation',
                 'attributes' => array(
@@ -452,7 +452,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRootUserGroupTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'rootUserGroup'
             ),
@@ -467,7 +467,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRootUserGroupTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'rootUserGroup',
                 'attributes' => array(
@@ -486,7 +486,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRootMediaFolderTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'rootMediaFolder'
             ),
@@ -501,7 +501,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRootMediaFolderTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'rootMediaFolder',
                 'attributes' => array(
@@ -520,7 +520,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLocationByRemoteIdTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'locationByRemoteId'
             ),
@@ -535,7 +535,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLocationByRemoteIdTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'locationByRemoteId',
                 'attributes' => array(
@@ -554,7 +554,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLocationByPathTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'locationByPath'
             ),
@@ -569,7 +569,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLocationByPathTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'locationByPath',
                 'attributes' => array(
@@ -588,7 +588,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsTrashTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'trash'
             ),
@@ -603,7 +603,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsTrashTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'trash',
                 'attributes' => array(
@@ -622,7 +622,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSectionsTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'sections'
             ),
@@ -637,7 +637,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSectionTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'sections',
                 'attributes' => array(
@@ -656,7 +656,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsViewsTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'views'
             ),
@@ -671,7 +671,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsViewsTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'views',
                 'attributes' => array(
@@ -690,7 +690,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsObjectStateGroupsTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'objectStateGroups'
             ),
@@ -705,7 +705,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsObjectStateGroupsTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'objectStateGroups',
                 'attributes' => array(
@@ -724,7 +724,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsObjectStatesTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'objectStates'
             ),
@@ -739,7 +739,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsObjectStatesTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'objectStates',
                 'attributes' => array(
@@ -758,7 +758,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsGlobalUrlAliasesTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'globalUrlAliases'
             ),
@@ -773,7 +773,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsGlobalUrlAliasesTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'globalUrlAliases',
                 'attributes' => array(
@@ -792,7 +792,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUrlWildcardsTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'urlWildcards'
             ),
@@ -807,7 +807,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUrlWildcardsTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'urlWildcards',
                 'attributes' => array(
@@ -826,7 +826,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsCreateSessionTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'createSession'
             ),
@@ -841,7 +841,7 @@ class RootTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsCreateSessionTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'createSession',
                 'attributes' => array(

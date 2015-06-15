@@ -35,7 +35,7 @@ run() {
 download_and_run() {
     url="http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-$1.tar.gz"
     dir_name="elasticsearch-$1"
-    resources_dir="eZ/Publish/Core/Persistence/Elasticsearch/Content/Search/Resources"
+    resources_dir="eZ/Publish/Core/Search/Elasticsearch/Content/Resources"
 
     download $url
 
@@ -53,7 +53,7 @@ download_and_run() {
 
 check_version() {
     case $1 in
-        1.2.2|1.2.3|1.3.0|1.3.1|1.3.2|1.3.3|1.3.4|1.3.5|1.3.6|1.4.0|1.4.1);;
+        1.2.2|1.2.3|1.3.0|1.3.1|1.3.2|1.3.3|1.3.4|1.3.5|1.3.6|1.4.0|1.4.1|1.4.2);;
         *)
             echo "Sorry, $1 is not supported or not valid version."
             exit 1

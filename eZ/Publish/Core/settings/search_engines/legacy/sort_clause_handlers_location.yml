@@ -1,0 +1,50 @@
+parameters:
+    ezpublish.search.legacy.gateway.sort_clause_handler.location.id.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\SortClauseHandler\Location\Id
+    ezpublish.search.legacy.gateway.sort_clause_handler.location.depth.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\SortClauseHandler\Location\Depth
+    ezpublish.search.legacy.gateway.sort_clause_handler.location.path.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\SortClauseHandler\Location\Path
+    ezpublish.search.legacy.gateway.sort_clause_handler.location.is_main_location.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\SortClauseHandler\Location\IsMainLocation
+    ezpublish.search.legacy.gateway.sort_clause_handler.location.priority.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\SortClauseHandler\Location\Priority
+    ezpublish.search.legacy.gateway.sort_clause_handler.location.visibility.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\SortClauseHandler\Location\Visibility
+
+services:
+    # Note: services tagged with:
+    #  - ezpublish.search.legacy.gateway.sort_clause_handler.location
+    # are registered to this one using compilation pass
+    ezpublish.search.legacy.gateway.sort_clause_converter.location:
+        class: %ezpublish.search.legacy.gateway.sort_clause_converter.class%
+
+    ezpublish.search.legacy.gateway.sort_clause_handler.location.id:
+        parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
+        class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.id.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
+
+    ezpublish.search.legacy.gateway.sort_clause_handler.location.depth:
+        parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
+        class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.depth.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
+
+    ezpublish.search.legacy.gateway.sort_clause_handler.location.path:
+        parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
+        class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.path.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
+
+    ezpublish.search.legacy.gateway.sort_clause_handler.location.is_main_location:
+        parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
+        class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.is_main_location.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
+
+    ezpublish.search.legacy.gateway.sort_clause_handler.location.priority:
+        parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
+        class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.priority.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
+
+    ezpublish.search.legacy.gateway.sort_clause_handler.location.visibility:
+        parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
+        class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.visibility.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}

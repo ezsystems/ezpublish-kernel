@@ -12,6 +12,8 @@ namespace eZ\Publish\API\Repository\Tests\FieldType;
 use eZ\Publish\Core\FieldType\Media\Value as MediaValue;
 use eZ\Publish\Core\FieldType\Media\Type as MediaType;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
  * Integration test for use field type
@@ -19,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class MediaIntegrationTest extends FileBaseIntegrationTest
+class MediaIntegrationTest extends FileSearchBaseIntegrationTest
 {
     /**
      * Stores the loaded image path for copy test.
@@ -421,6 +423,56 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         return array(
             array(
                 $this->getValidCreationFieldData()
+            ),
+        );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return new MediaValue(
+            array(
+                'inputUri' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                'fileName' => 'blue-blue-blue-sindelfingen.jpg',
+                'fileSize' => filesize( $path ),
+            )
+        );
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return new MediaValue(
+            array(
+                'inputUri' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                'fileName' => 'icy-night-flower-binary.png',
+                'fileSize' => filesize( $path ),
+            )
+        );
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        $value = $this->getValidSearchValueOne();
+        return $value->fileName;
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        $value = $this->getValidSearchValueTwo();
+        return $value->fileName;
+    }
+
+    protected function getAdditionallyIndexedFieldData()
+    {
+        return array(
+            array(
+                "file_size",
+                $this->getValidSearchValueOne()->fileSize,
+                $this->getValidSearchValueTwo()->fileSize,
+            ),
+            array(
+                "mime_type",
+                "image/jpeg",
+                "image/png",
             ),
         );
     }

@@ -8,7 +8,6 @@
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection;
 
 use ArrayObject;
-use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

@@ -34,8 +34,6 @@ services:
     ezpublish.security.controller:
         class: %ezpublish.security.controller.class%
         arguments: [@templating, @ezpublish.config.resolver, @?form.csrf_provider]
-        calls:
-            - [setRequest, [@?request=]]
 
     ezpublish.security.login_listener:
         class: %ezpublish.security.login_listener.class%
@@ -43,7 +41,8 @@ services:
             - @ezpublish.api.repository
             - @ezpublish.config.resolver
             - @event_dispatcher
-            - @security.context
+            - @security.token_storage
+            - @security.authorization_checker
             - %fragment.path%
         tags:
             - { name: kernel.event_subscriber }

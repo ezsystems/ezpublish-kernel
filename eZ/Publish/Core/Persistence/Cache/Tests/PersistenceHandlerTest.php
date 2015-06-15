@@ -41,19 +41,6 @@ class PersistenceHandlerTest extends HandlerTest
     /**
      * Test that instance is of correct type
      *
-     * @covers eZ\Publish\Core\Persistence\Cache\Handler::searchHandler
-     */
-    public function testSearchHandler()
-    {
-        $this->loggerMock->expects( $this->never() )->method( $this->anything() );
-        $handler = $this->persistenceCacheHandler->searchHandler();
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Search\\Handler', $handler );
-        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Cache\\SearchHandler', $handler );
-    }
-
-    /**
-     * Test that instance is of correct type
-     *
      * @covers eZ\Publish\Core\Persistence\Cache\Handler::contentLanguageHandler
      */
     public function testLanguageHandler()

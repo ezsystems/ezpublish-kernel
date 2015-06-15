@@ -9,8 +9,12 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\User;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\Security\User\Provider;
+use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\Values\User\User;
 use PHPUnit_Framework_TestCase;
 
 class ProviderTest extends PHPUnit_Framework_TestCase
@@ -89,19 +93,73 @@ class ProviderTest extends PHPUnit_Framework_TestCase
 
     public function testRefreshUser()
     {
-        $apiUser = $this->getMock( 'eZ\Publish\API\Repository\Values\User\User' );
+        $userId = 123;
+        $apiUser = new User(
+            array(
+                'content' => new Content(
+                    array(
+                        'versionInfo' => new VersionInfo(
+                            array( 'contentInfo' => new ContentInfo( array( 'id' => $userId ) ) )
+                        )
+                    )
+                )
+            )
+        );
+        $refreshedAPIUser = clone $apiUser;
+        $user = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\Security\UserInterface' );
+        $user
+            ->expects( $this->once() )
+            ->method( 'getAPIUser' )
+            ->will( $this->returnValue( $apiUser ) );
+        $user
+            ->expects( $this->once() )
+            ->method( 'setAPIUser' )
+            ->with( $refreshedAPIUser );
+
+        $this->userService
+            ->expects( $this->once() )
+            ->method( 'loadUser' )
+            ->with( $userId )
+            ->will( $this->returnValue( $refreshedAPIUser ) );
+
+        $this->repository
+            ->expects( $this->once() )
+            ->method( 'setCurrentUser' )
+            ->with( $refreshedAPIUser );
+
+        $this->assertSame( $user, $this->userProvider->refreshUser( $user ) );
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
+     */
+    public function testRefreshUserNotFound()
+    {
+        $userId = 123;
+        $apiUser = new User(
+            array(
+                'content' => new Content(
+                    array(
+                        'versionInfo' => new VersionInfo(
+                            array( 'contentInfo' => new ContentInfo( array( 'id' => $userId ) ) )
+                        )
+                    )
+                )
+            )
+        );
         $user = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\Security\UserInterface' );
         $user
             ->expects( $this->once() )
             ->method( 'getAPIUser' )
             ->will( $this->returnValue( $apiUser ) );
 
-        $this->repository
+        $this->userService
             ->expects( $this->once() )
-            ->method( 'setCurrentUser' )
-            ->with( $apiUser );
+            ->method( 'loadUser' )
+            ->with( $userId )
+            ->will( $this->throwException( new NotFoundException( 'user', 'foo' ) ) );
 
-        $this->assertSame( $user, $this->userProvider->refreshUser( $user ) );
+        $this->userProvider->refreshUser( $user );
     }
 
     /**

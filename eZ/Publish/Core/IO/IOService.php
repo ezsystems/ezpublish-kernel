@@ -7,19 +7,18 @@
  */
 namespace eZ\Publish\Core\IO;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Exception;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
 use eZ\Publish\Core\IO\Exception\IOException;
+use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\MimeTypeDetector;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\IO\MetadataHandler;
-use Exception;
 
 /**
  * The io service for managing binary files
@@ -28,22 +27,15 @@ use Exception;
  */
 class IOService implements IOServiceInterface
 {
-    /** @var IOBinaryDataHandler */
+    /** @var \eZ\Publish\Core\IO\IOBinarydataHandler */
     protected $binarydataHandler;
 
-    /** @var IOMetadataHandler */
+    /** @var \eZ\Publish\Core\IO\IOMetadataHandler */
     protected $metadataHandler;
 
-    /** @var MimeTypeDetector */
+    /** @var \eZ\Publish\SPI\IO\MimeTypeDetector */
     protected $mimeTypeDetector;
 
-    /**
-     * Setups service with reference to repository object that created it & corresponding handler
-     *
-     * @param IOMetadataHandler $metadataHandler
-     * @param IOBinarydataHandler $binarydataHandler
-     * @param array $settings
-     */
     public function __construct(
         IOMetadataHandler $metadataHandler,
         IOBinarydataHandler $binarydataHandler,
@@ -62,15 +54,6 @@ class IOService implements IOServiceInterface
         $this->settings['prefix'] = $prefix;
     }
 
-    /**
-     * Creates a BinaryFileCreateStruct object from the uploaded file $uploadedFile
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException When given an invalid uploaded file
-     *
-     * @param array $uploadedFile The $_POST hash of an uploaded file
-     *
-     * @return \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct
-     */
     public function newBinaryCreateStructFromUploadedFile( array $uploadedFile )
     {
         if ( !is_string( $uploadedFile['tmp_name'] ) || empty( $uploadedFile['tmp_name'] ) )
@@ -91,15 +74,6 @@ class IOService implements IOServiceInterface
         return $binaryCreateStruct;
     }
 
-    /**
-     * Creates a BinaryFileCreateStruct object from $localFile
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException When $localFile doesn't exist/can't be read
-     *
-     * @param string $localFile Path to local file
-     *
-     * @return \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct
-     */
     public function newBinaryCreateStructFromLocalFile( $localFile )
     {
         if ( empty( $localFile ) || !is_string( $localFile ) )
@@ -123,15 +97,6 @@ class IOService implements IOServiceInterface
         return $binaryCreateStruct;
     }
 
-    /**
-     * Creates a binary file in the repository
-     *
-     * @param \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct $binaryFileCreateStruct
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
-     *
-     * @return \eZ\Publish\Core\IO\Values\BinaryFile The created BinaryFile object
-     */
     public function createBinaryFile( BinaryFileCreateStruct $binaryFileCreateStruct )
     {
         if ( empty( $binaryFileCreateStruct->id ) || !is_string( $binaryFileCreateStruct->id ) )
@@ -170,14 +135,6 @@ class IOService implements IOServiceInterface
         return $this->buildDomainBinaryFileObject( $spiBinaryFile );
     }
 
-    /**
-     * Deletes $binaryFile
-     *
-     * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
-     *
-     * @throws InvalidArgumentValue If the binary file is invalid
-     * @throws BinaryFileNotFoundException If the binary file isn't found
-     */
     public function deleteBinaryFile( BinaryFile $binaryFile )
     {
         $this->checkBinaryFileId( $binaryFile->id );
@@ -196,16 +153,6 @@ class IOService implements IOServiceInterface
         $this->binarydataHandler->delete( $spiUri );
     }
 
-    /**
-     * Loads the binary file with $binaryFileId
-     *
-     * @param string $binaryFileId
-     *
-     * @return BinaryFile|bool the file, or false if it doesn't exist
-     *
-     * @throws BinaryFileNotFoundException If no file identified by $binaryFileId exists
-     * @throws InvalidBinaryFileIdException
-     */
     public function loadBinaryFile( $binaryFileId )
     {
         $this->checkBinaryFileId( $binaryFileId );
@@ -232,15 +179,6 @@ class IOService implements IOServiceInterface
         );
     }
 
-    /**
-     * Returns a read (mode: rb) file resource to $binaryFile
-     *
-     * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
-     *
-     * @throws InvalidBinaryFileIdException
-     *
-     * @return resource
-     */
     public function getFileInputStream( BinaryFile $binaryFile )
     {
         $this->checkBinaryFileId( $binaryFile->id );
@@ -250,15 +188,6 @@ class IOService implements IOServiceInterface
         );
     }
 
-    /**
-     * Returns the content of the binary file
-     *
-     * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
-     *
-     * @throws InvalidBinaryFileIdException
-
-     * @return string
-     */
     public function getFileContents( BinaryFile $binaryFile )
     {
         $this->checkBinaryFileId( $binaryFile->id );
@@ -268,44 +197,21 @@ class IOService implements IOServiceInterface
         );
     }
 
-    /**
-     * Returns the internal, handler level path to $externalPath
-     * @param string $externalId
-     * @return string
-     */
     public function getInternalPath( $binaryFileId )
     {
         return $this->binarydataHandler->getUri( $this->getPrefixedUri( $binaryFileId ) );
     }
 
-    /**
-     * Returns the external path to $internalId
-     * @param string $internalId
-     * @return string
-     */
     public function getExternalPath( $internalId )
     {
         return $this->loadBinaryFileByUri( $internalId )->id;
     }
 
-    /**
-     * Returns the public HTTP uri for $binaryFileId
-     * @param string $binaryFileId
-     * @return string
-     */
     public function getUri( $binaryFileId )
     {
         return $this->binarydataHandler->getUri( $binaryFileId );
     }
 
-    /**
-     * Gets the mime-type of the BinaryFile
-     *
-     * Example: text/xml
-     *
-     * @param string $binaryFileId
-     * @return string|null
-     */
     public function getMimeType( $binaryFileId )
     {
         return $this->metadataHandler->getMimeType( $this->getPrefixedUri( $binaryFileId ) );
@@ -400,5 +306,17 @@ class IOService implements IOServiceInterface
         {
             throw new InvalidBinaryFileIdException( $binaryFileId );
         }
+    }
+
+    /**
+     * Deletes a directory.
+     *
+     * @param string $path
+     */
+    public function deleteDirectory( $path )
+    {
+        $prefixedUri = $this->getPrefixedUri( $path );
+        $this->metadataHandler->deleteDirectory( $prefixedUri );
+        $this->binarydataHandler->deleteDirectory( $prefixedUri );
     }
 }

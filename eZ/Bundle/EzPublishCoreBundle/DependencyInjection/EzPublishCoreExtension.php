@@ -80,6 +80,8 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $loader->load( 'services.yml' );
         // Security services
         $loader->load( 'security.yml' );
+        // Slots
+        $loader->load( 'slot.yml' );
         // Default settings
         $loader->load( 'default_settings.yml' );
         $this->registerRepositoriesConfiguration( $config, $container );
@@ -243,18 +245,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
                 )
             );
         }
-
-        // Define additional routes that are allowed with legacy_mode: true.
-        if ( isset( $config['router']['default_router']['legacy_aware_routes'] ) )
-        {
-            $container->setParameter(
-                'ezpublish.default_router.legacy_aware_routes',
-                array_merge(
-                    $container->getParameter( 'ezpublish.default_router.legacy_aware_routes' ),
-                    $config['router']['default_router']['legacy_aware_routes']
-                )
-            );
-        }
     }
 
     /**
@@ -277,6 +267,9 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $coreLoader->load( 'storage_engines/common.yml' );
         $coreLoader->load( 'storage_engines/cache.yml' );
         $coreLoader->load( 'storage_engines/legacy.yml' );
+        $coreLoader->load( 'storage_engines/shortcuts.yml' );
+        $coreLoader->load( 'search_engines/common.yml' );
+        $coreLoader->load( 'search_engines/shortcuts.yml' );
         $coreLoader->load( 'utils.yml' );
         $coreLoader->load( 'io.yml' );
 
@@ -394,12 +387,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         // First build the SiteAccess relation map, indexed by repository and rootLocationId.
         foreach ( $saList as $sa )
         {
-            // Exclude siteaccesses in legacy_mode (e.g. admin interface)
-            if ( $configResolver->getParameter( 'legacy_mode', 'ezsettings', $sa ) === true )
-            {
-                continue;
-            }
-
             $repository = $configResolver->getParameter( 'repository', 'ezsettings', $sa );
             if ( !isset( $saRelationMap[$repository] ) )
             {
@@ -418,11 +405,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         // Now build the related SiteAccesses list, based on the relation map.
         foreach ( $saList as $sa )
         {
-            if ( $configResolver->getParameter( 'legacy_mode', 'ezsettings', $sa ) === true )
-            {
-                continue;
-            }
-
             $repository = $configResolver->getParameter( 'repository', 'ezsettings', $sa );
             $rootLocationId = $configResolver->getParameter( 'content.tree_root.location_id', 'ezsettings', $sa );
             $container->setParameter(

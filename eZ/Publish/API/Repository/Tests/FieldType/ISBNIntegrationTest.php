@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class ISBNIntegrationTest extends BaseIntegrationTest
+class ISBNIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
      * Get name of tested field type
@@ -342,5 +342,15 @@ class ISBNIntegrationTest extends BaseIntegrationTest
                 $this->getValidCreationFieldData()
             ),
         );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return "9780099067504";
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return "9780380448340";
     }
 }

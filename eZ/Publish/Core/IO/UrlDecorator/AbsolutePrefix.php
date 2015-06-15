@@ -8,7 +8,6 @@
  */
 namespace eZ\Publish\Core\IO\UrlDecorator;
 
-use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
 use eZ\Publish\Core\IO\UrlDecorator;
 
 /**

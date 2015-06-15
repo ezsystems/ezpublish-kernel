@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
-use eZ\Publish\SPI\Search\Handler as SearchHandler;
+use eZ\Publish\SPI\Search\Content\Handler as SearchHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
@@ -39,13 +39,6 @@ class ContentUpdater
     protected $converterRegistry;
 
     /**
-     * Search handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler
-     */
-    protected $searchHandler;
-
-    /**
      * Storage handler
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
@@ -60,20 +53,17 @@ class ContentUpdater
     /**
      * Creates a new content updater
      *
-     * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
      */
     public function __construct(
-        SearchHandler $searchHandler,
         ContentGateway $contentGateway,
         Registry $converterRegistry,
         StorageHandler $storageHandler,
         ContentMapper $contentMapper )
     {
-        $this->searchHandler = $searchHandler;
         $this->contentGateway = $contentGateway;
         $this->converterRegistry = $converterRegistry;
         $this->storageHandler = $storageHandler;
@@ -152,11 +142,16 @@ class ContentUpdater
      */
     public function applyUpdates( $contentTypeId, array $actions )
     {
-        foreach ( $this->loadContentObjects( $contentTypeId ) as $contentInfo )
+        if ( empty( $actions ) )
+        {
+            return;
+        }
+
+        foreach ( $this->getContentIdsByContentTypeId( $contentTypeId ) as $contentId )
         {
             foreach ( $actions as $action )
             {
-                $action->apply( $contentInfo );
+                $action->apply( $contentId );
             }
         }
     }
@@ -166,24 +161,10 @@ class ContentUpdater
      *
      * @param mixed $contentTypeId
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo[]
+     * @return int[]
      */
-    protected function loadContentObjects( $contentTypeId )
+    protected function getContentIdsByContentTypeId( $contentTypeId )
     {
-        $result = $this->searchHandler->findContent(
-            new Query(
-                array(
-                    'filter' => new Criterion\ContentTypeId( $contentTypeId )
-                )
-            )
-        );
-
-        $contentInfo = array();
-        foreach ( $result->searchHits as $hit )
-        {
-            $contentInfo[] = $hit->valueObject;
-        }
-
-        return $contentInfo;
+        return $this->contentGateway->getContentIdsByContentTypeId( $contentTypeId );
     }
 }

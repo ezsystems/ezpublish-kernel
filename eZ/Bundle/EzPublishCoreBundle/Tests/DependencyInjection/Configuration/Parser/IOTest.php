@@ -109,11 +109,11 @@ class IOTest extends AbstractParserTestCase
 
         // Should have been defined & converted in ezdemo_site
         $this->assertContainerBuilderHasParameter(
-            "ezsettings.ezdemo_site.io.root_dir", "%ezpublish_legacy.root_dir%/var/ezdemo_site/storage"
+            "ezsettings.ezdemo_site.io.root_dir", "%webroot_dir%/var/ezdemo_site/storage"
         );
         // Should have been converted in default
         $this->assertContainerBuilderHasParameter(
-            "ezsettings.default.io.root_dir", "%ezpublish_legacy.root_dir%/var/storage"
+            "ezsettings.default.io.root_dir", "%webroot_dir%/var/storage"
         );
     }
 }

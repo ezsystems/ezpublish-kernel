@@ -33,8 +33,7 @@ class FragmentPass implements CompilerPassInterface
 
         $fragmentListenerDef = $container->findDefinition( 'fragment.listener' );
         $fragmentListenerDef
-            ->setFactoryService( 'ezpublish.fragment_listener.factory' )
-            ->setFactoryMethod( 'buildFragmentListener' )
+            ->setFactory( [ new Reference( 'ezpublish.fragment_listener.factory' ), 'buildFragmentListener' ] )
             ->addArgument( '%fragment.listener.class%' );
 
         // Looping over all fragment renderers to decorate them

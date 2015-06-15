@@ -58,7 +58,7 @@ class RoleAssignmentListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRoleListElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'RoleAssignmentList',
             ),
@@ -77,7 +77,7 @@ class RoleAssignmentListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUserRoleAssignmentListAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'RoleAssignmentList',
                 'attributes' => array(
@@ -162,7 +162,7 @@ class RoleAssignmentListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsGroupRoleAssignmentListAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'RoleAssignmentList',
                 'attributes' => array(

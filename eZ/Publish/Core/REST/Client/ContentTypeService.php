@@ -273,11 +273,11 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      *
      * The content type is created in the state STATUS_DRAFT.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create a content type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException In case when
      *         - array of content type groups does not contain at least one content type group
      *         - identifier or remoteId in the content type create struct already exists
      *         - there is a duplicate field identifier in the content type create struct
-     *         - content type create struct does not contain at least one field definition create struct
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
      *         if a field definition in the $contentTypeCreateStruct is not valid
      *

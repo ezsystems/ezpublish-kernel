@@ -1,0 +1,243 @@
+parameters:
+    # Criterion handler classes
+    ezpublish.search.legacy.gateway.criteria_converter.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter
+    ezpublish.search.legacy.gateway.criterion_handler.common.content_id.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\ContentId
+    ezpublish.search.legacy.gateway.criterion_handler.common.content_type_group_id.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\ContentTypeGroupId
+    ezpublish.search.legacy.gateway.criterion_handler.common.content_type_id.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\ContentTypeId
+    ezpublish.search.legacy.gateway.criterion_handler.common.content_type_identifier.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\ContentTypeIdentifier
+    ezpublish.search.legacy.gateway.criterion_handler.common.date_metadata.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\DateMetadata
+    ezpublish.search.legacy.gateway.criterion_handler.common.field.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\Field
+    ezpublish.search.legacy.gateway.criterion_handler.common.full_text.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FullText
+    ezpublish.search.legacy.gateway.criterion_handler.common.language_code.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\LanguageCode
+    ezpublish.search.legacy.gateway.criterion_handler.common.logical_and.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\LogicalAnd
+    ezpublish.search.legacy.gateway.criterion_handler.common.logical_not.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\LogicalNot
+    ezpublish.search.legacy.gateway.criterion_handler.common.logical_or.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\LogicalOr
+    ezpublish.search.legacy.gateway.criterion_handler.common.map_location_distance.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\MapLocationDistance
+    ezpublish.search.legacy.gateway.criterion_handler.common.match_all.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\MatchAll
+    ezpublish.search.legacy.gateway.criterion_handler.common.match_none.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\MatchNone
+    ezpublish.search.legacy.gateway.criterion_handler.common.object_state_id.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\ObjectStateId
+    ezpublish.search.legacy.gateway.criterion_handler.common.field_relation.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldRelation
+    ezpublish.search.legacy.gateway.criterion_handler.common.remote_id.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\RemoteId
+    ezpublish.search.legacy.gateway.criterion_handler.common.section_id.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\SectionId
+    ezpublish.search.legacy.gateway.criterion_handler.common.user_metadata.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\UserMetadata
+
+    # Criterion field value handler classes
+    ezpublish.search.legacy.gateway.criterion_field_value_converter.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Converter
+    ezpublish.search.legacy.gateway.criterion_field_value_handler.registry.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\HandlerRegistry
+    ezpublish.search.legacy.gateway.criterion_field_value_handler.collection.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Collection
+    ezpublish.search.legacy.gateway.criterion_field_value_handler.composite.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Composite
+    ezpublish.search.legacy.gateway.criterion_field_value_handler.simple.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Simple
+
+services:
+    ezpublish.search.legacy.gateway.criterion_handler.base:
+        abstract: true
+        arguments: [@ezpublish.api.storage_engine.legacy.dbhandler]
+
+    ezpublish.search.legacy.gateway.criterion_handler.field_base:
+        abstract: true
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish.spi.persistence.content_type_handler
+            - @ezpublish.spi.persistence.language_handler
+
+    ezpublish.search.legacy.gateway.criterion_field_value_handler.base:
+        abstract: true
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish.api.storage_engine.transformation_processor
+
+    # Criterion handlers
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.content_id:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.content_id.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.content_type_group_id:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.content_type_group_id.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.content_type_id:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.content_type_id.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.content_type_identifier:
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.content_type_identifier.class%
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish.spi.persistence.content_type_handler
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.date_metadata:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.date_metadata.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.field:
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.field.class%
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish.spi.persistence.content_type_handler
+            - @ezpublish.spi.persistence.language_handler
+            - @ezpublish.persistence.legacy.field_value_converter.registry
+            - @ezpublish.search.legacy.gateway.criterion_field_value_converter
+            - @ezpublish.api.storage_engine.transformation_processor
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.full_text:
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.full_text.class%
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish.api.storage_engine.transformation_processor
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.language_code:
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.language_code.class%
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish.persistence.legacy.language.mask_generator
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.logical_and:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.logical_and.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.logical_not:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.logical_not.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.logical_or:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.logical_or.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.map_location_distance:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.field_base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.map_location_distance.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.match_all:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.match_all.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.match_none:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.match_none.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.object_state_id:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.object_state_id.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.field_relation:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.field_base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.field_relation.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.remote_id:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.remote_id.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.section_id:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.section_id.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    ezpublish.search.legacy.gateway.criterion_handler.common.user_metadata:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.common.user_metadata.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
+
+    # Criterion field value handlers
+
+    # Note: services tagged with 'ezpublish.search.legacy.gateway.criterion_field_value_handler'
+    # are registered to this one using compilation pass
+    ezpublish.search.legacy.gateway.criterion_field_value_handler.registry:
+        class: %ezpublish.search.legacy.gateway.criterion_field_value_handler.registry.class%
+
+    ezpublish.search.legacy.gateway.criterion_field_value_converter:
+        class: %ezpublish.search.legacy.gateway.criterion_field_value_converter.class%
+        arguments:
+            - @ezpublish.search.legacy.gateway.criterion_field_value_handler.registry
+            - @ezpublish.search.legacy.gateway.criterion_field_value_handler.default
+
+    ezpublish.search.legacy.gateway.criterion_field_value_handler.collection.comma_separated:
+        parent: ezpublish.search.legacy.gateway.criterion_field_value_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_field_value_handler.collection.class%
+        arguments:
+            - ,
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezcountry}
+            - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezobjectrelationlist}
+
+    ezpublish.search.legacy.gateway.criterion_field_value_handler.collection.hypen_separated:
+        parent: ezpublish.search.legacy.gateway.criterion_field_value_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_field_value_handler.collection.class%
+        arguments:
+            - -
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezselection}
+
+    ezpublish.search.legacy.gateway.criterion_field_value_handler.composite:
+        parent: ezpublish.search.legacy.gateway.criterion_field_value_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_field_value_handler.composite.class%
+
+    ezpublish.search.legacy.gateway.criterion_field_value_handler.simple:
+        parent: ezpublish.search.legacy.gateway.criterion_field_value_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_field_value_handler.simple.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezboolean}
+            - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezdate}
+            - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezdatetime}
+            - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezemail}
+            - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezinteger}
+            - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezobjectrelation}
+            - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: eztime}
+
+    ezpublish.search.legacy.gateway.criterion_field_value_handler.default:
+        alias: ezpublish.search.legacy.gateway.criterion_field_value_handler.composite

@@ -56,6 +56,7 @@ class EZP20018ObjectStateTest extends BaseTest
     {
         $query = new Query();
         $query->filter = new ObjectStateId( 1 );
+        $query->limit = 50;
         $results1 = $this->getRepository()->getSearchService()->findContent( $query );
 
         $this->assertEquals( 18, $results1->totalCount );

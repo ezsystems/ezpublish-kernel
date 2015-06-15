@@ -2,7 +2,6 @@ parameters:
     # Redefining the default router class to implement the RequestMatcherInterface
     router.class: eZ\Bundle\EzPublishCoreBundle\Routing\DefaultRouter
     ezpublish.default_router.non_siteaccess_aware_routes: ['_assetic_', '_wdt', '_profiler', '_configurator_']
-    ezpublish.default_router.legacy_aware_routes: ['_ezpublishLegacyTreeMenu', 'ezpublish_rest_', '_ezpublishPreviewContent', '_wdt', '_profiler', '_assetic']
 
     ezpublish.chain_router.class: eZ\Publish\Core\MVC\Symfony\Routing\ChainRouter
     ezpublish.url_generator.base.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator
@@ -13,10 +12,12 @@ parameters:
     ezpublish.siteaccess_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\SiteAccessListener
     ezpublish.siteaccess_listener.routing.class: eZ\Bundle\EzPublishCoreBundle\EventListener\RoutingListener
     ezpublish.request_redirect_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener
+    ezpublish.request_index_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\IndexRequestListener
     ezpublish.siteaccess_match_listener.class: eZ\Publish\Core\MVC\Symfony\EventListener\SiteAccessMatchListener
     ezpublish.route_reference.generator.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGenerator
     ezpublish.route_reference.listener.language_switch.class: eZ\Publish\Core\MVC\Symfony\EventListener\LanguageSwitchListener
     ezpublish.original_request_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\OriginalRequestListener
+    ezpublish.route_reference.listener.content_download.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ContentDownloadRouteReferenceListener
 
 services:
     ezpublish.chain_router:
@@ -97,11 +98,18 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    ezpublish.request_index_listener:
+        class: %ezpublish.request_index_listener.class%
+        arguments:
+            - @ezpublish.config.resolver
+        tags:
+            - { name: kernel.event_subscriber }
+
     ezpublish.route_reference.generator:
       class: %ezpublish.route_reference.generator.class%
       arguments: [@event_dispatcher]
       calls:
-        - [setRequest, [@?request=]]
+        - [setRequestStack, [@request_stack]]
 
     ezpublish.route_reference.listener.language_switch:
         class: %ezpublish.route_reference.listener.language_switch.class%
@@ -113,3 +121,9 @@ services:
         class: %ezpublish.original_request_listener.class%
         tags:
             - { name: kernel.event_subscriber }
+
+    ezpublish.route_reference.listener.content_download:
+        class: eZ\Bundle\EzPublishCoreBundle\EventListener\ContentDownloadRouteReferenceListener
+        tags:
+            - { name: kernel.event_subscriber }
+        arguments: [@ezpublish.translation_helper]

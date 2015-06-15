@@ -56,7 +56,8 @@ class Type extends FieldType
                     null,
                     array(
                         "validator" => $validatorIdentifier
-                    )
+                    ),
+                    "[$validatorIdentifier]"
                 );
 
                 continue;
@@ -67,14 +68,15 @@ class Type extends FieldType
                 {
                     case "minIntegerValue":
                     case "maxIntegerValue":
-                        if ( $value !== false && !is_integer( $value ) )
+                        if ( $value !== null && !is_integer( $value ) )
                         {
                             $validationErrors[] = new ValidationError(
                                 "Validator parameter '%parameter%' value must be of integer type",
                                 null,
                                 array(
                                     "parameter" => $name
-                                )
+                                ),
+                                "[$validatorIdentifier][$name]"
                             );
                         }
                         break;
@@ -84,7 +86,8 @@ class Type extends FieldType
                             null,
                             array(
                                 "parameter" => $name
-                            )
+                            ),
+                            "[$validatorIdentifier][$name]"
                         );
                 }
             }
@@ -131,7 +134,8 @@ class Type extends FieldType
                 null,
                 array(
                     "size" => $constraints['maxIntegerValue']
-                )
+                ),
+                'value'
             );
         }
 
@@ -143,7 +147,8 @@ class Type extends FieldType
                 null,
                 array(
                     "size" => $constraints['minIntegerValue']
-                )
+                ),
+                'value'
             );
         }
 

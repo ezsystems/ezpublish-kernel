@@ -13,10 +13,8 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
-use eZ\Publish\SPI\Search\Location\Handler as LocationSearchHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
-use eZ\Publish\SPI\Search\Handler as ContentSearchHandler;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandler;
@@ -35,11 +33,6 @@ class Handler implements HandlerInterface
     protected $contentHandler;
 
     /**
-     * @var \eZ\Publish\SPI\Search\Handler
-     */
-    protected $contentSearchHandler;
-
-    /**
      * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
      */
     protected $contentTypeHandler;
@@ -53,11 +46,6 @@ class Handler implements HandlerInterface
      * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     protected $locationHandler;
-
-    /**
-     * @var \eZ\Publish\SPI\Search\Location\Handler
-     */
-    protected $locationSearchHandler;
 
     /**
      * @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
@@ -96,11 +84,9 @@ class Handler implements HandlerInterface
 
     public function __construct(
         ContentHandler $contentHandler,
-        ContentSearchHandler $contentSearchHandler,
         ContentTypeHandler $contentTypeHandler,
         LanguageHandler $languageHandler,
         LocationHandler $locationHandler,
-        LocationSearchHandler $locationSearchHandler,
         ObjectStateHandler $objectStateHandler,
         SectionHandler $sectionHandler,
         SPITransactionHandler $transactionHandler,
@@ -111,11 +97,9 @@ class Handler implements HandlerInterface
     )
     {
         $this->contentHandler = $contentHandler;
-        $this->contentSearchHandler = $contentSearchHandler;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->languageHandler = $languageHandler;
         $this->locationHandler = $locationHandler;
-        $this->locationSearchHandler = $locationSearchHandler;
         $this->objectStateHandler = $objectStateHandler;
         $this->sectionHandler = $sectionHandler;
         $this->transactionHandler = $transactionHandler;
@@ -131,11 +115,6 @@ class Handler implements HandlerInterface
         return $this->contentHandler;
     }
 
-    public function searchHandler()
-    {
-        return $this->contentSearchHandler;
-    }
-
     public function contentTypeHandler()
     {
         return $this->contentTypeHandler;
@@ -149,11 +128,6 @@ class Handler implements HandlerInterface
     public function locationHandler()
     {
         return $this->locationHandler;
-    }
-
-    public function locationSearchHandler()
-    {
-        return $this->locationSearchHandler;
     }
 
     public function objectStateHandler()

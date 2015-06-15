@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\Core\IO\Values;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
-
 /**
  * Override of BinaryFile that indicates a non existing file.
  *

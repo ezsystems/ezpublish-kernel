@@ -83,8 +83,18 @@ class Provider implements APIUserProviderInterface
             throw new UnsupportedUserException( sprintf( 'Instances of "%s" are not supported.', get_class( $user ) ) );
         }
 
-        $this->repository->setCurrentUser( $user->getAPIUser() );
-        return $user;
+        try
+        {
+            $refreshedAPIUser = $this->repository->getUserService()->loadUser( $user->getAPIUser()->id );
+            $user->setAPIUser( $refreshedAPIUser );
+            $this->repository->setCurrentUser( $refreshedAPIUser );
+
+            return $user;
+        }
+        catch ( NotFoundException $e )
+        {
+            throw new UsernameNotFoundException( $e->getMessage(), 0, $e );
+        }
     }
 
     /**

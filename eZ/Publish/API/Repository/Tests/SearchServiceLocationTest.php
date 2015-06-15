@@ -32,14 +32,9 @@ class SearchServiceLocationTest extends BaseTest
     protected function setUp()
     {
         $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
-        }
-
         if ( $setupFactory instanceof LegacyElasticsearch )
         {
-            $this->markTestSkipped( "Field search is not yet implemented for Elasticsearch storage" );
+            $this->markTestSkipped( "Field Location search is not yet implemented Elasticsearch search engine" );
         }
 
         parent::setUp();
@@ -102,12 +97,23 @@ class SearchServiceLocationTest extends BaseTest
     {
         $testContent = $this->createMultipleCountriesContent();
 
+        $setupFactory = $this->getSetupFactory();
+        // @todo index full contries data
+        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
+        {
+            $country = "BE";
+        }
+        else
+        {
+            $country = "Belgium";
+        }
+
         $query = new LocationQuery(
             array(
                 'criterion' => new Criterion\Field(
                     "countries",
                     Criterion\Operator::CONTAINS,
-                    "Belgium"
+                    $country
                 )
             )
         );
@@ -296,6 +302,12 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testMultilingualFieldSort()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -351,6 +363,12 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testMultilingualFieldSortVariant2()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -406,6 +424,12 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testMultilingualFieldSortVariant3()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -512,6 +536,12 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testMultilingualFieldSortWithNonTranslatableField()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -567,6 +597,12 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testMultilingualFieldSortWithDefaultLanguage()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -622,6 +658,12 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testMultilingualFieldSortWithDefaultLanguageVariant2()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -677,6 +719,12 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testMultilingualFieldSortUnusedLanguageDoesNotFilterResultSet()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -714,6 +762,12 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testMultilingualFieldSortUnusedLanguageDoesNotChangeSort()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -817,7 +871,7 @@ class SearchServiceLocationTest extends BaseTest
     public function testQueryModifiedField()
     {
         // Check using get_class since the others extend SetupFactory\Legacy
-        if ( get_class( $this->getSetupFactory() ) === '\eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
         {
             $this->markTestIncomplete(
                 "Custom fields not supported by LegacySE " .
@@ -1613,7 +1667,7 @@ class SearchServiceLocationTest extends BaseTest
             include $fixture,
             $result,
             "Search results do not match.",
-            .1 // Be quite generous regarding delay -- most important for scores
+            .2 // Be quite generous regarding delay -- most important for scores
         );
     }
 

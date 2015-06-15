@@ -25,27 +25,32 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $repository;
+    protected $repository;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $configResolver;
+    protected $configResolver;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $eventDispatcher;
+    protected $eventDispatcher;
+
+    /**
+     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $tokenStorage;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $securityContext;
+    protected $authChecker;
 
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Security\EventListener\SecurityListener
      */
-    private $listener;
+    protected $listener;
 
     protected function setUp()
     {
@@ -53,8 +58,20 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
         $this->repository = $this->getMock( 'eZ\Publish\API\Repository\Repository' );
         $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
         $this->eventDispatcher = $this->getMock( 'Symfony\Component\EventDispatcher\EventDispatcherInterface' );
-        $this->securityContext = $this->getMock( 'Symfony\Component\Security\Core\SecurityContextInterface' );
-        $this->listener = new SecurityListener( $this->repository, $this->configResolver, $this->eventDispatcher, $this->securityContext );
+        $this->tokenStorage = $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface' );
+        $this->authChecker = $this->getMock( 'Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface' );
+        $this->listener = $this->generateListener();
+    }
+
+    protected function generateListener()
+    {
+        return new SecurityListener(
+            $this->repository,
+            $this->configResolver,
+            $this->eventDispatcher,
+            $this->tokenStorage,
+            $this->authChecker
+        );
     }
 
     public function testGetSubscribedEvents()
@@ -148,7 +165,7 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
             ->method( 'setCurrentUser' )
             ->with( $apiUser );
 
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->once() )
             ->method( 'setToken' )
             ->with( $this->isInstanceOf( 'eZ\Publish\Core\MVC\Symfony\Security\InteractiveLoginToken' ) );
@@ -172,7 +189,7 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
         $siteAccess = new SiteAccess();
         $request->attributes->set( 'siteaccess', $siteAccess );
 
-        $this->securityContext
+        $this->authChecker
             ->expects( $this->once() )
             ->method( 'isGranted' )
             ->with( $this->equalTo( new Attribute( 'user', 'login', array( 'valueObject' => $siteAccess ) ) ) )
@@ -194,7 +211,7 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
         $siteAccess = new SiteAccess();
         $request->attributes->set( 'siteaccess', $siteAccess );
 
-        $this->securityContext
+        $this->authChecker
             ->expects( $this->once() )
             ->method( 'isGranted' )
             ->with( $this->equalTo( new Attribute( 'user', 'login', array( 'valueObject' => $siteAccess ) ) ) )
@@ -217,7 +234,7 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
         $siteAccess = new SiteAccess();
         $request->attributes->set( 'siteaccess', $siteAccess );
 
-        $this->securityContext
+        $this->authChecker
             ->expects( $this->never() )
             ->method( 'isGranted' );
 
@@ -233,7 +250,7 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
             ->method( 'getUser' )
             ->will( $this->returnValue( $user ) );
 
-        $this->securityContext
+        $this->authChecker
             ->expects( $this->never() )
             ->method( 'isGranted' );
 
@@ -248,10 +265,10 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
             HttpKernelInterface::SUB_REQUEST
         );
 
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->never() )
             ->method( 'getToken' );
-        $this->securityContext
+        $this->authChecker
             ->expects( $this->never() )
             ->method( 'isGranted' );
 
@@ -269,33 +286,10 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
             ->expects( $this->never() )
             ->method( 'getParameter' );
 
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->never() )
             ->method( 'getToken' );
-        $this->securityContext
-            ->expects( $this->never() )
-            ->method( 'isGranted' );
-
-        $this->listener->onKernelRequest( $event );
-    }
-
-    public function testOnKernelRequestLegacyMode()
-    {
-        $event = new GetResponseEvent(
-            $this->getMock( 'Symfony\Component\HttpKernel\HttpKernelInterface' ),
-            new Request(),
-            HttpKernelInterface::MASTER_REQUEST
-        );
-        $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'legacy_mode' )
-            ->will( $this->returnValue( true ) );
-
-        $this->securityContext
-            ->expects( $this->never() )
-            ->method( 'getToken' );
-        $this->securityContext
+        $this->authChecker
             ->expects( $this->never() )
             ->method( 'isGranted' );
 
@@ -310,16 +304,10 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
             HttpKernelInterface::MASTER_REQUEST
         );
 
-        $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'legacy_mode' )
-            ->will( $this->returnValue( false ) );
-
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->never() )
             ->method( 'getToken' );
-        $this->securityContext
+        $this->authChecker
             ->expects( $this->never() )
             ->method( 'isGranted' );
 
@@ -336,17 +324,11 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
             HttpKernelInterface::MASTER_REQUEST
         );
 
-        $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'legacy_mode' )
-            ->will( $this->returnValue( false ) );
-
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->once() )
             ->method( 'getToken' )
             ->will( $this->returnValue( null ) );
-        $this->securityContext
+        $this->authChecker
             ->expects( $this->never() )
             ->method( 'isGranted' );
 
@@ -364,28 +346,21 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
             HttpKernelInterface::MASTER_REQUEST
         );
 
-        $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'legacy_mode' )
-            ->will( $this->returnValue( false ) );
-
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->once() )
             ->method( 'getToken' )
             ->will( $this->returnValue( null ) );
-        $this->securityContext
+        $this->authChecker
             ->expects( $this->never() )
             ->method( 'isGranted' );
 
         $this->listener->onKernelRequest( $event );
     }
 
-    /**
-     * @expectedException \eZ\Publish\Core\MVC\Symfony\Security\Exception\UnauthorizedSiteAccessException
-     */
     public function testOnKernelRequestAccessDenied()
     {
+        $this->setExpectedException( 'eZ\Publish\Core\MVC\Symfony\Security\Exception\UnauthorizedSiteAccessException' );
+
         $request = new Request();
         $request->attributes->set( 'siteaccess', new SiteAccess() );
         $event = new GetResponseEvent(
@@ -394,23 +369,17 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
             HttpKernelInterface::MASTER_REQUEST
         );
 
-        $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'legacy_mode' )
-            ->will( $this->returnValue( false ) );
-
         $token = $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface' );
         $token
             ->expects( $this->any() )
             ->method( 'getUsername' )
             ->will( $this->returnValue( 'foo' ) );
 
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->once() )
             ->method( 'getToken' )
             ->will( $this->returnValue( $token ) );
-        $this->securityContext
+        $this->authChecker
             ->expects( $this->once() )
             ->method( 'isGranted' )
             ->will( $this->returnValue( false ) );
@@ -428,23 +397,17 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
             HttpKernelInterface::MASTER_REQUEST
         );
 
-        $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'legacy_mode' )
-            ->will( $this->returnValue( false ) );
-
         $token = $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface' );
         $token
             ->expects( $this->any() )
             ->method( 'getUsername' )
             ->will( $this->returnValue( 'foo' ) );
 
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->once() )
             ->method( 'getToken' )
             ->will( $this->returnValue( $token ) );
-        $this->securityContext
+        $this->authChecker
             ->expects( $this->once() )
             ->method( 'isGranted' )
             ->will( $this->returnValue( true ) );

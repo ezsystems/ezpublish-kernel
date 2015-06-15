@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
+use eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
@@ -29,12 +29,32 @@ class SearchServiceFieldFiltersTest extends BaseTest
     {
         $setupFactory = $this->getSetupFactory();
 
-        if ( !$setupFactory instanceof LegacyElasticsearch )
+        if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestIncomplete( "ATM implemented only for Elasticsearch storage" );
+            $this->markTestIncomplete( "Not implemented for Solr Search Engine" );
         }
 
         parent::setUp();
+    }
+
+    protected function checkFullTextFilteringSupport()
+    {
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy' )
+        {
+            $this->markTestSkipped(
+                "Legacy Search Engine does not support field filters with Fulltext criterion"
+            );
+        }
+    }
+
+    protected function checkCustomFieldsSupport()
+    {
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy' )
+        {
+            $this->markTestSkipped(
+                "Legacy Search Engine does not support custom fields"
+            );
+        }
     }
 
     protected function addMapLocationToFolderType()
@@ -203,6 +223,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextQueryLanguageAll( $type = null )
     {
+        $this->checkFullTextFilteringSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -246,6 +268,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextQueryLanguage( $type = null )
     {
+        $this->checkFullTextFilteringSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -284,6 +308,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextQueryLanguageComplement( $type = null )
     {
+        $this->checkFullTextFilteringSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -322,6 +348,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextQueryLanguageEmpty( $type = null )
     {
+        $this->checkFullTextFilteringSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -359,6 +387,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextQueryLanguageAlwaysAvailable( $type = null )
     {
+        $this->checkFullTextFilteringSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -402,6 +432,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextQueryLanguageAlwaysAvailableComplement( $type = null )
     {
+        $this->checkFullTextFilteringSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -445,6 +477,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextQueryAlwaysAvailable( $type = null )
     {
+        $this->checkFullTextFilteringSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -488,6 +522,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextQueryAlwaysAvailableComplement( $type = null )
     {
+        $this->checkFullTextFilteringSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -527,6 +563,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextQueryAlwaysAvailableEmpty( $type = null )
     {
+        $this->checkFullTextFilteringSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -1370,7 +1408,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $this->assertEquals( 0, $searchResult->totalCount );
     }
 
-
     /**
      * Test for the findContent() method.
      *
@@ -1560,6 +1597,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldQueryAll( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -1581,7 +1620,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1609,6 +1648,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldQuery( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -1627,7 +1668,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1653,6 +1694,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldQueryComplement( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -1671,7 +1714,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1697,6 +1740,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldQueryEmpty( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -1715,7 +1760,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1740,6 +1785,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldQueryLanguageAlwaysAvailable( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -1757,7 +1804,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1785,6 +1832,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldQueryLanguageAlwaysAvailableComplement( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -1802,7 +1851,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1830,6 +1879,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldQueryAlwaysAvailable( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -1847,7 +1898,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1874,6 +1925,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldQueryAlwaysAvailableComplement( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -1888,7 +1941,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1915,6 +1968,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldQueryAlwaysAvailableEmpty( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -1929,7 +1984,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1955,6 +2010,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeQueryAll( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -1972,7 +2029,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -2000,6 +2057,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeQuery( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -2014,7 +2073,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -2040,6 +2099,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeQueryComplement( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -2054,7 +2115,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -2080,6 +2141,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeQueryEmpty( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -2094,7 +2157,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -2119,6 +2182,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeQueryLanguageAlwaysAvailable( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -2136,7 +2201,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -2164,6 +2229,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeQueryLanguageAlwaysAvailableComplement( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -2181,7 +2248,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -2209,6 +2276,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeQueryAlwaysAvailable( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -2226,7 +2295,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -2254,6 +2323,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeQueryAlwaysAvailableComplement( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -2268,7 +2339,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -2295,6 +2366,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeQueryAlwaysAvailableEmpty( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -2309,7 +2382,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -3185,6 +3258,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldQueryAll( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3196,7 +3271,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "two"
                 ),
@@ -3232,6 +3307,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldQuery( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3243,7 +3320,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "two"
                 ),
@@ -3274,6 +3351,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldQueryComplement( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3285,7 +3364,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "two"
                 ),
@@ -3316,6 +3395,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldQueryEmpty( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3327,7 +3408,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "two"
                 ),
@@ -3357,6 +3438,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldQueryLanguageAlwaysAvailable( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3368,7 +3451,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "one"
                 ),
@@ -3404,6 +3487,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldQueryLanguageAlwaysAvailableComplement( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3415,7 +3500,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "one"
                 ),
@@ -3451,6 +3536,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldQueryAlwaysAvailable( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3462,7 +3549,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "one"
                 ),
@@ -3498,6 +3585,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldQueryAlwaysAvailableComplement( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3509,7 +3598,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "one"
                 ),
@@ -3541,6 +3630,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldQueryAlwaysAvailableEmpty( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3552,7 +3643,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "one"
                 ),
@@ -3583,6 +3674,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeQueryAll( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3593,7 +3686,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
                 'sortClauses' => array(
                     new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
                 ),
@@ -3626,6 +3719,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeQuery( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3636,7 +3731,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
             )
         );
 
@@ -3664,6 +3759,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeQueryComplement( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3674,7 +3771,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
             )
         );
 
@@ -3702,6 +3799,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeQueryEmpty( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3712,7 +3811,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
             )
         );
 
@@ -3739,6 +3838,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeQueryLanguageAlwaysAvailable( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3749,7 +3850,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
                 'sortClauses' => array(
                     new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
                 ),
@@ -3782,6 +3883,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeQueryLanguageAlwaysAvailableComplement( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3792,7 +3895,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
                 'sortClauses' => array(
                     new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
                 ),
@@ -3825,6 +3928,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeQueryAlwaysAvailable( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3835,7 +3940,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
                 'sortClauses' => array(
                     new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
                 ),
@@ -3868,6 +3973,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeQueryAlwaysAvailableComplement( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3878,7 +3985,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
             )
         );
 
@@ -3907,6 +4014,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeQueryAlwaysAvailableEmpty( $type = null )
     {
+        $this->checkCustomFieldsSupport();
+
         if ( $type === null )
         {
             $type = "query";
@@ -3917,7 +4026,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
             )
         );
 

@@ -518,12 +518,13 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
                 $this->returnValue(
                     array(
                         new ObjectState( array( 'id' => 1, 'groupId' => 2 ) ),
-                        new ObjectState( array( 'id' => 2, 'groupId' => 2 ) )
+                        new ObjectState( array( 'id' => 2, 'groupId' => 2 ) ),
+                        new ObjectState( array( 'id' => 3, 'groupId' => 2 ) )
                     )
                 )
             );
 
-        $gatewayMock->expects( $this->exactly( 2 ) )
+        $gatewayMock->expects( $this->exactly( 3 ) )
             ->method( 'updateObjectStatePriority' );
 
         $gatewayMock->expects( $this->at( 2 ) )
@@ -533,6 +534,10 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $gatewayMock->expects( $this->at( 3 ) )
             ->method( 'updateObjectStatePriority' )
             ->with( $this->equalTo( 1 ), $this->equalTo( 1 ) );
+
+        $gatewayMock->expects( $this->at( 4 ) )
+            ->method( 'updateObjectStatePriority' )
+            ->with( $this->equalTo( 3 ), $this->equalTo( 2 ) );
 
         $handler->setPriority( 2, 0 );
     }

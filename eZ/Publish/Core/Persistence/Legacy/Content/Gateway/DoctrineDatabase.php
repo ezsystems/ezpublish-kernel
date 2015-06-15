@@ -1820,4 +1820,30 @@ class DoctrineDatabase extends Gateway
             // No match, do nothing
         }
     }
+
+    /**
+     * Returns all Content IDs for a given $contentTypeId.
+     *
+     * @param int $contentTypeId
+     *
+     * @return int[]
+     */
+    public function getContentIdsByContentTypeId( $contentTypeId )
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query
+            ->select( $this->dbHandler->quoteColumn( "id" ) )
+            ->from( $this->dbHandler->quoteTable( "ezcontentobject" ) )
+            ->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "contentclass_id" ),
+                    $query->bindValue( $contentTypeId, null, PDO::PARAM_INT )
+                )
+            );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( PDO::FETCH_COLUMN );
+    }
 }

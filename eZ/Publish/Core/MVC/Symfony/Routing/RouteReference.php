@@ -46,7 +46,7 @@ class RouteReference
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\ParameterBag
+     * @return array
      */
     public function getParams()
     {

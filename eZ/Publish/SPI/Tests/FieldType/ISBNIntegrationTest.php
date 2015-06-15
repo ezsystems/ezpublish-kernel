@@ -59,7 +59,7 @@ class ISBNIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezisbn',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\ISBN(),
+            new Legacy\Content\FieldValue\Converter\ISBNConverter(),
             new FieldType\NullStorage()
         );
     }

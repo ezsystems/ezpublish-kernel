@@ -44,7 +44,7 @@ class SelectionIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezselection',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Selection(),
+            new Legacy\Content\FieldValue\Converter\SelectionConverter(),
             new FieldType\NullStorage()
         );
     }

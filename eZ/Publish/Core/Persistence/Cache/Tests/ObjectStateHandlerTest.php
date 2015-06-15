@@ -225,7 +225,6 @@ class ObjectStateHandlerTest extends HandlerTest
             ->method( 'isMiss' )
             ->will( $this->returnValue( true ) );
 
-
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler' );
@@ -301,7 +300,6 @@ class ObjectStateHandlerTest extends HandlerTest
             ->expects( $this->once() )
             ->method( 'isMiss' )
             ->will( $this->returnValue( false ) );
-
 
         $expectedGroups = array_slice( $testGroups, $offset, $limit > -1 ?: null );
 
@@ -416,7 +414,6 @@ class ObjectStateHandlerTest extends HandlerTest
             ->expects( $this->once() )
             ->method( 'set' )
             ->with( $testStateIds );
-
 
         $handler = $this->persistenceCacheHandler->objectStateHandler();
         $states = $handler->loadObjectStates( 1 );
@@ -903,7 +900,6 @@ class ObjectStateHandlerTest extends HandlerTest
             ->expects( $this->once() )
             ->method( 'isMiss' )
             ->will( $this->returnValue( true ) );
-
 
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 

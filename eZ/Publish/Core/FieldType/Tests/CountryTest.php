@@ -610,7 +610,8 @@ class CountryTest extends FieldTypeTest
                 ),
                 array(
                     new ValidationError(
-                        "Field definition does not allow multiple countries to be selected."
+                        "Field definition does not allow multiple countries to be selected.",
+                        null, array(), 'countries'
                     ),
                 ),
             ),
@@ -636,7 +637,8 @@ class CountryTest extends FieldTypeTest
                         null,
                         array(
                             "alpha2" => "LE"
-                        )
+                        ),
+                        'countries'
                     ),
                 ),
             ),

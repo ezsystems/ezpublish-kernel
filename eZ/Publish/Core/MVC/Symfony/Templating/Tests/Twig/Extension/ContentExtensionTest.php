@@ -32,21 +32,17 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
      */
     private $fieldHelperMock;
 
+    private $fieldDefinitions = array();
+
     public function getExtensions()
     {
-        $configResolver = $this->getConfigResolverMock();
         $this->fieldHelperMock = $this->getMockBuilder( 'eZ\\Publish\\Core\\Helper\\FieldHelper' )
             ->disableOriginalConstructor()->getMock();
+        $configResolver = $this->getConfigResolverMock();
 
         return array(
             new ContentExtension(
                 $this->getRepositoryMock(),
-                $configResolver,
-                $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\FieldType\\View\\ParameterProviderRegistryInterface' ),
-                $this->getMockBuilder( 'eZ\Publish\Core\FieldType\XmlText\Converter\Html5' )->disableOriginalConstructor()->getMock(),
-                $this->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\RichText\\Converter' )->disableOriginalConstructor()->getMock(),
-                $this->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\RichText\\Converter' )->disableOriginalConstructor()->getMock(),
-                $this->getMock( 'eZ\Publish\SPI\Variation\VariationHandler' ),
                 new TranslationHelper(
                     $configResolver,
                     $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' ),
@@ -62,19 +58,6 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
     {
         return dirname( __FILE__ ) . '/_fixtures/content_functions/';
     }
-
-    public function getFieldDefinition( $typeIdentifier, $id = null, $settings = array() )
-    {
-        return new FieldDefinition(
-            array(
-                'id' => $id,
-                'fieldSettings' => $settings,
-                'fieldTypeIdentifier' => $typeIdentifier
-            )
-        );
-    }
-
-    public $fieldDefinitions = array();
 
     /**
      * Creates content with initial/main language being fre-FR
@@ -132,23 +115,6 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
 
     }
 
-    protected function getField( $isEmpty )
-    {
-        $field = new Field( array( 'fieldDefIdentifier' => 'testfield', 'value' => null ) );
-
-        $this->fieldHelperMock
-            ->expects( $this->once() )
-            ->method( 'isFieldEmpty' )
-            ->will( $this->returnValue( $isEmpty ) );
-
-        return $field;
-    }
-
-    private function getTemplatePath( $tpl )
-    {
-        return 'templates/' . $tpl;
-    }
-
     private function getConfigResolverMock()
     {
         $mock = $this->getMock(
@@ -166,48 +132,22 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
                             null,
                             array( 'fre-FR', 'eng-US' )
                         ),
-                        array(
-                            'field_templates',
-                            null,
-                            null,
-                            array(
-                                array(
-                                    'template' => $this->getTemplatePath( 'fields_override1.html.twig' ),
-                                    'priority' => 10
-                                ),
-                                array(
-                                    'template' => $this->getTemplatePath( 'fields_default.html.twig' ),
-                                    'priority' => 0
-                                ),
-                                array(
-                                    'template' => $this->getTemplatePath( 'fields_override2.html.twig' ),
-                                    'priority' => 20
-                                ),
-                            )
-                        ),
-                        array(
-                            'fielddefinition_settings_templates',
-                            null,
-                            null,
-                            array(
-                                array(
-                                    'template' => $this->getTemplatePath( 'settings_override1.html.twig' ),
-                                    'priority' => 10
-                                ),
-                                array(
-                                    'template' => $this->getTemplatePath( 'settings_default.html.twig' ),
-                                    'priority' => 0
-                                ),
-                                array(
-                                    'template' => $this->getTemplatePath( 'settings_override2.html.twig' ),
-                                    'priority' => 20
-                                ),
-                            )
-                        )
                     )
                 )
             );
         return $mock;
+    }
+
+    protected function getField( $isEmpty )
+    {
+        $field = new Field( array( 'fieldDefIdentifier' => 'testfield', 'value' => null ) );
+
+        $this->fieldHelperMock
+            ->expects( $this->once() )
+            ->method( 'isFieldEmpty' )
+            ->will( $this->returnValue( $isEmpty ) );
+
+        return $field;
     }
 
     /**
@@ -231,18 +171,17 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
     {
         $mock = $this->getMock( "eZ\\Publish\\API\\Repository\\ContentTypeService" );
 
-        $context = $this;
         $mock->expects( $this->any() )
             ->method( "loadContentType" )
             ->will(
                 $this->returnCallback(
-                    function ( $contentTypeId ) use ( $context )
+                    function ( $contentTypeId )
                     {
                         return new ContentType(
                             array(
                                 'identifier' => $contentTypeId,
                                 'mainLanguageCode' => 'fre-FR',
-                                'fieldDefinitions' => $context->fieldDefinitions[$contentTypeId]
+                                'fieldDefinitions' => $this->fieldDefinitions[$contentTypeId]
                             )
                         );
                     }

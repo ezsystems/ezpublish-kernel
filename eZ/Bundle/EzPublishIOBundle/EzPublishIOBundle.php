@@ -8,15 +8,15 @@
 namespace eZ\Bundle\EzPublishIOBundle;
 
 use eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler;
+use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
 use eZ\Bundle\EzPublishIOBundle\DependencyInjection\EzPublishIOExtension;
 use eZ\Publish\Core\Base\Container\Compiler\IOHandlerTagPass;
-use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class EzPublishIOBundle extends Bundle
 {
-    /** @var EzPublishIOExtension */
+    /** @var \eZ\Bundle\EzPublishIOBundle\DependencyInjection\EzPublishIOExtension */
     protected $extension;
 
     public function build( ContainerBuilder $container )

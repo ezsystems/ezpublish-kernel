@@ -101,7 +101,7 @@ abstract class Value extends BaseValue
 
     public function __get( $propertyName )
     {
-        if ( $propertyName == 'path' )
+        if ( $propertyName === 'path' )
             return $this->inputUri;
 
         return parent::__get( $propertyName );
@@ -110,12 +110,12 @@ abstract class Value extends BaseValue
     public function __set( $propertyName, $propertyValue )
     {
         // BC with 5.0 (EZP-20948)
-        if ( $propertyName == 'path' )
+        if ( $propertyName === 'path' )
         {
             $this->inputUri = $propertyValue;
         }
         // BC with 5.2 (EZP-22808)
-        else if ( $propertyName == 'id' && file_exists( $propertyValue ) )
+        else if ( $propertyName === 'id' && file_exists( $propertyValue ) )
         {
             $this->inputUri = $propertyValue;
         }
@@ -127,7 +127,7 @@ abstract class Value extends BaseValue
 
     public function __isset( $propertyName )
     {
-        if ( $propertyName == 'path' )
+        if ( $propertyName === 'path' )
             return true;
 
         return parent::__isset( $propertyName );

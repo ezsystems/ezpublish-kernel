@@ -88,10 +88,6 @@ class RichTextTest extends PHPUnit_Framework_TestCase
                     "type" => "int",
                     "default" => 10
                 ),
-                "tagPreset" => array(
-                    "type" => "choice",
-                    "default" => RichTextType::TAG_PRESET_DEFAULT
-                ),
             ),
             $fieldType->getSettingsSchema(),
             "The settings schema does not match what is expected."

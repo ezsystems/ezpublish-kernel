@@ -14,12 +14,10 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use eZ\Bundle\EzPublishCoreBundle\Kernel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Routing\RequestContext;
 
 class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -86,50 +84,12 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             array(
                 KernelEvents::REQUEST => array(
-                    array( 'onKernelRequestSetup', 190 ),
                     array( 'onKernelRequestForward', 10 ),
                     array( 'onKernelRequestRedirect', 0 ),
-                    array( 'onKernelRequestIndex', 40 ),
                 )
             ),
             $this->requestEventListener->getSubscribedEvents()
         );
-    }
-
-    /**
-     * @dataProvider indexPageProvider
-     */
-    public function testOnKernelRequestIndexOnIndexPage( $requestPath, $configuredIndexPath, $expectedIndexPath )
-    {
-        $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'index_page' )
-            ->will( $this->returnValue( $configuredIndexPath ) );
-        $this->request->attributes->set( 'semanticPathinfo', $requestPath );
-        $this->requestEventListener->onKernelRequestIndex( $this->event );
-        $this->assertEquals( $expectedIndexPath, $this->request->attributes->get( 'semanticPathinfo' ) );
-        $this->assertTrue( $this->request->attributes->get( 'needsForward' ) );
-    }
-
-    public function indexPageProvider()
-    {
-        return array(
-            array( '/', '/foo', '/foo' ),
-            array( '/', '/foo/', '/foo/' ),
-            array( '/', '/foo/bar', '/foo/bar' ),
-            array( '/', 'foo/bar', '/foo/bar' ),
-            array( '', 'foo/bar', '/foo/bar' ),
-            array( '', '/foo/bar', '/foo/bar' ),
-            array( '', '/foo/bar/', '/foo/bar/' ),
-        );
-    }
-
-    public function testOnKernelRequestIndexNotOnIndexPage()
-    {
-        $this->request->attributes->set( 'semanticPathinfo', '/anyContent' );
-        $this->requestEventListener->onKernelRequestIndex( $this->event );
-        $this->assertFalse( $this->request->attributes->has( 'needsForward' ) );
     }
 
     public function testOnKernelRequestForwardSubRequest()
@@ -167,67 +127,6 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
         $this->requestEventListener->onKernelRequestForward( $event );
         $this->assertSame( $response, $event->getResponse() );
         $this->assertTrue( $event->isPropagationStopped() );
-    }
-
-    public function testOnKernelRequestSetupSubrequest()
-    {
-        $this->router
-            ->expects( $this->never() )
-            ->method( 'getContext' );
-        $this->router
-            ->expects( $this->never() )
-            ->method( 'setContext' );
-
-        $event = new GetResponseEvent( $this->httpKernel, new Request, HttpKernelInterface::SUB_REQUEST );
-        $this->requestEventListener->onKernelRequestSetup( $event );
-        $this->assertFalse( $event->hasResponse() );
-    }
-
-    public function testOnKernelRequestSetupAlreadyHasSiteaccess()
-    {
-        $event = new GetResponseEvent( $this->httpKernel, new Request, HttpKernelInterface::MASTER_REQUEST );
-        $this->requestEventListener->onKernelRequestSetup( $event );
-        $this->assertFalse( $event->hasResponse() );
-    }
-
-    public function testOnKernelRequestSetupAlreadySetupUri()
-    {
-        $this->router
-            ->expects( $this->once() )
-            ->method( 'generate' )
-            ->with( 'ezpublishSetup' )
-            ->will( $this->returnValue( '/setup' ) );
-        $this->router
-            ->expects( $this->once() )
-            ->method( 'getContext' )
-            ->will( $this->returnValue( $this->getMock( 'Symfony\Component\Routing\RequestContext' ) ) );
-
-        $requestEventListener = new RequestEventListener( $this->configResolver, $this->router, 'setup', $this->logger );
-        $event = new GetResponseEvent( $this->httpKernel, Request::create( '/setup' ), HttpKernelInterface::MASTER_REQUEST );
-        $requestEventListener->onKernelRequestSetup( $event );
-        $this->assertFalse( $event->hasResponse() );
-    }
-
-    public function testOnKernelRequestSetup()
-    {
-        $this->router
-            ->expects( $this->once() )
-            ->method( 'generate' )
-            ->with( 'ezpublishSetup' )
-            ->will( $this->returnValue( '/setup' ) );
-        $this->router
-            ->expects( $this->once() )
-            ->method( 'getContext' )
-            ->will( $this->returnValue( $this->getMock( 'Symfony\Component\Routing\RequestContext' ) ) );
-
-        $requestEventListener = new RequestEventListener( $this->configResolver, $this->router, 'setup', $this->logger );
-        $event = new GetResponseEvent( $this->httpKernel, Request::create( '/foo/bar' ), HttpKernelInterface::MASTER_REQUEST );
-        $requestEventListener->onKernelRequestSetup( $event );
-        $this->assertTrue( $event->hasResponse() );
-        /** @var RedirectResponse $response */
-        $response = $event->getResponse();
-        $this->assertInstanceOf( 'Symfony\Component\HttpFoundation\RedirectResponse', $response );
-        $this->assertSame( '/setup', $response->getTargetUrl() );
     }
 
     public function testOnKernelRequestRedirectSubRequest()

@@ -1,0 +1,1704 @@
+<?php
+/**
+ * This file is part of the eZ Publish Kernel package
+ *
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ * @version //autogentag//
+ */
+
+namespace eZ\Publish\Core\Search\Legacy\Tests\Content;
+
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
+use eZ\Publish\Core\Persistence;
+use eZ\Publish\Core\Search\Legacy\Content;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as ContentTypeHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as ContentTypeMapper;
+use eZ\Publish\SPI\Persistence\Content as ContentObject;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
+
+/**
+ * Test case for ContentSearchHandler
+ */
+class HandlerTest extends LanguageAwareTestCase
+{
+    protected static $setUp = false;
+
+    /**
+     * Field registry mock
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
+     */
+    protected $fieldRegistry;
+
+    /**
+     * Only set up once for these read only tests on a large fixture
+     *
+     * Skipping the reset-up, since setting up for these tests takes quite some
+     * time, which is not required to spent, since we are only reading from the
+     * database anyways.
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        if ( !self::$setUp )
+        {
+            parent::setUp();
+            $this->insertDatabaseFixture( __DIR__ . '/../_fixtures/full_dump.php' );
+            self::$setUp = $this->handler;
+        }
+        else
+        {
+            $this->handler = self::$setUp;
+        }
+    }
+
+    /**
+     * Assert that the elements are
+     */
+    protected function assertSearchResults( $expectedIds, $searchResult )
+    {
+        $result = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->id;
+            },
+            $searchResult->searchHits
+        );
+
+        sort( $result );
+
+        $this->assertEquals( $expectedIds, $result );
+    }
+
+    /**
+     * Returns the content search handler to test
+     *
+     * This method returns a fully functional search handler to perform tests
+     * on.
+     *
+     * @param array $fullTextSearchConfiguration
+     *
+     * @return \eZ\Publish\Core\Search\Legacy\Content\Handler
+     */
+    protected function getContentSearchHandler( array $fullTextSearchConfiguration = array() )
+    {
+        $transformationProcessor = new Persistence\TransformationProcessor\DefinitionBased(
+            new Persistence\TransformationProcessor\DefinitionBased\Parser(),
+            new Persistence\TransformationProcessor\PcreCompiler(
+                new Persistence\Utf8Converter()
+            ),
+            glob( __DIR__ . '/../../../../Persistence/Tests/TransformationProcessor/_fixtures/transformations/*.tr' )
+        );
+        $commaSeparatedCollectionValueHandler = new Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Collection(
+            $this->getDatabaseHandler(),
+            $transformationProcessor,
+            ","
+        );
+        $hyphenSeparatedCollectionValueHandler = new Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Collection(
+            $this->getDatabaseHandler(),
+            $transformationProcessor,
+            "-"
+        );
+        $simpleValueHandler = new Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Simple(
+            $this->getDatabaseHandler(),
+            $transformationProcessor
+        );
+        $compositeValueHandler = new Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Composite(
+            $this->getDatabaseHandler(),
+            $transformationProcessor
+        );
+
+        return new Content\Handler(
+            new Content\Gateway\DoctrineDatabase(
+                $this->getDatabaseHandler(),
+                new Content\Common\Gateway\CriteriaConverter(
+                    array(
+                        new Content\Common\Gateway\CriterionHandler\ContentId(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Common\Gateway\CriterionHandler\LogicalNot(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Common\Gateway\CriterionHandler\LogicalAnd(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Common\Gateway\CriterionHandler\LogicalOr(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Gateway\CriterionHandler\Subtree(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Common\Gateway\CriterionHandler\ContentTypeId(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Common\Gateway\CriterionHandler\ContentTypeIdentifier(
+                            $this->getDatabaseHandler(),
+                            $this->getContentTypeHandler()
+                        ),
+                        new Content\Common\Gateway\CriterionHandler\ContentTypeGroupId(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Common\Gateway\CriterionHandler\DateMetadata(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Gateway\CriterionHandler\LocationId(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Gateway\CriterionHandler\LocationPriority(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Gateway\CriterionHandler\ParentLocationId(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Common\Gateway\CriterionHandler\RemoteId(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Gateway\CriterionHandler\LocationRemoteId(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Common\Gateway\CriterionHandler\SectionId(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Common\Gateway\CriterionHandler\FullText(
+                            $this->getDatabaseHandler(),
+                            $transformationProcessor,
+                            $fullTextSearchConfiguration
+                        ),
+                        new Content\Common\Gateway\CriterionHandler\Field(
+                            $this->getDatabaseHandler(),
+                            $this->getContentTypeHandler(),
+                            $this->getLanguageHandler(),
+                            $this->getConverterRegistry(),
+                            new Content\Common\Gateway\CriterionHandler\FieldValue\Converter(
+                                new Content\Common\Gateway\CriterionHandler\FieldValue\HandlerRegistry(
+                                    array(
+                                        "ezboolean" => $simpleValueHandler,
+                                        "ezcountry" => $commaSeparatedCollectionValueHandler,
+                                        "ezdate" => $simpleValueHandler,
+                                        "ezdatetime" => $simpleValueHandler,
+                                        "ezemail" => $simpleValueHandler,
+                                        "ezinteger" => $simpleValueHandler,
+                                        "ezobjectrelation" => $simpleValueHandler,
+                                        "ezobjectrelationlist" => $commaSeparatedCollectionValueHandler,
+                                        "ezselection" => $hyphenSeparatedCollectionValueHandler,
+                                        "eztime" => $simpleValueHandler,
+                                    )
+                                ),
+                                $compositeValueHandler
+                            ),
+                            $transformationProcessor
+                        ),
+                        new Content\Common\Gateway\CriterionHandler\ObjectStateId(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Common\Gateway\CriterionHandler\LanguageCode(
+                            $this->getDatabaseHandler(),
+                            $this->getLanguageMaskGenerator()
+                        ),
+                        new Content\Gateway\CriterionHandler\Visibility(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Common\Gateway\CriterionHandler\MatchAll(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Common\Gateway\CriterionHandler\UserMetadata(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Common\Gateway\CriterionHandler\FieldRelation(
+                            $this->getDatabaseHandler(),
+                            $this->getContentTypeHandler(),
+                            $this->getLanguageHandler()
+                        ),
+                        new Content\Gateway\CriterionHandler\Depth(
+                            $this->getDatabaseHandler()
+                        ),
+                    )
+                ),
+                new Content\Common\Gateway\SortClauseConverter(
+                    array(
+                        new Content\Common\Gateway\SortClauseHandler\ContentId( $this->getDatabaseHandler() ),
+                    )
+                )
+            ),
+            $this->getContentMapperMock()
+        );
+    }
+
+    protected $contentTypeHandler;
+
+    protected function getContentTypeHandler()
+    {
+        if ( !isset( $this->contentTypeHandler ) )
+        {
+            $this->contentTypeHandler = new ContentTypeHandler(
+                new ContentTypeGateway(
+                    $this->getDatabaseHandler(),
+                    $this->getLanguageMaskGenerator()
+                ),
+                new ContentTypeMapper( $this->getConverterRegistry() ),
+                $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler" )
+            );
+        }
+
+        return $this->contentTypeHandler;
+    }
+
+    protected function getConverterRegistry()
+    {
+        if ( !isset( $this->fieldRegistry ) )
+        {
+            $this->fieldRegistry = new ConverterRegistry(
+                array(
+                    'ezdatetime' => new Converter\DateAndTimeConverter(),
+                    'ezinteger' => new Converter\IntegerConverter(),
+                    'ezstring' => new Converter\TextLineConverter(),
+                    'ezprice' => new Converter\IntegerConverter(),
+                    'ezurl' => new Converter\UrlConverter(),
+                    'ezxmltext' => new Converter\XmlTextConverter(),
+                    'ezboolean' => new Converter\CheckboxConverter(),
+                    'ezkeyword' => new Converter\KeywordConverter(),
+                )
+            );
+        }
+
+        return $this->fieldRegistry;
+    }
+
+    /**
+     * Returns a content mapper mock
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
+     */
+    protected function getContentMapperMock()
+    {
+        $mapperMock = $this->getMock(
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
+            array( 'extractContentInfoFromRows' ),
+            array(
+                $this->fieldRegistry,
+                $this->getLanguageHandler()
+            )
+        );
+        $mapperMock->expects( $this->any() )
+            ->method( 'extractContentInfoFromRows' )
+            ->with( $this->isType( 'array' ) )
+            ->will(
+                $this->returnCallback(
+                    function ( $rows )
+                    {
+                        $contentInfoObjs = array();
+                        foreach ( $rows as $row )
+                        {
+                            $contentId = (int)$row['id'];
+                            if ( !isset( $contentInfoObjs[$contentId] ) )
+                            {
+                                $contentInfoObjs[$contentId] = new ContentInfo();
+                                $contentInfoObjs[$contentId]->id = $contentId;
+                            }
+                        }
+                        return array_values( $contentInfoObjs );
+                    }
+                )
+            );
+        return $mapperMock;
+    }
+
+    /**
+     * Returns a content field handler mock
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
+     */
+    protected function getContentFieldHandlerMock()
+    {
+        return $this->getMock(
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldHandler',
+            array( 'loadExternalFieldData' ),
+            array(),
+            '',
+            false
+        );
+    }
+
+    /**
+     * Bug #80
+     */
+    public function testFindWithoutOffsetLimit()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->findContent(
+            new Query(
+                array(
+                    'filter' => new Criterion\ContentId( 10 )
+                )
+            )
+        );
+
+        $this->assertEquals(
+            1,
+            $result->totalCount
+        );
+    }
+
+    /**
+     * Bug #81, bug #82
+     */
+    public function testFindWithZeroLimit()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->findContent(
+            new Query(
+                array(
+                    'filter' => new Criterion\ContentId( 10 ),
+                    'offset'    => 0,
+                    'limit'     => 0,
+                )
+            )
+        );
+
+        $this->assertEquals(
+            1,
+            $result->totalCount
+        );
+        $this->assertEquals(
+            array(),
+            $result->searchHits
+        );
+    }
+
+    /**
+     * Issue with PHP_MAX_INT limit overflow in databases
+     */
+    public function testFindWithNullLimit()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->findContent(
+            new Query(
+                array(
+                    'filter' => new Criterion\ContentId( 10 ),
+                    'offset'    => 0,
+                    'limit'     => null,
+                )
+            )
+        );
+
+        $this->assertEquals(
+            1,
+            $result->totalCount
+        );
+        $this->assertEquals(
+            1,
+            count( $result->searchHits )
+        );
+    }
+
+    /**
+     * Issue with offsetting to the nonexistent results produces \ezcQueryInvalidParameterException exception.
+     */
+    public function testFindWithOffsetToNonexistent()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->findContent(
+            new Query(
+                array(
+                    'filter' => new Criterion\ContentId( 10 ),
+                    'offset'    => 1000,
+                    'limit'     => null,
+                )
+            )
+        );
+
+        $this->assertEquals(
+            1,
+            $result->totalCount
+        );
+        $this->assertEquals(
+            0,
+            count( $result->searchHits )
+        );
+    }
+
+    public function testFindWithExistingLanguageFields()
+    {
+        $this->markTestSkipped( "Translation filters are currently not supported by new search API." );
+
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->findContent(
+            new Query(
+                array(
+                    'filter'    => new Criterion\ContentId( 11 ),
+                    'offset'       => 0,
+                    'limit'        => null,
+                    'translations' => array( 'eng-US' )
+                )
+            )
+        );
+
+        $this->assertEquals(
+            1,
+            $result->totalCount
+        );
+    }
+
+    public function testFindWithMissingLanguageFields()
+    {
+        $this->markTestSkipped( "Translation filters are currently not supported by new search API." );
+
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->findContent(
+            new Query(
+                array(
+                    'filter' => new Criterion\ContentId( 4 ),
+                    'offset'       => 0,
+                    'limit'        => null,
+                    'translations' => array( 'eng-GB' )
+                )
+            )
+        );
+
+        $this->assertEquals(
+            0,
+            $result->totalCount
+        );
+    }
+
+    public function testFindSingle()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $contentInfo = $locator->findSingle( new Criterion\ContentId( 10 ) );
+
+        $this->assertEquals( 10, $contentInfo->id );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testFindSingleWithNonSearchableField()
+    {
+        $locator = $this->getContentSearchHandler();
+        $locator->findSingle(
+            new Criterion\Field(
+                'tag_cloud_url',
+                Criterion\Operator::EQ,
+                'http://nimbus.com'
+            )
+        );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testFindContentWithNonSearchableField()
+    {
+        $locator = $this->getContentSearchHandler();
+        $locator->findContent(
+            new Query(
+                array(
+                    'filter' => new Criterion\Field(
+                        'tag_cloud_url',
+                        Criterion\Operator::EQ,
+                        'http://nimbus.com'
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                )
+            )
+        );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testFindSingleTooMany()
+    {
+        $locator = $this->getContentSearchHandler();
+        $locator->findSingle( new Criterion\ContentId( array( 4, 10, 12, 23 ) ) );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testFindSingleZero()
+    {
+        $locator = $this->getContentSearchHandler();
+        $locator->findSingle( new Criterion\ContentId( 0 ) );
+    }
+
+    public function testContentIdFilter()
+    {
+        $this->assertSearchResults(
+            array( 4, 10 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\ContentId(
+                            array( 1, 4, 10 )
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testContentIdFilterCount()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->findContent(
+            new Query(
+                array(
+                    'filter' => new Criterion\ContentId(
+                        array( 1, 4, 10 )
+                    ),
+                    'limit' => 10,
+                )
+            )
+        );
+
+        $this->assertSame( 2, $result->totalCount );
+    }
+
+    public function testContentAndCombinatorFilter()
+    {
+        $this->assertSearchResults(
+            array( 4 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\LogicalAnd(
+                            array(
+                                new Criterion\ContentId(
+                                    array( 1, 4, 10 )
+                                ),
+                                new Criterion\ContentId(
+                                    array( 4, 12 )
+                                ),
+                            )
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testContentOrCombinatorFilter()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->findContent(
+            new Query(
+                array(
+                    'filter' => new Criterion\LogicalOr(
+                        array(
+                            new Criterion\ContentId(
+                                array( 1, 4, 10 )
+                            ),
+                            new Criterion\ContentId(
+                                array( 4, 12 )
+                            ),
+                        )
+                    ),
+                    'limit' => 10,
+                )
+            )
+        );
+
+        $expectedContentIds = array( 4, 10, 12 );
+
+        $this->assertEquals(
+            count( $expectedContentIds ),
+            count( $result->searchHits )
+        );
+        foreach ( $result->searchHits as $hit )
+        {
+            $this->assertContains(
+                $hit->valueObject->id,
+                $expectedContentIds
+            );
+        }
+    }
+
+    public function testContentNotCombinatorFilter()
+    {
+        $this->assertSearchResults(
+            array( 4 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\LogicalAnd(
+                            array(
+                                new Criterion\ContentId(
+                                    array( 1, 4, 10 )
+                                ),
+                                new Criterion\LogicalNot(
+                                    new Criterion\ContentId(
+                                        array( 10, 12 )
+                                    )
+                                ),
+                            )
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testContentSubtreeFilterIn()
+    {
+        $this->assertSearchResults(
+            array( 67, 68, 69, 70, 71, 72, 73, 74 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\Subtree(
+                            array( '/1/2/69/' )
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testContentSubtreeFilterEq()
+    {
+        $this->assertSearchResults(
+            array( 67, 68, 69, 70, 71, 72, 73, 74 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\Subtree( '/1/2/69/' ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testContentDepthFilterEq()
+    {
+        $this->assertSearchResults(
+            array( 4, 41, 45, 56, 65 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::EQ, 1 ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testContentDepthFilterIn()
+    {
+        $this->assertSearchResults(
+            array( 4, 11, 12, 13, 41, 42, 45, 49, 50, 51, 52, 54, 56, 57, 65, 67, 75, 84, 94, 105, 151, 154, 165, 188, 225 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::IN, array( 1, 2 ) ),
+                        'limit' => 50,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testContentDepthFilterBetween()
+    {
+        $this->assertSearchResults(
+            array( 4, 41, 45, 56, 65 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::BETWEEN, array( 0, 1 ) ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testContentDepthFilterGreaterThan()
+    {
+        $this->assertSearchResults(
+            array( 97, 100, 133, 134, 135, 137, 138, 140, 141, 142, 143, 146, 149, 172, 173, 175, 192, 194, 195, 196, 197, 198, 199, 200, 201, 203, 204, 205, 206, 207, 208, 209, 210, 212, 213 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::GT, 4 ),
+                        'limit' => 50,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testContentDepthFilterGreaterThanOrEqual()
+    {
+        $this->assertSearchResults(
+            array( 97, 100, 133, 134, 135, 137, 138, 140, 141, 142, 143, 146, 149, 172, 173, 175, 192, 194, 195, 196, 197, 198, 199, 200, 201, 203, 204, 205, 206, 207, 208, 209, 210, 212, 213 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::GTE, 5 ),
+                        'limit' => 50,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testContentDepthFilterLessThan()
+    {
+        $this->assertSearchResults(
+            array( 4, 41, 45, 56, 65 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::LT, 2 ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testContentDepthFilterLessThanOrEqual()
+    {
+        $this->assertSearchResults(
+            array( 4, 11, 12, 13, 41, 42, 45, 49, 50, 51, 52, 54, 56, 57, 65, 67, 75, 84, 94, 105, 151, 154, 165, 188, 225 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::LTE, 2 ),
+                        'limit' => 50,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testContentTypeIdFilter()
+    {
+        $this->assertSearchResults(
+            array( 10, 14, 226 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\ContentTypeId( 4 ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testContentTypeIdentifierFilter()
+    {
+        $this->assertSearchResults(
+            array( 41, 45, 49, 50, 51 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\ContentTypeIdentifier( 'folder' ),
+                        'limit' => 5,
+                        'sortClauses' => array( new SortClause\ContentId ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testContentTypeGroupFilter()
+    {
+        $this->assertSearchResults(
+            array( 4, 10, 11, 12, 13, 14, 42, 225, 226 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\ContentTypeGroupId( 2 ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testDateMetadataFilterModifiedGreater()
+    {
+        $this->assertSearchResults(
+            array( 11, 225, 226 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\DateMetadata(
+                            Criterion\DateMetadata::MODIFIED,
+                            Criterion\Operator::GT,
+                            1311154214
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testDateMetadataFilterModifiedGreaterOrEqual()
+    {
+        $this->assertSearchResults(
+            array( 11, 14, 225, 226 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\DateMetadata(
+                            Criterion\DateMetadata::MODIFIED,
+                            Criterion\Operator::GTE,
+                            1311154214
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testDateMetadataFilterModifiedIn()
+    {
+        $this->assertSearchResults(
+            array( 11, 14, 225, 226 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\DateMetadata(
+                            Criterion\DateMetadata::MODIFIED,
+                            Criterion\Operator::IN,
+                            array( 1311154214, 1311154215 )
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testDateMetadataFilterModifiedBetween()
+    {
+        $this->assertSearchResults(
+            array( 11, 14, 225, 226 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\DateMetadata(
+                            Criterion\DateMetadata::MODIFIED,
+                            Criterion\Operator::BETWEEN,
+                            array( 1311154213, 1311154215 )
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testDateMetadataFilterCreatedBetween()
+    {
+        $this->assertSearchResults(
+            array( 66, 131, 225 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\DateMetadata(
+                            Criterion\DateMetadata::CREATED,
+                            Criterion\Operator::BETWEEN,
+                            array( 1299780749, 1311154215 )
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testLocationIdFilter()
+    {
+        $this->assertSearchResults(
+            array( 4, 65 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\LocationId( array( 1, 2, 5 ) ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testLocationPriorityFilter()
+    {
+        $this->assertSearchResults(
+            array( 154, 165, 188 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\LocationPriority(
+                            Criterion\Operator::BETWEEN,
+                            array( 1, 10 )
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testParentLocationIdFilter()
+    {
+        $this->assertSearchResults(
+            array( 4, 41, 45, 56, 65 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\ParentLocationId( array( 1 ) ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testRemoteIdFilter()
+    {
+        $this->assertSearchResults(
+            array( 4, 10 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\RemoteId(
+                            array( 'f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca' )
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testLocationRemoteIdFilter()
+    {
+        $this->assertSearchResults(
+            array( 4, 65 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\LocationRemoteId(
+                            array( '3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983' )
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testSectionFilter()
+    {
+        $this->assertSearchResults(
+            array( 4, 10, 11, 12, 13, 14, 42, 226 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\SectionId( array( 2 ) ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testStatusFilter()
+    {
+        $this->assertSearchResults(
+            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            $searchResult = $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        // Status criterion is gone, but this will also match all published
+                        'filter' => new Criterion\LogicalNot(
+                            new Criterion\ContentId(
+                                array( 0 )
+                            )
+                        ),
+                        'limit' => 10,
+                        'sortClauses' => array( new SortClause\ContentId ),
+                    )
+                )
+            )
+        );
+
+        $this->assertEquals(
+            185,
+            $searchResult->totalCount
+        );
+    }
+
+    public function testFieldFilter()
+    {
+        $this->assertSearchResults(
+            array( 11 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\Field(
+                            'name',
+                            Criterion\Operator::EQ,
+                            'members'
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testFieldFilterIn()
+    {
+        $this->assertSearchResults(
+            array( 11, 42 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\Field(
+                            'name',
+                            Criterion\Operator::IN,
+                            array( 'members', 'anonymous users' )
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testFieldFilterContainsPartial()
+    {
+        $this->assertSearchResults(
+            array( 42 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Field(
+                            'name',
+                            Criterion\Operator::CONTAINS,
+                            'nonymous use'
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testFieldFilterContainsSimple()
+    {
+        $this->assertSearchResults(
+            array( 77 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Field(
+                            'publish_date',
+                            Criterion\Operator::CONTAINS,
+                            1174643880
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testFieldFilterContainsSimpleNoMatch()
+    {
+        $this->assertSearchResults(
+            array(),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Field(
+                            'publish_date',
+                            Criterion\Operator::CONTAINS,
+                            1174643
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testFieldFilterBetween()
+    {
+        $this->assertSearchResults(
+            array( 69, 71, 72 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\Field(
+                            'price',
+                            Criterion\Operator::BETWEEN,
+                            array( 10000, 1000000 )
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testFieldFilterOr()
+    {
+        $this->assertSearchResults(
+            array( 11, 69, 71, 72 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\LogicalOr(
+                            array(
+                                new Criterion\Field(
+                                    'name',
+                                    Criterion\Operator::EQ,
+                                    'members'
+                                ),
+                                new Criterion\Field(
+                                    'price',
+                                    Criterion\Operator::BETWEEN,
+                                    array( 10000, 1000000 )
+                                )
+                            )
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testFullTextFilter()
+    {
+        $this->assertSearchResults(
+            array( 191 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\FullText( 'applied webpage' ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testFullTextWildcardFilter()
+    {
+        $this->assertSearchResults(
+            array( 191 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\FullText( 'applie*' ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testFullTextDisabledWildcardFilter()
+    {
+        $this->assertSearchResults(
+            array(),
+            $this->getContentSearchHandler(
+                array( 'enableWildcards' => false )
+            )->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\FullText( 'applie*' ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testFullTextFilterStopwordRemoval()
+    {
+        $handler = $this->getContentSearchHandler(
+            array(
+                'stopWordThresholdFactor' => 0.1
+            )
+        );
+
+        $this->assertSearchResults(
+            array(),
+            $handler->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\FullText( 'the' ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testFullTextFilterNoStopwordRemoval()
+    {
+        $handler = $this->getContentSearchHandler(
+            array(
+                'stopWordThresholdFactor' => 1
+            )
+        );
+
+        $result = $handler->findContent(
+            new Query(
+                array(
+                    'filter' => new Criterion\FullText(
+                        'the'
+                    ),
+                    'limit' => 10,
+                )
+            )
+        );
+
+        $this->assertEquals(
+            10,
+            count(
+                array_map(
+                    function ( $hit )
+                    {
+                        return $hit->valueObject->id;
+                    },
+                    $result->searchHits
+                )
+            )
+        );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testFullTextFilterInvalidStopwordThreshold()
+    {
+        $this->getContentSearchHandler(
+            array(
+                'stopWordThresholdFactor' => 2
+            )
+        );
+    }
+
+    public function testObjectStateIdFilter()
+    {
+        $this->assertSearchResults(
+            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\ObjectStateId( 1 ),
+                        'limit' => 10,
+                        'sortClauses' => array( new SortClause\ContentId ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testObjectStateIdFilterIn()
+    {
+        $this->assertSearchResults(
+            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\ObjectStateId( array( 1, 2 ) ),
+                        'limit' => 10,
+                        'sortClauses' => array( new SortClause\ContentId ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testLanguageCodeFilter()
+    {
+        $this->assertSearchResults(
+            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\LanguageCode( 'eng-US' ),
+                        'limit' => 10,
+                        'sortClauses' => array( new SortClause\ContentId ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testLanguageCodeFilterIn()
+    {
+        $this->assertSearchResults(
+            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\LanguageCode( array( 'eng-US', 'eng-GB' ) ),
+                        'limit' => 10,
+                        'sortClauses' => array( new SortClause\ContentId ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testLanguageCodeFilterWithAlwaysAvailable()
+    {
+        $this->assertSearchResults(
+            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49, 50, 51, 56, 57, 65, 68, 70, 74, 76, 80 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\LanguageCode( 'eng-GB', true ),
+                        'limit' => 20,
+                        'sortClauses' => array( new SortClause\ContentId ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testVisibilityFilter()
+    {
+        $this->assertSearchResults(
+            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\Visibility(
+                            Criterion\Visibility::VISIBLE
+                        ),
+                        'limit' => 10,
+                        'sortClauses' => array( new SortClause\ContentId ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testUserMetadataFilterOwnerWrongUserId()
+    {
+        $this->assertSearchResults(
+            array(),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UserMetadata(
+                            Criterion\UserMetadata::OWNER,
+                            Criterion\Operator::EQ,
+                            2
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testUserMetadataFilterOwnerAdministrator()
+    {
+        $this->assertSearchResults(
+            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UserMetadata(
+                            Criterion\UserMetadata::OWNER,
+                            Criterion\Operator::EQ,
+                            14
+                        ),
+                        'limit' => 10,
+                        'sortClauses' => array( new SortClause\ContentId ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testUserMetadataFilterOwnerEqAMember()
+    {
+        $this->assertSearchResults(
+            array( 223 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UserMetadata(
+                            Criterion\UserMetadata::OWNER,
+                            Criterion\Operator::EQ,
+                            226
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testUserMetadataFilterOwnerInAMember()
+    {
+        $this->assertSearchResults(
+            array( 223 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UserMetadata(
+                            Criterion\UserMetadata::OWNER,
+                            Criterion\Operator::IN,
+                            array( 226 )
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testUserMetadataFilterCreatorEqAMember()
+    {
+        $this->assertSearchResults(
+            array( 223 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UserMetadata(
+                            Criterion\UserMetadata::MODIFIER,
+                            Criterion\Operator::EQ,
+                            226
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testUserMetadataFilterCreatorInAMember()
+    {
+        $this->assertSearchResults(
+            array( 223 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UserMetadata(
+                            Criterion\UserMetadata::MODIFIER,
+                            Criterion\Operator::IN,
+                            array( 226 )
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testUserMetadataFilterEqGroupMember()
+    {
+        $this->assertSearchResults(
+            array( 223 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UserMetadata(
+                            Criterion\UserMetadata::GROUP,
+                            Criterion\Operator::EQ,
+                            11
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testUserMetadataFilterInGroupMember()
+    {
+        $this->assertSearchResults(
+            array( 223 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UserMetadata(
+                            Criterion\UserMetadata::GROUP,
+                            Criterion\Operator::IN,
+                            array( 11 )
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testUserMetadataFilterEqGroupMemberNoMatch()
+    {
+        $this->assertSearchResults(
+            array(),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UserMetadata(
+                            Criterion\UserMetadata::GROUP,
+                            Criterion\Operator::EQ,
+                            13
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testUserMetadataFilterInGroupMemberNoMatch()
+    {
+        $this->assertSearchResults(
+            array(),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\UserMetadata(
+                            Criterion\UserMetadata::GROUP,
+                            Criterion\Operator::IN,
+                            array( 13 )
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testFieldRelationFilterContainsSingle()
+    {
+        $this->assertSearchResults(
+            array( 67 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\FieldRelation(
+                            'billboard',
+                            Criterion\Operator::CONTAINS,
+                            array( 60 )
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testFieldRelationFilterContainsSingleNoMatch()
+    {
+        $this->assertSearchResults(
+            array(),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\FieldRelation(
+                            'billboard',
+                            Criterion\Operator::CONTAINS,
+                            array( 4 )
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testFieldRelationFilterContainsArray()
+    {
+        $this->assertSearchResults(
+            array( 67 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\FieldRelation(
+                            'billboard',
+                            Criterion\Operator::CONTAINS,
+                            array( 60, 75 )
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testFieldRelationFilterContainsArrayNotMatch()
+    {
+        $this->assertSearchResults(
+            array(),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\FieldRelation(
+                            'billboard',
+                            Criterion\Operator::CONTAINS,
+                            array( 60, 64 )
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testFieldRelationFilterInArray()
+    {
+        $this->assertSearchResults(
+            array( 67, 75 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\FieldRelation(
+                            'billboard',
+                            Criterion\Operator::IN,
+                            array( 60, 64 )
+                        ),
+                    )
+                )
+            )
+        );
+    }
+
+    public function testFieldRelationFilterInArrayNotMatch()
+    {
+        $this->assertSearchResults(
+            array(),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\FieldRelation(
+                            'billboard',
+                            Criterion\Operator::IN,
+                            array( 4, 10 )
+                        ),
+                    )
+                )
+            )
+        );
+    }
+}

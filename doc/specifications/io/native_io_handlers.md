@@ -36,7 +36,7 @@ ez_io:
                 adapter: default
 ```
 
-The 'default' flysystem adapter's directory is based on your site settings, and will automatically be set to `%ezpublish_legacy.root_dir%/$var_dir$/$storage_dir$` (example: `/path/to/ezpublish_legacy/var/ezdemo_site/storage`).
+The 'default' flysystem adapter's directory is based on your site settings, and will automatically be set to `%webroot_dir%/$var_dir$/$storage_dir$` (example: `/path/to/ezpublish/web/var/ezdemo_site/storage`).
 
 ## The native Flysystem handler.
 [league/flysystem](flysystem.thephpleague.com) (along with [FlysystemBundle](https://github.com/1up-lab/OneupFlysystemBundle/)) is an abstract file handling library.

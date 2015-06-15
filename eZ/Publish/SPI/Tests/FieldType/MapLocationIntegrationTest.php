@@ -59,7 +59,7 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezgmaplocation',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\MapLocation(),
+            new Legacy\Content\FieldValue\Converter\MapLocationConverter(),
             new FieldType\MapLocation\MapLocationStorage(
                 array(
                     'LegacyStorage' => new FieldType\MapLocation\MapLocationStorage\Gateway\LegacyStorage(),

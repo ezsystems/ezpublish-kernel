@@ -145,6 +145,62 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
     }
 
     /**
+     * Test for the createContentType() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     */
+    public function testCreateContentTypeThrowsUnauthorizedException()
+    {
+        $repository = $this->getRepository();
+
+        $creatorId = $this->generateId( 'user', 14 );
+        $anonymousUserId = $this->generateId( 'user', 10 );
+        /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
+        $userService = $repository->getUserService();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'new-group'
+        );
+        // $creatorId is the ID of the administrator user
+        $groupCreate->creatorId = $creatorId;
+        $groupCreate->creationDate = $this->createDateTime();
+        $contentTypeGroup = $contentTypeService->createContentTypeGroup( $groupCreate );
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct(
+            'new-type'
+        );
+        // $creatorId is the ID of the administrator user
+        $typeCreate->creatorId = $creatorId;
+        $typeCreate->creationDate = $this->createDateTime();
+        $typeCreate->mainLanguageCode = 'eng-GB';
+        $typeCreate->names = array( 'eng-GB' => 'A name.' );
+        $typeCreate->descriptions = array( 'eng-GB' => 'A description.' );
+
+        $titleFieldCreateStruct = $contentTypeService->newFieldDefinitionCreateStruct( 'title', 'ezstring' );
+        $titleFieldCreateStruct->names = array( 'eng-GB' => 'Title' );
+        $titleFieldCreateStruct->descriptions = array( 'eng-GB' => 'The Title' );
+        $titleFieldCreateStruct->fieldGroup = 'content';
+        $titleFieldCreateStruct->position = 10;
+        $titleFieldCreateStruct->isTranslatable = true;
+        $titleFieldCreateStruct->isRequired = true;
+        $titleFieldCreateStruct->isSearchable = true;
+        $typeCreate->addFieldDefinition( $titleFieldCreateStruct );
+
+        // Set anonymous user
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
+
+        // This call will fail with a "UnauthorizedException"
+        $contentTypeService->createContentType( $typeCreate, array( $contentTypeGroup ) );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the updateContentTypeDraft() method.
      *
      * @return void

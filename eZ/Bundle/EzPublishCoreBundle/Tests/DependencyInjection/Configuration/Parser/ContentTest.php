@@ -24,7 +24,7 @@ class ContentTest extends AbstractParserTestCase
 
     protected function getMinimalConfiguration()
     {
-        return Yaml::parse( __DIR__ . '/../../Fixtures/ezpublish_minimal.yml' );
+        return Yaml::parse( file_get_contents( __DIR__ . '/../../Fixtures/ezpublish_minimal.yml' ) );
     }
 
     public function testDefaultContentSettings()

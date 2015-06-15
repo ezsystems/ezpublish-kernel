@@ -330,7 +330,8 @@ class SearchServiceTest extends BaseTest
                     'filter' => new Criterion\Subtree(
                         '/1/'
                     ),
-                    'sortClauses' => array( new SortClause\ContentId() )
+                    'sortClauses' => array( new SortClause\ContentId() ),
+                    'limit' => 50,
                 ),
                 $fixtureDir . 'Status.php',
                 // Result having the same sort level should be sorted between them to be system independent
@@ -367,6 +368,7 @@ class SearchServiceTest extends BaseTest
                     'sortClauses' => array(
                         new SortClause\ContentId(),
                     ),
+                    'limit' => 50,
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
@@ -380,6 +382,7 @@ class SearchServiceTest extends BaseTest
                     'sortClauses' => array(
                         new SortClause\ContentId(),
                     ),
+                    'limit' => 50,
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
@@ -393,6 +396,7 @@ class SearchServiceTest extends BaseTest
                     'sortClauses' => array(
                         new SortClause\ContentId(),
                     ),
+                    'limit' => 50,
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
@@ -406,6 +410,7 @@ class SearchServiceTest extends BaseTest
                     'sortClauses' => array(
                         new SortClause\ContentId(),
                     ),
+                    'limit' => 50,
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
@@ -419,6 +424,7 @@ class SearchServiceTest extends BaseTest
                     'sortClauses' => array(
                         new SortClause\ContentId(),
                     ),
+                    'limit' => 50,
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
@@ -432,6 +438,7 @@ class SearchServiceTest extends BaseTest
                     'sortClauses' => array(
                         new SortClause\ContentId(),
                     ),
+                    'limit' => 50,
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
@@ -445,6 +452,7 @@ class SearchServiceTest extends BaseTest
                     'sortClauses' => array(
                         new SortClause\ContentId(),
                     ),
+                    'limit' => 50,
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
@@ -458,6 +466,7 @@ class SearchServiceTest extends BaseTest
                     'sortClauses' => array(
                         new SortClause\ContentId(),
                     ),
+                    'limit' => 50,
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
@@ -530,7 +539,8 @@ class SearchServiceTest extends BaseTest
                     'criterion' => new Criterion\Visibility(
                         Criterion\Visibility::VISIBLE
                     ),
-                    'sortClauses' => array( new SortClause\ContentId() )
+                    'sortClauses' => array( new SortClause\ContentId() ),
+                    'limit' => 50,
                 ),
                 $fixtureDir . 'Visibility.php',
             ),
@@ -565,7 +575,8 @@ class SearchServiceTest extends BaseTest
             array(
                 array(
                     'criterion' => new Criterion\Depth( Criterion\Operator::GTE, 2 ),
-                    'sortClauses' => array( new SortClause\ContentId() )
+                    'sortClauses' => array( new SortClause\ContentId() ),
+                    'limit' => 50,
                 ),
                 $fixtureDir . 'DepthGte.php',
             ),
@@ -579,14 +590,16 @@ class SearchServiceTest extends BaseTest
             array(
                 array(
                     'criterion' => new Criterion\Depth( Criterion\Operator::LTE, 2 ),
-                    'sortClauses' => array( new SortClause\ContentId() )
+                    'sortClauses' => array( new SortClause\ContentId() ),
+                    'limit' => 50,
                 ),
                 $fixtureDir . 'DepthLte.php',
             ),
             array(
                 array(
                     'criterion' => new Criterion\Depth( Criterion\Operator::BETWEEN, array( 1, 2 ) ),
-                    'sortClauses' => array( new SortClause\ContentId() )
+                    'sortClauses' => array( new SortClause\ContentId() ),
+                    'limit' => 50,
                 ),
                 $fixtureDir . 'DepthLte.php',
             ),
@@ -621,7 +634,8 @@ class SearchServiceTest extends BaseTest
             array(
                 array(
                     'criterion' => new Criterion\Location\Depth( Criterion\Operator::GTE, 2 ),
-                    'sortClauses' => array( new SortClause\ContentId() )
+                    'sortClauses' => array( new SortClause\ContentId() ),
+                    'limit' => 50,
                 ),
                 $fixtureDir . 'DepthGte.php',
             ),
@@ -635,14 +649,16 @@ class SearchServiceTest extends BaseTest
             array(
                 array(
                     'criterion' => new Criterion\Location\Depth( Criterion\Operator::LTE, 2 ),
-                    'sortClauses' => array( new SortClause\ContentId() )
+                    'sortClauses' => array( new SortClause\ContentId() ),
+                    'limit' => 50,
                 ),
                 $fixtureDir . 'DepthLte.php',
             ),
             array(
                 array(
                     'criterion' => new Criterion\Location\Depth( Criterion\Operator::BETWEEN, array( 1, 2 ) ),
-                    'sortClauses' => array( new SortClause\ContentId() )
+                    'sortClauses' => array( new SortClause\ContentId() ),
+                    'limit' => 50,
                 ),
                 $fixtureDir . 'DepthLte.php',
             ),
@@ -826,6 +842,110 @@ class SearchServiceTest extends BaseTest
         );
     }
 
+    public function testFindNoPerformCount()
+    {
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $query = new Query();
+        $query->performCount = false;
+        $query->query = new Criterion\ContentTypeId(
+            array( 4 )
+        );
+
+        $searchHit = $searchService->findContent( $query );
+
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            $this->assertEquals(
+                null,
+                $searchHit->totalCount
+            );
+        }
+        else
+        {
+            $this->assertEquals(
+                2,
+                $searchHit->totalCount
+            );
+        }
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testFindNoPerformCountException()
+    {
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) !== 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            $this->markTestSkipped( "Only applicable to Legacy/DB based search" );
+        }
+
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $query = new Query();
+        $query->performCount = false;
+        $query->limit = 0;
+        $query->query = new Criterion\ContentTypeId(
+            array( 4 )
+        );
+
+        $searchService->findContent( $query );
+    }
+
+    public function testFindLocationsNoPerformCount()
+    {
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $query = new LocationQuery();
+        $query->performCount = false;
+        $query->query = new Criterion\ContentTypeId(
+            array( 4 )
+        );
+
+        $searchHit = $searchService->findLocations( $query );
+
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            $this->assertEquals(
+                null,
+                $searchHit->totalCount
+            );
+        }
+        else
+        {
+            $this->assertEquals(
+                2,
+                $searchHit->totalCount
+            );
+        }
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testFindLocationsNoPerformCountException()
+    {
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) !== 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            $this->markTestSkipped( "Only applicable to Legacy/DB based search" );
+        }
+
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $query = new LocationQuery();
+        $query->performCount = false;
+        $query->limit = 0;
+        $query->query = new Criterion\ContentTypeId(
+            array( 4 )
+        );
+
+        $searchService->findLocations( $query );
+    }
+
     /**
      * Create test Content with ezcountry field having multiple countries selected.
      *
@@ -942,6 +1062,7 @@ class SearchServiceTest extends BaseTest
 
     /**
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$criterion->target' is invalid: No searchable fields found for the given criterion target 'some_hopefully_unknown_field'
      */
     public function testInvalidFieldIdentifierRange()
     {
@@ -964,6 +1085,7 @@ class SearchServiceTest extends BaseTest
 
     /**
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$criterion->target' is invalid: No searchable fields found for the given criterion target 'some_hopefully_unknown_field'
      */
     public function testInvalidFieldIdentifierIn()
     {
@@ -986,6 +1108,7 @@ class SearchServiceTest extends BaseTest
 
     /**
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$criterion->target' is invalid: No searchable fields found for the given criterion target 'tag_cloud_url'
      */
     public function testFindContentWithNonSearchableField()
     {
@@ -1001,6 +1124,49 @@ class SearchServiceTest extends BaseTest
                         'http://nimbus.com'
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
+                )
+            )
+        );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$sortClause->targetData' is invalid: No searchable fields found for the given sort clause target 'title' on 'template_look'
+     */
+    public function testSortFieldWithNonSearchableField()
+    {
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $searchService->findContent(
+            new Query(
+                array(
+                    'sortClauses' => array( new SortClause\Field( "template_look", "title" ) ),
+                )
+            )
+        );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$sortClause->targetData' is invalid: No searchable fields found for the given sort clause target 'title' on 'template_look'
+     */
+    public function testSortMapLocationDistanceWithNonSearchableField()
+    {
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $searchService->findContent(
+            new Query(
+                array(
+                    'sortClauses' => array(
+                        new SortClause\MapLocationDistance(
+                            "template_look",
+                            "title",
+                            1,
+                            2
+                        ),
+                    ),
                 )
             )
         );
@@ -1078,7 +1244,7 @@ class SearchServiceTest extends BaseTest
                 array(
                     'filter' => new Criterion\SectionId( array( 2 ) ),
                     'offset' => 0,
-                    'limit' => 10,
+                    'limit' => 50,
                     'sortClauses' => array(
                         new SortClause\DateModified(),
                         new SortClause\ContentId(),
@@ -1090,7 +1256,7 @@ class SearchServiceTest extends BaseTest
                 array(
                     'filter' => new Criterion\SectionId( array( 4, 2, 6, 3 ) ),
                     'offset' => 0,
-                    'limit' => null,
+                    'limit' => 50,
                     'sortClauses' => array(
                         new SortClause\SectionIdentifier(),
                         new SortClause\ContentId(),
@@ -1102,7 +1268,7 @@ class SearchServiceTest extends BaseTest
                 array(
                     'filter' => new Criterion\SectionId( array( 4, 2, 6, 3 ) ),
                     'offset' => 0,
-                    'limit' => null,
+                    'limit' => 50,
                     'sortClauses' => array(
                         new SortClause\SectionName(),
                         new SortClause\ContentId(),
@@ -1114,7 +1280,7 @@ class SearchServiceTest extends BaseTest
                 array(
                     'filter' => new Criterion\SectionId( array( 2, 3 ) ),
                     'offset' => 0,
-                    'limit' => null,
+                    'limit' => 50,
                     'sortClauses' => array(
                         new SortClause\ContentName(),
                         new SortClause\ContentId(),
@@ -1126,7 +1292,7 @@ class SearchServiceTest extends BaseTest
                 array(
                     'filter' => new Criterion\ContentTypeId( 1 ),
                     'offset' => 0,
-                    'limit' => null,
+                    'limit' => 50,
                     'sortClauses' => array(
                         new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-US" ),
                         new SortClause\ContentId(),
@@ -1138,7 +1304,7 @@ class SearchServiceTest extends BaseTest
                 array(
                     'filter' => new Criterion\ContentTypeId( array( 1, 3 ) ),
                     'offset' => 0,
-                    'limit' => null,
+                    'limit' => 50,
                     'sortClauses' => array(
                         new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-US" ),
                         new SortClause\ContentId(),
@@ -1150,7 +1316,7 @@ class SearchServiceTest extends BaseTest
                 array(
                     'filter' => new Criterion\ContentTypeId( array( 1, 3 ) ),
                     'offset' => 0,
-                    'limit' => null,
+                    'limit' => 50,
                     'sortClauses' => array(
                         new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-US" ),
                         new SortClause\ContentId(),
@@ -1183,28 +1349,6 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . 'SortFieldMultipleTypesSliceReverse.php',
-            ),
-        );
-    }
-
-    public function getSortedContentSearchesLegacy()
-    {
-        $fixtureDir = $this->getFixtureDir();
-
-        return array(
-            // template_look/title es ezsetting fieldtype, not indexed in Solr or Elasticsearch
-            // @todo check - ezsetting should not be searchable
-            array(
-                array(
-                    'filter' => new Criterion\SectionId( array( 5 ) ),
-                    'offset' => 0,
-                    'limit' => null,
-                    'sortClauses' => array(
-                        new SortClause\Field( "template_look", "title", Query::SORT_ASC ),
-                        new SortClause\ContentId(),
-                    )
-                ),
-                $fixtureDir . 'SortTemplateTitle.php',
             ),
         );
     }
@@ -1466,7 +1610,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -1527,7 +1671,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -1590,7 +1734,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -1649,12 +1793,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testSearchWithFieldSortThrowsInvalidArgumentExceptionTranslatableField()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
-        }
-
         $contentType = $this->createTestContentType();
         $this->createMultilingualContent( $contentType, 1, 2 );
 
@@ -1680,12 +1818,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testSearchWithFieldSortThrowsInvalidArgumentExceptionNonTranslatableField()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
-        }
-
         $contentType = $this->createTestContentType();
         $this->createMultilingualContent( $contentType, 1, 2, 3, "eng-GB" );
 
@@ -1714,7 +1846,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -1775,7 +1907,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -1836,7 +1968,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -1897,7 +2029,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -1940,7 +2072,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -2007,46 +2139,6 @@ class SearchServiceTest extends BaseTest
             },
             $result->searchHits
         );
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @todo Only for Legacy Storage Search, tests are missing for Solr and Elasticsearch
-     *
-     * @dataProvider getSortedContentSearchesLegacy
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     */
-    public function testFindAndSortContentLegacy( $queryData, $fixture, $closure = null )
-    {
-        $setupFactory = $this->getSetupFactory();
-        if (/* $setupFactory instanceof LegacySolr ||*/ $setupFactory instanceof LegacyElasticsearch )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr and Elasticsearch storage" );
-        }
-
-        $query = new Query( $queryData );
-        $this->assertQueryFixture( $query, $fixture, $closure );
-    }
-
-    /**
-     * Test for the findLocations() method.
-     *
-     * @todo Only for Legacy Storage Search, tests are missing for Solr and Elasticsearch
-     *
-     * @dataProvider getSortedContentSearchesLegacy
-     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     */
-    public function testFindAndSortContentLocationsLegacy( $queryData, $fixture, $closure = null )
-    {
-        $setupFactory = $this->getSetupFactory();
-        if (/* $setupFactory instanceof LegacySolr ||*/ $setupFactory instanceof LegacyElasticsearch )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr and Elasticsearch storage" );
-        }
-
-        $query = new LocationQuery( $queryData );
-        $this->assertQueryFixture( $query, $fixture, $closure );
     }
 
     /**
@@ -2383,7 +2475,7 @@ class SearchServiceTest extends BaseTest
     public function testQueryModifiedField()
     {
         // Check using get_class since the others extend SetupFactory\Legacy
-        if ( get_class( $this->getSetupFactory() ) === '\eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
         {
             $this->markTestIncomplete(
                 "Custom fields not supported by LegacySE " .
@@ -2408,6 +2500,49 @@ class SearchServiceTest extends BaseTest
         $this->assertQueryFixture(
             $query,
             $this->getFixtureDir() . '/QueryModifiedField.php'
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * This tests first explicitly creates sort clause on the 'short_name' which is empty
+     * for all Content instances of 'folder' ContentType. Custom sort field is then set
+     * to the index storage name of folder's 'name' field, in order to show the custom
+     * sort field working.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testSortModifiedField()
+    {
+        // Check using get_class since the others extend SetupFactory\Legacy
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            $this->markTestIncomplete(
+                "Custom field sort not supported by LegacySE " .
+                "(@todo: Legacy should fallback to just querying normal field so this should be tested here)"
+            );
+        }
+
+        $sortClause = new SortClause\Field( "folder", "short_name", Query::SORT_ASC, "eng-US" );
+        $sortClause->setCustomField( "folder", "short_name", "folder_name_value_s" );
+
+        $query = new Query(
+            array(
+                "filter" => new Criterion\ContentTypeId( 1 ),
+                "offset" => 0,
+                "limit" => 10,
+                "sortClauses" => array(
+                    $sortClause,
+                    new SortClause\ContentId(),
+                )
+            )
+        );
+
+        $this->assertQueryFixture(
+            $query,
+            $this->getFixtureDir() . "/SortFolderName.php"
         );
     }
 
@@ -3429,7 +3564,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -3494,7 +3629,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -3559,7 +3694,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -3624,7 +3759,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -3691,7 +3826,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -3839,6 +3974,7 @@ class SearchServiceTest extends BaseTest
                 'sortClauses' => array(
                     new SortClause\ContentId(),
                 ),
+                'limit' => 50,
             )
         );
 
@@ -3932,6 +4068,7 @@ class SearchServiceTest extends BaseTest
                 'sortClauses' => array(
                     new SortClause\Location\Id(),
                 ),
+                'limit' => 50,
             )
         );
 
@@ -4249,16 +4386,15 @@ class SearchServiceTest extends BaseTest
         {
             foreach ( array( $fixture, $result ) as $result )
             {
-                $property = new \ReflectionProperty(get_class($result), 'maxScore');
+                $property = new \ReflectionProperty( get_class( $result ), 'maxScore' );
                 $property->setAccessible( true );
                 $property->setValue( $result, 0.0 );
 
                 foreach ( $result->searchHits as $hit )
                 {
-                    $property = new \ReflectionProperty(get_class($hit), 'score');
+                    $property = new \ReflectionProperty( get_class( $hit ), 'score' );
                     $property->setAccessible( true );
                     $property->setValue( $hit, 0.0 );
-
                 }
             }
         }

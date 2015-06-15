@@ -58,7 +58,7 @@ class TextBlockIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'eztext',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\TextBlock(),
+            new Legacy\Content\FieldValue\Converter\TextBlockConverter(),
             new FieldType\NullStorage()
         );
     }

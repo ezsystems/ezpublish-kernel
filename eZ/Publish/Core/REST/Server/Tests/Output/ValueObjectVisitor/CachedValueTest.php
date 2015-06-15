@@ -18,6 +18,7 @@ use eZ\Publish\Core\REST\Server\Values\CachedValue;
 use PHPUnit_Framework_MockObject_MockObject;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class CachedValueTest extends ValueObjectVisitorBaseTest
 {
@@ -150,7 +151,12 @@ class CachedValueTest extends ValueObjectVisitorBaseTest
         $visitor = new ValueObjectVisitor\CachedValue(
             $this->getConfigProviderMock()
         );
-        $visitor->setRequest( $this->request );
+        $requestStack = new RequestStack();
+        if ( $this->request )
+        {
+            $requestStack->push( $this->request );
+        }
+        $visitor->setRequestStack( $requestStack );
         return $visitor;
     }
 

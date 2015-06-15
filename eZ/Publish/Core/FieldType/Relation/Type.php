@@ -61,7 +61,8 @@ class Type extends FieldType
                     null,
                     array(
                         "setting" => $name
-                    )
+                    ),
+                    "[$name]"
                 );
                 continue;
             }
@@ -78,7 +79,8 @@ class Type extends FieldType
                                 "setting" => $name,
                                 "selection_browse" => self::SELECTION_BROWSE,
                                 "selection_dropdown" => self::SELECTION_DROPDOWN
-                            )
+                            ),
+                            "[$name]"
                         );
                     }
                     break;
@@ -90,7 +92,8 @@ class Type extends FieldType
                             null,
                             array(
                                 "setting" => $name
-                            )
+                            ),
+                            "[$name]"
                         );
                     }
                     break;

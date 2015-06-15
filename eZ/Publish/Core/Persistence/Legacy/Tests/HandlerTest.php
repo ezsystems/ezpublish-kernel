@@ -54,41 +54,6 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::searchHandler
-     *
-     * @return void
-     */
-    public function testSearchHandler()
-    {
-        $handler = $this->getHandlerFixture();
-        $searchHandler = $handler->searchHandler();
-
-        $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Search\\Handler',
-            $searchHandler
-        );
-        $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Search\\Handler',
-            $searchHandler
-        );
-    }
-
-    /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::searchHandler
-     *
-     * @return void
-     */
-    public function testSearchHandlerTwice()
-    {
-        $handler = $this->getHandlerFixture();
-
-        $this->assertSame(
-            $handler->searchHandler(),
-            $handler->searchHandler()
-        );
-    }
-
-    /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentTypeHandler
      *
      * @return void

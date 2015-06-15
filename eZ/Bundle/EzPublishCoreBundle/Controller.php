@@ -15,11 +15,6 @@ use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as Authorizatio
 class Controller extends BaseController
 {
     /**
-     * @var \Closure
-     */
-    private $legacyKernelClosure;
-
-    /**
      * @throws \LogicException
      *
      * @return \eZ\Publish\API\Repository\Repository
@@ -27,20 +22,6 @@ class Controller extends BaseController
     public function getRepository()
     {
         return $this->container->get( 'ezpublish.api.repository' );
-    }
-
-    /**
-     * Returns the legacy kernel object.
-     *
-     * @return \eZ\Publish\Core\MVC\Legacy\Kernel
-     */
-    final protected function getLegacyKernel()
-    {
-        if ( !isset( $this->legacyKernelClosure ) )
-            $this->legacyKernelClosure = $this->get( 'ezpublish_legacy.kernel' );
-
-        $legacyKernelClosure = $this->legacyKernelClosure;
-        return $legacyKernelClosure();
     }
 
     /**

@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\SPI\Persistence\User\RoleAssignment;
@@ -212,7 +213,7 @@ class RepositoryTest extends BaseServiceMockTest
             ->method( $this->anything() );
 
         $result = $mockedRepository->sudo(
-            function ( $repo )
+            function ( Repository $repo )
             {
                 return $repo->hasAccess( "test-module", "test-function" );
             }
@@ -297,6 +298,7 @@ class RepositoryTest extends BaseServiceMockTest
             array( "getRoleDomainMapper", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
+                $this->getSPIMockHandler( "Search\\Handler" ),
             )
         );
 
@@ -438,6 +440,7 @@ class RepositoryTest extends BaseServiceMockTest
             array( "getRoleDomainMapper", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
+                $this->getSPIMockHandler( "Search\\Handler" ),
             )
         );
 
@@ -556,6 +559,7 @@ class RepositoryTest extends BaseServiceMockTest
             array( "getRoleDomainMapper", "getCurrentUser", "getLimitationService" ),
             array(
                 $this->getPersistenceMock(),
+                $this->getSPIMockHandler( "Search\\Handler" ),
             )
         );
         $limitationService = $this->getMock(
@@ -690,6 +694,7 @@ class RepositoryTest extends BaseServiceMockTest
             array( "hasAccess", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
+                $this->getSPIMockHandler( "Search\\Handler" ),
             )
         );
 
@@ -723,6 +728,7 @@ class RepositoryTest extends BaseServiceMockTest
             array( "hasAccess", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
+                $this->getSPIMockHandler( "Search\\Handler" ),
             )
         );
 
@@ -1062,6 +1068,7 @@ class RepositoryTest extends BaseServiceMockTest
             array( "getUserService" ),
             array(
                 $this->getPersistenceMock(),
+                $this->getSPIMockHandler( "Search\\Handler" ),
                 array(
                     'user' => array(
                         'anonymousUserID' => 10

@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use eZ\Publish\Core\FieldType\Media\Type;
 
-class MediaProcessor extends FieldTypeProcessor
+class MediaProcessor extends BinaryInputProcessor
 {
     /**
      * {@inheritDoc}

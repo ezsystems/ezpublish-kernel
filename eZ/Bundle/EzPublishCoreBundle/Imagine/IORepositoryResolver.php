@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\MissingBinaryFile;
+use eZ\Publish\SPI\Variation\VariationPurger;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
@@ -39,12 +40,27 @@ class IORepositoryResolver implements ResolverInterface
      * @var FilterConfiguration
      */
     private $filterConfiguration;
+    /**
+     * @var \eZ\Publish\SPI\Variation\VariationPurger
+     */
+    private $variationPurger;
 
-    public function __construct( IOServiceInterface $ioService, RequestContext $requestContext, FilterConfiguration $filterConfiguration )
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator */
+    private $variationPathGenerator;
+
+    public function __construct(
+        IOServiceInterface $ioService,
+        RequestContext $requestContext,
+        FilterConfiguration $filterConfiguration,
+        VariationPurger $variationPurger,
+        VariationPathGenerator $variationPathGenerator
+    )
     {
         $this->ioService = $ioService;
         $this->requestContext = $requestContext;
         $this->filterConfiguration = $filterConfiguration;
+        $this->variationPurger = $variationPurger;
+        $this->variationPathGenerator = $variationPathGenerator;
     }
 
     public function isStored( $path, $filter )
@@ -57,17 +73,23 @@ class IORepositoryResolver implements ResolverInterface
         try
         {
             $binaryFile = $this->ioService->loadBinaryFile( $path );
+
             // Treat a MissingBinaryFile as a not loadable file.
             if ( $binaryFile instanceof MissingBinaryFile )
             {
                 throw new NotResolvableException( "Variation image not found in $path" );
             }
 
-            $path = $binaryFile->uri;
-            $path = $filter !== static::VARIATION_ORIGINAL ? $this->getFilePath(
-                $path,
-                $filter
-            ) : $path;
+            if ( $filter !== static::VARIATION_ORIGINAL )
+            {
+                $variationPath = $this->getFilePath( $path, $filter );
+                $variationBinaryFile = $this->ioService->loadBinaryFile( $variationPath );
+                $path = $variationBinaryFile->uri;
+            }
+            else
+            {
+                $path = $binaryFile->uri;
+            }
 
             return sprintf(
                 '%s%s',
@@ -108,10 +130,14 @@ class IORepositoryResolver implements ResolverInterface
      */
     public function remove( array $paths, array $filters )
     {
-        // TODO: $paths may be empty, meaning that all generated images corresponding to $filters need to be removed.
         if ( empty( $filters ) )
         {
             $filters = array_keys( $this->filterConfiguration->all() );
+        }
+
+        if ( empty( $paths ) )
+        {
+            $this->variationPurger->purge( $filters );
         }
 
         foreach ( $paths as $path )
@@ -131,10 +157,7 @@ class IORepositoryResolver implements ResolverInterface
     }
 
     /**
-     * Returns path for filtered image from original path.
-     * Pattern is <original_dir>/<filename>_<filter_name>.<extension>
-     *
-     * e.g. var/ezdemo_site/Tardis/bigger/in-the-inside/RiverSong_thumbnail.jpg
+     * Returns path for filtered image from original path, using the VariationPathGenerator.
      *
      * @param string $path
      * @param string $filter
@@ -143,14 +166,7 @@ class IORepositoryResolver implements ResolverInterface
      */
     public function getFilePath( $path, $filter )
     {
-        $info = pathinfo( $path );
-        return sprintf(
-            '%s/%s_%s%s',
-            $info['dirname'],
-            $info['filename'],
-            $filter,
-            empty( $info['extension'] ) ? '' : '.' . $info['extension']
-        );
+        return $this->variationPathGenerator->getVariationPath( $path, $filter );
     }
 
     /**

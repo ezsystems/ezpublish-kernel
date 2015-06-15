@@ -54,7 +54,7 @@ class SectionListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSectionListElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'SectionList',
             ),
@@ -73,7 +73,7 @@ class SectionListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSectionListAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'SectionList',
                 'attributes' => array(

@@ -9,10 +9,9 @@ namespace eZ\Publish\Core\IO;
 
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
+use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\MissingBinaryFile;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
-use eZ\Publish\Core\IO\MetadataHandler;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -24,7 +23,7 @@ use Psr\Log\LoggerInterface;
  */
 class TolerantIOService extends IOService
 {
-    /** @var LoggerInterface */
+    /** @var \Psr\Log\LoggerInterface */
     protected $logger;
 
     public function setLogger( LoggerInterface $logger = null )
@@ -37,8 +36,8 @@ class TolerantIOService extends IOService
      *
      * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
      *
-     * @throws InvalidArgumentValue If the binary file is invalid
-     * @throws BinaryFileNotFoundException If the binary file isn't found
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If the binary file is invalid
+     * @throws \eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException If the binary file isn't found
      */
     public function deleteBinaryFile( BinaryFile $binaryFile )
     {
@@ -73,17 +72,18 @@ class TolerantIOService extends IOService
      *
      * @param string $binaryFileId
      *
-     * @return BinaryFile|MissingBinaryFile
+     * @return \eZ\Publish\Core\IO\Values\BinaryFile|\eZ\Publish\Core\IO\Values\MissingBinaryFile
      *
-     * @throws InvalidBinaryFileIdException
+     * @throws \eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException
      */
     public function loadBinaryFile( $binaryFileId )
     {
         $this->checkBinaryFileId( $binaryFileId );
 
-        // @todo An absolute path can in no case be loaded, but throwing an exception is too much (why ?)
         if ( $binaryFileId[0] === '/' )
-            return false;
+        {
+            throw new InvalidBinaryFileIdException( $binaryFileId, "Binary file ids can not begin with a /" );
+        }
 
         try
         {
@@ -121,7 +121,7 @@ class TolerantIOService extends IOService
     /**
      * @param $binaryFileId
      *
-     * @return MissingBinaryFile
+     * @return \eZ\Publish\Core\IO\Values\MissingBinaryFile
      */
     private function createMissingBinaryFile( $binaryFileId )
     {

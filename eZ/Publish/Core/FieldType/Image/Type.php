@@ -9,14 +9,13 @@
 
 namespace eZ\Publish\Core\FieldType\Image;
 
-use eZ\Publish\Core\FieldType\FieldType;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
-use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\SPI\Persistence\Content\FieldValue;
-use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
  * The Image field type
@@ -170,13 +169,13 @@ class Type extends FieldType
 
         if ( isset( $fieldValue->inputUri ) && !getimagesize( $fieldValue->inputUri ) )
         {
-            $errors[] = new ValidationError( "A valid image file is required." );
+            $errors[] = new ValidationError( "A valid image file is required.", null, array(), 'inputUri' );
         }
 
         // BC: Check if file is a valid image if the value of 'id' matches a local file
         if ( isset( $fieldValue->id ) && file_exists( $fieldValue->id ) && !getimagesize( $fieldValue->id ) )
         {
-            $errors[] = new ValidationError( "A valid image file is required." );
+            $errors[] = new ValidationError( "A valid image file is required.", null, array(), 'id' );
         }
 
         foreach ( (array)$fieldDefinition->getValidatorConfiguration() as $validatorIdentifier => $parameters )
@@ -184,7 +183,7 @@ class Type extends FieldType
             switch ( $validatorIdentifier )
             {
                 case 'FileSizeValidator':
-                    if ( !isset( $parameters['maxFileSize'] ) || $parameters['maxFileSize'] == false )
+                    if ( empty( $parameters['maxFileSize'] ) )
                     {
                         // No file size limit
                         break;
@@ -198,7 +197,8 @@ class Type extends FieldType
                             "The file size cannot exceed %size% bytes.",
                             array(
                                 "size" => $parameters['maxFileSize'],
-                            )
+                            ),
+                            'fileSize'
                         );
                     }
                     break;
@@ -231,7 +231,8 @@ class Type extends FieldType
                             array(
                                 "validator" => $validatorIdentifier,
                                 "parameter" => 'maxFileSize',
-                            )
+                            ),
+                            "[$validatorIdentifier]"
                         );
                         break;
                     }
@@ -244,7 +245,8 @@ class Type extends FieldType
                                 "validator" => $validatorIdentifier,
                                 "parameter" => 'maxFileSize',
                                 "type" => 'integer',
-                            )
+                            ),
+                            "[$validatorIdentifier][maxFileSize]"
                         );
                     }
                     break;
@@ -254,7 +256,8 @@ class Type extends FieldType
                         null,
                         array(
                             "validator" => $validatorIdentifier
-                        )
+                        ),
+                        "[$validatorIdentifier]"
                     );
             }
         }

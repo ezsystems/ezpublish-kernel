@@ -11,30 +11,23 @@ namespace eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 
 use eZ\Publish\Core\MVC\Symfony\Event\RouteReferenceGenerationEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\MVC\Symfony\RequestStackAware;
 use eZ\Publish\Core\MVC\Symfony\Routing\RouteReference;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class RouteReferenceGenerator implements RouteReferenceGeneratorInterface
 {
+    use RequestStackAware;
+
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     private $dispatcher;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\Request
-     */
-    private $request;
-
     public function __construct( EventDispatcherInterface $dispatcher )
     {
         $this->dispatcher = $dispatcher;
-    }
-
-    public function setRequest( Request $request = null )
-    {
-        $this->request = $request;
     }
 
     /**
@@ -48,13 +41,14 @@ class RouteReferenceGenerator implements RouteReferenceGeneratorInterface
      */
     public function generate( $resource = null, array $params = array() )
     {
+        $request = $this->getCurrentRequest();
         if ( $resource === null )
         {
-            $resource = $this->request->attributes->get( '_route' );
-            $params += $this->request->attributes->get( '_route_params', array() );
+            $resource = $request->attributes->get( '_route' );
+            $params += $request->attributes->get( '_route_params', array() );
         }
 
-        $event = new RouteReferenceGenerationEvent( new RouteReference( $resource, $params ), $this->request );
+        $event = new RouteReferenceGenerationEvent( new RouteReference( $resource, $params ), $request );
         $this->dispatcher->dispatch( MVCEvents::ROUTE_REFERENCE_GENERATION, $event );
         return $event->getRouteReference();
     }

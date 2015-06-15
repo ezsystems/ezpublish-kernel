@@ -101,7 +101,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLocationElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Location',
                 'children' => array(
@@ -123,7 +123,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLocationAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Location',
                 'attributes' => array(
@@ -146,7 +146,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsIdValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'id',
                 'content'  => '42'
@@ -166,7 +166,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPriorityValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'priority',
                 'content'  => '0'
@@ -186,7 +186,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsHiddenValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'hidden',
                 'content'  => 'false'
@@ -206,7 +206,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsInvisibleValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'invisible',
                 'content'  => 'true'
@@ -226,7 +226,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRemoteIdValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'remoteId',
                 'content'  => 'remote-id'
@@ -246,7 +246,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsChildrenElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Children'
             ),
@@ -265,7 +265,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsChildrenAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Children',
                 'attributes' => array(
@@ -288,7 +288,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsParentLocationElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ParentLocation'
             ),
@@ -307,7 +307,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsParentLocationAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ParentLocation',
                 'attributes' => array(
@@ -330,7 +330,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Content'
             ),
@@ -349,7 +349,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Content',
                 'attributes' => array(
@@ -372,7 +372,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPathStringValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'pathString',
                 'content'  => '/1/2/21/42/'
@@ -392,7 +392,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsDepthValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'depth',
                 'content'  => '3'
@@ -412,7 +412,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSortFieldValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'sortField',
                 'content'  => 'PATH'
@@ -432,7 +432,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSortOrderValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'sortOrder',
                 'content'  => 'ASC'
@@ -452,7 +452,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsChildCountValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'childCount',
                 'content'  => '0'
@@ -472,7 +472,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUrlAliasesTag( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'UrlAliases'
             ),
@@ -491,7 +491,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUrlAliasesTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'UrlAliases',
                 'attributes' => array(

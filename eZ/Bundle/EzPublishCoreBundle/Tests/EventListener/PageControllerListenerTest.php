@@ -58,8 +58,7 @@ class PageControllerListenerTest extends PHPUnit_Framework_TestCase
         parent::setUp();
         $this->controllerResolver = $this->getMock( 'Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface' );
         $this->controllerManager = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\Controller\\ManagerInterface' );
-        $this->pageService = $this->
-            getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\Page\\PageService' )
+        $this->pageService = $this->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\Page\\PageService' )
             ->disableOriginalConstructor()
             ->getMock();
         $this->logger = $this->getMock( 'Psr\\Log\\LoggerInterface' );

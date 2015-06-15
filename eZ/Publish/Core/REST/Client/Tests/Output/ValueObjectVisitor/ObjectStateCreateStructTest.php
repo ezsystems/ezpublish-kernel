@@ -59,7 +59,7 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsNamesElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'names',
                 'children' => array(
@@ -81,7 +81,7 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsDescriptionsElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'descriptions',
                 'children' => array(
@@ -103,7 +103,7 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsIdentifierValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'identifier',
                 'content'  => 'some-state',
@@ -123,7 +123,7 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPriorityValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'priority',
                 'content'  => '0',
@@ -143,7 +143,7 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsDefaultLanguageCodeValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'defaultLanguageCode',
                 'content'  => 'eng-GB',

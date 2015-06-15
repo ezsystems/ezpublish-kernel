@@ -2135,7 +2135,7 @@ abstract class ContentBase extends BaseServiceTest
         $originalVersionInfos = $contentService->loadVersions( $contentInfo );
         $copiedVersionInfos = $contentService->loadVersions( $copiedContent->contentInfo );
         $sorter =
-            function ( $a, $b )
+            function ( VersionInfo $a, VersionInfo $b )
             {
                 return strcmp( $a->versionNo, $b->versionNo );
             };

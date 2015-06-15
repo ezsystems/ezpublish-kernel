@@ -1112,7 +1112,6 @@ class RoleServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUser()
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testGetRoleAssignments
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testAssignRoleToUser()
     {
@@ -1440,9 +1439,8 @@ class RoleServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUser()
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUser
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRoleWithAddPolicy
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
-    public function testGetRoleAssignmentsForUser()
+    public function testGetRoleAssignmentsForUserDirect()
     {
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
@@ -1484,12 +1482,61 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
+     * Test for the getRoleAssignmentsForUser() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUser()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUser
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRoleWithAddPolicy
+     */
+    public function testGetRoleAssignmentsForUserEmpty()
+    {
+        $repository = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        $adminUser = $repository->getCurrentUser();
+
+        // Load the currently assigned role
+        $roleAssignments = $roleService->getRoleAssignmentsForUser( $adminUser );
+        /* END: Use Case */
+
+        $this->assertEquals( 0, count( $roleAssignments ) );
+    }
+
+    /**
+     * Test for the getRoleAssignmentsForUser() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUser()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUser
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRoleWithAddPolicy
+     */
+    public function testGetRoleAssignmentsForUserInherited()
+    {
+        $repository = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        $adminUser = $repository->getCurrentUser();
+
+        // Load the currently assigned role + inherited role assignments
+        $roleAssignments = $roleService->getRoleAssignmentsForUser( $adminUser, true );
+        /* END: Use Case */
+
+        $this->assertEquals( 1, count( $roleAssignments ) );
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupRoleAssignment',
+            reset( $roleAssignments )
+        );
+    }
+
+    /**
      * Test for the assignRoleToUserGroup() method.
      *
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup()
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testGetRoleAssignments
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUserGroup
      */
     public function testAssignRoleToUserGroup()
     {
@@ -1617,7 +1664,6 @@ class RoleServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup($role, $userGroup, $roleLimitation)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUserGroup
      */
@@ -1660,7 +1706,6 @@ class RoleServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup($role, $userGroup, $roleLimitation)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUserGroup
      */
@@ -1710,7 +1755,6 @@ class RoleServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup($role, $userGroup, $roleLimitation)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUserGroup
      */
@@ -1826,7 +1870,6 @@ class RoleServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUserGroup()
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUserGroup
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRoleWithAddPolicy
-     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUserGroup
      */
     public function testGetRoleAssignmentsForUserGroup()
     {

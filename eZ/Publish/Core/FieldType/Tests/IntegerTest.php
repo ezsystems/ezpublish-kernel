@@ -306,7 +306,7 @@ class IntegerTest extends FieldTypeTest
             array(
                 array(
                     'IntegerValueValidator' => array(
-                        'minIntegerValue' => false,
+                        'minIntegerValue' => null,
                     )
                 )
             ),
@@ -320,7 +320,7 @@ class IntegerTest extends FieldTypeTest
             array(
                 array(
                     'IntegerValueValidator' => array(
-                        'maxIntegerValue' => false,
+                        'maxIntegerValue' => null,
                     )
                 )
             ),
@@ -574,7 +574,8 @@ class IntegerTest extends FieldTypeTest
                         null,
                         array(
                             "size" => 5
-                        )
+                        ),
+                        'value'
                     ),
                 )
             ),
@@ -594,7 +595,8 @@ class IntegerTest extends FieldTypeTest
                         null,
                         array(
                             "size" => 10
-                        )
+                        ),
+                        'value'
                     ),
                 ),
             ),
@@ -614,14 +616,16 @@ class IntegerTest extends FieldTypeTest
                         null,
                         array(
                             "size" => 5
-                        )
+                        ),
+                        'value'
                     ),
                     new ValidationError(
                         "The value can not be lower than %size%.",
                         null,
                         array(
                             "size" => 10
-                        )
+                        ),
+                        'value'
                     ),
                 ),
             ),

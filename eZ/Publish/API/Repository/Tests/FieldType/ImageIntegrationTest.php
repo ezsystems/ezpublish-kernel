@@ -11,6 +11,8 @@ namespace eZ\Publish\API\Repository\Tests\FieldType;
 
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
  * Integration test for use field type
@@ -18,7 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class ImageIntegrationTest extends FileBaseIntegrationTest
+class ImageIntegrationTest extends FileSearchBaseIntegrationTest
 {
     /**
      * Stores the loaded image path for copy test.
@@ -560,6 +562,104 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $this->assertFalse(
             $this->uriExistsOnIO( $originalFileUri ),
             "Asserting image file $originalFileUri has been removed."
+        );
+    }
+
+    public function testUpdateImageAltTextOnly()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'image' );
+        $createStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+
+        $createStruct->setField( 'name', __METHOD__ );
+        $createStruct->setField(
+            'image',
+            new ImageValue(
+                [
+                    'inputUri' => __DIR__ . '/_fixtures/image.jpg',
+                    'fileName' => 'image.jpg',
+                    'fileSize' => filesize( __DIR__ . '/_fixtures/image.jpg' ),
+                    'alternativeText' => 'Initial alternative text'
+                ]
+            )
+        );
+
+        $content = $contentService->createContent(
+            $createStruct,
+            [$locationService->newLocationCreateStruct( 2 )]
+        );
+
+        $imageField = $content->getFieldValue( 'image' );
+        $imageField->alternativeText = 'Updated alternative text';
+
+        $contentService->publishVersion( $content->getVersionInfo() );
+
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $updateStruct->setField( 'image', $imageField );
+
+        $newVersion = $contentService->createContentDraft( $content->contentInfo );
+        $contentService->updateContent( $newVersion->versionInfo, $updateStruct );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return new ImageValue(
+            array(
+                'fileName' => 'cafe-terrace-at-night.jpg',
+                'inputUri' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                'alternativeText' => 'café terrace at night, also known as the cafe terrace on the place du forum',
+                'fileSize' => filesize( $path ),
+            )
+        );
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return new ImageValue(
+            array(
+                'fileName' => 'thatched-cottages-at-cordeville.png',
+                'inputUri' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                'alternativeText' => 'chaumes de cordeville à auvers-sur-oise',
+                'fileSize' => filesize( $path ),
+            )
+        );
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        $value = $this->getValidSearchValueOne();
+        return $value->fileName;
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        $value = $this->getValidSearchValueTwo();
+        return $value->fileName;
+    }
+
+    protected function getAdditionallyIndexedFieldData()
+    {
+        return array(
+            array(
+                "alternative_text",
+                $this->getValidSearchValueOne()->alternativeText,
+                $this->getValidSearchValueTwo()->alternativeText,
+            ),
+            array(
+                "file_size",
+                $this->getValidSearchValueOne()->fileSize,
+                $this->getValidSearchValueTwo()->fileSize,
+            ),
+            array(
+                "mime_type",
+                "image/jpeg",
+                "image/png",
+            ),
         );
     }
 }

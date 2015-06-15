@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Controller\Tests\Controller\Content;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\Helper\PreviewLocationProvider;
 use eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
@@ -41,7 +42,10 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $securityContext;
+    protected $authorizationChecker;
+
+    /** @var PreviewLocationProvider|\PHPUnit_Framework_MockObject_MockObject */
+    protected $locationProvider;
 
     protected function setUp()
     {
@@ -53,7 +57,11 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->getMockBuilder( 'eZ\Publish\Core\Helper\ContentPreviewHelper' )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->securityContext = $this->getMock( 'Symfony\Component\Security\Core\SecurityContextInterface' );
+        $this->authorizationChecker = $this->getMock( 'Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface' );
+        $this->locationProvider = $this
+            ->getMockBuilder( 'eZ\Publish\Core\Helper\PreviewLocationProvider' )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -65,7 +73,8 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             $this->contentService,
             $this->httpKernel,
             $this->previewHelper,
-            $this->securityContext
+            $this->authorizationChecker,
+            $this->locationProvider
         );
 
         return $controller;
@@ -85,7 +94,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->method( 'loadContent' )
             ->with( $contentId, array( $lang ), $versionNo )
             ->will( $this->throwException( new UnauthorizedException( 'foo', 'bar' ) ) );
-        $controller->previewContentAction( $contentId, $versionNo, $lang, 'test' );
+        $controller->previewContentAction( new Request(), $contentId, $versionNo, $lang, 'test' );
     }
 
     /**
@@ -102,9 +111,9 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->setConstructorArgs( array( array( 'id' => $contentId ) ) )
             ->getMockForAbstractClass();
 
-        $this->previewHelper
+        $this->locationProvider
             ->expects( $this->once() )
-            ->method( 'getPreviewLocation' )
+            ->method( 'loadMainLocation' )
             ->with( $contentId )
             ->will( $this->returnValue( $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Location' ) ) );
         $this->contentService
@@ -112,13 +121,13 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->method( 'loadContent' )
             ->with( $contentId, array( $lang ), $versionNo )
             ->will( $this->returnValue( $content ) );
-        $this->securityContext
+        $this->authorizationChecker
             ->expects( $this->once() )
             ->method( 'isGranted' )
             ->with( $this->equalTo( new AuthorizationAttribute( 'content', 'versionread', array( 'valueObject' => $content ) ) ) )
             ->will( $this->returnValue( false ) );
 
-        $controller->previewContentAction( $contentId, $versionNo, $lang, 'test' );
+        $controller->previewContentAction( new Request(), $contentId, $versionNo, $lang, 'test' );
     }
 
     public function testPreview()
@@ -133,9 +142,9 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         // Repository expectations
-        $this->previewHelper
+        $this->locationProvider
             ->expects( $this->once() )
-            ->method( 'getPreviewLocation' )
+            ->method( 'loadMainLocation' )
             ->with( $contentId )
             ->will( $this->returnValue( $location ) );
         $this->contentService
@@ -143,7 +152,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->method( 'loadContent' )
             ->with( $contentId, array( $lang ), $versionNo )
             ->will( $this->returnValue( $content ) );
-        $this->securityContext
+        $this->authorizationChecker
             ->expects( $this->once() )
             ->method( 'isGranted' )
             ->with( $this->equalTo( new AuthorizationAttribute( 'content', 'versionread', array( 'valueObject' => $content ) ) ) )
@@ -156,6 +165,25 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
         $request = $this->getMock( 'Symfony\Component\HttpFoundation\Request', array( 'duplicate' ) );
 
         // PreviewHelper expectations
+        $this->previewHelper
+            ->expects( $this->exactly( 2 ) )
+            ->method( 'setPreviewActive' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( true, null ),
+                        array( false, null ),
+                    )
+                )
+            );
+        $this->previewHelper
+            ->expects( $this->once() )
+            ->method( 'setPreviewedContent' )
+            ->with( $content );
+        $this->previewHelper
+            ->expects( $this->once() )
+            ->method( 'setPreviewedLocation' )
+            ->with( $location );
         $this->previewHelper
             ->expects( $this->once() )
             ->method( 'getOriginalSiteAccess' )
@@ -185,13 +213,11 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $expectedResponse ) );
 
         $controller = $this->getPreviewController();
-        $controller->setRequest( $request );
         $this->assertSame(
             $expectedResponse,
-            $controller->previewContentAction( $contentId, $versionNo, $lang, $previewSiteAccessName )
+            $controller->previewContentAction( $request, $contentId, $versionNo, $lang, $previewSiteAccessName )
         );
     }
-
 
     public function testPreviewDefaultSiteaccess()
     {
@@ -205,9 +231,9 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         // Repository expectations
-        $this->previewHelper
+        $this->locationProvider
             ->expects( $this->once() )
-            ->method( 'getPreviewLocation' )
+            ->method( 'loadMainLocation' )
             ->with( $contentId )
             ->will( $this->returnValue( $location ) );
         $this->contentService
@@ -215,7 +241,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->method( 'loadContent' )
             ->with( $contentId, array( $lang ), $versionNo )
             ->will( $this->returnValue( $content ) );
-        $this->securityContext
+        $this->authorizationChecker
             ->expects( $this->once() )
             ->method( 'isGranted' )
             ->with( $this->equalTo( new AuthorizationAttribute( 'content', 'versionread', array( 'valueObject' => $content ) ) ) )
@@ -249,10 +275,9 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $expectedResponse ) );
 
         $controller = $this->getPreviewController();
-        $controller->setRequest( $request );
         $this->assertSame(
             $expectedResponse,
-            $controller->previewContentAction( $contentId, $versionNo, $lang )
+            $controller->previewContentAction( $request, $contentId, $versionNo, $lang )
         );
     }
 

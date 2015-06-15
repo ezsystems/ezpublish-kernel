@@ -40,8 +40,8 @@ abstract class BaseNonRedundantFieldSetTest extends BaseTest
 
         $validatorConfiguration = array(
             'StringLengthValidator' => array(
-                'minStringLength' => false,
-                'maxStringLength' => false,
+                'minStringLength' => null,
+                'maxStringLength' => null,
             ),
         );
 

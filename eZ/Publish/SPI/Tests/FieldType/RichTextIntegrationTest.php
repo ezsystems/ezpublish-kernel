@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\SPI\Tests\FieldType;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichText as RichTextConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichTextConverter;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -114,7 +114,6 @@ class RichTextIntegrationTest extends BaseIntegrationTest
                         'fieldSettings' => new FieldSettings(
                             array(
                                 'numRows' => 0,
-                                'tagPreset' => null,
                             )
                         )
                     )

@@ -39,7 +39,7 @@ class LegacyElasticsearch extends Legacy
         return $repository;
     }
 
-    protected function getServiceContainer()
+    public function getServiceContainer()
     {
         if ( !isset( self::$serviceContainer ) )
         {
@@ -52,14 +52,14 @@ class LegacyElasticsearch extends Legacy
             /** @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
             $loader->load( 'tests/integration_legacy_elasticsearch.yml' );
 
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\CriterionVisitorDispatcherContentPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\CriterionVisitorDispatcherLocationPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\AggregateFacetBuilderVisitorPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\AggregateFieldValueMapperPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\AggregateSortClauseVisitorContentPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\AggregateSortClauseVisitorLocationPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\FieldRegistryPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\SignalSlotPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Elasticsearch\CriterionVisitorDispatcherContentPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Elasticsearch\CriterionVisitorDispatcherLocationPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Elasticsearch\AggregateFacetBuilderVisitorPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Elasticsearch\AggregateFieldValueMapperPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Elasticsearch\AggregateSortClauseVisitorContentPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Elasticsearch\AggregateSortClauseVisitorLocationPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\FieldRegistryPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\SignalSlotPass() );
 
             $containerBuilder->setParameter(
                 "legacy_dsn",
@@ -91,7 +91,9 @@ class LegacyElasticsearch extends Legacy
         // @todo: Is there a nicer way to get access to all content objects? We
         // require this to run a full index here.
         /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandler */
-        $persistenceHandler = $this->getServiceContainer()->get( 'ezpublish.spi.persistence.legacy_elasticsearch' );
+        $persistenceHandler = $this->getServiceContainer()->get( 'ezpublish.spi.persistence.legacy' );
+        /** @var \eZ\Publish\SPI\Search\Handler $searchHandler */
+        $searchHandler = $this->getServiceContainer()->get( 'ezpublish.spi.search.elasticsearch' );
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
         $databaseHandler = $this->getServiceContainer()->get( 'ezpublish.api.storage_engine.legacy.dbhandler' );
 
@@ -117,15 +119,15 @@ class LegacyElasticsearch extends Legacy
             );
         }
 
-        /** @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Handler $searchHandler */
-        $searchHandler = $persistenceHandler->searchHandler();
-        $searchHandler->setCommit( false );
-        $searchHandler->purgeIndex();
-        $searchHandler->setCommit( true );
-        $searchHandler->bulkIndexContent( $contentObjects );
+        /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Handler $contentSearchHandler */
+        $contentSearchHandler = $searchHandler->contentSearchHandler();
+        $contentSearchHandler->setCommit( false );
+        $contentSearchHandler->purgeIndex();
+        $contentSearchHandler->setCommit( true );
+        $contentSearchHandler->bulkIndexContent( $contentObjects );
 
-        /** @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\Handler $locationSearchHandler */
-        $locationSearchHandler = $persistenceHandler->locationSearchHandler();
+        /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Location\Handler $locationSearchHandler */
+        $locationSearchHandler = $searchHandler->locationSearchHandler();
         $locationSearchHandler->setCommit( false );
         $locationSearchHandler->purgeIndex();
         $locationSearchHandler->setCommit( true );

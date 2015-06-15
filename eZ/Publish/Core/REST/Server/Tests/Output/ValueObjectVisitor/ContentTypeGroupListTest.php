@@ -56,7 +56,7 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTypeGroupListElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ContentTypeGroupList',
             ),
@@ -75,7 +75,7 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTypeGroupListAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ContentTypeGroupList',
                 'attributes' => array(

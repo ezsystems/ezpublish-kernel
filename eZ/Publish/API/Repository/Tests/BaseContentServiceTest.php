@@ -191,7 +191,7 @@ abstract class BaseContentServiceTest extends BaseTest
      *
      * @return array \eZ\Publish\API\Repository\Values\Content\Content, id
      */
-    protected function createUpdatedDraftVersion2_NotAdmin()
+    protected function createUpdatedDraftVersion2NotAdmin()
     {
         $repository = $this->getRepository();
 
@@ -206,16 +206,15 @@ abstract class BaseContentServiceTest extends BaseTest
 
         // Load the Admin Group
         $userAdminGroup = $userService->loadUserGroup( '12' );
-        
-        $userAdmin2 = $userService->createUser( $newUserCreateStruct, array ( $userAdminGroup ) );
-        
+        $userAdmin2 = $userService->createUser( $newUserCreateStruct, array( $userAdminGroup ) );
+
         /* BEGIN: Inline */
         $draftVersion2 = $this->createContentDraftVersion2();
 
         // Create an update struct and modify some fields
         $contentUpdate = $contentService->newContentUpdateStruct();
         $contentUpdate->initialLanguageCode = $mainLanguageCode;
-    
+
         $contentUpdate->creatorId = $this->generateId( 'user', $userAdmin2->id );
         $contentUpdate->setField( 'name', 'An awesome forum²' );
         $contentUpdate->setField( 'name', 'An awesome forum²³', 'eng-GB' );

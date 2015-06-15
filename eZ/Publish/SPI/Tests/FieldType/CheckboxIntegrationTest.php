@@ -58,7 +58,7 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezboolean',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Checkbox(),
+            new Legacy\Content\FieldValue\Converter\CheckboxConverter(),
             new FieldType\NullStorage()
         );
     }

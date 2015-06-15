@@ -77,14 +77,15 @@ class Type extends FieldType
                 switch ( $name )
                 {
                     case 'defaultLayout':
-                        if ( !in_array( $value, $this->pageService->getAvailableZoneLayouts() ) )
+                        if ( $value !== "" && !in_array( $value, $this->pageService->getAvailableZoneLayouts() ) )
                         {
                             $validationErrors[] = new ValidationError(
                                 "Layout '{$value}' for setting '%setting%' is not available",
                                 null,
                                 array(
                                     'setting' => $name
-                                )
+                                ),
+                                "[$name]"
                             );
                         }
                         break;
@@ -97,7 +98,8 @@ class Type extends FieldType
                     null,
                     array(
                         'setting' => $name
-                    )
+                    ),
+                    "[$name]"
                 );
             }
         }
@@ -116,6 +118,31 @@ class Type extends FieldType
     public function getEmptyValue()
     {
         return new Value();
+    }
+
+    /**
+     * Returns if the given $value is considered empty by the field type
+     *
+     * @param \eZ\Publish\Core\FieldType\Page\Value $value
+     *
+     * @return boolean
+     */
+    public function isEmptyValue( SPIValue $value )
+    {
+        if ( $value === null || $value == $this->getEmptyValue() )
+        {
+            return true;
+        }
+
+        foreach ( $value->page->zones as $zone )
+        {
+            if ( !empty( $zone->blocks ) )
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

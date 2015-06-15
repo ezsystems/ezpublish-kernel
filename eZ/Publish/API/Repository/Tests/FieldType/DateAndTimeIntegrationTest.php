@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Tests\FieldType;
 
 use eZ\Publish\Core\FieldType\DateAndTime\Value as DateAndTimeValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use DateTime;
 
 /**
  * Integration test for use field type
@@ -18,7 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class DateAndTimeIntegrationTest extends BaseIntegrationTest
+class DateAndTimeIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
      * Get name of tested field type
@@ -348,5 +349,39 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
                 $this->getValidCreationFieldData()
             ),
         );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return "2012-04-15T15:43:56Z";
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return "2015-04-15T15:43:56Z";
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        // Handling Legacy Search Engine, which stores DateAndTime value as integer timestamp
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            $dateTime = new DateTime( $this->getValidSearchValueOne() );
+            return $dateTime->getTimestamp();
+        }
+
+        return parent::getSearchTargetValueOne();
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        // Handling Legacy Search Engine, which stores DateAndTime value as integer timestamp
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            $dateTime = new DateTime( $this->getValidSearchValueTwo() );
+            return $dateTime->getTimestamp();
+        }
+
+        return parent::getSearchTargetValueTwo();
     }
 }

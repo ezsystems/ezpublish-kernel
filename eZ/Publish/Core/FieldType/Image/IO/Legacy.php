@@ -8,12 +8,11 @@
  */
 namespace eZ\Publish\Core\FieldType\Image\IO;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * Legacy Image IOService
@@ -58,13 +57,13 @@ class Legacy implements IOServiceInterface
     private $draftPrefix;
 
     /**
-     * @var OptionsProvider
+     * @var \eZ\Publish\Core\FieldType\Image\IO\OptionsProvider
      */
     private $optionsProvider;
 
     /**
-     * @param IOServiceInterface $publishedIOService
-     * @param IOServiceInterface $draftIOService
+     * @param \eZ\Publish\Core\IO\IOServiceInterface $publishedIOService
+     * @param \eZ\Publish\Core\IO\IOServiceInterface $draftIOService
      * @param array $options Path options. Known keys: var_dir, storage_dir, draft_images_dir, published_images_dir.
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException if required options are missing
@@ -207,6 +206,16 @@ class Legacy implements IOServiceInterface
     public function deleteBinaryFile( BinaryFile $binaryFile )
     {
         $this->publishedIOService->deleteBinaryFile( $binaryFile );
+    }
+
+    /**
+     * Deletes a directory.
+     *
+     * @param string $path
+     */
+    public function deleteDirectory( $path )
+    {
+        $this->publishedIOService->deleteDirectory( $path );
     }
 
     public function newBinaryCreateStructFromUploadedFile( array $uploadedFile )

@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddFie
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content;
 use PHPUnit_Framework_TestCase;
+use ReflectionObject;
 
 /**
  * Test case for Content Type Updater.
@@ -59,7 +60,13 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
      */
     public function testCtor()
     {
-        $action = $this->getAddFieldAction();
+        $action = new AddField(
+            $this->getContentGatewayMock(),
+            $this->getFieldDefinitionFixture(),
+            $this->getFieldValueConverterMock(),
+            $this->getContentStorageHandlerMock(),
+            $this->getContentMapperMock()
+        );
 
         $this->assertAttributeSame(
             $this->getContentGatewayMock(),
@@ -78,39 +85,215 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField::apply
-     *
-     * @return void
-     */
-    public function testApply()
+    public function testApplySingleVersionSingleTranslation()
     {
-        $action = $this->getAddFieldAction();
-        $contentInfo = $this->getContentInfoFixture();
-        $content = $this->getContentFixture();
+        $contentId = 42;
         $versionNumbers = array( 1 );
-        $field = $this->getFieldReference( 1, "eng-GB" );
+        $content = $this->getContentFixture( 1, array( "cro-HR" ) );
+        $action = $this->getMockedAction( array( "insertField" ) );
 
-        $this->getContentGatewayMock()->expects( $this->once() )
+        $this->getContentGatewayMock()
+            ->expects( $this->once() )
             ->method( 'listVersionNumbers' )
-            ->with( $this->equalTo( "contentId" ) )
+            ->with( $this->equalTo( $contentId ) )
             ->will( $this->returnValue( $versionNumbers ) );
 
-        $this->getContentGatewayMock()->expects( $this->once() )
+        $this->getContentGatewayMock()
+            ->expects( $this->at( 1 ) )
             ->method( 'load' )
-            ->with( $contentInfo->id, $contentInfo->currentVersionNo )
+            ->with( $contentId, 1 )
             ->will( $this->returnValue( array() ) );
 
-        $this->getContentMapperMock()->expects( $this->once() )
+        $this->getContentMapperMock()
+            ->expects( $this->once() )
             ->method( 'extractContentFromRows' )
             ->with( array() )
             ->will( $this->returnValue( array( $content ) ) );
 
+        $action
+            ->expects( $this->once() )
+            ->method( "insertField" )
+            ->with( $content, $this->getFieldReference( null, 1, "cro-HR" ) )
+            ->will( $this->returnValue( "fieldId1" ) );
+
+        $action->apply( $contentId );
+    }
+
+    public function testApplySingleVersionMultipleTranslations()
+    {
+        $contentId = 42;
+        $versionNumbers = array( 1 );
+        $content = $this->getContentFixture( 1, array( "eng-GB", "ger-DE" ) );
+        $action = $this->getMockedAction( array( "insertField" ) );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->once() )
+            ->method( 'listVersionNumbers' )
+            ->with( $this->equalTo( $contentId ) )
+            ->will( $this->returnValue( $versionNumbers ) );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->at( 1 ) )
+            ->method( 'load' )
+            ->with( $contentId, 1 )
+            ->will( $this->returnValue( array() ) );
+
+        $this->getContentMapperMock()
+            ->expects( $this->once() )
+            ->method( 'extractContentFromRows' )
+            ->with( array() )
+            ->will( $this->returnValue( array( $content ) ) );
+
+        $action
+            ->expects( $this->at( 0 ) )
+            ->method( "insertField" )
+            ->with( $content, $this->getFieldReference( null, 1, "eng-GB" ) )
+            ->will( $this->returnValue( "fieldId1" ) );
+
+        $action
+            ->expects( $this->at( 1 ) )
+            ->method( "insertField" )
+            ->with( $content, $this->getFieldReference( null, 1, "ger-DE" ) )
+            ->will( $this->returnValue( "fieldId2" ) );
+
+        $action->apply( $contentId );
+    }
+
+    public function testApplyMultipleVersionsSingleTranslation()
+    {
+        $contentId = 42;
+        $versionNumbers = array( 1, 2 );
+        $content1 = $this->getContentFixture( 1, array( "eng-GB" ) );
+        $content2 = $this->getContentFixture( 2, array( "eng-GB" ) );
+        $action = $this->getMockedAction( array( "insertField" ) );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->once() )
+            ->method( 'listVersionNumbers' )
+            ->with( $this->equalTo( $contentId ) )
+            ->will( $this->returnValue( $versionNumbers ) );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->at( 1 ) )
+            ->method( 'load' )
+            ->with( $contentId, 1 )
+            ->will( $this->returnValue( array() ) );
+
+        $this->getContentMapperMock()
+            ->expects( $this->at( 0 ) )
+            ->method( 'extractContentFromRows' )
+            ->with( array() )
+            ->will( $this->returnValue( array( $content1 ) ) );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->at( 2 ) )
+            ->method( 'load' )
+            ->with( $contentId, 2 )
+            ->will( $this->returnValue( array() ) );
+
+        $this->getContentMapperMock()
+            ->expects( $this->at( 1 ) )
+            ->method( 'extractContentFromRows' )
+            ->with( array() )
+            ->will( $this->returnValue( array( $content2 ) ) );
+
+        $action
+            ->expects( $this->at( 0 ) )
+            ->method( "insertField" )
+            ->with( $content1, $this->getFieldReference( null, 1, "eng-GB" ) )
+            ->will( $this->returnValue( "fieldId1" ) );
+
+        $action
+            ->expects( $this->at( 1 ) )
+            ->method( "insertField" )
+            ->with( $content2, $this->getFieldReference( "fieldId1", 2, "eng-GB" ) )
+            ->will( $this->returnValue( "fieldId1" ) );
+
+        $action->apply( $contentId );
+    }
+
+    public function testApplyMultipleVersionsMultipleTranslations()
+    {
+        $contentId = 42;
+        $versionNumbers = array( 1, 2 );
+        $content1 = $this->getContentFixture( 1, array( "eng-GB", "ger-DE" ) );
+        $content2 = $this->getContentFixture( 2, array( "eng-GB", "ger-DE" ) );
+        $action = $this->getMockedAction( array( "insertField" ) );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->once() )
+            ->method( 'listVersionNumbers' )
+            ->with( $this->equalTo( $contentId ) )
+            ->will( $this->returnValue( $versionNumbers ) );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->at( 1 ) )
+            ->method( 'load' )
+            ->with( $contentId, 1 )
+            ->will( $this->returnValue( array() ) );
+
+        $this->getContentMapperMock()
+            ->expects( $this->at( 0 ) )
+            ->method( 'extractContentFromRows' )
+            ->with( array() )
+            ->will( $this->returnValue( array( $content1 ) ) );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->at( 2 ) )
+            ->method( 'load' )
+            ->with( $contentId, 2 )
+            ->will( $this->returnValue( array() ) );
+
+        $this->getContentMapperMock()
+            ->expects( $this->at( 1 ) )
+            ->method( 'extractContentFromRows' )
+            ->with( array() )
+            ->will( $this->returnValue( array( $content2 ) ) );
+
+        $action
+            ->expects( $this->at( 0 ) )
+            ->method( "insertField" )
+            ->with( $content1, $this->getFieldReference( null, 1, "eng-GB" ) )
+            ->will( $this->returnValue( "fieldId1" ) );
+
+        $action
+            ->expects( $this->at( 1 ) )
+            ->method( "insertField" )
+            ->with( $content1, $this->getFieldReference( null, 1, "ger-DE" ) )
+            ->will( $this->returnValue( "fieldId2" ) );
+
+        $action
+            ->expects( $this->at( 2 ) )
+            ->method( "insertField" )
+            ->with( $content2, $this->getFieldReference( "fieldId1", 2, "eng-GB" ) )
+            ->will( $this->returnValue( "fieldId1" ) );
+
+        $action
+            ->expects( $this->at( 3 ) )
+            ->method( "insertField" )
+            ->with( $content2, $this->getFieldReference( "fieldId2", 2, "ger-DE" ) )
+            ->will( $this->returnValue( "fieldId2" ) );
+
+        $action->apply( $contentId );
+    }
+
+    public function testInsertNewField()
+    {
+        $versionInfo = new Content\VersionInfo();
+        $content = new Content();
+        $content->versionInfo = $versionInfo;
+
+        $value = new Content\FieldValue();
+
+        $field = new Field();
+        $field->id = null;
+        $field->value = $value;
+
         $this->getFieldValueConverterMock()
             ->expects( $this->once() )
-            ->method( 'toStorageValue' )
+            ->method( "toStorageValue" )
             ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\FieldValue' ),
+                $value,
                 $this->isInstanceOf( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue" )
             );
 
@@ -118,65 +301,48 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'insertNewField' )
             ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ),
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ),
+                $content,
+                $field,
                 $this->isInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue' )
-            )->will( $this->returnValue( 23 ) );
-
-        $field->id = 23;
+            )
+            ->will( $this->returnValue( 23 ) );
 
         $this->getContentStorageHandlerMock()
             ->expects( $this->once() )
-            ->method( 'storeFieldData' )
-            ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
-                $this->equalTo( $field )
-            )->will( $this->returnValue( false ) );
+            ->method( "storeFieldData" )
+            ->with( $versionInfo, $field )
+            ->will( $this->returnValue( false ) );
 
-        $action->apply( $contentInfo );
+        $this->getContentGatewayMock()->expects( $this->never() )->method( "updateField" );
 
-        $this->assertEquals(
-            2,
-            count( $content->fields ),
-            'Field not added to content'
-        );
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field', $content->fields[1] );
-        $this->assertEquals( 23, $content->fields[1]->id );
+        $action = $this->getMockedAction();
+
+        $refAction = new ReflectionObject( $action );
+        $refMethod = $refAction->getMethod( "insertField" );
+        $refMethod->setAccessible( true );
+        $fieldId = $refMethod->invoke( $action, $content, $field );
+
+        $this->assertEquals( 23, $fieldId );
+        $this->assertEquals( 23, $field->id );
     }
 
-    /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField::apply
-     *
-     * @return void
-     */
-    public function testApplyUpdatingStorageHandler()
+    public function testInsertNewFieldUpdating()
     {
-        $action = $this->getAddFieldAction();
-        $contentInfo = $this->getContentInfoFixture();
-        $content = $this->getContentFixture();
-        $versionNumbers = array( 1 );
-        $field = $this->getFieldReference( 1, "eng-GB" );
+        $versionInfo = new Content\VersionInfo();
+        $content = new Content();
+        $content->versionInfo = $versionInfo;
 
-        $this->getContentGatewayMock()->expects( $this->once() )
-            ->method( 'listVersionNumbers' )
-            ->with( $this->equalTo( "contentId" ) )
-            ->will( $this->returnValue( $versionNumbers ) );
+        $value = new Content\FieldValue();
 
-        $this->getContentGatewayMock()->expects( $this->once() )
-            ->method( 'load' )
-            ->with( $contentInfo->id, $contentInfo->currentVersionNo )
-            ->will( $this->returnValue( array() ) );
-
-        $this->getContentMapperMock()->expects( $this->once() )
-            ->method( 'extractContentFromRows' )
-            ->with( array() )
-            ->will( $this->returnValue( array( $content ) ) );
+        $field = new Field();
+        $field->id = null;
+        $field->value = $value;
 
         $this->getFieldValueConverterMock()
             ->expects( $this->exactly( 2 ) )
-            ->method( 'toStorageValue' )
+            ->method( "toStorageValue" )
             ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\FieldValue' ),
+                $value,
                 $this->isInstanceOf( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue" )
             );
 
@@ -184,136 +350,148 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'insertNewField' )
             ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ),
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ),
+                $content,
+                $field,
                 $this->isInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue' )
-            )->will( $this->returnValue( 23 ) );
-
-        $field->id = 23;
+            )
+            ->will( $this->returnValue( 23 ) );
 
         $this->getContentStorageHandlerMock()
             ->expects( $this->once() )
-            ->method( 'storeFieldData' )
-            ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
-                $this->equalTo( $field )
-            )->will( $this->returnValue( true ) );
+            ->method( "storeFieldData" )
+            ->with( $versionInfo, $field )
+            ->will( $this->returnValue( true ) );
 
         $this->getContentGatewayMock()
             ->expects( $this->once() )
-            ->method( 'updateNonTranslatableField' )
+            ->method( "updateField" )
             ->with(
-                $this->equalTo( $field ),
-                $this->isInstanceOf( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue" ),
-                $this->equalTo( "contentId" )
+                $field,
+                $this->isInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue' )
             );
 
-        $action->apply( $contentInfo );
+        $action = $this->getMockedAction();
 
-        $this->assertEquals(
-            2,
-            count( $content->fields ),
-            'Field not added to content'
-        );
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field', $content->fields[1] );
-        $this->assertEquals( 23, $content->fields[1]->id );
+        $refAction = new ReflectionObject( $action );
+        $refMethod = $refAction->getMethod( "insertField" );
+        $refMethod->setAccessible( true );
+        $fieldId = $refMethod->invoke( $action, $content, $field );
+
+        $this->assertEquals( 23, $fieldId );
+        $this->assertEquals( 23, $field->id );
     }
 
-    /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField::apply
-     *
-     * @return void
-     */
-    public function testApplyUpdatingStorageHandlerTranslatableField()
+    public function testInsertExistingField()
     {
-        // Prepare action for translatable field
-        $action = $this->getAddFieldAction( true );
-        $contentInfo = $this->getContentInfoFixture();
-        $content = $this->getContentFixture();
-        $versionNumbers = array( 1 );
-        $field = $this->getFieldReference( 1, "eng-GB" );
+        $versionInfo = new Content\VersionInfo();
+        $content = new Content();
+        $content->versionInfo = $versionInfo;
 
-        $this->getContentGatewayMock()->expects( $this->once() )
-            ->method( 'listVersionNumbers' )
-            ->with( $this->equalTo( "contentId" ) )
-            ->will( $this->returnValue( $versionNumbers ) );
+        $value = new Content\FieldValue();
 
-        $this->getContentGatewayMock()->expects( $this->once() )
-            ->method( 'load' )
-            ->with( $contentInfo->id, $contentInfo->currentVersionNo )
-            ->will( $this->returnValue( array() ) );
+        $field = new Field();
+        $field->id = 32;
+        $field->value = $value;
 
-        $this->getContentMapperMock()->expects( $this->once() )
-            ->method( 'extractContentFromRows' )
-            ->with( array() )
-            ->will( $this->returnValue( array( $content ) ) );
+        $this->getFieldValueConverterMock()
+            ->expects( $this->once() )
+            ->method( "toStorageValue" )
+            ->with(
+                $value,
+                $this->isInstanceOf( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue" )
+            );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->once() )
+            ->method( 'insertExistingField' )
+            ->with(
+                $content,
+                $field,
+                $this->isInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue' )
+            );
+
+        $this->getContentStorageHandlerMock()
+            ->expects( $this->once() )
+            ->method( "storeFieldData" )
+            ->with( $versionInfo, $field )
+            ->will( $this->returnValue( false ) );
+
+        $this->getContentGatewayMock()->expects( $this->never() )->method( "updateField" );
+
+        $action = $this->getMockedAction();
+
+        $refAction = new ReflectionObject( $action );
+        $refMethod = $refAction->getMethod( "insertField" );
+        $refMethod->setAccessible( true );
+        $fieldId = $refMethod->invoke( $action, $content, $field );
+
+        $this->assertEquals( 32, $fieldId );
+        $this->assertEquals( 32, $field->id );
+    }
+
+    public function testInsertExistingFieldUpdating()
+    {
+        $versionInfo = new Content\VersionInfo();
+        $content = new Content();
+        $content->versionInfo = $versionInfo;
+
+        $value = new Content\FieldValue();
+
+        $field = new Field();
+        $field->id = 32;
+        $field->value = $value;
 
         $this->getFieldValueConverterMock()
             ->expects( $this->exactly( 2 ) )
-            ->method( 'toStorageValue' )
+            ->method( "toStorageValue" )
             ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\FieldValue' ),
+                $value,
                 $this->isInstanceOf( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue" )
             );
 
         $this->getContentGatewayMock()
             ->expects( $this->once() )
-            ->method( 'insertNewField' )
+            ->method( 'insertExistingField' )
             ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ),
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ),
+                $content,
+                $field,
                 $this->isInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue' )
-            )->will( $this->returnValue( 23 ) );
-
-        $field->id = 23;
+            );
 
         $this->getContentStorageHandlerMock()
             ->expects( $this->once() )
-            ->method( 'storeFieldData' )
-            ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
-                $this->equalTo( $field )
-            )->will( $this->returnValue( true ) );
+            ->method( "storeFieldData" )
+            ->with( $versionInfo, $field )
+            ->will( $this->returnValue( true ) );
 
         $this->getContentGatewayMock()
             ->expects( $this->once() )
-            ->method( 'updateField' )
+            ->method( "updateField" )
             ->with(
-                $this->equalTo( $field ),
-                $this->isInstanceOf( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue" )
+                $field,
+                $this->isInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue' )
             );
 
-        $action->apply( $contentInfo );
+        $action = $this->getMockedAction();
 
-        $this->assertEquals(
-            2,
-            count( $content->fields ),
-            'Field not added to content'
-        );
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field', $content->fields[1] );
-        $this->assertEquals( 23, $content->fields[1]->id );
-    }
+        $refAction = new ReflectionObject( $action );
+        $refMethod = $refAction->getMethod( "insertField" );
+        $refMethod->setAccessible( true );
+        $fieldId = $refMethod->invoke( $action, $content, $field );
 
-    /**
-     * Returns a ContentInfo  fixture
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
-     */
-    protected function getContentInfoFixture()
-    {
-        $contentInfo = new Content\ContentInfo();
-        $contentInfo->id = "contentId";
-        $contentInfo->currentVersionNo = "versionNo";
-
-        return $contentInfo;
+        $this->assertEquals( 32, $fieldId );
+        $this->assertEquals( 32, $field->id );
     }
 
     /**
      * Returns a Content fixture
      *
+     * @param int $versionNo
+     * @param array $languageCodes
+     *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    protected function getContentFixture()
+    protected function getContentFixture( $versionNo, array $languageCodes )
     {
         $contentInfo = new Content\ContentInfo();
         $contentInfo->id = "contentId";
@@ -322,8 +500,15 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
 
         $content = new Content();
         $content->versionInfo = $versionInfo;
-        $content->versionInfo->versionNo = 3;
-        $content->fields = array( new Field( array( "languageCode" => "eng-GB" ) ) );
+        $content->versionInfo->versionNo = $versionNo;
+
+        $fields = array();
+        foreach ( $languageCodes as $languageCode )
+        {
+            $fields[] = new Field( array( "languageCode" => $languageCode ) );
+        }
+
+        $content->fields = $fields;
 
         return $content;
     }
@@ -403,15 +588,13 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
     /**
      * Returns a FieldDefinition fixture
      *
-     * @param bool $isTranslatable
-     *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      */
-    protected function getFieldDefinitionFixture( $isTranslatable = false )
+    protected function getFieldDefinitionFixture()
     {
         $fieldDef = new Content\Type\FieldDefinition();
         $fieldDef->id = 42;
-        $fieldDef->isTranslatable = $isTranslatable;
+        $fieldDef->isTranslatable = true;
         $fieldDef->fieldType = 'ezstring';
         $fieldDef->defaultValue = new Content\FieldValue();
         return $fieldDef;
@@ -420,15 +603,17 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
     /**
      * Returns a reference Field
      *
+     * @param int $id
      * @param int $versionNo
      * @param string $languageCode
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Field
      */
-    public function getFieldReference( $versionNo, $languageCode )
+    public function getFieldReference( $id, $versionNo, $languageCode )
     {
         $field = new Field();
 
+        $field->id = $id;
         $field->fieldDefinitionId = 42;
         $field->type = 'ezstring';
         $field->value = new Content\FieldValue();
@@ -439,24 +624,23 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns the AddField action to test
-     *
-     * @param bool $isTranslatable
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField
+     * @param $methods
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField
      */
-    protected function getAddFieldAction( $isTranslatable = false )
+    protected function getMockedAction( $methods = array() )
     {
-        if ( !isset( $this->addFieldAction ) )
-        {
-            $this->addFieldAction = new AddField(
-                $this->getContentGatewayMock(),
-                $this->getFieldDefinitionFixture( $isTranslatable ),
-                $this->getFieldValueConverterMock(),
-                $this->getContentStorageHandlerMock(),
-                $this->getContentMapperMock()
-            );
-        }
-        return $this->addFieldAction;
+        return $this
+            ->getMockBuilder( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\ContentUpdater\\Action\\AddField" )
+            ->setMethods( (array)$methods )
+            ->setConstructorArgs(
+                array(
+                    $this->getContentGatewayMock(),
+                    $this->getFieldDefinitionFixture(),
+                    $this->getFieldValueConverterMock(),
+                    $this->getContentStorageHandlerMock(),
+                    $this->getContentMapperMock()
+                )
+            )
+            ->getMock();
     }
 }

@@ -57,7 +57,7 @@ class PolicyCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPolicyCreateElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'PolicyCreate',
                 'children' => array(
@@ -80,7 +80,7 @@ class PolicyCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPolicyCreateAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'PolicyCreate',
                 'attributes' => array(
@@ -102,7 +102,7 @@ class PolicyCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsModuleValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'module',
                 'content'  => 'content',
@@ -122,7 +122,7 @@ class PolicyCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsFunctionValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'function',
                 'content'  => 'delete',
@@ -142,7 +142,7 @@ class PolicyCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLimitationsElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'limitations'
             ),
@@ -161,7 +161,7 @@ class PolicyCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLimitationsAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'limitations',
                 'attributes' => array(

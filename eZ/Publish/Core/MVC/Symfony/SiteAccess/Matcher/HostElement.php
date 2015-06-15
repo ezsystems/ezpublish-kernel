@@ -27,6 +27,13 @@ class HostElement implements VersatileMatcher
     private $elementNumber;
 
     /**
+     * Host elements used for matching as an array.
+     *
+     * @var array
+     */
+    private $hostElements;
+
+    /**
      * Constructor.
      *
      * @param int $elementNumber Number of elements to take into account.
@@ -36,6 +43,11 @@ class HostElement implements VersatileMatcher
         $this->elementNumber = (int)$elementNumber;
     }
 
+    public function __sleep()
+    {
+        return array( 'elementNumber', 'hostElements' );
+    }
+
     /**
      * Returns matching Siteaccess.
      *
@@ -43,8 +55,7 @@ class HostElement implements VersatileMatcher
      */
     public function match()
     {
-        $elements = explode( ".", $this->request->host );
-
+        $elements = $this->getHostElements();
         return isset( $elements[$this->elementNumber - 1] ) ? $elements[$this->elementNumber - 1] : false;
     }
 
@@ -80,5 +91,23 @@ class HostElement implements VersatileMatcher
         $hostElements[$elementNumber] = $siteAccessName;
         $this->request->setHost( implode( '.', $hostElements ) );
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    private function getHostElements()
+    {
+        if ( isset( $this->hostElements ) )
+        {
+            return $this->hostElements;
+        }
+        else if ( !isset( $this->request ) )
+        {
+            return array();
+        }
+
+        $elements = explode( ".", $this->request->host );
+        return $this->hostElements = $elements;
     }
 }

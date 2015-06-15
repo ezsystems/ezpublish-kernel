@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
@@ -25,7 +26,7 @@ class ParentContentType extends MultipleValued
     public function matchLocation( APILocation $location )
     {
         $parentContentType = $this->repository->sudo(
-            function ( $repository ) use ( $location )
+            function ( Repository $repository ) use ( $location )
             {
                 $parent = $repository->getLocationService()->loadLocation( $location->parentLocationId );
                 return $repository
@@ -47,7 +48,7 @@ class ParentContentType extends MultipleValued
     public function matchContentInfo( ContentInfo $contentInfo )
     {
         $location = $this->repository->sudo(
-            function ( $repository ) use ( $contentInfo )
+            function ( Repository $repository ) use ( $contentInfo )
             {
                 return $repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
             }

@@ -83,7 +83,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         return $this->getHandler(
             'ezimage',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Image( $this->ioService, $urlRedecorator ),
+            new Legacy\Content\FieldValue\Converter\ImageConverter( $this->ioService, $urlRedecorator ),
             new FieldType\Image\ImageStorage(
                 array(
                     'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage( $urlRedecorator ),
@@ -280,14 +280,16 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         }*/
     }
 
-    public function testCreateContentUsingIdPropertyWorksAndThrowsWarning()
+    /**
+     * @expectedException \eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException
+     */
+    public function testCreateContentUsingIdPropertyThrowsWarning()
     {
         $this->testCreateContentType();
         $contentType = $this->testLoadContentTypeField();
         $this->getDeprecationWarnerMock()
-            ->expects( $this->once() )
-            ->method( 'log' )
-            ->with( $this->stringContains( 'id property' ) );
+            ->expects( $this->never() )
+            ->method( 'log' );
 
         $this->createContent( $contentType, $this->getDeprecatedIdPropertyValue() );
     }

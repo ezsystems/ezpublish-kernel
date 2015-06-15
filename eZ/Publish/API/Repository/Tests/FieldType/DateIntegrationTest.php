@@ -20,7 +20,7 @@ use DateTime;
  * @group integration
  * @group field-type
  */
-class DateIntegrationTest extends BaseIntegrationTest
+class DateIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
      * Get name of tested field type
@@ -338,5 +338,39 @@ class DateIntegrationTest extends BaseIntegrationTest
                 $this->getValidCreationFieldData()
             ),
         );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        $date = new DateTime( "1970-01-02" );
+        return $date->getTimestamp();
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        $date = new DateTime( "1970-01-03" );
+        return $date->getTimestamp();
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        // Handling Legacy Search Engine, which stores Date value as timestamp
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            return $this->getValidSearchValueOne();
+        }
+
+        return "1970-01-02T00:00:00Z";
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        // Handling Legacy Search Engine, which stores Date value as timestamp
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            return $this->getValidSearchValueTwo();
+        }
+
+        return "1970-01-03T00:00:00Z";
     }
 }

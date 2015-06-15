@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Tests;
 
-use eZ\Publish\Core\FieldType\Float\Type as Float;
+use eZ\Publish\Core\FieldType\Float\Type as FloatType;
 use eZ\Publish\Core\FieldType\Float\Value as FloatValue;
 use eZ\Publish\Core\FieldType\ValidationError;
 
@@ -32,7 +32,7 @@ class FloatTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        $fieldType = new Float();
+        $fieldType = new FloatType();
         $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
 
         return $fieldType;
@@ -574,7 +574,8 @@ class FloatTest extends FieldTypeTest
                         null,
                         array(
                             "size" => 5.1
-                        )
+                        ),
+                        'value'
                     ),
                 ),
             ),
@@ -594,7 +595,8 @@ class FloatTest extends FieldTypeTest
                         null,
                         array(
                             "size" => 10.5
-                        )
+                        ),
+                        'value'
                     ),
                 ),
             ),
@@ -614,14 +616,16 @@ class FloatTest extends FieldTypeTest
                         null,
                         array(
                             "size" => 5.1
-                        )
+                        ),
+                        'value'
                     ),
                     new ValidationError(
                         "The value can not be lower than %size%.",
                         null,
                         array(
                             "size" => 10.5
-                        )
+                        ),
+                        'value'
                     ),
                 ),
             ),

@@ -103,7 +103,8 @@ class Type extends BaseType
                                 null,
                                 array(
                                     "setting" => $name
-                                )
+                                ),
+                                "[$name]"
                             );
                         }
                         break;
@@ -116,7 +117,8 @@ class Type extends BaseType
                     null,
                     array(
                         "setting" => $name
-                    )
+                    ),
+                    "[$name]"
                 );
             }
         }
@@ -286,5 +288,15 @@ class Type extends BaseType
             : 0 );
 
         return $result;
+    }
+
+    /**
+     * Returns whether the field type is searchable
+     *
+     * @return boolean
+     */
+    public function isSearchable()
+    {
+        return false;
     }
 }

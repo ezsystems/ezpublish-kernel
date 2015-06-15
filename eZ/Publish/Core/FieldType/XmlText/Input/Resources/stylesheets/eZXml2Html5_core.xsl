@@ -27,7 +27,7 @@
             <xsl:number count="section[ancestor::section] | header" level="multiple"/>
         </xsl:variable>
 
-        <a name="eztoc_{translate($name, '.', '_')}" id="eztoc_{translate($name, '.', '_')}"/>
+        <a id="eztoc_{translate($name, '.', '_')}"/>
         <xsl:element name="h{$level}">
             <xsl:copy-of select="@class"/>
             <xsl:copy-of select="@align"/>

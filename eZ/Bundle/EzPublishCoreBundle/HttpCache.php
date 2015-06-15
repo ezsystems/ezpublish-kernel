@@ -11,16 +11,13 @@ namespace eZ\Bundle\EzPublishCoreBundle;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\RequestAwarePurger;
-use FOS\HttpCacheBundle\HttpCache as BaseHttpCache;
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\SymfonyCache\UserContextSubscriber;
+use FOS\HttpCacheBundle\SymfonyCache\EventDispatchingHttpCache;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-abstract class HttpCache extends BaseHttpCache
+abstract class HttpCache extends EventDispatchingHttpCache
 {
-    const USER_HASH_HEADER = 'X-User-Hash';
-
-    const SESSION_NAME_PREFIX = 'eZSESSID';
-
     protected function createStore()
     {
         return new LocationAwareStore( $this->cacheDir ?: $this->kernel->getCacheDir() . '/http_cache' );
@@ -115,10 +112,8 @@ abstract class HttpCache extends BaseHttpCache
         return array( '127.0.0.1', '::1', 'fe80::1' );
     }
 
-    protected function cleanupForwardRequest( Request $forwardReq, Request $originalRequest )
+    protected function getDefaultSubscribers()
     {
-        parent::cleanupForwardRequest( $forwardReq, $originalRequest );
-        // Embed the original request as we need it to match the SiteAccess.
-        $forwardReq->attributes->set( '_ez_original_request', $originalRequest );
+        return [new UserContextSubscriber( ['user_hash_header' => 'X-User-Hash', 'session_name_prefix' => 'eZSESSID'] )];
     }
 }

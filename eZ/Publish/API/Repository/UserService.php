@@ -61,12 +61,14 @@ interface UserService
      * Loads the sub groups of a user group
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
+     * @param int $offset the start offset for paging
+     * @param int $limit the number of user groups returned
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
-    public function loadSubUserGroups( UserGroup $userGroup );
+    public function loadSubUserGroups( UserGroup $userGroup, $offset = 0, $limit = 10 );
 
     /**
      * Removes a user group
@@ -245,10 +247,12 @@ interface UserService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed read the user or user group
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param int $offset the start offset for paging
+     * @param int $limit the number of user groups returned
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
-    public function loadUserGroupsOfUser( User $user );
+    public function loadUserGroupsOfUser( User $user, $offset = 0, $limit = 10 );
 
     /**
      * Loads the users of a user group
@@ -256,12 +260,12 @@ interface UserService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param int $offset
-     * @param int $limit
+     * @param int $offset the start offset for paging
+     * @param int $limit the number of users returned
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersOfUserGroup( UserGroup $userGroup, $offset = 0, $limit = -1 );
+    public function loadUsersOfUserGroup( UserGroup $userGroup, $offset = 0, $limit = 10 );
 
     /**
      * Instantiate a user create class

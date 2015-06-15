@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\MVC\Symfony\FieldType\Tests\View\ParameterProvider;
 use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProvider\LocaleParameterProvider;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class LocaleParameterProviderTest extends PHPUnit_Framework_TestCase
 {
@@ -30,15 +31,16 @@ class LocaleParameterProviderTest extends PHPUnit_Framework_TestCase
     {
         $field = new Field( array( "languageCode" => "cro-HR" ) );
         $parameterProvider = new LocaleParameterProvider( $this->getLocaleConverterMock() );
-        $parameterProvider->setRequest( $this->getRequestMock( $hasRequestLocale ) );
+        $parameterProvider->setRequestStack( $this->getRequestStackMock( $hasRequestLocale ) );
         $this->assertSame(
             array( 'locale' => $expectedLocale ),
             $parameterProvider->getViewParameters( $field )
         );
     }
 
-    protected function getRequestMock( $hasLocale )
+    protected function getRequestStackMock( $hasLocale )
     {
+        $requestStack = new RequestStack();
         $parameterBagMock = $this->getMock( "Symfony\\Component\\HttpFoundation\\ParameterBag" );
 
         $parameterBagMock->expects( $this->any() )
@@ -51,15 +53,17 @@ class LocaleParameterProviderTest extends PHPUnit_Framework_TestCase
             ->with( $this->equalTo( "_locale" ) )
             ->will( $this->returnValue( "fr_FR" ) );
 
-        $mock = $this->getMock( "Symfony\\Component\\HttpFoundation\\Request" );
-        $mock->attributes = $parameterBagMock;
+        $requestMock = $this->getMock( "Symfony\\Component\\HttpFoundation\\Request" );
+        $requestMock->attributes = $parameterBagMock;
 
-        $mock->expects( $this->any() )
+        $requestMock->expects( $this->any() )
             ->method( "__get" )
             ->with( $this->equalTo( "attributes" ) )
             ->will( $this->returnValue( $parameterBagMock ) );
 
-        return $mock;
+        $requestStack->push( $requestMock );
+
+        return $requestStack;
     }
 
     protected function getLocaleConverterMock()

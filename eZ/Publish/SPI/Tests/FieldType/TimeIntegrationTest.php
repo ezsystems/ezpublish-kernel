@@ -58,7 +58,7 @@ class TimeIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'eztime',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Time(),
+            new Legacy\Content\FieldValue\Converter\TimeConverter(),
             new FieldType\NullStorage()
         );
     }

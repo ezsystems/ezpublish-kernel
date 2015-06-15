@@ -19,11 +19,11 @@ use League\Flysystem\FilesystemInterface;
 
 class Flysystem implements IOBinaryDataHandler
 {
-    /** @var FilesystemInterface */
+    /** @var \League\Flysystem\FilesystemInterface */
     private $filesystem;
 
     /**
-     * @var UrlDecorator
+     * @var \eZ\Publish\Core\IO\UrlDecorator
      */
     private $urlDecorator;
 
@@ -33,15 +33,6 @@ class Flysystem implements IOBinaryDataHandler
         $this->urlDecorator = $urlDecorator;
     }
 
-    /**
-     * Creates the file $spiBinaryFileId with data from $resource, or updates data if it exists
-     *
-     * @param BinaryFileCreateStruct $binaryFileCreateStruct
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If file already exists
-     *
-     * @return void
-     */
     public function create( BinaryFileCreateStruct $binaryFileCreateStruct )
     {
         try
@@ -68,13 +59,6 @@ class Flysystem implements IOBinaryDataHandler
         }
     }
 
-    /**
-     * Deletes the file $spiBinaryFileId
-     *
-     * @param string $spiBinaryFileId
-     *
-     * @throws BinaryFileNotFoundException If $spiBinaryFileId isn't found
-     */
     public function delete( $spiBinaryFileId )
     {
         try
@@ -87,15 +71,6 @@ class Flysystem implements IOBinaryDataHandler
         }
     }
 
-    /**
-     * Returns the binary content from $spiBinaryFileId
-     *
-     * @param $spiBinaryFileId
-     *
-     * @throws BinaryFileNotFoundException If $spiBinaryFileId is not found
-     *
-     * @return string
-     */
     public function getContents( $spiBinaryFileId )
     {
         try
@@ -108,15 +83,6 @@ class Flysystem implements IOBinaryDataHandler
         }
     }
 
-    /**
-     * Returns a read-only, binary file resource to $spiBinaryFileId
-     *
-     * @param string $spiBinaryFileId
-     *
-     * @return resource A read-only binary resource to $spiBinaryFileId
-     *
-     * @throws BinaryFileNotFoundException
-     */
     public function getResource( $spiBinaryFileId )
     {
         try
@@ -129,13 +95,6 @@ class Flysystem implements IOBinaryDataHandler
         }
     }
 
-    /**
-     * Returns the public URI for $spiBinaryFileId using the uriDecorator. If none, prefixes with a /
-     *
-     * @param string $spiBinaryFileId
-     *
-     * @return string
-     */
     public function getUri( $spiBinaryFileId )
     {
         if ( isset( $this->urlDecorator ) )
@@ -151,5 +110,10 @@ class Flysystem implements IOBinaryDataHandler
         else
             return ltrim( $binaryFileUri, '/' );
 
+    }
+
+    public function deleteDirectory( $spiPath )
+    {
+        $this->filesystem->deleteDir( $spiPath );
     }
 }

@@ -7,7 +7,6 @@
  */
 namespace eZ\Publish\Core\IO\Exception;
 
-use Exception;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 
 class InvalidBinaryFileIdException extends InvalidArgumentValue

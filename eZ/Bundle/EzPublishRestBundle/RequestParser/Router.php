@@ -25,20 +25,13 @@ class Router implements RequestParser
      */
     private $router;
 
-    /**
-     * The configured  prefix for REST routes
-     * @var string
-     */
-    private $restRoutesPrefix;
-
-    public function __construct( $restRoutesPrefix, RouterInterface $router )
+    public function __construct( RouterInterface $router )
     {
         $this->router = $router;
-        $this->restRoutesPrefix = $restRoutesPrefix;
     }
 
     /**
-     * @throws ResourceNotFoundException If no match was found
+     * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException If no match was found
      */
     public function parse( $url )
     {

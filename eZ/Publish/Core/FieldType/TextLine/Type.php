@@ -31,7 +31,7 @@ class Type extends FieldType
             ),
             'maxStringLength' => array(
                 'type' => 'int',
-                'default' => false
+                'default' => null
             )
         )
     );
@@ -67,14 +67,15 @@ class Type extends FieldType
                 {
                     case "minStringLength":
                     case "maxStringLength":
-                        if ( $value !== false && !is_integer( $value ) )
+                        if ( $value !== null && !is_integer( $value ) )
                         {
                             $validationErrors[] = new ValidationError(
                                 "Validator parameter '%parameter%' value must be of integer type",
                                 null,
                                 array(
                                     "parameter" => $name
-                                )
+                                ),
+                                "[$validatorIdentifier][$name]"
                             );
                         }
                         break;
@@ -127,7 +128,8 @@ class Type extends FieldType
                 "The string can not exceed %size% characters.",
                 array(
                     "size" => $constraints['maxStringLength']
-                )
+                ),
+                'text'
             );
         }
 
@@ -141,7 +143,8 @@ class Type extends FieldType
                 "The string can not be shorter than %size% characters.",
                 array(
                     "size" => $constraints['minStringLength']
-                )
+                ),
+                'text'
             );
         }
 

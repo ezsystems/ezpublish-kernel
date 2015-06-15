@@ -95,7 +95,7 @@ class RestLocationRootNodeTest extends RestLocationTest
      */
     public function testResultContainsIdValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'id',
                 'content'  => '1'
@@ -115,7 +115,7 @@ class RestLocationRootNodeTest extends RestLocationTest
      */
     public function testResultContainsParentLocationElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ParentLocation'
             ),
@@ -134,7 +134,7 @@ class RestLocationRootNodeTest extends RestLocationTest
      */
     public function testResultContainsParentLocationAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ParentLocation',
                 'attributes' => array()
@@ -154,7 +154,7 @@ class RestLocationRootNodeTest extends RestLocationTest
      */
     public function testResultContainsLocationAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Location',
                 'attributes' => array(
@@ -177,7 +177,7 @@ class RestLocationRootNodeTest extends RestLocationTest
      */
     public function testResultContainsChildrenAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Children',
                 'attributes' => array(
@@ -200,7 +200,7 @@ class RestLocationRootNodeTest extends RestLocationTest
      */
     public function testResultContainsPathStringValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'pathString',
                 'content'  => '/1'
@@ -220,7 +220,7 @@ class RestLocationRootNodeTest extends RestLocationTest
      */
     public function testResultContainsUrlAliasesTagAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'UrlAliases',
                 'attributes' => array(

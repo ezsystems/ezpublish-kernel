@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor\MediaProcessor;
 use PHPUnit_Framework_TestCase;
 
-class MediaProcessorTest extends PHPUnit_Framework_TestCase
+class MediaProcessorTest extends BinaryInputProcessorTest
 {
     protected $constants = array(
         "TYPE_FLASH",
@@ -71,6 +71,6 @@ class MediaProcessorTest extends PHPUnit_Framework_TestCase
      */
     protected function getProcessor()
     {
-        return new MediaProcessor;
+        return new MediaProcessor( $this->getTempDir() );
     }
 }

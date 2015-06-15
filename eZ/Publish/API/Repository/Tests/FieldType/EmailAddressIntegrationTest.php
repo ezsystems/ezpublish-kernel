@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class EmailAddressIntegrationTest extends BaseIntegrationTest
+class EmailAddressIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
      * Get name of tested field type
@@ -333,5 +333,15 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
                 $this->getValidCreationFieldData()
             ),
         );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return "holmes4@ez.no";
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return "wyoming.knott@ez.no";
     }
 }

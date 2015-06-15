@@ -1050,7 +1050,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyFieldCreate->isTranslatable = true;
         $bodyFieldCreate->isRequired = false;
         $bodyFieldCreate->isInfoCollector = false;
-        $bodyFieldCreate->isSearchable = true;
+        $bodyFieldCreate->isSearchable = false;
         $bodyFieldCreate->defaultValue = "";
         //$bodyFieldCreate->validatorConfiguration
         $bodyFieldCreate->fieldSettings = array(
@@ -1168,7 +1168,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyFieldCreate->isTranslatable = true;
         $bodyFieldCreate->isRequired = false;
         $bodyFieldCreate->isInfoCollector = false;
-        $bodyFieldCreate->isSearchable = true;
+        $bodyFieldCreate->isSearchable = false;
         $bodyFieldCreate->defaultValue = "";
         //$bodyFieldCreate->validatorConfiguration
         $bodyFieldCreate->fieldSettings = array(
@@ -1488,13 +1488,10 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the createContentTypeGroup() method.
      *
      * @depends testCreateContentType
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Argument must contain at least one FieldDefinitionCreateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
      *
      * @return array
      */
-    public function testCreateContentTypeThrowsInvalidArgumentExceptionNoFieldDefinitions()
+    public function testCreateContentTypeWithoutFieldDefinitions()
     {
         /* BEGIN: Use Case */
         $contentTypeService = $this->repository->getContentTypeService();
@@ -1512,11 +1509,14 @@ abstract class ContentTypeBase extends BaseServiceTest
         $typeCreateStruct->descriptions = array( 'eng-US' => 'A description.' );
 
         // Throws an exception because content type create struct does not have any field definition create structs set
-        $type = $contentTypeService->createContentType(
-            $typeCreateStruct,
-            array(
-                // "Content" group
-                $contentTypeService->loadContentTypeGroup( 1 )
+        self::assertInstanceOf(
+            'eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft',
+            $contentTypeService->createContentType(
+                $typeCreateStruct,
+                array(
+                    // "Content" group
+                    $contentTypeService->loadContentTypeGroup( 1 )
+                )
             )
         );
         /* END: Use Case */
@@ -3356,7 +3356,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $fieldDefinitionUpdateStruct->fieldSettings = array(
             "textRows" => $fieldDefinition->fieldSettings["textRows"] + 1
         );
-        $fieldDefinitionUpdateStruct->isSearchable = !$fieldDefinition->isSearchable;
+        $fieldDefinitionUpdateStruct->isSearchable = $fieldDefinition->isSearchable;
 
         $contentTypeService->updateFieldDefinition(
             $contentTypeDraft,

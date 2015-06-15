@@ -9,19 +9,16 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
-use eZ\Bundle\EzPublishCoreBundle\Kernel;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\SPI\HashGenerator;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\RouterInterface;
 
 class RequestEventListener implements EventSubscriberInterface
@@ -58,62 +55,10 @@ class RequestEventListener implements EventSubscriberInterface
     {
         return array(
             KernelEvents::REQUEST => array(
-                array( 'onKernelRequestSetup', 190 ),
                 array( 'onKernelRequestForward', 10 ),
                 array( 'onKernelRequestRedirect', 0 ),
-                // onKernelRequestIndex needs to be before the router (prio 32)
-                array( 'onKernelRequestIndex', 40 ),
             )
         );
-    }
-
-    /**
-     * Checks if the IndexPage is configured and which page must be shown
-     *
-     * @param GetResponseEvent $event
-     */
-    public function onKernelRequestIndex( GetResponseEvent $event )
-    {
-        $request = $event->getRequest();
-        $semanticPathinfo = $request->attributes->get( 'semanticPathinfo' ) ?: '/';
-        if (
-            $event->getRequestType() === HttpKernelInterface::MASTER_REQUEST
-            && $semanticPathinfo === '/'
-        )
-        {
-            $indexPage = $this->configResolver->getParameter( 'index_page' );
-            if ( $indexPage !== null )
-            {
-                $indexPage = '/' . ltrim( $indexPage, '/' );
-                $request->attributes->set( 'semanticPathinfo', $indexPage );
-                $request->attributes->set( 'needsForward', true );
-            }
-        }
-    }
-
-    /**
-     * Checks if it's needed to redirect to setup wizard
-     *
-     * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
-     */
-    public function onKernelRequestSetup( GetResponseEvent $event )
-    {
-        if ( $event->getRequestType() == HttpKernelInterface::MASTER_REQUEST )
-        {
-            if ( $this->defaultSiteAccess !== 'setup' )
-                return;
-
-            $request = $event->getRequest();
-            $requestContext = $this->router->getContext();
-            $requestContext->fromRequest( $request );
-            $this->router->setContext( $requestContext );
-            $setupURI = $this->router->generate( 'ezpublishSetup' );
-
-            if ( ( $requestContext->getBaseUrl() . $request->getPathInfo() ) === $setupURI )
-                return;
-
-            $event->setResponse( new RedirectResponse( $setupURI ) );
-        }
     }
 
     /**

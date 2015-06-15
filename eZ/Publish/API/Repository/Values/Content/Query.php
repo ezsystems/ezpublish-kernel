@@ -70,6 +70,8 @@ class Query extends ValueObject
     /**
      * Query offset
      *
+     * Sets the offset for search hits, used for paging the results.
+     *
      * @var int
      */
     public $offset = 0;
@@ -77,9 +79,12 @@ class Query extends ValueObject
     /**
      * Query limit
      *
+     * Limit for number of search hits to return.
+     * If value is `0`, search query will not return any search hits, useful for doing a count.
+     *
      * @var int
      */
-    public $limit;
+    public $limit = 10;
 
     /**
      * If true spellcheck suggestions are returned
@@ -87,6 +92,13 @@ class Query extends ValueObject
      * @var boolean
      */
     public $spellcheck;
+
+    /**
+     * If true, search engine should perform count even if that means extra lookup.
+     *
+     * @var boolean
+     */
+    public $performCount = true;
 
     /**
      * Wrapper for deprecated $criterion property

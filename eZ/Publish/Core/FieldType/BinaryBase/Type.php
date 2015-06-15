@@ -29,7 +29,7 @@ abstract class Type extends FieldType
         "FileSizeValidator" => array(
             'maxFileSize' => array(
                 'type' => 'int',
-                'default' => false,
+                'default' => null,
             )
         )
     );
@@ -308,7 +308,7 @@ abstract class Type extends FieldType
                 // @todo There is a risk if we rely on a user built Value, since the FileSize
                 // property can be set manually, making this validation pointless
                 case 'FileSizeValidator':
-                    if ( !isset( $parameters['maxFileSize'] ) || $parameters['maxFileSize'] == false )
+                    if ( empty( $parameters['maxFileSize'] ) )
                     {
                         // No file size limit
                         break;
@@ -321,7 +321,8 @@ abstract class Type extends FieldType
                             "The file size cannot exceed %size% bytes.",
                             array(
                                 "size" => $parameters['maxFileSize'],
-                            )
+                            ),
+                            'fileSize'
                         );
                     }
                     break;
@@ -346,7 +347,7 @@ abstract class Type extends FieldType
             switch ( $validatorIdentifier )
             {
                 case 'FileSizeValidator':
-                    if ( !isset( $parameters['maxFileSize'] ) )
+                    if ( !array_key_exists( 'maxFileSize', $parameters ) )
                     {
                         $validationErrors[] = new ValidationError(
                             "Validator %validator% expects parameter %parameter% to be set.",
@@ -354,11 +355,12 @@ abstract class Type extends FieldType
                             array(
                                 "validator" => $validatorIdentifier,
                                 "parameter" => 'maxFileSize',
-                            )
+                            ),
+                            "[$validatorIdentifier][maxFileSize]"
                         );
                         break;
                     }
-                    if ( !is_int( $parameters['maxFileSize'] ) && $parameters['maxFileSize'] !== false )
+                    if ( !is_int( $parameters['maxFileSize'] ) && $parameters['maxFileSize'] !== null )
                     {
                         $validationErrors[] = new ValidationError(
                             "Validator %validator% expects parameter %parameter% to be of %type%.",
@@ -367,6 +369,7 @@ abstract class Type extends FieldType
                                 "validator" => $validatorIdentifier,
                                 "parameter" => 'maxFileSize',
                                 "type" => 'integer',
+                                "[$validatorIdentifier][maxFileSize]"
                             )
                         );
                     }
@@ -377,7 +380,8 @@ abstract class Type extends FieldType
                         null,
                         array(
                             "validator" => $validatorIdentifier
-                        )
+                        ),
+                        "[$validatorIdentifier]"
                     );
             }
         }

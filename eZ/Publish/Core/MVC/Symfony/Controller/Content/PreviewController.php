@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Helper\ContentPreviewHelper;
+use eZ\Publish\Core\Helper\PreviewLocationProvider;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
@@ -21,7 +22,7 @@ use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class PreviewController
 {
@@ -41,46 +42,47 @@ class PreviewController
     private $previewHelper;
 
     /**
-     * @var \Symfony\Component\Security\Core\SecurityContextInterface
+     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
      */
-    private $securityContext;
+    private $authorizationChecker;
 
     /**
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \eZ\Publish\Core\Helper\PreviewLocationProvider
      */
-    private $request;
+    private $locationProvider;
 
     public function __construct(
         ContentService $contentService,
         HttpKernelInterface $kernel,
         ContentPreviewHelper $previewHelper,
-        SecurityContextInterface $securityContext
+        AuthorizationCheckerInterface $authorizationChecker,
+        PreviewLocationProvider $locationProvider
     )
     {
         $this->contentService = $contentService;
         $this->kernel = $kernel;
         $this->previewHelper = $previewHelper;
-        $this->securityContext = $securityContext;
+        $this->authorizationChecker = $authorizationChecker;
+        $this->locationProvider = $locationProvider;
     }
 
-    public function setRequest( Request $request = null )
+    public function previewContentAction( Request $request, $contentId, $versionNo, $language, $siteAccessName = null )
     {
-        $this->request = $request;
-    }
+        $this->previewHelper->setPreviewActive( true );
 
-    public function previewContentAction( $contentId, $versionNo, $language, $siteAccessName = null )
-    {
         try
         {
             $content = $this->contentService->loadContent( $contentId, array( $language ), $versionNo );
-            $location = $this->previewHelper->getPreviewLocation( $contentId );
+            $location = $this->locationProvider->loadMainLocation( $contentId );
+            $this->previewHelper->setPreviewedContent( $content );
+            $this->previewHelper->setPreviewedLocation( $location );
         }
         catch ( UnauthorizedException $e )
         {
             throw new AccessDeniedException();
         }
 
-        if ( !$this->securityContext->isGranted( new AuthorizationAttribute( 'content', 'versionread', array( 'valueObject' => $content ) ) ) )
+        if ( !$this->authorizationChecker->isGranted( new AuthorizationAttribute( 'content', 'versionread', array( 'valueObject' => $content ) ) ) )
         {
             throw new AccessDeniedException();
         }
@@ -93,13 +95,14 @@ class PreviewController
         }
 
         $response = $this->kernel->handle(
-            $this->getForwardRequest( $location, $content, $siteAccess ),
+            $this->getForwardRequest( $location, $content, $siteAccess, $request ),
             HttpKernelInterface::SUB_REQUEST
         );
         $response->headers->remove( 'cache-control' );
         $response->headers->remove( 'expires' );
 
         $this->previewHelper->restoreConfigScope();
+        $this->previewHelper->setPreviewActive( false );
 
         return $response;
     }
@@ -110,12 +113,13 @@ class PreviewController
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $previewSiteAccess
+     * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Request
      */
-    protected function getForwardRequest( Location $location, Content $content, SiteAccess $previewSiteAccess )
+    protected function getForwardRequest( Location $location, Content $content, SiteAccess $previewSiteAccess, Request $request )
     {
-        return $this->request->duplicate(
+        return $request->duplicate(
             null, null,
             array(
                 '_controller' => 'ez_content:viewLocation',
@@ -133,7 +137,7 @@ class PreviewController
                     'isPreview' => true
                 ),
                 'siteaccess' => $previewSiteAccess,
-                'semanticPathinfo' => $this->request->attributes->get( 'semanticPathinfo' ),
+                'semanticPathinfo' => $request->attributes->get( 'semanticPathinfo' ),
             )
         );
     }

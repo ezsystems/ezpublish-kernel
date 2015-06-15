@@ -1,0 +1,232 @@
+{
+    "content": {
+        "dynamic": false,
+        "_all" : { "enabled": false },
+        "properties": {
+            "id": { "type": "string", "index": "not_analyzed" },
+            "type_id": { "type": "string", "index": "not_analyzed" },
+            "group_mid": { "type": "string", "index": "not_analyzed" },
+            "version_id": { "type": "integer", "index": "not_analyzed" },
+            "status_id": { "type": "string", "index": "not_analyzed" },
+            "name_s": { "type": "string", "index": "not_analyzed" },
+            "creator_id": { "type": "string", "index": "not_analyzed" },
+            "owner_id": { "type": "string", "index": "not_analyzed" },
+            "owner_user_group_mid": { "type": "string", "index": "not_analyzed" },
+            "section_id": { "type": "string", "index": "not_analyzed" },
+            "section_identifier_id": { "type": "string", "index": "not_analyzed" },
+            "section_name_s": { "type": "string", "index": "not_analyzed" },
+            "remote_id_id": { "type": "string", "index": "not_analyzed" },
+            "modified_dt": { "type": "date", "index": "not_analyzed" },
+            "published_dt": { "type": "date", "index": "not_analyzed" },
+            "language_code_ms": { "type": "string", "index": "not_analyzed" },
+            "always_available_b": { "type": "boolean", "index": "not_analyzed" },
+            "object_state_mid": { "type": "string", "index": "not_analyzed" },
+            "locations_doc": {
+                "type": "nested",
+                "dynamic": false,
+                "properties": {
+                    "id": { "type": "string", "index": "not_analyzed" },
+                    "priority_i": { "type": "integer", "index": "not_analyzed" },
+                    "hidden_b": { "type": "boolean", "index": "not_analyzed" },
+                    "invisible_b": { "type": "boolean", "index": "not_analyzed" },
+                    "remote_id_id": { "type": "string", "index": "not_analyzed" },
+                    "content_id_id": { "type": "string", "index": "not_analyzed" },
+                    "parent_id_id": { "type": "string", "index": "not_analyzed" },
+                    "path_string_id": { "type": "string", "index": "not_analyzed" },
+                    "depth_i": { "type": "integer", "index": "not_analyzed" },
+                    "sort_field_id": { "type": "string", "index": "not_analyzed" },
+                    "sort_order_id": { "type": "string", "index": "not_analyzed" },
+                    "is_main_location_b": { "type": "boolean", "index": "not_analyzed" }
+                }
+            },
+            "fields_doc": {
+                "type": "nested",
+                "dynamic": true,
+                "properties": {
+                    "meta_all_ara_SA": { "type": "string", "analyzer": "analyzer_ara_SA" },
+                    "meta_all_cat_ES": { "type": "string", "analyzer": "analyzer_cat_ES" },
+                    "meta_all_chi_CN": { "type": "string", "analyzer": "analyzer_chi_CN" },
+                    "meta_all_chi_HK": { "type": "string", "analyzer": "analyzer_chi_HK" },
+                    "meta_all_chi_TW": { "type": "string", "analyzer": "analyzer_chi_TW" },
+                    "meta_all_cro_HR": { "type": "string", "analyzer": "analyzer_cro_HR" },
+                    "meta_all_cze_CZ": { "type": "string", "analyzer": "analyzer_cze_CZ" },
+                    "meta_all_dan_DK": { "type": "string", "analyzer": "analyzer_dan_DK" },
+                    "meta_all_dut_NL": { "type": "string", "analyzer": "analyzer_dut_NL" },
+                    "meta_all_ell_GR": { "type": "string", "analyzer": "analyzer_ell_GR" },
+                    "meta_all_eng_AU": { "type": "string", "analyzer": "analyzer_eng_AU" },
+                    "meta_all_eng_CA": { "type": "string", "analyzer": "analyzer_eng_CA" },
+                    "meta_all_eng_GB": { "type": "string", "analyzer": "analyzer_eng_GB" },
+                    "meta_all_eng_NZ": { "type": "string", "analyzer": "analyzer_eng_NZ" },
+                    "meta_all_eng_US": { "type": "string", "analyzer": "analyzer_eng_US" },
+                    "meta_all_epo_EO": { "type": "string", "analyzer": "analyzer_epo_EO" },
+                    "meta_all_esl_ES": { "type": "string", "analyzer": "analyzer_esl_ES" },
+                    "meta_all_esl_MX": { "type": "string", "analyzer": "analyzer_esl_MX" },
+                    "meta_all_fin_FI": { "type": "string", "analyzer": "analyzer_fin_FI" },
+                    "meta_all_fre_BE": { "type": "string", "analyzer": "analyzer_fre_BE" },
+                    "meta_all_fre_CA": { "type": "string", "analyzer": "analyzer_fre_CA" },
+                    "meta_all_fre_FR": { "type": "string", "analyzer": "analyzer_fre_FR" },
+                    "meta_all_ger_DE": { "type": "string", "analyzer": "analyzer_ger_DE" },
+                    "meta_all_heb_IL": { "type": "string", "analyzer": "analyzer_heb_IL" },
+                    "meta_all_hin_IN": { "type": "string", "analyzer": "analyzer_hin_IN" },
+                    "meta_all_hun_HU": { "type": "string", "analyzer": "analyzer_hun_HU" },
+                    "meta_all_ind_ID": { "type": "string", "analyzer": "analyzer_ind_ID" },
+                    "meta_all_ita_IT": { "type": "string", "analyzer": "analyzer_ita_IT" },
+                    "meta_all_jpn_JP": { "type": "string", "analyzer": "analyzer_jpn_JP" },
+                    "meta_all_kor_KR": { "type": "string", "analyzer": "analyzer_kor_KR" },
+                    "meta_all_nno_NO": { "type": "string", "analyzer": "analyzer_nno_NO" },
+                    "meta_all_nor_NO": { "type": "string", "analyzer": "analyzer_nor_NO" },
+                    "meta_all_pol_PL": { "type": "string", "analyzer": "analyzer_pol_PL" },
+                    "meta_all_por_BR": { "type": "string", "analyzer": "analyzer_por_BR" },
+                    "meta_all_por_MZ": { "type": "string", "analyzer": "analyzer_por_MZ" },
+                    "meta_all_por_PT": { "type": "string", "analyzer": "analyzer_por_PT" },
+                    "meta_all_rus_RU": { "type": "string", "analyzer": "analyzer_rus_RU" },
+                    "meta_all_ser_SR": { "type": "string", "analyzer": "analyzer_ser_SR" },
+                    "meta_all_slk_SK": { "type": "string", "analyzer": "analyzer_slk_SK" },
+                    "meta_all_srp_RS": { "type": "string", "analyzer": "analyzer_srp_RS" },
+                    "meta_all_swe_SE": { "type": "string", "analyzer": "analyzer_swe_SE" },
+                    "meta_all_tur_TR": { "type": "string", "analyzer": "analyzer_tur_TR" },
+                    "meta_all_ukr_UA": { "type": "string", "analyzer": "analyzer_ukr_UA" },
+                    "meta_language_code_s": { "type": "string", "index": "not_analyzed" },
+                    "meta_is_main_translation_b": { "type": "boolean", "index": "not_analyzed" },
+                    "meta_is_always_available_b": { "type": "boolean", "index": "not_analyzed" },
+                    "user_first_name_value_s": { "type": "string", "analyzer": "string_lowercase", "copy_to": "fields_doc.custom_field" },
+                    "user_last_name_value_s": { "type": "string", "analyzer": "string_lowercase", "copy_to": "fields_doc.custom_field" },
+                    "custom_field": { "type": "string", "analyzer": "string_lowercase" }
+                }
+            }
+        },
+        "dynamic_templates": [
+            { "meta_all_ara_SA": { "path_match": "fields_doc.*_meta_all_ara_SA_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_ara_SA" } } },
+            { "meta_all_cat_ES": { "path_match": "fields_doc.*_meta_all_cat_ES_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_cat_ES" } } },
+            { "meta_all_chi_CN": { "path_match": "fields_doc.*_meta_all_chi_CN_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_chi_CN" } } },
+            { "meta_all_chi_HK": { "path_match": "fields_doc.*_meta_all_chi_HK_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_chi_HK" } } },
+            { "meta_all_chi_TW": { "path_match": "fields_doc.*_meta_all_chi_TW_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_chi_TW" } } },
+            { "meta_all_cro_HR": { "path_match": "fields_doc.*_meta_all_cro_HR_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_cro_HR" } } },
+            { "meta_all_cze_CZ": { "path_match": "fields_doc.*_meta_all_cze_CZ_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_cze_CZ" } } },
+            { "meta_all_dan_DK": { "path_match": "fields_doc.*_meta_all_dan_DK_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_dan_DK" } } },
+            { "meta_all_dut_NL": { "path_match": "fields_doc.*_meta_all_dut_NL_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_dut_NL" } } },
+            { "meta_all_ell_GR": { "path_match": "fields_doc.*_meta_all_ell_GR_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_ell_GR" } } },
+            { "meta_all_eng_AU": { "path_match": "fields_doc.*_meta_all_eng_AU_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_eng_AU" } } },
+            { "meta_all_eng_CA": { "path_match": "fields_doc.*_meta_all_eng_CA_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_eng_CA" } } },
+            { "meta_all_eng_GB": { "path_match": "fields_doc.*_meta_all_eng_GB_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_eng_GB" } } },
+            { "meta_all_eng_NZ": { "path_match": "fields_doc.*_meta_all_eng_NZ_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_eng_NZ" } } },
+            { "meta_all_eng_US": { "path_match": "fields_doc.*_meta_all_eng_US_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_eng_US" } } },
+            { "meta_all_epo_EO": { "path_match": "fields_doc.*_meta_all_epo_EO_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_epo_EO" } } },
+            { "meta_all_esl_ES": { "path_match": "fields_doc.*_meta_all_esl_ES_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_esl_ES" } } },
+            { "meta_all_esl_MX": { "path_match": "fields_doc.*_meta_all_esl_MX_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_esl_MX" } } },
+            { "meta_all_fin_FI": { "path_match": "fields_doc.*_meta_all_fin_FI_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_fin_FI" } } },
+            { "meta_all_fre_BE": { "path_match": "fields_doc.*_meta_all_fre_BE_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_fre_BE" } } },
+            { "meta_all_fre_CA": { "path_match": "fields_doc.*_meta_all_fre_CA_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_fre_CA" } } },
+            { "meta_all_fre_FR": { "path_match": "fields_doc.*_meta_all_fre_FR_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_fre_FR" } } },
+            { "meta_all_ger_DE": { "path_match": "fields_doc.*_meta_all_ger_DE_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_ger_DE" } } },
+            { "meta_all_heb_IL": { "path_match": "fields_doc.*_meta_all_heb_IL_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_heb_IL" } } },
+            { "meta_all_hin_IN": { "path_match": "fields_doc.*_meta_all_hin_IN_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_hin_IN" } } },
+            { "meta_all_hun_HU": { "path_match": "fields_doc.*_meta_all_hun_HU_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_hun_HU" } } },
+            { "meta_all_ind_ID": { "path_match": "fields_doc.*_meta_all_ind_ID_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_ind_ID" } } },
+            { "meta_all_ita_IT": { "path_match": "fields_doc.*_meta_all_ita_IT_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_ita_IT" } } },
+            { "meta_all_jpn_JP": { "path_match": "fields_doc.*_meta_all_jpn_JP_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_jpn_JP" } } },
+            { "meta_all_kor_KR": { "path_match": "fields_doc.*_meta_all_kor_KR_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_kor_KR" } } },
+            { "meta_all_nno_NO": { "path_match": "fields_doc.*_meta_all_nno_NO_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_nno_NO" } } },
+            { "meta_all_nor_NO": { "path_match": "fields_doc.*_meta_all_nor_NO_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_nor_NO" } } },
+            { "meta_all_pol_PL": { "path_match": "fields_doc.*_meta_all_pol_PL_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_pol_PL" } } },
+            { "meta_all_por_BR": { "path_match": "fields_doc.*_meta_all_por_BR_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_por_BR" } } },
+            { "meta_all_por_MZ": { "path_match": "fields_doc.*_meta_all_por_MZ_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_por_MZ" } } },
+            { "meta_all_por_PT": { "path_match": "fields_doc.*_meta_all_por_PT_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_por_PT" } } },
+            { "meta_all_rus_RU": { "path_match": "fields_doc.*_meta_all_rus_RU_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_rus_RU" } } },
+            { "meta_all_ser_SR": { "path_match": "fields_doc.*_meta_all_ser_SR_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_ser_SR" } } },
+            { "meta_all_slk_SK": { "path_match": "fields_doc.*_meta_all_slk_SK_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_slk_SK" } } },
+            { "meta_all_srp_RS": { "path_match": "fields_doc.*_meta_all_srp_RS_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_srp_RS" } } },
+            { "meta_all_swe_SE": { "path_match": "fields_doc.*_meta_all_swe_SE_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_swe_SE" } } },
+            { "meta_all_tur_TR": { "path_match": "fields_doc.*_meta_all_tur_TR_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_tur_TR" } } },
+            { "meta_all_ukr_UA": { "path_match": "fields_doc.*_meta_all_ukr_UA_*", "mapping": { "index": "no", "copy_to": "fields_doc.meta_all_ukr_UA" } } },
+            {
+                "field_string": {
+                    "path_match": "fields_doc.*_*s",
+                    "match_mapping_type": "string",
+                    "mapping": {
+                        "type": "string",
+                        "analyzer": "string_lowercase"
+                    }
+                }
+            },
+            {
+                "field_id": {
+                    "path_match": "fields_doc.*_id",
+                    "match_mapping_type": "string",
+                    "mapping": {
+                        "type": "string",
+                        "index": "not_analyzed"
+                    }
+                }
+            },
+            {
+                "field_integer": {
+                    "path_match": "fields_doc.*_i",
+                    "match_mapping_type": "integer",
+                    "mapping": {
+                        "type": "integer",
+                        "index": "not_analyzed"
+                    }
+                }
+            },
+            {
+                "field_float": {
+                    "path_match": "fields_doc.*_f",
+                    "match_mapping_type": "float",
+                    "mapping": {
+                        "type": "integer",
+                        "index": "not_analyzed"
+                    }
+                }
+            },
+            {
+                "field_long": {
+                    "path_match": "fields_doc.*_l",
+                    "match_mapping_type": "long",
+                    "mapping": {
+                        "type": "integer",
+                        "index": "not_analyzed"
+                    }
+                }
+            },
+            {
+                "field_double": {
+                    "path_match": "fields_doc.*_d",
+                    "match_mapping_type": "double",
+                    "mapping": {
+                        "type": "integer",
+                        "index": "not_analyzed"
+                    }
+                }
+            },
+            {
+                "field_boolean": {
+                    "path_match": "fields_doc.*_b",
+                    "match_mapping_type": "boolean",
+                    "mapping": {
+                        "type": "boolean",
+                        "index": "not_analyzed"
+                    }
+                }
+            },
+            {
+                "field_geo_point": {
+                    "path_match": "fields_doc.*_gl",
+                    "mapping": {
+                        "type": "geo_point"
+                    }
+                }
+            },
+            {
+                "field_datetime": {
+                    "path_match": "fields_doc.*_dt",
+                    "match_mapping_type": "date",
+                    "mapping": {
+                        "type": "date",
+                        "index": "not_analyzed"
+                    }
+                }
+            }
+        ]
+    }
+}

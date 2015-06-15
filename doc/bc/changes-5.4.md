@@ -87,6 +87,108 @@ Changes affecting version compatibility with former or future versions.
 * `ViewCaching` legacy setting is now enforced and injected in legacy kernel when booted. This is to avoid persistence/Http
   cache clear not working when publishing content.
 
+* 5.4.2: Search implementations have been refactored out of persistence into own namespace
+
+    Implementations have been moved out of `eZ\Publish\Core\Persistence`
+    namespace into their own namespace at `eZ\Publish\Core\Search`. With that, previously
+    deprecated methods of the main storage handler (implementing
+    `eZ\Publish\SPI\Persistence\Handler` interface) have been removed:
+
+    * `searchHandler()`
+    * `locationSearchHandler()`
+
+    These are now available in the main search handler, implementing
+    new `eZ\Publish\SPI\Search\Handler` interface, as:
+
+    * `contentSearchHandler()` (replaces `searchHandler()`)
+    * `locationSearchHandler()`
+
+    Main search handler can now be retrieved from the service container through
+    `ezpublish.spi.search` service identifier. This service may in future return
+    different implementations of the interface, for example one providing caching
+    or emitting signals for slots. At the moment it is aliased
+    to the concrete implementation of the storage engine, available through
+    `ezpublish.spi.search_engine` service identifier. This is in turn aliased
+    to the Legacy Search Engine, available through `ezpublish.spi.search.legacy` service
+    identifier.
+
+    Legacy Search Engine is at the moment of writing the only officially supported Search Engine.
+
+    With the implementation move, service tags for sort clause, criteria and
+    criteria field value handlers have also changed. Previous service tags:
+
+    * `ezpublish.persistence.legacy.search.gateway.criterion_handler.content`
+    * `ezpublish.persistence.legacy.search.gateway.criterion_handler.location`
+    * `ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler`
+    * `ezpublish.persistence.legacy.search.gateway.sort_clause_handler.content`
+    * `ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location`
+
+    are now changed to the following, respectively:
+
+    * `ezpublish.search.legacy.gateway.criterion_handler.content`
+    * `ezpublish.search.legacy.gateway.criterion_handler.location`
+    * `ezpublish.search.legacy.gateway.criterion_field_value_handler`
+    * `ezpublish.search.legacy.gateway.sort_clause_handler.content`
+    * `ezpublish.search.legacy.gateway.sort_clause_handler.location`
+
+* 5.4.2: Legacy Search Engine FullText searchThresholdValue -> stopWordThresholdFactor
+
+    EZP-24213: the "Stop Word Threshold" configuration, `searchThresholdValue`, was hardcoded
+    to 20 items. It is now changed to `stopWordThresholdFactor`, a factor (between 0 and 1)
+    for the percentage of content objects to set the Stop Word Threshold to. Default value
+    is set to 0.66, meaning if you search for a common word like "the", it will be ignored
+    from the search expression if more then 66% of your content contains the word.
+
+    Note: Does not affect future Solr/ElasticSearch search engines which has far more
+          advanced search options built in.
+
+* 5.4.3: Semantic configuration for search engines has been implemented
+
+    At the moment of writing, only Legacy Search Engine is supported. Search engine bundles are also
+    introduced here, these need to be activated in `EzPublishKernel.php` in order for the engine to be
+    available for configuration. For the Legacy Search Engine the bundle is located at
+    `eZ/Bundle/EzPublishLegacySearchEngineBundle`.
+
+    With semantic configuration for search engines, repository configuration has changed. Previous
+    structure:
+
+    ```yml
+    ezpublish:
+        repositories:
+            main:
+                engine: legacy
+                connection: default
+    ```
+
+    has been updated with search engine configuration. With it, storage settings are now moved under
+    `storage` key. New structure looks like this:
+
+    ```yml
+    ezpublish:
+        repositories:
+            main:
+                storage:
+                    engine: legacy
+                    connection: my_connection
+                search:
+                    engine: legacy
+                    connection: my_connection
+    ```
+
+    The same as was previously the case with storage configuration, it is not mandatory to provide
+    search configuration. In that case the system will try to use default search engine and default
+    connection. Old structure is still supported, but is deprecated. The support will be removed in
+    one of the future releases.
+
+* 5.4.3: `eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider` is has been renamed to
+  `eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider`, as it now provides
+  repository configuration for both storage and search engines. Class signature has remained the
+  same.
+
+* 5.4.3: `eZ\Publish\Core\Repository\ContentService::deleteVersion()` now throws `BadStateException`
+  when deleting last version of the Content. Since Content without a version does not make sense, in
+  this case `eZ\Publish\Core\Repository\ContentService::deleteContent()` should be used instead.
+
 ## Deprecations
 
 * `imagemagick` siteaccess settings are now deprecated. It is mandatory to remove them.
@@ -125,6 +227,29 @@ Changes affecting version compatibility with former or future versions.
   [custom Context Providers from `FOSHttpCacheBundle`](http://foshttpcachebundle.readthedocs.org/en/latest/reference/configuration/user-context.html#custom-context-providers).
   
   `ezpublish.identity_definer` service tag and related classes/interfaces will be removed in v6.0
+  
+* 5.4.2: `eZ\Bundle\EzPublishCoreBundle\Controller::getLegacyKernel()` is deprecated (will be removed in v6.0).
+  Use `eZ\Bundle\EzPublishLegacyBundle\Controller::getLegacyKernel()` instead. 
+  
+* 5.4.2: `legacy_mode` setting is deprecated and will be removed in v6.0.
+  Move your setting to `ez_publish_legacy` (LegacyBundle) namespace instead:
+  
+  ```yml
+  # This is deprecated
+  ezpublish:
+      system:
+          my_siteaccess:
+              legacy_mode: true
+              
+  # New setting
+  ez_publish_legacy:
+      system:
+          my_siteaccess:
+              legacy_mode: true
+  ```
+
+* 5.4.2: `legacy_aware_routes` setting is deprecated and will be removed in v6.0.
+  Move your setting to `ez_publish_legacy` instead.
   
 No further changes are known in this release at the time of writing.
 See online on your corresponding eZ Publish version for

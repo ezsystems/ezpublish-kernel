@@ -58,7 +58,7 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezemail',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\EmailAddress(),
+            new Legacy\Content\FieldValue\Converter\EmailAddressConverter(),
             new FieldType\NullStorage()
         );
     }

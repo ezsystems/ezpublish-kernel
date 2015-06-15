@@ -45,7 +45,6 @@ class Ezxhtml5EditTest extends PHPUnit_Framework_TestCase
         $validator = $this->getConversionValidator();
         $errors = $validator->validate( $document );
 
-
         $this->assertEquals( count( $expectedErrors ), count( $errors ) );
 
         foreach ( $errors as $index => $error )
@@ -58,7 +57,6 @@ class Ezxhtml5EditTest extends PHPUnit_Framework_TestCase
      * @var \eZ\Publish\Core\FieldType\RichText\Validator
      */
     protected $validator;
-
 
     /**
      * @return \eZ\Publish\Core\FieldType\RichText\Validator

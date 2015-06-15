@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output;
 
+use eZ\Publish\Core\REST\Common\Tests\AssertXmlTagTrait;
 use eZ\Publish\Core\REST\Server\Tests;
 
 use eZ\Publish\Core\REST\Common\Output\Generator;
@@ -17,6 +18,8 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest as Commo
 
 abstract class ValueObjectVisitorBaseTest extends CommonValueObjectVisitorBaseTest
 {
+    use AssertXmlTagTrait;
+
     /**
      * @var \eZ\Publish\Core\REST\Common\RequestParser\eZPublish
      */
@@ -27,10 +30,11 @@ abstract class ValueObjectVisitorBaseTest extends CommonValueObjectVisitorBaseTe
      */
     protected function getRequestParser()
     {
-        if ( !isset( $this->requestParser ) )
+        if ( !isset($this->requestParser) )
         {
             $this->requestParser = new EzPublishRequestParser();
         }
+
         return $this->requestParser;
     }
 }

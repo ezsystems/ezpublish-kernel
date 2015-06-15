@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
-use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
@@ -52,7 +51,8 @@ class RemoveField extends Action
         ContentGateway $contentGateway,
         FieldDefinition $fieldDef,
         StorageHandler $storageHandler,
-        ContentMapper $contentMapper )
+        ContentMapper $contentMapper
+    )
     {
         $this->contentGateway = $contentGateway;
         $this->fieldDefinition = $fieldDef;
@@ -63,30 +63,41 @@ class RemoveField extends Action
     /**
      * Applies the action to the given $content
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $contentInfo
-     *
-     * @return void
+     * @param int $contentId
      */
-    public function apply( ContentInfo $contentInfo )
+    public function apply( $contentId )
     {
-        $fieldIdsToRemoveMap = array();
+        $versionNumbers = $this->contentGateway->listVersionNumbers( $contentId );
+        $fieldIdSet = array();
 
-        $contentRows = $this->contentGateway->load( $contentInfo->id, $contentInfo->currentVersionNo );
-        $contentList = $this->contentMapper->extractContentFromRows( $contentRows );
-        $content = $contentList[0];
-
-        foreach ( $content->fields as $field )
+        foreach ( $versionNumbers as $versionNo )
         {
-            if ( $field->fieldDefinitionId == $this->fieldDefinition->id )
+            $contentRows = $this->contentGateway->load( $contentId, $versionNo );
+            $contentList = $this->contentMapper->extractContentFromRows( $contentRows );
+            $content = $contentList[0];
+            $versionFieldIdSet = array();
+
+            foreach ( $content->fields as $field )
             {
-                $this->contentGateway->deleteField( $field->id );
-                $fieldIdsToRemoveMap[$field->type][] = $field->id;
+                if ( $field->fieldDefinitionId == $this->fieldDefinition->id )
+                {
+                    $fieldIdSet[$field->id] = true;
+                    $versionFieldIdSet[$field->id] = true;
+                }
             }
+
+            // Delete from external storage with list of IDs per version
+            $this->storageHandler->deleteFieldData(
+                $this->fieldDefinition->fieldType,
+                $content->versionInfo,
+                array_keys( $versionFieldIdSet )
+            );
         }
 
-        foreach ( $fieldIdsToRemoveMap as $fieldType => $ids )
+        // Delete from internal storage -- field is always deleted from _all_ versions
+        foreach ( array_keys( $fieldIdSet ) as $fieldId )
         {
-            $this->storageHandler->deleteFieldData( $fieldType, $content->versionInfo, $ids );
+            $this->contentGateway->deleteField( $fieldId );
         }
     }
 }

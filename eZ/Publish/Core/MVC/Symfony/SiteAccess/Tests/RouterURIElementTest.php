@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement as URIElementMatcher;
@@ -179,5 +180,18 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
             array( 'another_siteaccess', '/foo/bar' ),
             array( 'another_siteaccess_again_dont_tell_me', '/foo/bar' ),
         );
+    }
+
+    public function testSerialize()
+    {
+        $matcher = new URIElementMatcher( 1 );
+        $matcher->setRequest( new SimplifiedRequest( array( 'pathinfo' => '/foo/bar' ) ) );
+        $sa = new SiteAccess( 'test', 'test', $matcher );
+        $serializedSA1 = serialize( $sa );
+
+        $matcher->setRequest( new SimplifiedRequest( array( 'pathinfo' => '/foo/bar/baz' ) ) );
+        $serializedSA2 = serialize( $sa );
+
+        $this->assertSame( $serializedSA1, $serializedSA2 );
     }
 }

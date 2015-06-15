@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Keyword as KeywordConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\KeywordConverter;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
 use PHPUnit_Framework_TestCase;
 
@@ -22,7 +22,7 @@ use PHPUnit_Framework_TestCase;
 class KeywordTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Keyword
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\KeywordConverter
      */
     protected $converter;
 
@@ -35,7 +35,7 @@ class KeywordTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group keyword
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Keyword::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\KeywordConverter::toStorageValue
      */
     public function testToStorageValue()
     {
@@ -55,7 +55,7 @@ class KeywordTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group keyword
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Keyword::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\KeywordConverter::toFieldValue
      */
     public function testToFieldValue()
     {
@@ -70,7 +70,7 @@ class KeywordTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group keyword
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Keyword::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\KeywordConverter::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinition()
     {
@@ -80,7 +80,7 @@ class KeywordTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group keyword
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Keyword::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\KeywordConverter::toFieldDefinition
      */
     public function testToFieldDefinition()
     {

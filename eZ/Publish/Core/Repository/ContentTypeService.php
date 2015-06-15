@@ -552,14 +552,6 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
-        if ( empty( $contentTypeCreateStruct->fieldDefinitions ) )
-        {
-            throw new InvalidArgumentException(
-                "\$contentTypeCreateStruct",
-                "Argument must contain at least one FieldDefinitionCreateStruct"
-            );
-        }
-
         foreach ( $contentTypeCreateStruct->fieldDefinitions as $key => $fieldDefinitionCreateStruct )
         {
             if ( !$fieldDefinitionCreateStruct instanceof FieldDefinitionCreateStruct )
@@ -757,11 +749,11 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * The content type is created in the state STATUS_DRAFT.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create a content type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException In case when
      *         - array of content type groups does not contain at least one content type group
      *         - identifier or remoteId in the content type create struct already exists
      *         - there is a duplicate field identifier in the content type create struct
-     *         - content type create struct does not contain at least one field definition create struct
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
      *         if a field definition in the $contentTypeCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeValidationException
@@ -774,6 +766,9 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function createContentType( APIContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups )
     {
+        if ( $this->repository->hasAccess( 'class', 'create' ) !== true )
+            throw new UnauthorizedException( 'ContentType', 'create' );
+
         // Prevent argument mutation
         $contentTypeCreateStruct = clone $contentTypeCreateStruct;
         $this->validateInputContentTypeCreateStruct( $contentTypeCreateStruct );
@@ -893,7 +888,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         $groupIds = array_map(
-            function ( $contentTypeGroup )
+            function ( ContentTypeGroup $contentTypeGroup )
             {
                 return $contentTypeGroup->id;
             },

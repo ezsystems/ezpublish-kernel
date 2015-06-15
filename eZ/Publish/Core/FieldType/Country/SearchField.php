@@ -47,4 +47,19 @@ class SearchField implements Indexable
             'value' => new Search\FieldType\MultipleStringField(),
         );
     }
+
+    /**
+     * Get name of the default field to be used for query and sort.
+     *
+     * As field types can index multiple fields (see MapLocation field type's
+     * implementation of this interface), this method is used to define default
+     * field for query and sort. Default field is typically used by Field
+     * criterion and sort clause.
+     *
+     * @return string
+     */
+    public function getDefaultField()
+    {
+        return "value";
+    }
 }

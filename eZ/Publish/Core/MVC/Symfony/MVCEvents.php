@@ -77,4 +77,12 @@ final class MVCEvents
      * The event listener method receives a eZ\Publish\Core\MVC\Symfony\Event\RouteReferenceGenerationEvent instance.
      */
     const ROUTE_REFERENCE_GENERATION = 'ezpublish.routing.reference_generation';
+
+    /**
+     * CACHE_CLEAR_CONTENT event occurs when cache needs to be cleared for a content.
+     * It gives the opportunity to add related locations to clear (aka "smart cache clearing").
+     *
+     * The event listener method receives a eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent instance.
+     */
+    const CACHE_CLEAR_CONTENT = 'ezpublish.cache_clear.content';
 }

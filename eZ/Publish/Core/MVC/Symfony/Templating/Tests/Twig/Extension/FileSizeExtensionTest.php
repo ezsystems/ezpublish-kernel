@@ -131,11 +131,11 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
                     {
                         foreach ( $that->getLocale() as $value )
                         {
-                            if ( $value == 'fre-FR' )
+                            if ( $value === 'fre-FR' )
                             {
                                 return $suffixes . ' French version';
                             }
-                            else if ( $value == 'eng-GB' )
+                            else if ( $value === 'eng-GB' )
                             {
                                 return $suffixes . ' English version';
                             }

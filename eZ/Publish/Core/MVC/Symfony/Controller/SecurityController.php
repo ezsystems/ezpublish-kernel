@@ -13,7 +13,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Templating\EngineInterface;
 
 class SecurityController
@@ -33,11 +33,6 @@ class SecurityController
      */
     protected $csrfProvider;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\Request
-     */
-    protected $request;
-
     public function __construct( EngineInterface $templateEngine, ConfigResolverInterface $configResolver, CsrfProviderInterface $csrfProvider = null )
     {
         $this->templateEngine = $templateEngine;
@@ -45,26 +40,18 @@ class SecurityController
         $this->csrfProvider = $csrfProvider;
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     */
-    public function setRequest( Request $request = null )
+    public function loginAction( Request $request )
     {
-        $this->request = $request;
-    }
+        $session = $request->getSession();
 
-    public function loginAction()
-    {
-        $session = $this->request->getSession();
-
-        if ( $this->request->attributes->has( SecurityContextInterface::AUTHENTICATION_ERROR ) )
+        if ( $request->attributes->has( Security::AUTHENTICATION_ERROR ) )
         {
-            $error = $this->request->attributes->get( SecurityContextInterface::AUTHENTICATION_ERROR );
+            $error = $request->attributes->get( Security::AUTHENTICATION_ERROR );
         }
         else
         {
-            $error = $session->get( SecurityContextInterface::AUTHENTICATION_ERROR );
-            $session->remove( SecurityContextInterface::AUTHENTICATION_ERROR );
+            $error = $session->get( Security::AUTHENTICATION_ERROR );
+            $session->remove( Security::AUTHENTICATION_ERROR );
         }
 
         $csrfToken = isset( $this->csrfProvider ) ? $this->csrfProvider->generateCsrfToken( 'authenticate' ) : null;
@@ -72,7 +59,7 @@ class SecurityController
             $this->templateEngine->render(
                 $this->configResolver->getParameter( 'security.login_template' ),
                 array(
-                    'last_username' => $session->get( SecurityContextInterface::LAST_USERNAME ),
+                    'last_username' => $session->get( Security::LAST_USERNAME ),
                     'error' => $error,
                     'csrf_token' => $csrfToken,
                     'layout' => $this->configResolver->getParameter( 'security.base_layout' ),

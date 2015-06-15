@@ -53,7 +53,7 @@ class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentObjectStatesElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'ContentObjectStates',
             ),
@@ -72,7 +72,7 @@ class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentObjectStatesAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'ContentObjectStates',
                 'attributes' => array(

@@ -23,6 +23,11 @@ class RestSessionBasedFactory extends FormLoginFactory
         $this->defaultFailureHandlerOptions = array();
     }
 
+    protected function isRememberMeAware( $config )
+    {
+        return false;
+    }
+
     protected function createListener( $container, $id, $config, $userProvider )
     {
         $listenerId = $this->getListenerId();

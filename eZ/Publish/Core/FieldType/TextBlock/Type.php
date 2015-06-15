@@ -168,7 +168,7 @@ class Type extends FieldType
      */
     public function isSearchable()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -196,7 +196,8 @@ class Type extends FieldType
                                 null,
                                 array(
                                     "setting" => $name
-                                )
+                                ),
+                                "[$name]"
                             );
                         }
                         break;
@@ -209,7 +210,8 @@ class Type extends FieldType
                     null,
                     array(
                         "setting" => $name
-                    )
+                    ),
+                    "[$name]"
                 );
             }
         }

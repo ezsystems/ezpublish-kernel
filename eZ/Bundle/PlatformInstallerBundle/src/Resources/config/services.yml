@@ -1,0 +1,27 @@
+parameters:
+    ezplatform.installer.db_based_installer.class: EzSystems\PlatformInstallerBundle\Installer\DbBasedInstaller
+    ezplatform.installer.clean_installer.class: EzSystems\PlatformInstallerBundle\Installer\CleanInstaller
+    ezplatform.installer.install_command.class: EzSystems\PlatformInstallerBundle\Command\InstallPlatformCommand
+
+services:
+    ezplatform.installer.db_based_installer:
+        abstract: true
+        class:  %ezplatform.installer.db_based_installer.class%
+        arguments: [@database_connection]
+
+    ezplatform.installer.clean_installer:
+        class: %ezplatform.installer.clean_installer.class%
+        parent: ezplatform.installer.db_based_installer
+        tags:
+            - {name: ezplatform.installer, type: clean}
+
+    ezplatform.installer.install_command:
+        class: %ezplatform.installer.install_command.class%
+        arguments:
+            - @database_connection
+            - []
+            - @cache_clearer
+            - @filesystem
+            - %kernel.cache_dir%
+        tags:
+            - { name: console.command }

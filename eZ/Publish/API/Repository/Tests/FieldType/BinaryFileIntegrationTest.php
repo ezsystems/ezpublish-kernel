@@ -11,6 +11,8 @@ namespace eZ\Publish\API\Repository\Tests\FieldType;
 
 use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
  * Integration test for use field type
@@ -18,7 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class BinaryFileIntegrationTest extends FileBaseIntegrationTest
+class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
 {
     /**
      * Stores the loaded image path for copy test.
@@ -403,6 +405,72 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         return array(
             array(
                 $this->getValidCreationFieldData()
+            ),
+        );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return new BinaryFileValue(
+            array(
+                'inputUri' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                'fileName' => 'blue-blue-blue-sindelfingen.jpg',
+                'fileSize' => filesize( $path ),
+            )
+        );
+    }
+
+    /**
+     * BinaryFile field type is not searchable with Field criterion
+     * and sort clause in Legacy search engine
+     */
+    public function testCreateTestContent()
+    {
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy' )
+        {
+            $this->markTestSkipped(
+                "BinaryFile field type is not searchable with Field criterion and sort clause in Legacy search engine"
+            );
+        }
+
+        return parent::testCreateTestContent();
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return new BinaryFileValue(
+            array(
+                'inputUri' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                'fileName' => 'icy-night-flower-binary.png',
+                'fileSize' => filesize( $path ),
+            )
+        );
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        $value = $this->getValidSearchValueOne();
+        return $value->fileName;
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        $value = $this->getValidSearchValueTwo();
+        return $value->fileName;
+    }
+
+    protected function getAdditionallyIndexedFieldData()
+    {
+        return array(
+            array(
+                "file_size",
+                $this->getValidSearchValueOne()->fileSize,
+                $this->getValidSearchValueTwo()->fileSize,
+            ),
+            array(
+                "mime_type",
+                "image/jpeg",
+                "image/png",
             ),
         );
     }

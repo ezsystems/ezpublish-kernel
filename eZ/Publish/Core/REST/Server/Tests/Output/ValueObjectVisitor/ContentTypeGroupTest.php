@@ -99,7 +99,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTypeGroupElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ContentTypeGroup',
                 'children' => array(
@@ -121,7 +121,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTypeGroupAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ContentTypeGroup',
                 'attributes' => array(
@@ -144,7 +144,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsIdValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'id',
                 'content'  => '42'
@@ -164,7 +164,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsIdentifierValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'identifier',
                 'content'  => 'some-group'
@@ -184,7 +184,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsCreatedValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'created',
                 'content'  => '2012-12-31T19:30:00+01:00'
@@ -204,7 +204,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsModifiedValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'modified',
                 'content'  => '2012-12-31T19:35:00+01:00'
@@ -224,7 +224,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsCreatorElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'  => 'Creator',
             ),
@@ -243,7 +243,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsCreatorAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Creator',
                 'attributes' => array(
@@ -266,7 +266,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsModifierElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'Modifier'
             ),
@@ -285,7 +285,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsModifierAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Modifier',
                 'attributes' => array(
@@ -308,7 +308,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTypesElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'ContentTypes'
             ),
@@ -327,7 +327,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTypesAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ContentTypes',
                 'attributes' => array(

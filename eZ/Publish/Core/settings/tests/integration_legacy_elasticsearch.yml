@@ -1,4 +1,16 @@
 parameters:
+    # Redefining default ezfloat field type class with the implementation that defines the type
+    # as searchable. Needed in order to test searching wiht Elasticsearch engine.
+    ezpublish.fieldType.ezfloat.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableFloat
+    # Redefining default ezimage field type class with the implementation that defines the type
+    # as searchable. Needed in order to test searching wiht Elasticsearch engine.
+    ezpublish.fieldType.ezimage.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableImage
+    # Redefining default eztext field type class with the implementation that defines the type
+    # as searchable. Needed in order to test searching wiht Elasticsearch engine.
+    ezpublish.fieldType.eztext.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableTextBlock
+    # Redefining default ezmedia field type class with the implementation that defines the type
+    # as searchable. Needed in order to test searching wiht Elasticsearch engine.
+    ezpublish.fieldType.ezmedia.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableMedia
     languages:
         - eng-US
         - eng-GB
@@ -11,5 +23,5 @@ services:
     ezpublish.cache_pool.spi.cache.decorator:
         class: %ezpublish.cache_pool.spi.cache.decorator.class%
 
-    ezpublish.api.storage_engine:
-        alias: ezpublish.spi.persistence.legacy_elasticsearch
+    ezpublish.spi.search_engine:
+        alias: ezpublish.spi.search.elasticsearch

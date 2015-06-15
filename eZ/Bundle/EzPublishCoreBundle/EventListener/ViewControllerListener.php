@@ -59,7 +59,7 @@ class ViewControllerListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array( KernelEvents::CONTROLLER => 'getController' );
+        return array( KernelEvents::CONTROLLER => array( 'getController', 10 ) );
     }
 
     /**
@@ -93,7 +93,7 @@ class ViewControllerListener implements EventSubscriberInterface
             else if ( $request->attributes->has( 'contentId' ) )
             {
                 $valueObject = $this->repository->sudo(
-                    function ( $repository ) use ( $request )
+                    function ( Repository $repository ) use ( $request )
                     {
                         return $repository->getContentService()->loadContentInfo(
                             $request->attributes->get( 'contentId' )

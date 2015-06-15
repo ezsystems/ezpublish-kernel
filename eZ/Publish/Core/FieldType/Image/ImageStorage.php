@@ -9,49 +9,32 @@
 
 namespace eZ\Publish\Core\FieldType\Image;
 
-use eZ\Publish\SPI\Persistence\Content\VersionInfo;
-use eZ\Publish\SPI\Persistence\Content\Field;
-use eZ\Publish\Core\IO\IOServiceInterface;
-use eZ\Publish\Core\FieldType\GatewayBasedStorage;
-use eZ\Publish\Core\IO\MetadataHandler;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use Psr\Log\LoggerInterface;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface as DeprecationWarner;
+use eZ\Publish\Core\FieldType\GatewayBasedStorage;
+use eZ\Publish\Core\IO\IOServiceInterface;
+use eZ\Publish\Core\IO\MetadataHandler;
+use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
  * Converter for Image field type external storage
- *
- * The keyword storage ships a list (array) of keywords in
- * $field->value->externalData. $field->value->data is simply empty, because no
- * internal data is store.
  */
 class ImageStorage extends GatewayBasedStorage
 {
-    /**
-     * The IO Service used to manipulate data
-     *
-     * @var IOServiceInterface
-     */
+    /** @var \eZ\Publish\Core\IO\IOServiceInterface */
     protected $IOService;
 
-    /**
-     * Path generator
-     *
-     * @var PathGenerator
-     */
+    /** @var \eZ\Publish\Core\FieldType\Image\PathGenerator */
     protected $pathGenerator;
 
-    /** @var MetadataHandler */
+    /** @var \eZ\Publish\Core\IO\MetadataHandler */
     protected $imageSizeMetadataHandler;
 
-    /**
-     * @var DeprecationWarner
-     */
+    /** @var \eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface */
     private $deprecationWarner;
 
-    /**
-     * @var AliasCleanerInterface
-     */
+    /** @var \eZ\Publish\Core\FieldType\Image\AliasCleanerInterface */
     protected $aliasCleaner;
 
     public function __construct(
@@ -71,41 +54,6 @@ class ImageStorage extends GatewayBasedStorage
         $this->aliasCleaner = $aliasCleaner;
     }
 
-    /**
-     * @see \eZ\Publish\SPI\FieldType\FieldStorage
-     */
-    /*public function copyLegacyField( VersionInfo $versionInfo, Field $field, Field $originalField, array $context )
-    {
-        if ( $originalField->value->data === null )
-        {
-            return false;
-        }
-
-        // Field copies don't store their own image, but store their own reference to it
-        $this->getGateway( $context )->storeImageReference( $originalField->value->data['path'], $field->id );
-
-        $contentMetaData = array(
-            'fieldId' => $field->id,
-            'versionNo' => $versionInfo->versionNo,
-            'languageCode' => $field->languageCode,
-        );
-
-        $storedValue = array_merge(
-            // Basic value data
-            $field->value->data,
-            // Content meta data
-            $contentMetaData
-        );
-
-        $field->value->data = $storedValue;
-        $field->value->externalData = null;
-
-        return true;
-    }*/
-
-    /**
-     * @see \eZ\Publish\SPI\FieldType\FieldStorage
-     */
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         $contentMetaData = array(
@@ -127,24 +75,19 @@ class ImageStorage extends GatewayBasedStorage
                 $field->value->externalData['fileName']
             );
 
-            if ( $this->IOService->exists( $targetPath ) )
+            if ( isset( $field->value->externalData['id'] ) )
+            {
+                $binaryFile = $this->IOService->loadBinaryFile( $field->value->externalData['id'] );
+            }
+            else if ( $this->IOService->exists( $targetPath ) )
             {
                 $binaryFile = $this->IOService->loadBinaryFile( $targetPath );
             }
-            else
+            else if ( isset( $field->value->externalData['inputUri'] ) )
             {
-                if ( isset( $field->value->externalData['inputUri'] ) )
-                {
-                    $localFilePath = $field->value->externalData['inputUri'];
-                    unset( $field->value->externalData['inputUri'] );
-                }
-                else
-                {
-                    $this->deprecationWarner->log(
-                        "Using the Image\\Value::\$id property to create images is deprecated. Use 'inputUri'"
-                    );
-                    $localFilePath = $field->value->externalData['id'];
-                }
+                $localFilePath = $field->value->externalData['inputUri'];
+                unset( $field->value->externalData['inputUri'] );
+
                 $binaryFileCreateStruct = $this->IOService->newBinaryCreateStructFromLocalFile( $localFilePath );
                 $binaryFileCreateStruct->id = $targetPath;
                 $binaryFile = $this->IOService->createBinaryFile( $binaryFileCreateStruct );
@@ -153,6 +96,14 @@ class ImageStorage extends GatewayBasedStorage
                 $field->value->externalData['width'] = $imageSize[0];
                 $field->value->externalData['height'] = $imageSize[1];
             }
+            else
+            {
+                throw new InvalidArgumentException(
+                    "inputUri",
+                    "No source image could be obtained from the given external data"
+                );
+            }
+
             $field->value->externalData['imageId'] = $versionInfo->contentInfo->id . '-' . $field->id;
             $field->value->externalData['uri'] = $binaryFile->uri;
             $field->value->externalData['id'] = $binaryFile->id;
@@ -190,20 +141,6 @@ class ImageStorage extends GatewayBasedStorage
         return true;
     }
 
-    /**
-     * Populates $field value property based on the external data.
-     * $field->value is a {@link eZ\Publish\SPI\Persistence\Content\FieldValue} object.
-     * This value holds the data as a {@link eZ\Publish\Core\FieldType\Value} based object,
-     * according to the field type (e.g. for TextLine, it will be a {@link eZ\Publish\Core\FieldType\TextLine\Value} object).
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param array $context
-     *
-     * @throws NotFoundException If the stored image path couldn't be retrieved by the IOService
-     *
-     * @return void
-     */
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         if ( $field->value->data !== null )
@@ -216,12 +153,6 @@ class ImageStorage extends GatewayBasedStorage
         }
     }
 
-    /**
-     * @param array $fieldIds
-     * @param array $context
-     *
-     * @return boolean
-     */
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
         /** @var \eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway $gateway */
@@ -239,9 +170,7 @@ class ImageStorage extends GatewayBasedStorage
 
             if ( $this->aliasCleaner )
             {
-                $this->aliasCleaner->removeAliases(
-                    $this->IOService->loadBinaryFileByUri( $storedFiles['original'] )
-                );
+                $this->aliasCleaner->removeAliases( $storedFiles['original'] );
             }
 
             foreach ( $storedFiles as $storedFilePath )
@@ -256,20 +185,11 @@ class ImageStorage extends GatewayBasedStorage
         }
     }
 
-    /**
-     * Checks if field type has external data to deal with
-     *
-     * @return boolean
-     */
     public function hasFieldData()
     {
         return true;
     }
 
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param array $context
-     */
     public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
     {
         // @todo: Correct?

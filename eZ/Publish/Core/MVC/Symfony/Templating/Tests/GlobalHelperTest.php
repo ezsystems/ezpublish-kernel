@@ -13,6 +13,7 @@ use eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper;
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class GlobalHelperTest extends PHPUnit_Framework_TestCase
 {
@@ -63,9 +64,11 @@ class GlobalHelperTest extends PHPUnit_Framework_TestCase
     public function testGetSiteaccess()
     {
         $request = new Request();
+        $requestStack = new RequestStack();
+        $requestStack->push( $request );
         $siteAccess = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess' );
         $request->attributes->set( 'siteaccess', $siteAccess );
-        $this->helper->setRequest( $request );
+        $this->helper->setRequestStack( $requestStack );
 
         $this->assertSame( $siteAccess, $this->helper->getSiteaccess() );
     }
@@ -79,7 +82,9 @@ class GlobalHelperTest extends PHPUnit_Framework_TestCase
             'somethingelse'    => 'héhé-høhø'
         );
         $request->attributes->set( 'viewParameters', $viewParameters );
-        $this->helper->setRequest( $request );
+        $requestStack = new RequestStack();
+        $requestStack->push( $request );
+        $this->helper->setRequestStack( $requestStack );
 
         $this->assertSame( $viewParameters, $this->helper->getViewParameters() );
     }
@@ -89,7 +94,9 @@ class GlobalHelperTest extends PHPUnit_Framework_TestCase
         $request = Request::create( '/foo' );
         $viewParametersString = '/(foo)/bar/(toto)/tata/(somethingelse)/héhé-høhø';
         $request->attributes->set( 'viewParametersString', $viewParametersString );
-        $this->helper->setRequest( $request );
+        $requestStack = new RequestStack();
+        $requestStack->push( $request );
+        $this->helper->setRequestStack( $requestStack );
 
         $this->assertSame( $viewParametersString, $this->helper->getViewParametersString() );
     }
@@ -99,7 +106,9 @@ class GlobalHelperTest extends PHPUnit_Framework_TestCase
         $request = Request::create( '/ezdemo_site/foo/bar' );
         $semanticPathinfo = '/foo/bar';
         $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
-        $this->helper->setRequest( $request );
+        $requestStack = new RequestStack();
+        $requestStack->push( $request );
+        $this->helper->setRequestStack( $requestStack );
 
         $this->assertSame( $semanticPathinfo, $this->helper->getRequestedUriString() );
     }
@@ -110,7 +119,9 @@ class GlobalHelperTest extends PHPUnit_Framework_TestCase
         $semanticPathinfo = '/foo/bar';
         $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
         $request->attributes->set( '_route', 'someRouteName' );
-        $this->helper->setRequest( $request );
+        $requestStack = new RequestStack();
+        $requestStack->push( $request );
+        $this->helper->setRequestStack( $requestStack );
         $this->assertSame( $semanticPathinfo, $this->helper->getSystemUriString() );
     }
 
@@ -123,6 +134,8 @@ class GlobalHelperTest extends PHPUnit_Framework_TestCase
         $request->attributes->set( '_route', UrlAliasRouter::URL_ALIAS_ROUTE_NAME );
         $request->attributes->set( 'locationId', $locationId );
         $request->attributes->set( 'viewType', $viewType );
+        $requestStack = new RequestStack();
+        $requestStack->push( $request );
 
         $this->router
             ->expects( $this->once() )
@@ -130,7 +143,7 @@ class GlobalHelperTest extends PHPUnit_Framework_TestCase
             ->with( '_ezpublishLocation', array( 'locationId' => $locationId, 'viewType' => $viewType ) )
             ->will( $this->returnValue( $expectedSystemUriString ) );
 
-        $this->helper->setRequest( $request );
+        $this->helper->setRequestStack( $requestStack );
 
         $this->assertSame( $expectedSystemUriString, $this->helper->getSystemUriString() );
     }

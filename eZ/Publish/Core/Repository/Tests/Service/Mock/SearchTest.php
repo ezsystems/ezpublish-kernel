@@ -43,10 +43,10 @@ class SearchTest extends BaseServiceMockTest
     public function testConstructor()
     {
         $repositoryMock = $this->getRepositoryMock();
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
-        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Handler' );
-        /** @var \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandlerMock */
-        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Location\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Location\\Handler' );
         $domainMapperMock = $this->getDomainMapperMock();
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         $settings = array( "teh setting" );
@@ -128,10 +128,10 @@ class SearchTest extends BaseServiceMockTest
     public function testFindContentValidatesLocationCriteriaAndSortClauses( $query, $exceptionMessage )
     {
         $repositoryMock = $this->getRepositoryMock();
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
-        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Handler' );
-        /** @var \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandlerMock */
-        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Location\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Location\\Handler' );
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
 
         $service = new SearchService(
@@ -181,10 +181,10 @@ class SearchTest extends BaseServiceMockTest
     public function testFindSingleValidatesLocationCriteria( $criterion, $exceptionMessage )
     {
         $repositoryMock = $this->getRepositoryMock();
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
-        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Handler' );
-        /** @var \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandlerMock */
-        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Location\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Location\\Handler' );
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         $service = new SearchService(
             $repositoryMock,
@@ -220,10 +220,10 @@ class SearchTest extends BaseServiceMockTest
     public function testFindContentThrowsHandlerException()
     {
         $repositoryMock = $this->getRepositoryMock();
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
-        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Handler' );
-        /** @var \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandlerMock */
-        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Location\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Location\\Handler' );
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
 
         $service = new SearchService(
@@ -260,10 +260,10 @@ class SearchTest extends BaseServiceMockTest
     public function testFindContentNoPermissionsFilter()
     {
         $repositoryMock = $this->getRepositoryMock();
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
-        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Handler' );
-        /** @var \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandlerMock */
-        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Location\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Location\\Handler' );
         $domainMapperMock = $this->getDomainMapperMock();
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         $service = new SearchService(
@@ -290,7 +290,7 @@ class SearchTest extends BaseServiceMockTest
             );
 
         $serviceQuery = new Query;
-        $handlerQuery = new Query( array( "filter" => new Criterion\MatchAll(), "limit" => SearchService::MAX_LIMIT ) );
+        $handlerQuery = new Query( array( "filter" => new Criterion\MatchAll(), "limit" => 10 ) );
         $fieldFilters = array();
         $spiContentInfo = new SPIContentInfo;
         $contentMock = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\Content\\Content" );
@@ -338,10 +338,10 @@ class SearchTest extends BaseServiceMockTest
     public function testFindContentWithPermission()
     {
         $repositoryMock = $this->getRepositoryMock();
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
-        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Handler' );
-        /** @var \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandlerMock */
-        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Location\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Location\\Handler' );
         $domainMapperMock = $this->getDomainMapperMock();
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         $service = new SearchService(
@@ -425,10 +425,10 @@ class SearchTest extends BaseServiceMockTest
     public function testFindContentWithNoPermission()
     {
         $repositoryMock = $this->getRepositoryMock();
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
-        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Handler' );
-        /** @var \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandlerMock */
-        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Location\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Location\\Handler' );
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         $service = new SearchService(
             $repositoryMock,
@@ -514,10 +514,10 @@ class SearchTest extends BaseServiceMockTest
         $contentTypeMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" );
         $fieldDefinitionMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition" );
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
-        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Handler' );
-        /** @var \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandlerMock */
-        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Location\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Location\\Handler' );
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
@@ -581,10 +581,10 @@ class SearchTest extends BaseServiceMockTest
     public function testFindContentWithDefaultQueryValues()
     {
         $repositoryMock = $this->getRepositoryMock();
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
-        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Handler' );
-        /** @var \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandlerMock */
-        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Location\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Location\\Handler' );
         $domainMapperMock = $this->getDomainMapperMock();
         $service = new SearchService(
             $repositoryMock,
@@ -626,7 +626,7 @@ class SearchTest extends BaseServiceMockTest
                 new Query(
                     array(
                         "filter" => new Criterion\MatchAll(),
-                        "limit" => 1073741824
+                        "limit" => 10
                     )
                 ),
                 array()
@@ -666,10 +666,10 @@ class SearchTest extends BaseServiceMockTest
     public function testFindSingleThrowsNotFoundException()
     {
         $repositoryMock = $this->getRepositoryMock();
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
-        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Handler' );
-        /** @var \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandlerMock */
-        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Location\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Location\\Handler' );
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
@@ -700,10 +700,10 @@ class SearchTest extends BaseServiceMockTest
     public function testFindSingleThrowsHandlerException()
     {
         $repositoryMock = $this->getRepositoryMock();
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
-        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Handler' );
-        /** @var \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandlerMock */
-        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Location\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Location\\Handler' );
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         $service = new SearchService(
             $repositoryMock,
@@ -738,10 +738,10 @@ class SearchTest extends BaseServiceMockTest
     public function testFindSingle()
     {
         $repositoryMock = $this->getRepositoryMock();
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
-        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Handler' );
-        /** @var \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandlerMock */
-        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Location\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Location\\Handler' );
         $domainMapperMock = $this->getDomainMapperMock();
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         $service = new SearchService(
@@ -805,10 +805,10 @@ class SearchTest extends BaseServiceMockTest
     public function functionFindLocationsWithPermission()
     {
         $repositoryMock = $this->getRepositoryMock();
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
-        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Handler' );
-        /** @var \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandlerMock */
-        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Location\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Location\\Handler' );
         $domainMapperMock = $this->getDomainMapperMock();
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         $service = new SearchService(
@@ -872,10 +872,10 @@ class SearchTest extends BaseServiceMockTest
     public function testFindLocationsWithNoPermissionsFilter()
     {
         $repositoryMock = $this->getRepositoryMock();
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
-        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Handler' );
-        /** @var \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandlerMock */
-        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Location\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Location\\Handler' );
         $domainMapperMock = $this->getDomainMapperMock();
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         $service = new SearchService(
@@ -890,7 +890,7 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock->expects( $this->never() )->method( "hasAccess" );
 
         $serviceQuery = new LocationQuery;
-        $handlerQuery = new LocationQuery( array( "filter" => new Criterion\MatchAll(), "limit" => SearchService::MAX_LIMIT ) );
+        $handlerQuery = new LocationQuery( array( "filter" => new Criterion\MatchAll(), "limit" => 10 ) );
         $spiLocation = new SPILocation;
         $locationMock = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\Content\\Location" );
 
@@ -939,10 +939,10 @@ class SearchTest extends BaseServiceMockTest
         $contentTypeMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" );
         $fieldDefinitionMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition" );
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
-        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Handler' );
-        /** @var \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandlerMock */
-        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Location\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Location\\Handler' );
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
@@ -1008,10 +1008,10 @@ class SearchTest extends BaseServiceMockTest
     public function testFindLocationsThrowsHandlerException()
     {
         $repositoryMock = $this->getRepositoryMock();
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
-        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Handler' );
-        /** @var \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandlerMock */
-        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Location\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Location\\Handler' );
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
 
         $service = new SearchService(
@@ -1048,10 +1048,11 @@ class SearchTest extends BaseServiceMockTest
     public function testFindLocationsWithDefaultQueryValues()
     {
         $repositoryMock = $this->getRepositoryMock();
-        /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
-        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Handler' );
-        /** @var \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandlerMock */
-        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Location\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Handler' );
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        /** @var \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getSPIMockHandler( 'Search\\Content\\Location\\Handler' );
         $domainMapperMock = $this->getDomainMapperMock();
         $service = new SearchService(
             $repositoryMock,
@@ -1077,7 +1078,7 @@ class SearchTest extends BaseServiceMockTest
                 new LocationQuery(
                     array(
                         "filter" => new Criterion\MatchAll(),
-                        "limit" => 1073741824
+                        "limit" => 10
                     )
                 )
             )

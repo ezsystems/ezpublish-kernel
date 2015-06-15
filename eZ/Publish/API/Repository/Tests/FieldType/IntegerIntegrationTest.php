@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class IntegerIntegrationTest extends BaseIntegrationTest
+class IntegerIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
      * Get name of tested field type
@@ -333,6 +333,16 @@ class IntegerIntegrationTest extends BaseIntegrationTest
             array( new IntegerValue( 0 ) ),
             array( new IntegerValue( 0.0 ) ),
         );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return 25;
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return 26;
     }
 }
 

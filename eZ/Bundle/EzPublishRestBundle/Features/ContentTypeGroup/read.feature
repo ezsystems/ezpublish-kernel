@@ -21,11 +21,13 @@ Feature: Read a Content Type Groups
         When I get Content Type Group with id "{id}"
         Then response has a not found exception
 
-    Scenario: Can't read a Content Type Group without an authorized user through id
-        Given I do not have permissions
+    Scenario: Read a Content Type Group through id with anonymous user
+        Given I have "anonymous" permissions
         And there is a Content Type Group with id "{id}" and identifier "some_string"
         When I get Content Type Group with id "{id}"
-        Then response has a not authorized error
+        Then response has a Content Type Group with identifier "some_string"
+        And response has a "eZ\Publish\Core\REST\Client\Values\ContentType\ContentTypeGroup" object
+        And response header "content-type" has "ContentTypeGroup"
 
     # Get Content Type Group through <identifier>
     Scenario: Read a Content Type Group through identifier
@@ -42,8 +44,10 @@ Feature: Read a Content Type Groups
         When I get Content Type Group with identifier "some_string"
         Then response has a not found exception
 
-    Scenario: Can't read a Content Type Group without an authorized user through identifier
-        Given I do not have permissions
+    Scenario: Read a Content Type Group through identifier with anonymous user
+        Given I have "anonymous" permissions
         And there is a Content Type Group with identifier "some_string"
         When I get Content Type Group with identifier "some_string"
-        Then response has a not authorized error
+        Then response has a Content Type Group with identifier "some_string"
+        And response has a "eZ\Publish\Core\REST\Client\Values\ContentType\ContentTypeGroup" object
+        And response header "content-type" has "ContentTypeGroup"

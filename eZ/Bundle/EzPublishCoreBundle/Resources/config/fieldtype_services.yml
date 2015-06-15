@@ -69,7 +69,7 @@ services:
         class: %ezpublish.fieldType.locale.parameterProvider.class%
         arguments: [@ezpublish.locale.converter]
         calls:
-            - [setRequest, [@?request=]]
+            - [setRequestStack, [@request_stack]]
         tags:
             - {name: ezpublish.fieldType.parameterProvider, alias: ezdatetime}
             - {name: ezpublish.fieldType.parameterProvider, alias: ezdate}
@@ -87,8 +87,7 @@ services:
 
     ezpublish.fieldType.ezpage.pageService:
         class: %ezpublish.fieldType.ezpage.pageService.class%
-        factory_service: ezpublish.fieldType.ezpage.pageService.factory
-        factory_method: buildService
+        factory: ["@ezpublish.fieldType.ezpage.pageService.factory", buildService]
         arguments:
             - %ezpublish.fieldType.ezpage.pageService.class%
             - @ezpublish.config.resolver
@@ -181,7 +180,7 @@ services:
         class: %ezpublish.fieldType.ezrichtext.renderer.class%
         arguments:
             - @ezpublish.api.repository
-            - @security.context
+            - @security.authorization_checker
             - @ezpublish.config.resolver
             - @templating
             - %ezpublish.fieldType.ezrichtext.tag.namespace%
@@ -222,6 +221,7 @@ services:
     # through service tags.
     ezpublish.fieldType.ezrichtext.converter.output.xhtml5:
         class: %ezpublish.fieldType.ezrichtext.converter.aggregate.class%
+        lazy: true
 
     ezpublish.fieldType.ezrichtext.converter.edit.xhtml5:
         class: %ezpublish.fieldType.ezrichtext.converter.edit.html5.class%

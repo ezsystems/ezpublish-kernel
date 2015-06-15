@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText as XmlTextConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlTextConverter;
 use PHPUnit_Framework_TestCase;
 use DOMDocument;
 
@@ -24,7 +24,7 @@ use DOMDocument;
 class XmlTextTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlTextConverter
      */
     protected $converter;
 
@@ -51,7 +51,7 @@ EOT;
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlTextConverter::toStorageValue
      */
     public function testToStorageValue()
     {
@@ -65,7 +65,7 @@ EOT;
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlTextConverter::toFieldValue
      */
     public function testToFieldValue()
     {

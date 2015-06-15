@@ -63,7 +63,7 @@ class RelationListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRelationsElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Relations',
             ),
@@ -82,7 +82,7 @@ class RelationListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRelationsAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Relations',
                 'attributes' => array(

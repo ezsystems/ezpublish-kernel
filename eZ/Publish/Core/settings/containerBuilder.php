@@ -38,8 +38,13 @@ $loader->load( 'roles.yml' );
 $loader->load( 'storage_engines/common.yml' );
 $loader->load( 'storage_engines/cache.yml' );
 $loader->load( 'storage_engines/legacy.yml' );
-$loader->load( 'storage_engines/legacy_solr.yml' );
-$loader->load( 'storage_engines/legacy_elasticsearch.yml' );
+$loader->load( 'storage_engines/shortcuts.yml' );
+$loader->load( 'search_engines/common.yml' );
+$loader->load( 'search_engines/legacy.yml' );
+$loader->load( 'search_engines/slots.yml' );
+$loader->load( 'search_engines/solr.yml' );
+$loader->load( 'search_engines/elasticsearch.yml' );
+$loader->load( 'search_engines/shortcuts.yml' );
 $loader->load( 'settings.yml' );
 $loader->load( 'utils.yml' );
 
@@ -49,10 +54,11 @@ $containerBuilder->addCompilerPass( new Compiler\FieldTypeCollectionPass() );
 $containerBuilder->addCompilerPass( new Compiler\RegisterLimitationTypePass() );
 
 $containerBuilder->addCompilerPass( new Compiler\Storage\ExternalStorageRegistryPass() );
-$containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\CriteriaConverterPass() );
-$containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\CriterionFieldValueHandlerRegistryPass() );
 $containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\FieldValueConverterRegistryPass() );
 $containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\RoleLimitationConverterPass() );
-$containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\SortClauseConverterPass() );
+
+$containerBuilder->addCompilerPass( new Compiler\Search\Legacy\CriteriaConverterPass() );
+$containerBuilder->addCompilerPass( new Compiler\Search\Legacy\CriterionFieldValueHandlerRegistryPass() );
+$containerBuilder->addCompilerPass( new Compiler\Search\Legacy\SortClauseConverterPass() );
 
 return $containerBuilder;

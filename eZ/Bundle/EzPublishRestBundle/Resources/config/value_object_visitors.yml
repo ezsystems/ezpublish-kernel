@@ -53,6 +53,7 @@ parameters:
     ezpublish_rest.output.value_object_visitor.RestUser.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestUser
     ezpublish_rest.output.value_object_visitor.UserSession.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\UserSession
     ezpublish_rest.output.value_object_visitor.UserSessionDeleted.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\DeletedUserSession
+    ezpublish_rest.output.value_object_visitor.SessionInput.class: eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\SessionInput
 
     # ContentType
     ezpublish_rest.output.value_object_visitor.RestContentType.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestContentType
@@ -395,6 +396,12 @@ services:
         class: %ezpublish_rest.output.value_object_visitor.UserSessionDeleted.class%
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\DeletedUserSession }
+
+    ezpublish_rest.output.value_object_visitor.SessionInput:
+        parent: ezpublish_rest.output.value_object_visitor.base
+        class: %ezpublish_rest.output.value_object_visitor.SessionInput.class%
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\SessionInput }
 
     # ContentType
     ezpublish_rest.output.value_object_visitor.RestContentType:
@@ -790,6 +797,6 @@ services:
         arguments:
             - @ezpublish.config.resolver
         calls:
-            - [setRequest, [@?request=]]
+            - [setRequestStack, [@request_stack]]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\CachedValue }

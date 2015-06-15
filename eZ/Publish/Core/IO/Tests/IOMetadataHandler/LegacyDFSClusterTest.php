@@ -184,6 +184,23 @@ class LegacyDFSClusterTest extends PHPUnit_Framework_TestCase
         self::assertFalse( $this->handler->exists( 'prefix/my/file.png' ) );
     }
 
+    public function testDeletedirectory()
+    {
+        $statement = $this->createDbalStatementMock();
+        $statement
+            ->expects( $this->once() )
+            ->method( 'bindValue' )
+            ->with( 1, 'folder/subfolder/%' );
+
+        $this->dbalMock
+            ->expects( $this->once() )
+            ->method( 'prepare' )
+            ->with( $this->anything() )
+            ->will( $this->returnValue( $statement ) );
+
+        $this->handler->deleteDirectory( 'folder/subfolder/' );
+    }
+
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */

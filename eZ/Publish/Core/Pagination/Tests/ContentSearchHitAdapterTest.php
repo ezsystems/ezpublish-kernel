@@ -87,6 +87,7 @@ class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
         $searchQuery = clone $query;
         $searchQuery->offset = $offset;
         $searchQuery->limit = $limit;
+        $searchQuery->performCount = false;
 
         $hits = array();
         for ( $i = 0; $i < $limit; ++$i )

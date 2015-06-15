@@ -70,49 +70,184 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testApply()
+    public function testApplySingleVersionSingleTranslation()
     {
+        $contentId = 42;
+        $versionNumbers = array( 1 );
         $action = $this->getRemoveFieldAction();
-        $contentInfo = $this->getContentInfoFixture();
-        $content = $this->getContentFixture();
+        $content = $this->getContentFixture( 1, array( "cro-HR" ) );
 
-        $this->getContentGatewayMock()->expects( $this->once() )
+        $this->getContentGatewayMock()
+            ->expects( $this->once() )
+            ->method( 'listVersionNumbers' )
+            ->with( $this->equalTo( $contentId ) )
+            ->will( $this->returnValue( $versionNumbers ) );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->at( 1 ) )
             ->method( 'load' )
-            ->with( $contentInfo->id, $contentInfo->currentVersionNo )
+            ->with( $contentId, 1 )
             ->will( $this->returnValue( array() ) );
 
-        $this->getContentMapperMock()->expects( $this->once() )
+        $this->getContentMapperMock()
+            ->expects( $this->once() )
             ->method( 'extractContentFromRows' )
             ->with( array() )
             ->will( $this->returnValue( array( $content ) ) );
 
-        $this->getContentGatewayMock()->expects( $this->once() )
+        $this->getContentGatewayMock()
+            ->expects( $this->once() )
             ->method( 'deleteField' )
-            ->with( $this->equalTo( 3 ) );
+            ->with( $this->equalTo( "3-cro-HR" ) );
 
         $this->getContentStorageHandlerMock()->expects( $this->once() )
             ->method( 'deleteFieldData' )
             ->with(
                 $this->equalTo( 'ezstring' ),
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
-                $this->equalTo( array( 3 ) )
+                $content->versionInfo,
+                $this->equalTo( array( "3-cro-HR" ) )
             );
 
-        $action->apply( $contentInfo );
+        $action->apply( $contentId );
     }
 
     /**
-     * Returns a ContentInfo  fixture
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
      */
-    protected function getContentInfoFixture()
+    public function testApplyMultipleVersionsSingleTranslation()
     {
-        $contentInfo = new Content\ContentInfo();
-        $contentInfo->id = "contentId";
-        $contentInfo->currentVersionNo = "versionNo";
+        $contentId = 42;
+        $versionNumbers = array( 1, 2 );
+        $action = $this->getRemoveFieldAction();
+        $content1 = $this->getContentFixture( 1, array( "cro-HR" ) );
+        $content2 = $this->getContentFixture( 2, array( "cro-HR" ) );
 
-        return $contentInfo;
+        $this->getContentGatewayMock()
+            ->expects( $this->once() )
+            ->method( 'listVersionNumbers' )
+            ->with( $this->equalTo( $contentId ) )
+            ->will( $this->returnValue( $versionNumbers ) );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->at( 1 ) )
+            ->method( 'load' )
+            ->with( $contentId, 1 )
+            ->will( $this->returnValue( array() ) );
+
+        $this->getContentMapperMock()
+            ->expects( $this->at( 0 ) )
+            ->method( 'extractContentFromRows' )
+            ->with( array() )
+            ->will( $this->returnValue( array( $content1 ) ) );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->at( 2 ) )
+            ->method( 'load' )
+            ->with( $contentId, 2 )
+            ->will( $this->returnValue( array() ) );
+
+        $this->getContentMapperMock()
+            ->expects( $this->at( 1 ) )
+            ->method( 'extractContentFromRows' )
+            ->with( array() )
+            ->will( $this->returnValue( array( $content2 ) ) );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->once() )
+            ->method( 'deleteField' )
+            ->with( $this->equalTo( "3-cro-HR" ) );
+
+        $this->getContentStorageHandlerMock()
+            ->expects( $this->at( 0 ) )
+            ->method( 'deleteFieldData' )
+            ->with(
+                $this->equalTo( 'ezstring' ),
+                $content1->versionInfo,
+                $this->equalTo( array( "3-cro-HR" ) )
+            );
+
+        $this->getContentStorageHandlerMock()
+            ->expects( $this->at( 1 ) )
+            ->method( 'deleteFieldData' )
+            ->with(
+                $this->equalTo( 'ezstring' ),
+                $content2->versionInfo,
+                $this->equalTo( array( "3-cro-HR" ) )
+            );
+
+        $action->apply( $contentId );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
+     */
+    public function testApplyMultipleVersionsMultipleTranslations()
+    {
+        $contentId = 42;
+        $versionNumbers = array( 1, 2 );
+        $action = $this->getRemoveFieldAction();
+        $content1 = $this->getContentFixture( 1, array( "cro-HR", "hun-HU" ) );
+        $content2 = $this->getContentFixture( 2, array( "cro-HR", "hun-HU" ) );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->once() )
+            ->method( 'listVersionNumbers' )
+            ->with( $this->equalTo( $contentId ) )
+            ->will( $this->returnValue( $versionNumbers ) );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->at( 1 ) )
+            ->method( 'load' )
+            ->with( $contentId, 1 )
+            ->will( $this->returnValue( array() ) );
+
+        $this->getContentMapperMock()
+            ->expects( $this->at( 0 ) )
+            ->method( 'extractContentFromRows' )
+            ->with( array() )
+            ->will( $this->returnValue( array( $content1 ) ) );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->at( 2 ) )
+            ->method( 'load' )
+            ->with( $contentId, 2 )
+            ->will( $this->returnValue( array() ) );
+
+        $this->getContentMapperMock()
+            ->expects( $this->at( 1 ) )
+            ->method( 'extractContentFromRows' )
+            ->with( array() )
+            ->will( $this->returnValue( array( $content2 ) ) );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->at( 3 ) )
+            ->method( 'deleteField' )
+            ->with( $this->equalTo( "3-cro-HR" ) );
+
+        $this->getContentGatewayMock()
+            ->expects( $this->at( 4 ) )
+            ->method( 'deleteField' )
+            ->with( $this->equalTo( "3-hun-HU" ) );
+
+        $this->getContentStorageHandlerMock()
+            ->expects( $this->at( 0 ) )
+            ->method( 'deleteFieldData' )
+            ->with(
+                $this->equalTo( 'ezstring' ),
+                $content1->versionInfo,
+                $this->equalTo( array( "3-cro-HR", "3-hun-HU" ) )
+            );
+
+        $this->getContentStorageHandlerMock()
+            ->expects( $this->at( 1 ) )
+            ->method( 'deleteFieldData' )
+            ->with(
+                $this->equalTo( 'ezstring' ),
+                $content2->versionInfo,
+                $this->equalTo( array( "3-cro-HR", "3-hun-HU" ) )
+            );
+
+        $action->apply( $contentId );
     }
 
     /**
@@ -120,27 +255,36 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    protected function getContentFixture()
+    protected function getContentFixture( $versionNo, $languageCodes )
     {
-        $fieldNoRemove = new Content\Field();
-        $fieldNoRemove->id = 2;
-        $fieldNoRemove->versionNo = 13;
-        $fieldNoRemove->fieldDefinitionId = 23;
-        $fieldNoRemove->type = 'ezstring';
+        $fields = array();
 
-        $fieldRemove = new Content\Field();
-        $fieldRemove->id = 3;
-        $fieldRemove->versionNo = 13;
-        $fieldRemove->fieldDefinitionId = 42;
-        $fieldRemove->type = 'ezstring';
+        foreach ( $languageCodes as $index => $languageCode )
+        {
+            $fieldNoRemove = new Content\Field();
+            $fieldNoRemove->id = "2-{$languageCode}";
+            $fieldNoRemove->versionNo = $versionNo;
+            $fieldNoRemove->fieldDefinitionId = 23;
+            $fieldNoRemove->type = 'ezstring';
+            $fieldNoRemove->languageCode = $languageCode;
+
+            $fields[] = $fieldNoRemove;
+
+            $fieldRemove = new Content\Field();
+            $fieldRemove->id = "3-{$languageCode}";
+            $fieldRemove->versionNo = $versionNo;
+            $fieldRemove->fieldDefinitionId = 42;
+            $fieldRemove->type = 'ezstring';
+            $fieldRemove->languageCode = $languageCode;
+
+            $fields[] = $fieldRemove;
+        }
 
         $content = new Content();
         $content->versionInfo = new Content\VersionInfo();
-        $content->fields = array(
-            $fieldNoRemove,
-            $fieldRemove
-        );
-        $content->versionInfo->versionNo = 3;
+        $content->fields = $fields;
+        $content->versionInfo->versionNo = $versionNo;
+
         return $content;
     }
 

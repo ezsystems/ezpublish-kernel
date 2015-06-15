@@ -59,19 +59,9 @@ class Handler implements PersistenceHandlerInterface
     protected $locationHandler;
 
     /**
-     * @var LocationSearchHandler
-     */
-    protected $locationSearchHandler;
-
-    /**
      * @var UserHandler
      */
     protected $userHandler;
-
-    /**
-     * @var SearchHandler
-     */
-    protected $searchHandler;
 
     /**
      * @var TrashHandler
@@ -108,10 +98,8 @@ class Handler implements PersistenceHandlerInterface
      * @param \eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler $contentLanguageHandler
      * @param \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler $contentTypeHandler
      * @param \eZ\Publish\Core\Persistence\Cache\UserHandler $userHandler
-     * @param \eZ\Publish\Core\Persistence\Cache\SearchHandler $searchHandler
      * @param \eZ\Publish\Core\Persistence\Cache\TransactionHandler $transactionHandler
      * @param \eZ\Publish\Core\Persistence\Cache\TrashHandler $trashHandler
-     * @param \eZ\Publish\Core\Persistence\Cache\LocationSearchHandler $locationSearchHandler
      * @param \eZ\Publish\Core\Persistence\Cache\UrlAliasHandler $urlAliasHandler
      * @param \eZ\Publish\Core\Persistence\Cache\ObjectStateHandler $objectStateHandler
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
@@ -124,10 +112,8 @@ class Handler implements PersistenceHandlerInterface
         CacheContentLanguageHandler $contentLanguageHandler,
         CacheContentTypeHandler $contentTypeHandler,
         CacheUserHandler $userHandler,
-        CacheSearchHandler $searchHandler,
         CacheTransactionHandler $transactionHandler,
         CacheTrashHandler $trashHandler,
-        CacheLocationSearchHandler $locationSearchHandler,
         CacheUrlAliasHandler $urlAliasHandler,
         CacheObjectStateHandler $objectStateHandler,
         PersistenceLogger $logger
@@ -140,10 +126,8 @@ class Handler implements PersistenceHandlerInterface
         $this->contentLanguageHandler = $contentLanguageHandler;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->userHandler = $userHandler;
-        $this->searchHandler = $searchHandler;
         $this->transactionHandler = $transactionHandler;
         $this->trashHandler = $trashHandler;
-        $this->locationSearchHandler = $locationSearchHandler;
         $this->urlAliasHandler = $urlAliasHandler;
         $this->objectStateHandler = $objectStateHandler;
         $this->logger = $logger;
@@ -155,14 +139,6 @@ class Handler implements PersistenceHandlerInterface
     public function contentHandler()
     {
         return $this->contentHandler;
-    }
-
-    /**
-     * @return \eZ\Publish\SPI\Search\Handler
-     */
-    public function searchHandler()
-    {
-        return $this->searchHandler;
     }
 
     /**
@@ -187,14 +163,6 @@ class Handler implements PersistenceHandlerInterface
     public function locationHandler()
     {
         return $this->locationHandler;
-    }
-
-    /**
-     * @return \eZ\Publish\SPI\Persistence\Content\Location\Handler
-     */
-    public function locationSearchHandler()
-    {
-        return $this->locationSearchHandler;
     }
 
     /**

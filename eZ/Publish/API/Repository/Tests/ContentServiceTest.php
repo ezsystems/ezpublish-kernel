@@ -1309,10 +1309,10 @@ class ContentServiceTest extends BaseContentServiceTest
      * @group user
      * @group field-type
      */
-    public function testUpdateContent_WithDifferentUser()
+    public function testUpdateContentWithDifferentUser()
     {
         /* BEGIN: Use Case */
-        $arrayWithDraftVersion2 = $this->createUpdatedDraftVersion2_NotAdmin();
+        $arrayWithDraftVersion2 = $this->createUpdatedDraftVersion2NotAdmin();
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -2548,9 +2548,10 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
      */
     public function testDeleteVersion()
     {
@@ -2559,13 +2560,24 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
-        $draft = $this->createContentDraftVersion1();
+        $content = $this->createContentVersion1();
+
+        // Create new draft, because published or last version of the Content can't be deleted
+        $draft = $contentService->createContentDraft(
+            $content->getVersionInfo()->getContentInfo()
+        );
 
         // Delete the previously created draft
         $contentService->deleteVersion( $draft->getVersionInfo() );
         /* END: Use Case */
 
-        $contentService->loadContent( $draft->id );
+        $versions = $contentService->loadVersions( $content->getVersionInfo()->getContentInfo() );
+
+        $this->assertCount( 1, $versions );
+        $this->assertEquals(
+            $content->getVersionInfo()->id,
+            $versions[0]->id
+        );
     }
 
     /**
@@ -2574,10 +2586,11 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteVersion
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
-    public function testDeleteVersionThrowsBadStateException()
+    public function testDeleteVersionThrowsBadStateExceptionOnPublishedVersion()
     {
         $repository = $this->getRepository();
 
@@ -2589,6 +2602,30 @@ class ContentServiceTest extends BaseContentServiceTest
         // This call will fail with a "BadStateException", because the content
         // version is currently published.
         $contentService->deleteVersion( $content->getVersionInfo() );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the deleteVersion() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     */
+    public function testDeleteVersionThrowsBadStateExceptionOnLastVersion()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $draft = $this->createContentDraftVersion1();
+
+        // This call will fail with a "BadStateException", because the Content
+        // version is the last version of the Content.
+        $contentService->deleteVersion( $draft->getVersionInfo() );
         /* END: Use Case */
     }
 
@@ -2698,6 +2735,11 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertAllFieldsEquals( $contentCopied->getFields() );
 
         $this->assertDefaultContentStates( $contentCopied->contentInfo );
+
+        $this->assertNotNull(
+            $contentCopied->contentInfo->mainLocationId,
+            'Expected main location to be set given we provided a LocationCreateStruct'
+        );
     }
 
     /**
@@ -2758,6 +2800,11 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         $this->assertEquals( 1, $contentCopied->getVersionInfo()->versionNo );
+
+        $this->assertNotNull(
+            $contentCopied->contentInfo->mainLocationId,
+            'Expected main location to be set given we provided a LocationCreateStruct'
+        );
     }
 
     /**

@@ -16,3 +16,9 @@ services:
 
     ezpublish.api.storage_engine:
         alias: ezpublish.spi.persistence.legacy
+
+    ezpublish.spi.search:
+        alias: ezpublish.spi.search_engine
+
+    ezpublish.spi.search_engine:
+        alias: ezpublish.spi.search.legacy

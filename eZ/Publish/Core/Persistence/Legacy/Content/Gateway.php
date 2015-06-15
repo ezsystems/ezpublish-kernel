@@ -388,4 +388,13 @@ abstract class Gateway
      * @return int ID the inserted ID
      */
     abstract public function insertRelation( RelationCreateStruct $createStruct );
+
+    /**
+     * Returns all Content IDs for a given $contentTypeId.
+     *
+     * @param int $contentTypeId
+     *
+     * @return int[]
+     */
+    abstract public function getContentIdsByContentTypeId( $contentTypeId );
 }

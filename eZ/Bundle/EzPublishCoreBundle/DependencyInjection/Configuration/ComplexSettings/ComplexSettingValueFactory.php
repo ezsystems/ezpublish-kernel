@@ -7,8 +7,6 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
-
 /**
  * Factory for complex dynamic settings resolution.
  *

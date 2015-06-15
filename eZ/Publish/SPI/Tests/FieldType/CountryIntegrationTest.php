@@ -73,7 +73,7 @@ class CountryIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezcountry',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Country(),
+            new Legacy\Content\FieldValue\Converter\CountryConverter(),
             new FieldType\NullStorage()
         );
     }

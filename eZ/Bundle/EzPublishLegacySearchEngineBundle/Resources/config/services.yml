@@ -1,0 +1,16 @@
+parameters:
+    ezpublish.search.legacy.connection.factory.class: eZ\Bundle\EzPublishLegacySearchEngineBundle\ApiLoader\ConnectionFactory
+    ezpublish.search.legacy.connection.class: Doctrine\DBAL\Driver\Connection
+
+services:
+    ezpublish.search.legacy.connection.factory:
+        class: %ezpublish.search.legacy.connection.factory.class%
+        arguments:
+            - @ezpublish.api.repository_configuration_provider
+        calls:
+            - [setContainer, [@service_container]]
+
+    ezpublish.api.search_engine.legacy.connection:
+        class: %ezpublish.search.legacy.connection.class%
+        factory: ["@ezpublish.search.legacy.connection.factory", getConnection]
+        lazy: true
