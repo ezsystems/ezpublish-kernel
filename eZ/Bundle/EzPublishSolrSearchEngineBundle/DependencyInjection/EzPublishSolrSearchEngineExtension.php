@@ -134,7 +134,7 @@ class EzPublishSolrSearchEngineExtension extends Extension
         $contentEndpointResolverDef->replaceArgument( 0, $connectionParams['entry_endpoints']['content'] );
         $contentEndpointResolverDef->replaceArgument( 1, $connectionParams['cluster']['content']['translations'] );
         $contentEndpointResolverDef->replaceArgument( 2, $connectionParams['cluster']['content']['default'] );
-        $contentEndpointResolverDef->replaceArgument( 3, $connectionParams['cluster']['content']['always_available'] );
+        $contentEndpointResolverDef->replaceArgument( 3, $connectionParams['cluster']['content']['main_translations'] );
         $container->setDefinition( $contentEndpointResolverId, $contentEndpointResolverDef );
 
         // Content search gateway
@@ -156,7 +156,7 @@ class EzPublishSolrSearchEngineExtension extends Extension
         $locationEndpointResolverDef->replaceArgument( 0, $connectionParams['entry_endpoints']['location'] );
         $locationEndpointResolverDef->replaceArgument( 1, $connectionParams['cluster']['location']['translations'] );
         $locationEndpointResolverDef->replaceArgument( 2, $connectionParams['cluster']['location']['default'] );
-        $locationEndpointResolverDef->replaceArgument( 3, $connectionParams['cluster']['location']['always_available'] );
+        $locationEndpointResolverDef->replaceArgument( 3, $connectionParams['cluster']['location']['main_translations'] );
         $container->setDefinition( $locationEndpointResolverId, $locationEndpointResolverDef );
 
         // Location search gateway

@@ -204,7 +204,7 @@ class Configuration implements ConfigurationInterface
                                 (
                                     !empty( $v["cluster"]["content"]["translations"] ) ||
                                     !empty( $v["cluster"]["content"]["default"] ) ||
-                                    !empty( $v["cluster"]["content"]["always_available"] )
+                                    !empty( $v["cluster"]["content"]["main_translations"] )
                                 )
                             );
                         }
@@ -226,9 +226,9 @@ class Configuration implements ConfigurationInterface
                                 $endpointSet[$v["cluster"]["content"]["default"]] = true;
                             }
 
-                            if ( !empty( $v["cluster"]["content"]["always_available"] ) )
+                            if ( !empty( $v["cluster"]["content"]["main_translations"] ) )
                             {
-                                $endpointSet[$v["cluster"]["content"]["always_available"]] = true;
+                                $endpointSet[$v["cluster"]["content"]["main_translations"]] = true;
                             }
 
                             $v["entry_endpoints"]["content"] = array_keys( $endpointSet );
@@ -246,7 +246,7 @@ class Configuration implements ConfigurationInterface
                                 (
                                     !empty( $v["cluster"]["location"]["translations"] ) ||
                                     !empty( $v["cluster"]["location"]["default"] ) ||
-                                    !empty( $v["cluster"]["location"]["always_available"] )
+                                    !empty( $v["cluster"]["location"]["main_translations"] )
                                 )
                             );
                         }
@@ -268,9 +268,9 @@ class Configuration implements ConfigurationInterface
                                 $endpointSet[$v["cluster"]["location"]["default"]] = true;
                             }
 
-                            if ( !empty( $v["cluster"]["location"]["always_available"] ) )
+                            if ( !empty( $v["cluster"]["location"]["main_translations"] ) )
                             {
-                                $endpointSet[$v["cluster"]["location"]["always_available"]] = true;
+                                $endpointSet[$v["cluster"]["location"]["main_translations"]] = true;
                             }
 
                             $v["entry_endpoints"]["location"] = array_keys( $endpointSet );
@@ -346,7 +346,7 @@ class Configuration implements ConfigurationInterface
                                         "eng-GB" => "endpoint2",
                                     ),
                                     "default" => "endpoint3",
-                                    "always_available" => "endpoint4",
+                                    "main_translations" => "endpoint4",
                                 ),
                                 "location" => array(
                                     "translations" => array(
@@ -354,7 +354,7 @@ class Configuration implements ConfigurationInterface
                                         "eng-GB" => "endpoint2",
                                     ),
                                     "default" => "endpoint3",
-                                    "always_available" => "endpoint4",
+                                    "main_translations" => "endpoint4",
                                 ),
                             )
                         )
@@ -363,10 +363,10 @@ class Configuration implements ConfigurationInterface
                                 ->info(
                                     "Defines a map of translation language codes and Solr " .
                                     "endpoint names for Content index.\n\n" .
-                                    "Optionally, you can define default and always available " .
+                                    "Optionally, you can define default and main translations " .
                                     "endpoints. Default one will be used for a translation if it " .
-                                    "is not explicitly mapped, and always available will be used " .
-                                    "for indexing translations that are always available.\n\n" .
+                                    "is not explicitly mapped, and main translations will be " .
+                                    "used for indexing translations in the main language.\n\n" .
                                     "If single endpoint name is given, it will be used as a " .
                                     "shortcut to define the default endpoint."
                                 )
@@ -378,7 +378,7 @@ class Configuration implements ConfigurationInterface
                                             "eng-GB" => "endpoint2",
                                         ),
                                         "default" => "endpoint3",
-                                        "always_available" => "endpoint4",
+                                        "main_translations" => "endpoint4",
                                     )
                                 )
                                 ->children()
@@ -407,15 +407,15 @@ class Configuration implements ConfigurationInterface
                                             "This setting is optional."
                                         )
                                     ->end()
-                                    ->scalarNode( "always_available" )
+                                    ->scalarNode( "main_translations" )
                                         ->defaultNull()
                                         ->info(
-                                            "Always available endpoint will be used to index " .
-                                            "documents of translations that are always " .
-                                            "available.\n\n" .
+                                            "Main translations endpoint will be used to index " .
+                                            "documents of translations in the main languages\n\n" .
                                             "This setting is optional. Use it to reduce the " .
                                             "number of Solr endpoints that the query is " .
-                                            "distributed to when using always available fallback."
+                                            "distributed to when using always available fallback " .
+                                            "or searching only main languages."
                                         )
                                     ->end()
                                 ->end()
@@ -424,10 +424,10 @@ class Configuration implements ConfigurationInterface
                                 ->info(
                                     "Defines a map of translation language codes and Solr " .
                                     "endpoint names for Location index.\n\n" .
-                                    "Optionally, you can define default and always available " .
+                                    "Optionally, you can define default and main translations " .
                                     "endpoints. Default one will be used for a translation if it " .
-                                    "is not explicitly mapped, and always available will be used " .
-                                    "for indexing translations that are always available.\n\n" .
+                                    "is not explicitly mapped, and main translations will be " .
+                                    "used for indexing translations in the main language.\n\n" .
                                     "If single endpoint name is given, it will be used as a " .
                                     "shortcut to define the default endpoint."
                                 )
@@ -439,7 +439,7 @@ class Configuration implements ConfigurationInterface
                                             "eng-GB" => "endpoint2",
                                         ),
                                         "default" => "endpoint3",
-                                        "always_available" => "endpoint4",
+                                        "main_translations" => "endpoint4",
                                     )
                                 )
                                 ->children()
@@ -468,15 +468,15 @@ class Configuration implements ConfigurationInterface
                                             "This setting is optional."
                                         )
                                     ->end()
-                                    ->scalarNode( "always_available" )
+                                    ->scalarNode( "main_translations" )
                                         ->defaultNull()
                                         ->info(
-                                            "Always available endpoint will be used to index " .
-                                            "documents of translations that are always " .
-                                            "available.\n\n" .
+                                            "Main translations endpoint will be used to index " .
+                                            "documents of translations in the main languages\n\n" .
                                             "This setting is optional. Use it to reduce the " .
                                             "number of Solr endpoints that the query is " .
-                                            "distributed to when using always available fallback."
+                                            "distributed to when using always available fallback " .
+                                            "or searching only main languages."
                                         )
                                     ->end()
                                 ->end()
