@@ -112,14 +112,14 @@ should not remove or drastically change the existing definitions.
     <dynamicField name="*_gl_1_coordinate" type="double" indexed="true" stored="true"/>
     <dynamicField name="*_c" type="currency" indexed="true" stored="true"/>
 
-    <field name="text" type="text" indexed="true" multiValued="true" stored="false"/>
-
     <!--
-      Index all text, html and string fields in full text index
+      Full text field is indexed through a proxy field '*_fulltext_t'.
+      This definition's wildcard should be kept longer than other dynamic fields,
+      in order for this field to match over them.
     -->
-    <copyField source="*_t" dest="text" />
-    <copyField source="*_s" dest="text" />
-    <copyField source="*_h" dest="text" />
+    <field name="text" type="text" indexed="true" multiValued="true" stored="false"/>
+    <dynamicField name="*_fulltext_t" type="text" indexed="false" stored="false"/>
+    <copyField source="*_fulltext_t" dest="text" />
 
     <!--
       This field is required since Solr 4

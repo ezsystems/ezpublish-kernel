@@ -331,7 +331,7 @@ class NativeDocumentMapper implements DocumentMapper
             new FieldType\MultipleIdentifierField()
         );
 
-        $fieldSets = $this->mapContentFields( $content, $contentType );
+        $fieldSets = $this->mapContentFields( $content, $contentType, true );
         $documents = array();
 
         foreach ( $fieldSets as $languageCode => $translationFields )
@@ -402,10 +402,15 @@ class NativeDocumentMapper implements DocumentMapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
+     * @param boolean $indexFulltext
      *
      * @return \eZ\Publish\SPI\Search\Field[][]
      */
-    protected function mapContentFields( Content $content, ContentType $contentType )
+    protected function mapContentFields(
+        Content $content,
+        ContentType $contentType,
+        $indexFulltext
+    )
     {
         $fieldSets = array();
 
@@ -427,7 +432,7 @@ class NativeDocumentMapper implements DocumentMapper
                     }
 
                     $fieldSets[$field->languageCode][] = new Field(
-                        $this->fieldNameGenerator->getName(
+                        $name = $this->fieldNameGenerator->getName(
                             $indexField->name,
                             $fieldDefinition->identifier,
                             $contentType->identifier
@@ -435,6 +440,15 @@ class NativeDocumentMapper implements DocumentMapper
                         $indexField->value,
                         $indexField->type
                     );
+
+                    if ( $indexFulltext && $indexField->type instanceof FieldType\StringField )
+                    {
+                        $fieldSets[$field->languageCode][] = new Field(
+                            $name . "_fulltext",
+                            $indexField->value,
+                            new FieldType\TextField()
+                        );
+                    }
                 }
             }
         }
@@ -614,7 +628,7 @@ class NativeDocumentMapper implements DocumentMapper
         $contentType = $this->contentTypeHandler->load(
             $content->versionInfo->contentInfo->contentTypeId
         );
-        $fieldSets = $this->mapContentFields( $content, $contentType );
+        $fieldSets = $this->mapContentFields( $content, $contentType, true );
         $documents = array();
 
         foreach ( $fieldSets as $languageCode => $translationFields )
