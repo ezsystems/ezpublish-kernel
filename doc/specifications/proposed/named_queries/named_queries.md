@@ -1,18 +1,23 @@
 ## Overview
 
-Named queries are Content or Location Query objects that are predefined in the system.
+Named queries, or QueryTypes, are Content or Location Query objects that are predefined in the system, and can be
+used in several ways:
+- from twig templates, using a sub-request:
+  `{{ render( controller( ez_query, {'identifier': 'latest_articles' ) ) }}`
+- from php code, by loading the Query, and running it through the SearchService
+- from REST, using `/content/views`
 
-They can be used in multiple ways:
-- from twig templates, using a sub-request: {{ render( controller( ez_query, {'identifier': 'latest_articles' ) ) }}
-- from php code, by getting the Query from a service
-- from REST, by executing a predefined view / query
+QueryTypes can accept parameters, that can be used as values in the query. It can be used for paging, or to set a
+ContentType identifier...
 
 ## Components
 
 ### REST
 
 #### Getting a view's results
-Returns the same results that POSTing a Query to `/content/views`,  but without the need to include the Query in the Request.
+Returns the same results that POSTing a Query to `/content/views`,  but without the need to POST the Query. Results can
+also be cached over HTTP.
+
 ```
 GET /api/ezp/v2/content/views/AcmeBundle:LatestArticles
 ```
@@ -25,17 +30,21 @@ Over REST, View arguments are passed as query parameters:
 GET /api/ezp/v2/content/views/AcmeBundle:LatestArticles?category=marketing
 ```
 
-In the example above, category could be mapped to a Location ID, or a Content Field, either tag, or selection, or object relation...
+In the example above, category could be mapped to a Location ID, or a Content Field, either tag, or selection,
+or object relation...
 
 
 ### Query controller
+
+> Status: must have
+
 ```twig
 {{ render( 
 	controller( 
 		ez_query, 
 		{
-			'identifier': 'latest_articles', 
-			'parameters': {'type': 'article'}
+			'identifier': 'AcmeBundle:LatestArticles',
+			'parameters': {'category': 'marketing'}
 		} 
 	) 
 ) }}
@@ -43,22 +52,20 @@ In the example above, category could be mapped to a Location ID, or a Content Fi
 
 ### Services
 
-A main `QueryService` / `ezplatform.query_service`, with methods to load a QueryType by identifier. Query persistence will be specified later.
+#### Main QueryTypeRegistry
 
-Automatically generated services, per query: `ezplatform.query_type.latest_articles`
-(do we need an underscore separated automatically generated name ? The QueryType class would be `LatestArticlesQueryType`.
+> Status: must have
 
-### Services
+A main `QueryTypeRegistry` / `ezplatform.query_type.registry`, with a `load` method that accepts a QueryType identifier.
 
-#### QueryTypeService
-A main `QueryTypeService` / `ezplatform.query_type_service`, with a `load` method a QueryType by identifier. Query persistence will be specified later.
+(REST: No store, delete or update methods as persistence will be handled later)
 
-#### QueryType auto-services
-QueryType objects are, via a compiler pass, registered as services. It makes it easy to just inject one into a controller or any business logic item without injecting the QueryTypeService.
+#### Per query service
 
-Example: `ezplatform.query.latest_articles`
+> Status: questionable (naming is an issue if we want to follow namespacing)
 
-Q: Do we need an underscore separated automatically generated name ? The QueryType class would be `LatestArticlesQueryType`, how do we go to `latest_articles` ?
+Automatically generated services (compiler pass), per query: `ezplatform.query_type.latest_articles`
+(How do we get from `AcmeBundle:LatestArticles` to a usable service name ? text transformation ?)
 
 ## QueryType object
 
@@ -145,3 +152,85 @@ How do we distinguish/handle Location vs Content queries ?
 SubClass the main QueryType as LocationQueryType and ContentQueryType ? The REST API distinguishes them as follows:
 - The XML/JSON node representing the Query is either a LocationQuery or a ContentQuery
 - The result with either contain Content or Location objects (the endpoint chooses the right Search method depending on the type of Query.
+
+### Caching
+If we want REST views to be cacheable, we should add the relevant X-Location-ID headers in the result.
+
+> Q: Is it something we want ?
+
+### Dependency on REST LocationSearch
+LocationQueries will obviously not work until LocationSearch support is added to REST.
+
+### Should we separate content & location search queries ?
+
+On second thought, having one feature handling both queries (over REST and PHP) could get tedious.
+Maybe not so much over REST, since you will get the ContentType, and the Query has already been executed.
+
+Another way would be to distinguish the registry's methods: `QueryTypeRegistry::loadContentQuery`, or `QueryTypeRegistry::loadLocationQuery`.
+But this would kind of imply *two* registries.
+
+## What about View objects in PHP ?
+
+For PHP developers, you'd have to test what kind of query you got, in order to send it to the right SearchService
+method. To be on par with REST, one way would be to add a View object.
+
+Either it's a Value object that contains the query, and can execute itself, or a dedicated service, that can be given a
+Query, and will be returned the results. And if the View was an iterator, it could really make a few things easier.
+
+Though you'd still have to test what the query contains before you can use it, but you also have to do this with REST.
+
+Or we just need separate `LocationView` and `ContentView` objects in PHP as well. But then, how do you load those views ?
+Then maybe we instead need a ViewTypeRegistry instead of a QueryTypeRegistry.
+
+### Usage example
+
+```php
+$view = new View(
+    $queryTypeRegistry->get( 'AcmeBundle:latestArticles` )
+);
+
+$viewResult = $view->execute( ['category' => 'marketing'] );
+foreach ( $viewResult as $result )
+{
+  // ...
+}
+```
+
+### View objects
+
+#### View
+
+A View is a stateless QueryType container. It can execute the query, with or without parameters, and returns a ViewResult.
+
+> Q: what is the point/role of this object, again ? Especially since it needs to be built...
+
+```php
+interface View
+{
+    /**
+     * @return Query
+     */
+    public function getQuery();
+
+    /**
+     * @return ViewResult
+     */
+    public function execute( array $parameters = [] );
+}
+```
+
+#### ViewResult
+
+A ViewResult contains the results of the execution of a view. It acts as a proxy to the the API's SearchResult object.
+It may provide automatic paging of results by automatically managing the offset/limit Query Parameters (this is something
+the View object can not do, as it is stateless).
+
+
+```
+interface ViewResult implements Countable, Iterator
+{
+}
+```
+
+> Q: what is the link between a ViewResult and its View ?
+> Q: does the ViewResult add anything to the existing SearchResult ?
