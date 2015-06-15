@@ -1,7 +1,6 @@
 ## Overview
 
-Named queries, or QueryTypes, are Content or Location Query objects that are predefined in the system, and can be
-used in several ways:
+Named queries, or QueryTypes, are predefined Content or Location Query objects. They can be used in several ways:
 - from twig templates, using a sub-request:
   `{{ render( controller( ez_query, {'identifier': 'latest_articles' ) ) }}`
 - from php code, by loading the Query, and running it through the SearchService
@@ -9,6 +8,9 @@ used in several ways:
 
 QueryTypes can accept parameters, that can be used as values in the query. It can be used for paging, or to set a
 ContentType identifier...
+
+In the initial version, QueryType objects can be created as PHP classes. The main use-case is to allow developers
+to define Queries for the project that can be used in several ways, without knowing their internals.
 
 ## Components
 
