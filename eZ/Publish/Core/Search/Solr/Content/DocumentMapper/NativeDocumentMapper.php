@@ -628,7 +628,7 @@ class NativeDocumentMapper implements DocumentMapper
         $contentType = $this->contentTypeHandler->load(
             $content->versionInfo->contentInfo->contentTypeId
         );
-        $fieldSets = $this->mapContentFields( $content, $contentType, true );
+        $fieldSets = $this->mapContentFields( $content, $contentType, false );
         $documents = array();
 
         foreach ( $fieldSets as $languageCode => $translationFields )
