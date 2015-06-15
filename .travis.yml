@@ -10,8 +10,6 @@ matrix:
   fast_finish: true
   # misc nighlty tests we keep an eye on and aim to fix closer to stable versions
   allow_failures:
-    - php: 5.5
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.8@dev"
     - php: hhvm
       env: TEST_CONFIG="phpunit.xml"
   include:
@@ -28,7 +26,7 @@ matrix:
       env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CONTAINER_TEST_CONFIG="tests/integration_legacy_solr_single_core.yml" SOLR_CONFS="eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
 # 5.5
     - php: 5.5
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.8@dev"
+      env: TEST_CONFIG="phpunit.xml"
     - php: 5.5
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME"
     - php: 5.5
@@ -40,12 +38,12 @@ matrix:
       env: TEST_CONFIG="phpunit-integration-legacy.xml"
     - php: 5.6
       env: BEHAT_PROFILE="demo" TEST="clean"
-# hhvm
-    - php: hhvm
-      env: TEST_CONFIG="phpunit.xml"
 # 7.0
     - php: 7.0
       env: TEST_CONFIG="phpunit.xml"
+# hhvm - disabled, no need ot enable before travis has newer versions avaiable
+#    - php: hhvm
+#      env: TEST_CONFIG="phpunit.xml"
 
 
 # test only master (+ Pull requests)
