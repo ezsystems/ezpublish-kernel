@@ -40,43 +40,4 @@ class RichTextProcessor extends FieldTypeProcessor
 
         return $outgoingValueHash;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function preProcessFieldSettingsHash( $incomingSettingsHash )
-    {
-        if ( isset( $incomingSettingsHash["tagPreset"] ) )
-        {
-            switch ( $incomingSettingsHash["tagPreset"] )
-            {
-                case 'TAG_PRESET_DEFAULT':
-                    $incomingSettingsHash["tagPreset"] = Type::TAG_PRESET_DEFAULT;
-                    break;
-                case 'TAG_PRESET_SIMPLE_FORMATTING':
-                    $incomingSettingsHash["tagPreset"] = Type::TAG_PRESET_SIMPLE_FORMATTING;
-            }
-        }
-        return $incomingSettingsHash;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function postProcessFieldSettingsHash( $outgoingSettingsHash )
-    {
-        if ( isset( $outgoingSettingsHash["tagPreset"] ) )
-        {
-            switch ( $outgoingSettingsHash["tagPreset"] )
-            {
-                case Type::TAG_PRESET_DEFAULT:
-                    $outgoingSettingsHash["tagPreset"] = 'TAG_PRESET_DEFAULT';
-                    break;
-                case Type::TAG_PRESET_SIMPLE_FORMATTING:
-                    $outgoingSettingsHash["tagPreset"] = 'TAG_PRESET_SIMPLE_FORMATTING';
-            }
-        }
-
-        return $outgoingSettingsHash;
-    }
 }
