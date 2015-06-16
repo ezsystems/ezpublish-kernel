@@ -10,7 +10,8 @@ if [ "$DB" = "mysql" ] ; then mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;"
 if [ "$DB" = "postgresql" ] ; then psql -c "CREATE DATABASE $DB_NAME;" -U postgres ; psql -c "CREATE EXTENSION pgcrypto;" -U postgres $DB_NAME ; fi
 
 # Update composer to newest version
-composer self-update -v --no-interaction
+# disabled, issues with packagist/github, something..
+#composer self-update -v --no-interaction
 
 # Setup github key to avoid api rate limit
 ./bin/.travis/install_composer_github_key.sh
