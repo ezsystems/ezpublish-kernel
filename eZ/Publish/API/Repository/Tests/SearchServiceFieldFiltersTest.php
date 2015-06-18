@@ -209,6 +209,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-GB",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchService->findContent( $query, $fieldFilters );
@@ -250,6 +251,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
                 "eng-GB",
                 "eng-US",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -291,6 +293,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-GB",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -331,6 +334,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-US",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -371,6 +375,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -413,7 +418,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-GB",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -458,7 +462,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-US",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -503,7 +506,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -545,7 +547,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -586,7 +587,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -718,6 +718,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
                 "eng-GB",
                 "eng-US",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -757,6 +758,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-GB",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -795,6 +797,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-US",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -833,6 +836,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -873,7 +877,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-GB",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -916,7 +919,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-US",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -959,7 +961,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -999,7 +1000,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1038,7 +1038,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1080,6 +1079,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
                 "eng-GB",
                 "eng-US",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1119,6 +1119,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-GB",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1157,6 +1158,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-US",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1195,6 +1197,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1235,7 +1238,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-GB",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1278,7 +1280,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-US",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1321,7 +1322,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1361,7 +1361,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1400,7 +1399,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1630,6 +1628,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
                 "eng-GB",
                 "eng-US",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1677,6 +1676,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-GB",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1723,6 +1723,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-US",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1769,6 +1770,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1813,7 +1815,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-GB",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1860,7 +1861,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-US",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1907,7 +1907,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1950,7 +1949,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -1993,7 +1991,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -2039,6 +2036,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
                 "eng-GB",
                 "eng-US",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -2082,6 +2080,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-GB",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -2124,6 +2123,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-US",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -2166,6 +2166,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -2210,7 +2211,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-GB",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -2257,7 +2257,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-US",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -2304,7 +2303,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -2348,7 +2346,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -2391,7 +2388,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -2640,6 +2636,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
                 "eng-GB",
                 "eng-US",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -2699,6 +2696,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-GB",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -2757,6 +2755,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-US",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -2815,6 +2814,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -2884,7 +2884,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-GB",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -2956,7 +2955,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-US",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3028,7 +3026,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3090,7 +3087,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3151,7 +3147,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3289,6 +3284,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
                 "eng-GB",
                 "eng-US",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3334,6 +3330,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-GB",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3378,6 +3375,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-US",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3422,6 +3420,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3468,7 +3467,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-GB",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3517,7 +3515,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-US",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3566,7 +3563,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3612,7 +3608,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3657,7 +3652,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3701,6 +3695,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
                 "eng-GB",
                 "eng-US",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3742,6 +3737,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-GB",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3782,6 +3778,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-US",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3822,6 +3819,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
+            "useAlwaysAvailable" => false,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3864,7 +3862,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-GB",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3909,7 +3906,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "eng-US",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3954,7 +3950,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -3996,7 +3991,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
@@ -4037,7 +4031,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
             "languages" => array(
                 "ger-DE",
             ),
-            "useAlwaysAvailable" => true,
         );
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );

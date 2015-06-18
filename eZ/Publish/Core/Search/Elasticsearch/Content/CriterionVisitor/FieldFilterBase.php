@@ -42,7 +42,7 @@ abstract class FieldFilterBase extends CriterionVisitor
                 ),
             );
 
-            if ( isset( $fieldFilters["useAlwaysAvailable"] ) && $fieldFilters["useAlwaysAvailable"] === true )
+            if ( !isset( $fieldFilters["useAlwaysAvailable"] ) || $fieldFilters["useAlwaysAvailable"] === true )
             {
                 $filter = array(
                     "or" => array(

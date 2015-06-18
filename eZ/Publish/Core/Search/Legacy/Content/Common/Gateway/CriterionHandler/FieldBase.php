@@ -104,8 +104,8 @@ abstract class FieldBase extends CriterionHandler
         // If 'useAlwaysAvailable' is set to true, additionally factor in condition for the
         // Content's main language that is marked as always available
         if (
-            isset( $fieldFilters["useAlwaysAvailable"] )
-            && $fieldFilters["useAlwaysAvailable"] === true
+            !isset( $fieldFilters["useAlwaysAvailable"] )
+            || $fieldFilters["useAlwaysAvailable"] === true
         )
         {
             $query->where(
