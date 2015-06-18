@@ -72,7 +72,7 @@ class ImageTest extends FieldTypeTest
             "FileSizeValidator" => array(
                 'maxFileSize' => array(
                     'type' => 'int',
-                    'default' => false,
+                    'default' => null,
                 )
             )
         );

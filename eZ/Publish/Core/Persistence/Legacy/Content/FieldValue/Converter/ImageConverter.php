@@ -250,7 +250,7 @@ EOT;
                     'FileSizeValidator' => array(
                         'maxFileSize' => ( $storageDef->dataInt1 != 0
                             ? (int)$storageDef->dataInt1 * 1024 * 1024
-                            : false ),
+                            : null ),
                     )
                 )
             )
