@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 class ComplexSettingsPass implements CompilerPassInterface
 {
@@ -45,55 +46,66 @@ class ComplexSettingsPass implements CompilerPassInterface
                     continue;
                 }
 
-                $factoryServiceId = sprintf( '%s.%s_%d', $serviceId, '__complex_setting_factory', $argumentIndex );
-                $container->setDefinition(
-                    $factoryServiceId,
-                    $this->createFactoryDefinition(
-                        $argumentValue,
-                        $this->parser->parseComplexSetting( $argumentValue )
-                    )
+                $arguments[$argumentIndex] = $this->createComplexSettingExpression(
+                    $argumentValue,
+                    $this->parser->parseComplexSetting( $argumentValue )
                 );
-
-                $arguments[$argumentIndex] = new Reference( $factoryServiceId );
-                $definition->setArguments( $arguments );
             }
+
+            $definition->setArguments( $arguments );
         }
     }
 
     /**
-     * Creates a complex setting factory.
+     * Creates an expression for given complex setting.
      *
-     * The factory has a variable number of arguments.
-     * Dynamic settings are added as tupples: first the argument without the leading and trailing $, so that it is not
+     * The expression uses 'ezpublish.config.complex_setting_value.resolver' service for complex setting resolution.
+     * The complex setting value resolver has a variable number of arguments.
+     * Dynamic settings are added as tuples: first the argument without the leading and trailing $, so that it is not
      * transformed by the config resolver pass, then the argument as a string, so that it does get transformed.
      *
      * @param string $argumentValue The original argument ($var$/$another_var$)
      * @param array $dynamicSettings Array of dynamic settings in $argumentValue
      *
-     * @return Definition
+     * @return Expression
      */
-    private function createFactoryDefinition( $argumentValue, $dynamicSettings )
+    private function createComplexSettingExpression( $argumentValue, array $dynamicSettings )
     {
-        $definition = new Definition(
-            'stdClass',
-            array( $argumentValue )
-        );
-
-        $definition->setFactory(
-            [
-                'eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingValueFactory',
-                'getArgumentValue'
-            ]
-        );
+        $resolverArguments = ['"' . $argumentValue . '"'];
         foreach ( $dynamicSettings as $dynamicSetting )
         {
             // Trim the '$'  so that the dynamic setting doesn't get transformed
-            $definition->addArgument( trim( $dynamicSetting, '$' ) );
-
+            $resolverArguments[] = '"' . trim( $dynamicSetting, '$' ) . '"';
             // This one will be transformed
-            $definition->addArgument( $dynamicSetting );
+            $resolverArguments[] = $this->createConfigResolverSubExpression(
+                $this->parser->parseDynamicSetting( $dynamicSetting )
+            );
         }
 
-        return $definition;
+        $expression = sprintf(
+            'service("ezpublish.config.complex_setting_value.resolver").resolveSetting(%s)',
+            implode( ', ', $resolverArguments )
+        );
+
+        return new Expression( $expression );
+    }
+
+    /**
+     * Returns the sub expression (as string) to resolve individual dynamic settings contained in original complex setting.
+     *
+     * @param array $parsedDynamicSetting Dynamic setting, parsed.
+     *
+     * @return string
+     */
+    private function createConfigResolverSubExpression( array $parsedDynamicSetting )
+    {
+        $expression = sprintf(
+            'service("ezpublish.config.resolver").getParameter("%s", %s, %s)',
+            $parsedDynamicSetting['param'],
+            isset( $parsedDynamicSetting['namespace'] ) ? '"' . $parsedDynamicSetting['namespace'] . '"' : 'null',
+            isset( $parsedDynamicSetting['scope'] ) ? '"' . $parsedDynamicSetting['scope'] . '"' : 'null'
+        );
+
+        return $expression;
     }
 }

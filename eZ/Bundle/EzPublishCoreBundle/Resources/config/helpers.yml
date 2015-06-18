@@ -7,7 +7,7 @@ parameters:
     ezpublish.dynamic_settings_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\DynamicSettingsListener
     ezpublish.content_preview.location_provider.class: eZ\Publish\Core\Helper\PreviewLocationProvider
     ezpublish.config_resolver.resettable_services: []
-    ezpublish.config_resolver.dynamic_settings_services: []
+    ezpublish.config_resolver.updateable_services: []
 
 services:
     # Helpers
@@ -41,7 +41,7 @@ services:
         class: %ezpublish.dynamic_settings_listener.class%
         arguments:
             - %ezpublish.config_resolver.resettable_services%
-            - %ezpublish.config_resolver.dynamic_settings_services%
+            - %ezpublish.config_resolver.updateable_services%
         calls:
             - [setContainer, [@service_container]]
         tags:

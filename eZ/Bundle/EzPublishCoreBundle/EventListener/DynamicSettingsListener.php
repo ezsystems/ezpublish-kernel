@@ -13,10 +13,12 @@ use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ExpressionLanguage;
+use Symfony\Component\DependencyInjection\IntrospectableContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class DynamicSettingsListener extends ContainerAware implements EventSubscriberInterface
+class DynamicSettingsListener implements EventSubscriberInterface
 {
     /**
      * Array of serviceIds to reset in the container.
@@ -26,16 +28,30 @@ class DynamicSettingsListener extends ContainerAware implements EventSubscriberI
     private $resettableServiceIds;
 
     /**
-     * Array of "fake" services handling dynamic settings injection.
-     *
      * @var array
      */
-    private $dynamicSettingsServiceIds;
+    private $updatableServices;
 
-    public function __construct( array $resettableServiceIds, array $dynamicSettingsServiceIds )
+    /**
+     * @var ExpressionLanguage
+     */
+    private $expressionLanguage;
+
+    /**
+     * @var IntrospectableContainerInterface
+     */
+    private $container;
+
+    public function __construct( array $resettableServiceIds, array $updatableServices, ExpressionLanguage $expressionLanguage = null )
     {
         $this->resettableServiceIds = $resettableServiceIds;
-        $this->dynamicSettingsServiceIds = $dynamicSettingsServiceIds;
+        $this->updatableServices = $updatableServices;
+        $this->expressionLanguage = $expressionLanguage ?: new ExpressionLanguage();
+    }
+
+    public function setContainer( IntrospectableContainerInterface $container )
+    {
+        $this->container = $container;
     }
 
     public static function getSubscribedEvents()
@@ -71,15 +87,29 @@ class DynamicSettingsListener extends ContainerAware implements EventSubscriberI
         // Ensure to reset services that need to be.
         foreach ( $this->resettableServiceIds as $serviceId )
         {
+            if ( !$this->container->initialized( $serviceId ) )
+            {
+                continue;
+            }
+
             $this->container->set( $serviceId, null );
         }
 
-        // Force dynamic settings services to synchronize.
-        // This will trigger services depending on dynamic settings to update if they use setter injection.
-        foreach ( $this->dynamicSettingsServiceIds as $fakeServiceId )
+        // Update services that can be updated.
+        foreach ( $this->updatableServices as $serviceId => $methodCalls )
         {
-            $this->container->set( $fakeServiceId, null );
-            $this->container->set( $fakeServiceId, $this->container->get( $fakeServiceId ) );
+            if ( !$this->container->initialized( $serviceId ) )
+            {
+                continue;
+            }
+
+            $service = $this->container->get( $serviceId );
+            foreach ( $methodCalls as $callConfig )
+            {
+                list ( $method, $expression ) = $callConfig;
+                $argument = $this->expressionLanguage->evaluate( $expression, ['container' => $this->container] );
+                call_user_func_array( [$service, $method], [$argument] );
+            }
         }
     }
 }
