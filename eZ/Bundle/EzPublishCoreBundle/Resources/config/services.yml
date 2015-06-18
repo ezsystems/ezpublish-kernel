@@ -85,7 +85,6 @@ services:
         arguments:
             - @ezpublish.api.service.content
             - @ezpublish.fieldType.ezbinaryfile.io_service
-            - @ezpublish.translation_helper
         parent: ezpublish.controller.base
 
     ezpublish.controller.page.view:

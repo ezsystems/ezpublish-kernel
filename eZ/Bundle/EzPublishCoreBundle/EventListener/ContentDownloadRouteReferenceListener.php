@@ -17,6 +17,7 @@ class ContentDownloadRouteReferenceListener implements EventSubscriberInterface
 {
     const ROUTE_NAME = 'ez_content_download';
     const OPT_FIELD_IDENTIFIER = 'fieldIdentifier';
+    const OPT_FIELD_ID = 'fieldId';
     const OPT_CONTENT = 'content';
     const OPT_CONTENT_ID = 'contentId';
     const OPT_DOWNLOAD_NAME = 'filename';
@@ -66,6 +67,9 @@ class ContentDownloadRouteReferenceListener implements EventSubscriberInterface
             $routeReference->set( self::OPT_VERSION, $options[self::OPT_VERSION] );
         }
 
+        $routeReference->remove( self::OPT_FIELD_IDENTIFIER );
+
+        $routeReference->set( self::OPT_FIELD_ID, $options[self::OPT_FIELD_ID] );
         $routeReference->set( self::OPT_CONTENT_ID, $options[self::OPT_CONTENT_ID] );
         $routeReference->set( self::OPT_DOWNLOAD_NAME, $options[self::OPT_DOWNLOAD_NAME] );
     }
@@ -84,6 +88,18 @@ class ContentDownloadRouteReferenceListener implements EventSubscriberInterface
             function ( Options $options )
             {
                 return $options[self::OPT_CONTENT]->id;
+            }
+        );
+
+        $resolver->setDefault(
+            self::OPT_FIELD_ID,
+            function ( Options $options )
+            {
+                return $this->translationHelper->getTranslatedField(
+                    $options[self::OPT_CONTENT],
+                    $options[self::OPT_FIELD_IDENTIFIER],
+                    $options[self::OPT_LANGUAGE]
+                )->id;
             }
         );
 
