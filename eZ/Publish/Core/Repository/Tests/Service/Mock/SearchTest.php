@@ -853,7 +853,7 @@ class SearchTest extends BaseServiceMockTest
             ->with( $criterionMock )
             ->will( $this->returnValue( true ) );
 
-        $result = $service->findLocations( $query, true );
+        $result = $service->findLocations( $query, array(), true );
 
         $this->assertEquals(
             new SearchResult(
@@ -914,7 +914,7 @@ class SearchTest extends BaseServiceMockTest
             ->with( $this->equalTo( $spiLocation ) )
             ->will( $this->returnValue( $locationMock ) );
 
-        $result = $service->findLocations( $serviceQuery, false );
+        $result = $service->findLocations( $serviceQuery, array(), false );
 
         $this->assertEquals(
             new SearchResult(
@@ -984,6 +984,7 @@ class SearchTest extends BaseServiceMockTest
         {
             $result = $service->findLocations(
                 new LocationQuery( array( "sortClauses" => $sortClauses ) ),
+                array(),
                 true
             );
         }
@@ -1035,7 +1036,7 @@ class SearchTest extends BaseServiceMockTest
             ->with( $criterionMock )
             ->will( $this->throwException( new Exception( "Handler threw an exception" ) ) );
 
-        $service->findLocations( $query, true );
+        $service->findLocations( $query, array(), true );
     }
 
     /**
@@ -1093,7 +1094,7 @@ class SearchTest extends BaseServiceMockTest
                 )
             );
 
-        $result = $service->findLocations( new LocationQuery(), false );
+        $result = $service->findLocations( new LocationQuery(), array(), false );
 
         $this->assertEquals(
             new SearchResult(

@@ -21,10 +21,12 @@ interface Handler
      * Finds locations for the given $query
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
+     * @param array $fieldFilters - a map of filters for the returned fields.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult With Location as SearchHit->valueObject
      */
-    public function findLocations( LocationQuery $query );
+    public function findLocations( LocationQuery $query, array $fieldFilters = array() );
 
     /**
      * Indexes a Location in the index storage

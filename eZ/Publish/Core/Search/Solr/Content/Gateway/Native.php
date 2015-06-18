@@ -146,7 +146,7 @@ class Native extends Gateway
             "sort" => $this->getSortClauses( $query->sortClauses ),
             "start" => $query->offset,
             "rows" => $query->limit,
-            "fl" => "*,score",
+            "fl" => "*,score,[shard]",
             "wt" => "json",
         );
 
@@ -268,7 +268,7 @@ class Native extends Gateway
                 $languageSettings["languages"]
         );
         $useAlwaysAvailable = (
-            isset( $languageSettings["useAlwaysAvailable"] ) &&
+            !isset( $languageSettings["useAlwaysAvailable"] ) ||
             $languageSettings["useAlwaysAvailable"] === true
         );
         $hasMainLanguagesEndpoint = ( $this->endpointResolver->getMainLanguagesEndpoint() !== null );
@@ -295,8 +295,13 @@ class Native extends Gateway
             $filters[] = "({$languageFilters})";
         }
 
-        // Handle always available fallback
-        if ( $useAlwaysAvailable )
+        // If no given languages, search only main languages
+        if ( empty( $languages ) )
+        {
+            $filters[] = "meta_indexed_is_main_translation_b:true";
+        }
+        // Otherwise handle always available fallback if used
+        else if ( $useAlwaysAvailable )
         {
             $filter = "meta_indexed_is_main_translation_and_always_available_b:true";
 
@@ -314,11 +319,6 @@ class Native extends Gateway
             }
 
             $filters[] = $filter;
-        }
-        // If no given languages and not using always available fallback, search only main languages
-        else if ( empty( $languages ) )
-        {
-            $filters[] = "meta_indexed_is_main_translation_b:true";
         }
 
         return implode( " OR ", $filters );

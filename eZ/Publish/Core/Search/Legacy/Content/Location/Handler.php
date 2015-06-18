@@ -53,7 +53,7 @@ class Handler implements LocationSearchHandler
     /**
      * @see \eZ\Publish\SPI\Search\Content\Location\Handler::findLocations
      */
-    public function findLocations( LocationQuery $query )
+    public function findLocations( LocationQuery $query, array $fieldFilters = array() )
     {
         $start = microtime( true );
         $query->filter = $query->filter ?: new Criterion\MatchAll();

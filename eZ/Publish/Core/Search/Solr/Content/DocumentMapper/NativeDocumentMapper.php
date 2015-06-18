@@ -604,7 +604,7 @@ class NativeDocumentMapper implements DocumentMapper
             new FieldType\DateField()
         );
         $fields[] = new Field(
-            'content_language_code',
+            'language_code',
             array_keys( $content->versionInfo->names ),
             new FieldType\MultipleStringField()
         );
