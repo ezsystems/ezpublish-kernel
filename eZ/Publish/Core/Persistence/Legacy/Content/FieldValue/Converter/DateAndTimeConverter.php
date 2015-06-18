@@ -98,6 +98,10 @@ class DateAndTimeConverter implements Converter
     {
         $useSeconds = (bool)$storageDef->dataInt2;
         $dateInterval = $this->getDateIntervalFromXML( $storageDef->dataText5 );
+        if ( !($dateInterval instanceof DateInterval) )
+        {
+            $dateInterval = new DateInterval( "P0Y" );
+        }
 
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
