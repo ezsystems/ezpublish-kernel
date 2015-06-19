@@ -80,7 +80,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                     'LegacyStorage' => new FieldType\Media\MediaStorage\Gateway\LegacyStorage(),
                 ),
                 $this->ioService = self::$container->get( "ezpublish.fieldType.ezbinaryfile.io_service" ),
-                new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator(),
+                $legacyPathGenerator = new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator(),
                 new FileInfo()
             )
         );

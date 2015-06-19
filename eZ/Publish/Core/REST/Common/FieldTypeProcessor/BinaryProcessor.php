@@ -40,8 +40,10 @@ class BinaryProcessor extends BinaryInputProcessor
             return $outgoingValueHash;
         }
 
+        $outgoingValueHash['uri'] = $this->generateUrl( $outgoingValueHash['uri'] );
+
         // url is kept for BC, but uri is the right one
-        $outgoingValueHash['uri'] = $outgoingValueHash['url'] = $this->generateUrl( $outgoingValueHash['uri'] );
+        $outgoingValueHash['url'] = $outgoingValueHash['uri'];
 
         return $outgoingValueHash;
     }

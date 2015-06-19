@@ -12,7 +12,6 @@ use eZ\Publish\Core\IO\IOService;
 use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class DownloadController extends Controller
@@ -54,7 +53,7 @@ class DownloadController extends Controller
 
         $field = $this->translationHelper->getTranslatedField(
             $content, $fieldIdentifier,
-            $request->query->has( 'language' ) ? $request->query->get( 'language' ) : null
+            $request->query->has( 'inLanguage' ) ? $request->query->get( 'inLanguage' ) : null
         );
         if ( !$field instanceof Field )
         {

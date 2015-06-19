@@ -366,24 +366,25 @@ class MediaIntegrationTest extends FileSearchBaseIntegrationTest
     public function provideToHashData()
     {
         $fixture = $this->getFixtureData();
+        $expected = $fixture['create'];
 
-        $fixture['create']['uri'] = $fixture['create']['inputUri'];
-        $fixture['create']['path'] = $fixture['create']['inputUri'];
+        $expected['uri'] = $expected['inputUri'];
+        $expected['path'] = $expected['inputUri'];
 
         // Defaults set by type
-        $fixture['create']['hasController'] = false;
-        $fixture['create']['autoplay'] = false;
-        $fixture['create']['loop'] = false;
-        $fixture['create']['width'] = 0;
-        $fixture['create']['height'] = 0;
+        $expected['hasController'] = false;
+        $expected['autoplay'] = false;
+        $expected['loop'] = false;
+        $expected['width'] = 0;
+        $expected['height'] = 0;
 
         $fieldValue = $this->getValidCreationFieldData();
-        $fieldValue->uri = $fixture['create']['uri'];
+        $fieldValue->uri = $expected['uri'];
 
         return array(
             array(
                 $fieldValue,
-                $fixture['create'],
+                $expected,
             ),
         );
     }

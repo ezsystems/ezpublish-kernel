@@ -39,10 +39,10 @@ Example: `/content/download/68/file/My-file.pdf`
   The version number the file must be downloaded for. Requires the versionview permission.
   If not specified, the published version is used.
 
-- language (optional)
+- inLanguage (optional)
 
-  The language the file must be downloaded for.
-  If not specified, the prioritized languages list of the matched siteaccess is used.
+  The language the file should be downloaded in.
+  If not specified, the most prioritized language for the siteaccess will be used.
 
 The controller action will load the content based on the content id, and identify the field using the identifier. The
 binary file referenced by the Field Value will then be streamed, using the active IO Service.
@@ -69,10 +69,24 @@ The only difference is that instead of providing the `contentId`, the route refe
 Content Value Object.
 
 #### REST
-An extra attribute will be added to Fields of BinaryFile/Media type: `downloadUri`. It will contain the download uri for
-the Field's contents.
+
+> Story: EZP-24468
+
+For various reasons (cache handling, layering), REST uses a special download URL, based on the fieldId:
+
+```
+/content/download/{contentId}/{fieldId}
+```
+
+Based on the fieldId, and independently from the siteaccess, it will use the language switcher's mechanisms, and redirect
+to the relevant `ez_content_download` route.
+
+This URL, with the HTTP post, is available via the `url` property of BinaryFile and Media fields.
 
 ## Backward compatibility
+
+> Status: TODO
+
 Since it is common practice to copy/save file download links, it is possible that a legacy link will be used on occasions.
 This can be covered by adding a route that matches the legacy route, and redirects to the new route:
 
@@ -91,6 +105,7 @@ would be redirected to
 
 ### IgorwFileServeBundle
 
+> Status: considered, but not done
 > https://github.com/igorw/IgorwFileServeBundle
 
 A package meant to replace the BinaryResponse we currently use. Supports server-side mechanism such as X-SendFile, but

@@ -10,6 +10,7 @@ parameters:
     ezpublish.controller.content.view.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController
     ezpublish.controller.content.preview.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController
     ezpublish.controller.content.download.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\DownloadController
+    ezpublish.controller.content.download_redirection.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\DownloadRedirectionController
     ezpublish.controller.page.view.class: eZ\Bundle\EzPublishCoreBundle\Controller\PageController
 
     # Param converters
@@ -86,6 +87,16 @@ services:
             - @ezpublish.api.service.content
             - @ezpublish.fieldType.ezbinaryfile.io_service
             - @ezpublish.translation_helper
+            - @router
+            - @ezpublish.route_reference.generator
+        parent: ezpublish.controller.base
+
+    ezpublish.controller.content.download_redirection:
+        class: %ezpublish.controller.content.download_redirection.class%
+        arguments:
+            - @ezpublish.api.service.content
+            - @router
+            - @ezpublish.route_reference.generator
         parent: ezpublish.controller.base
 
     ezpublish.controller.page.view:

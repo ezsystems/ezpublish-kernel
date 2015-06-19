@@ -10,6 +10,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AsseticPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\BinaryContentDownloadPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ComplexSettingsPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConfigResolverParameterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeParameterProviderRegistryPass;
@@ -83,6 +84,7 @@ class EzPublishCoreBundle extends Bundle
             ),
             PassConfig::TYPE_BEFORE_REMOVING
         );
+        $container->addCompilerPass( new BinaryContentDownloadPass() );
 
         // Storage passes
         $container->addCompilerPass( new ExternalStorageRegistryPass );
