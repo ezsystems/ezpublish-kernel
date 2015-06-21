@@ -58,8 +58,7 @@ foreach ( $viewResult as $result )
 #### View
 
 A View is a stateless QueryType container. It can execute the query, with or without parameters, and returns a ViewResult.
-
-> Q: what is the point/role of this object, again ? Especially since it needs to be built...
+It has the requirements (SearchService, etc) to execute Queries.
 
 ```php
 interface View
