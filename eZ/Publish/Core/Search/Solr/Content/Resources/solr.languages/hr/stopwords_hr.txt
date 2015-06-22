@@ -1,0 +1,1 @@
+# Stub, a list of Croation stopwords is not part of the Solr distribution

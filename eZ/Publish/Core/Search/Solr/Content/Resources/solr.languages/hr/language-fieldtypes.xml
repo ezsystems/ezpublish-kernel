@@ -1,0 +1,10 @@
+<!-- Croatian -->
+<fieldType name="text" class="solr.TextField" positionIncrementGap="100">
+    <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords_hr.txt"/>
+    </analyzer>
+</fieldType>
+
+
