@@ -44,7 +44,11 @@ system:
                     template: "AcmeBundle:query/list/latest_articles.html.twig"
                     match:
                         QueryType\Name: 'AcmeBundle:LatestContent'
-                        QueryType\Parameter: "ContentType=article"
+                        QueryType\Parameter:
+                            ContentType:"article"
+                            Limit: 10
+                            SortBy:"name"
+                            SorDirection:"desc"
 ```
 
 ## QueryType objects
