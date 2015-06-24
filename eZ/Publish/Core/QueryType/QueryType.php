@@ -6,7 +6,6 @@ namespace eZ\Publish\Core\QueryType;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
 
-
 /**
  * A Query container. It can return the Query it holds, with or without parameters.
  */
