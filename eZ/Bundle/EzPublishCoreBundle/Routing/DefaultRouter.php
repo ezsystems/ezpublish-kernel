@@ -72,6 +72,7 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
 
     public function matchRequest( Request $request )
     {
+        $this->getContext()->fromRequest( $request );
         return $this->match( $request->attributes->get( 'semanticPathinfo', $request->getPathInfo() ) );
     }
 
