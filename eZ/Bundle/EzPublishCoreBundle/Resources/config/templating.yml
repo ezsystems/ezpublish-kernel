@@ -1,5 +1,4 @@
 parameters:
-    twig.loader.string.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\LoaderString
     twig.extension.intl.class: Twig_Extensions_Extension_Intl
 
     ezpublish.twig.extension.content.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentExtension
@@ -28,11 +27,6 @@ parameters:
     assetic.asset_factory.class: eZ\Bundle\EzPublishCoreBundle\Assetic\AssetFactory
 
 services:
-    twig.loader.string:
-        class: %twig.loader.string.class%
-        tags:
-            - {name: twig.loader}
-
     twig.extension.intl:
         class: %twig.extension.intl.class%
         tags:
