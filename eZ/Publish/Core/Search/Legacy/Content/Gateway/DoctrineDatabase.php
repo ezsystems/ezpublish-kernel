@@ -85,7 +85,7 @@ class DoctrineDatabase extends Gateway
         $doCount = true
     )
     {
-        $count = $doCount ? $this->getResultCount( $criterion, $sort, $fieldFilters ) : null;
+        $count = $doCount ? $this->getResultCount( $criterion, null, $fieldFilters ) : null;
 
         if ( !$doCount && $limit === 0 )
         {
