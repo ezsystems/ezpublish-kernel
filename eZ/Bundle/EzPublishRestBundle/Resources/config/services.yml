@@ -230,7 +230,7 @@ services:
             - @event_dispatcher
             - %form.type_extension.csrf.enabled%
             - %ezpublish_rest.csrf_token_intention%
-            - @?form.csrf_provider
+            - @?security.csrf.token_manager
         tags:
             - { name: kernel.event_subscriber }
 

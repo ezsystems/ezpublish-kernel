@@ -36,6 +36,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Csrf\CsrfToken;
 
 /**
  * User controller
@@ -995,17 +996,19 @@ class User extends RestController
         try
         {
             $csrfToken = '';
-            $csrfProvider = $this->container->get( 'form.csrf_provider', ContainerInterface::NULL_ON_INVALID_REFERENCE );
+            $csrfTokenManager = $this->container->get( 'security.csrf.token_manager', ContainerInterface::NULL_ON_INVALID_REFERENCE );
             $session = $request->getSession();
             if ( $session->isStarted() )
             {
-                if ( $csrfProvider )
+                if ( $csrfTokenManager )
                 {
                     $csrfToken = $request->headers->get( 'X-CSRF-Token' );
                     if (
-                        !$csrfProvider->isCsrfTokenValid(
-                            $this->container->getParameter( 'ezpublish_rest.csrf_token_intention' ),
-                            $csrfToken
+                        !$csrfTokenManager->isTokenValid(
+                            new CsrfToken(
+                                $this->container->getParameter( 'ezpublish_rest.csrf_token_intention' ),
+                                $csrfToken
+                            )
                         )
                     )
                     {
@@ -1020,7 +1023,7 @@ class User extends RestController
             // This will seamlessly start the session.
             if ( !$csrfToken )
             {
-                $csrfToken = $csrfProvider->generateCsrfToken(
+                $csrfToken = $csrfTokenManager->generateCsrfToken(
                     $this->container->getParameter( 'ezpublish_rest.csrf_token_intention' )
                 );
             }

@@ -21,6 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 use eZ\Bundle\EzPublishRestBundle\EventListener\CsrfListener;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Security\Csrf\CsrfToken;
 
 class CsrfListenerTest extends EventListenerTest
 {
@@ -162,19 +163,23 @@ class CsrfListenerTest extends EventListenerTest
      */
     protected function getCsrfProviderMock()
     {
-        $provider = $this->getMock(
-            'Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface'
-        );
+        $provider = $this->getMock( '\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface' );
         $provider->expects( $this->any() )
-            ->method( 'isCsrfTokenValid' )
+            ->method( 'isTokenValid' )
             ->will(
-                $this->returnValueMap(
-                    array(
-                        array( self::INTENTION, self::VALID_TOKEN, true ),
-                        array( self::INTENTION, self::INVALID_TOKEN, false )
-                    )
+                $this->returnCallback(
+                    function ( CsrfToken $token )
+                    {
+                        if ( $token == new CsrfToken( self::INTENTION, self::VALID_TOKEN ) )
+                        {
+                            return true;
+                        }
+
+                        return false;
+                    }
                 )
             );
+
         return $provider;
     }
 

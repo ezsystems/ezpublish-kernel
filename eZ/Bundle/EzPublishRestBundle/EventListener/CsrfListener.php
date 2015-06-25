@@ -13,9 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Bundle\EzPublishRestBundle\RestEvents;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class CsrfListener implements EventSubscriberInterface
 {
@@ -25,9 +26,9 @@ class CsrfListener implements EventSubscriberInterface
     const CSRF_TOKEN_HEADER = "X-CSRF-Token";
 
     /**
-     * @var \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface
+     * @var null|CsrfTokenManagerInterface
      */
-    private $csrfProvider;
+    private $csrfTokenManager;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
@@ -51,19 +52,19 @@ class CsrfListener implements EventSubscriberInterface
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      * @param bool $csrfEnabled
      * @param string $csrfTokenIntention
-     * @param null|\Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface $csrfProvider
+     * @param null|CsrfTokenManagerInterface $csrfTokenManager
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         $csrfEnabled,
         $csrfTokenIntention,
-        CsrfProviderInterface $csrfProvider = null
+        CsrfTokenManagerInterface $csrfTokenManager = null
     )
     {
         $this->eventDispatcher = $eventDispatcher;
         $this->csrfEnabled = $csrfEnabled;
         $this->csrfTokenIntention = $csrfTokenIntention;
-        $this->csrfProvider = $csrfProvider;
+        $this->csrfTokenManager = $csrfTokenManager;
     }
 
     /**
@@ -138,8 +139,7 @@ class CsrfListener implements EventSubscriberInterface
      */
     protected function isLoginRequest( $route )
     {
-        // TODO: add CSRF token to protect against force-login attacks
-        return $route == "ezpublish_rest_createSession";
+        return $route === "ezpublish_rest_createSession";
     }
 
     /**
@@ -154,9 +154,11 @@ class CsrfListener implements EventSubscriberInterface
             return false;
         }
 
-        return $this->csrfProvider->isCsrfTokenValid(
-            $this->csrfTokenIntention,
-            $request->headers->get( self::CSRF_TOKEN_HEADER )
+        return $this->csrfTokenManager->isTokenValid(
+            new CsrfToken(
+                $this->csrfTokenIntention,
+                $request->headers->get( self::CSRF_TOKEN_HEADER )
+            )
         );
     }
 }

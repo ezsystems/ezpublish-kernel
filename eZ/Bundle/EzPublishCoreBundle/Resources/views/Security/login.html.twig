@@ -22,7 +22,7 @@
                         <input type="password" id="password" class="form-control" name="_password" required="required" placeholder="{{ 'Enter password'|trans }}" />
                     </div>
 
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token("authenticate") }}" />
 
                     {#
                         If you want to control the URL the user
