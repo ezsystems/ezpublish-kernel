@@ -67,7 +67,7 @@ script:
   - if [ "$BEHAT_PROFILE" != "" ] ; then cd "$HOME/build/ezplatform" && php bin/behat -vv --profile $BEHAT_PROFILE --suite $TEST ; fi
 
 # disable mail notifications
-notification:
+notifications:
   email: false
 
 # reduce depth (history) of git checkout
