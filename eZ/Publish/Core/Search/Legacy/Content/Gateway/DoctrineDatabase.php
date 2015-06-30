@@ -85,7 +85,7 @@ class DoctrineDatabase extends Gateway
         $doCount = true
     )
     {
-        $count = $doCount ? $this->getResultCount( $criterion, $sort, $fieldFilters ) : null;
+        $count = $doCount ? $this->getResultCount( $criterion, $fieldFilters ) : null;
 
         if ( !$doCount && $limit === 0 )
         {
@@ -139,7 +139,7 @@ class DoctrineDatabase extends Gateway
      * @param array $fieldFilters
      * @return int
      */
-    protected function getResultCount( Criterion $filter, $sort, $fieldFilters )
+    protected function getResultCount( Criterion $filter, $fieldFilters )
     {
         $query = $this->handler->createSelectQuery();
 
@@ -152,12 +152,6 @@ class DoctrineDatabase extends Gateway
                 'ezcontentobject.id',
                 'ezcontentobject_version.contentobject_id'
             );
-
-        // Should be possible to remove it now, since Field sort clauses do not filter any more
-        if ( $sort !== null )
-        {
-            $this->sortClauseConverter->applyJoin( $query, $sort );
-        }
 
         $query->where(
             $this->getQueryCondition( $filter, $query, $fieldFilters )
