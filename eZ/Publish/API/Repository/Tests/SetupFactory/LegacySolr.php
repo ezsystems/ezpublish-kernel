@@ -140,9 +140,9 @@ class LegacySolr extends Legacy
         switch ( $coresSetup )
         {
             case SearchServiceTranslationLanguageFallbackTest::SETUP_DEDICATED:
-                return "tests/integration_legacy_solr_multicore.yml";
+                return "tests/integration_legacy_solr_multicore_dedicated.yml";
             case SearchServiceTranslationLanguageFallbackTest::SETUP_SHARED:
-                return "tests/integration_legacy_solr_multicore_mix.yml";
+                return "tests/integration_legacy_solr_multicore_shared.yml";
             case SearchServiceTranslationLanguageFallbackTest::SETUP_SINGLE:
                 return "tests/integration_legacy_solr_single_core.yml";
         }
