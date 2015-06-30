@@ -40,6 +40,27 @@ class TolerantIOServiceTest extends IOServiceTest
     }
 
     /**
+     * @covers \eZ\Publish\Core\IO\TolerantIOService::createMissingBinaryFile
+     */
+    public function testCreateMissingBinaryFile()
+    {
+        $id = 'id.ext';
+        $prefixedUri = $this->getPrefixedUri( $id );
+
+        $this->binarydataHandlerMock
+            ->expects( $this->once() )
+            ->method( 'getUri' )
+            ->with( $prefixedUri )
+            ->will( $this->returnValue( "/$prefixedUri" ) );
+
+        $binaryFile = parent::testLoadBinaryFileNotFound();
+        self::assertEquals(
+            new MissingBinaryFile( array( 'id' => 'id.ext', 'uri' => "/$prefixedUri" ) ),
+            $binaryFile
+        );
+    }
+
+    /**
      * Overridden to change the expected exception (none)
      * @covers \eZ\Publish\Core\IO\IOService::deleteBinaryFile
      */

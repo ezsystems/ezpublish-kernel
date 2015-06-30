@@ -128,7 +128,7 @@ class TolerantIOService extends IOService
         return new MissingBinaryFile(
             array(
                 'id' => $binaryFileId,
-                'uri' => $this->binarydataHandler->getUri( $binaryFileId )
+                'uri' => $this->binarydataHandler->getUri( $this->getPrefixedUri( $binaryFileId ) ),
             )
         );
     }
