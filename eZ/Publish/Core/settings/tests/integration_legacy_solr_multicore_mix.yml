@@ -28,9 +28,9 @@ parameters:
     ezpublish.search.solr.location.entry_endpoints:
           - endpoint3
     ezpublish.search.solr.location.cluster_endpoints:
-          eng-US: endpoint4
+          eng-GB: endpoint4
     ezpublish.search.solr.location.default_endpoint: endpoint1
-    ezpublish.search.solr.location.main_translations_endpoint: endpoint0
+    ezpublish.search.solr.location.main_translations_endpoint: endpoint2
 
 services:
     ezpublish.cache_pool.spi.cache.decorator:
