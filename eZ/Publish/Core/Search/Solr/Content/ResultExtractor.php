@@ -65,6 +65,7 @@ abstract class ResultExtractor
                 array(
                     "score" => $doc->score,
                     "index" => $this->getIndexIdentifier( $doc ),
+                    "contentTranslation" => $this->getMatchedLanguageCode( $doc ),
                     "valueObject" => $this->extractHit( $doc ),
                 )
             );
@@ -72,6 +73,16 @@ abstract class ResultExtractor
         }
 
         return $result;
+    }
+
+    /**
+     * Returns language code of the Content's translation of the matched document.
+     *
+     * @param $hit
+     */
+    protected function getMatchedLanguageCode( $hit )
+    {
+        return $hit->meta_indexed_language_code_s;
     }
 
     /**
