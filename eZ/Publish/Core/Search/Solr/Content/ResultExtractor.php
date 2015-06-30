@@ -64,6 +64,7 @@ abstract class ResultExtractor
             $searchHit = new SearchHit(
                 array(
                     "score" => $doc->score,
+                    "index" => $this->getIndexIdentifier( $doc ),
                     "valueObject" => $this->extractHit( $doc ),
                 )
             );
@@ -71,6 +72,18 @@ abstract class ResultExtractor
         }
 
         return $result;
+    }
+
+    /**
+     * Returns the identifier of the logical index (shard) of the matched document.
+     *
+     * @param mixed $hit
+     *
+     * @return string
+     */
+    protected function getIndexIdentifier( $hit )
+    {
+        return $hit->{"[shard]"};
     }
 
     /**
