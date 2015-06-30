@@ -10,10 +10,8 @@
 namespace eZ\Publish\Core\MVC\Symfony\Controller;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Templating\EngineInterface;
 
 class SecurityController
@@ -29,39 +27,25 @@ class SecurityController
     protected $configResolver;
 
     /**
-     * @var \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface|null
+     * @var \Symfony\Component\Security\Http\Authentication\AuthenticationUtils
      */
-    protected $csrfProvider;
+    protected $authenticationUtils;
 
-    public function __construct( EngineInterface $templateEngine, ConfigResolverInterface $configResolver, CsrfProviderInterface $csrfProvider = null )
+    public function __construct( EngineInterface $templateEngine, ConfigResolverInterface $configResolver, AuthenticationUtils $authenticationUtils )
     {
         $this->templateEngine = $templateEngine;
         $this->configResolver = $configResolver;
-        $this->csrfProvider = $csrfProvider;
+        $this->authenticationUtils = $authenticationUtils;
     }
 
-    public function loginAction( Request $request )
+    public function loginAction()
     {
-        $session = $request->getSession();
-
-        if ( $request->attributes->has( Security::AUTHENTICATION_ERROR ) )
-        {
-            $error = $request->attributes->get( Security::AUTHENTICATION_ERROR );
-        }
-        else
-        {
-            $error = $session->get( Security::AUTHENTICATION_ERROR );
-            $session->remove( Security::AUTHENTICATION_ERROR );
-        }
-
-        $csrfToken = isset( $this->csrfProvider ) ? $this->csrfProvider->generateCsrfToken( 'authenticate' ) : null;
         return new Response(
             $this->templateEngine->render(
                 $this->configResolver->getParameter( 'security.login_template' ),
                 array(
-                    'last_username' => $session->get( Security::LAST_USERNAME ),
-                    'error' => $error,
-                    'csrf_token' => $csrfToken,
+                    'last_username' => $this->authenticationUtils->getLastUsername(),
+                    'error' => $this->authenticationUtils->getLastAuthenticationError(),
                     'layout' => $this->configResolver->getParameter( 'security.base_layout' ),
                 )
             )

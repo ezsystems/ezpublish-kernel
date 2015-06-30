@@ -145,6 +145,11 @@ Changes affecting version compatibility with former or future versions.
   Before, it contained the physical path to the file, e.g. `var/site/storage/original/...`. Since this path isn't
   allowed to pass through the rewrite rules for security, it was not usable.
   This also affects REST, that will now expose a valid HTTP download URL.
+  
+* `csrf_token` variable is not passed to login template any more. Use `csrf_token()` Twig function to generate it instead.
+  ```jinja
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token("authenticate") }}" />
+  ```
 
 ## Deprecations
 
