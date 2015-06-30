@@ -146,7 +146,7 @@ class Native extends Gateway
             "sort" => $this->getSortClauses( $query->sortClauses ),
             "start" => $query->offset,
             "rows" => $query->limit,
-            "fl" => "*,score",
+            "fl" => "*,score,[shard]",
             "wt" => "json",
         );
 
