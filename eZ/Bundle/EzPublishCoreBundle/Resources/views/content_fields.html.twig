@@ -409,7 +409,10 @@
 {% if not ez_is_field_empty( content, field ) %}
 <figure {{ block( 'field_attributes' ) }}>
     {% set imageAlias = ez_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
-    <img src="{% if imageAlias %}{{ asset( imageAlias.uri ) }}{% else %}//:0{% endif %}"{% if imageAlias.width is defined %} width="{{ imageAlias.width }}"{% endif %}{% if imageAlias.height is defined %} height="{{ imageAlias.height }}"{% endif %} alt="{{ field.value.alternativeText }}" />
+    {% set src = imageAlias ? asset( imageAlias.uri ) : "//:0" %}
+    {% set width = parameters.width is defined ? parameters.width : imageAlias.width %}
+    {% set height = parameters.height is defined ? parameters.height : imageAlias.height %}
+    <img src="{{ src }}"{% if width %} width="{{ width }}"{% endif %}{% if height %} height="{{ height }}"{% endif %} alt="{{ field.value.alternativeText }}" />
 </figure>
 {% endif %}
 {% endspaceless %}
