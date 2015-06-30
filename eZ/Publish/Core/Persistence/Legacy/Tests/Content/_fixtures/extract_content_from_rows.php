@@ -28,7 +28,7 @@ return array (
     'ezcontentobject_attribute_contentclassattribute_id' => '194',
     'ezcontentobject_attribute_data_type_string' => 'ezsrrating',
     'ezcontentobject_attribute_language_code' => 'eng-GB',
-    'ezcontentobject_attribute_language_id' => '2',
+    'ezcontentobject_attribute_language_id' => '4',
     'ezcontentobject_attribute_version' => '2',
     'ezcontentobject_attribute_data_float' => '0.0',
     'ezcontentobject_attribute_data_int' => NULL,
@@ -36,7 +36,7 @@ return array (
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_name_name' => 'Something',
-    'ezcontentobject_name_content_translation' => 'eng-US',
+    'ezcontentobject_name_content_translation' => 'eng-GB',
     'ezcontentobject_tree_main_node_id' => '228',
   ),
   1 =>

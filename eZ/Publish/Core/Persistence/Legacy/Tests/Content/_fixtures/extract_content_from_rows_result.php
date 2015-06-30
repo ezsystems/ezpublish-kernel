@@ -13,7 +13,7 @@ $content->fields = array();
 
 $versionInfo = new VersionInfo();
 $versionInfo->id = 676;
-$versionInfo->names = array( 'eng-US' => 'Something' );
+$versionInfo->names = array( 'eng-US' => 'Something', 'eng-GB' => 'Something' );
 $versionInfo->versionNo = 2;
 $versionInfo->modificationDate = 1313061404;
 $versionInfo->creatorId = 14;

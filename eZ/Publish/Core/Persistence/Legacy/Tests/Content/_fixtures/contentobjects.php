@@ -19161,7 +19161,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'data_type_string' => 'ezsrrating',
       'id' => '4000',
       'language_code' => 'eng-GB',
-      'language_id' => '2',
+      'language_id' => '4',
       'sort_key_int' => '0',
       'sort_key_string' => '',
       'version' => '2',
@@ -30394,6 +30394,15 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'language_id'=>3,
       'name'=>'Something',
       'real_translation'=>'eng-US'
+    ),
+
+    array(
+        'content_translation'=>'eng-GB',
+        'content_version'=>2,
+        'contentobject_id'=>226,
+        'language_id'=>4,
+        'name'=>'Something',
+        'real_translation'=>'eng-GB'
     ),
 
     array(
