@@ -110,28 +110,59 @@ class QueryBuilder
             )
         )->leftJoin(
             $this->dbHandler->quoteTable( 'ezcontentobject_tree' ),
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' ),
-                $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' )
-            )
-        )
-        // @todo: Joining with ezcontentobject_name is probably a VERY bad way to gather that information
-        // since it creates an additional cartesian product with translations.
-        ->leftJoin(
-            $this->dbHandler->quoteTable( 'ezcontentobject_name' ),
             $query->expr->lAnd(
-                // ezcontentobject_name.content_translation is also part of the PK but can't be
-                // easily joined with something at this level
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_name' ),
+                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' ),
                     $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' )
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'content_version', 'ezcontentobject_name' ),
-                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
+                    $this->dbHandler->quoteColumn( 'main_node_id', 'ezcontentobject_tree' ),
+                    $this->dbHandler->quoteColumn( 'node_id', 'ezcontentobject_tree' )
                 )
             )
         );
+        // @todo: Joining with ezcontentobject_name is probably a VERY bad way to gather that information
+        // since it creates an additional cartesian product with translations.
+        if ( $translations !== null )
+        {
+            $query->leftJoin(
+                $this->dbHandler->quoteTable( 'ezcontentobject_name' ),
+                $query->expr->lAnd(
+                    // ezcontentobject_name.content_translation is also part of the PK but can't be
+                    // easily joined with something at this level
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_name' ),
+                        $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'content_version', 'ezcontentobject_name' ),
+                        $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
+                    ),
+                    $query->expr->in(
+                        $this->dbHandler->quoteColumn( 'real_translation', 'ezcontentobject_name' ),
+                        $translations
+                    )
+                )
+            );
+        }
+        else
+        {
+            $query->leftJoin(
+                $this->dbHandler->quoteTable( 'ezcontentobject_name' ),
+                $query->expr->lAnd(
+                    // ezcontentobject_name.content_translation is also part of the PK but can't be
+                    // easily joined with something at this level
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_name' ),
+                        $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'content_version', 'ezcontentobject_name' ),
+                        $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
+                    )
+                )
+            );
+        }
 
         if ( !empty( $translations ) )
         {
