@@ -741,7 +741,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $this->assertValuesInRows(
             'ezcontentobject_attribute_language_id',
-            array( '2' ),
+            array( '2', '4' ),
             $res
         );
     }
@@ -822,7 +822,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
         $this->assertValuesInRows(
             'ezcontentobject_attribute_language_id',
-            array( '2' ),
+            array( '4' ),
             $res
         );
         $this->assertEquals(
