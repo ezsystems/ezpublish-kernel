@@ -1023,7 +1023,7 @@ class User extends RestController
             // This will seamlessly start the session.
             if ( !$csrfToken )
             {
-                $csrfToken = $csrfTokenManager->generateCsrfToken(
+                $csrfToken = $csrfTokenManager->getToken(
                     $this->container->getParameter( 'ezpublish_rest.csrf_token_intention' )
                 );
             }
