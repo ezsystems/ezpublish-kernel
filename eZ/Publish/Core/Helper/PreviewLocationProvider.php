@@ -50,12 +50,13 @@ class PreviewLocationProvider
      *
      * If the content doesn't have a location nor a location draft, null is returned.
      *
-     * @param mixed $contentInfo
+     * @param mixed $contentId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location|null
      */
     public function loadMainLocation( $contentId )
     {
+        $location = null;
         $contentInfo = $this->contentService->loadContentInfo( $contentId );
 
         // mainLocationId already exists, content has been published at least once.
@@ -64,22 +65,22 @@ class PreviewLocationProvider
             $location = $this->locationService->loadLocation( $contentInfo->mainLocationId );
         }
         // New Content, never published, create a virtual location object.
-        else
+        else if ( !$contentInfo->published )
         {
-            // @todo In future releases this will be a full draft location when this feature
-            // is implemented. Or it might return null when content does not have location,
-            // but for now we can't detect that so we return a virtual draft location
+            // In cases content is missing locations this will return empty array
             $parentLocations = $this->locationHandler->loadParentLocationsForDraftContent( $contentInfo->id );
-            if ( count( $parentLocations ) === 0 )
+            if ( empty( $parentLocations ) )
             {
                 return null;
             }
+
             $location = new Location(
                 array(
                     'contentInfo' => $contentInfo,
                     'status' => Location::STATUS_DRAFT,
                     'parentLocationId' => $parentLocations[0]->id,
-                    'depth' => $parentLocations[0]->depth + 1
+                    'depth' => $parentLocations[0]->depth + 1,
+                    'pathString' => $parentLocations[0]->pathString . '/x'
                 )
             );
         }

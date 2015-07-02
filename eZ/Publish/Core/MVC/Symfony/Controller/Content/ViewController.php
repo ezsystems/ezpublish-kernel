@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
@@ -406,8 +407,10 @@ class ViewController extends Controller
      * @param string $viewType
      * @param boolean $layout
      * @param array $params
+     *
+     * @return string
      */
-    protected function renderLocation( $location, $viewType, $layout = false, array $params = array() )
+    protected function renderLocation( Location $location, $viewType, $layout = false, array $params = array() )
     {
         return $this->viewManager->renderLocation( $location, $viewType, $params + array( 'noLayout' => !$layout ) );
     }
@@ -419,8 +422,10 @@ class ViewController extends Controller
      * @param string $viewType
      * @param boolean $layout
      * @param array $params
+     *
+     * @return string
      */
-    protected function renderContent( $content, $viewType, $layout = false, array $params = array() )
+    protected function renderContent( Content $content, $viewType, $layout = false, array $params = array() )
     {
         return $this->viewManager->renderContent( $content, $viewType, $params + array( 'noLayout' => !$layout ) );
     }

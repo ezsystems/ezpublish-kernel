@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
 use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -66,6 +67,9 @@ class PreviewController
         $this->locationProvider = $locationProvider;
     }
 
+    /**
+     * @throws NotImplementedException If Content is missing location as this is not supported in current version
+     */
     public function previewContentAction( Request $request, $contentId, $versionNo, $language, $siteAccessName = null )
     {
         $this->previewHelper->setPreviewActive( true );
@@ -74,6 +78,12 @@ class PreviewController
         {
             $content = $this->contentService->loadContent( $contentId, array( $language ), $versionNo );
             $location = $this->locationProvider->loadMainLocation( $contentId );
+
+            if ( !$location instanceof Location )
+            {
+                throw new NotImplementedException( "Preview for content without locations" );
+            }
+
             $this->previewHelper->setPreviewedContent( $content );
             $this->previewHelper->setPreviewedLocation( $location );
         }
