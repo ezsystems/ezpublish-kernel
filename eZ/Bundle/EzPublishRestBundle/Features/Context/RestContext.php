@@ -41,7 +41,7 @@ class RestContext extends Context
     /**
      * Rest driver for all requests and responses
      *
-     * @var \eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\RestClient
+     * @var \eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\DriverInterface
      */
     protected $restDriver;
 

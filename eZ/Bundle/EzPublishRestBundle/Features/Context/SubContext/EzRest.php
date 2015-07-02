@@ -59,7 +59,8 @@ trait EzRest
     {
         Assertion::assertEquals(
             $this->decomposeObjectHeader( $this->restDriver->getHeader( $header ) ),
-            $object
+            $object,
+            $this->restDriver->getBody()
         );
     }
 
@@ -73,7 +74,7 @@ trait EzRest
         Assertion::assertEquals(
             $code,
             $errorStatusCode,
-            "Expected '$code' status code found '$errorStatusCode'"
+            "Expected '$code' status code found '$errorStatusCode' with message:" . $this->restDriver->getStatusMessage()
         );
     }
 
