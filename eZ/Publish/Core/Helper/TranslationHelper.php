@@ -75,6 +75,27 @@ class TranslationHelper
     }
 
     /**
+     * Returns content type name, translated.
+     * By default this method uses prioritized languages, unless $forcedLanguage is provided.
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
+     *
+     * @return string
+     */
+    public function getTranslatedContentTypeName( ContentType $contentType, $forcedLanguage = null )
+    {
+        foreach ( $this->getLanguages( $forcedLanguage ) as $lang )
+        {
+            $translatedName = $contentType->getName( $lang );
+            if ( $translatedName !== null )
+            {
+                return $translatedName;
+            }
+        }
+    }
+
+    /**
      * Returns content name, translated, from a ContentInfo object.
      * By default this method uses prioritized languages, unless $forcedLanguage is provided.
      *
