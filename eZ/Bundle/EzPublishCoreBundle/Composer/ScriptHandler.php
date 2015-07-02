@@ -93,7 +93,7 @@ ________________/\\\\\\\\\\\\\\\____________/\\\\\\\\\\\\\____/\\\\\\___________
 <fg=cyan>Welcome to eZ Platform!</fg=cyan>
 
 <options=bold>You may now complete the eZ Platform installation with ezplatform:install command, example of use:</options=bold>
-<comment>    $ php ezpublish/console ezplatform:install --env prod demo-clean</comment>
+<comment>    $ php ezpublish/console ezplatform:install --env prod demo</comment>
 
 <options=bold>After executing this, you can launch your browser* and get started.</options=bold>
 
