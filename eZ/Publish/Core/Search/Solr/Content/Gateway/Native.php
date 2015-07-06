@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Search\Solr\Content\Gateway;
 
-use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Search\Solr\Content\Gateway;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
@@ -47,6 +46,13 @@ class Native extends Gateway
      * @var \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointRegistry
      */
     protected $endpointRegistry;
+
+    /**
+     * Core filter service
+     *
+     * @var \eZ\Publish\Core\Search\Solr\Content\Gateway\CoreFilter
+     */
+    protected $coreFilter;
 
     /**
      * Query visitor
@@ -94,6 +100,7 @@ class Native extends Gateway
      * @param HttpClient $client
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver $endpointResolver
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointRegistry $endpointRegistry
+     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\CoreFilter $coreFilter
      * @param CriterionVisitor $criterionVisitor
      * @param SortClauseVisitor $sortClauseVisitor
      * @param FacetBuilderVisitor $facetBuilderVisitor
@@ -104,6 +111,7 @@ class Native extends Gateway
         HttpClient $client,
         EndpointResolver $endpointResolver,
         EndpointRegistry $endpointRegistry,
+        CoreFilter $coreFilter,
         CriterionVisitor $criterionVisitor,
         SortClauseVisitor $sortClauseVisitor,
         FacetBuilderVisitor $facetBuilderVisitor,
@@ -114,6 +122,7 @@ class Native extends Gateway
         $this->client              = $client;
         $this->endpointResolver = $endpointResolver;
         $this->endpointRegistry = $endpointRegistry;
+        $this->coreFilter = $coreFilter;
         $this->criterionVisitor    = $criterionVisitor;
         $this->sortClauseVisitor   = $sortClauseVisitor;
         $this->facetBuilderVisitor = $facetBuilderVisitor;
@@ -134,27 +143,19 @@ class Native extends Gateway
      */
     public function find( Query $query, array $fieldFilters = array() )
     {
-        $documentType = "content";
-        if ( $query instanceof LocationQuery )
-        {
-            $documentType = "location";
-        }
+        $query = clone $query;
+
+        $this->coreFilter->apply( $query, $fieldFilters );
 
         $parameters = array(
             "q" => $this->criterionVisitor->visit( $query->query ),
-            "fq" => "document_type_id:{$documentType} AND (" . $this->criterionVisitor->visit( $query->filter ) . ")",
+            "fq" => $this->criterionVisitor->visit( $query->filter ),
             "sort" => $this->getSortClauses( $query->sortClauses ),
             "start" => $query->offset,
             "rows" => $query->limit,
             "fl" => "*,score,[shard]",
             "wt" => "json",
         );
-
-        $coreFilter = $this->getCoreFilter( $fieldFilters );
-        if ( !empty( $coreFilter ) )
-        {
-            $parameters["fq"] = "({$coreFilter}) AND (" . $parameters["fq"] . ")";
-        }
 
         $searchTargets = $this->getSearchTargets( $fieldFilters );
         if ( !empty( $searchTargets ) )
@@ -248,132 +249,6 @@ class Native extends Gateway
         }
 
         return implode( ",", $shards );
-    }
-
-    /**
-     * Returns a filtering condition for the given language settings.
-     *
-     * The condition ensures the same Content will be matched only once across all
-     * targeted translation endpoints.
-     *
-     * @param array $languageSettings
-     *
-     * @return string
-     */
-    protected function getCoreFilter( array $languageSettings )
-    {
-        $languages = (
-            empty( $languageSettings["languages"] ) ?
-                array() :
-                $languageSettings["languages"]
-        );
-        $useAlwaysAvailable = (
-            !isset( $languageSettings["useAlwaysAvailable"] ) ||
-            $languageSettings["useAlwaysAvailable"] === true
-        );
-        $hasMainLanguagesEndpoint = ( $this->endpointResolver->getMainLanguagesEndpoint() !== null );
-
-        $filters = array();
-        $languageFilters = array();
-
-        foreach ( $languages as $languageCode )
-        {
-            $languageFilter = $this->getCoreLanguageFilter( $languages, $languageCode );
-            $languageFilters[] = "({$languageFilter})";
-        }
-
-        if ( !empty( $languageFilters ) )
-        {
-            $languageFilters = implode( " OR ", $languageFilters );
-
-            // Exclude always available index if used
-            if ( $hasMainLanguagesEndpoint )
-            {
-                $languageFilters = "({$languageFilters}) NOT meta_indexed_main_translation_b:true";
-            }
-
-            $filters[] = "({$languageFilters})";
-        }
-
-        // If no given languages, search only main languages
-        if ( empty( $languages ) )
-        {
-            $filters[] = "meta_indexed_is_main_translation_b:true";
-        }
-        // Otherwise handle always available fallback if used
-        else if ( $useAlwaysAvailable )
-        {
-            $filter = "meta_indexed_is_main_translation_and_always_available_b:true";
-
-            // For always available fallback exclude all given languages
-            if ( !empty( $languages ) )
-            {
-                $languageExclude = $this->getLanguageExcludeCondition( $languages );
-                $filter = "({$filter} {$languageExclude})";
-            }
-
-            // Exclude non indexed main language documents if main language index if used
-            if ( $hasMainLanguagesEndpoint )
-            {
-                $filter = "({$filter} AND meta_indexed_main_translation_b:true)";
-            }
-
-            $filters[] = $filter;
-        }
-
-        return implode( " OR ", $filters );
-    }
-
-    /**
-     * Returns a filtering condition for the given list of language codes and
-     * a selected language code among them.
-     *
-     * Note that the list of language codes is assumed to be prioritized, that is sorted by
-     * priority, descending.
-     *
-     * @param array $languageCodes
-     * @param string $selectedLanguageCode
-     *
-     * @return string
-     */
-    protected function getCoreLanguageFilter( array $languageCodes, $selectedLanguageCode )
-    {
-        $include = 'meta_indexed_language_code_s:"' . $selectedLanguageCode . '"';
-        $exclude = $this->getLanguageExcludeCondition( $languageCodes, $selectedLanguageCode );
-
-        if ( !empty( $exclude ) )
-        {
-            return "{$include} {$exclude}";
-        }
-
-        return $include;
-    }
-
-    /**
-     * Returns excluding condition for the given list of language codes and
-     * a selected language code among them. If $selectedLanguageCode is omitted,
-     * all languages will be included in the filtering condition.
-     *
-     * @param array $languageCodes
-     * @param null|string $selectedLanguageCode
-     *
-     * @return string
-     */
-    protected function getLanguageExcludeCondition( array $languageCodes, $selectedLanguageCode = null )
-    {
-        $filters = array();
-
-        foreach ( $languageCodes as $languageCode )
-        {
-            if ( $selectedLanguageCode !== null && $languageCode === $selectedLanguageCode )
-            {
-                break;
-            }
-
-            $filters[] = 'NOT language_code_ms:"' . $languageCode . '"';
-        }
-
-        return implode( " ", $filters );
     }
 
     /**
