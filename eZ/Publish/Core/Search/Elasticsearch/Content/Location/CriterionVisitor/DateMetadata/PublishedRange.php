@@ -57,7 +57,7 @@ class PublishedRange extends DateMetadata
 
         return array(
             "range" => array(
-                "content_published_dt" => $this->getRange( $criterion->operator, $start, $end ),
+                "content_published_dt" => $this->getFilterRange( $criterion->operator, $start, $end ),
             ),
         );
     }

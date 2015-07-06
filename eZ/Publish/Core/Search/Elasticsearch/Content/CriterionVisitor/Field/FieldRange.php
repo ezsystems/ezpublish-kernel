@@ -66,19 +66,24 @@ class FieldRange extends Field
 
         $start = $value[0];
         $end = isset( $value[1] ) ? $value[1] : null;
-        $range = $this->getRange( $criterion->operator, $start, $end );
-
-        $ranges = array();
-        foreach ( $fieldNames as $name )
+        if ( ( $criterion->operator === Operator::LT ) || ( $criterion->operator === Operator::LTE ) )
         {
-            $ranges[] = array(
-                "range" => array(
-                    "fields_doc." . $name => $range,
-                ),
-            );
+            $end = $start;
+            $start = null;
         }
 
-        return $ranges;
+        $fields = array();
+        foreach ( $fieldNames as $name )
+        {
+            $fields[] = "fields_doc." . $name;
+        }
+
+        return array(
+            "query_string" => array(
+                "fields" => $fields,
+                "query" => $this->getQueryRange( $criterion->operator, $start, $end ),
+            ),
+        );
     }
 
     /**
@@ -98,7 +103,7 @@ class FieldRange extends Field
             "nested" => array(
                 "path" => "fields_doc",
                 "filter" => array(
-                    "or" => $this->getCondition( $criterion ),
+                    "query" => $this->getCondition( $criterion ),
                 ),
             ),
         );
@@ -145,7 +150,7 @@ class FieldRange extends Field
             $query = array(
                 "nested" => array(
                     "path" => "fields_doc",
-                    "query" => $query,
+                    "query" => $this->getCondition( $criterion ),
                 ),
             );
         }
@@ -156,7 +161,7 @@ class FieldRange extends Field
                     "path" => "fields_doc",
                     "query" => array(
                         "filtered" => array(
-                            "query" => $query,
+                            "query" => $this->getCondition( $criterion ),
                             "filter" => $fieldFilter,
                         ),
                     ),
