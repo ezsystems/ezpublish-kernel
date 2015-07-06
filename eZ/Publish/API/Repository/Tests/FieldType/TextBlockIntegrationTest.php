@@ -326,8 +326,20 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
         return 'caution is the " path to \\mediocrity';
     }
 
+    protected function getSearchTargetValueOne()
+    {
+        // ensure case-insensitivity
+        return strtoupper( $this->getValidSearchValueOne() );
+    }
+
     protected function getValidSearchValueTwo()
     {
         return "truth suffers from ' \\too much analysis";
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        // ensure case-insensitivity
+        return strtoupper( $this->getValidSearchValueTwo() );
     }
 }

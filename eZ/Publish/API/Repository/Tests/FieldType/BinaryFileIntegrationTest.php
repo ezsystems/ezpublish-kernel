@@ -450,13 +450,15 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
     protected function getSearchTargetValueOne()
     {
         $value = $this->getValidSearchValueOne();
-        return $value->fileName;
+        // ensure case-insensitivity
+        return strtoupper( $value->fileName );
     }
 
     protected function getSearchTargetValueTwo()
     {
         $value = $this->getValidSearchValueTwo();
-        return $value->fileName;
+        // ensure case-insensitivity
+        return strtoupper( $value->fileName );
     }
 
     protected function getAdditionallyIndexedFieldData()
@@ -469,8 +471,9 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
             ),
             array(
                 "mime_type",
-                "image/jpeg",
-                "image/png",
+                // ensure case-insensitivity
+                "IMAGE/JPEG",
+                "IMAGE/PNG",
             ),
         );
     }
