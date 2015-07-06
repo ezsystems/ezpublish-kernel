@@ -45,16 +45,18 @@ class ContentTypeIdIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        return implode(
-            ' OR ',
-            array_map(
-                function ( $value )
-                {
-                    return 'content_type_id:"' . $value . '"';
-                },
-                $criterion->value
-            )
-        );
+        return '(' .
+            implode(
+                ' OR ',
+                array_map(
+                    function ( $value )
+                    {
+                        return 'content_type_id:"' . $value . '"';
+                    },
+                    $criterion->value
+                )
+            ) .
+            ')';
     }
 }
 
