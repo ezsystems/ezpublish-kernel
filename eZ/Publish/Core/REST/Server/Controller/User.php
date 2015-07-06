@@ -1025,7 +1025,7 @@ class User extends RestController
             {
                 $csrfToken = $csrfTokenManager->getToken(
                     $this->container->getParameter( 'ezpublish_rest.csrf_token_intention' )
-                );
+                )->getValue();
             }
 
             return new Values\UserSession(
