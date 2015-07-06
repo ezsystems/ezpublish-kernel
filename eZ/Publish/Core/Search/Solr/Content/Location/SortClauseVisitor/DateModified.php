@@ -12,13 +12,13 @@ namespace eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor;
 use eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
-/**DateModified
+/**
  * Visits the sortClause tree into a Solr query
  */
 class DateModified extends SortClauseVisitor
 {
     /**
-     * CHeck if visitor is applicable to current sortClause
+     * Check if visitor is applicable to current sortClause
      *
      * @param SortClause $sortClause
      *
