@@ -53,6 +53,7 @@ branches:
   only:
     - master
     - impl-EZP-24434-aa-core-2
+    - fix-EZP-24556-solr-customfield
 
 # setup requirements for running unit/integration/behat tests
 before_script:
