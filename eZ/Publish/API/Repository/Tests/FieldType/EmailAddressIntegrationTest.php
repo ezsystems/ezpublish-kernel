@@ -340,8 +340,20 @@ class EmailAddressIntegrationTest extends SearchBaseIntegrationTest
         return "holmes4@ez.no";
     }
 
+    protected function getSearchTargetValueOne()
+    {
+        // ensure case-insensitivity
+        return strtoupper( $this->getValidSearchValueOne() );
+    }
+
     protected function getValidSearchValueTwo()
     {
         return "wyoming.knott@ez.no";
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        // ensure case-insensitivity
+        return strtoupper( $this->getValidSearchValueTwo() );
     }
 }

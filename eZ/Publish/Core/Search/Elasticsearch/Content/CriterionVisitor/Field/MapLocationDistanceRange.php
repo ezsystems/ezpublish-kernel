@@ -108,7 +108,7 @@ class MapLocationDistanceRange extends Field
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue $location */
         $location = $criterion->valueData;
-        $range = $this->getRange( $criterion->operator, $start, $end );
+        $range = $this->getFilterRange( $criterion->operator, $start, $end );
 
         $filters = array();
         foreach ( $fieldNames as $name )

@@ -45,7 +45,7 @@ class LogicalNot extends CriterionVisitor
             throw new \RuntimeException( "Invalid aggregation in LogicalNot criterion." );
         }
 
-        return '(*:* NOT (' . $subVisitor->visit( $criterion->criteria[0] ) . '))';
+        return '(*:* NOT ' . $subVisitor->visit( $criterion->criteria[0] ) . ')';
     }
 }
 

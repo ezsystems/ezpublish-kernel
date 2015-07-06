@@ -57,7 +57,7 @@ class ModifiedRange extends DateMetadata
 
         return array(
             "range" => array(
-                "modified_dt" => $this->getRange( $criterion->operator, $start, $end ),
+                "modified_dt" => $this->getFilterRange( $criterion->operator, $start, $end ),
             ),
         );
     }

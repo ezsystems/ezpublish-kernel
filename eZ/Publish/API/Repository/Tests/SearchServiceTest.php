@@ -219,6 +219,83 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
+                    'filter' => new Criterion\CustomField(
+                        'user_group_name_value_s',
+                        Criterion\Operator::EQ,
+                        'Members'
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'Field.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\CustomField(
+                        'user_group_name_value_s',
+                        Criterion\Operator::CONTAINS,
+                        'Members'
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'Field.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\CustomField(
+                        'user_group_name_value_s',
+                        Criterion\Operator::LT,
+                        'Members'
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'CustomFieldLt.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\CustomField(
+                        'user_group_name_value_s',
+                        Criterion\Operator::LTE,
+                        'Members'
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'CustomFieldLte.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\CustomField(
+                        'user_group_name_value_s',
+                        Criterion\Operator::GT,
+                        'Members'
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'CustomFieldGt.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\CustomField(
+                        'user_group_name_value_s',
+                        Criterion\Operator::GTE,
+                        'Members'
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'CustomFieldGte.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\CustomField(
+                        'user_group_name_value_s',
+                        Criterion\Operator::BETWEEN,
+                        array( 'Administrator users', 'Members' )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'CustomFieldBetween.php',
+            ),
+            array(
+                array(
                     'filter' => new Criterion\RemoteId(
                         array( 'f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca' )
                     ),

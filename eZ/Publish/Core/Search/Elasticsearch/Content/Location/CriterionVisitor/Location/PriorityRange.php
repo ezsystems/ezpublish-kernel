@@ -57,7 +57,7 @@ class PriorityRange extends CriterionVisitor
 
         return array(
             "range" => array(
-                "priority_i" => $this->getRange( $criterion->operator, $start, $end ),
+                "priority_i" => $this->getFilterRange( $criterion->operator, $start, $end ),
             ),
         );
     }

@@ -59,6 +59,68 @@ abstract class CriterionVisitor
     }
 
     /**
+     * Get Elasticsearch range query
+     *
+     * Start and end are optional, depending on the respective operator. Pass
+     * null in this case. The operator may be one of:
+     *
+     * - case Operator::GT:
+     * - case Operator::GTE:
+     * - case Operator::LT:
+     * - case Operator::LTE:
+     * - case Operator::BETWEEN:
+     *
+     * @throws \RuntimeException If operator is no recognized
+     *
+     * @param mixed $operator
+     * @param mixed $start
+     * @param mixed $end
+     *
+     * @return string
+     */
+    protected function getQueryRange( $operator, $start, $end )
+    {
+        $start = $this->prepareValue( $start );
+        $end = $this->prepareValue( $end );
+
+        $startBrace = '[';
+        $startValue = '*';
+        $endValue   = '*';
+        $endBrace   = ']';
+
+        switch ( $operator )
+        {
+            case Operator::GT:
+                $startBrace = '{';
+                $endBrace   = '}';
+                // Intentionally omitted break
+
+            case Operator::GTE:
+                $startValue = $start;
+                break;
+
+            case Operator::LT:
+                $startBrace = '{';
+                $endBrace   = '}';
+                // Intentionally omitted break
+
+            case Operator::LTE:
+                $endValue = $end;
+                break;
+
+            case Operator::BETWEEN:
+                $startValue = $start;
+                $endValue   = $end;
+                break;
+
+            default:
+                throw new \RuntimeException( "Unknown operator: $operator" );
+        }
+
+        return "$startBrace$startValue TO $endValue$endBrace";
+    }
+
+    /**
      * Get Elasticsearch range filter
      *
      * Start and end are optional, depending on the respective operator. Pass
@@ -78,7 +140,7 @@ abstract class CriterionVisitor
      *
      * @return string
      */
-    protected function getRange( $operator, $start, $end )
+    protected function getFilterRange( $operator, $start, $end )
     {
         if ( ( $operator === Operator::LT ) || ( $operator === Operator::LTE ) )
         {
@@ -124,5 +186,29 @@ abstract class CriterionVisitor
         }
 
         return $range;
+    }
+
+    /**
+     * Converts given $value to the appropriate Elasticsearch representation.
+     *
+     * The value will be converted to string representation and escaped if needed.
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    protected function prepareValue( $value )
+    {
+        switch ( gettype( $value ) )
+        {
+            case "boolean":
+                return ( $value ? "true" : "false" );
+
+            case "string":
+                return '"' . preg_replace( '/("|\\\)/', '\\\$1', $value ) . '"';
+
+            default:
+                return (string)$value;
+        }
     }
 }

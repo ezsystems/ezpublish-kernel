@@ -326,6 +326,7 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
             array( new TextLineValue( "   " ) ),
         );
     }
+
     public function providerForTestIsNotEmptyValue()
     {
         return array(
@@ -342,8 +343,20 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
         return "a";
     }
 
+    protected function getSearchTargetValueOne()
+    {
+        // ensure case-insensitivity
+        return strtoupper( $this->getValidSearchValueOne() );
+    }
+
     protected function getValidSearchValueTwo()
     {
         return "b";
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        // ensure case-insensitivity
+        return strtoupper( $this->getValidSearchValueTwo() );
     }
 }

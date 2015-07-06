@@ -51,13 +51,20 @@ class CustomFieldRange extends CustomField
      */
     protected function getCondition( Criterion $criterion )
     {
-        $start = $criterion->value[0];
-        $end = isset( $criterion->value[1] ) ? $criterion->value[1] : null;
-        $range = $this->getRange( $criterion->operator, $start, $end );
+        $values = (array)$criterion->value;
+        $start = $values[0];
+        $end = isset( $values[1] ) ? $values[1] : null;
+        if ( ( $criterion->operator === Operator::LT ) || ( $criterion->operator === Operator::LTE ) )
+        {
+            $end = $start;
+            $start = null;
+        }
+
+        $range = $this->getQueryRange( $criterion->operator, $start, $end );
 
         return array(
-            "range" => array(
-                "fields_doc." . $criterion->target => $range,
+            "query_string" => array(
+                "query" => "fields_doc." . $criterion->target . ":" . $range,
             ),
         );
     }
@@ -78,7 +85,9 @@ class CustomFieldRange extends CustomField
         $filter = array(
             "nested" => array(
                 "path" => "fields_doc",
-                "filter" => $this->getCondition( $criterion ),
+                "filter" => array(
+                    "query" => $this->getCondition( $criterion ),
+                ),
             ),
         );
 
