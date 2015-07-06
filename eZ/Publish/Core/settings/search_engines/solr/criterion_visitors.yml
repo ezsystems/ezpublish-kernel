@@ -27,7 +27,8 @@ parameters:
     ezpublish.search.solr.content.criterion_visitor.field_in.class: eZ\Publish\Core\Search\Solr\Content\CriterionVisitor\Field\FieldIn
     ezpublish.search.solr.content.criterion_visitor.field_range.class: eZ\Publish\Core\Search\Solr\Content\CriterionVisitor\Field\FieldRange
     ezpublish.search.solr.content.criterion_visitor.visibility.class: eZ\Publish\Core\Search\Solr\Content\CriterionVisitor\Visibility
-    ezpublish.search.solr.content.criterion_visitor.custom_field.class: eZ\Publish\Core\Search\Solr\Content\CriterionVisitor\CustomField
+    ezpublish.search.solr.content.criterion_visitor.custom_field_in.class: eZ\Publish\Core\Search\Solr\Content\CriterionVisitor\CustomField\CustomFieldIn
+    ezpublish.search.solr.content.criterion_visitor.custom_field_range.class: eZ\Publish\Core\Search\Solr\Content\CriterionVisitor\CustomField\CustomFieldRange
     ezpublish.search.solr.content.criterion_visitor.depth_in.class: eZ\Publish\Core\Search\Solr\Content\CriterionVisitor\DepthIn
     ezpublish.search.solr.content.criterion_visitor.depth_between.class: eZ\Publish\Core\Search\Solr\Content\CriterionVisitor\DepthBetween
 
@@ -60,6 +61,9 @@ parameters:
     ezpublish.search.solr.location.criterion_visitor.field_range.class: eZ\Publish\Core\Search\Solr\Content\Location\CriterionVisitor\Field\FieldRange
     # We don't support fulltext Location search out of the box
     #ezpublish.search.solr.location.criterion_visitor.full_text.class: eZ\Publish\Core\Search\Solr\Content\Location\CriterionVisitor\FullText
+    ezpublish.search.solr.location.criterion_visitor.custom_field_in.class: eZ\Publish\Core\Search\Solr\Content\Location\CriterionVisitor\CustomField\CustomFieldIn
+    ezpublish.search.solr.location.criterion_visitor.custom_field_range.class: eZ\Publish\Core\Search\Solr\Content\Location\CriterionVisitor\CustomField\CustomFieldRange
+    ezpublish.search.solr.location.criterion_visitor.full_text.class: eZ\Publish\Core\Search\Solr\Content\Location\CriterionVisitor\FullText
     ezpublish.search.solr.location.criterion_visitor.map_location_distance_range.class: eZ\Publish\Core\Search\Solr\Content\Location\CriterionVisitor\Field\MapLocationDistanceRange
 
 services:
@@ -222,8 +226,13 @@ services:
         tags:
             - {name: ezpublish.search.solr.content.criterion_visitor}
 
-    ezpublish.search.solr.content.criterion_visitor.custom_field:
-        class: %ezpublish.search.solr.content.criterion_visitor.custom_field.class%
+    ezpublish.search.solr.content.criterion_visitor.custom_field_in:
+        class: %ezpublish.search.solr.content.criterion_visitor.custom_field_in.class%
+        tags:
+            - {name: ezpublish.search.solr.content.criterion_visitor}
+
+    ezpublish.search.solr.content.criterion_visitor.custom_field_range:
+        class: %ezpublish.search.solr.content.criterion_visitor.custom_field_range.class%
         tags:
             - {name: ezpublish.search.solr.content.criterion_visitor}
 
@@ -390,6 +399,16 @@ services:
     #        - @ezpublish.search.common.field_name_resolver
     #    tags:
     #        - {name: ezpublish.search.solr.location.criterion_visitor}
+
+    ezpublish.search.solr.location.criterion_visitor.custom_field_in:
+        class: %ezpublish.search.solr.location.criterion_visitor.custom_field_in.class%
+        tags:
+            - {name: ezpublish.search.solr.location.criterion_visitor}
+
+    ezpublish.search.solr.location.criterion_visitor.custom_field_range:
+        class: %ezpublish.search.solr.location.criterion_visitor.custom_field_range.class%
+        tags:
+            - {name: ezpublish.search.solr.location.criterion_visitor}
 
     ezpublish.search.solr.location.criterion_visitor.map_location_distance_range:
         class: %ezpublish.search.solr.location.criterion_visitor.map_location_distance_range.class%

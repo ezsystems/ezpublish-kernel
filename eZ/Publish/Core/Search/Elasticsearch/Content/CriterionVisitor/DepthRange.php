@@ -58,7 +58,7 @@ class DepthRange extends CriterionVisitor
                 "path" => "locations_doc",
                 "filter" => array(
                     "range" => array(
-                        "locations_doc.depth_id" => $this->getRange( $criterion->operator, $start, $end ),
+                        "locations_doc.depth_id" => $this->getFilterRange( $criterion->operator, $start, $end ),
                     ),
                 ),
             ),
@@ -84,7 +84,7 @@ class DepthRange extends CriterionVisitor
                 "path" => "locations_doc",
                 "query" => array(
                     "range" => array(
-                        "locations_doc.depth_i" => $this->getRange( $criterion->operator, $start, $end ),
+                        "locations_doc.depth_i" => $this->getFilterRange( $criterion->operator, $start, $end ),
                     ),
                 ),
             ),
