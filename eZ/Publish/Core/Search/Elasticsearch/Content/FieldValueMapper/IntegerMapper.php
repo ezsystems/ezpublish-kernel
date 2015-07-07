@@ -39,6 +39,18 @@ class IntegerMapper extends FieldValueMapper
      */
     public function map( Field $field )
     {
-        return (int)$field->value;
+        return $this->convert( $field->value );
+    }
+
+    /**
+     * Convert to a proper Elasticsearch representation
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    protected function convert( $value )
+    {
+        return (int)$value;
     }
 }

@@ -135,7 +135,8 @@ class FieldNameResolver
                 $contentTypeIdentifier,
                 $fieldDefinitionIdentifier,
                 $fieldIdentifierMap[$fieldDefinitionIdentifier]["field_type_identifier"],
-                $name
+                $name,
+                false
             );
         }
 
@@ -182,7 +183,8 @@ class FieldNameResolver
             $contentTypeIdentifier,
             $fieldDefinitionIdentifier,
             $fieldMap[$contentTypeIdentifier][$fieldDefinitionIdentifier]["field_type_identifier"],
-            $name
+            $name,
+            true
         );
     }
 
@@ -194,6 +196,7 @@ class FieldNameResolver
      * @param string $fieldDefinitionIdentifier
      * @param string $fieldTypeIdentifier
      * @param string $name
+     * @param boolean $isSortField
      *
      * @return string
      */
@@ -202,7 +205,8 @@ class FieldNameResolver
         $contentTypeIdentifier,
         $fieldDefinitionIdentifier,
         $fieldTypeIdentifier,
-        $name
+        $name,
+        $isSortField
     )
     {
         // If criterion or sort clause implements CustomFieldInterface and custom field is set for
@@ -222,10 +226,17 @@ class FieldNameResolver
 
         $indexFieldType = $this->fieldRegistry->getType( $fieldTypeIdentifier );
 
-        // If $name is not given use default search field name
+        // If $name is not given use default field name
         if ( $name === null )
         {
-            $name = $indexFieldType->getDefaultField();
+            if ( $isSortField )
+            {
+                $name = $indexFieldType->getDefaultSortField();
+            }
+            else
+            {
+                $name = $indexFieldType->getDefaultMatchField();
+            }
         }
 
         $indexDefinition = $indexFieldType->getIndexDefinition();

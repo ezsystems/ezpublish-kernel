@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\Relation;
+namespace eZ\Publish\Core\FieldType\Selection;
 
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
@@ -15,7 +15,7 @@ use eZ\Publish\SPI\FieldType\Indexable;
 use eZ\Publish\SPI\Search;
 
 /**
- * Indexable definition for Relation field type
+ * Indexable definition for Selection field type
  */
 class SearchField implements Indexable
 {
@@ -29,10 +29,40 @@ class SearchField implements Indexable
      */
     public function getIndexData( Field $field, FieldDefinition $fieldDefinition )
     {
+        $indexes = array();
+        $values = array();
+        $fieldSettings = $fieldDefinition->fieldTypeConstraints->fieldSettings;
+        $options = $fieldSettings["options"];
+        $positionSet = array_flip( $field->value->data );
+
+        foreach ( $options as $index => $value )
+        {
+            if ( isset( $positionSet[$index] ) )
+            {
+                $values[] = $value;
+                $indexes[] = $index;
+            }
+        }
+
         return array(
             new Search\Field(
-                'value',
-                $field->value->data,
+                'option_value',
+                $values,
+                new Search\FieldType\MultipleStringField()
+            ),
+            new Search\Field(
+                'option_index',
+                $indexes,
+                new Search\FieldType\MultipleIntegerField()
+            ),
+            new Search\Field(
+                'option_count',
+                count( $indexes ),
+                new Search\FieldType\IntegerField()
+            ),
+            new Search\Field(
+                'sort_value',
+                implode( "-", $indexes ),
                 new Search\FieldType\StringField()
             ),
         );
@@ -46,7 +76,9 @@ class SearchField implements Indexable
     public function getIndexDefinition()
     {
         return array(
-            'value' => new Search\FieldType\StringField(),
+            'option_value' => new Search\FieldType\MultipleStringField(),
+            'option_index' => new Search\FieldType\MultipleIntegerField(),
+            'sort_value' => new Search\FieldType\StringField(),
         );
     }
 
@@ -62,11 +94,11 @@ class SearchField implements Indexable
      */
     public function getDefaultMatchField()
     {
-        return "value";
+        return "option_index";
     }
 
     public function getDefaultSortField()
     {
-        return $this->getDefaultMatchField();
+        return "sort_value";
     }
 }

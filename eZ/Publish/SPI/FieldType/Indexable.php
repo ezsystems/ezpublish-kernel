@@ -10,6 +10,7 @@
 namespace eZ\Publish\SPI\FieldType;
 
 use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 /**
  * The field type interface which all field types have to implement to be
@@ -22,11 +23,12 @@ interface Indexable
     /**
      * Get index data for field for search backend
      *
-     * @param Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      *
      * @return \eZ\Publish\SPI\Search\Field[]
      */
-    public function getIndexData( Field $field );
+    public function getIndexData( Field $field, FieldDefinition $fieldDefinition );
 
     /**
      * Get index field types for search backend
@@ -45,6 +47,13 @@ interface Indexable
      *
      * @return string
      */
-    public function getDefaultField();
+    public function getDefaultMatchField();
+
+    /**
+     *
+     *
+     * @return string
+     */
+    public function getDefaultSortField();
 }
 

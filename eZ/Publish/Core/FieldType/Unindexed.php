@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\FieldType;
 
 use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\FieldType\Indexable;
 
 /**
@@ -20,11 +21,12 @@ class Unindexed implements Indexable
     /**
      * Get index data for field for search backend
      *
-     * @param Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      *
      * @return \eZ\Publish\SPI\Search\Field[]
      */
-    public function getIndexData( Field $field )
+    public function getIndexData( Field $field, FieldDefinition $fieldDefinition )
     {
         return array();
     }
@@ -49,7 +51,12 @@ class Unindexed implements Indexable
      *
      * @return string
      */
-    public function getDefaultField()
+    public function getDefaultMatchField()
+    {
+        return null;
+    }
+
+    public function getDefaultSortField()
     {
         return null;
     }

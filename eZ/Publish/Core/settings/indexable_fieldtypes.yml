@@ -16,6 +16,7 @@ parameters:
     ezpublish.fieldType.indexable.ezinteger.class: eZ\Publish\Core\FieldType\Integer\SearchField
     ezpublish.fieldType.indexable.ezfloat.class: eZ\Publish\Core\FieldType\Float\SearchField
     ezpublish.fieldType.indexable.eztime.class: eZ\Publish\Core\FieldType\Time\SearchField
+    ezpublish.fieldType.indexable.ezselection.class: eZ\Publish\Core\FieldType\Selection\SearchField
     ezpublish.fieldType.indexable.unindexed.class: eZ\Publish\Core\FieldType\Unindexed
 
 services:
@@ -116,6 +117,11 @@ services:
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezobjectrelation}
 
+    ezpublish.fieldType.indexable.ezselection:
+        class: %ezpublish.fieldType.indexable.ezselection.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezselection}
+
     ezpublish.fieldType.indexable.unindexed:
         class: %ezpublish.fieldType.indexable.unindexed.class%
         tags:
@@ -127,7 +133,6 @@ services:
             - {name: ezpublish.fieldType.indexable, alias: ezmultioption}
             - {name: ezpublish.fieldType.indexable, alias: ezauthor}
             - {name: ezpublish.fieldType.indexable, alias: ezsrrating}
-            - {name: ezpublish.fieldType.indexable, alias: ezselection}
             - {name: ezpublish.fieldType.indexable, alias: ezsubtreesubscription}
             - {name: ezpublish.fieldType.indexable, alias: ezobjectrelationlist}
             - {name: ezpublish.fieldType.indexable, alias: ezoption}
