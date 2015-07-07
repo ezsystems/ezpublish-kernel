@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\FieldType\MapLocation;
 
 use eZ\Publish\SPI\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\FieldType\Indexable;
 use eZ\Publish\SPI\Search;
 
@@ -22,10 +23,11 @@ class SearchField implements Indexable
      * Get index data for field for search backend
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      *
      * @return \eZ\Publish\SPI\Search\Field[]
      */
-    public function getIndexData( Field $field )
+    public function getIndexData( Field $field, FieldDefinition $fieldDefinition )
     {
         return array(
             new Search\Field(
