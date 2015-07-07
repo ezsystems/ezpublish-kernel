@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class SelectionIntegrationTest extends BaseIntegrationTest
+class SelectionIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
      * Get name of tested field type
@@ -60,8 +60,8 @@ class SelectionIntegrationTest extends BaseIntegrationTest
             'isMultiple' => true,
             'options' => array(
                 0 => 'First',
-                1 => 'Sindelfingen',
-                2 => 'Bielefeld',
+                1 => 'Bielefeld',
+                2 => 'Sindelfingen',
             )
         );
     }
@@ -329,6 +329,42 @@ class SelectionIntegrationTest extends BaseIntegrationTest
             ),
             array(
                 new SelectionValue( array( 0 ) )
+            ),
+        );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return array( 1 );
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return array( 2 );
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        return 1;
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        return 2;
+    }
+
+    protected function getAdditionallyIndexedFieldData()
+    {
+        return array(
+            array(
+                "option_value",
+                "Bielefeld",
+                "Sindelfingen",
+            ),
+            array(
+                "sort_value",
+                "1",
+                "2",
             ),
         );
     }
