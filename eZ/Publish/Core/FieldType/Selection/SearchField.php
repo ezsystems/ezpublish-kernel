@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\Media;
+namespace eZ\Publish\Core\FieldType\Selection;
 
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
@@ -15,7 +15,7 @@ use eZ\Publish\SPI\FieldType\Indexable;
 use eZ\Publish\SPI\Search;
 
 /**
- * Indexable definition for Media field type
+ * Indexable definition for Selection field type
  */
 class SearchField implements Indexable
 {
@@ -29,20 +29,40 @@ class SearchField implements Indexable
      */
     public function getIndexData( Field $field, FieldDefinition $fieldDefinition )
     {
+        $indexes = array();
+        $values = array();
+        $fieldSettings = $fieldDefinition->fieldTypeConstraints->fieldSettings;
+        $options = $fieldSettings["options"];
+        $positionSet = array_flip( $field->value->data );
+
+        foreach ( $options as $index => $value )
+        {
+            if ( isset( $positionSet[$index] ) )
+            {
+                $values[] = $value;
+                $indexes[] = $index;
+            }
+        }
+
         return array(
             new Search\Field(
-                'file_name',
-                $field->value->externalData["fileName"],
-                new Search\FieldType\StringField()
+                'selected_option_value',
+                $values,
+                new Search\FieldType\MultipleStringField()
             ),
             new Search\Field(
-                'file_size',
-                $field->value->externalData["fileSize"],
+                'selected_option_index',
+                $indexes,
+                new Search\FieldType\MultipleIntegerField()
+            ),
+            new Search\Field(
+                'selected_option_count',
+                count( $indexes ),
                 new Search\FieldType\IntegerField()
             ),
             new Search\Field(
-                'mime_type',
-                $field->value->externalData["mimeType"],
+                'sort_value',
+                implode( "-", $indexes ),
                 new Search\FieldType\StringField()
             ),
         );
@@ -56,9 +76,10 @@ class SearchField implements Indexable
     public function getIndexDefinition()
     {
         return array(
-            'file_name' => new Search\FieldType\StringField(),
-            'file_size' => new Search\FieldType\IntegerField(),
-            'mime_type' => new Search\FieldType\StringField(),
+            'selected_option_value' => new Search\FieldType\MultipleStringField(),
+            'selected_option_index' => new Search\FieldType\MultipleIntegerField(),
+            'selected_option_count' => new Search\FieldType\IntegerField(),
+            'sort_value' => new Search\FieldType\StringField(),
         );
     }
 
@@ -73,7 +94,7 @@ class SearchField implements Indexable
      */
     public function getDefaultMatchField()
     {
-        return "file_name";
+        return "selected_option_index";
     }
 
     /**
@@ -87,6 +108,6 @@ class SearchField implements Indexable
      */
     public function getDefaultSortField()
     {
-        return $this->getDefaultMatchField();
+        return "sort_value";
     }
 }

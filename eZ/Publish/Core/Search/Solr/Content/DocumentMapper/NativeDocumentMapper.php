@@ -425,7 +425,9 @@ class NativeDocumentMapper implements DocumentMapper
                 }
 
                 $fieldType = $this->fieldRegistry->getType( $field->type );
-                foreach ( $fieldType->getIndexData( $field ) as $indexField )
+                $indexFields = $fieldType->getIndexData( $field, $fieldDefinition );
+
+                foreach ( $indexFields as $indexField )
                 {
                     if ( $indexField->value === null )
                     {
