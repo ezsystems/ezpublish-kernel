@@ -72,8 +72,13 @@ class SearchField implements Indexable
      *
      * @return string
      */
-    public function getDefaultField()
+    public function getDefaultMatchField()
     {
         return "file_name";
+    }
+
+    public function getDefaultSortField()
+    {
+        return $this->getDefaultMatchField();
     }
 }

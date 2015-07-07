@@ -47,6 +47,13 @@ interface Indexable
      *
      * @return string
      */
-    public function getDefaultField();
+    public function getDefaultMatchField();
+
+    /**
+     *
+     *
+     * @return string
+     */
+    public function getDefaultSortField();
 }
 

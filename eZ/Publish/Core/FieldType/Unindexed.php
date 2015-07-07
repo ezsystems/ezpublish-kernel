@@ -51,7 +51,12 @@ class Unindexed implements Indexable
      *
      * @return string
      */
-    public function getDefaultField()
+    public function getDefaultMatchField()
+    {
+        return null;
+    }
+
+    public function getDefaultSortField()
     {
         return null;
     }
