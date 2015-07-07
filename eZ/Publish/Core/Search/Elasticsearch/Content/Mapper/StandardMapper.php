@@ -321,7 +321,9 @@ class StandardMapper implements MapperInterface
                     }
 
                     $fieldType = $this->fieldRegistry->getType( $field->type );
-                    foreach ( $fieldType->getIndexData( $field ) as $indexField )
+                    $indexFields = $fieldType->getIndexData( $field, $fieldDefinition );
+
+                    foreach ( $indexFields as $indexField )
                     {
                         $fields[] = new Field(
                             $name = $this->fieldNameGenerator->getName(
