@@ -86,10 +86,17 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
             ->method( 'getLocationService' )
             ->will( $this->returnValue( $this->locationService ) );
 
+        $urlAliasCharmap = array(
+            '"' => '%22',
+            "'" => '%27',
+            '<' => '%3C',
+            '>' => '%3E',
+        );
         $this->urlAliasGenerator = new UrlAliasGenerator(
             $this->repository,
             $this->router,
-            $this->configResolver
+            $this->configResolver,
+            $urlAliasCharmap
         );
         $this->urlAliasGenerator->setLogger( $this->logger );
         $this->urlAliasGenerator->setSiteAccessRouter( $this->siteAccessRouter );
@@ -223,6 +230,11 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
                 new URLAlias( array( 'path' => '/foo/bar' ) ),
                 array( 'some' => 'thing', 'truc' => 'muche' ),
                 '/foo/bar?some=thing&truc=muche'
+            ),
+            array(
+                new UrlAlias( array( 'path' => '/special-chars-"<>\'' ) ),
+                array(),
+                '/special-chars-%22%3C%3E%27',
             ),
         );
     }
