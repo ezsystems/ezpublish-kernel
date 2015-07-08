@@ -281,11 +281,11 @@ class Handler implements BaseContentTypeHandler
     {
         foreach ( $createStruct->fieldDefinitions as $fieldDef )
         {
-            if ( !is_int( $fieldDef->position ) || $fieldDef->position <= 0 )
+            if ( !is_int( $fieldDef->position ) )
                 throw new InvalidArgumentException(
                     "position",
                     "'" . var_export( $fieldDef->position, true ) .
-                    "' is wrong value in class FieldDefinition, an integer strictly greater than 0 is required."
+                    "' is wrong value in class FieldDefinition, an integer is required."
                 );
         }
 
