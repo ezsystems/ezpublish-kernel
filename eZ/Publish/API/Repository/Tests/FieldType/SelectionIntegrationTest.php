@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class SelectionIntegrationTest extends BaseIntegrationTest
+class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
 {
     /**
      * Get name of tested field type
@@ -59,9 +59,11 @@ class SelectionIntegrationTest extends BaseIntegrationTest
         return array(
             'isMultiple' => true,
             'options' => array(
-                0 => 'First',
-                1 => 'Sindelfingen',
-                2 => 'Bielefeld',
+                0 => 'A first',
+                1 => 'Bielefeld',
+                2 => 'Sindelfingen',
+                3 => 'Turtles',
+                4 => 'Zombies',
             )
         );
     }
@@ -177,7 +179,7 @@ class SelectionIntegrationTest extends BaseIntegrationTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(
-                new SelectionValue( array( 3 ) ),
+                new SelectionValue( array( 7 ) ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
             ),
         );
@@ -329,6 +331,63 @@ class SelectionIntegrationTest extends BaseIntegrationTest
             ),
             array(
                 new SelectionValue( array( 0 ) )
+            ),
+        );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return array( 1 );
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return array( 2 );
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        return 1;
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        return 2;
+    }
+
+    protected function getAdditionallyIndexedFieldData()
+    {
+        return array(
+            array(
+                "selected_option_value",
+                "Bielefeld",
+                "Sindelfingen",
+            ),
+            array(
+                "sort_value",
+                "1",
+                "2",
+            ),
+        );
+    }
+
+    protected function getValidMultivaluedSearchValuesOne()
+    {
+        return array( 0, 1 );
+    }
+
+    protected function getValidMultivaluedSearchValuesTwo()
+    {
+        return array( 2, 3, 4 );
+    }
+
+    protected function getAdditionallyIndexedMultivaluedFieldData()
+    {
+        return array(
+            array(
+                "selected_option_value",
+                array( "A first", "Bielefeld" ),
+                array( "Sindelfingen", "Turtles", "Zombies" ),
             ),
         );
     }

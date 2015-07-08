@@ -428,7 +428,8 @@ class FieldNameResolverTest extends TestCase
             "content_type_identifier",
             "field_definition_identifier",
             "dummy",
-            "dummy"
+            "dummy",
+            false
         );
 
         $this->assertEquals( "custom_field_name", $customFieldName );
@@ -489,13 +490,14 @@ class FieldNameResolverTest extends TestCase
             "content_type_identifier",
             "field_definition_identifier",
             "field_type_identifier",
-            "field_name"
+            "field_name",
+            true
         );
 
         $this->assertEquals( "generated_typed_field_name", $fieldName );
     }
 
-    public function testGetIndexFieldNameDefaultField()
+    public function testGetIndexFieldNameDefaultMatchField()
     {
         $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getSearchableFieldMap" ) );
         $indexFieldType = $this->getIndexFieldTypeMock();
@@ -511,7 +513,7 @@ class FieldNameResolverTest extends TestCase
 
         $indexFieldType
             ->expects( $this->once() )
-            ->method( "getDefaultField" )
+            ->method( "getDefaultMatchField" )
             ->will(
                 $this->returnValue( "field_name" )
             );
@@ -555,16 +557,14 @@ class FieldNameResolverTest extends TestCase
             "content_type_identifier",
             "field_definition_identifier",
             "field_type_identifier",
-            null
+            null,
+            false
         );
 
         $this->assertEquals( "generated_typed_field_name", $fieldName );
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testGetIndexFieldNameDefaultFieldThrowsRuntimeException()
+    public function testGetIndexFieldNameDefaultSortField()
     {
         $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getSearchableFieldMap" ) );
         $indexFieldType = $this->getIndexFieldTypeMock();
@@ -580,7 +580,77 @@ class FieldNameResolverTest extends TestCase
 
         $indexFieldType
             ->expects( $this->once() )
-            ->method( "getDefaultField" )
+            ->method( "getDefaultSortField" )
+            ->will(
+                $this->returnValue( "field_name" )
+            );
+
+        $indexFieldType
+            ->expects( $this->once() )
+            ->method( "getIndexDefinition" )
+            ->will(
+                $this->returnValue(
+                    array(
+                        "field_name" => $searchFieldTypeMock,
+                    )
+                )
+            );
+
+        $this->fieldNameGeneratorMock
+            ->expects( $this->once() )
+            ->method( "getName" )
+            ->with(
+                "field_name",
+                "field_definition_identifier",
+                "content_type_identifier"
+            )
+            ->will(
+                $this->returnValue( "generated_field_name" )
+            );
+
+        $this->fieldNameGeneratorMock
+            ->expects( $this->once() )
+            ->method( "getTypedName" )
+            ->with(
+                "generated_field_name",
+                $this->isInstanceOf( "eZ\\Publish\\SPI\\Search\\FieldType" )
+            )
+            ->will(
+                $this->returnValue( "generated_typed_field_name" )
+            );
+
+        $fieldName = $mockedFieldNameResolver->getIndexFieldName(
+            new ArrayObject(),
+            "content_type_identifier",
+            "field_definition_identifier",
+            "field_type_identifier",
+            null,
+            true
+        );
+
+        $this->assertEquals( "generated_typed_field_name", $fieldName );
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testGetIndexFieldNameDefaultMatchFieldThrowsRuntimeException()
+    {
+        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getSearchableFieldMap" ) );
+        $indexFieldType = $this->getIndexFieldTypeMock();
+        $searchFieldTypeMock = $this->getSearchFieldTypeMock();
+
+        $this->fieldRegistryMock
+            ->expects( $this->once() )
+            ->method( "getType" )
+            ->with( "field_type_identifier" )
+            ->will(
+                $this->returnValue( $indexFieldType )
+            );
+
+        $indexFieldType
+            ->expects( $this->once() )
+            ->method( "getDefaultMatchField" )
             ->will(
                 $this->returnValue( "non_existent_field_name" )
             );
@@ -601,7 +671,53 @@ class FieldNameResolverTest extends TestCase
             "content_type_identifier",
             "field_definition_identifier",
             "field_type_identifier",
-            null
+            null,
+            false
+        );
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testGetIndexFieldNameDefaultSortFieldThrowsRuntimeException()
+    {
+        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getSearchableFieldMap" ) );
+        $indexFieldType = $this->getIndexFieldTypeMock();
+        $searchFieldTypeMock = $this->getSearchFieldTypeMock();
+
+        $this->fieldRegistryMock
+            ->expects( $this->once() )
+            ->method( "getType" )
+            ->with( "field_type_identifier" )
+            ->will(
+                $this->returnValue( $indexFieldType )
+            );
+
+        $indexFieldType
+            ->expects( $this->once() )
+            ->method( "getDefaultSortField" )
+            ->will(
+                $this->returnValue( "non_existent_field_name" )
+            );
+
+        $indexFieldType
+            ->expects( $this->once() )
+            ->method( "getIndexDefinition" )
+            ->will(
+                $this->returnValue(
+                    array(
+                        "field_name" => $searchFieldTypeMock,
+                    )
+                )
+            );
+
+        $mockedFieldNameResolver->getIndexFieldName(
+            new ArrayObject(),
+            "content_type_identifier",
+            "field_definition_identifier",
+            "field_type_identifier",
+            null,
+            true
         );
     }
 
@@ -640,7 +756,8 @@ class FieldNameResolverTest extends TestCase
             "content_type_identifier",
             "field_definition_identifier",
             "field_type_identifier",
-            "non_existent_field_name"
+            "non_existent_field_name",
+            false
         );
     }
 
