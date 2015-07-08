@@ -139,6 +139,8 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
             $this->markTestSkipped( "Field type '{$this->getTypeName()}' is not searchable." );
         }
 
+        $this->checkSearchEngineSupport();
+
         $contentType = $this->testCreateContentType();
 
         return array(

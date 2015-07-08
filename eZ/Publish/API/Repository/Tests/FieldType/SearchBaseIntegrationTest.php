@@ -168,6 +168,14 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         return array();
     }
 
+    /**
+     * Used to control test execution by search engine
+     */
+    protected function checkSearchEngineSupport()
+    {
+        // Does nothing by default, override in a concrete test case as needed
+    }
+
     protected function checkCustomFieldsSupport()
     {
         if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy' )
@@ -238,6 +246,8 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         {
             $this->markTestSkipped( "Field type '{$this->getTypeName()}' is not searchable." );
         }
+
+        $this->checkSearchEngineSupport();
 
         $contentType = $this->testCreateContentType();
 

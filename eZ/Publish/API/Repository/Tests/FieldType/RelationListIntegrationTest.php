@@ -22,7 +22,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  * @group integration
  * @group field-type
  */
-class RelationListFieldTypeIntegrationTest extends RelationBaseIntegrationTest
+class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBaseIntegrationTest
 {
     /**
      * Get name of tested field type
@@ -397,5 +397,45 @@ class RelationListFieldTypeIntegrationTest extends RelationBaseIntegrationTest
                 $this->getValidCreationFieldData()
             ),
         );
+    }
+
+    protected function checkSearchEngineSupport()
+    {
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy' )
+        {
+            $this->markTestSkipped(
+                "'ezobjectrelationlist' field type is not searchable with Legacy Search Engine"
+            );
+        }
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return array( 11 );
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return array( 12 );
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        return 11;
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        return 12;
+    }
+
+    protected function getValidMultivaluedSearchValuesOne()
+    {
+        return array( 11, 12 );
+    }
+
+    protected function getValidMultivaluedSearchValuesTwo()
+    {
+        return array( 13, 14 );
     }
 }
