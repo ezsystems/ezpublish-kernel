@@ -27,11 +27,11 @@ class Type extends FieldType
         'FloatValueValidator' => array(
             'minFloatValue' => array(
                 'type' => 'float',
-                'default' => false
+                'default' => null
             ),
             'maxFloatValue' => array(
                 'type' => 'float',
-                'default' => false
+                'default' => null
             )
         )
     );
@@ -69,7 +69,7 @@ class Type extends FieldType
                 {
                     case "minFloatValue":
                     case "maxFloatValue":
-                        if ( $value !== false && !is_numeric( $value ) )
+                        if ( $value !== null && !is_numeric( $value ) )
                         {
                             $validationErrors[] = new ValidationError(
                                 "Validator parameter '%parameter%' value must be of numeric type",
@@ -124,7 +124,7 @@ class Type extends FieldType
         $validationErrors = array();
 
         if ( isset( $constraints['maxFloatValue'] ) &&
-            $constraints['maxFloatValue'] !== false && $fieldValue->value > $constraints['maxFloatValue'] )
+            $constraints['maxFloatValue'] !== null && $fieldValue->value > $constraints['maxFloatValue'] )
         {
             $validationErrors[] = new ValidationError(
                 "The value can not be higher than %size%.",
@@ -137,7 +137,7 @@ class Type extends FieldType
         }
 
         if ( isset( $constraints['minFloatValue'] ) &&
-            $constraints['minFloatValue'] !== false && $fieldValue->value < $constraints['minFloatValue'] )
+            $constraints['minFloatValue'] !== null && $fieldValue->value < $constraints['minFloatValue'] )
         {
             $validationErrors[] = new ValidationError(
                 "The value can not be lower than %size%.",

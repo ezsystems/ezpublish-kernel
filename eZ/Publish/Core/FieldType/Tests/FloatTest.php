@@ -49,11 +49,11 @@ class FloatTest extends FieldTypeTest
             "FloatValueValidator" => array(
                 "minFloatValue" => array(
                     "type" => "float",
-                    "default" => false
+                    "default" => null
                 ),
                 "maxFloatValue" => array(
                     "type" => "float",
-                    "default" => false
+                    "default" => null
                 )
             )
         );
@@ -306,7 +306,7 @@ class FloatTest extends FieldTypeTest
             array(
                 array(
                     'FloatValueValidator' => array(
-                        'minFloatValue' => false,
+                        'minFloatValue' => null,
                     )
                 )
             ),
@@ -320,7 +320,7 @@ class FloatTest extends FieldTypeTest
             array(
                 array(
                     'FloatValueValidator' => array(
-                        'maxFloatValue' => false,
+                        'maxFloatValue' => null,
                     )
                 )
             ),

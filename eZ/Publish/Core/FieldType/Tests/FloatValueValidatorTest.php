@@ -76,11 +76,11 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
         $constraintsSchema = array(
             "minFloatValue" => array(
                 "type" => "float",
-                "default" => false
+                "default" => null
             ),
             "maxFloatValue" => array(
                 "type" => "float",
-                "default" => false
+                "default" => null
             )
         );
         $validator = new FloatValueValidator;
@@ -243,15 +243,15 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
                     "maxFloatValue" => 2.2,
                 ),
                 array(
-                    "minFloatValue" => false,
-                    "maxFloatValue" => false
+                    "minFloatValue" => null,
+                    "maxFloatValue" => null
                 ),
                 array(
                     "minFloatValue" => -5,
-                    "maxFloatValue" => false
+                    "maxFloatValue" => null
                 ),
                 array(
-                    "minFloatValue" => false,
+                    "minFloatValue" => null,
                     "maxFloatValue" => 12.7
                 ),
                 array(

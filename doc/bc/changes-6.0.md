@@ -151,6 +151,10 @@ Changes affecting version compatibility with former or future versions.
   <input type="hidden" name="_csrf_token" value="{{ csrf_token("authenticate") }}" />
   ```
 
+* Float field type `FloatValueValidator` has changed. `false` isn't considered as valid value any more for
+  `minFloatValue` and `maxFloatValue`. Use `null` instead of `false` if you want to deactivate these validators.
+  Default validator value has been changed accordingly.
+
 ## Deprecations
 
 * `eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger::purge()` is deprecated and will be removed in v6.1.

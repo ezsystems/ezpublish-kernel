@@ -176,7 +176,7 @@ abstract class Validator
      */
     public function __set( $name, $value )
     {
-        if ( !isset( $this->constraints[$name] ) )
+        if ( !array_key_exists( $name, $this->constraints ) )
         {
             throw new PropertyNotFound( "The constraint '{$name}' is not valid for this validator." );
         }
