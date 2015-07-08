@@ -12,6 +12,8 @@ matrix:
   allow_failures:
     - php: hhvm
       env: TEST_CONFIG="phpunit.xml"
+    - php: 7.0
+      env: TEST_CONFIG="phpunit.xml"
   include:
 # 5.4
     - php: 5.4
