@@ -55,11 +55,20 @@ class UrlAliasGenerator extends Generator
      */
     private $configResolver;
 
-    public function __construct( Repository $repository, RouterInterface $defaultRouter, ConfigResolverInterface $configResolver )
+    /**
+     * Array of characters that are potentially unsafe for output for (x)html, json, etc,
+     * and respective url-encoded value
+     *
+     * @var array
+     */
+    private $unsafeCharMap;
+
+    public function __construct( Repository $repository, RouterInterface $defaultRouter, ConfigResolverInterface $configResolver , array $unsafeCharMap = array() )
     {
         $this->repository = $repository;
         $this->defaultRouter = $defaultRouter;
         $this->configResolver = $configResolver;
+        $this->unsafeCharMap = $unsafeCharMap;
     }
 
     /**
@@ -124,7 +133,9 @@ class UrlAliasGenerator extends Generator
         }
 
         $path = $path ?: '/';
-        return $path . $queryString;
+
+        // replace potentially unsafe characters with url-encoded counterpart
+        return strtr( $path . $queryString, $this->unsafeCharMap );
     }
 
     /**

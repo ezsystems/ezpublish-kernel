@@ -2,6 +2,12 @@ parameters:
     # Redefining the default router class to implement the RequestMatcherInterface
     router.class: eZ\Bundle\EzPublishCoreBundle\Routing\DefaultRouter
     ezpublish.default_router.non_siteaccess_aware_routes: ['_assetic_', '_wdt', '_profiler', '_configurator_']
+    # characters that may require encoding in the urlalias generator
+    ezpublish.urlalias_generator.charmap:
+        "\"" : "%22"
+        "'" : "%27"
+        "<" : "%3C"
+        ">" : "%3E"
 
     ezpublish.chain_router.class: eZ\Publish\Core\MVC\Symfony\Routing\ChainRouter
     ezpublish.url_generator.base.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator
@@ -57,7 +63,11 @@ services:
 
     ezpublish.urlalias_generator:
         class: %ezpublish.urlalias_generator.class%
-        arguments: [@ezpublish.api.repository, @router.default, @ezpublish.config.resolver]
+        arguments:
+            - @ezpublish.api.repository
+            - @router.default
+            - @ezpublish.config.resolver
+            - %ezpublish.urlalias_generator.charmap%
         parent: ezpublish.url_generator.base
 
     ezpublish.siteaccess.matcher_builder:
