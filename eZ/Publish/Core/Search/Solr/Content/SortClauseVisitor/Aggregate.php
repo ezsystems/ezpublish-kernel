@@ -21,16 +21,14 @@ class Aggregate extends SortClauseVisitor
     /**
      * Array of available visitors
      *
-     * @var array
+     * @var \eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor[]
      */
     protected $visitors = array();
 
     /**
-     * COnstruct from optional visitor array
+     * Construct from optional visitor array
      *
-     * @param array $visitors
-     *
-     * @return void
+     * @param \eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor[] $visitors
      */
     public function __construct( array $visitors = array() )
     {
@@ -43,9 +41,7 @@ class Aggregate extends SortClauseVisitor
     /**
      * Adds visitor
      *
-     * @param FieldValueVisitor $visitor
-     *
-     * @return void
+     * @param \eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor $visitor
      */
     public function addVisitor( SortClauseVisitor $visitor )
     {
@@ -53,9 +49,9 @@ class Aggregate extends SortClauseVisitor
     }
 
     /**
-     * CHeck if visitor is applicable to current sortClause
+     * Checks if visitor is applicable to current sortClause
      *
-     * @param SortClause $sortClause
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
      * @return boolean
      */
@@ -65,7 +61,9 @@ class Aggregate extends SortClauseVisitor
     }
 
     /**
-     * Map field value to a proper Solr representation
+     * Maps sort clause to a proper Solr representation
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException If visitor is not found
      *
      * @param SortClause $sortClause
      *

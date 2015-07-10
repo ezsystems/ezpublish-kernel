@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor;
+namespace eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
 
 use eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
@@ -20,7 +20,7 @@ class DateModified extends SortClauseVisitor
     /**
      * Check if visitor is applicable to current sortClause
      *
-     * @param SortClause $sortClause
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
      * @return boolean
      */
@@ -32,12 +32,12 @@ class DateModified extends SortClauseVisitor
     /**
      * Map field value to a proper Solr representation
      *
-     * @param SortClause $sortClause
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
      * @return string
      */
     public function visit( SortClause $sortClause )
     {
-        return 'content_modified_dt' . $this->getDirection( $sortClause );
+        return 'modified_dt' . $this->getDirection( $sortClause );
     }
 }
