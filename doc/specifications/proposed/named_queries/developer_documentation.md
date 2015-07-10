@@ -26,7 +26,7 @@ from the query template.
 {{ render(controller(
     'ez_query:contentQuery',
     {
-        'queryName': 'AcmeBundle:LatestContent',
+        'queryTypeName': 'AcmeBundle:LatestContent',
         'viewType': 'list',
         'parameters': {'type': 'article'}
     }
