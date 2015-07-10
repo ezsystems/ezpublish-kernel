@@ -31,7 +31,8 @@ class Document extends ValueObject
     public $languageCode;
 
     /**
-     * Denotes that document's translation is always available
+     * Denotes that document's translation is the main translation and it is
+     * always available
      *
      * @var boolean
      */
