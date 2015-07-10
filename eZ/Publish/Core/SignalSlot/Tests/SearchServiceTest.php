@@ -11,6 +11,7 @@
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
@@ -53,6 +54,16 @@ class SearchServiceTest extends ServiceTest
                 0,
             ),
             array(
+                'findContentInfo',
+                array(
+                    new Query(),
+                    $languageFilter,
+                    false,
+                ),
+                new SearchResult(array('totalCount' => 0)),
+                0,
+            ),
+            array(
                 'findSingle',
                 array(
                     $criterion,
@@ -60,6 +71,16 @@ class SearchServiceTest extends ServiceTest
                     false,
                 ),
                 $content,
+                0,
+            ),
+            array(
+                'findLocations',
+                array(
+                    new LocationQuery(),
+                    $languageFilter,
+                    false,
+                ),
+                new SearchResult(array('totalCount' => 0)),
                 0,
             ),
             array(
