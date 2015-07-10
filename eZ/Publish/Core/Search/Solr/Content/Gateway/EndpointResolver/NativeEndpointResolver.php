@@ -114,7 +114,7 @@ class NativeEndpointResolver implements EndpointResolver
                 $languageSettings["languages"]
         );
         $useAlwaysAvailable = (
-            isset( $languageSettings["useAlwaysAvailable"] ) &&
+            !isset( $languageSettings["useAlwaysAvailable"] ) ||
             $languageSettings["useAlwaysAvailable"] === true
         );
 

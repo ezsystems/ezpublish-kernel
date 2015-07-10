@@ -12,6 +12,8 @@ namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 use eZ\Publish\Core\Base\ServiceContainer;
 use eZ\Publish\Core\Base\Container\Compiler;
 use PDO;
+use RuntimeException;
+use eZ\Publish\API\Repository\Tests\SearchServiceTranslationLanguageFallbackTest;
 
 /**
  * A Test Factory is used to setup the infrastructure for a tests, based on a
@@ -133,6 +135,18 @@ class LegacySolr extends Legacy
 
     protected function getTestConfigurationFile()
     {
-        return getenv( "CONTAINER_TEST_CONFIG" );
+        $coresSetup = getenv( "CORES_SETUP" );
+
+        switch ( $coresSetup )
+        {
+            case SearchServiceTranslationLanguageFallbackTest::SETUP_DEDICATED:
+                return "tests/integration_legacy_solr_multicore_dedicated.yml";
+            case SearchServiceTranslationLanguageFallbackTest::SETUP_SHARED:
+                return "tests/integration_legacy_solr_multicore_shared.yml";
+            case SearchServiceTranslationLanguageFallbackTest::SETUP_SINGLE:
+                return "tests/integration_legacy_solr_single_core.yml";
+        }
+
+        throw new RuntimeException( "Backend cores setup '{$coresSetup}' is not handled" );
     }
 }

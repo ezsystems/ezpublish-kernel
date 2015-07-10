@@ -79,16 +79,18 @@ class Handler implements SearchHandlerInterface
      * Finds Locations for the given $query
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
+     * @param array $fieldFilters - a map of filters for the returned fields.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findLocations( LocationQuery $query )
+    public function findLocations( LocationQuery $query, array $fieldFilters = array() )
     {
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
 
         return $this->resultExtractor->extract(
-            $this->gateway->find( $query )
+            $this->gateway->find( $query, $fieldFilters )
         );
     }
 

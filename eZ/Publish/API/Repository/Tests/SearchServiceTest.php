@@ -4399,6 +4399,17 @@ class SearchServiceTest extends BaseTest
             }
         }
 
+        foreach ( $result->searchHits as $hit )
+        {
+            $property = new \ReflectionProperty( get_class( $hit ), 'index' );
+            $property->setAccessible( true );
+            $property->setValue( $hit, null );
+
+            $property = new \ReflectionProperty( get_class( $hit ), 'contentTranslation' );
+            $property->setAccessible( true );
+            $property->setValue( $hit, null );
+        }
+
         $this->assertEquals(
             $fixture,
             $result,

@@ -1663,6 +1663,17 @@ class SearchServiceLocationTest extends BaseTest
             $closure( $result );
         }
 
+        foreach ( $result->searchHits as $hit )
+        {
+            $property = new \ReflectionProperty( get_class( $hit ), 'index' );
+            $property->setAccessible( true );
+            $property->setValue( $hit, null );
+
+            $property = new \ReflectionProperty( get_class( $hit ), 'contentTranslation' );
+            $property->setAccessible( true );
+            $property->setValue( $hit, null );
+        }
+
         $this->assertEquals(
             include $fixture,
             $result,
