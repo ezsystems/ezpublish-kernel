@@ -8,15 +8,18 @@ Predefined, named queries can be defined in any bundle. They can then be used fr
 [template overriding](#template_override), making it easy to use different templates for different calls.
 
 ## <a name="query_controller"></a> The query controller
-A new controller is added : `ez_query`.
+A new controller is added : `ez_query`. It has actions for each type of Search operation:
+- `ez_query:contentInfo` will run a Content Query and return ContentInfo items.
+  Unless you explicitly need data from the Content (Fields, Versions), **always prefer ContentInfo**, as it performs much better.
+  Most query templates should anyway iterate over the items, and render them using the viewController.
+- `ez_query:content` will run a Content Query and return Content items
+- `ez_query:locations` will run a Location Query and return Location items
 
-It has two actions: `locationQuery`, and `contentQuery`.
-
-Both requires two arguments:
-- `queryName`, the name of the QueryType to run. Example: `AcmeBundle:LatestArticles'
+They requires two arguments:
+- `queryTypeName`, the name of the QueryType to run. Example: `AcmeBundle:LatestArticles'
 - `viewType`, similar to what `viewContent` and `viewLocation` expect. Examples: `list`, `tree`, `full_list`...
 
-It also supports a `parameters` hash. It will be passed on to the QueryType when building the Query, and made available
+They also support a `parameters` hash. It will be passed on to the QueryType when building the Query, and made available
 from the query template.
 
 ```jinja
@@ -92,7 +95,9 @@ displayed using the object's properties or the `ez_content` controller actions.
 
 #### Available variables
 
-`location_list`/`content_list` | array | Array of search results, depending if the action (locationQuery or contentQuery)
+`location_list`                | array | Array of resulting Location. *Only set by the contentInfo action*
+`content_list`                 | array | Array of resulting Content. *Only set by the contentInfo action*
+`content_info_list`            | array | Array of resulting ContentInfo. *Only set by the contentInfo action*
 `list_count`                   | int   | Number of items in the resultset, within the limit if any
 `total_count`                  | int   | Total number of items in the search result
 `parameters`                   | array | The `parameters` hash that was passed to the Query
