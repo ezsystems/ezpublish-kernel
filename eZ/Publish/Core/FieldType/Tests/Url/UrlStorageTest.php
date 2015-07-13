@@ -88,6 +88,38 @@ class UrlStorageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(12, $field->value->data['urlId']);
     }
 
+    public function testStoreFieldDataWithEmptyUrl()
+    {
+        $versionInfo = new VersionInfo(array('versionNo' => 24));
+        $fieldValue = new FieldValue(array('externalData' => ''));
+        $field = new Field(array('id' => 42, 'value' => $fieldValue));
+        $gateway = $this->getGatewayMock();
+
+        $gateway
+            ->expects($this->never())
+            ->method('getUrlIdMap');
+
+        $gateway
+            ->expects($this->never())
+            ->method('insertUrl');
+
+        $gateway
+            ->expects($this->never())
+            ->method('linkUrl');
+
+        $storage = $this->getPartlyMockedStorage(array('getGateway'));
+        $storage
+            ->expects($this->once())
+            ->method('getGateway')
+            ->with($this->getContext())
+            ->will($this->returnValue($gateway));
+
+        $result = $storage->storeFieldData($versionInfo, $field, $this->getContext());
+
+        $this->assertFalse($result);
+        $this->assertEquals(null, $field->value->data['urlId']);
+    }
+
     public function testGetFieldData()
     {
         $versionInfo = new VersionInfo();
