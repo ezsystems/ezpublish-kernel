@@ -41,7 +41,7 @@ class Field extends SortClause implements CustomFieldInterface
      * @param string $typeIdentifier
      * @param string $fieldIdentifier
      * @param string $sortDirection
-     * @param null|string $languageCode
+     * @param null|string $languageCode @deprecated since 5.4.5. use languageFilter instead
      */
     public function __construct($typeIdentifier, $fieldIdentifier, $sortDirection = Query::SORT_ASC, $languageCode = null)
     {

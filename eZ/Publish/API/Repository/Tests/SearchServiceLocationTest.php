@@ -474,57 +474,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testSearchWithFieldSortThrowsInvalidArgumentExceptionTranslatableField()
-    {
-        $contentType = $this->createTestContentType();
-        $this->createMultilingualContent($contentType, 1, 2);
-
-        $query = new LocationQuery(
-            array(
-                'criterion' => new Criterion\ContentTypeId($contentType->id),
-                'sortClauses' => array(
-                    new SortClause\Field('test-type', 'integer', LocationQuery::SORT_ASC),
-                ),
-            )
-        );
-
-        $repository = $this->getRepository();
-        $searchService = $repository->getSearchService();
-        $searchService->findLocations($query);
-    }
-
-    /**
-     * Test for the findLocations() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testSearchWithFieldSortThrowsInvalidArgumentExceptionNonTranslatableField()
-    {
-        $contentType = $this->createTestContentType();
-        $this->createMultilingualContent($contentType, 1, 2, 3, 'eng-GB');
-
-        $query = new LocationQuery(
-            array(
-                'criterion' => new Criterion\ContentTypeId($contentType->id),
-                'sortClauses' => array(
-                    // The main language can change, so no language code allowed on non-translatable field whatsoever
-                    new SortClause\Field('test-type', 'integer2', LocationQuery::SORT_ASC, 'eng-GB'),
-                ),
-            )
-        );
-
-        $repository = $this->getRepository();
-        $searchService = $repository->getSearchService();
-        $searchService->findLocations($query);
-    }
-
-    /**
-     * Test for the findLocations() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
      */
     public function testMultilingualFieldSortWithNonTranslatableField()
     {

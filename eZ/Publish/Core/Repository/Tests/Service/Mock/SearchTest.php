@@ -482,9 +482,6 @@ class SearchTest extends BaseServiceMockTest
     public function testFindContentValidatesFieldSortClauses($sortClauses, $isTranslatable, $isValid, $message = null)
     {
         $repositoryMock = $this->getRepositoryMock();
-        $contentTypeServiceMock = $this->getMock('eZ\\Publish\\API\\Repository\\ContentTypeService');
-        $contentTypeMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType');
-        $fieldDefinitionMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition');
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
@@ -500,29 +497,6 @@ class SearchTest extends BaseServiceMockTest
             ->expects($this->any())
             ->method('addPermissionsCriterion')
             ->will($this->returnValue(false));
-
-        $repositoryMock
-            ->expects($this->once())
-            ->method('getContentTypeService')
-            ->will($this->returnValue($contentTypeServiceMock));
-
-        $contentTypeServiceMock
-            ->expects($this->once())
-            ->method('loadContentTypeByIdentifier')
-            ->with('testContentTypeIdentifier')
-            ->will($this->returnValue($contentTypeMock));
-
-        $contentTypeMock
-            ->expects($this->once())
-            ->method('getFieldDefinition')
-            ->with('testFieldDefinitionIdentifier')
-            ->will($this->returnValue($fieldDefinitionMock));
-
-        $fieldDefinitionMock
-            ->expects($this->once())
-            ->method('__get')
-            ->with('isTranslatable')
-            ->will($this->returnValue($isTranslatable));
 
         try {
             $result = $service->findContent(
@@ -882,9 +856,6 @@ class SearchTest extends BaseServiceMockTest
     public function testFindLocationsValidatesFieldSortClauses($sortClauses, $isTranslatable, $isValid, $message = null)
     {
         $repositoryMock = $this->getRepositoryMock();
-        $contentTypeServiceMock = $this->getMock('eZ\\Publish\\API\\Repository\\ContentTypeService');
-        $contentTypeMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType');
-        $fieldDefinitionMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition');
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
@@ -900,29 +871,6 @@ class SearchTest extends BaseServiceMockTest
             ->expects($this->any())
             ->method('addPermissionsCriterion')
             ->will($this->returnValue(false));
-
-        $repositoryMock
-            ->expects($this->once())
-            ->method('getContentTypeService')
-            ->will($this->returnValue($contentTypeServiceMock));
-
-        $contentTypeServiceMock
-            ->expects($this->once())
-            ->method('loadContentTypeByIdentifier')
-            ->with('testContentTypeIdentifier')
-            ->will($this->returnValue($contentTypeMock));
-
-        $contentTypeMock
-            ->expects($this->once())
-            ->method('getFieldDefinition')
-            ->with('testFieldDefinitionIdentifier')
-            ->will($this->returnValue($fieldDefinitionMock));
-
-        $fieldDefinitionMock
-            ->expects($this->once())
-            ->method('__get')
-            ->with('isTranslatable')
-            ->will($this->returnValue($isTranslatable));
 
         try {
             $result = $service->findLocations(

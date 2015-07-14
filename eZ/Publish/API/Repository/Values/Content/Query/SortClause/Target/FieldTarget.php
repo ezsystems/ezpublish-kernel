@@ -34,6 +34,7 @@ class FieldTarget extends Target
     /**
      * Language code of the targeted Field.
      *
+     * @deprecated Since 5.4.5. use languageFilter instead
      * @var null|string
      */
     public $languageCode;

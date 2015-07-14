@@ -35,7 +35,7 @@ class MapLocationDistance extends SortClause implements CustomFieldInterface
      * @param float $latitude Latitude of the location that distance is calculated from
      * @param float $longitude Longitude of the location that distance is calculated from
      * @param string $sortDirection
-     * @param null|string $languageCode
+     * @param null|string $languageCode @deprecated since 5.4.5. use languageFilter instead
      */
     public function __construct(
         $typeIdentifier,
