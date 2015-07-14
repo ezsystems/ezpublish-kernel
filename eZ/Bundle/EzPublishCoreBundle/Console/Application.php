@@ -11,6 +11,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Console;
 
+use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
+use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application as BaseApplication;
@@ -52,5 +54,7 @@ class Application extends BaseApplication
         $siteAccess = $container->get('ezpublish.siteaccess');
         $siteAccess->name = $this->siteAccessName ?: $container->getParameter('ezpublish.siteaccess.default');
         $siteAccess->matchingType = 'cli';
+        $eventDispatcher = $container->get('event_dispatcher');
+        $eventDispatcher->dispatch(MVCEvents::CONFIG_SCOPE_CHANGE, new ScopeChangeEvent($siteAccess));
     }
 }
