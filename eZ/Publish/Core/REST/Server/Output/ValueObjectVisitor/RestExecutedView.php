@@ -9,6 +9,9 @@
 
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
@@ -16,6 +19,7 @@ use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\Core\REST\Server\Values\RestLocation;
 
 /**
  * Section value object visitor
@@ -109,16 +113,7 @@ class RestExecutedView extends ValueObjectVisitor
 
             $generator->startObjectElement( 'value' );
 
-            /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo */
-            $contentInfo = $searchHit->valueObject->contentInfo;
-            $restContent = new RestContentValue(
-                $contentInfo,
-                $this->locationService->loadLocation( $contentInfo->mainLocationId ),
-                $searchHit->valueObject,
-                $this->contentTypeService->loadContentType( $contentInfo->contentTypeId ),
-                $this->contentService->loadRelations( $searchHit->valueObject->getVersionInfo() )
-            );
-            $visitor->visitValueObject( $restContent );
+            $visitor->visitValueObject( $this->mapSearchHit( $searchHit ) );
             $generator->endObjectElement( 'value' );
             $generator->endObjectElement( 'searchHit' );
         }
@@ -133,5 +128,39 @@ class RestExecutedView extends ValueObjectVisitor
 
         $generator->endObjectElement( 'View' );
     }
-}
 
+    private function mapSearchHit( SearchHit $searchHit )
+    {
+        if ( $searchHit->valueObject instanceof Content )
+        {
+            return $this->mapContentSearchHit( $searchHit->valueObject );
+        }
+
+        if ( $searchHit->valueObject instanceof Location )
+        {
+            return $this->mapLocationSearchHit( $searchHit->valueObject );
+        }
+    }
+
+    /**
+     * @return RestContent
+     */
+    private function mapContentSearchHit( Content $content )
+    {
+        return new RestContentValue(
+            $content->contentInfo,
+            $this->locationService->loadLocation( $content->contentInfo->mainLocationId ),
+            $content,
+            $this->contentTypeService->loadContentType( $content->contentInfo->contentTypeId ),
+            $this->contentService->loadRelations( $content->getVersionInfo() )
+        );
+    }
+
+    /**
+     * @return RestLocation
+     */
+    private function mapLocationSearchHit( Location $location )
+    {
+        return new RestLocation( $location, 0, true );
+    }
+}

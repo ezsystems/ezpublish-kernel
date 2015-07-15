@@ -2127,6 +2127,10 @@ Create View
     :Content-Type:
         :application/vnd.ez.api.ViewInput+xml: the view input in xml format (see View_)
         :application/vnd.ez.api.ViewInput+json: the view input in json format (see View_)
+:Experimental:
+    :Query Type:
+        By default, the Query_ referenced in the ViewInput_ is considered as a Content Query. A Location Query
+        can be used by setting the Query's node "type" attribute to "location".
 :Response: 200 OK
            Note : when persistence will be implemented, it will change to 201 Created
 
@@ -2159,7 +2163,7 @@ Perform a query on images withing the media section, sorted by name, limiting re
     <?xml version="1.0" encoding="UTF-8"?>
     <ViewInput>
       <identifier>TitleView</identifier>
-      <Query>
+      <Query type="content">
         <Criteria>
           <ContentTypeIdentifierCriterion>image</ContentTypeIdentifierCriterion>
           <SectionIdentifierCriterion>media</SectionIdentifierCriterion>
@@ -7156,6 +7160,7 @@ View XML Schema
       </xsd:complexType>
 
       <xsd:complexType name="queryType">
+        <xsd:attribute name="type" type="xsd:string" default="content"/>
         <xsd:all>
           <xsd:element name="Criterion" type="criterionType" />
           <xsd:element name="limit" type="xsd:int" />
