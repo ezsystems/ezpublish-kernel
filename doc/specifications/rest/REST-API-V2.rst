@@ -242,6 +242,7 @@ In the content module there are the root collections objects, locations, trash a
 /content/locations                                                .                   list/find locations     .                            .
 /content/locations/<path>                                         .                   load a location         update location              delete location  copy subtree
 /content/locations/<path>/children                                .                   load children           .                            .
+/views                                                            create view         list views              .                            .
 /content/views                                                    create view         list views              .                            .
 /content/views/<ID>                                               .                   get view                .                            delete view
 /content/views/<ID>/results                                       .                   get view results        .                            .
@@ -333,7 +334,7 @@ XML Example
         <locationByPath media-type="" href="/api/ezp/v2/content/locations{?locationPath}"/>
         <trash media-type="application/vnd.ez.api.Trash+xml" href="/api/ezp/v2/content/trash"/>
         <sections media-type="application/vnd.ez.api.SectionList+xml" href="/api/ezp/v2/content/sections"/>
-        <views media-type="application/vnd.ez.api.RefList+xml" href="/api/ezp/v2/content/views"/>
+        <views media-type="application/vnd.ez.api.RefList+xml" href="/api/ezp/v2/views"/>
         <objectStateGroups media-type="application/vnd.ez.api.ObjectStateGroupList+xml" href="/api/ezp/v2/content/objectstategroups"/>
         <objectStates media-type="application/vnd.ez.api.ObjectStateList+xml" href="/api/ezp/v2/content/objectstategroups/{objectStateGroupId}/objectstates"/>
         <globalUrlAliases media-type="application/vnd.ez.api.UrlAliasRefList+xml" href="/api/ezp/v2/content/urlaliases"/>
@@ -443,7 +444,7 @@ JSON Example
                 "_media-type": "application/vnd.ez.api.UserRefList+json"
             },
             "views": {
-                "_href": "/api/ezp/v2/content/views",
+                "_href": "/api/ezp/v2/views",
                 "_media-type": "application/vnd.ez.api.RefList+json"
             },
             "refreshSession": {
@@ -791,7 +792,7 @@ List/Search Content
 ```````````````````
 :Resource: /content/objects
 :Method: GET (not implemented)
-:Description: This resource will used in future for searching content by providing a query string as alternative to posting a view to /content/views.
+:Description: This resource will used in future for searching content by providing a query string as alternative to posting a view to /views.
 
 Load Content by remote id
 `````````````````````````
@@ -2116,7 +2117,7 @@ Views
 
 Create View
 ```````````
-:Resource: /content/views
+:Resource: /views
 :Method:  POST
 :Description: executes a query and returns view including the results
               The View_ input reflects the criteria model of the public API.
@@ -2124,9 +2125,13 @@ Create View
     :Accept:
         :application/vnd.ez.api.View+xml: the view in xml format (see View_)
         :application/vnd.ez.api.View+json: the view in json format (see View_)
+        :application/vnd.ez.api.View+xml; version=1.1: the view in xml format (see View_)
+        :application/vnd.ez.api.View+json; version=1.1: the view in json format (see View_)
     :Content-Type:
         :application/vnd.ez.api.ViewInput+xml: the view input in xml format (see View_)
         :application/vnd.ez.api.ViewInput+json: the view input in json format (see View_)
+        :application/vnd.ez.api.ViewInput+xml; version=1.1: the view input in xml format (see View_)
+        :application/vnd.ez.api.ViewInput+json; version=1.1: the view input in json format (see View_)
 :Response: 200 OK
            Note : when persistence will be implemented, it will change to 201 Created
 
@@ -2149,9 +2154,9 @@ Perform a query on images withing the media section, sorted by name, limiting re
 
 .. code:: http
 
-    POST /content/views HTTP/1.1
-    Accept: application/vnd.ez.api.View+xml
-    Content-Type: application/vnd.ez.api.ViewInput+xml
+    POST /views HTTP/1.1
+    Accept: application/vnd.ez.api.View+xml; version=1.1
+    Content-Type: application/vnd.ez.api.ViewInput+xml; version=1.1
     Content-Length: xxx
 
 .. code:: xml
@@ -2159,7 +2164,7 @@ Perform a query on images withing the media section, sorted by name, limiting re
     <?xml version="1.0" encoding="UTF-8"?>
     <ViewInput>
       <identifier>TitleView</identifier>
-      <Query>
+      <ContentQuery>
         <Criteria>
           <ContentTypeIdentifierCriterion>image</ContentTypeIdentifierCriterion>
           <SectionIdentifierCriterion>media</SectionIdentifierCriterion>
@@ -2174,26 +2179,26 @@ Perform a query on images withing the media section, sorted by name, limiting re
         <FacetBuilders>
           <contentTypeFacetBuilder/>
         </FacetBuilders>
-      </Query>
+      </ContentQuery>
     </ViewInput>
 
 .. code:: http
 
     HTTP/1.1 200 OK
-    Location: /content/views/view1234
-    Content-Type: application/vnd.ez.api.View+xml
+    Location: /views/view1234
+    Content-Type: application/vnd.ez.api.View+xml; version=1.1
     Content-Length: xxx
 
 .. code:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <View href="/content/views/TitleView" media-type="application/vnd.ez.api.View+xml">
+    <View href="/views/TitleView" media-type="application/vnd.ez.api.View+xml; version=1.1">
       <identifier>TitleView</identifier>
       <User href="/user/users/14" media-type="vnd.ez.api.User+xml"/>
       <public>false</public>
-      <Query>
+      <LocationQuery>
         <Criteria>
-          <FullTextCriterion>Title</FullTextCriterion>
+          <ParentLocationIdCriterion>2</ParentLocationIdCriterion>
         </Criteria>
         <limit>10</limit>
         <offset>0</offset>
@@ -2205,65 +2210,30 @@ Perform a query on images withing the media section, sorted by name, limiting re
         <FacetBuilders>
           <contentTypeFacetBuilder/>
         </FacetBuilders>
-      </Query>
+      </LocationQuery>
       <Result href="/content/views/view1234/results"
         media-type="application/vnd.ez.api.ViewResult+xml" count="34" time="31" maxScore="1.0">
         <searchHits>
           <searchHit score="1.0" index="installid1234567890">
             <hightlight/>
             <value>
-              <Content href="/content/objects/23" id="23"
-                media-type="application/vnd.ez.api.Content+xml" remoteId="qwert123"
-                xmlns:p="http://ez.no/API/Values" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://ez.no/API/Values Content.xsd ">
-                <ContentType href="/content/types/10"
-                  media-type="application/vnd.ez.api.ContentType+xml" />
-                <Name>Name</Name>
-                <Versions href="/content/objects/23/versions" media-type="application/vnd.ez.api.VersionList+xml" />
-                <CurrentVersion href="/content/objects/23/currentversion"
-                  media-type="application/vnd.ez.api.Version+xml">
-                  <Version href="/content/objects/23/versions/2"
-                    media-type="application/vnd.ez.api.Version+xml">
-                    <VersionInfo>
-                      <id>123</id>
-                      <versionNo>2</versionNo>
-                      <status>PUBLISHED</status>
-                      <modificationDate>2001-12-31T12:00:00</modificationDate>
-                      <creator href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
-                      <creationDate>2001-12-31T12:00:00</creationDate>
-                      <initialLanguageCode>eng-UK</initialLanguageCode>
-                      <Content href="/content/objects/23"
-                        media-type="application/vnd.ez.api.ContentInfo+xml" />
-                    </VersionInfo>
-                    <Fields>
-                      <field>
-                        <id>1234</id>
-                        <fieldDefinitionIdentifier>title</fieldDefinitionIdentifier>
-                        <languageCode>eng-UK</languageCode>
-                        <fieldValue>Title</fieldValue>
-                      </field>
-                      <field>
-                        <id>1235</id>
-                        <fieldDefinitionIdentifier>summary
-                        </fieldDefinitionIdentifier>
-                        <languageCode>eng-UK</languageCode>
-                        <fieldValue>This is a summary</fieldValue>
-                      </field>
-                    </Fields>
-                    <Relations />
-                  </Version>
-                </CurrentVersion>
-                <Section href="/content/objects/23/section" media-type="application/vnd.ez.api.Section+xml" />
-                <MainLocation href="/content/objects/23/mainlocation"
-                  media-type="application/vnd.ez.api.Location+xml" />
-                <Locations href="/content/objects/23/locations"
-                  media-type="application/vnd.ez.api.LocationList+xml" />
-                <Owner href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
-                <PublishDate>2001-12-31T12:00:00</PublishDate>
-                <LastModificationDate>2001-12-31T12:00:00</LastModificationDate>
-                <MainLanguageCode>eng-UK</MainLanguageCode>
-                <AlwaysAvailable>true</AlwaysAvailable>
-              </Content>
+              <Location media-type="application/vnd.ez.api.Location+xml" href="/api/ezp/v2/content/locations/1/2">
+                <id>2</id>
+                <priority>0</priority>
+                <hidden>false</hidden>
+                <invisible>false</invisible>
+                <ParentLocation media-type="application/vnd.ez.api.Location+xml" href="/api/ezp/v2/content/locations/1"/>
+                <pathString>/1/2/</pathString>
+                <depth>1</depth>
+                <childCount>8</childCount>
+                <remoteId>f3e90596361e31d496d4026eb624c983</remoteId>
+                <Children media-type="application/vnd.ez.api.LocationList+xml" href="/api/ezp/v2/content/locations/1/2/children"/>
+                <Content media-type="application/vnd.ez.api.Content+xml" href="/api/ezp/v2/content/objects/57"/>
+                <sortField>PRIORITY</sortField>
+                <sortOrder>ASC</sortOrder>
+                <UrlAliases media-type="application/vnd.ez.api.UrlAliasRefList+xml" href="/api/ezp/v2/content/locations/1/2/urlaliases"/>
+              </Location>
+
             </value>
           </searchHit>
           ....
@@ -2291,6 +2261,39 @@ Perform a query on images withing the media section, sorted by name, limiting re
       </Result>
     </View>
 
+
+Create View
+```````````
+:Resource: /content/views
+:Method:  POST
+:Description: Executes a query and returns view including the results.
+              The View_ input reflects the criteria model of the public API.
+              Will respond with a 301, as the resource has been moved to /views (Platform 1.0)
+:Headers:
+    :Accept:
+        :application/vnd.ez.api.View+xml: the view in xml format (see View_)
+        :application/vnd.ez.api.View+json: the view in json format (see View_)
+        :application/vnd.ez.api.View+xml; version=1.1: the view in xml format (see View_)
+        :application/vnd.ez.api.View+json; version=1.1: the view in json format (see View_)
+    :Content-Type:
+        :application/vnd.ez.api.ViewInput+xml: the view input in xml format (see View_)
+        :application/vnd.ez.api.ViewInput+json: the view input in json format (see View_)
+        :application/vnd.ez.api.ViewInput+xml; version=1.1: the view input in xml format (see View_)
+        :application/vnd.ez.api.ViewInput+json; version=1.1: the view input in json format (see View_)
+:Response: 301 Moved Permanently
+
+.. code:: http
+
+          HTTP/1.1 301 Moved Permanently
+          ETag: "<new etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+          Location: /views
+.. parsed-literal::
+View_
+
+:Error codes:
+    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
 
 List views
 ``````````
@@ -7314,7 +7317,7 @@ View XML Schema
         </xsd:complexContent>
       </xsd:complexType>
 
-      <xsd:complexType name="facetTyoe">
+      <xsd:complexType name="facetType">
         <xsd:choice>
           <xsd:element name="sectionFacet" type="sectionFacetType" />
           <xsd:element name="locationFacet" type="locationFacetType" />
@@ -7381,7 +7384,10 @@ View XML Schema
               <xsd:element name="identifier" type="xsd:string" />
               <xsd:element name="User" type="ref" />
               <xsd:element name="public" type="xsd:boolean" />
-              <xsd:element name="Query" type="queryType" />
+              <xsd:any minOccurs="1" maxOccurs="1">
+                <xsd:element name="ContentQuery" type="queryType" />
+                <xsd:element name="LocationQuery" type="queryType" />
+              </xsd:any>
               <xsd:element name="Result" type="resultType" />
             </xsd:all>
           </xsd:extension>
