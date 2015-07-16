@@ -163,6 +163,13 @@ interface Repository
     public function getObjectStateService();
 
     /**
+     * Get VersionStateService
+     *
+     * @return \eZ\Publish\API\Repository\VersionStateService
+     */
+    public function getVersionStateService();
+
+    /**
      * Get RoleService
      *
      * @return \eZ\Publish\API\Repository\RoleService
