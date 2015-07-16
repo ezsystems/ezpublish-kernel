@@ -18,6 +18,8 @@ use RuntimeException;
 /**
  * The Loading Extractor extracts the value object from the Elasticsearch search hit data
  * by loading it from the database.
+ *
+ * @todo workshop: implement native extractor (extracting from returned fields)
  */
 class LoadingResultExtractor extends ResultExtractor
 {

@@ -65,7 +65,7 @@ abstract class ResultExtractor
                 array(
                     "score" => $doc->score,
                     "index" => $this->getIndexIdentifier( $doc ),
-                    "contentTranslation" => $this->getMatchedLanguageCode( $doc ),
+                    "matchedTranslation" => $this->getMatchedLanguageCode( $doc ),
                     "valueObject" => $this->extractHit( $doc ),
                 )
             );
@@ -94,6 +94,7 @@ abstract class ResultExtractor
      */
     protected function getIndexIdentifier( $hit )
     {
+        // @todo workshop: use "[collection]"
         return $hit->{"[shard]"};
     }
 
