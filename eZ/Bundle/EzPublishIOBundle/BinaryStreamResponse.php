@@ -72,6 +72,10 @@ class BinaryStreamResponse extends Response
      */
     public function setFile( $file, $contentDisposition = null, $autoLastModified = true )
     {
+        if ( !$file instanceof BinaryFile )
+        {
+            return $this;
+        }
         $this->file = $file;
 
         if ( $autoLastModified )
@@ -133,6 +137,11 @@ class BinaryStreamResponse extends Response
      */
     public function prepare( Request $request )
     {
+        if ( !$this->file instanceof BinaryFile )
+        {
+            return $this;
+        }
+
         $this->headers->set( 'Content-Length', $this->file->size );
         $this->headers->set( 'Accept-Ranges', 'bytes' );
         $this->headers->set( 'Content-Transfer-Encoding', 'binary' );
