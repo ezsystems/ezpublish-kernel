@@ -137,6 +137,11 @@ class BinaryStreamResponse extends Response
      */
     public function prepare( Request $request )
     {
+        if ( !$this->file instanceof BinaryFile )
+        {
+            return $this;
+        }
+        
         $this->headers->set( 'Content-Length', $this->file->size );
         $this->headers->set( 'Accept-Ranges', 'bytes' );
         $this->headers->set( 'Content-Transfer-Encoding', 'binary' );
