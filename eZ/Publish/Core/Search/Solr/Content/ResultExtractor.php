@@ -94,6 +94,7 @@ abstract class ResultExtractor
      */
     protected function getIndexIdentifier( $hit )
     {
+        // @todo workshop: use "[collection]"
         return $hit->{"[shard]"};
     }
 

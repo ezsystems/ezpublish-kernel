@@ -55,6 +55,8 @@ abstract class Gateway
     abstract public function purgeIndex();
 
     /**
+     * @todo workshop: chenge to empty commit request, do not commit by default
+     *
      * Set if index/delete actions should commit or if several actions is to be expected
      *
      * This should be set to false before group of actions and true before the last one

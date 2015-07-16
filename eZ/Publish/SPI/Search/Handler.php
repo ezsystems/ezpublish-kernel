@@ -11,6 +11,8 @@ namespace eZ\Publish\SPI\Search;
 
 /**
  * The interface for the main Search Engine handlers
+ *
+ * @todo workshop: merge content and location search handler
  */
 interface Handler
 {
