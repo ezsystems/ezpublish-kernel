@@ -4482,7 +4482,7 @@ class SearchServiceTest extends BaseTest
             $property->setAccessible( true );
             $property->setValue( $hit, null );
 
-            $property = new \ReflectionProperty( get_class( $hit ), 'contentTranslation' );
+            $property = new \ReflectionProperty( get_class( $hit ), 'matchedTranslation' );
             $property->setAccessible( true );
             $property->setValue( $hit, null );
         }

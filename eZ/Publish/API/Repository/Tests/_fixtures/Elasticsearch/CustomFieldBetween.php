@@ -15,7 +15,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
       ),
        'score' => 1,
        'index' => NULL,
-       'contentTranslation' => NULL,
+       'matchedTranslation' => NULL,
        'highlight' => NULL,
     )),
     1 => 
@@ -27,7 +27,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
       ),
        'score' => 1,
        'index' => NULL,
-       'contentTranslation' => NULL,
+       'matchedTranslation' => NULL,
        'highlight' => NULL,
     )),
     2 => 
@@ -39,7 +39,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
       ),
        'score' => 1,
        'index' => NULL,
-       'contentTranslation' => NULL,
+       'matchedTranslation' => NULL,
        'highlight' => NULL,
     )),
     3 => 
@@ -51,7 +51,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
       ),
        'score' => 1,
        'index' => NULL,
-       'contentTranslation' => NULL,
+       'matchedTranslation' => NULL,
        'highlight' => NULL,
     )),
   ),
