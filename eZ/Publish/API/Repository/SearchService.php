@@ -32,7 +32,7 @@ interface SearchService
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
      *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations
-     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
+     * @param boolean $filterOnUserPermissions if true only the objects which the user is allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
