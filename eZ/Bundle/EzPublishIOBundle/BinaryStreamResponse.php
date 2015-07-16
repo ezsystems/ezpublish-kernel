@@ -141,7 +141,7 @@ class BinaryStreamResponse extends Response
         {
             return $this;
         }
-        
+
         $this->headers->set( 'Content-Length', $this->file->size );
         $this->headers->set( 'Accept-Ranges', 'bytes' );
         $this->headers->set( 'Content-Transfer-Encoding', 'binary' );
