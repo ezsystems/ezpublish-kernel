@@ -504,7 +504,6 @@ class UserService implements UserServiceInterface
                     )
                 )
             );
-            $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
 
             $this->repository->commit();
         }
@@ -513,6 +512,7 @@ class UserService implements UserServiceInterface
             $this->repository->rollback();
             throw $e;
         }
+        $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
 
         return $this->buildDomainUserObject( $spiUser, $publishedContent );
     }
