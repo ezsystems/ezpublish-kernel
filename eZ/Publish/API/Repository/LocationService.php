@@ -202,5 +202,15 @@ interface LocationService
      * @return \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct
      */
     public function newLocationUpdateStruct();
+
+    /**
+     * Instantiates a correct sort clause object based on provided location sort field and sort order
+     *
+     * @param int $sortField
+     * @param int $sortOrder
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause
+     */
+    public function getSortClauseBySortField( $sortField, $sortOrder = Location::SORT_ORDER_ASC );
 }
 

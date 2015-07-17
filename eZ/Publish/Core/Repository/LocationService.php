@@ -803,7 +803,7 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause
      */
-    protected function getSortClauseBySortField( $sortField, $sortOrder = APILocation::SORT_ORDER_ASC )
+    public function getSortClauseBySortField( $sortField, $sortOrder = APILocation::SORT_ORDER_ASC )
     {
         $sortOrder = $sortOrder == APILocation::SORT_ORDER_DESC ? Query::SORT_DESC : Query::SORT_ASC;
         switch ( $sortField )

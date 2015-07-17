@@ -343,6 +343,9 @@ services:
     ezpublish_rest.input.parser.ViewInput:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.ViewInput.class%
+        arguments:
+            - @ezpublish.api.service.location
+            - @ezpublish_rest.parser_tools
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ViewInput }
 
