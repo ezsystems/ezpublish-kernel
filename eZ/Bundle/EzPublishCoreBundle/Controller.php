@@ -11,6 +11,8 @@ namespace eZ\Bundle\EzPublishCoreBundle;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
+use Symfony\Component\HttpFoundation\Response;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 
 class Controller extends BaseController
 {
@@ -50,5 +52,30 @@ class Controller extends BaseController
     public function getRootLocation()
     {
         return $this->getGlobalHelper()->getRootLocation();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function render( $view, array $parameters = array(), Response $response = null )
+    {
+        if ( null === $response )
+            $response = new Response();
+
+        $response->setContent( $this->renderView( $view, $parameters ) );
+
+        return $response;
+    }
+
+    /**
+     * Using eZ view Manager
+     *
+     * {@inheritDoc}
+     */
+    public function renderView( $view, array $parameters = array() )
+    {
+        $viewManager = $this->container->get( 'ezpublish.view_manager' );
+
+        return $viewManager->renderContentView( new ContentView( $view ), $parameters );
     }
 }
