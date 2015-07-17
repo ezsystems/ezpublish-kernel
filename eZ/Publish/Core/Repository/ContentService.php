@@ -1523,10 +1523,11 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param int|null $publicationDate
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function publishVersion( APIVersionInfo $versionInfo )
+    public function publishVersion( APIVersionInfo $versionInfo, $publicationDate = null )
     {
         $content = $this->internalLoadContent(
             $versionInfo->contentInfo->id,
@@ -1549,7 +1550,7 @@ class ContentService implements ContentServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $content = $this->internalPublishVersion( $content->getVersionInfo() );
+            $content = $this->internalPublishVersion( $content->getVersionInfo(), $publicationDate );
             $this->repository->commit();
         }
         catch ( Exception $e )
@@ -1579,8 +1580,22 @@ class ContentService implements ContentServiceInterface
         }
 
         $metadataUpdateStruct = new SPIMetadataUpdateStruct();
-        $metadataUpdateStruct->publicationDate = isset( $publicationDate ) ? $publicationDate : time();
+
+        $metadataUpdateStruct->publicationDate = time();
+        if ( !is_null( $versionInfo->creationDate->getTimestamp() ) )
+        {
+            $metadataUpdateStruct->publicationDate = $versionInfo->creationDate->getTimestamp();
+        }
+        if ( isset( $publicationDate ) )
+        {
+            $metadataUpdateStruct->publicationDate = $publicationDate;
+        }
+
         $metadataUpdateStruct->modificationDate = $metadataUpdateStruct->publicationDate;
+        if ( $versionInfo->contentInfo->currentVersionNo != 1 )
+        {
+            $metadataUpdateStruct->modificationDate = time();
+        }
 
         $spiContent = $this->persistenceHandler->contentHandler()->publish(
             $versionInfo->getContentInfo()->id,

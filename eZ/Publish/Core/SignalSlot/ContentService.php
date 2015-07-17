@@ -412,12 +412,13 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param int|null $publicationDate
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function publishVersion( VersionInfo $versionInfo )
+    public function publishVersion( VersionInfo $versionInfo, $publicationDate = null )
     {
-        $returnValue = $this->service->publishVersion( $versionInfo );
+        $returnValue = $this->service->publishVersion( $versionInfo, $publicationDate );
         $this->signalDispatcher->emit(
             new PublishVersionSignal(
                 array(
