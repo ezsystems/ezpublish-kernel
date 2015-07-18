@@ -208,6 +208,11 @@ class Type extends FieldType
      */
     protected function createValueFromInput( $inputValue )
     {
+        if ( is_numeric( $inputValue ) )
+        {
+            $inputValue = (string)$inputValue;
+        }
+
         if ( is_string( $inputValue ) )
         {
             $inputValue = new Value( $inputValue );
@@ -261,6 +266,11 @@ class Type extends FieldType
         if ( $hash === null )
         {
             return $this->getEmptyValue();
+        }
+
+        if ( is_numeric( $hash ) )
+        {
+            $hash = (string)$hash;
         }
         return new Value( $hash );
     }
