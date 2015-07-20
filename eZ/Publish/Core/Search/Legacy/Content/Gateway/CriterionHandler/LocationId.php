@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the DoctrineDatabase location id criterion handler class
+ * File containing the DoctrineDatabase location id criterion handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
- * Location id criterion handler
+ * Location id criterion handler.
  */
 class LocationId extends CriterionHandler
 {
@@ -24,15 +26,15 @@ class LocationId extends CriterionHandler
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return boolean
+     * @return bool
      */
-    public function accept( Criterion $criterion )
+    public function accept(Criterion $criterion)
     {
         return $criterion instanceof Criterion\LocationId;
     }
 
     /**
-     * Generate query expression for a Criterion this handler accepts
+     * Generate query expression for a Criterion this handler accepts.
      *
      * accept() must be called before calling this method.
      *
@@ -48,25 +50,23 @@ class LocationId extends CriterionHandler
         SelectQuery $query,
         Criterion $criterion,
         array $fieldFilters
-    )
-    {
+    ) {
         $subSelect = $query->subSelect();
         $subSelect
             ->select(
-                $this->dbHandler->quoteColumn( 'contentobject_id' )
+                $this->dbHandler->quoteColumn('contentobject_id')
             )->from(
-                $this->dbHandler->quoteTable( 'ezcontentobject_tree' )
+                $this->dbHandler->quoteTable('ezcontentobject_tree')
             )->where(
                 $query->expr->in(
-                    $this->dbHandler->quoteColumn( 'node_id' ),
+                    $this->dbHandler->quoteColumn('node_id'),
                     $criterion->value
                 )
             );
 
         return $query->expr->in(
-            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
+            $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
             $subSelect
         );
     }
 }
-

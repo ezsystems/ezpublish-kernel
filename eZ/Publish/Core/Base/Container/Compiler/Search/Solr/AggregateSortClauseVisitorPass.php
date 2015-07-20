@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the AggregateSortClauseVisitorPass class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,18 +26,16 @@ class AggregateSortClauseVisitorPass implements CompilerPassInterface
      *
      * @throws \LogicException
      */
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
         if (
-            !$container->hasDefinition( 'ezpublish.search.solr.content.sort_clause_visitor.aggregate' ) &&
-            !$container->hasDefinition( 'ezpublish.search.solr.location.sort_clause_visitor.aggregate' )
-        )
-        {
+            !$container->hasDefinition('ezpublish.search.solr.content.sort_clause_visitor.aggregate') &&
+            !$container->hasDefinition('ezpublish.search.solr.location.sort_clause_visitor.aggregate')
+        ) {
             return;
         }
 
-        if ( $container->hasDefinition( 'ezpublish.search.solr.content.sort_clause_visitor.aggregate' ) )
-        {
+        if ($container->hasDefinition('ezpublish.search.solr.content.sort_clause_visitor.aggregate')) {
             $aggregateContentSortClauseVisitorDefinition = $container->getDefinition(
                 'ezpublish.search.solr.content.sort_clause_visitor.aggregate'
             );
@@ -44,11 +44,10 @@ class AggregateSortClauseVisitorPass implements CompilerPassInterface
                 'ezpublish.search.solr.content.sort_clause_visitor'
             );
 
-            $this->addHandlers( $aggregateContentSortClauseVisitorDefinition, $visitors );
+            $this->addHandlers($aggregateContentSortClauseVisitorDefinition, $visitors);
         }
 
-        if ( $container->hasDefinition( 'ezpublish.search.solr.location.sort_clause_visitor.aggregate' ) )
-        {
+        if ($container->hasDefinition('ezpublish.search.solr.location.sort_clause_visitor.aggregate')) {
             $aggregateLocationSortClauseVisitorDefinition = $container->getDefinition(
                 'ezpublish.search.solr.location.sort_clause_visitor.aggregate'
             );
@@ -57,15 +56,14 @@ class AggregateSortClauseVisitorPass implements CompilerPassInterface
                 'ezpublish.search.solr.location.sort_clause_visitor'
             );
 
-            $this->addHandlers( $aggregateLocationSortClauseVisitorDefinition, $visitors );
+            $this->addHandlers($aggregateLocationSortClauseVisitorDefinition, $visitors);
         }
     }
 
-    protected function addHandlers( Definition $definition, $handlers )
+    protected function addHandlers(Definition $definition, $handlers)
     {
-        foreach ( $handlers as $id => $attributes )
-        {
-            $definition->addMethodCall( 'addVisitor', array( new Reference( $id ) ) );
+        foreach ($handlers as $id => $attributes) {
+            $definition->addMethodCall('addVisitor', array(new Reference($id)));
         }
     }
 }

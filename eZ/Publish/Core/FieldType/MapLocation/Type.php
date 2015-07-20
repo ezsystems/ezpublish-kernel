@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the MapLocation field type
+ * File containing the MapLocation field type.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,20 +18,20 @@ use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
- * MapLocation field types
+ * MapLocation field types.
  *
  * Represents keywords.
  */
 class Type extends FieldType
 {
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
     public function getFieldTypeIdentifier()
     {
-        return "ezgmaplocation";
+        return 'ezgmaplocation';
     }
 
     /**
@@ -42,7 +44,7 @@ class Type extends FieldType
      *
      * @return string
      */
-    public function getName( SPIValue $value )
+    public function getName(SPIValue $value)
     {
         return (string)$value->address;
     }
@@ -55,17 +57,17 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value;
+        return new Value();
     }
 
     /**
-     * Returns if the given $value is considered empty by the field type
+     * Returns if the given $value is considered empty by the field type.
      *
      * @param mixed $value
      *
-     * @return boolean
+     * @return bool
      */
-    public function isEmptyValue( SPIValue $value )
+    public function isEmptyValue(SPIValue $value)
     {
         return $value->latitude === null && $value->longitude === null;
     }
@@ -77,11 +79,10 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\MapLocation\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
-        if ( is_array( $inputValue ) )
-        {
-            $inputValue = new Value( $inputValue );
+        if (is_array($inputValue)) {
+            $inputValue = new Value($inputValue);
         }
 
         return $inputValue;
@@ -93,29 +94,24 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\MapLocation\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
-        if ( !is_float( $value->latitude ) && !is_int( $value->latitude ) )
-        {
+        if (!is_float($value->latitude) && !is_int($value->latitude)) {
             throw new InvalidArgumentType(
                 '$value->latitude',
                 'float',
                 $value->latitude
             );
         }
-        if ( !is_float( $value->longitude ) && !is_int( $value->longitude ) )
-        {
+        if (!is_float($value->longitude) && !is_int($value->longitude)) {
             throw new InvalidArgumentType(
                 '$value->longitude',
                 'float',
                 $value->longitude
             );
         }
-        if ( !is_string( $value->address ) )
-        {
+        if (!is_string($value->address)) {
             throw new InvalidArgumentType(
                 '$value->address',
                 'string',
@@ -131,40 +127,40 @@ class Type extends FieldType
      *
      * @return string
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo(BaseValue $value)
     {
-        return $this->transformationProcessor->transformByGroup( (string)$value, "lowercase" );
+        return $this->transformationProcessor->transformByGroup((string)$value, 'lowercase');
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * @param mixed $hash
      *
      * @return \eZ\Publish\Core\FieldType\MapLocation\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        if ( $hash === null )
-        {
+        if ($hash === null) {
             return $this->getEmptyValue();
         }
-        return new Value( $hash );
+
+        return new Value($hash);
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\MapLocation\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
-        if ( $this->isEmptyValue( $value ) )
-        {
+        if ($this->isEmptyValue($value)) {
             return null;
         }
+
         return array(
             'latitude' => $value->latitude,
             'longitude' => $value->longitude,
@@ -173,9 +169,9 @@ class Type extends FieldType
     }
 
     /**
-     * Returns whether the field type is searchable
+     * Returns whether the field type is searchable.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSearchable()
     {
@@ -183,36 +179,36 @@ class Type extends FieldType
     }
 
     /**
-     * Converts a $value to a persistence value
+     * Converts a $value to a persistence value.
      *
      * @param \eZ\Publish\Core\FieldType\MapLocation\Value $value
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function toPersistenceValue( SPIValue $value )
+    public function toPersistenceValue(SPIValue $value)
     {
         return new FieldValue(
             array(
-                "data" => null,
-                "externalData" => $this->toHash( $value ),
-                "sortKey" => $this->getSortInfo( $value ),
+                'data' => null,
+                'externalData' => $this->toHash($value),
+                'sortKey' => $this->getSortInfo($value),
             )
         );
     }
 
     /**
-     * Converts a persistence $fieldValue to a Value
+     * Converts a persistence $fieldValue to a Value.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
      * @return \eZ\Publish\Core\FieldType\MapLocation\Value
      */
-    public function fromPersistenceValue( FieldValue $fieldValue )
+    public function fromPersistenceValue(FieldValue $fieldValue)
     {
-        if ( $fieldValue->externalData === null )
-        {
+        if ($fieldValue->externalData === null) {
             return $this->getEmptyValue();
         }
-        return $this->fromHash( $fieldValue->externalData );
+
+        return $this->fromHash($fieldValue->externalData);
     }
 }

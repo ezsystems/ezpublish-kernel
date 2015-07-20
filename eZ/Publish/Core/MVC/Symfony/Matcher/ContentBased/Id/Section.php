@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the Section Id matcher class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,11 +22,11 @@ class Section extends MultipleValued
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchLocation( APILocation $location )
+    public function matchLocation(APILocation $location)
     {
-        return isset( $this->values[$location->getContentInfo()->sectionId] );
+        return isset($this->values[$location->getContentInfo()->sectionId]);
     }
 
     /**
@@ -32,10 +34,10 @@ class Section extends MultipleValued
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchContentInfo( ContentInfo $contentInfo )
+    public function matchContentInfo(ContentInfo $contentInfo)
     {
-        return isset( $this->values[$contentInfo->sectionId] );
+        return isset($this->values[$contentInfo->sectionId]);
     }
 }

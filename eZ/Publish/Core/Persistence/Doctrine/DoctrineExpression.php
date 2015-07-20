@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing an interface for the Doctrine database abstractions
+ * File containing an interface for the Doctrine database abstractions.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,7 +27,7 @@ class DoctrineExpression implements Expression
      */
     private $platform;
 
-    public function __construct( Connection $connection )
+    public function __construct(Connection $connection)
     {
         $this->connection = $connection;
         $this->platform = $connection->getDatabasePlatform();
@@ -47,13 +49,14 @@ class DoctrineExpression implements Expression
      * </code>
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
+     *
      * @return string a logical expression
      */
     public function lOr()
     {
         $args = func_get_args();
 
-        return $this->combine( $args, ' OR ' );
+        return $this->combine($args, ' OR ');
     }
 
     /**
@@ -61,25 +64,24 @@ class DoctrineExpression implements Expression
      *
      * @param array $args
      * @param string $by
+     *
      * @return string
      */
-    private function combine( array $args, $by )
+    private function combine(array $args, $by)
     {
-        $args = $this->arrayFlatten( $args );
+        $args = $this->arrayFlatten($args);
 
-        if ( count( $args ) < 1 )
-        {
+        if (count($args) < 1) {
             throw new QueryException(
                 "The expression '{$by}' expected at least 1 argument but none provided."
             );
         }
 
-        if ( count( $args ) === 1 )
-        {
+        if (count($args) === 1) {
             return $args[0];
         }
 
-        return '( ' . join( $by, $args ) . ' )';
+        return '( ' . implode($by, $args) . ' )';
     }
 
     /**
@@ -98,13 +100,14 @@ class DoctrineExpression implements Expression
      * </code>
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
+     *
      * @return string a logical expression
      */
     public function lAnd()
     {
         $args = func_get_args();
 
-        return $this->combine( $args, ' AND ' );
+        return $this->combine($args, ' AND ');
     }
 
     /**
@@ -119,9 +122,10 @@ class DoctrineExpression implements Expression
      * </code>
      *
      * @param string $expression
+     *
      * @return string a logical expression
      */
-    public function not( $expression )
+    public function not($expression)
     {
         return "NOT ( {$expression} )";
     }
@@ -141,13 +145,16 @@ class DoctrineExpression implements Expression
      * </code>
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
+     *
      * @param string|array(string) $...
+     *
      * @return string an expression
      */
     public function add()
     {
         $args = func_get_args();
-        return $this->basicMath( '+', $args  );
+
+        return $this->basicMath('+', $args);
     }
 
     /**
@@ -165,13 +172,16 @@ class DoctrineExpression implements Expression
      * </code>
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
+     *
      * @param string|array(string) $...
+     *
      * @return string an expression
      */
     public function sub()
     {
         $args = func_get_args();
-        return $this->basicMath( '-', $args  );
+
+        return $this->basicMath('-', $args);
     }
 
     /**
@@ -189,13 +199,16 @@ class DoctrineExpression implements Expression
      * </code>
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
+     *
      * @param string|array(string) $...
+     *
      * @return string an expression
      */
     public function mul()
     {
         $args = func_get_args();
-        return $this->basicMath( '*', $args );
+
+        return $this->basicMath('*', $args);
     }
 
     /**
@@ -213,13 +226,16 @@ class DoctrineExpression implements Expression
      * </code>
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
+     *
      * @param string|array(string) $...
+     *
      * @return string an expression
      */
     public function div()
     {
         $args = func_get_args();
-        return $this->basicMath( '/', $args );
+
+        return $this->basicMath('/', $args);
     }
 
     /**
@@ -234,9 +250,10 @@ class DoctrineExpression implements Expression
      *
      * @param string $value1 logical expression to compare
      * @param string $value2 logical expression to compare with
+     *
      * @return string logical expression
      */
-    public function eq( $value1, $value2 )
+    public function eq($value1, $value2)
     {
         return "{$value1} = {$value2}";
     }
@@ -253,9 +270,10 @@ class DoctrineExpression implements Expression
      *
      * @param string $value1 logical expression to compare
      * @param string $value2 logical expression to compare with
+     *
      * @return string logical expression
      */
-    public function neq( $value1, $value2 )
+    public function neq($value1, $value2)
     {
         return "{$value1} <> {$value2}";
     }
@@ -272,9 +290,10 @@ class DoctrineExpression implements Expression
      *
      * @param string $value1 logical expression to compare
      * @param string $value2 logical expression to compare with
+     *
      * @return string logical expression
      */
-    public function gt( $value1, $value2 )
+    public function gt($value1, $value2)
     {
         return "{$value1} > {$value2}";
     }
@@ -292,9 +311,10 @@ class DoctrineExpression implements Expression
      *
      * @param string $value1 logical expression to compare
      * @param string $value2 logical expression to compare with
+     *
      * @return string logical expression
      */
-    public function gte( $value1, $value2 )
+    public function gte($value1, $value2)
     {
         return "{$value1} >= {$value2}";
     }
@@ -311,9 +331,10 @@ class DoctrineExpression implements Expression
      *
      * @param string $value1 logical expression to compare
      * @param string $value2 logical expression to compare with
+     *
      * @return string logical expression
      */
-    public function lt( $value1, $value2 )
+    public function lt($value1, $value2)
     {
         return "{$value1} < {$value2}";
     }
@@ -331,9 +352,10 @@ class DoctrineExpression implements Expression
      *
      * @param string $value1 logical expression to compare
      * @param string $value2 logical expression to compare with
+     *
      * @return string logical expression
      */
-    public function lte( $value1, $value2 )
+    public function lte($value1, $value2)
     {
         return "{$value1} <= {$value2}";
     }
@@ -358,56 +380,50 @@ class DoctrineExpression implements Expression
      *         parameters.
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if the 2nd parameter is an
      *         empty array.
+     *
      * @param string $column the value that should be matched against
      * @param string|array(string) $... values that will be matched against $column
+     *
      * @return string logical expression
      */
-    public function in( $column )
+    public function in($column)
     {
         $args = func_get_args();
 
-        if ( count( $args ) < 2 )
-        {
-            throw new QueryException( 'Expected two or more parameters to in()' );
+        if (count($args) < 2) {
+            throw new QueryException('Expected two or more parameters to in()');
         }
 
-        if ( is_array( $args[1] ) )
-        {
-            $values = array_values( $args[1] );
-        }
-        else
-        {
-            $values = array_slice( $args, 1 );
+        if (is_array($args[1])) {
+            $values = array_values($args[1]);
+        } else {
+            $values = array_slice($args, 1);
         }
 
         // Special handling of sub selects to avoid double braces
-        if ( count( $values ) === 1 && $values[0] instanceof SubselectDoctrineQuery )
-        {
+        if (count($values) === 1 && $values[0] instanceof SubselectDoctrineQuery) {
             return "{$column} IN " . $values[0]->getQuery();
         }
 
-        if ( count( $values ) == 0 )
-        {
-            throw new QueryException( 'At least one element is required as value.' );
+        if (count($values) == 0) {
+            throw new QueryException('At least one element is required as value.');
         }
 
-        foreach ( $values as $key => $value )
-        {
-            switch ( true )
-            {
+        foreach ($values as $key => $value) {
+            switch (true) {
                 case $value instanceof SubselectDoctrineQuery:
                     $values[$key] = $value->getQuery();
                     break;
-                case is_int( $value ):
-                case is_float( $value ):
+                case is_int($value):
+                case is_float($value):
                     $values[$key] = (string)$value;
                     break;
                 default:
-                    $values[$key] = $this->connection->quote( $value );
+                    $values[$key] = $this->connection->quote($value);
             }
         }
 
-        return "{$column} IN ( " . join( ', ', $values ) . ' )';
+        return "{$column} IN ( " . implode(', ', $values) . ' )';
     }
 
     /**
@@ -421,9 +437,10 @@ class DoctrineExpression implements Expression
      * </code>
      *
      * @param string $expression the expression that should be compared to null
+     *
      * @return string logical expression
      */
-    public function isNull( $expression )
+    public function isNull($expression)
     {
         return "{$expression} IS NULL";
     }
@@ -448,9 +465,10 @@ class DoctrineExpression implements Expression
      * @param string $expression the value to compare to
      * @param string $value1 the lower value to compare with
      * @param string $value2 the higher value to compare with
+     *
      * @return string logical expression
      */
-    public function between( $expression, $value1, $value2 )
+    public function between($expression, $value1, $value2)
     {
         return "{$expression} BETWEEN {$value1} AND {$value2}";
     }
@@ -465,78 +483,84 @@ class DoctrineExpression implements Expression
      * @param string $expression the name of the expression to match on
      * @param string $pattern the pattern to match with.
      */
-    public function like( $expression, $pattern )
+    public function like($expression, $pattern)
     {
         return "{$expression} LIKE {$pattern}";
     }
 
     /**
-     * Returns the average value of a column
+     * Returns the average value of a column.
      *
      * @param string $column the column to use
+     *
      * @return string
      */
-    public function avg( $column )
+    public function avg($column)
     {
         return "AVG( {$column} )";
     }
 
     /**
-     * Returns the number of rows (without a NULL value) of a column
+     * Returns the number of rows (without a NULL value) of a column.
      *
      * If a '*' is used instead of a column the number of selected rows
      * is returned.
      *
      * @param string $column the column to use
+     *
      * @return string
      */
-    public function count( $column )
+    public function count($column)
     {
         return "COUNT( {$column} )";
     }
 
     /**
-     * Returns the highest value of a column
+     * Returns the highest value of a column.
      *
      * @param string $column the column to use
+     *
      * @return string
      */
-    public function max( $column )
+    public function max($column)
     {
         return "MAX( {$column} )";
     }
 
     /**
-     * Returns the lowest value of a column
+     * Returns the lowest value of a column.
      *
      * @param string $column the column to use
+     *
      * @return string
      */
-    public function min( $column )
+    public function min($column)
     {
         return "MIN( {$column} )";
     }
 
     /**
-     * Returns the total sum of a column
+     * Returns the total sum of a column.
      *
      * @param string $column the column to use
+     *
      * @return string
      */
-    public function sum( $column )
+    public function sum($column)
     {
         return "SUM( {$column} )";
     }
 
     /**
-     * Returns the length of text field $column
+     * Returns the length of text field $column.
      *
      * @param string $column
+     *
      * @return string
      */
-    public function length( $column )
+    public function length($column)
     {
-        return $this->platform->getLengthExpression( $column );
+        return $this->platform->getLengthExpression($column);
     }
 
     /**
@@ -544,11 +568,12 @@ class DoctrineExpression implements Expression
      *
      * @param string $column
      * @param int $decimals
+     *
      * @return string
      */
-    public function round( $column, $decimals )
+    public function round($column, $decimals)
     {
-        return $this->platform->getRoundExpression( $column, $decimals );
+        return $this->platform->getRoundExpression($column, $decimals);
     }
 
     /**
@@ -557,11 +582,12 @@ class DoctrineExpression implements Expression
      *
      * @param string $expression1
      * @param string $expression2
+     *
      * @return string
      */
-    public function mod( $expression1, $expression2 )
+    public function mod($expression1, $expression2)
     {
-        return $this->platform->getModExpression( $expression1, $expression2 );
+        return $this->platform->getModExpression($expression1, $expression2);
     }
 
     /**
@@ -583,15 +609,16 @@ class DoctrineExpression implements Expression
      * @param string $value the target $value the string or the string column.
      * @param int $from extract from this characeter.
      * @param int $len extract this amount of characters.
+     *
      * @return string sql that extracts part of a string.
      */
-    public function subString( $value, $from, $len = null )
+    public function subString($value, $from, $len = null)
     {
-        return $this->platform->getSubstringExpression( $value, $from, $len );
+        return $this->platform->getSubstringExpression($value, $from, $len);
     }
 
     /**
-     * Returns a series of strings concatinated
+     * Returns a series of strings concatinated.
      *
      * concat() accepts an arbitrary number of parameters. Each parameter
      * must contain an expression or an array with expressions.
@@ -602,41 +629,44 @@ class DoctrineExpression implements Expression
     {
         $args = func_get_args();
 
-        return call_user_func_array( array( $this->platform, 'getConcatExpression' ), $args );
+        return call_user_func_array(array($this->platform, 'getConcatExpression'), $args);
     }
 
     /**
-     * Returns the SQL to locate the position of the first occurrence of a substring
+     * Returns the SQL to locate the position of the first occurrence of a substring.
      *
      * @param string $substr
      * @param string $value
+     *
      * @return string
      */
-    public function position( $substr, $value )
+    public function position($substr, $value)
     {
-        return $this->platform->getLocateExpression( $value, $substr );
+        return $this->platform->getLocateExpression($value, $substr);
     }
 
     /**
-     * Returns the SQL to change all characters to lowercase
+     * Returns the SQL to change all characters to lowercase.
      *
      * @param string $value
+     *
      * @return string
      */
-    public function lower( $value )
+    public function lower($value)
     {
-        return $this->platform->getLowerExpression( $value );
+        return $this->platform->getLowerExpression($value);
     }
 
     /**
-     * Returns the SQL to change all characters to uppercase
+     * Returns the SQL to change all characters to uppercase.
      *
      * @param string $value
+     *
      * @return string
      */
-    public function upper( $value )
+    public function upper($value)
     {
-        return $this->platform->getUpperExpression( $value );
+        return $this->platform->getUpperExpression($value);
     }
 
     /**
@@ -644,11 +674,12 @@ class DoctrineExpression implements Expression
      *
      * @param string $value1
      * @param string $value2
+     *
      * @return string
      */
-    public function bitAnd( $value1, $value2 )
+    public function bitAnd($value1, $value2)
     {
-        return $this->platform->getBitAndComparisonExpression( $value1, $value2 );
+        return $this->platform->getBitAndComparisonExpression($value1, $value2);
     }
 
     /**
@@ -656,11 +687,12 @@ class DoctrineExpression implements Expression
      *
      * @param string $value1
      * @param string $value2
+     *
      * @return string
      */
-    public function bitOr( $value1, $value2 )
+    public function bitOr($value1, $value2)
     {
-        return $this->platform->getBitOrComparisonExpression( $value1, $value2 );
+        return $this->platform->getBitOrComparisonExpression($value1, $value2);
     }
 
     /**
@@ -684,28 +716,24 @@ class DoctrineExpression implements Expression
      * </code>
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException
+     *
      * @return string
      */
     public function searchedCase()
     {
         $args = func_get_args();
 
-        if ( count( $args ) === 0 )
-        {
-            throw new QueryException( 'Expected at least one parameter in searchedCase()' );
+        if (count($args) === 0) {
+            throw new QueryException('Expected at least one parameter in searchedCase()');
         }
 
         $expr = ' CASE';
-        foreach ( $args as $arg )
-        {
-            if ( is_array( $arg ) && count( $arg ) == 2 )
-            {
+        foreach ($args as $arg) {
+            if (is_array($arg) && count($arg) == 2) {
                 $column1 = $arg[0];
                 $column2 = $arg[1];
                 $expr .= " WHEN {$column1} THEN {$column2}";
-            }
-            else if ( is_scalar( $arg ) )
-            {
+            } elseif (is_scalar($arg)) {
                 $column = $arg;
                 $expr .= " ELSE {$column}";
             }
@@ -724,27 +752,25 @@ class DoctrineExpression implements Expression
      * expressions.
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
+     *
      * @param string $type the type of operation, can be '+', '-', '*' or '/'.
      * @param string|array(string) $...
+     *
      * @return string an expression
      */
-    private function basicMath( $type )
+    private function basicMath($type)
     {
         $args = func_get_args();
-        $elements = $this->arrayFlatten( array_slice( $args, 1 ) );
-        if ( count( $elements ) < 1 )
-        {
+        $elements = $this->arrayFlatten(array_slice($args, 1));
+        if (count($elements) < 1) {
             throw new QueryException(
                 "The operation '{$type}' expected at least 1 argument but none provided."
             );
         }
-        if ( count( $elements ) == 1 )
-        {
+        if (count($elements) == 1) {
             return $elements[0];
-        }
-        else
-        {
-            return '( ' . join( " $type ", $elements ) . ' )';
+        } else {
+            return '( ' . implode(" $type ", $elements) . ' )';
         }
     }
 
@@ -752,17 +778,16 @@ class DoctrineExpression implements Expression
      * Returns all the elements in $array as one large single dimensional array.
      *
      * @param array $array
+     *
      * @return array
      */
-    private function arrayFlatten( array $array )
+    private function arrayFlatten(array $array)
     {
         $flat = array();
-        foreach ( $array as $arg )
-        {
-            switch ( gettype( $arg ) )
-            {
+        foreach ($array as $arg) {
+            switch (gettype($arg)) {
                 case 'array':
-                    $flat = array_merge( $flat, $arg );
+                    $flat = array_merge($flat, $arg);
                     break;
 
                 default:
@@ -770,6 +795,7 @@ class DoctrineExpression implements Expression
                     break;
             }
         }
+
         return $flat;
     }
 }

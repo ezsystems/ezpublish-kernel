@@ -1,20 +1,20 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values;
 use eZ\Publish\Core\REST\Server\Values\Version;
-use eZ\Publish\Core\REST\Common;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
@@ -34,16 +34,16 @@ class VersionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test the Version visitor
+     * Test the Version visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $version = new Version(
             new Values\Content\Content(
@@ -74,23 +74,23 @@ class VersionTest extends ValueObjectVisitorBaseTest
                                 'fieldDefIdentifier' => 'ezimage',
                             )
                         ),
-                    )
+                    ),
                 )
             ),
-            $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
+            $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'),
             array()
         );
 
-        $this->fieldTypeSerializerMock->expects( $this->exactly( 2 ) )
-            ->method( 'serializeFieldValue' )
+        $this->fieldTypeSerializerMock->expects($this->exactly(2))
+            ->method('serializeFieldValue')
             ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' ),
-                $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' ),
-                $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Field' )
+                $this->isInstanceOf('eZ\\Publish\\Core\\REST\\Common\\Output\\Generator'),
+                $this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'),
+                $this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Field')
             );
 
-        $this->getVisitorMock()->expects( $this->exactly( 2 ) )
-            ->method( 'visitValueObject' );
+        $this->getVisitorMock()->expects($this->exactly(2))
+            ->method('visitValueObject');
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentInVersion',
@@ -107,9 +107,9 @@ class VersionTest extends ValueObjectVisitorBaseTest
             $version
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
@@ -119,15 +119,15 @@ class VersionTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisit
      */
-    public function testResultContainsVersionChildren( $result )
+    public function testResultContainsVersionChildren($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'Version',
+                'tag' => 'Version',
                 'children' => array(
-                    'less_than'    => 2,
+                    'less_than' => 2,
                     'greater_than' => 0,
-                )
+                ),
             ),
             $result,
             'Invalid <Version> element.',
@@ -140,15 +140,15 @@ class VersionTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisit
      */
-    public function testResultVersionAttributes( $result )
+    public function testResultVersionAttributes($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'Version',
+                'tag' => 'Version',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Version+xml',
-                    'href' => '/content/objects/23/versions/5'
-                )
+                    'href' => '/content/objects/23/versions/5',
+                ),
             ),
             $result,
             'Invalid <Version> attributes.',
@@ -161,15 +161,15 @@ class VersionTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisit
      */
-    public function testResultContainsFieldsChildren( $result )
+    public function testResultContainsFieldsChildren($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'Fields',
+                'tag' => 'Fields',
                 'children' => array(
-                    'less_than'    => 3,
+                    'less_than' => 3,
                     'greater_than' => 1,
-                )
+                ),
             ),
             $result,
             'Invalid <Fields> element.',
@@ -178,12 +178,12 @@ class VersionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the Version visitor
+     * Get the Version visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Version
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Version( $this->fieldTypeSerializerMock );
+        return new ValueObjectVisitor\Version($this->fieldTypeSerializerMock);
     }
 }

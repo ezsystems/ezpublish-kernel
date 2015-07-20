@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\Content\VersionInfo class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -70,10 +72,10 @@ abstract class VersionInfo extends ValueObject
      *
      * @return string
      */
-    abstract public function getName( $languageCode = null );
+    abstract public function getName($languageCode = null);
 
     /**
-     * the last modified date of this version
+     * the last modified date of this version.
      *
      * @var \DateTime
      */
@@ -94,7 +96,7 @@ abstract class VersionInfo extends ValueObject
     protected $creationDate;
 
     /**
-     * One of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED
+     * One of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED.
      *
      * @var int Constant.
      */
@@ -108,7 +110,7 @@ abstract class VersionInfo extends ValueObject
     protected $initialLanguageCode;
 
     /**
-     * List of languages in this version
+     * List of languages in this version.
      *
      * Reflects which languages fields exists in for this version.
      *

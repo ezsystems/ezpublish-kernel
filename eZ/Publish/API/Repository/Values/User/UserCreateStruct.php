@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\User\UserCreateStruct class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,12 +14,12 @@ namespace eZ\Publish\API\Repository\Values\User;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 
 /**
- * This class is used to create a new user in the repository
+ * This class is used to create a new user in the repository.
  */
 abstract class UserCreateStruct extends ContentCreateStruct
 {
     /**
-     * User login
+     * User login.
      *
      * @required
      *
@@ -26,7 +28,7 @@ abstract class UserCreateStruct extends ContentCreateStruct
     public $login;
 
     /**
-     * User E-Mail address
+     * User E-Mail address.
      *
      * @required
      *
@@ -35,7 +37,7 @@ abstract class UserCreateStruct extends ContentCreateStruct
     public $email;
 
     /**
-     * The plain password
+     * The plain password.
      *
      * @required
      *
@@ -44,9 +46,9 @@ abstract class UserCreateStruct extends ContentCreateStruct
     public $password;
 
     /**
-     * Indicates if the user is enabled after creation
+     * Indicates if the user is enabled after creation.
      *
-     * @var boolean
+     * @var bool
      */
     public $enabled = true;
 }

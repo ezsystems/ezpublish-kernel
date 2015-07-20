@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ImageTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,20 +23,19 @@ class ImageTest extends AbstractParserTestCase
     {
         parent::setUp();
 
-        if ( !isset( $_ENV['imagemagickConvertPath'] ) || !is_executable( $_ENV['imagemagickConvertPath'] ) )
-        {
-            $this->markTestSkipped( 'Missing or mis-configured Imagemagick convert path.' );
+        if (!isset($_ENV['imagemagickConvertPath']) || !is_executable($_ENV['imagemagickConvertPath'])) {
+            $this->markTestSkipped('Missing or mis-configured Imagemagick convert path.');
         }
     }
 
     protected function getMinimalConfiguration()
     {
-        $this->config = Yaml::parse( file_get_contents( __DIR__ . '/../../Fixtures/ezpublish_image.yml' ) );
+        $this->config = Yaml::parse(file_get_contents(__DIR__ . '/../../Fixtures/ezpublish_image.yml'));
         $this->config += array(
             'imagemagick' => array(
                 'enabled' => true,
-                'path' => $_ENV['imagemagickConvertPath']
-            )
+                'path' => $_ENV['imagemagickConvertPath'],
+            ),
         );
 
         return $this->config;
@@ -43,7 +44,7 @@ class ImageTest extends AbstractParserTestCase
     protected function getContainerExtensions()
     {
         return array(
-            new EzPublishCoreExtension( array( new Image() ) )
+            new EzPublishCoreExtension(array(new Image())),
         );
     }
 
@@ -52,24 +53,21 @@ class ImageTest extends AbstractParserTestCase
         $this->load();
 
         $expectedParsedVariations = array();
-        foreach ( $this->config['system'] as $sa => $saConfig )
-        {
+        foreach ($this->config['system'] as $sa => $saConfig) {
             $expectedParsedVariations[$sa] = array();
-            foreach ( $saConfig['image_variations'] as $variationName => $imageVariationConfig )
-            {
+            foreach ($saConfig['image_variations'] as $variationName => $imageVariationConfig) {
                 $imageVariationConfig['post_processors'] = array();
-                foreach ( $imageVariationConfig['filters'] as $i => $filter )
-                {
+                foreach ($imageVariationConfig['filters'] as $i => $filter) {
                     $imageVariationConfig['filters'][$filter['name']] = $filter['params'];
-                    unset( $imageVariationConfig['filters'][$i] );
+                    unset($imageVariationConfig['filters'][$i]);
                 }
                 $expectedParsedVariations[$sa][$variationName] = $imageVariationConfig;
             }
         }
 
-        $expected = $expectedParsedVariations['ezdemo_group'] + $this->container->getParameter( 'ezsettings.default.image_variations' );
-        $this->assertConfigResolverParameterValue( 'image_variations', $expected, 'ezdemo_site', false );
-        $this->assertConfigResolverParameterValue( 'image_variations', $expected, 'ezdemo_site_admin', false );
+        $expected = $expectedParsedVariations['ezdemo_group'] + $this->container->getParameter('ezsettings.default.image_variations');
+        $this->assertConfigResolverParameterValue('image_variations', $expected, 'ezdemo_site', false);
+        $this->assertConfigResolverParameterValue('image_variations', $expected, 'ezdemo_site_admin', false);
         $this->assertConfigResolverParameterValue(
             'image_variations',
             $expected + $expectedParsedVariations['fre'],
@@ -89,10 +87,10 @@ class ImageTest extends AbstractParserTestCase
                     'ezdemo_site' => array(
                         'imagemagick' => array(
                             'pre_parameters' => '-foo -bar',
-                            'post_parameters' => '-baz'
-                        )
-                    )
-                )
+                            'post_parameters' => '-baz',
+                        ),
+                    ),
+                ),
             )
         );
     }

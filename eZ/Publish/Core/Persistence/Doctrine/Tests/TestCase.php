@@ -21,32 +21,28 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $dsn = getenv( "DATABASE" );
+        $dsn = getenv('DATABASE');
 
-        if ( !$dsn )
-        {
-            $dsn = "sqlite://:memory:";
+        if (!$dsn) {
+            $dsn = 'sqlite://:memory:';
         }
 
-        $doctrineParams = ConnectionHandler::parseDSN( $dsn );
+        $doctrineParams = ConnectionHandler::parseDSN($dsn);
 
-        $this->connection = DriverManager::getConnection( $doctrineParams );
-        $this->handler = new ConnectionHandler( $this->connection );
+        $this->connection = DriverManager::getConnection($doctrineParams);
+        $this->handler = new ConnectionHandler($this->connection);
     }
 
     protected function createQueryTestTable()
     {
-        $table = new \Doctrine\DBAL\Schema\Table( 'query_test' );
-        $table->addColumn( 'id', 'integer' );
-        $table->addColumn( 'val1', 'string' );
-        $table->addColumn( 'val2', 'integer' );
+        $table = new \Doctrine\DBAL\Schema\Table('query_test');
+        $table->addColumn('id', 'integer');
+        $table->addColumn('val1', 'string');
+        $table->addColumn('val2', 'integer');
 
-        try
-        {
-            $this->connection->getSchemaManager()->createTable( $table );
-        }
-        catch ( DBALException $e)
-        {
+        try {
+            $this->connection->getSchemaManager()->createTable($table);
+        } catch (DBALException $e) {
         }
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the FullText Criterion parser class
+ * File containing the FullText Criterion parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,12 +17,12 @@ use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText as FullTextCriterion;
 
 /**
- * Parser for FullText Criterion
+ * Parser for FullText Criterion.
  */
 class FullText extends BaseParser
 {
     /**
-     * Parses input structure to a FullText criterion
+     * Parses input structure to a FullText criterion.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -29,13 +31,12 @@ class FullText extends BaseParser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        if ( !array_key_exists( "FullTextCriterion", $data ) )
-        {
-            throw new Exceptions\Parser( "Invalid <FullTextCriterion> format" );
+        if (!array_key_exists('FullTextCriterion', $data)) {
+            throw new Exceptions\Parser('Invalid <FullTextCriterion> format');
         }
 
-        return new FullTextCriterion( $data["FullTextCriterion"] );
+        return new FullTextCriterion($data['FullTextCriterion']);
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway\DoctrineDatabaseTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway\DoctrineDatabaseTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -36,8 +38,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::__construct
-     *
-     * @return void
      */
     public function testCtor()
     {
@@ -52,9 +52,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertContentObject
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::generateLanguageMask
+     *
      * @todo Fix not available fields
      */
     public function testInsertContentObject()
@@ -62,7 +62,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $struct = $this->getCreateStructFixture();
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->insertContentObject( $struct );
+        $gateway->insertContentObject($struct);
 
         $this->assertQueryResult(
             array(
@@ -96,12 +96,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                         'published',
                         'status',
                     )
-                )->from( 'ezcontentobject' )
+                )->from('ezcontentobject')
         );
     }
 
     /**
-     * Returns a Content fixture
+     * Returns a Content fixture.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\CreateStruct
      */
@@ -120,7 +120,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             'eng-US' => 'Content name',
         );
         $struct->fields = array(
-            new Field( array( "languageCode" => "eng-US" ) )
+            new Field(array('languageCode' => 'eng-US')),
         );
         $struct->locations = array();
 
@@ -128,21 +128,21 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a Content fixture
+     * Returns a Content fixture.
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
     protected function getContentFixture()
     {
-        $content = new Content;
+        $content = new Content();
 
-        $content->versionInfo = new VersionInfo;
+        $content->versionInfo = new VersionInfo();
         $content->versionInfo->names = array(
             'eng-US' => 'Content name',
         );
         $content->versionInfo->status = VersionInfo::STATUS_PENDING;
 
-        $content->versionInfo->contentInfo = new ContentInfo;
+        $content->versionInfo->contentInfo = new ContentInfo();
         $content->versionInfo->contentInfo->contentTypeId = 23;
         $content->versionInfo->contentInfo->sectionId = 42;
         $content->versionInfo->contentInfo->ownerId = 13;
@@ -159,13 +159,13 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a Version fixture
+     * Returns a Version fixture.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      */
     protected function getVersionFixture()
     {
-        $version = new VersionInfo;
+        $version = new VersionInfo();
 
         $version->id = null;
         $version->versionNo = 1;
@@ -176,8 +176,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $version->initialLanguageCode = 'eng-GB';
         $version->contentInfo = new ContentInfo(
             array(
-                "id" => 2342,
-                "alwaysAvailable" => true
+                'id' => 2342,
+                'alwaysAvailable' => true,
             )
         );
 
@@ -185,7 +185,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertVersion
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::generateLanguageMask
      */
@@ -194,7 +193,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $version = $this->getVersionFixture();
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->insertVersion( $version, array() );
+        $gateway->insertVersion($version, array());
 
         $this->assertQueryResult(
             array(
@@ -210,7 +209,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'initial_language_id' => '4',
                     // Not needed, according to field mapping document
                     // 'user_id',
-                )
+                ),
             ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
@@ -226,14 +225,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                         'language_mask',
                         'initial_language_id',
                     )
-                )->from( 'ezcontentobject_version' )
+                )->from('ezcontentobject_version')
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setStatus
-     *
-     * @return void
      */
     public function testSetStatus()
     {
@@ -241,39 +238,37 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         // insert content
         $struct = $this->getCreateStructFixture();
-        $contentId = $gateway->insertContentObject( $struct );
+        $contentId = $gateway->insertContentObject($struct);
 
         // insert version
         $version = $this->getVersionFixture();
         $version->contentInfo->id = $contentId;
-        $gateway->insertVersion( $version, array() );
+        $gateway->insertVersion($version, array());
 
         $this->assertTrue(
-            $gateway->setStatus( $version->contentInfo->id, $version->versionNo, VersionInfo::STATUS_PENDING )
+            $gateway->setStatus($version->contentInfo->id, $version->versionNo, VersionInfo::STATUS_PENDING)
         );
 
         $this->assertQueryResult(
-            array( array( VersionInfo::STATUS_PENDING ) ),
+            array(array(VersionInfo::STATUS_PENDING)),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
-                ->select( 'status' )
-                ->from( 'ezcontentobject_version' )
+                ->select('status')
+                ->from('ezcontentobject_version')
         );
 
         // check that content status has not been set to published
         $this->assertQueryResult(
-            array( array( VersionInfo::STATUS_DRAFT ) ),
+            array(array(VersionInfo::STATUS_DRAFT)),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
-                ->select( 'status' )
-                ->from( 'ezcontentobject' )
+                ->select('status')
+                ->from('ezcontentobject')
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setStatus
-     *
-     * @return void
      */
     public function testSetStatusPublished()
     {
@@ -281,53 +276,49 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         // insert content
         $struct = $this->getCreateStructFixture();
-        $contentId = $gateway->insertContentObject( $struct );
+        $contentId = $gateway->insertContentObject($struct);
 
         // insert version
         $version = $this->getVersionFixture();
         $version->contentInfo->id = $contentId;
-        $gateway->insertVersion( $version, array() );
+        $gateway->insertVersion($version, array());
 
         $this->assertTrue(
-            $gateway->setStatus( $version->contentInfo->id, $version->versionNo, VersionInfo::STATUS_PUBLISHED )
+            $gateway->setStatus($version->contentInfo->id, $version->versionNo, VersionInfo::STATUS_PUBLISHED)
         );
 
         $this->assertQueryResult(
-            array( array( VersionInfo::STATUS_PUBLISHED ) ),
+            array(array(VersionInfo::STATUS_PUBLISHED)),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
-                ->select( 'status' )
-                ->from( 'ezcontentobject_version' )
+                ->select('status')
+                ->from('ezcontentobject_version')
         );
 
         // check that content status has been set to published
         $this->assertQueryResult(
-            array( array( ContentInfo::STATUS_PUBLISHED ) ),
+            array(array(ContentInfo::STATUS_PUBLISHED)),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
-                ->select( 'status' )
-                ->from( 'ezcontentobject' )
+                ->select('status')
+                ->from('ezcontentobject')
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setStatus
-     *
-     * @return void
      */
     public function testSetStatusUnknownVersion()
     {
         $gateway = $this->getDatabaseGateway();
 
         $this->assertFalse(
-            $gateway->setStatus( 23, 42, 2 )
+            $gateway->setStatus(23, 42, 2)
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::updateContent
-     *
-     * @return void
      */
     public function testUpdateContent()
     {
@@ -339,7 +330,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $metadataStruct = $this->getMetadataUpdateStructFixture();
 
-        $gateway->updateContent( 10, $metadataStruct );
+        $gateway->updateContent(10, $metadataStruct);
 
         $this->assertQueryResult(
             array(
@@ -349,8 +340,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'owner_id' => '42',
                     'published' => '123456',
                     'remote_id' => 'ghjk1234567890ghjk1234567890',
-                    'name' => 'Thoth'
-                )
+                    'name' => 'Thoth',
+                ),
             ),
             $this->getDatabaseHandler()->createSelectQuery()
                 ->select(
@@ -360,13 +351,13 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'published',
                     'remote_id',
                     'name'
-                )->from( 'ezcontentobject' )
-                ->where( 'id = 10' )
+                )->from('ezcontentobject')
+                ->where('id = 10')
         );
     }
 
     /**
-     * Returns an UpdateStruct fixture
+     * Returns an UpdateStruct fixture.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\UpdateStruct
      */
@@ -377,11 +368,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $struct->fields = array();
         $struct->modificationDate = 234567;
         $struct->initialLanguageId = 2;
+
         return $struct;
     }
 
     /**
-     * Returns a MetadataUpdateStruct fixture
+     * Returns a MetadataUpdateStruct fixture.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct
      */
@@ -392,15 +384,14 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $struct->publicationDate = 123456;
         $struct->mainLanguageId = 3;
         $struct->modificationDate = 234567;
-        $struct->remoteId = "ghjk1234567890ghjk1234567890";
-        $struct->name = "Thoth";
+        $struct->remoteId = 'ghjk1234567890ghjk1234567890';
+        $struct->name = 'Thoth';
+
         return $struct;
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::updateVersion
-     *
-     * @return void
      */
     public function testUpdateVersion()
     {
@@ -410,7 +401,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             __DIR__ . '/../_fixtures/contentobjects.php'
         );
 
-        $gateway->updateVersion( 10, 2, $this->getUpdateStructFixture() );
+        $gateway->updateVersion(10, 2, $this->getUpdateStructFixture());
 
         $query = $this->getDatabaseHandler()->createSelectQuery();
         $this->assertQueryResult(
@@ -419,7 +410,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'creator_id' => '23',
                     'initial_language_id' => '2',
                     'modified' => '234567',
-                )
+                ),
             ),
             $query
                 ->select(
@@ -428,11 +419,11 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                         'initial_language_id',
                         'modified',
                     )
-                )->from( 'ezcontentobject_version' )
+                )->from('ezcontentobject_version')
                 ->where(
                     $query->expr->lAnd(
-                        $query->expr->eq( 'contentobject_id', 10 ),
-                        $query->expr->eq( 'version', 2 )
+                        $query->expr->eq('contentobject_id', 10),
+                        $query->expr->eq('version', 2)
                     )
                 )
         );
@@ -440,8 +431,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertNewField
-     *
-     * @return void
      */
     public function testInsertNewField()
     {
@@ -453,7 +442,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $value = $this->getStorageValueFixture();
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->insertNewField( $content, $field, $value );
+        $gateway->insertNewField($content, $field, $value);
 
         $this->assertQueryResult(
             array(
@@ -470,7 +459,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'sort_key_string' => 'Test',
                     'version' => '1',
                     'language_id' => '5',
-                )
+                ),
             ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
@@ -489,15 +478,13 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                         'version',
                         'language_id',
                     )
-                )->from( 'ezcontentobject_attribute' )
+                )->from('ezcontentobject_attribute')
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::updateField
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setFieldUpdateValues
-     *
-     * @return void
      */
     public function testUpdateField()
     {
@@ -508,7 +495,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $value = $this->getStorageValueFixture();
 
         $gateway = $this->getDatabaseGateway();
-        $field->id = $gateway->insertNewField( $content, $field, $value );
+        $field->id = $gateway->insertNewField($content, $field, $value);
 
         $newValue = new StorageFieldValue(
             array(
@@ -520,7 +507,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             )
         );
 
-        $gateway->updateField( $field, $newValue );
+        $gateway->updateField($field, $newValue);
 
         $this->assertQueryResult(
             array(
@@ -530,7 +517,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'data_text' => 'New text',
                     'sort_key_int' => '123',
                     'sort_key_string' => 'new_text',
-                )
+                ),
             ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
@@ -542,15 +529,13 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                         'sort_key_int',
                         'sort_key_string',
                     )
-                )->from( 'ezcontentobject_attribute' )
+                )->from('ezcontentobject_attribute')
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::updateNonTranslatableField
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setFieldUpdateValues
-     *
-     * @return void
      */
     public function testUpdateNonTranslatableField()
     {
@@ -562,8 +547,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $value = $this->getStorageValueFixture();
 
         $gateway = $this->getDatabaseGateway();
-        $fieldGb->id = $gateway->insertNewField( $content, $fieldGb, $value );
-        $fieldUs->id = $gateway->insertNewField( $content, $fieldUs, $value );
+        $fieldGb->id = $gateway->insertNewField($content, $fieldGb, $value);
+        $fieldUs->id = $gateway->insertNewField($content, $fieldUs, $value);
 
         $updateStruct = new Content\UpdateStruct();
 
@@ -577,7 +562,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             )
         );
 
-        $gateway->updateNonTranslatableField( $fieldGb, $newValue, $content->versionInfo->contentInfo->id );
+        $gateway->updateNonTranslatableField($fieldGb, $newValue, $content->versionInfo->contentInfo->id);
 
         $this->assertQueryResult(
             array(
@@ -595,7 +580,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'data_text' => 'New text',
                     'sort_key_int' => '123',
                     'sort_key_string' => 'new_text',
-                )
+                ),
             ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
@@ -607,14 +592,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                         'sort_key_int',
                         'sort_key_string',
                     )
-                )->from( 'ezcontentobject_attribute' )
+                )->from('ezcontentobject_attribute')
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::listVersions
-     *
-     * @return void
      */
     public function testListVersions()
     {
@@ -623,18 +606,17 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getDatabaseGateway();
-        $res = $gateway->listVersions( 226 );
+        $res = $gateway->listVersions(226);
 
         $this->assertEquals(
             2,
-            count( $res )
+            count($res)
         );
 
-        foreach ( $res as $row )
-        {
+        foreach ($res as $row) {
             $this->assertEquals(
                 24,
-                count( $row )
+                count($row)
             );
         }
 
@@ -659,8 +641,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::listVersionNumbers
-     *
-     * @return void
      */
     public function testListVersionNumbers()
     {
@@ -669,15 +649,13 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getDatabaseGateway();
-        $res = $gateway->listVersionNumbers( 226 );
+        $res = $gateway->listVersionNumbers(226);
 
-        $this->assertEquals( array( 1, 2 ), $res );
+        $this->assertEquals(array(1, 2), $res);
     }
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::listVersionsForUser
-     *
-     * @return void
      */
     public function testListVersionsForUser()
     {
@@ -686,18 +664,17 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getDatabaseGateway();
-        $res = $gateway->listVersionsForUser( 14 );
+        $res = $gateway->listVersionsForUser(14);
 
         $this->assertEquals(
             2,
-            count( $res )
+            count($res)
         );
 
-        foreach ( $res as $row )
-        {
+        foreach ($res as $row) {
             $this->assertEquals(
                 24,
-                count( $row )
+                count($row)
             );
         }
 
@@ -720,7 +697,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::load
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
      */
@@ -731,23 +707,22 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getDatabaseGateway();
-        $res = $gateway->load( 226, 2 );
+        $res = $gateway->load(226, 2);
 
         $this->assertValuesInRows(
             'ezcontentobject_attribute_language_code',
-            array( 'eng-US', 'eng-GB' ),
+            array('eng-US', 'eng-GB'),
             $res
         );
 
         $this->assertValuesInRows(
             'ezcontentobject_attribute_language_id',
-            array( '2', '4' ),
+            array('2', '4'),
             $res
         );
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::load
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
      */
@@ -759,10 +734,10 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getDatabaseGateway();
 
-        $resFirst = $gateway->load( 11, 1 );
-        $resSecond = $gateway->load( 11, 2 );
+        $resFirst = $gateway->load(11, 1);
+        $resSecond = $gateway->load(11, 2);
 
-        $res = array_merge( $resFirst, $resSecond );
+        $res = array_merge($resFirst, $resSecond);
 
         $orig = include __DIR__ . '/../_fixtures/extract_content_from_rows_multiple_versions.php';
 
@@ -771,11 +746,10 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             $res
         );*/
 
-        $this->assertEquals( $orig, $res, "Fixtures differ between what was previously stored(expected) and what it now generates(actual), this hints either some mistake in impl or that the fixture (../_fixtures/extract_content_from_rows_multiple_versions.php) and tests needs to be adapted." );
+        $this->assertEquals($orig, $res, 'Fixtures differ between what was previously stored(expected) and what it now generates(actual), this hints either some mistake in impl or that the fixture (../_fixtures/extract_content_from_rows_multiple_versions.php) and tests needs to be adapted.');
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::load
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
      */
@@ -787,9 +761,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getDatabaseGateway();
 
-        $res = $gateway->load( 226, 2 );
+        $res = $gateway->load(226, 2);
 
-        $res = array_merge( $res );
+        $res = array_merge($res);
 
         $orig = include __DIR__ . '/../_fixtures/extract_content_from_rows.php';
 
@@ -798,11 +772,10 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             $res
         );*/
 
-        $this->assertEquals( $orig, $res, "Fixtures differ between what was previously stored(expected) and what it now generates(actual), this hints either some mistake in impl or that the fixture (../_fixtures/extract_content_from_rows.php) and tests needs to be adapted." );
+        $this->assertEquals($orig, $res, 'Fixtures differ between what was previously stored(expected) and what it now generates(actual), this hints either some mistake in impl or that the fixture (../_fixtures/extract_content_from_rows.php) and tests needs to be adapted.');
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::load
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
      */
@@ -813,26 +786,25 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getDatabaseGateway();
-        $res = $gateway->load( 226, 2, array( 'eng-GB' ) );
+        $res = $gateway->load(226, 2, array('eng-GB'));
 
         $this->assertValuesInRows(
             'ezcontentobject_attribute_language_code',
-            array( 'eng-GB' ),
+            array('eng-GB'),
             $res
         );
         $this->assertValuesInRows(
             'ezcontentobject_attribute_language_id',
-            array( '4' ),
+            array('4'),
             $res
         );
         $this->assertEquals(
             1,
-            count( $res )
+            count($res)
         );
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::load
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
      */
@@ -843,36 +815,32 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getDatabaseGateway();
-        $res = $gateway->load( 226, 2, array( 'de-DE' ) );
+        $res = $gateway->load(226, 2, array('de-DE'));
 
         $this->assertEquals(
             0,
-            count( $res )
+            count($res)
         );
     }
 
     /**
-     * Asserts that $columnKey in $actualRows exactly contains $expectedValues
+     * Asserts that $columnKey in $actualRows exactly contains $expectedValues.
      *
      * @param string $columnKey
      * @param string[] $expectedValues
      * @param string[][] $actualRows
-     *
-     * @return void
      */
-    protected function assertValuesInRows( $columnKey, array $expectedValues, array $actualRows )
+    protected function assertValuesInRows($columnKey, array $expectedValues, array $actualRows)
     {
         $expectedValues = array_fill_keys(
-            array_values( $expectedValues ),
+            array_values($expectedValues),
             true
         );
 
         $containedValues = array();
 
-        foreach ( $actualRows as $row )
-        {
-            if ( isset( $row[$columnKey] ) )
-            {
+        foreach ($actualRows as $row) {
+            if (isset($row[$columnKey])) {
                 $containedValues[$row[$columnKey]] = true;
             }
         }
@@ -885,8 +853,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::getAllLocationIds
-     *
-     * @return void
      */
     public function testGetAllLocationIds()
     {
@@ -897,15 +863,13 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway = $this->getDatabaseGateway();
 
         $this->assertEquals(
-            array( 228 ),
-            $gateway->getAllLocationIds( 226 )
+            array(228),
+            $gateway->getAllLocationIds(226)
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::getFieldIdsByType
-     *
-     * @return void
      */
     public function testGetFieldIdsByType()
     {
@@ -917,19 +881,17 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $this->assertEquals(
             array(
-                'ezstring' => array( 841, ),
-                'ezxmltext' => array( 842, ),
-                'ezimage' => array( 843, ),
-                'ezkeyword' => array( 844, )
+                'ezstring' => array(841),
+                'ezxmltext' => array(842),
+                'ezimage' => array(843),
+                'ezkeyword' => array(844),
             ),
-            $gateway->getFieldIdsByType( 149 )
+            $gateway->getFieldIdsByType(149)
         );
     }
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::getFieldIdsByType
-     *
-     * @return void
      */
     public function testGetFieldIdsByTypeWithSecondArgument()
     {
@@ -941,16 +903,14 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $this->assertEquals(
             array(
-                'ezstring' => array( 4001, 4002 )
+                'ezstring' => array(4001, 4002),
             ),
-            $gateway->getFieldIdsByType( 225, 2 )
+            $gateway->getFieldIdsByType(225, 2)
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteRelations
-     *
-     * @return void
      */
     public function testDeleteRelationsTo()
     {
@@ -960,12 +920,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $beforeCount = array(
             'all' => $this->countContentRelations(),
-            'from' => $this->countContentRelations( 149 ),
-            'to' => $this->countContentRelations( null, 149 )
+            'from' => $this->countContentRelations(149),
+            'to' => $this->countContentRelations(null, 149),
         );
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->deleteRelations( 149 );
+        $gateway->deleteRelations(149);
 
         $this->assertEquals(
             // yes, relates to itself!
@@ -976,16 +936,14 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             ),
             array(
                 'all' => $this->countContentRelations(),
-                'from' => $this->countContentRelations( 149 ),
-                'to' => $this->countContentRelations( null, 149 )
+                'from' => $this->countContentRelations(149),
+                'to' => $this->countContentRelations(null, 149),
             )
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteRelations
-     *
-     * @return void
      */
     public function testDeleteRelationsFrom()
     {
@@ -995,12 +953,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $beforeCount = array(
             'all' => $this->countContentRelations(),
-            'from' => $this->countContentRelations( 75 ),
-            'to' => $this->countContentRelations( null, 75 )
+            'from' => $this->countContentRelations(75),
+            'to' => $this->countContentRelations(null, 75),
         );
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->deleteRelations( 75 );
+        $gateway->deleteRelations(75);
 
         $this->assertEquals(
             array(
@@ -1010,16 +968,14 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             ),
             array(
                 'all' => $this->countContentRelations(),
-                'from' => $this->countContentRelations( 75 ),
-                'to' => $this->countContentRelations( null, 75 )
+                'from' => $this->countContentRelations(75),
+                'to' => $this->countContentRelations(null, 75),
             )
         );
     }
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteRelations
-     *
-     * @return void
      */
     public function testDeleteRelationsWithSecondArgument()
     {
@@ -1029,12 +985,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $beforeCount = array(
             'all' => $this->countContentRelations(),
-            'from' => $this->countContentRelations( 225 ),
-            'to' => $this->countContentRelations( null, 225 )
+            'from' => $this->countContentRelations(225),
+            'to' => $this->countContentRelations(null, 225),
         );
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->deleteRelations( 225, 2 );
+        $gateway->deleteRelations(225, 2);
 
         $this->assertEquals(
             array(
@@ -1044,16 +1000,14 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             ),
             array(
                 'all' => $this->countContentRelations(),
-                'from' => $this->countContentRelations( 225 ),
-                'to' => $this->countContentRelations( null, 225 )
+                'from' => $this->countContentRelations(225),
+                'to' => $this->countContentRelations(null, 225),
             )
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteField
-     *
-     * @return void
      */
     public function testDeleteField()
     {
@@ -1064,7 +1018,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $beforeCount = $this->countContentFields();
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->deleteField( 22 );
+        $gateway->deleteField(22);
 
         $this->assertEquals(
             $beforeCount - 2,
@@ -1074,16 +1028,14 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $this->assertQueryResult(
             array(),
             $this->getDatabaseHandler()->createSelectQuery()
-                ->select( '*' )
-                ->from( 'ezcontentobject_attribute' )
-                ->where( 'id=22' )
+                ->select('*')
+                ->from('ezcontentobject_attribute')
+                ->where('id=22')
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteFields
-     *
-     * @return void
      */
     public function testDeleteFields()
     {
@@ -1093,28 +1045,26 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $beforeCount = array(
             'all' => $this->countContentFields(),
-            'this' => $this->countContentFields( 4 ),
+            'this' => $this->countContentFields(4),
         );
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->deleteFields( 4 );
+        $gateway->deleteFields(4);
 
         $this->assertEquals(
             array(
                 'all' => $beforeCount['all'] - 2,
-                'this' => 0
+                'this' => 0,
             ),
             array(
                 'all' => $this->countContentFields(),
-                'this' => $this->countContentFields( 4 ),
+                'this' => $this->countContentFields(4),
             )
         );
     }
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteFields
-     *
-     * @return void
      */
     public function testDeleteFieldsWithSecondArgument()
     {
@@ -1124,28 +1074,26 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $beforeCount = array(
             'all' => $this->countContentFields(),
-            'this' => $this->countContentFields( 225 ),
+            'this' => $this->countContentFields(225),
         );
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->deleteFields( 225, 2 );
+        $gateway->deleteFields(225, 2);
 
         $this->assertEquals(
             array(
                 'all' => $beforeCount['all'] - 2,
-                'this' => $beforeCount['this'] - 2
+                'this' => $beforeCount['this'] - 2,
             ),
             array(
                 'all' => $this->countContentFields(),
-                'this' => $this->countContentFields( 225 ),
+                'this' => $this->countContentFields(225),
             )
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteVersions
-     *
-     * @return void
      */
     public function testDeleteVersions()
     {
@@ -1155,28 +1103,26 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $beforeCount = array(
             'all' => $this->countContentVersions(),
-            'this' => $this->countContentVersions( 14 )
+            'this' => $this->countContentVersions(14),
         );
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->deleteVersions( 14 );
+        $gateway->deleteVersions(14);
 
         $this->assertEquals(
             array(
                 'all' => $beforeCount['all'] - 2,
-                'this' => 0
+                'this' => 0,
             ),
             array(
                 'all' => $this->countContentVersions(),
-                'this' => $this->countContentVersions( 14 ),
+                'this' => $this->countContentVersions(14),
             )
         );
     }
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteVersions
-     *
-     * @return void
      */
     public function testDeleteVersionsWithSecondArgument()
     {
@@ -1186,11 +1132,11 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $beforeCount = array(
             'all' => $this->countContentVersions(),
-            'this' => $this->countContentVersions( 225 )
+            'this' => $this->countContentVersions(225),
         );
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->deleteVersions( 225, 2 );
+        $gateway->deleteVersions(225, 2);
 
         $this->assertEquals(
             array(
@@ -1199,40 +1145,36 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             ),
             array(
                 'all' => $this->countContentVersions(),
-                'this' => $this->countContentVersions( 225 ),
+                'this' => $this->countContentVersions(225),
             )
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setName
-     *
-     * @return void
      */
     public function testSetName()
     {
         $beforeCount = array(
             'all' => $this->countContentNames(),
-            'this' => $this->countContentNames( 14 )
+            'this' => $this->countContentNames(14),
         );
 
         $gateway = $this->getDatabaseGateway();
 
-        $gateway->setName( 14, 2, "Hello world!", 'eng-GB' );
+        $gateway->setName(14, 2, 'Hello world!', 'eng-GB');
 
         $this->assertQueryResult(
-            array( array( 'eng-GB', 2, 14, 4, 'Hello world!', 'eng-GB' ) ),
+            array(array('eng-GB', 2, 14, 4, 'Hello world!', 'eng-GB')),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
-                ->select( '*' )
-                ->from( 'ezcontentobject_name' )
+                ->select('*')
+                ->from('ezcontentobject_name')
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteNames
-     *
-     * @return void
      */
     public function testDeleteNames()
     {
@@ -1242,28 +1184,26 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $beforeCount = array(
             'all' => $this->countContentNames(),
-            'this' => $this->countContentNames( 14 )
+            'this' => $this->countContentNames(14),
         );
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->deleteNames( 14 );
+        $gateway->deleteNames(14);
 
         $this->assertEquals(
             array(
                 'all' => $beforeCount['all'] - 2,
-                'this' => 0
+                'this' => 0,
             ),
             array(
                 'all' => $this->countContentNames(),
-                'this' => $this->countContentNames( 14 ),
+                'this' => $this->countContentNames(14),
             )
         );
     }
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteNames
-     *
-     * @return void
      */
     public function testDeleteNamesWithSecondArgument()
     {
@@ -1273,28 +1213,26 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $beforeCount = array(
             'all' => $this->countContentNames(),
-            'this' => $this->countContentNames( 225 )
+            'this' => $this->countContentNames(225),
         );
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->deleteNames( 225, 2 );
+        $gateway->deleteNames(225, 2);
 
         $this->assertEquals(
             array(
                 'all' => $beforeCount['all'] - 1,
-                'this' => $beforeCount['this'] - 1
+                'this' => $beforeCount['this'] - 1,
             ),
             array(
                 'all' => $this->countContentNames(),
-                'this' => $this->countContentNames( 225 ),
+                'this' => $this->countContentNames(225),
             )
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteContent
-     *
-     * @return void
      */
     public function testDeleteContent()
     {
@@ -1305,24 +1243,22 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $beforeCount = $this->countContent();
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->deleteContent( 14 );
+        $gateway->deleteContent(14);
 
         $this->assertEquals(
             array(
                 'all' => $beforeCount - 1,
-                'this' => 0
+                'this' => 0,
             ),
             array(
                 'all' => $this->countContent(),
-                'this' => $this->countContent( 14 )
+                'this' => $this->countContent(14),
             )
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::loadLatestPublishedData
-     *
-     * @return void
      */
     public function testLoadLatestPublishedData()
     {
@@ -1333,8 +1269,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway = $this->getDatabaseGateway();
 
         $this->assertEquals(
-            $gateway->loadLatestPublishedData( 10 ),
-            $gateway->load( 10, 2 )
+            $gateway->loadLatestPublishedData(10),
+            $gateway->load(10, 2)
         );
     }
 
@@ -1347,24 +1283,24 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getDatabaseGateway();
 
-        $relations = $gateway->loadRelations( 57 );
+        $relations = $gateway->loadRelations(57);
 
-        $this->assertEquals( 3, count( $relations ) );
+        $this->assertEquals(3, count($relations));
 
         $this->assertValuesInRows(
             'ezcontentobject_link_to_contentobject_id',
-            array( 58, 59, 60 ),
+            array(58, 59, 60),
             $relations
         );
 
         $this->assertValuesInRows(
             'ezcontentobject_link_from_contentobject_id',
-            array( 57 ),
+            array(57),
             $relations
         );
         $this->assertValuesInRows(
             'ezcontentobject_link_from_contentobject_version',
-            array( 2 ),
+            array(2),
             $relations
         );
     }
@@ -1378,19 +1314,19 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getDatabaseGateway();
 
-        $relations = $gateway->loadRelations( 57, null, \eZ\Publish\API\Repository\Values\Content\Relation::COMMON );
+        $relations = $gateway->loadRelations(57, null, \eZ\Publish\API\Repository\Values\Content\Relation::COMMON);
 
-        $this->assertEquals( 1, count( $relations ), "Expecting one relation to be loaded" );
+        $this->assertEquals(1, count($relations), 'Expecting one relation to be loaded');
 
         $this->assertValuesInRows(
             'ezcontentobject_link_relation_type',
-            array( \eZ\Publish\API\Repository\Values\Content\Relation::COMMON ),
+            array(\eZ\Publish\API\Repository\Values\Content\Relation::COMMON),
             $relations
         );
 
         $this->assertValuesInRows(
             'ezcontentobject_link_to_contentobject_id',
-            array( 58 ),
+            array(58),
             $relations
         );
     }
@@ -1404,13 +1340,13 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getDatabaseGateway();
 
-        $relations = $gateway->loadRelations( 57, 1 );
+        $relations = $gateway->loadRelations(57, 1);
 
-        $this->assertEquals( 1, count( $relations ), "Expecting one relation to be loaded" );
+        $this->assertEquals(1, count($relations), 'Expecting one relation to be loaded');
 
         $this->assertValuesInRows(
             'ezcontentobject_link_to_contentobject_id',
-            array( 58 ),
+            array(58),
             $relations
         );
     }
@@ -1424,9 +1360,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getDatabaseGateway();
 
-        $relations = $gateway->loadRelations( 57, 1, \eZ\Publish\API\Repository\Values\Content\Relation::EMBED );
+        $relations = $gateway->loadRelations(57, 1, \eZ\Publish\API\Repository\Values\Content\Relation::EMBED);
 
-        $this->assertEquals( 0, count( $relations ), "Expecting no relation to be loaded" );
+        $this->assertEquals(0, count($relations), 'Expecting no relation to be loaded');
     }
 
     /**
@@ -1438,13 +1374,13 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getDatabaseGateway();
 
-        $relations = $gateway->loadReverseRelations( 58 );
+        $relations = $gateway->loadReverseRelations(58);
 
-        self::assertEquals( 2, count( $relations ) );
+        self::assertEquals(2, count($relations));
 
         $this->assertValuesInRows(
             'ezcontentobject_link_from_contentobject_id',
-            array( 57, 61 ),
+            array(57, 61),
             $relations
         );
     }
@@ -1458,25 +1394,25 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getDatabaseGateway();
 
-        $relations = $gateway->loadReverseRelations( 58, \eZ\Publish\API\Repository\Values\Content\Relation::COMMON );
+        $relations = $gateway->loadReverseRelations(58, \eZ\Publish\API\Repository\Values\Content\Relation::COMMON);
 
-        self::assertEquals( 1, count( $relations ) );
+        self::assertEquals(1, count($relations));
 
         $this->assertValuesInRows(
             'ezcontentobject_link_from_contentobject_id',
-            array( 57 ),
+            array(57),
             $relations
         );
 
         $this->assertValuesInRows(
             'ezcontentobject_link_relation_type',
-            array( \eZ\Publish\API\Repository\Values\Content\Relation::COMMON ),
+            array(\eZ\Publish\API\Repository\Values\Content\Relation::COMMON),
             $relations
         );
     }
 
     /**
-     * Inserts the relation database fixture from relation_data.php
+     * Inserts the relation database fixture from relation_data.php.
      */
     protected function insertRelationFixture()
     {
@@ -1500,7 +1436,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $this->assertEquals(
             1,
-            $gateway->getLastVersionNumber( 4 )
+            $gateway->getLastVersionNumber(4)
         );
     }
 
@@ -1511,7 +1447,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     {
         $struct = $this->getRelationCreateStructFixture();
         $gateway = $this->getDatabaseGateway();
-        $gateway->insertRelation( $struct );
+        $gateway->insertRelation($struct);
 
         $this->assertQueryResult(
             array(
@@ -1535,8 +1471,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                         'to_contentobject_id',
                         'relation_type',
                     )
-                )->from( 'ezcontentobject_link' )
-                ->where( 'id = 1' )
+                )->from('ezcontentobject_link')
+                ->where('id = 1')
         );
     }
 
@@ -1547,12 +1483,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     {
         $this->insertRelationFixture();
 
-        self::assertEquals( 4, $this->countContentRelations( 57 ) );
+        self::assertEquals(4, $this->countContentRelations(57));
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->deleteRelation( 2, RelationValue::COMMON );
+        $gateway->deleteRelation(2, RelationValue::COMMON);
 
-        self::assertEquals( 3, $this->countContentRelations( 57 ) );
+        self::assertEquals(3, $this->countContentRelations(57));
     }
 
     /**
@@ -1563,18 +1499,18 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $this->insertRelationFixture();
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->deleteRelation( 11, RelationValue::COMMON );
+        $gateway->deleteRelation(11, RelationValue::COMMON);
 
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->getDatabaseHandler()->createSelectQuery();
         $this->assertQueryResult(
-            array( array( 'relation_type' => RelationValue::LINK, ), ),
+            array(array('relation_type' => RelationValue::LINK)),
             $query->select(
-                array( 'relation_type', )
+                array('relation_type')
             )->from(
                 'ezcontentobject_link'
             )->where(
-                $query->expr->eq( 'id', 11 )
+                $query->expr->eq('id', 11)
             )
         );
     }
@@ -1591,12 +1527,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->updateAlwaysAvailableFlag( 103, false );
+        $gateway->updateAlwaysAvailableFlag(103, false);
 
         $this->assertQueryResult(
-            array( array( 'id' => 2, ), ),
+            array(array('id' => 2)),
             $this->getDatabaseHandler()->createSelectQuery()->select(
-                array( 'language_mask', )
+                array('language_mask')
             )->from(
                 'ezcontentobject'
             )->where(
@@ -1606,15 +1542,15 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $query = $this->getDatabaseHandler()->createSelectQuery();
         $this->assertQueryResult(
-            array( array( 'language_id' => 2, ), ),
+            array(array('language_id' => 2)),
             $query->select(
-                array( 'language_id', )
+                array('language_id')
             )->from(
                 'ezcontentobject_name'
             )->where(
                 $query->expr->lAnd(
-                    $query->expr->eq( 'contentobject_id', 103 ),
-                    $query->expr->eq( 'content_version', 1 )
+                    $query->expr->eq('contentobject_id', 103),
+                    $query->expr->eq('content_version', 1)
                 )
             )
         );
@@ -1622,16 +1558,16 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $query = $this->getDatabaseHandler()->createSelectQuery();
         $this->assertQueryResult(
             array(
-                array( 'language_id' => 2, ),
+                array('language_id' => 2),
             ),
             $query->selectDistinct(
-                array( 'language_id', )
+                array('language_id')
             )->from(
                 'ezcontentobject_attribute'
             )->where(
                 $query->expr->lAnd(
-                    $query->expr->eq( 'contentobject_id', 103 ),
-                    $query->expr->eq( 'version', 1 )
+                    $query->expr->eq('contentobject_id', 103),
+                    $query->expr->eq('version', 1)
                 )
             )
         );
@@ -1645,10 +1581,10 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getDatabaseGateway();
 
-        $resFirst = $gateway->loadVersionInfo( 11, 1 );
-        $resSecond = $gateway->loadVersionInfo( 11, 2 );
+        $resFirst = $gateway->loadVersionInfo(11, 1);
+        $resSecond = $gateway->loadVersionInfo(11, 2);
 
-        $res = array_merge( $resFirst, $resSecond );
+        $res = array_merge($resFirst, $resSecond);
 
         $orig = include __DIR__ . '/../_fixtures/extract_version_info_from_rows_multiple_versions.php';
 
@@ -1657,7 +1593,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             $res
         );*/
 
-        $this->assertEquals( $orig, $res, "Fixtures differ between what was previously stored(expected) and what it now generates(actual), this hints either some mistake in impl or that the fixture (../_fixtures/extract_content_from_rows_multiple_versions.php) and tests needs to be adapted." );
+        $this->assertEquals($orig, $res, 'Fixtures differ between what was previously stored(expected) and what it now generates(actual), this hints either some mistake in impl or that the fixture (../_fixtures/extract_content_from_rows_multiple_versions.php) and tests needs to be adapted.');
     }
 
     /**
@@ -1668,20 +1604,18 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
      *
      * @return int
      */
-    protected function countContentRelations( $fromId = null, $toId = null )
+    protected function countContentRelations($fromId = null, $toId = null)
     {
         $query = $this->getDatabaseHandler()->createSelectQuery();
-        $query->select( 'count(*)' )
-            ->from( 'ezcontentobject_link' );
+        $query->select('count(*)')
+            ->from('ezcontentobject_link');
 
-        if ( $fromId !== null )
-        {
+        if ($fromId !== null) {
             $query->where(
                 'from_contentobject_id=' . $fromId
             );
         }
-        if ( $toId !== null )
-        {
+        if ($toId !== null) {
             $query->where(
                 'to_contentobject_id=' . $toId
             );
@@ -1694,20 +1628,19 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * Counts the number of fields
+     * Counts the number of fields.
      *
      * @param int $contentId
      *
      * @return int
      */
-    protected function countContentFields( $contentId = null )
+    protected function countContentFields($contentId = null)
     {
         $query = $this->getDatabaseHandler()->createSelectQuery();
-        $query->select( 'count(*)' )
-            ->from( 'ezcontentobject_attribute' );
+        $query->select('count(*)')
+            ->from('ezcontentobject_attribute');
 
-        if ( $contentId !== null )
-        {
+        if ($contentId !== null) {
             $query->where(
                 'contentobject_id=' . $contentId
             );
@@ -1720,20 +1653,19 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * Counts the number of versions
+     * Counts the number of versions.
      *
      * @param int $contentId
      *
      * @return int
      */
-    protected function countContentVersions( $contentId = null )
+    protected function countContentVersions($contentId = null)
     {
         $query = $this->getDatabaseHandler()->createSelectQuery();
-        $query->select( 'count(*)' )
-            ->from( 'ezcontentobject_version' );
+        $query->select('count(*)')
+            ->from('ezcontentobject_version');
 
-        if ( $contentId !== null )
-        {
+        if ($contentId !== null) {
             $query->where(
                 'contentobject_id=' . $contentId
             );
@@ -1746,20 +1678,19 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * Counts the number of content names
+     * Counts the number of content names.
      *
      * @param int $contentId
      *
      * @return int
      */
-    protected function countContentNames( $contentId = null )
+    protected function countContentNames($contentId = null)
     {
         $query = $this->getDatabaseHandler()->createSelectQuery();
-        $query->select( 'count(*)' )
-            ->from( 'ezcontentobject_name' );
+        $query->select('count(*)')
+            ->from('ezcontentobject_name');
 
-        if ( $contentId !== null )
-        {
+        if ($contentId !== null) {
             $query->where(
                 'contentobject_id=' . $contentId
             );
@@ -1772,20 +1703,19 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * Counts the number of content objects
+     * Counts the number of content objects.
      *
      * @param int $contentId
      *
      * @return int
      */
-    protected function countContent( $contentId = null )
+    protected function countContent($contentId = null)
     {
         $query = $this->getDatabaseHandler()->createSelectQuery();
-        $query->select( 'count(*)' )
-            ->from( 'ezcontentobject' );
+        $query->select('count(*)')
+            ->from('ezcontentobject');
 
-        if ( $contentId !== null )
-        {
+        if ($contentId !== null) {
             $query->where(
                 'id=' . $contentId
             );
@@ -1798,23 +1728,21 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * Stores $fixture in $file to be required as a fixture
+     * Stores $fixture in $file to be required as a fixture.
      *
      * @param string $file
      * @param mixed $fixture
-     *
-     * @return void
      */
-    protected function storeFixture( $file, $fixture )
+    protected function storeFixture($file, $fixture)
     {
         file_put_contents(
             $file,
-            "<?php\n\nreturn " . str_replace( " \n", "\n", var_export( $fixture, true ) ) . ";\n"
+            "<?php\n\nreturn " . str_replace(" \n", "\n", var_export($fixture, true)) . ";\n"
         );
     }
 
     /**
-     * Returns a Field fixture
+     * Returns a Field fixture.
      *
      * @return Field
      */
@@ -1831,7 +1759,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a Field fixture in a different language
+     * Returns a Field fixture in a different language.
      *
      * @return Field
      */
@@ -1839,11 +1767,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     {
         $field = $this->getFieldFixture();
         $field->languageCode = 'eng-US';
+
         return $field;
     }
 
     /**
-     * Returns a StorageFieldValue fixture
+     * Returns a StorageFieldValue fixture.
      *
      * @return StorageFieldValue
      */
@@ -1861,32 +1790,32 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a ready to test DoctrineDatabase gateway
+     * Returns a ready to test DoctrineDatabase gateway.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase
      */
     protected function getDatabaseGateway()
     {
-        if ( !isset( $this->databaseGateway ) )
-        {
+        if (!isset($this->databaseGateway)) {
             $this->databaseGateway = new DoctrineDatabase(
-                ( $dbHandler = $this->getDatabaseHandler() ),
-                new DoctrineDatabase\QueryBuilder( $dbHandler ),
+                ($dbHandler = $this->getDatabaseHandler()),
+                new DoctrineDatabase\QueryBuilder($dbHandler),
                 $this->getLanguageHandler(),
                 $this->getLanguageMaskGenerator()
             );
         }
+
         return $this->databaseGateway;
     }
 
     /**
-     * DoctrineDatabaseTest::getRelationCreateStructFixture()
+     * DoctrineDatabaseTest::getRelationCreateStructFixture().
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct
      */
     protected function getRelationCreateStructFixture()
     {
-        $struct = new RelationCreateStruct;
+        $struct = new RelationCreateStruct();
 
         $struct->destinationContentId = 1;
         $struct->sourceContentId = 1;

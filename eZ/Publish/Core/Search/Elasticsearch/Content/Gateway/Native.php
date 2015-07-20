@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Elasticsearch Native Gateway class
+ * File containing the Elasticsearch Native Gateway class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,6 @@ use eZ\Publish\Core\Search\Elasticsearch\Content\Document;
 use eZ\Publish\Core\Search\Elasticsearch\Content\Serializer;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Search\Elasticsearch\Content\Gateway;
-use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 use eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor;
 use eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor;
 use ArrayObject;
@@ -32,35 +33,35 @@ class Native extends Gateway
     protected $client;
 
     /**
-     * Document serializer
+     * Document serializer.
      *
      * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Serializer
      */
     protected $serializer;
 
     /**
-     * Query criterion visitor dispatcher
+     * Query criterion visitor dispatcher.
      *
      * @var \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher
      */
     protected $criterionVisitorDispatcher;
 
     /**
-     * Query sort clause visitor
+     * Query sort clause visitor.
      *
      * @var \eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor
      */
     protected $sortClauseVisitor;
 
     /**
-     * Query facet builder visitor
+     * Query facet builder visitor.
      *
      * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor
      */
     protected $facetBuilderVisitor;
 
     /**
-     * Name of the index in the search backend
+     * Name of the index in the search backend.
      *
      * @var string
      */
@@ -81,8 +82,7 @@ class Native extends Gateway
         SortClauseVisitor $sortClauseVisitor,
         FacetBuilderVisitor $facetBuilderVisitor,
         $indexName
-    )
-    {
+    ) {
         $this->client = $client;
         $this->serializer = $serializer;
         $this->criterionVisitorDispatcher = $criterionVisitorDispatcher;
@@ -96,25 +96,24 @@ class Native extends Gateway
      *
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Document $document
      */
-    public function index( Document $document )
+    public function index(Document $document)
     {
         $result = $this->client->request(
-            "POST",
+            'POST',
             "/{$this->indexName}/{$document->type}/{$document->id}",
             new Message(
                 array(
-                    "Content-Type" => "application/json",
+                    'Content-Type' => 'application/json',
                 ),
-                $json = $this->serializer->getIndexDocument( $document )
+                $json = $this->serializer->getIndexDocument($document)
             )
         );
 
         $this->flush();
 
-        if ( $result->headers["status"] !== 201 && $result->headers["status"] !== 200 )
-        {
+        if ($result->headers['status'] !== 201 && $result->headers['status'] !== 200) {
             throw new RuntimeException(
-                "Wrong HTTP status received from Elasticsearch: " . $result->headers["status"]
+                'Wrong HTTP status received from Elasticsearch: ' . $result->headers['status']
             );
         }
     }
@@ -124,35 +123,32 @@ class Native extends Gateway
      *
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Document[] $documents
      */
-    public function bulkIndex( array $documents )
+    public function bulkIndex(array $documents)
     {
-        if ( empty( $documents ) )
-        {
+        if (empty($documents)) {
             return;
         }
 
-        $payload = "";
-        foreach ( $documents as $document )
-        {
-            $payload .= $this->serializer->getIndexMetadata( $document ) . "\n";
-            $payload .= $this->serializer->getIndexDocument( $document ) . "\n";
+        $payload = '';
+        foreach ($documents as $document) {
+            $payload .= $this->serializer->getIndexMetadata($document) . "\n";
+            $payload .= $this->serializer->getIndexDocument($document) . "\n";
         }
 
         $result = $this->client->request(
-            "POST",
+            'POST',
             "/{$this->indexName}/_bulk",
             new Message(
                 array(
-                    "Content-Type" => "application/json",
+                    'Content-Type' => 'application/json',
                 ),
                 $payload
             )
         );
 
-        if ( $result->headers["status"] !== 201 && $result->headers["status"] !== 200 )
-        {
+        if ($result->headers['status'] !== 201 && $result->headers['status'] !== 200) {
             throw new RuntimeException(
-                "Wrong HTTP status received from Elasticsearch: " . $result->headers["status"]
+                'Wrong HTTP status received from Elasticsearch: ' . $result->headers['status']
             );
         }
 
@@ -168,30 +164,29 @@ class Native extends Gateway
      *
      * @return mixed
      */
-    public function find( Query $query, $type, array $fieldFilters = array() )
+    public function find(Query $query, $type, array $fieldFilters = array())
     {
         $aggregationList = array_map(
-            array( $this->facetBuilderVisitor, 'visit' ),
+            array($this->facetBuilderVisitor, 'visit'),
             $query->facetBuilders
         );
 
         $aggregations = array();
-        foreach ( $aggregationList as $aggregation )
-        {
-            $aggregations[key( $aggregation )] = reset( $aggregation );
+        foreach ($aggregationList as $aggregation) {
+            $aggregations[key($aggregation)] = reset($aggregation);
         }
 
         $ast = array(
-            "query" => array(
-                "filtered" => array(
-                    "query" => array(
+            'query' => array(
+                'filtered' => array(
+                    'query' => array(
                         $this->criterionVisitorDispatcher->dispatch(
                             $query->query,
                             CriterionVisitorDispatcher::CONTEXT_QUERY,
                             $fieldFilters
                         ),
                     ),
-                    "filter" => array(
+                    'filter' => array(
                         $this->criterionVisitorDispatcher->dispatch(
                             $query->filter,
                             CriterionVisitorDispatcher::CONTEXT_FILTER,
@@ -202,20 +197,20 @@ class Native extends Gateway
             ),
             // Filters are added through 'filtered' query, because aggregations operate in query scope
             //"filter" => ...
-            "aggregations" => empty( $aggregations ) ? new ArrayObject : $aggregations,
-            "sort" => array_map(
-                array( $this->sortClauseVisitor, "visit" ),
+            'aggregations' => empty($aggregations) ? new ArrayObject() : $aggregations,
+            'sort' => array_map(
+                array($this->sortClauseVisitor, 'visit'),
                 $query->sortClauses
             ),
-            "track_scores" => true,
-            "from" => $query->offset,
-            "size" => $query->limit,
+            'track_scores' => true,
+            'from' => $query->offset,
+            'size' => $query->limit,
         );
 
-        $response = $this->findRaw( json_encode( $ast ), $type );
+        $response = $this->findRaw(json_encode($ast), $type);
 
         // TODO: error handling
-        $data = json_decode( $response->body );
+        $data = json_decode($response->body);
 
         return $data;
     }
@@ -228,14 +223,14 @@ class Native extends Gateway
      *
      * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\Message
      */
-    public function findRaw( $query, $type )
+    public function findRaw($query, $type)
     {
         $response = $this->client->request(
-            "GET",
+            'GET',
             "/{$this->indexName}/{$type}/_search",
             new Message(
                 array(
-                    "Content-Type" => "application/json",
+                    'Content-Type' => 'application/json',
                 ),
                 $query
             )
@@ -249,13 +244,12 @@ class Native extends Gateway
      *
      * @param string $type
      */
-    public function purgeIndex( $type )
+    public function purgeIndex($type)
     {
-        $result = $this->client->request( "DELETE", "/{$this->indexName}/{$type}/_query?q=id:*" );
+        $result = $this->client->request('DELETE', "/{$this->indexName}/{$type}/_query?q=id:*");
         $this->flush();
 
-        if ( $result->headers["status"] !== 200 )
-        {
+        if ($result->headers['status'] !== 200) {
             //throw new RuntimeException(
             //    "Wrong HTTP status received from Elasticsearch: " . $result->headers["status"]
             //);
@@ -268,9 +262,9 @@ class Native extends Gateway
      * @param int|string $id
      * @param string $type
      */
-    public function delete( $id, $type )
+    public function delete($id, $type)
     {
-        $result = $this->client->request( "DELETE", "/{$this->indexName}/{$type}/{$id}" );
+        $result = $this->client->request('DELETE', "/{$this->indexName}/{$type}/{$id}");
         $this->flush();
     }
 
@@ -280,14 +274,14 @@ class Native extends Gateway
      * @param string $query
      * @param string $type
      */
-    public function deleteByQuery( $query, $type )
+    public function deleteByQuery($query, $type)
     {
         $result = $this->client->request(
-            "DELETE",
+            'DELETE',
             "/{$this->indexName}/{$type}/_query",
             new Message(
                 array(
-                    "Content-Type" => "application/json",
+                    'Content-Type' => 'application/json',
                 ),
                 $query
             )
@@ -300,6 +294,6 @@ class Native extends Gateway
      */
     public function flush()
     {
-        $this->client->request( "POST", "/_flush?full=false&force=false" );
+        $this->client->request('POST', '/_flush?full=false&force=false');
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,17 +13,14 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 
 use eZ\Publish\Core\Base\ServiceContainer;
 use eZ\Publish\Core\Persistence\Legacy\Handler;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
 /**
- * Test case for Repository Handler
+ * Test case for Repository Handler.
  */
 class HandlerTest extends TestCase
 {
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
-     *
-     * @return void
      */
     public function testContentHandler()
     {
@@ -40,8 +39,6 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
-     *
-     * @return void
      */
     public function testContentHandlerTwice()
     {
@@ -55,8 +52,6 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentTypeHandler
-     *
-     * @return void
      */
     public function testContentTypeHandler()
     {
@@ -71,8 +66,6 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentLanguageHandler
-     *
-     * @return void
      */
     public function testContentLanguageHandler()
     {
@@ -87,8 +80,6 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentTypeHandler
-     *
-     * @return void
      */
     public function testContentTypeHandlerTwice()
     {
@@ -102,8 +93,6 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::locationHandler
-     *
-     * @return void
      */
     public function testLocationHandler()
     {
@@ -122,8 +111,6 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::locationHandler
-     *
-     * @return void
      */
     public function testLocationHandlerTwice()
     {
@@ -137,8 +124,6 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::userHandler
-     *
-     * @return void
      */
     public function testUserHandler()
     {
@@ -157,8 +142,6 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::userHandler
-     *
-     * @return void
      */
     public function testUserHandlerTwice()
     {
@@ -172,8 +155,6 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::sectionHandler
-     *
-     * @return void
      */
     public function testSectionHandler()
     {
@@ -192,8 +173,6 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::sectionHandler
-     *
-     * @return void
      */
     public function testSectionHandlerTwice()
     {
@@ -207,8 +186,6 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::urlAliasHandler
-     *
-     * @return void
      */
     public function testUrlAliasHandler()
     {
@@ -227,8 +204,6 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::urlAliasHandler
-     *
-     * @return void
      */
     public function testUrlAliasHandlerTwice()
     {
@@ -242,8 +217,6 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::transactionHandler
-     *
-     * @return void
      */
     public function testTransactionHandler()
     {
@@ -262,8 +235,6 @@ class HandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::transactionHandler
-     *
-     * @return void
      */
     public function testTransactionHandlerTwice()
     {
@@ -278,17 +249,16 @@ class HandlerTest extends TestCase
     protected static $legacyHandler;
 
     /**
-     * Returns the Handler
+     * Returns the Handler.
      *
      * @return Handler
      */
     protected function getHandlerFixture()
     {
-        if ( !isset( self::$legacyHandler ) )
-        {
+        if (!isset(self::$legacyHandler)) {
             $container = $this->getContainer();
 
-            self::$legacyHandler = $container->get( 'ezpublish.spi.persistence.legacy' );
+            self::$legacyHandler = $container->get('ezpublish.spi.persistence.legacy');
         }
 
         return self::$legacyHandler;
@@ -298,8 +268,7 @@ class HandlerTest extends TestCase
 
     protected function getContainer()
     {
-        if ( !isset( self::$container ) )
-        {
+        if (!isset(self::$container)) {
             $config = include __DIR__ . '/../../../../../../config.php';
             $installDir = $config['install_dir'];
 
@@ -307,11 +276,11 @@ class HandlerTest extends TestCase
             $containerBuilder = include $config['container_builder_path'];
 
             $containerBuilder->setParameter(
-                "languages",
-                array( "eng-US", "eng-GB" )
+                'languages',
+                array('eng-US', 'eng-GB')
             );
             $containerBuilder->setParameter(
-                "legacy_dsn",
+                'legacy_dsn',
                 $this->getDsn()
             );
 
@@ -329,18 +298,16 @@ class HandlerTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler::createFromDSN
-     *
-     * @return void
      */
     public function testDatabaseInstance()
     {
         $container = $this->getContainer();
-        $databaseHandler = $container->get( "ezpublish.api.storage_engine.legacy.dbhandler" );
-        $className = get_class( $this->getDatabaseHandler() );
+        $databaseHandler = $container->get('ezpublish.api.storage_engine.legacy.dbhandler');
+        $className = get_class($this->getDatabaseHandler());
 
         $this->assertTrue(
             $databaseHandler instanceof $className,
-            get_class( $databaseHandler ) . " not of type $className."
+            get_class($databaseHandler) . " not of type $className."
         );
     }
 }

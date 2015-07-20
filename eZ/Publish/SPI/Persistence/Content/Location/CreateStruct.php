@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Location CreateStruct class
+ * File containing the Location CreateStruct class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class CreateStruct extends ValueObject
 {
     /**
-     * Location priority
+     * Location priority.
      *
      * Position of the Location among its siblings when sorted using priority
      * sort order.
@@ -26,7 +28,7 @@ class CreateStruct extends ValueObject
     /**
      * Indicates that the Location entity has been explicitly marked as hidden.
      *
-     * @var boolean
+     * @var bool
      */
     public $hidden = false;
 
@@ -34,7 +36,7 @@ class CreateStruct extends ValueObject
      * Indicates that the Location is implicitly marked as hidden by a parent
      * location.
      *
-     * @var boolean
+     * @var bool
      */
     public $invisible = false;
 
@@ -56,6 +58,7 @@ class CreateStruct extends ValueObject
 
     /**
      * version of the corresponding {@link Content}.
+     *
      * @todo Rename to $contentVersionNo?
      *
      * @var int Content version.
@@ -68,6 +71,7 @@ class CreateStruct extends ValueObject
      * This field might be removed in a later version.
      *
      * @deprecated Since 5.4, planned to be removed in 6.0
+     *
      * @var string
      */
     public $pathIdentificationString;
@@ -103,7 +107,8 @@ class CreateStruct extends ValueObject
     public $sortOrder;
 
     /**
-     * Parent location's Id
+     * Parent location's Id.
+     *
      * @var int
      */
     public $parentId;

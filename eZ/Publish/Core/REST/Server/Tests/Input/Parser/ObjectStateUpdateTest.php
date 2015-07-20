@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
 class ObjectStateUpdateTest extends BaseTest
 {
     /**
-     * Tests the ObjectStateUpdate parser
+     * Tests the ObjectStateUpdate parser.
      */
     public function testParse()
     {
@@ -26,22 +28,22 @@ class ObjectStateUpdateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test state'
-                    )
-                )
+                        '#text' => 'Test state',
+                    ),
+                ),
             ),
             'descriptions' => array(
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test description'
-                    )
-                )
-            )
+                        '#text' => 'Test description',
+                    ),
+                ),
+            ),
         );
 
         $objectStateUpdate = $this->getParser();
-        $result = $objectStateUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $objectStateUpdate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateUpdateStruct',
@@ -62,20 +64,20 @@ class ObjectStateUpdateTest extends BaseTest
         );
 
         $this->assertEquals(
-            array( 'eng-GB' => 'Test state' ),
+            array('eng-GB' => 'Test state'),
             $result->names,
             'ObjectStateUpdateStruct names property not created correctly.'
         );
 
         $this->assertEquals(
-            array( 'eng-GB' => 'Test description' ),
+            array('eng-GB' => 'Test description'),
             $result->descriptions,
             'ObjectStateUpdateStruct descriptions property not created correctly.'
         );
     }
 
     /**
-     * Test ObjectStateUpdate parser throwing exception on invalid names structure
+     * Test ObjectStateUpdate parser throwing exception on invalid names structure.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'names' element for ObjectStateUpdate.
@@ -90,18 +92,18 @@ class ObjectStateUpdateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test description'
-                    )
-                )
-            )
+                        '#text' => 'Test description',
+                    ),
+                ),
+            ),
         );
 
         $objectStateUpdate = $this->getParser();
-        $objectStateUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $objectStateUpdate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Returns the ObjectStateUpdate parser
+     * Returns the ObjectStateUpdate parser.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateUpdate
      */
@@ -114,7 +116,7 @@ class ObjectStateUpdateTest extends BaseTest
     }
 
     /**
-     * Get the object state service mock object
+     * Get the object state service mock object.
      *
      * @return \eZ\Publish\API\Repository\ObjectStateService
      */
@@ -128,10 +130,10 @@ class ObjectStateUpdateTest extends BaseTest
             false
         );
 
-        $objectStateServiceMock->expects( $this->any() )
-            ->method( 'newObjectStateUpdateStruct' )
+        $objectStateServiceMock->expects($this->any())
+            ->method('newObjectStateUpdateStruct')
             ->will(
-                $this->returnValue( new ObjectStateUpdateStruct() )
+                $this->returnValue(new ObjectStateUpdateStruct())
             );
 
         return $objectStateServiceMock;

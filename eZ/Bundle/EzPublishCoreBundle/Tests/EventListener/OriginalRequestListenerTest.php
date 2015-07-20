@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the OriginalRequestListenerTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,7 +24,7 @@ class OriginalRequestListenerTest extends PHPUnit_Framework_TestCase
     {
         $this->assertSame(
             array(
-                KernelEvents::REQUEST => array( 'onKernelRequest', 200 )
+                KernelEvents::REQUEST => array('onKernelRequest', 200),
             ),
             OriginalRequestListener::getSubscribedEvents()
         );
@@ -32,28 +34,28 @@ class OriginalRequestListenerTest extends PHPUnit_Framework_TestCase
     {
         $request = new Request();
         $event = new GetResponseEvent(
-            $this->getMock( '\Symfony\Component\HttpKernel\HttpKernelInterface' ),
+            $this->getMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
             $request,
             HttpKernelInterface::SUB_REQUEST
         );
 
         $listener = new OriginalRequestListener();
-        $listener->onKernelRequest( $event );
-        $this->assertFalse( $request->attributes->has( '_ez_original_request' ) );
+        $listener->onKernelRequest($event);
+        $this->assertFalse($request->attributes->has('_ez_original_request'));
     }
 
     public function testOnKernelRequestNoOriginalRequest()
     {
         $request = new Request();
         $event = new GetResponseEvent(
-            $this->getMock( '\Symfony\Component\HttpKernel\HttpKernelInterface' ),
+            $this->getMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
 
         $listener = new OriginalRequestListener();
-        $listener->onKernelRequest( $event );
-        $this->assertFalse( $request->attributes->has( '_ez_original_request' ) );
+        $listener->onKernelRequest($event);
+        $this->assertFalse($request->attributes->has('_ez_original_request'));
     }
 
     public function testOnKernelRequestWithOriginalRequest()
@@ -64,21 +66,21 @@ class OriginalRequestListenerTest extends PHPUnit_Framework_TestCase
         $originalUri = '/foo/bar';
         $originalAccept = 'blabla';
 
-        $expectedOriginalRequest = Request::create( sprintf( '%s://%s:%d%s', $scheme, $host, $port, $originalUri ) );
-        $expectedOriginalRequest->headers->set( 'accept', $originalAccept );
-        $expectedOriginalRequest->server->set( 'HTTP_ACCEPT', $originalAccept );
+        $expectedOriginalRequest = Request::create(sprintf('%s://%s:%d%s', $scheme, $host, $port, $originalUri));
+        $expectedOriginalRequest->headers->set('accept', $originalAccept);
+        $expectedOriginalRequest->server->set('HTTP_ACCEPT', $originalAccept);
 
-        $request = Request::create( sprintf( '%s://%s:%d', $scheme, $host, $port ) . '/_fos_user_hash' );
-        $request->headers->set( 'x-fos-original-url', $originalUri );
-        $request->headers->set( 'x-fos-original-accept', $originalAccept );
+        $request = Request::create(sprintf('%s://%s:%d', $scheme, $host, $port) . '/_fos_user_hash');
+        $request->headers->set('x-fos-original-url', $originalUri);
+        $request->headers->set('x-fos-original-accept', $originalAccept);
         $event = new GetResponseEvent(
-            $this->getMock( '\Symfony\Component\HttpKernel\HttpKernelInterface' ),
+            $this->getMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
 
         $listener = new OriginalRequestListener();
-        $listener->onKernelRequest( $event );
-        $this->assertEquals( $expectedOriginalRequest, $request->attributes->get( '_ez_original_request' ) );
+        $listener->onKernelRequest($event);
+        $this->assertEquals($expectedOriginalRequest, $request->attributes->get('_ez_original_request'));
     }
 }

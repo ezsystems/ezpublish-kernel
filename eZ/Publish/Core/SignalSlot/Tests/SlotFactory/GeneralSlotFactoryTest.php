@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,12 +24,12 @@ class GeneralSlotFactoryTest extends PHPUnit_Framework_TestCase
     public function providerForFactoryTests()
     {
         return array(
-            array( array( "slot1" => true, "slot2" => true ) ),
+            array(array('slot1' => true, 'slot2' => true)),
             array(
                 array(
-                    'slot1' => $this->getMock( '\\eZ\\Publish\\Core\\SignalSlot\\Slot' ),
-                    'slot2' => $this->getMock( '\\eZ\\Publish\\Core\\SignalSlot\\Slot' )
-                )
+                    'slot1' => $this->getMock('\\eZ\\Publish\\Core\\SignalSlot\\Slot'),
+                    'slot2' => $this->getMock('\\eZ\\Publish\\Core\\SignalSlot\\Slot'),
+                ),
             ),
         );
     }
@@ -35,35 +37,31 @@ class GeneralSlotFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider providerForFactoryTests
      */
-    public function testValidSlot( $slots )
+    public function testValidSlot($slots)
     {
-        $factory = $this->setUpFactory( $slots );
-        foreach ( $slots as $slotIdentifier => $slotValue )
-            $this->assertEquals( $slotValue, $factory->getSlot( $slotIdentifier ) );
+        $factory = $this->setUpFactory($slots);
+        foreach ($slots as $slotIdentifier => $slotValue) {
+            $this->assertEquals($slotValue, $factory->getSlot($slotIdentifier));
+        }
     }
 
     /**
      * @dataProvider providerForFactoryTests
      */
-    public function testInValidSlot( $slots )
+    public function testInValidSlot($slots)
     {
-        $factory = $this->setUpFactory( $slots );
-        foreach ( array_keys( $slots ) as $slotIdentifier )
-        {
-            try
-            {
-                $factory->getSlot( $slotIdentifier . '42' );
-                $this->fail( 'expected NotFoundException ' );
-            }
-            catch ( NotFoundException $e )
-            {
+        $factory = $this->setUpFactory($slots);
+        foreach (array_keys($slots) as $slotIdentifier) {
+            try {
+                $factory->getSlot($slotIdentifier . '42');
+                $this->fail('expected NotFoundException ');
+            } catch (NotFoundException $e) {
             }
         }
     }
 
-    private function setUpFactory( $slots )
+    private function setUpFactory($slots)
     {
-        return new SignalSlot\SlotFactory\GeneralSlotFactory( $slots );
+        return new SignalSlot\SlotFactory\GeneralSlotFactory($slots);
     }
 }
-

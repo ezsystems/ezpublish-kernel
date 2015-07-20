@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContentViewPass class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,6 +20,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
  */
 class ContentViewPass extends ViewPass
 {
-    const VIEW_PROVIDER_IDENTIFIER = "ezpublish.content_view_provider";
-    const ADD_VIEW_PROVIDER_METHOD = "addContentViewProvider";
+    const VIEW_PROVIDER_IDENTIFIER = 'ezpublish.content_view_provider';
+    const ADD_VIEW_PROVIDER_METHOD = 'addContentViewProvider';
 }

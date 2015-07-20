@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a ParserToolsTest class
+ * File containing a ParserToolsTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,6 @@ use PHPUnit_Framework_TestCase;
 
 class ParserToolsTest extends PHPUnit_Framework_TestCase
 {
-
     public function testIsEmbeddedObjectReturnsTrue()
     {
         $parserTools = $this->getParserTools();
@@ -55,11 +56,11 @@ class ParserToolsTest extends PHPUnit_Framework_TestCase
             '',
             false
         );
-        $dispatcherMock->expects( $this->once() )
-            ->method( 'parse' )
+        $dispatcherMock->expects($this->once())
+            ->method('parse')
             ->with(
-                $this->isType( 'array' ),
-                $this->equalTo( 'application/my-type' )
+                $this->isType('array'),
+                $this->equalTo('application/my-type')
             );
 
         $parsingInput = array(
@@ -70,7 +71,7 @@ class ParserToolsTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             '/foo/bar',
-            $parserTools->parseObjectElement( $parsingInput, $dispatcherMock )
+            $parserTools->parseObjectElement($parsingInput, $dispatcherMock)
         );
     }
 
@@ -85,8 +86,8 @@ class ParserToolsTest extends PHPUnit_Framework_TestCase
             '',
             false
         );
-        $dispatcherMock->expects( $this->never() )
-            ->method( 'parse' );
+        $dispatcherMock->expects($this->never())
+            ->method('parse');
 
         $parsingInput = array(
             '_href' => '/foo/bar',
@@ -96,7 +97,7 @@ class ParserToolsTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             '/foo/bar',
-            $parserTools->parseObjectElement( $parsingInput, $dispatcherMock )
+            $parserTools->parseObjectElement($parsingInput, $dispatcherMock)
         );
     }
 

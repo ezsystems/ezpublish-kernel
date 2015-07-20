@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the DoctrineDatabase Collection field value handler class
+ * File containing the DoctrineDatabase Collection field value handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -32,13 +34,13 @@ class Collection extends Handler
     protected $separator;
 
     /**
-     * Creates a new criterion handler
+     * Creates a new criterion handler.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
      * @param string $separator
      */
-    public function __construct( DatabaseHandler $dbHandler, TransformationProcessor $transformationProcessor, $separator )
+    public function __construct(DatabaseHandler $dbHandler, TransformationProcessor $transformationProcessor, $separator)
     {
         $this->dbHandler = $dbHandler;
         $this->transformationProcessor = $transformationProcessor;
@@ -54,23 +56,22 @@ class Collection extends Handler
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function handle( SelectQuery $query, Criterion $criterion, $column )
+    public function handle(SelectQuery $query, Criterion $criterion, $column)
     {
-        switch ( $criterion->operator )
-        {
+        switch ($criterion->operator) {
             case Criterion\Operator::CONTAINS:
-                $quotedColumn = $this->dbHandler->quoteColumn( $column );
-                $value = $this->lowerCase( $criterion->value );
+                $quotedColumn = $this->dbHandler->quoteColumn($column);
+                $value = $this->lowerCase($criterion->value);
                 $filter = $query->expr->lOr(
                     array(
                         $query->expr->eq(
                             $quotedColumn,
-                            $query->bindValue( $value, null, \PDO::PARAM_STR )
+                            $query->bindValue($value, null, \PDO::PARAM_STR)
                         ),
                         $query->expr->like(
                             $quotedColumn,
                             $query->bindValue(
-                                "%" . $this->separator . $value,
+                                '%' . $this->separator . $value,
                                 null,
                                 \PDO::PARAM_STR
                             )
@@ -78,7 +79,7 @@ class Collection extends Handler
                         $query->expr->like(
                             $quotedColumn,
                             $query->bindValue(
-                                $value . $this->separator . "%",
+                                $value . $this->separator . '%',
                                 null,
                                 \PDO::PARAM_STR
                             )
@@ -86,17 +87,17 @@ class Collection extends Handler
                         $query->expr->like(
                             $quotedColumn,
                             $query->bindValue(
-                                "%" . $this->separator . $value . $this->separator . "%",
+                                '%' . $this->separator . $value . $this->separator . '%',
                                 null,
                                 \PDO::PARAM_STR
                             )
-                        )
+                        ),
                     )
                 );
                 break;
 
             default:
-                $filter = parent::handle( $query, $criterion, $column );
+                $filter = parent::handle($query, $criterion, $column);
         }
 
         return $filter;

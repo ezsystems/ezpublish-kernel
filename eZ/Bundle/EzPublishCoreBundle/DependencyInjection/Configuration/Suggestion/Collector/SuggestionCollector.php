@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ConfigSuggestionCollector class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,7 +25,7 @@ class SuggestionCollector implements SuggestionCollectorInterface
      *
      * @param \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\ConfigSuggestion $suggestion
      */
-    public function addSuggestion( ConfigSuggestion $suggestion )
+    public function addSuggestion(ConfigSuggestion $suggestion)
     {
         $this->suggestions[] = $suggestion;
     }
@@ -39,10 +41,10 @@ class SuggestionCollector implements SuggestionCollectorInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasSuggestions()
     {
-        return !empty( $this->suggestions );
+        return !empty($this->suggestions);
     }
 }

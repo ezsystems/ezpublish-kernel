@@ -1,16 +1,17 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common;
 
@@ -25,16 +26,16 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
     protected $visitor;
 
     /**
-     * Test the Exception visitor
+     * Test the Exception visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $exception = $this->getException();
 
@@ -44,29 +45,29 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
             $exception
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains ErrorMessage element and error code
+     * Test if result contains ErrorMessage element and error code.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsErrorCode( $result )
+    public function testResultContainsErrorCode($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'ErrorMessage',
+                'tag' => 'ErrorMessage',
                 'descendant' => array(
-                    'tag'     => 'errorCode',
+                    'tag' => 'errorCode',
                     'content' => (string)$this->getExpectedStatusCode(),
-                )
+                ),
             ),
             $result,
             'Invalid <ErrorMessage> element.',
@@ -75,21 +76,21 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains ErrorMessage element
+     * Test if result contains ErrorMessage element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsErrorMessage( $result )
+    public function testResultContainsErrorMessage($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'ErrorMessage',
+                'tag' => 'ErrorMessage',
                 'descendant' => array(
-                    'tag'     => 'errorMessage',
+                    'tag' => 'errorMessage',
                     'content' => $this->getExpectedMessage(),
-                )
+                ),
             ),
             $result,
             'Invalid <ErrorMessage> element.',
@@ -98,20 +99,20 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains ErrorMessage element and description
+     * Test if result contains ErrorMessage element and description.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsErrorDescription( $result )
+    public function testResultContainsErrorDescription($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'ErrorMessage',
+                'tag' => 'ErrorMessage',
                 'descendant' => array(
                     'tag' => 'errorDescription',
-                )
+                ),
             ),
             $result,
             'Invalid <ErrorMessage> element.',
@@ -120,20 +121,20 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if ErrorMessage element contains required attributes
+     * Test if ErrorMessage element contains required attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsExceptionAttributes( $result )
+    public function testResultContainsExceptionAttributes($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'ErrorMessage',
+                'tag' => 'ErrorMessage',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ErrorMessage+xml',
-                )
+                ),
             ),
             $result,
             'Invalid <ErrorMessage> attributes.',
@@ -142,7 +143,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get expected status code
+     * Get expected status code.
      *
      * @return int
      */
@@ -152,32 +153,32 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get expected message
+     * Get expected message.
      *
      * @return string
      */
     protected function getExpectedMessage()
     {
-        return "Internal Server Error";
+        return 'Internal Server Error';
     }
 
     /**
-     * Gets the exception
+     * Gets the exception.
      *
      * @return \Exception
      */
     protected function getException()
     {
-        return new \Exception( "Test" );
+        return new \Exception('Test');
     }
 
     /**
-     * Gets the exception visitor
+     * Gets the exception visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Exception
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Exception;
+        return new ValueObjectVisitor\Exception();
     }
 }

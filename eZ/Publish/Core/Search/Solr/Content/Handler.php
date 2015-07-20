@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Content Search handler class
+ * File containing the Content Search handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,10 +13,8 @@ namespace eZ\Publish\Core\Search\Solr\Content;
 
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
-use eZ\Publish\SPI\Persistence\Content\Section;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Search\Content\Handler as SearchHandlerInterface;
-use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
@@ -51,21 +51,21 @@ class Handler implements SearchHandlerInterface
     protected $gateway;
 
     /**
-     * Content handler
+     * Content handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Handler
      */
     protected $contentHandler;
 
     /**
-     * Document mapper
+     * Document mapper.
      *
      * @var \eZ\Publish\Core\Search\Solr\Content\DocumentMapper
      */
     protected $mapper;
 
     /**
-     * Result extractor
+     * Result extractor.
      *
      * @var \eZ\Publish\Core\Search\Solr\Content\ResultExtractor
      */
@@ -84,8 +84,7 @@ class Handler implements SearchHandlerInterface
         ContentHandler $contentHandler,
         DocumentMapper $mapper,
         ResultExtractor $resultExtractor
-    )
-    {
+    ) {
         $this->gateway = $gateway;
         $this->contentHandler = $contentHandler;
         $this->mapper = $mapper;
@@ -105,73 +104,76 @@ class Handler implements SearchHandlerInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContent( Query $query, array $fieldFilters = array() )
+    public function findContent(Query $query, array $fieldFilters = array())
     {
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
 
         return $this->resultExtractor->extract(
-            $this->gateway->find( $query, $fieldFilters )
+            $this->gateway->find($query, $fieldFilters)
         );
     }
 
     /**
-     * Performs a query for a single content object
+     * Performs a query for a single content object.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
      * @todo define structs for the field filters
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function findSingle( Criterion $filter, array $fieldFilters = array() )
+    public function findSingle(Criterion $filter, array $fieldFilters = array())
     {
         $searchQuery = new Query();
         $searchQuery->filter = $filter;
-        $searchQuery->query  = new Criterion\MatchAll();
+        $searchQuery->query = new Criterion\MatchAll();
         $searchQuery->offset = 0;
-        $searchQuery->limit  = 1;
-        $result = $this->findContent( $searchQuery, $fieldFilters );
+        $searchQuery->limit = 1;
+        $result = $this->findContent($searchQuery, $fieldFilters);
 
-        if ( !$result->totalCount )
-            throw new NotFoundException( 'Content', "findSingle() found no content for given \$filter" );
-        else if ( $result->totalCount > 1 )
-            throw new InvalidArgumentException( "totalCount", "findSingle() found more then one item for given \$filter" );
+        if (!$result->totalCount) {
+            throw new NotFoundException('Content', "findSingle() found no content for given \$filter");
+        } elseif ($result->totalCount > 1) {
+            throw new InvalidArgumentException('totalCount', "findSingle() found more then one item for given \$filter");
+        }
 
-        $first = reset( $result->searchHits );
+        $first = reset($result->searchHits);
+
         return $first->valueObject;
     }
 
     /**
-     * Suggests a list of values for the given prefix
+     * Suggests a list of values for the given prefix.
      *
      * @param string $prefix
      * @param string[] $fieldPaths
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
-    public function suggest( $prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null )
+    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null)
     {
-        throw new \Exception( "@todo: Not implemented yet." );
+        throw new \Exception('@todo: Not implemented yet.');
     }
 
     /**
-     * Indexes a content object
+     * Indexes a content object.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      */
-    public function indexContent( Content $content )
+    public function indexContent(Content $content)
     {
-        $this->gateway->bulkIndexDocuments( array( $this->mapper->mapContent( $content ) ) );
+        $this->gateway->bulkIndexDocuments(array($this->mapper->mapContent($content)));
     }
 
     /**
-     * Indexes several content objects
+     * Indexes several content objects.
      *
      * @todo: This function and setCommit() is needed for Persistence\Solr for test speed but not part
      *       of interface for the reason described in Solr\Content\Search\Gateway\Native::bulkIndexContent
@@ -179,58 +181,53 @@ class Handler implements SearchHandlerInterface
      *
      * @param \eZ\Publish\SPI\Persistence\Content[] $contentObjects
      */
-    public function bulkIndexContent( array $contentObjects )
+    public function bulkIndexContent(array $contentObjects)
     {
         $documents = array();
 
-        foreach ( $contentObjects as $content )
-        {
-            $documents[] = $this->mapper->mapContent( $content );
+        foreach ($contentObjects as $content) {
+            $documents[] = $this->mapper->mapContent($content);
         }
 
-        if ( !empty( $documents ) )
-        {
-            $this->gateway->bulkIndexDocuments( $documents );
+        if (!empty($documents)) {
+            $this->gateway->bulkIndexDocuments($documents);
         }
     }
 
     /**
-     * Deletes a content object from the index
+     * Deletes a content object from the index.
      *
      * @param int $contentId
      * @param int|null $versionId
      */
-    public function deleteContent( $contentId, $versionId = null )
+    public function deleteContent($contentId, $versionId = null)
     {
-        $this->gateway->deleteByQuery( "content_id:{$contentId}" );
+        $this->gateway->deleteByQuery("content_id:{$contentId}");
     }
 
     /**
-     * Deletes a location from the index
+     * Deletes a location from the index.
      *
      * @param mixed $locationId
      * @param mixed $contentId
      */
-    public function deleteLocation( $locationId, $contentId )
+    public function deleteLocation($locationId, $contentId)
     {
-        $this->gateway->deleteByQuery( "content_id:{$contentId}" );
+        $this->gateway->deleteByQuery("content_id:{$contentId}");
 
         // TODO it seems this part of location deletion (not last location) misses integration tests
-        try
-        {
-            $contentInfo = $this->contentHandler->loadContentInfo( $contentId );
-        }
-        catch ( NotFoundException $e )
-        {
+        try {
+            $contentInfo = $this->contentHandler->loadContentInfo($contentId);
+        } catch (NotFoundException $e) {
             return;
         }
 
-        $content = $this->contentHandler->load( $contentId, $contentInfo->currentVersionNo );
-        $this->bulkIndexContent( array( $content ) );
+        $content = $this->contentHandler->load($contentId, $contentInfo->currentVersionNo);
+        $this->bulkIndexContent(array($content));
     }
 
     /**
-     * Purges all contents from the index
+     * Purges all contents from the index.
      *
      * @todo: Make this public API?
      */
@@ -240,14 +237,14 @@ class Handler implements SearchHandlerInterface
     }
 
     /**
-     * Set if index/delete actions should commit or if several actions is to be expected
+     * Set if index/delete actions should commit or if several actions is to be expected.
      *
      * This should be set to false before group of actions and true before the last one
      *
      * @param bool $commit
      */
-    public function setCommit( $commit )
+    public function setCommit($commit)
     {
-        $this->gateway->setCommit( $commit );
+        $this->gateway->setCommit($commit);
     }
 }

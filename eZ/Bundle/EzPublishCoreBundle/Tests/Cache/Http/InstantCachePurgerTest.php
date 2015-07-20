@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the InstantCachePurgerTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,10 +20,10 @@ class InstantCachePurgerTest extends BaseTest
     {
         $this
             ->purgeClient
-            ->expects( $this->once() )
-            ->method( 'purgeAll' );
+            ->expects($this->once())
+            ->method('purgeAll');
 
-        $purger = new InstantCachePurger( $this->purgeClient, $this->contentService, $this->eventDispatcher );
-        $purger->clear( 'cache/dir/' );
+        $purger = new InstantCachePurger($this->purgeClient, $this->contentService, $this->eventDispatcher);
+        $purger->clear('cache/dir/');
     }
 }

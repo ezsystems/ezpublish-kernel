@@ -1,33 +1,33 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Common;
 use eZ\Publish\SPI\Variation\Values\ImageVariation;
 
 class ImageVariationTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the ImageVariation visitor
+     * Test the ImageVariation visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $imageVariation = new ImageVariation(
             array(
@@ -38,7 +38,7 @@ class ImageVariationTest extends ValueObjectVisitorBaseTest
                 'uri' => '/path/to/image/123/456789/variation.png',
                 'mimeType' => 'image/png',
                 'fileSize' => 12345,
-                'fileName' => 'Test-Image.png'
+                'fileName' => 'Test-Image.png',
             )
         );
 
@@ -46,7 +46,7 @@ class ImageVariationTest extends ValueObjectVisitorBaseTest
             'ezpublish_rest_binaryContent_getImageVariation',
             array(
                 'imageId' => '123-456789',
-                'variationIdentifier' => 'test'
+                'variationIdentifier' => 'test',
             ),
             "/content/binary/images/{$imageVariation->imageId}/variations/{$imageVariation->name}"
         );
@@ -57,12 +57,12 @@ class ImageVariationTest extends ValueObjectVisitorBaseTest
             $imageVariation
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         $dom = new \DOMDocument();
-        $dom->loadXml( $result );
+        $dom->loadXml($result);
 
         return $dom;
     }
@@ -71,117 +71,117 @@ class ImageVariationTest extends ValueObjectVisitorBaseTest
      * @param \DOMDocument $dom
      * @depends testVisit
      */
-    public function testContentImageVariationContentTagExists( \DOMDocument $dom )
+    public function testContentImageVariationContentTagExists(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/ContentImageVariation'  );
+        $this->assertXPath($dom, '/ContentImageVariation');
     }
 
     /**
      * @param \DOMDocument $dom
      * @depends testVisit
      */
-    public function testContentImageVariationTagHrefAttribute( \DOMDocument $dom )
+    public function testContentImageVariationTagHrefAttribute(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/ContentImageVariation[@href="/content/binary/images/123-456789/variations/test"]'  );
+        $this->assertXPath($dom, '/ContentImageVariation[@href="/content/binary/images/123-456789/variations/test"]');
     }
 
     /**
      * @param \DOMDocument $dom
      * @depends testVisit
      */
-    public function testContentImageVariationTagMediaTypeAttribute( \DOMDocument $dom )
+    public function testContentImageVariationTagMediaTypeAttribute(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/ContentImageVariation[@media-type="application/vnd.ez.api.ContentImageVariation+xml"]'  );
+        $this->assertXPath($dom, '/ContentImageVariation[@media-type="application/vnd.ez.api.ContentImageVariation+xml"]');
     }
 
     /**
      * @param \DOMDocument $dom
      * @depends testVisit
      */
-    public function testUriTagExists( \DOMDocument $dom )
+    public function testUriTagExists(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/ContentImageVariation/uri'  );
+        $this->assertXPath($dom, '/ContentImageVariation/uri');
     }
 
     /**
      * @param \DOMDocument $dom
      * @depends testVisit
      */
-    public function testUriTagValue( \DOMDocument $dom )
+    public function testUriTagValue(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/ContentImageVariation/uri[text()="/path/to/image/123/456789/variation.png"]'  );
+        $this->assertXPath($dom, '/ContentImageVariation/uri[text()="/path/to/image/123/456789/variation.png"]');
     }
 
     /**
      * @param \DOMDocument $dom
      * @depends testVisit
      */
-    public function testContentTypeTagExists( \DOMDocument $dom )
+    public function testContentTypeTagExists(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/ContentImageVariation/contentType'  );
+        $this->assertXPath($dom, '/ContentImageVariation/contentType');
     }
 
     /**
      * @param \DOMDocument $dom
      * @depends testVisit
      */
-    public function testContentTypeTagValue( \DOMDocument $dom )
+    public function testContentTypeTagValue(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/ContentImageVariation/contentType[text()="image/png"]'  );
+        $this->assertXPath($dom, '/ContentImageVariation/contentType[text()="image/png"]');
     }
 
     /**
      * @param \DOMDocument $dom
      * @depends testVisit
      */
-    public function testWidthTagExists( \DOMDocument $dom )
+    public function testWidthTagExists(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/ContentImageVariation/width'  );
+        $this->assertXPath($dom, '/ContentImageVariation/width');
     }
 
     /**
      * @param \DOMDocument $dom
      * @depends testVisit
      */
-    public function testWidthTagValue( \DOMDocument $dom )
+    public function testWidthTagValue(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/ContentImageVariation/width[text()="600"]'  );
+        $this->assertXPath($dom, '/ContentImageVariation/width[text()="600"]');
     }
 
     /**
      * @param \DOMDocument $dom
      * @depends testVisit
      */
-    public function testHeightTagExists( \DOMDocument $dom )
+    public function testHeightTagExists(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/ContentImageVariation/height'  );
+        $this->assertXPath($dom, '/ContentImageVariation/height');
     }
 
     /**
      * @param \DOMDocument $dom
      * @depends testVisit
      */
-    public function testHeightTagValue( \DOMDocument $dom )
+    public function testHeightTagValue(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/ContentImageVariation/height[text()="400"]' );
+        $this->assertXPath($dom, '/ContentImageVariation/height[text()="400"]');
     }
 
     /**
      * @param \DOMDocument $dom
      * @depends testVisit
      */
-    public function testFileSizeTagExists( \DOMDocument $dom )
+    public function testFileSizeTagExists(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/ContentImageVariation/fileSize'  );
+        $this->assertXPath($dom, '/ContentImageVariation/fileSize');
     }
 
     /**
      * @param \DOMDocument $dom
      * @depends testVisit
      */
-    public function testFileSizeTagValue( \DOMDocument $dom )
+    public function testFileSizeTagValue(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/ContentImageVariation/fileSize[text()="12345"]'  );
+        $this->assertXPath($dom, '/ContentImageVariation/fileSize[text()="12345"]');
     }
 
     /**

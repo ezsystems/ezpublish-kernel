@@ -8,13 +8,9 @@ class InsertDoctrineQueryTest extends TestCase
     {
         $insertQuery = $this->handler->createInsertQuery();
 
-        $insertQuery->insertInto(
-            'query_test'
-        )->set(
-            'val1', '?'
-        )->set(
-            'val2', 'NULL'
-        );
+        $insertQuery->insertInto('query_test')
+            ->set('val1', '?')
+            ->set('val2', 'NULL');
 
         $this->assertEquals(
             'INSERT INTO query_test (val1, val2) VALUES (?, NULL)',
@@ -22,4 +18,3 @@ class InsertDoctrineQueryTest extends TestCase
         );
     }
 }
-

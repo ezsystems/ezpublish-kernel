@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Elasticsearch Loading Extractor class
+ * File containing the Elasticsearch Loading Extractor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,14 +24,14 @@ use RuntimeException;
 class Loading extends Extractor
 {
     /**
-     * Content handler
+     * Content handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Handler
      */
     protected $contentHandler;
 
     /**
-     * Location handler
+     * Location handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
@@ -39,33 +41,28 @@ class Loading extends Extractor
         ContentHandler $contentHandler,
         LocationHandler $locationHandler,
         FacetBuilderVisitor $facetBuilderVisitor
-    )
-    {
+    ) {
         $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
 
-        parent::__construct( $facetBuilderVisitor );
+        parent::__construct($facetBuilderVisitor);
     }
 
     /**
-     *
-     *
      * @throws \RuntimeException If search $hit could not be handled
      *
      * @param mixed $hit
      *
      * @return \eZ\Publish\API\Repository\Values\ValueObject
      */
-    public function extractHit( $hit )
+    public function extractHit($hit)
     {
-        if ( $hit->_type === "content" )
-        {
-            return $this->contentHandler->loadContentInfo( $hit->_id );
+        if ($hit->_type === 'content') {
+            return $this->contentHandler->loadContentInfo($hit->_id);
         }
 
-        if ( $hit->_type === "location" )
-        {
-            return $this->locationHandler->load( $hit->_id );
+        if ($hit->_type === 'location') {
+            return $this->locationHandler->load($hit->_id);
         }
 
         throw new RuntimeException(

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Relation parser class
+ * File containing the Relation parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,12 +17,12 @@ use eZ\Publish\Core\REST\Client\Values;
 use eZ\Publish\API\Repository\ContentService;
 
 /**
- * Parser for Relation
+ * Parser for Relation.
  */
 class Relation extends BaseParser
 {
     /**
-     * Content Service
+     * Content Service.
      *
      * @var \eZ\Publish\Core\REST\Input\ContentService
      */
@@ -29,23 +31,24 @@ class Relation extends BaseParser
     /**
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      */
-    public function __construct( ContentService $contentService )
+    public function __construct(ContentService $contentService)
     {
         $this->contentService = $contentService;
     }
 
     /**
-     * Parse input structure
+     * Parse input structure.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      *
      * @return \eZ\Publish\API\Repository\Values\Relation\Version
+     *
      * @todo Error handling
      * @todo Should the related ContentInfo structs really be loaded here or do
      *       we need lazy loading for this?
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
         return new Values\Content\Relation(
             array(
@@ -56,23 +59,22 @@ class Relation extends BaseParser
                 'destinationContentInfo' => $this->contentService->loadContentInfo(
                     $data['DestinationContent']['_href']
                 ),
-                'type' => $this->convertRelationType( $data['RelationType'] ),
+                'type' => $this->convertRelationType($data['RelationType']),
                 // @todo: Handle SourceFieldDefinitionIdentifier
             )
         );
     }
 
     /**
-     * Converts the string representation of the relation type to its constant
+     * Converts the string representation of the relation type to its constant.
      *
      * @param string $stringType
      *
      * @return int
      */
-    protected function convertRelationType( $stringType )
+    protected function convertRelationType($stringType)
     {
-        switch ( strtoupper( $stringType ) )
-        {
+        switch (strtoupper($stringType)) {
             case 'COMMON':
                 return Values\Content\Relation::COMMON;
             case 'EMBED':
@@ -83,7 +85,7 @@ class Relation extends BaseParser
                 return Values\Content\Relation::FIELD;
         }
         throw new \RuntimeException(
-            sprintf( 'Unknown Relation type: "%s"', $stringType )
+            sprintf('Unknown Relation type: "%s"', $stringType)
         );
     }
 }

@@ -1,17 +1,20 @@
 <?php
+
 /**
  * File containing the eZ\Publish\SPI\Search\FieldType\IntegerField class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
+
 namespace eZ\Publish\SPI\Search\FieldType;
 
 use eZ\Publish\SPI\Search\FieldType;
 
 /**
- * Integer document field
+ * Integer document field.
  */
 class IntegerField extends FieldType
 {
@@ -22,4 +25,3 @@ class IntegerField extends FieldType
      */
     protected $type = 'ez_integer';
 }
-

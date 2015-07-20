@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -28,54 +30,54 @@ use eZ\Publish\Core\Search\Elasticsearch\Content\Document;
 /**
  * Standard Mapper implementation maps:
  *  - Content with its fields and corresponding Locations
- *  - Locations with Content data but without Content fields
+ *  - Locations with Content data but without Content fields.
  */
 class StandardMapper implements MapperInterface
 {
     /**
-     * Field name generator
+     * Field name generator.
      *
      * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator
      */
     protected $fieldNameGenerator;
 
     /**
-     * Content handler
+     * Content handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Handler
      */
     protected $contentHandler;
 
     /**
-     * Location handler
+     * Location handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     protected $locationHandler;
 
     /**
-     * Content type handler
+     * Content type handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
      */
     protected $contentTypeHandler;
 
     /**
-     * Object state handler
+     * Object state handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
      */
     protected $objectStateHandler;
 
     /**
-     * Section handler
+     * Section handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Section\Handler
      */
     protected $sectionHandler;
 
     /**
-     * Field registry
+     * Field registry.
      *
      * @var \eZ\Publish\Core\Search\Common\FieldRegistry
      */
@@ -98,8 +100,7 @@ class StandardMapper implements MapperInterface
         ContentTypeHandler $contentTypeHandler,
         ObjectStateHandler $objectStateHandler,
         SectionHandler $sectionHandler
-    )
-    {
+    ) {
         $this->fieldRegistry = $fieldRegistry;
         $this->fieldNameGenerator = $fieldNameGenerator;
         $this->contentHandler = $contentHandler;
@@ -116,12 +117,12 @@ class StandardMapper implements MapperInterface
      *
      * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document
      */
-    public function mapContentById( $contentId )
+    public function mapContentById($contentId)
     {
-        $contentInfo = $this->contentHandler->loadContentInfo( $contentId );
+        $contentInfo = $this->contentHandler->loadContentInfo($contentId);
 
         return $this->mapContent(
-            $this->contentHandler->load( $contentId, $contentInfo->currentVersionNo )
+            $this->contentHandler->load($contentId, $contentInfo->currentVersionNo)
         );
     }
 
@@ -132,15 +133,14 @@ class StandardMapper implements MapperInterface
      *
      * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document
      */
-    public function mapContent( Content $content )
+    public function mapContent(Content $content)
     {
-        $locations = $this->locationHandler->loadLocationsByContent( $content->versionInfo->contentInfo->id );
-        $section = $this->sectionHandler->load( $content->versionInfo->contentInfo->sectionId );
+        $locations = $this->locationHandler->loadLocationsByContent($content->versionInfo->contentInfo->id);
+        $section = $this->sectionHandler->load($content->versionInfo->contentInfo->sectionId);
         $mainLocation = null;
         $locationDocuments = array();
-        foreach ( $locations as $location )
-        {
-            $locationDocuments[] = $this->mapContentLocation( $location, $content );
+        foreach ($locations as $location) {
+            $locationDocuments[] = $this->mapContentLocation($location, $content);
         }
 
         // UserGroups and Users are Content, but permissions cascade is achieved through
@@ -225,7 +225,7 @@ class StandardMapper implements MapperInterface
             ),
             new Field(
                 'language_code',
-                array_keys( $content->versionInfo->names ),
+                array_keys($content->versionInfo->names),
                 new FieldType\MultipleStringField()
             ),
             new Field(
@@ -240,7 +240,7 @@ class StandardMapper implements MapperInterface
             ),
         );
 
-        $contentType = $this->contentTypeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
+        $contentType = $this->contentTypeHandler->load($content->versionInfo->contentInfo->contentTypeId);
         $fields[] = new Field(
             'group',
             $contentType->groupIds,
@@ -248,21 +248,21 @@ class StandardMapper implements MapperInterface
         );
         $fields[] = new Field(
             'fields',
-            $this->mapFields( $content, $contentType ),
+            $this->mapFields($content, $contentType),
             new FieldType\DocumentField()
         );
 
         $fields[] = new Field(
             'object_state',
-            $this->getObjectStateIds( $content->versionInfo->contentInfo->id ),
+            $this->getObjectStateIds($content->versionInfo->contentInfo->id),
             new FieldType\MultipleIdentifierField()
         );
 
         $document = new Document(
             array(
-                "id" => $content->versionInfo->contentInfo->id,
-                "type" => "content",
-                "fields" => $fields,
+                'id' => $content->versionInfo->contentInfo->id,
+                'type' => 'content',
+                'fields' => $fields,
             )
         );
 
@@ -278,19 +278,17 @@ class StandardMapper implements MapperInterface
      *
      * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document[]
      */
-    protected function mapFields( Content $content, Type $contentType )
+    protected function mapFields(Content $content, Type $contentType)
     {
         $fieldMap = array();
 
-        foreach ( $content->fields as $field )
-        {
+        foreach ($content->fields as $field) {
             $fieldMap[$field->languageCode][] = $field;
         }
 
         $fieldDocuments = array();
 
-        foreach ( array_keys( $fieldMap ) as $languageCode )
-        {
+        foreach (array_keys($fieldMap) as $languageCode) {
             $fields = array();
             $fields[] = new Field(
                 'meta_language_code',
@@ -311,20 +309,16 @@ class StandardMapper implements MapperInterface
                 new FieldType\BooleanField()
             );
 
-            foreach ( $fieldMap[$languageCode] as $field )
-            {
-                foreach ( $contentType->fieldDefinitions as $fieldDefinition )
-                {
-                    if ( $fieldDefinition->id !== $field->fieldDefinitionId )
-                    {
+            foreach ($fieldMap[$languageCode] as $field) {
+                foreach ($contentType->fieldDefinitions as $fieldDefinition) {
+                    if ($fieldDefinition->id !== $field->fieldDefinitionId) {
                         continue;
                     }
 
-                    $fieldType = $this->fieldRegistry->getType( $field->type );
-                    $indexFields = $fieldType->getIndexData( $field, $fieldDefinition );
+                    $fieldType = $this->fieldRegistry->getType($field->type);
+                    $indexFields = $fieldType->getIndexData($field, $fieldDefinition);
 
-                    foreach ( $indexFields as $indexField )
-                    {
+                    foreach ($indexFields as $indexField) {
                         $fields[] = new Field(
                             $name = $this->fieldNameGenerator->getName(
                                 $indexField->name,
@@ -338,10 +332,9 @@ class StandardMapper implements MapperInterface
                         if (
                             $indexField->type instanceof FieldType\StringField ||
                             $indexField->type instanceof FieldType\MultipleStringField
-                        )
-                        {
+                        ) {
                             $fields[] = new Field(
-                                $name . "_meta_all_" . str_replace( "-", "_", $languageCode ),
+                                $name . '_meta_all_' . str_replace('-', '_', $languageCode),
                                 $indexField->value,
                                 $indexField->type
                             );
@@ -352,7 +345,7 @@ class StandardMapper implements MapperInterface
 
             $fieldDocuments[] = new Document(
                 array(
-                    "fields" => $fields,
+                    'fields' => $fields,
                 )
             );
         }
@@ -371,7 +364,7 @@ class StandardMapper implements MapperInterface
      *
      * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document
      */
-    protected function mapContentLocation( Location $location, Content $content )
+    protected function mapContentLocation(Location $location, Content $content)
     {
         $fields = array(
             new Field(
@@ -426,14 +419,14 @@ class StandardMapper implements MapperInterface
             ),
             new Field(
                 'is_main_location',
-                ( $location->id == $content->versionInfo->contentInfo->mainLocationId ),
+                ($location->id == $content->versionInfo->contentInfo->mainLocationId),
                 new FieldType\BooleanField()
             ),
         );
 
         return new Document(
             array(
-                "fields" => $fields
+                'fields' => $fields,
             )
         );
     }
@@ -447,26 +440,26 @@ class StandardMapper implements MapperInterface
      *
      * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document
      */
-    public function mapLocation( Location $location )
+    public function mapLocation(Location $location)
     {
-        $contentInfo = $this->contentHandler->loadContentInfo( $location->contentId );
-        $content = $this->contentHandler->load( $location->contentId, $contentInfo->currentVersionNo );
-        $section = $this->sectionHandler->load( $content->versionInfo->contentInfo->sectionId );
+        $contentInfo = $this->contentHandler->loadContentInfo($location->contentId);
+        $content = $this->contentHandler->load($location->contentId, $contentInfo->currentVersionNo);
+        $section = $this->sectionHandler->load($content->versionInfo->contentInfo->sectionId);
 
-        $document = $this->mapContentLocation( $location, $content );
+        $document = $this->mapContentLocation($location, $content);
         $document->id = $location->id;
-        $document->type = "location";
+        $document->type = 'location';
 
         $document->fields[] = new Field(
             'is_main_location',
-            ( $location->id == $content->versionInfo->contentInfo->mainLocationId ),
+            ($location->id == $content->versionInfo->contentInfo->mainLocationId),
             new FieldType\BooleanField()
         );
 
         // UserGroups and Users are Content, but permissions cascade is achieved through
         // Locations hierarchy. We index all ancestor Location Content ids of all
         // Locations of an owner.
-        $ancestorLocationsContentIds = $this->getAncestorLocationsContentIds( $contentInfo->ownerId );
+        $ancestorLocationsContentIds = $this->getAncestorLocationsContentIds($contentInfo->ownerId);
         // Add owner user id as it can also be considered as user group.
         $ancestorLocationsContentIds[] = $contentInfo->ownerId;
         $document->fields[] = new Field(
@@ -542,7 +535,7 @@ class StandardMapper implements MapperInterface
         );
         $document->fields[] = new Field(
             'content_language_code',
-            array_keys( $content->versionInfo->names ),
+            array_keys($content->versionInfo->names),
             new FieldType\MultipleStringField()
         );
         $document->fields[] = new Field(
@@ -551,7 +544,7 @@ class StandardMapper implements MapperInterface
             new FieldType\BooleanField()
         );
 
-        $contentType = $this->contentTypeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
+        $contentType = $this->contentTypeHandler->load($content->versionInfo->contentInfo->contentTypeId);
         $document->fields[] = new Field(
             'content_group',
             $contentType->groupIds,
@@ -560,7 +553,7 @@ class StandardMapper implements MapperInterface
 
         $document->fields[] = new Field(
             'content_object_state',
-            $this->getObjectStateIds( $content->versionInfo->contentInfo->id ),
+            $this->getObjectStateIds($content->versionInfo->contentInfo->id),
             new FieldType\MultipleIdentifierField()
         );
 
@@ -577,31 +570,29 @@ class StandardMapper implements MapperInterface
      *
      * @return array
      */
-    protected function getAncestorLocationsContentIds( $contentId )
+    protected function getAncestorLocationsContentIds($contentId)
     {
-        $locations = $this->locationHandler->loadLocationsByContent( $contentId );
+        $locations = $this->locationHandler->loadLocationsByContent($contentId);
         $ancestorLocationContentIds = array();
         $ancestorLocationIds = array();
 
-        foreach ( $locations as $location )
-        {
-            $locationIds = explode( "/", trim( $location->pathString, "/" ) );
+        foreach ($locations as $location) {
+            $locationIds = explode('/', trim($location->pathString, '/'));
             // Remove Location of Content with $contentId
-            array_pop( $locationIds );
+            array_pop($locationIds);
             // Remove Root Location id (id==1 in legacy DB)
-            array_shift( $locationIds );
+            array_shift($locationIds);
 
-            $ancestorLocationIds = array_merge( $ancestorLocationIds, $locationIds );
+            $ancestorLocationIds = array_merge($ancestorLocationIds, $locationIds);
         }
 
-        foreach ( array_unique( $ancestorLocationIds ) as $locationId )
-        {
-            $location = $this->locationHandler->load( $locationId );
+        foreach (array_unique($ancestorLocationIds) as $locationId) {
+            $location = $this->locationHandler->load($locationId);
 
             $ancestorLocationContentIds[$location->contentId] = true;
         }
 
-        return array_keys( $ancestorLocationContentIds );
+        return array_keys($ancestorLocationContentIds);
     }
 
     /**
@@ -611,12 +602,11 @@ class StandardMapper implements MapperInterface
      *
      * @return array
      */
-    protected function getObjectStateIds( $contentId )
+    protected function getObjectStateIds($contentId)
     {
         $objectStateIds = array();
 
-        foreach ( $this->objectStateHandler->loadAllGroups() as $objectStateGroup )
-        {
+        foreach ($this->objectStateHandler->loadAllGroups() as $objectStateGroup) {
             $objectStateIds[] = $this->objectStateHandler->getContentState(
                 $contentId,
                 $objectStateGroup->id

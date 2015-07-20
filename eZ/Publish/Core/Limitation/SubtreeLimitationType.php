@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -29,7 +31,7 @@ use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\Core\Repository\Values\Content\Query\Criterion\PermissionSubtree;
 
 /**
- * SubtreeLimitation is a Content Limitation & a Role Limitation
+ * SubtreeLimitation is a Content Limitation & a Role Limitation.
  */
 class SubtreeLimitationType extends AbstractPersistenceLimitationType implements SPILimitationTypeInterface
 {
@@ -42,22 +44,17 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
      */
-    public function acceptValue( APILimitationValue $limitationValue )
+    public function acceptValue(APILimitationValue $limitationValue)
     {
-        if ( !$limitationValue instanceof APISubtreeLimitation )
-        {
-            throw new InvalidArgumentType( "\$limitationValue", "APISubtreeLimitation", $limitationValue );
-        }
-        else if ( !is_array( $limitationValue->limitationValues ) )
-        {
-            throw new InvalidArgumentType( "\$limitationValue->limitationValues", "array", $limitationValue->limitationValues );
+        if (!$limitationValue instanceof APISubtreeLimitation) {
+            throw new InvalidArgumentType("\$limitationValue", 'APISubtreeLimitation', $limitationValue);
+        } elseif (!is_array($limitationValue->limitationValues)) {
+            throw new InvalidArgumentType("\$limitationValue->limitationValues", 'array', $limitationValue->limitationValues);
         }
 
-        foreach ( $limitationValue->limitationValues as $key => $path )
-        {
-            if ( !is_string( $path ) )
-            {
-                throw new InvalidArgumentType( "\$limitationValue->limitationValues[{$key}]", "string", $path );
+        foreach ($limitationValue->limitationValues as $key => $path) {
+            if (!is_string($path)) {
+                throw new InvalidArgumentType("\$limitationValue->limitationValues[{$key}]", 'string', $path);
             }
         }
     }
@@ -71,50 +68,46 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( APILimitationValue $limitationValue )
+    public function validate(APILimitationValue $limitationValue)
     {
         $validationErrors = array();
-        foreach ( $limitationValue->limitationValues as $key => $path )
-        {
-            try
-            {
-                $pathArray = explode( '/', trim( $path, '/' ) );
-                $subtreeRootLocationId = end( $pathArray );
-                $spiLocation = $this->persistence->locationHandler()->load( $subtreeRootLocationId );
-            }
-            catch ( APINotFoundException $e )
-            {
+        foreach ($limitationValue->limitationValues as $key => $path) {
+            try {
+                $pathArray = explode('/', trim($path, '/'));
+                $subtreeRootLocationId = end($pathArray);
+                $spiLocation = $this->persistence->locationHandler()->load($subtreeRootLocationId);
+            } catch (APINotFoundException $e) {
             }
 
-            if ( !isset( $spiLocation ) || strpos( $spiLocation->pathString, $path ) !== 0 )
-            {
+            if (!isset($spiLocation) || strpos($spiLocation->pathString, $path) !== 0) {
                 $validationErrors[] = new ValidationError(
                     "limitationValues[%key%] => '%value%' does not exist in the backend",
                     null,
                     array(
-                        "value" => $path,
-                        "key" => $key
+                        'value' => $path,
+                        'key' => $key,
                     )
                 );
             }
         }
+
         return $validationErrors;
     }
 
     /**
-     * Create the Limitation Value
+     * Create the Limitation Value.
      *
      * @param mixed[] $limitationValues
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation
      */
-    public function buildValue( array $limitationValues )
+    public function buildValue(array $limitationValues)
     {
-        return new APISubtreeLimitation( array( 'limitationValues' => $limitationValues ) );
+        return new APISubtreeLimitation(array('limitationValues' => $limitationValues));
     }
 
     /**
-     * Evaluate permission against content & target(placement/parent/assignment)
+     * Evaluate permission against content & target(placement/parent/assignment).
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      *         Example: If LimitationValue is instance of ContentTypeLimitationValue, and Type is SectionLimitationType.
@@ -126,58 +119,46 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
      * @param \eZ\Publish\API\Repository\Values\ValueObject[]|null $targets The context of the $object, like Location of Content, if null none where provided by caller
      *
-     * @return boolean
+     * @return bool
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = null )
+    public function evaluate(APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = null)
     {
-        if ( !$value instanceof APISubtreeLimitation )
-        {
-            throw new InvalidArgumentException( '$value', 'Must be of type: APISubtreeLimitation' );
+        if (!$value instanceof APISubtreeLimitation) {
+            throw new InvalidArgumentException('$value', 'Must be of type: APISubtreeLimitation');
         }
 
-        if ( $object instanceof ContentCreateStruct )
-        {
-            return $this->evaluateForContentCreateStruct( $value, $targets );
-        }
-        else if ( $object instanceof Content )
-        {
+        if ($object instanceof ContentCreateStruct) {
+            return $this->evaluateForContentCreateStruct($value, $targets);
+        } elseif ($object instanceof Content) {
             $object = $object->getVersionInfo()->getContentInfo();
-        }
-        else if ( $object instanceof VersionInfo )
-        {
+        } elseif ($object instanceof VersionInfo) {
             $object = $object->getContentInfo();
-        }
-        else if ( !$object instanceof ContentInfo )
-        {
+        } elseif (!$object instanceof ContentInfo) {
             // As this is Role limitation we need to signal abstain on unsupported $object
             return self::ACCESS_ABSTAIN;
         }
 
         // Load locations if no specific placement was provided
-        if ( $targets === null )
-        {
-            if ( $object->published )
-                $targets = $this->persistence->locationHandler()->loadLocationsByContent( $object->id );
-            else// @todo Need support for draft locations to to work correctly
-                $targets = $this->persistence->locationHandler()->loadParentLocationsForDraftContent( $object->id );
+        if ($targets === null) {
+            if ($object->published) {
+                $targets = $this->persistence->locationHandler()->loadLocationsByContent($object->id);
+            } else {
+                // @todo Need support for draft locations to to work correctly
+                $targets = $this->persistence->locationHandler()->loadParentLocationsForDraftContent($object->id);
+            }
         }
 
-        foreach ( $targets as $target )
-        {
-            if ( !$target instanceof Location && !$target instanceof SPILocation )
-            {
+        foreach ($targets as $target) {
+            if (!$target instanceof Location && !$target instanceof SPILocation) {
                 // As this is Role limitation we need to signal abstain on unsupported $targets
                 return self::ACCESS_ABSTAIN;
             }
 
-            foreach ( $value->limitationValues as $limitationPathString )
-            {
-                if ( $target->pathString === $limitationPathString )
-                {
+            foreach ($value->limitationValues as $limitationPathString) {
+                if ($target->pathString === $limitationPathString) {
                     return true;
                 }
-                if ( strpos( $target->pathString, $limitationPathString ) === 0 )
-                {
+                if (strpos($target->pathString, $limitationPathString) === 0) {
                     return true;
                 }
             }
@@ -197,36 +178,30 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
      *
      * @return bool
      */
-    protected function evaluateForContentCreateStruct( APILimitationValue $value, array $targets )
+    protected function evaluateForContentCreateStruct(APILimitationValue $value, array $targets)
     {
         // If targets is empty/null return false as user does not have access
         // to content w/o location with this limitation
-        if ( empty( $targets ) )
-        {
+        if (empty($targets)) {
             return false;
         }
 
-        foreach ( $targets as $target )
-        {
-            if ( !$target instanceof LocationCreateStruct )
-            {
+        foreach ($targets as $target) {
+            if (!$target instanceof LocationCreateStruct) {
                 throw new InvalidArgumentException(
                     '$targets',
                     'If $object is ContentCreateStruct must contain objects of type: LocationCreateStruct'
                 );
             }
 
-            $target = $this->persistence->locationHandler()->load( $target->parentLocationId );
+            $target = $this->persistence->locationHandler()->load($target->parentLocationId);
 
             // For ContentCreateStruct all placements must match
-            foreach ( $value->limitationValues as $limitationPathString )
-            {
-                if ( $target->pathString === $limitationPathString )
-                {
+            foreach ($value->limitationValues as $limitationPathString) {
+                if ($target->pathString === $limitationPathString) {
                     continue 2;
                 }
-                if ( strpos( $target->pathString, $limitationPathString ) === 0 )
-                {
+                if (strpos($target->pathString, $limitationPathString) === 0) {
                     continue 2;
                 }
             }
@@ -238,27 +213,31 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
     }
 
     /**
-     * Returns Criterion for use in find() query
+     * Returns Criterion for use in find() query.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
      */
-    public function getCriterion( APILimitationValue $value, APIUser $currentUser )
+    public function getCriterion(APILimitationValue $value, APIUser $currentUser)
     {
-        if ( empty( $value->limitationValues )  )// no limitation values
-            throw new \RuntimeException( "\$value->limitationValues is empty, it should not have been stored in the first place" );
+        if (empty($value->limitationValues)) {
+            // no limitation values
+            throw new \RuntimeException("\$value->limitationValues is empty, it should not have been stored in the first place");
+        }
 
-        if ( !isset( $value->limitationValues[1] ) )// 1 limitation value: EQ operation
-            return new PermissionSubtree( $value->limitationValues[0] );
+        if (!isset($value->limitationValues[1])) {
+            // 1 limitation value: EQ operation
+            return new PermissionSubtree($value->limitationValues[0]);
+        }
 
         // several limitation values: IN operation
-        return new PermissionSubtree( $value->limitationValues );
+        return new PermissionSubtree($value->limitationValues);
     }
 
     /**
-     * Returns info on valid $limitationValues
+     * Returns info on valid $limitationValues.
      *
      * @return mixed[]|int In case of array, a hash with key as valid limitations value and value as human readable name
      *                     of that option, in case of int on of VALUE_SCHEMA_ constants.

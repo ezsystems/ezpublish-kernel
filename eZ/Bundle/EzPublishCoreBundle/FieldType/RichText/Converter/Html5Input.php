@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the Html5Input class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,10 +19,10 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
  */
 class Html5Input extends XsltConverter
 {
-    public function __construct( $stylesheet, ConfigResolverInterface $configResolver )
+    public function __construct($stylesheet, ConfigResolverInterface $configResolver)
     {
-        $customStylesheets = $configResolver->getParameter( 'fieldtypes.ezrichtext.input_custom_xsl' );
+        $customStylesheets = $configResolver->getParameter('fieldtypes.ezrichtext.input_custom_xsl');
         $customStylesheets = $customStylesheets ?: array();
-        parent::__construct( $stylesheet, $customStylesheets );
+        parent::__construct($stylesheet, $customStylesheets);
     }
 }

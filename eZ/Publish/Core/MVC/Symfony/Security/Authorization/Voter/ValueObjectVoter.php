@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ValueObjectVoter class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 /**
- * Voter to test access to a ValueObject from Repository (e.g. Content, Location...)
+ * Voter to test access to a ValueObject from Repository (e.g. Content, Location...).
  */
 class ValueObjectVoter implements VoterInterface
 {
@@ -24,17 +26,17 @@ class ValueObjectVoter implements VoterInterface
      */
     private $repository;
 
-    public function __construct( Repository $repository )
+    public function __construct(Repository $repository)
     {
         $this->repository = $repository;
     }
 
-    public function supportsAttribute( $attribute )
+    public function supportsAttribute($attribute)
     {
-        return $attribute instanceof AuthorizationAttribute && isset( $attribute->limitations['valueObject'] );
+        return $attribute instanceof AuthorizationAttribute && isset($attribute->limitations['valueObject']);
     }
 
-    public function supportsClass( $class )
+    public function supportsClass($class)
     {
         return true;
     }
@@ -56,15 +58,13 @@ class ValueObjectVoter implements VoterInterface
      * @param object         $object     The object to secure
      * @param array          $attributes An array of attributes associated with the method being invoked
      *
-     * @return integer either ACCESS_GRANTED, ACCESS_ABSTAIN, or ACCESS_DENIED
+     * @return int either ACCESS_GRANTED, ACCESS_ABSTAIN, or ACCESS_DENIED
      */
-    public function vote( TokenInterface $token, $object, array $attributes )
+    public function vote(TokenInterface $token, $object, array $attributes)
     {
-        foreach ( $attributes as $attribute )
-        {
-            if ( $this->supportsAttribute( $attribute ) )
-            {
-                $targets = isset( $attribute->limitations['targets'] ) ? $attribute->limitations['targets'] : null;
+        foreach ($attributes as $attribute) {
+            if ($this->supportsAttribute($attribute)) {
+                $targets = isset($attribute->limitations['targets']) ? $attribute->limitations['targets'] : null;
                 if (
                     $this->repository->canUser(
                         $attribute->module,
@@ -72,8 +72,7 @@ class ValueObjectVoter implements VoterInterface
                         $attribute->limitations['valueObject'],
                         $targets
                     ) === false
-                )
-                {
+                ) {
                     return VoterInterface::ACCESS_DENIED;
                 }
 

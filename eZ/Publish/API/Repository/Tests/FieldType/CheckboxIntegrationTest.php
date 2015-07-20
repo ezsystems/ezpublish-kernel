@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\API\Repository\Tests\FieldType\CheckboxIntegrationTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\CheckboxIntegrationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,7 @@ use eZ\Publish\Core\FieldType\Checkbox\Value as CheckboxValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
@@ -21,7 +23,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class CheckboxIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -31,7 +33,7 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get expected settings schema
+     * Get expected settings schema.
      *
      * @return array
      */
@@ -41,7 +43,7 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get a valid $fieldSettings value.
      *
      * @return mixed
      */
@@ -51,7 +53,7 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get $fieldSettings value not accepted by the field type
+     * Get $fieldSettings value not accepted by the field type.
      *
      * @return mixed
      */
@@ -63,7 +65,7 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get expected validator schema
+     * Get expected validator schema.
      *
      * @return array
      */
@@ -73,7 +75,7 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $validatorConfiguration.
      *
      * @return mixed
      */
@@ -83,25 +85,25 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get $validatorConfiguration not accepted by the field type
+     * Get $validatorConfiguration not accepted by the field type.
      *
      * @return mixed
      */
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            'unknown' => array( 'value' => 42 ),
+            'unknown' => array('value' => 42),
         );
     }
 
     /**
-     * Get initial field data for valid object creation
+     * Get initial field data for valid object creation.
      *
      * @return mixed
      */
     public function getValidCreationFieldData()
     {
-        return new CheckboxValue( true );
+        return new CheckboxValue(true);
     }
 
     /**
@@ -111,10 +113,8 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field )
+    public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Checkbox\\Value',
@@ -131,7 +131,7 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during creation
+     * Get field data which will result in errors during creation.
      *
      * This is a PHPUnit data provider.
      *
@@ -155,30 +155,30 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
     {
         return array(
             array(
-                new CheckboxValue( new \stdClass() ),
+                new CheckboxValue(new \stdClass()),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
         );
     }
 
     /**
-     * Get update field externals data
+     * Get update field externals data.
      *
      * @return array
      */
     public function getValidUpdateFieldData()
     {
-        return new CheckboxValue( false );
+        return new CheckboxValue(false);
     }
 
     /**
-     * Get externals updated field data values
+     * Get externals updated field data values.
      *
      * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Checkbox\\Value',
@@ -195,7 +195,7 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during update
+     * Get field data which will result in errors during update.
      *
      * This is a PHPUnit data provider.
      *
@@ -228,7 +228,7 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
      *
      * @param Field $field
      */
-    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Checkbox\\Value',
@@ -245,7 +245,7 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get data to test to hash method
+     * Get data to test to hash method.
      *
      * This is a PHPUnit data provider
      *
@@ -268,14 +268,14 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
     {
         return array(
             array(
-                new CheckboxValue( true ),
-                '1'
+                new CheckboxValue(true),
+                '1',
             ),
         );
     }
 
     /**
-     * Get expectations for the fromHash call on our field value
+     * Get expectations for the fromHash call on our field value.
      *
      * This is a PHPUnit data provider
      *
@@ -286,7 +286,7 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
         return array(
             array(
                 '1',
-                new CheckboxValue( true )
+                new CheckboxValue(true),
             ),
         );
     }
@@ -294,9 +294,9 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new CheckboxValue ),
-            array( new CheckboxValue( null ) ),
-            array( new CheckboxValue( false ) ),
+            array(new CheckboxValue()),
+            array(new CheckboxValue(null)),
+            array(new CheckboxValue(false)),
         );
     }
 
@@ -304,10 +304,10 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
     {
         return array(
             array(
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
             ),
             array(
-                new CheckboxValue( true )
+                new CheckboxValue(true),
             ),
         );
     }
@@ -325,8 +325,7 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
     protected function getSearchTargetValueOne()
     {
         // Handling Legacy Search Engine, which stores Checkbox value as integer
-        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
-        {
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
             return (int)$this->getValidSearchValueOne();
         }
 
@@ -336,8 +335,7 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
     protected function getSearchTargetValueTwo()
     {
         // Handling Legacy Search Engine, which stores Checkbox value as integer
-        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
-        {
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
             return (int)$this->getValidSearchValueTwo();
         }
 

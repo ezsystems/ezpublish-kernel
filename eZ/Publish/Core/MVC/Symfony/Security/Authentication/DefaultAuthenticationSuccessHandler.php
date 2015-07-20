@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the DefaultAuthenticationSuccessHandler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,11 +21,10 @@ class DefaultAuthenticationSuccessHandler extends BaseSuccessHandler
      *
      * @param ConfigResolverInterface $configResolver
      */
-    public function setConfigResolver( ConfigResolverInterface $configResolver )
+    public function setConfigResolver(ConfigResolverInterface $configResolver)
     {
-        $defaultPage = $configResolver->getParameter( 'default_page' );
-        if ( $defaultPage !== null )
-        {
+        $defaultPage = $configResolver->getParameter('default_page');
+        if ($defaultPage !== null) {
             $this->options['default_target_path'] = $defaultPage;
         }
     }

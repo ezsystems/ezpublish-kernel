@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\API\Repository\Tests\FieldType\TextBlockIntegrationTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\TextBlockIntegrationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,7 @@ use eZ\Publish\Core\FieldType\TextBlock\Value as TextBlockValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
@@ -21,7 +23,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class TextBlockIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -31,7 +33,7 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get expected settings schema
+     * Get expected settings schema.
      *
      * @return array
      */
@@ -39,14 +41,14 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
     {
         return array(
             'textRows' => array(
-                'type'    => 'int',
+                'type' => 'int',
                 'default' => 10,
             ),
         );
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get a valid $fieldSettings value.
      *
      * @return mixed
      */
@@ -58,7 +60,7 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get $fieldSettings value not accepted by the field type
+     * Get $fieldSettings value not accepted by the field type.
      *
      * @return mixed
      */
@@ -70,7 +72,7 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get expected validator schema
+     * Get expected validator schema.
      *
      * @return array
      */
@@ -80,7 +82,7 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $validatorConfiguration.
      *
      * @return mixed
      */
@@ -90,25 +92,25 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get $validatorConfiguration not accepted by the field type
+     * Get $validatorConfiguration not accepted by the field type.
      *
      * @return mixed
      */
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            'unknown' => array( 'value' => 23 )
+            'unknown' => array('value' => 23),
         );
     }
 
     /**
-     * Get initial field data for valid object creation
+     * Get initial field data for valid object creation.
      *
      * @return mixed
      */
     public function getValidCreationFieldData()
     {
-        return new TextBlockValue( 'Example' );
+        return new TextBlockValue('Example');
     }
 
     /**
@@ -118,10 +120,8 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field )
+    public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\TextBlock\\Value',
@@ -138,7 +138,7 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during creation
+     * Get field data which will result in errors during creation.
      *
      * This is a PHPUnit data provider.
      *
@@ -169,23 +169,23 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get update field externals data
+     * Get update field externals data.
      *
      * @return array
      */
     public function getValidUpdateFieldData()
     {
-        return new TextBlockValue( 'Example  2' );
+        return new TextBlockValue('Example  2');
     }
 
     /**
-     * Get externals updated field data values
+     * Get externals updated field data values.
      *
      * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\TextBlock\\Value',
@@ -202,7 +202,7 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during update
+     * Get field data which will result in errors during update.
      *
      * This is a PHPUnit data provider.
      *
@@ -235,7 +235,7 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
      *
      * @param Field $field
      */
-    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\TextBlock\\Value',
@@ -252,7 +252,7 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get data to test to hash method
+     * Get data to test to hash method.
      *
      * This is a PHPUnit data provider
      *
@@ -275,14 +275,14 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
     {
         return array(
             array(
-                new TextBlockValue( 'Simple value' ),
+                new TextBlockValue('Simple value'),
                 'Simple value',
             ),
         );
     }
 
     /**
-     * Get expectations for the fromHash call on our field value
+     * Get expectations for the fromHash call on our field value.
      *
      * This is a PHPUnit data provider
      *
@@ -293,7 +293,7 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
         return array(
             array(
                 'Foobar',
-                new TextBlockValue( 'Foobar' )
+                new TextBlockValue('Foobar'),
             ),
         );
     }
@@ -301,12 +301,12 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new TextBlockValue ),
-            array( new TextBlockValue( null ) ),
-            array( new TextBlockValue( "" ) ),
-            array( new TextBlockValue( "\n\n\n" ) ),
-            array( new TextBlockValue( "\r\r\r" ) ),
-            array( new TextBlockValue( "   " ) ),
+            array(new TextBlockValue()),
+            array(new TextBlockValue(null)),
+            array(new TextBlockValue('')),
+            array(new TextBlockValue("\n\n\n")),
+            array(new TextBlockValue("\r\r\r")),
+            array(new TextBlockValue('   ')),
         );
     }
 
@@ -314,10 +314,10 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
     {
         return array(
             array(
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
             ),
-            array( new TextBlockValue( 0 ) ),
-            array( new TextBlockValue( "0" ) ),
+            array(new TextBlockValue(0)),
+            array(new TextBlockValue('0')),
         );
     }
 
@@ -329,7 +329,7 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
     protected function getSearchTargetValueOne()
     {
         // ensure case-insensitivity
-        return strtoupper( $this->getValidSearchValueOne() );
+        return strtoupper($this->getValidSearchValueOne());
     }
 
     protected function getValidSearchValueTwo()
@@ -340,6 +340,6 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
     protected function getSearchTargetValueTwo()
     {
         // ensure case-insensitivity
-        return strtoupper( $this->getValidSearchValueTwo() );
+        return strtoupper($this->getValidSearchValueTwo());
     }
 }

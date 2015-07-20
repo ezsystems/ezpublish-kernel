@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -31,8 +33,8 @@ class AssignedLocationsListenerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->locationService = $this->getMock( '\eZ\Publish\API\Repository\LocationService' );
-        $this->listener = new AssignedLocationsListener( $this->locationService );
+        $this->locationService = $this->getMock('\eZ\Publish\API\Repository\LocationService');
+        $this->listener = new AssignedLocationsListener($this->locationService);
     }
 
     public function testGetSubscribedEvents()
@@ -46,8 +48,8 @@ class AssignedLocationsListenerTest extends PHPUnit_Framework_TestCase
     public function testOnContentCacheClear()
     {
         $contentId = 123;
-        $contentInfo = new ContentInfo( ['id' => $contentId] );
-        $event = new ContentCacheClearEvent( $contentInfo );
+        $contentInfo = new ContentInfo(['id' => $contentId]);
+        $event = new ContentCacheClearEvent($contentInfo);
 
         $locations = [
             new Location(),
@@ -56,12 +58,12 @@ class AssignedLocationsListenerTest extends PHPUnit_Framework_TestCase
             new Location(),
         ];
         $this->locationService
-            ->expects( $this->once() )
-            ->method( 'loadLocations' )
-            ->with( $contentInfo )
-            ->will( $this->returnValue( $locations ) );
+            ->expects($this->once())
+            ->method('loadLocations')
+            ->with($contentInfo)
+            ->will($this->returnValue($locations));
 
-        $this->listener->onContentCacheClear( $event );
-        $this->assertSame( $locations, $event->getLocationsToClear() );
+        $this->listener->onContentCacheClear($event);
+        $this->assertSame($locations, $event->getLocationsToClear());
     }
 }

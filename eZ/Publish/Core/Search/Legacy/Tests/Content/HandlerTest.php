@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,6 @@ use eZ\Publish\Core\Persistence;
 use eZ\Publish\Core\Search\Legacy\Content;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as ContentTypeMapper;
-use eZ\Publish\SPI\Persistence\Content as ContentObject;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -24,62 +25,56 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
 
 /**
- * Test case for ContentSearchHandler
+ * Test case for ContentSearchHandler.
  */
 class HandlerTest extends LanguageAwareTestCase
 {
     protected static $setUp = false;
 
     /**
-     * Field registry mock
+     * Field registry mock.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $fieldRegistry;
 
     /**
-     * Only set up once for these read only tests on a large fixture
+     * Only set up once for these read only tests on a large fixture.
      *
      * Skipping the reset-up, since setting up for these tests takes quite some
      * time, which is not required to spent, since we are only reading from the
      * database anyways.
-     *
-     * @return void
      */
     public function setUp()
     {
-        if ( !self::$setUp )
-        {
+        if (!self::$setUp) {
             parent::setUp();
-            $this->insertDatabaseFixture( __DIR__ . '/../_fixtures/full_dump.php' );
+            $this->insertDatabaseFixture(__DIR__ . '/../_fixtures/full_dump.php');
             self::$setUp = $this->handler;
-        }
-        else
-        {
+        } else {
             $this->handler = self::$setUp;
         }
     }
 
     /**
-     * Assert that the elements are
+     * Assert that the elements are.
      */
-    protected function assertSearchResults( $expectedIds, $searchResult )
+    protected function assertSearchResults($expectedIds, $searchResult)
     {
         $result = array_map(
-            function ( $hit )
-            {
+            function ($hit) {
                 return $hit->valueObject->id;
             },
             $searchResult->searchHits
         );
 
-        sort( $result );
+        sort($result);
 
-        $this->assertEquals( $expectedIds, $result );
+        $this->assertEquals($expectedIds, $result);
     }
 
     /**
-     * Returns the content search handler to test
+     * Returns the content search handler to test.
      *
      * This method returns a fully functional search handler to perform tests
      * on.
@@ -88,24 +83,24 @@ class HandlerTest extends LanguageAwareTestCase
      *
      * @return \eZ\Publish\Core\Search\Legacy\Content\Handler
      */
-    protected function getContentSearchHandler( array $fullTextSearchConfiguration = array() )
+    protected function getContentSearchHandler(array $fullTextSearchConfiguration = array())
     {
         $transformationProcessor = new Persistence\TransformationProcessor\DefinitionBased(
             new Persistence\TransformationProcessor\DefinitionBased\Parser(),
             new Persistence\TransformationProcessor\PcreCompiler(
                 new Persistence\Utf8Converter()
             ),
-            glob( __DIR__ . '/../../../../Persistence/Tests/TransformationProcessor/_fixtures/transformations/*.tr' )
+            glob(__DIR__ . '/../../../../Persistence/Tests/TransformationProcessor/_fixtures/transformations/*.tr')
         );
         $commaSeparatedCollectionValueHandler = new Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Collection(
             $this->getDatabaseHandler(),
             $transformationProcessor,
-            ","
+            ','
         );
         $hyphenSeparatedCollectionValueHandler = new Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Collection(
             $this->getDatabaseHandler(),
             $transformationProcessor,
-            "-"
+            '-'
         );
         $simpleValueHandler = new Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Simple(
             $this->getDatabaseHandler(),
@@ -180,16 +175,16 @@ class HandlerTest extends LanguageAwareTestCase
                             new Content\Common\Gateway\CriterionHandler\FieldValue\Converter(
                                 new Content\Common\Gateway\CriterionHandler\FieldValue\HandlerRegistry(
                                     array(
-                                        "ezboolean" => $simpleValueHandler,
-                                        "ezcountry" => $commaSeparatedCollectionValueHandler,
-                                        "ezdate" => $simpleValueHandler,
-                                        "ezdatetime" => $simpleValueHandler,
-                                        "ezemail" => $simpleValueHandler,
-                                        "ezinteger" => $simpleValueHandler,
-                                        "ezobjectrelation" => $simpleValueHandler,
-                                        "ezobjectrelationlist" => $commaSeparatedCollectionValueHandler,
-                                        "ezselection" => $hyphenSeparatedCollectionValueHandler,
-                                        "eztime" => $simpleValueHandler,
+                                        'ezboolean' => $simpleValueHandler,
+                                        'ezcountry' => $commaSeparatedCollectionValueHandler,
+                                        'ezdate' => $simpleValueHandler,
+                                        'ezdatetime' => $simpleValueHandler,
+                                        'ezemail' => $simpleValueHandler,
+                                        'ezinteger' => $simpleValueHandler,
+                                        'ezobjectrelation' => $simpleValueHandler,
+                                        'ezobjectrelationlist' => $commaSeparatedCollectionValueHandler,
+                                        'ezselection' => $hyphenSeparatedCollectionValueHandler,
+                                        'eztime' => $simpleValueHandler,
                                     )
                                 ),
                                 $compositeValueHandler
@@ -224,7 +219,7 @@ class HandlerTest extends LanguageAwareTestCase
                 ),
                 new Content\Common\Gateway\SortClauseConverter(
                     array(
-                        new Content\Common\Gateway\SortClauseHandler\ContentId( $this->getDatabaseHandler() ),
+                        new Content\Common\Gateway\SortClauseHandler\ContentId($this->getDatabaseHandler()),
                     )
                 )
             ),
@@ -236,15 +231,14 @@ class HandlerTest extends LanguageAwareTestCase
 
     protected function getContentTypeHandler()
     {
-        if ( !isset( $this->contentTypeHandler ) )
-        {
+        if (!isset($this->contentTypeHandler)) {
             $this->contentTypeHandler = new ContentTypeHandler(
                 new ContentTypeGateway(
                     $this->getDatabaseHandler(),
                     $this->getLanguageMaskGenerator()
                 ),
-                new ContentTypeMapper( $this->getConverterRegistry() ),
-                $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler" )
+                new ContentTypeMapper($this->getConverterRegistry()),
+                $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler')
             );
         }
 
@@ -253,8 +247,7 @@ class HandlerTest extends LanguageAwareTestCase
 
     protected function getConverterRegistry()
     {
-        if ( !isset( $this->fieldRegistry ) )
-        {
+        if (!isset($this->fieldRegistry)) {
             $this->fieldRegistry = new ConverterRegistry(
                 array(
                     'ezdatetime' => new Converter\DateAndTimeConverter(),
@@ -273,7 +266,7 @@ class HandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a content mapper mock
+     * Returns a content mapper mock.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
@@ -281,38 +274,37 @@ class HandlerTest extends LanguageAwareTestCase
     {
         $mapperMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
-            array( 'extractContentInfoFromRows' ),
+            array('extractContentInfoFromRows'),
             array(
                 $this->fieldRegistry,
-                $this->getLanguageHandler()
+                $this->getLanguageHandler(),
             )
         );
-        $mapperMock->expects( $this->any() )
-            ->method( 'extractContentInfoFromRows' )
-            ->with( $this->isType( 'array' ) )
+        $mapperMock->expects($this->any())
+            ->method('extractContentInfoFromRows')
+            ->with($this->isType('array'))
             ->will(
                 $this->returnCallback(
-                    function ( $rows )
-                    {
+                    function ($rows) {
                         $contentInfoObjs = array();
-                        foreach ( $rows as $row )
-                        {
+                        foreach ($rows as $row) {
                             $contentId = (int)$row['id'];
-                            if ( !isset( $contentInfoObjs[$contentId] ) )
-                            {
+                            if (!isset($contentInfoObjs[$contentId])) {
                                 $contentInfoObjs[$contentId] = new ContentInfo();
                                 $contentInfoObjs[$contentId]->id = $contentId;
                             }
                         }
-                        return array_values( $contentInfoObjs );
+
+                        return array_values($contentInfoObjs);
                     }
                 )
             );
+
         return $mapperMock;
     }
 
     /**
-     * Returns a content field handler mock
+     * Returns a content field handler mock.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
      */
@@ -320,7 +312,7 @@ class HandlerTest extends LanguageAwareTestCase
     {
         return $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldHandler',
-            array( 'loadExternalFieldData' ),
+            array('loadExternalFieldData'),
             array(),
             '',
             false
@@ -328,7 +320,7 @@ class HandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * Bug #80
+     * Bug #80.
      */
     public function testFindWithoutOffsetLimit()
     {
@@ -337,7 +329,7 @@ class HandlerTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\ContentId( 10 )
+                    'filter' => new Criterion\ContentId(10),
                 )
             )
         );
@@ -349,7 +341,7 @@ class HandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * Bug #81, bug #82
+     * Bug #81, bug #82.
      */
     public function testFindWithZeroLimit()
     {
@@ -358,9 +350,9 @@ class HandlerTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\ContentId( 10 ),
-                    'offset'    => 0,
-                    'limit'     => 0,
+                    'filter' => new Criterion\ContentId(10),
+                    'offset' => 0,
+                    'limit' => 0,
                 )
             )
         );
@@ -376,7 +368,7 @@ class HandlerTest extends LanguageAwareTestCase
     }
 
     /**
-     * Issue with PHP_MAX_INT limit overflow in databases
+     * Issue with PHP_MAX_INT limit overflow in databases.
      */
     public function testFindWithNullLimit()
     {
@@ -385,9 +377,9 @@ class HandlerTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\ContentId( 10 ),
-                    'offset'    => 0,
-                    'limit'     => null,
+                    'filter' => new Criterion\ContentId(10),
+                    'offset' => 0,
+                    'limit' => null,
                 )
             )
         );
@@ -398,7 +390,7 @@ class HandlerTest extends LanguageAwareTestCase
         );
         $this->assertEquals(
             1,
-            count( $result->searchHits )
+            count($result->searchHits)
         );
     }
 
@@ -412,9 +404,9 @@ class HandlerTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\ContentId( 10 ),
-                    'offset'    => 1000,
-                    'limit'     => null,
+                    'filter' => new Criterion\ContentId(10),
+                    'offset' => 1000,
+                    'limit' => null,
                 )
             )
         );
@@ -425,23 +417,23 @@ class HandlerTest extends LanguageAwareTestCase
         );
         $this->assertEquals(
             0,
-            count( $result->searchHits )
+            count($result->searchHits)
         );
     }
 
     public function testFindWithExistingLanguageFields()
     {
-        $this->markTestSkipped( "Translation filters are currently not supported by new search API." );
+        $this->markTestSkipped('Translation filters are currently not supported by new search API.');
 
         $locator = $this->getContentSearchHandler();
 
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter'    => new Criterion\ContentId( 11 ),
-                    'offset'       => 0,
-                    'limit'        => null,
-                    'translations' => array( 'eng-US' )
+                    'filter' => new Criterion\ContentId(11),
+                    'offset' => 0,
+                    'limit' => null,
+                    'translations' => array('eng-US'),
                 )
             )
         );
@@ -454,17 +446,17 @@ class HandlerTest extends LanguageAwareTestCase
 
     public function testFindWithMissingLanguageFields()
     {
-        $this->markTestSkipped( "Translation filters are currently not supported by new search API." );
+        $this->markTestSkipped('Translation filters are currently not supported by new search API.');
 
         $locator = $this->getContentSearchHandler();
 
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter' => new Criterion\ContentId( 4 ),
-                    'offset'       => 0,
-                    'limit'        => null,
-                    'translations' => array( 'eng-GB' )
+                    'filter' => new Criterion\ContentId(4),
+                    'offset' => 0,
+                    'limit' => null,
+                    'translations' => array('eng-GB'),
                 )
             )
         );
@@ -479,9 +471,9 @@ class HandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $contentInfo = $locator->findSingle( new Criterion\ContentId( 10 ) );
+        $contentInfo = $locator->findSingle(new Criterion\ContentId(10));
 
-        $this->assertEquals( 10, $contentInfo->id );
+        $this->assertEquals(10, $contentInfo->id);
     }
 
     /**
@@ -513,7 +505,7 @@ class HandlerTest extends LanguageAwareTestCase
                         Criterion\Operator::EQ,
                         'http://nimbus.com'
                     ),
-                    'sortClauses' => array( new SortClause\ContentId() )
+                    'sortClauses' => array(new SortClause\ContentId()),
                 )
             )
         );
@@ -525,7 +517,7 @@ class HandlerTest extends LanguageAwareTestCase
     public function testFindSingleTooMany()
     {
         $locator = $this->getContentSearchHandler();
-        $locator->findSingle( new Criterion\ContentId( array( 4, 10, 12, 23 ) ) );
+        $locator->findSingle(new Criterion\ContentId(array(4, 10, 12, 23)));
     }
 
     /**
@@ -534,18 +526,18 @@ class HandlerTest extends LanguageAwareTestCase
     public function testFindSingleZero()
     {
         $locator = $this->getContentSearchHandler();
-        $locator->findSingle( new Criterion\ContentId( 0 ) );
+        $locator->findSingle(new Criterion\ContentId(0));
     }
 
     public function testContentIdFilter()
     {
         $this->assertSearchResults(
-            array( 4, 10 ),
+            array(4, 10),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'filter' => new Criterion\ContentId(
-                            array( 1, 4, 10 )
+                            array(1, 4, 10)
                         ),
                         'limit' => 10,
                     )
@@ -562,30 +554,30 @@ class HandlerTest extends LanguageAwareTestCase
             new Query(
                 array(
                     'filter' => new Criterion\ContentId(
-                        array( 1, 4, 10 )
+                        array(1, 4, 10)
                     ),
                     'limit' => 10,
                 )
             )
         );
 
-        $this->assertSame( 2, $result->totalCount );
+        $this->assertSame(2, $result->totalCount);
     }
 
     public function testContentAndCombinatorFilter()
     {
         $this->assertSearchResults(
-            array( 4 ),
+            array(4),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'filter' => new Criterion\LogicalAnd(
                             array(
                                 new Criterion\ContentId(
-                                    array( 1, 4, 10 )
+                                    array(1, 4, 10)
                                 ),
                                 new Criterion\ContentId(
-                                    array( 4, 12 )
+                                    array(4, 12)
                                 ),
                             )
                         ),
@@ -606,10 +598,10 @@ class HandlerTest extends LanguageAwareTestCase
                     'filter' => new Criterion\LogicalOr(
                         array(
                             new Criterion\ContentId(
-                                array( 1, 4, 10 )
+                                array(1, 4, 10)
                             ),
                             new Criterion\ContentId(
-                                array( 4, 12 )
+                                array(4, 12)
                             ),
                         )
                     ),
@@ -618,14 +610,13 @@ class HandlerTest extends LanguageAwareTestCase
             )
         );
 
-        $expectedContentIds = array( 4, 10, 12 );
+        $expectedContentIds = array(4, 10, 12);
 
         $this->assertEquals(
-            count( $expectedContentIds ),
-            count( $result->searchHits )
+            count($expectedContentIds),
+            count($result->searchHits)
         );
-        foreach ( $result->searchHits as $hit )
-        {
+        foreach ($result->searchHits as $hit) {
             $this->assertContains(
                 $hit->valueObject->id,
                 $expectedContentIds
@@ -636,18 +627,18 @@ class HandlerTest extends LanguageAwareTestCase
     public function testContentNotCombinatorFilter()
     {
         $this->assertSearchResults(
-            array( 4 ),
+            array(4),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'filter' => new Criterion\LogicalAnd(
                             array(
                                 new Criterion\ContentId(
-                                    array( 1, 4, 10 )
+                                    array(1, 4, 10)
                                 ),
                                 new Criterion\LogicalNot(
                                     new Criterion\ContentId(
-                                        array( 10, 12 )
+                                        array(10, 12)
                                     )
                                 ),
                             )
@@ -662,12 +653,12 @@ class HandlerTest extends LanguageAwareTestCase
     public function testContentSubtreeFilterIn()
     {
         $this->assertSearchResults(
-            array( 67, 68, 69, 70, 71, 72, 73, 74 ),
+            array(67, 68, 69, 70, 71, 72, 73, 74),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'filter' => new Criterion\Subtree(
-                            array( '/1/2/69/' )
+                            array('/1/2/69/')
                         ),
                         'limit' => 10,
                     )
@@ -679,11 +670,11 @@ class HandlerTest extends LanguageAwareTestCase
     public function testContentSubtreeFilterEq()
     {
         $this->assertSearchResults(
-            array( 67, 68, 69, 70, 71, 72, 73, 74 ),
+            array(67, 68, 69, 70, 71, 72, 73, 74),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\Subtree( '/1/2/69/' ),
+                        'filter' => new Criterion\Subtree('/1/2/69/'),
                         'limit' => 10,
                     )
                 )
@@ -694,11 +685,11 @@ class HandlerTest extends LanguageAwareTestCase
     public function testContentDepthFilterEq()
     {
         $this->assertSearchResults(
-            array( 4, 41, 45, 56, 65 ),
+            array(4, 41, 45, 56, 65),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'criterion' => new Criterion\Depth( Criterion\Operator::EQ, 1 ),
+                        'criterion' => new Criterion\Depth(Criterion\Operator::EQ, 1),
                         'limit' => 10,
                     )
                 )
@@ -709,11 +700,11 @@ class HandlerTest extends LanguageAwareTestCase
     public function testContentDepthFilterIn()
     {
         $this->assertSearchResults(
-            array( 4, 11, 12, 13, 41, 42, 45, 49, 50, 51, 52, 54, 56, 57, 65, 67, 75, 84, 94, 105, 151, 154, 165, 188, 225 ),
+            array(4, 11, 12, 13, 41, 42, 45, 49, 50, 51, 52, 54, 56, 57, 65, 67, 75, 84, 94, 105, 151, 154, 165, 188, 225),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'criterion' => new Criterion\Depth( Criterion\Operator::IN, array( 1, 2 ) ),
+                        'criterion' => new Criterion\Depth(Criterion\Operator::IN, array(1, 2)),
                         'limit' => 50,
                     )
                 )
@@ -724,11 +715,11 @@ class HandlerTest extends LanguageAwareTestCase
     public function testContentDepthFilterBetween()
     {
         $this->assertSearchResults(
-            array( 4, 41, 45, 56, 65 ),
+            array(4, 41, 45, 56, 65),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'criterion' => new Criterion\Depth( Criterion\Operator::BETWEEN, array( 0, 1 ) ),
+                        'criterion' => new Criterion\Depth(Criterion\Operator::BETWEEN, array(0, 1)),
                     )
                 )
             )
@@ -738,11 +729,11 @@ class HandlerTest extends LanguageAwareTestCase
     public function testContentDepthFilterGreaterThan()
     {
         $this->assertSearchResults(
-            array( 97, 100, 133, 134, 135, 137, 138, 140, 141, 142, 143, 146, 149, 172, 173, 175, 192, 194, 195, 196, 197, 198, 199, 200, 201, 203, 204, 205, 206, 207, 208, 209, 210, 212, 213 ),
+            array(97, 100, 133, 134, 135, 137, 138, 140, 141, 142, 143, 146, 149, 172, 173, 175, 192, 194, 195, 196, 197, 198, 199, 200, 201, 203, 204, 205, 206, 207, 208, 209, 210, 212, 213),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'criterion' => new Criterion\Depth( Criterion\Operator::GT, 4 ),
+                        'criterion' => new Criterion\Depth(Criterion\Operator::GT, 4),
                         'limit' => 50,
                     )
                 )
@@ -753,11 +744,11 @@ class HandlerTest extends LanguageAwareTestCase
     public function testContentDepthFilterGreaterThanOrEqual()
     {
         $this->assertSearchResults(
-            array( 97, 100, 133, 134, 135, 137, 138, 140, 141, 142, 143, 146, 149, 172, 173, 175, 192, 194, 195, 196, 197, 198, 199, 200, 201, 203, 204, 205, 206, 207, 208, 209, 210, 212, 213 ),
+            array(97, 100, 133, 134, 135, 137, 138, 140, 141, 142, 143, 146, 149, 172, 173, 175, 192, 194, 195, 196, 197, 198, 199, 200, 201, 203, 204, 205, 206, 207, 208, 209, 210, 212, 213),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'criterion' => new Criterion\Depth( Criterion\Operator::GTE, 5 ),
+                        'criterion' => new Criterion\Depth(Criterion\Operator::GTE, 5),
                         'limit' => 50,
                     )
                 )
@@ -768,11 +759,11 @@ class HandlerTest extends LanguageAwareTestCase
     public function testContentDepthFilterLessThan()
     {
         $this->assertSearchResults(
-            array( 4, 41, 45, 56, 65 ),
+            array(4, 41, 45, 56, 65),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'criterion' => new Criterion\Depth( Criterion\Operator::LT, 2 ),
+                        'criterion' => new Criterion\Depth(Criterion\Operator::LT, 2),
                         'limit' => 10,
                     )
                 )
@@ -783,11 +774,11 @@ class HandlerTest extends LanguageAwareTestCase
     public function testContentDepthFilterLessThanOrEqual()
     {
         $this->assertSearchResults(
-            array( 4, 11, 12, 13, 41, 42, 45, 49, 50, 51, 52, 54, 56, 57, 65, 67, 75, 84, 94, 105, 151, 154, 165, 188, 225 ),
+            array(4, 11, 12, 13, 41, 42, 45, 49, 50, 51, 52, 54, 56, 57, 65, 67, 75, 84, 94, 105, 151, 154, 165, 188, 225),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'criterion' => new Criterion\Depth( Criterion\Operator::LTE, 2 ),
+                        'criterion' => new Criterion\Depth(Criterion\Operator::LTE, 2),
                         'limit' => 50,
                     )
                 )
@@ -798,11 +789,11 @@ class HandlerTest extends LanguageAwareTestCase
     public function testContentTypeIdFilter()
     {
         $this->assertSearchResults(
-            array( 10, 14, 226 ),
+            array(10, 14, 226),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\ContentTypeId( 4 ),
+                        'filter' => new Criterion\ContentTypeId(4),
                         'limit' => 10,
                     )
                 )
@@ -813,13 +804,13 @@ class HandlerTest extends LanguageAwareTestCase
     public function testContentTypeIdentifierFilter()
     {
         $this->assertSearchResults(
-            array( 41, 45, 49, 50, 51 ),
+            array(41, 45, 49, 50, 51),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\ContentTypeIdentifier( 'folder' ),
+                        'filter' => new Criterion\ContentTypeIdentifier('folder'),
                         'limit' => 5,
-                        'sortClauses' => array( new SortClause\ContentId ),
+                        'sortClauses' => array(new SortClause\ContentId()),
                     )
                 )
             )
@@ -829,11 +820,11 @@ class HandlerTest extends LanguageAwareTestCase
     public function testContentTypeGroupFilter()
     {
         $this->assertSearchResults(
-            array( 4, 10, 11, 12, 13, 14, 42, 225, 226 ),
+            array(4, 10, 11, 12, 13, 14, 42, 225, 226),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\ContentTypeGroupId( 2 ),
+                        'filter' => new Criterion\ContentTypeGroupId(2),
                         'limit' => 10,
                     )
                 )
@@ -844,7 +835,7 @@ class HandlerTest extends LanguageAwareTestCase
     public function testDateMetadataFilterModifiedGreater()
     {
         $this->assertSearchResults(
-            array( 11, 225, 226 ),
+            array(11, 225, 226),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
@@ -863,7 +854,7 @@ class HandlerTest extends LanguageAwareTestCase
     public function testDateMetadataFilterModifiedGreaterOrEqual()
     {
         $this->assertSearchResults(
-            array( 11, 14, 225, 226 ),
+            array(11, 14, 225, 226),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
@@ -882,14 +873,14 @@ class HandlerTest extends LanguageAwareTestCase
     public function testDateMetadataFilterModifiedIn()
     {
         $this->assertSearchResults(
-            array( 11, 14, 225, 226 ),
+            array(11, 14, 225, 226),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'filter' => new Criterion\DateMetadata(
                             Criterion\DateMetadata::MODIFIED,
                             Criterion\Operator::IN,
-                            array( 1311154214, 1311154215 )
+                            array(1311154214, 1311154215)
                         ),
                         'limit' => 10,
                     )
@@ -901,14 +892,14 @@ class HandlerTest extends LanguageAwareTestCase
     public function testDateMetadataFilterModifiedBetween()
     {
         $this->assertSearchResults(
-            array( 11, 14, 225, 226 ),
+            array(11, 14, 225, 226),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'filter' => new Criterion\DateMetadata(
                             Criterion\DateMetadata::MODIFIED,
                             Criterion\Operator::BETWEEN,
-                            array( 1311154213, 1311154215 )
+                            array(1311154213, 1311154215)
                         ),
                         'limit' => 10,
                     )
@@ -920,14 +911,14 @@ class HandlerTest extends LanguageAwareTestCase
     public function testDateMetadataFilterCreatedBetween()
     {
         $this->assertSearchResults(
-            array( 66, 131, 225 ),
+            array(66, 131, 225),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'filter' => new Criterion\DateMetadata(
                             Criterion\DateMetadata::CREATED,
                             Criterion\Operator::BETWEEN,
-                            array( 1299780749, 1311154215 )
+                            array(1299780749, 1311154215)
                         ),
                         'limit' => 10,
                     )
@@ -939,11 +930,11 @@ class HandlerTest extends LanguageAwareTestCase
     public function testLocationIdFilter()
     {
         $this->assertSearchResults(
-            array( 4, 65 ),
+            array(4, 65),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\LocationId( array( 1, 2, 5 ) ),
+                        'filter' => new Criterion\LocationId(array(1, 2, 5)),
                         'limit' => 10,
                     )
                 )
@@ -954,13 +945,13 @@ class HandlerTest extends LanguageAwareTestCase
     public function testLocationPriorityFilter()
     {
         $this->assertSearchResults(
-            array( 154, 165, 188 ),
+            array(154, 165, 188),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'filter' => new Criterion\LocationPriority(
                             Criterion\Operator::BETWEEN,
-                            array( 1, 10 )
+                            array(1, 10)
                         ),
                         'limit' => 10,
                     )
@@ -972,11 +963,11 @@ class HandlerTest extends LanguageAwareTestCase
     public function testParentLocationIdFilter()
     {
         $this->assertSearchResults(
-            array( 4, 41, 45, 56, 65 ),
+            array(4, 41, 45, 56, 65),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\ParentLocationId( array( 1 ) ),
+                        'filter' => new Criterion\ParentLocationId(array(1)),
                         'limit' => 10,
                     )
                 )
@@ -987,12 +978,12 @@ class HandlerTest extends LanguageAwareTestCase
     public function testRemoteIdFilter()
     {
         $this->assertSearchResults(
-            array( 4, 10 ),
+            array(4, 10),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'filter' => new Criterion\RemoteId(
-                            array( 'f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca' )
+                            array('f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca')
                         ),
                         'limit' => 10,
                     )
@@ -1004,12 +995,12 @@ class HandlerTest extends LanguageAwareTestCase
     public function testLocationRemoteIdFilter()
     {
         $this->assertSearchResults(
-            array( 4, 65 ),
+            array(4, 65),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'filter' => new Criterion\LocationRemoteId(
-                            array( '3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983' )
+                            array('3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983')
                         ),
                         'limit' => 10,
                     )
@@ -1021,11 +1012,11 @@ class HandlerTest extends LanguageAwareTestCase
     public function testSectionFilter()
     {
         $this->assertSearchResults(
-            array( 4, 10, 11, 12, 13, 14, 42, 226 ),
+            array(4, 10, 11, 12, 13, 14, 42, 226),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\SectionId( array( 2 ) ),
+                        'filter' => new Criterion\SectionId(array(2)),
                         'limit' => 10,
                     )
                 )
@@ -1036,18 +1027,18 @@ class HandlerTest extends LanguageAwareTestCase
     public function testStatusFilter()
     {
         $this->assertSearchResults(
-            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            array(4, 10, 11, 12, 13, 14, 41, 42, 45, 49),
             $searchResult = $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         // Status criterion is gone, but this will also match all published
                         'filter' => new Criterion\LogicalNot(
                             new Criterion\ContentId(
-                                array( 0 )
+                                array(0)
                             )
                         ),
                         'limit' => 10,
-                        'sortClauses' => array( new SortClause\ContentId ),
+                        'sortClauses' => array(new SortClause\ContentId()),
                     )
                 )
             )
@@ -1062,7 +1053,7 @@ class HandlerTest extends LanguageAwareTestCase
     public function testFieldFilter()
     {
         $this->assertSearchResults(
-            array( 11 ),
+            array(11),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
@@ -1081,14 +1072,14 @@ class HandlerTest extends LanguageAwareTestCase
     public function testFieldFilterIn()
     {
         $this->assertSearchResults(
-            array( 11, 42 ),
+            array(11, 42),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'filter' => new Criterion\Field(
                             'name',
                             Criterion\Operator::IN,
-                            array( 'members', 'anonymous users' )
+                            array('members', 'anonymous users')
                         ),
                         'limit' => 10,
                     )
@@ -1100,7 +1091,7 @@ class HandlerTest extends LanguageAwareTestCase
     public function testFieldFilterContainsPartial()
     {
         $this->assertSearchResults(
-            array( 42 ),
+            array(42),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
@@ -1119,7 +1110,7 @@ class HandlerTest extends LanguageAwareTestCase
     public function testFieldFilterContainsSimple()
     {
         $this->assertSearchResults(
-            array( 77 ),
+            array(77),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
@@ -1157,14 +1148,14 @@ class HandlerTest extends LanguageAwareTestCase
     public function testFieldFilterBetween()
     {
         $this->assertSearchResults(
-            array( 69, 71, 72 ),
+            array(69, 71, 72),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'filter' => new Criterion\Field(
                             'price',
                             Criterion\Operator::BETWEEN,
-                            array( 10000, 1000000 )
+                            array(10000, 1000000)
                         ),
                         'limit' => 10,
                     )
@@ -1176,7 +1167,7 @@ class HandlerTest extends LanguageAwareTestCase
     public function testFieldFilterOr()
     {
         $this->assertSearchResults(
-            array( 11, 69, 71, 72 ),
+            array(11, 69, 71, 72),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
@@ -1190,8 +1181,8 @@ class HandlerTest extends LanguageAwareTestCase
                                 new Criterion\Field(
                                     'price',
                                     Criterion\Operator::BETWEEN,
-                                    array( 10000, 1000000 )
-                                )
+                                    array(10000, 1000000)
+                                ),
                             )
                         ),
                         'limit' => 10,
@@ -1204,11 +1195,11 @@ class HandlerTest extends LanguageAwareTestCase
     public function testFullTextFilter()
     {
         $this->assertSearchResults(
-            array( 191 ),
+            array(191),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\FullText( 'applied webpage' ),
+                        'filter' => new Criterion\FullText('applied webpage'),
                         'limit' => 10,
                     )
                 )
@@ -1219,11 +1210,11 @@ class HandlerTest extends LanguageAwareTestCase
     public function testFullTextWildcardFilter()
     {
         $this->assertSearchResults(
-            array( 191 ),
+            array(191),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\FullText( 'applie*' ),
+                        'filter' => new Criterion\FullText('applie*'),
                         'limit' => 10,
                     )
                 )
@@ -1236,11 +1227,11 @@ class HandlerTest extends LanguageAwareTestCase
         $this->assertSearchResults(
             array(),
             $this->getContentSearchHandler(
-                array( 'enableWildcards' => false )
+                array('enableWildcards' => false)
             )->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\FullText( 'applie*' ),
+                        'filter' => new Criterion\FullText('applie*'),
                         'limit' => 10,
                     )
                 )
@@ -1252,7 +1243,7 @@ class HandlerTest extends LanguageAwareTestCase
     {
         $handler = $this->getContentSearchHandler(
             array(
-                'stopWordThresholdFactor' => 0.1
+                'stopWordThresholdFactor' => 0.1,
             )
         );
 
@@ -1261,7 +1252,7 @@ class HandlerTest extends LanguageAwareTestCase
             $handler->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\FullText( 'the' ),
+                        'filter' => new Criterion\FullText('the'),
                         'limit' => 10,
                     )
                 )
@@ -1273,7 +1264,7 @@ class HandlerTest extends LanguageAwareTestCase
     {
         $handler = $this->getContentSearchHandler(
             array(
-                'stopWordThresholdFactor' => 1
+                'stopWordThresholdFactor' => 1,
             )
         );
 
@@ -1292,8 +1283,7 @@ class HandlerTest extends LanguageAwareTestCase
             10,
             count(
                 array_map(
-                    function ( $hit )
-                    {
+                    function ($hit) {
                         return $hit->valueObject->id;
                     },
                     $result->searchHits
@@ -1309,7 +1299,7 @@ class HandlerTest extends LanguageAwareTestCase
     {
         $this->getContentSearchHandler(
             array(
-                'stopWordThresholdFactor' => 2
+                'stopWordThresholdFactor' => 2,
             )
         );
     }
@@ -1317,13 +1307,13 @@ class HandlerTest extends LanguageAwareTestCase
     public function testObjectStateIdFilter()
     {
         $this->assertSearchResults(
-            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            array(4, 10, 11, 12, 13, 14, 41, 42, 45, 49),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\ObjectStateId( 1 ),
+                        'filter' => new Criterion\ObjectStateId(1),
                         'limit' => 10,
-                        'sortClauses' => array( new SortClause\ContentId ),
+                        'sortClauses' => array(new SortClause\ContentId()),
                     )
                 )
             )
@@ -1333,13 +1323,13 @@ class HandlerTest extends LanguageAwareTestCase
     public function testObjectStateIdFilterIn()
     {
         $this->assertSearchResults(
-            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            array(4, 10, 11, 12, 13, 14, 41, 42, 45, 49),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\ObjectStateId( array( 1, 2 ) ),
+                        'filter' => new Criterion\ObjectStateId(array(1, 2)),
                         'limit' => 10,
-                        'sortClauses' => array( new SortClause\ContentId ),
+                        'sortClauses' => array(new SortClause\ContentId()),
                     )
                 )
             )
@@ -1349,13 +1339,13 @@ class HandlerTest extends LanguageAwareTestCase
     public function testLanguageCodeFilter()
     {
         $this->assertSearchResults(
-            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            array(4, 10, 11, 12, 13, 14, 41, 42, 45, 49),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\LanguageCode( 'eng-US' ),
+                        'filter' => new Criterion\LanguageCode('eng-US'),
                         'limit' => 10,
-                        'sortClauses' => array( new SortClause\ContentId ),
+                        'sortClauses' => array(new SortClause\ContentId()),
                     )
                 )
             )
@@ -1365,13 +1355,13 @@ class HandlerTest extends LanguageAwareTestCase
     public function testLanguageCodeFilterIn()
     {
         $this->assertSearchResults(
-            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            array(4, 10, 11, 12, 13, 14, 41, 42, 45, 49),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'filter' => new Criterion\LanguageCode( array( 'eng-US', 'eng-GB' ) ),
+                        'filter' => new Criterion\LanguageCode(array('eng-US', 'eng-GB')),
                         'limit' => 10,
-                        'sortClauses' => array( new SortClause\ContentId ),
+                        'sortClauses' => array(new SortClause\ContentId()),
                     )
                 )
             )
@@ -1381,13 +1371,13 @@ class HandlerTest extends LanguageAwareTestCase
     public function testLanguageCodeFilterWithAlwaysAvailable()
     {
         $this->assertSearchResults(
-            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49, 50, 51, 56, 57, 65, 68, 70, 74, 76, 80 ),
+            array(4, 10, 11, 12, 13, 14, 41, 42, 45, 49, 50, 51, 56, 57, 65, 68, 70, 74, 76, 80),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LanguageCode( 'eng-GB', true ),
+                        'criterion' => new Criterion\LanguageCode('eng-GB', true),
                         'limit' => 20,
-                        'sortClauses' => array( new SortClause\ContentId ),
+                        'sortClauses' => array(new SortClause\ContentId()),
                     )
                 )
             )
@@ -1397,7 +1387,7 @@ class HandlerTest extends LanguageAwareTestCase
     public function testVisibilityFilter()
     {
         $this->assertSearchResults(
-            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            array(4, 10, 11, 12, 13, 14, 41, 42, 45, 49),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
@@ -1405,7 +1395,7 @@ class HandlerTest extends LanguageAwareTestCase
                             Criterion\Visibility::VISIBLE
                         ),
                         'limit' => 10,
-                        'sortClauses' => array( new SortClause\ContentId ),
+                        'sortClauses' => array(new SortClause\ContentId()),
                     )
                 )
             )
@@ -1433,7 +1423,7 @@ class HandlerTest extends LanguageAwareTestCase
     public function testUserMetadataFilterOwnerAdministrator()
     {
         $this->assertSearchResults(
-            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            array(4, 10, 11, 12, 13, 14, 41, 42, 45, 49),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
@@ -1443,7 +1433,7 @@ class HandlerTest extends LanguageAwareTestCase
                             14
                         ),
                         'limit' => 10,
-                        'sortClauses' => array( new SortClause\ContentId ),
+                        'sortClauses' => array(new SortClause\ContentId()),
                     )
                 )
             )
@@ -1453,7 +1443,7 @@ class HandlerTest extends LanguageAwareTestCase
     public function testUserMetadataFilterOwnerEqAMember()
     {
         $this->assertSearchResults(
-            array( 223 ),
+            array(223),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
@@ -1471,14 +1461,14 @@ class HandlerTest extends LanguageAwareTestCase
     public function testUserMetadataFilterOwnerInAMember()
     {
         $this->assertSearchResults(
-            array( 223 ),
+            array(223),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'criterion' => new Criterion\UserMetadata(
                             Criterion\UserMetadata::OWNER,
                             Criterion\Operator::IN,
-                            array( 226 )
+                            array(226)
                         ),
                     )
                 )
@@ -1489,7 +1479,7 @@ class HandlerTest extends LanguageAwareTestCase
     public function testUserMetadataFilterCreatorEqAMember()
     {
         $this->assertSearchResults(
-            array( 223 ),
+            array(223),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
@@ -1507,14 +1497,14 @@ class HandlerTest extends LanguageAwareTestCase
     public function testUserMetadataFilterCreatorInAMember()
     {
         $this->assertSearchResults(
-            array( 223 ),
+            array(223),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'criterion' => new Criterion\UserMetadata(
                             Criterion\UserMetadata::MODIFIER,
                             Criterion\Operator::IN,
-                            array( 226 )
+                            array(226)
                         ),
                     )
                 )
@@ -1525,7 +1515,7 @@ class HandlerTest extends LanguageAwareTestCase
     public function testUserMetadataFilterEqGroupMember()
     {
         $this->assertSearchResults(
-            array( 223 ),
+            array(223),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
@@ -1543,14 +1533,14 @@ class HandlerTest extends LanguageAwareTestCase
     public function testUserMetadataFilterInGroupMember()
     {
         $this->assertSearchResults(
-            array( 223 ),
+            array(223),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'criterion' => new Criterion\UserMetadata(
                             Criterion\UserMetadata::GROUP,
                             Criterion\Operator::IN,
-                            array( 11 )
+                            array(11)
                         ),
                     )
                 )
@@ -1586,7 +1576,7 @@ class HandlerTest extends LanguageAwareTestCase
                         'criterion' => new Criterion\UserMetadata(
                             Criterion\UserMetadata::GROUP,
                             Criterion\Operator::IN,
-                            array( 13 )
+                            array(13)
                         ),
                     )
                 )
@@ -1597,14 +1587,14 @@ class HandlerTest extends LanguageAwareTestCase
     public function testFieldRelationFilterContainsSingle()
     {
         $this->assertSearchResults(
-            array( 67 ),
+            array(67),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'criterion' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
-                            array( 60 )
+                            array(60)
                         ),
                     )
                 )
@@ -1622,7 +1612,7 @@ class HandlerTest extends LanguageAwareTestCase
                         'criterion' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
-                            array( 4 )
+                            array(4)
                         ),
                     )
                 )
@@ -1633,14 +1623,14 @@ class HandlerTest extends LanguageAwareTestCase
     public function testFieldRelationFilterContainsArray()
     {
         $this->assertSearchResults(
-            array( 67 ),
+            array(67),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'criterion' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
-                            array( 60, 75 )
+                            array(60, 75)
                         ),
                     )
                 )
@@ -1658,7 +1648,7 @@ class HandlerTest extends LanguageAwareTestCase
                         'criterion' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
-                            array( 60, 64 )
+                            array(60, 64)
                         ),
                     )
                 )
@@ -1669,14 +1659,14 @@ class HandlerTest extends LanguageAwareTestCase
     public function testFieldRelationFilterInArray()
     {
         $this->assertSearchResults(
-            array( 67, 75 ),
+            array(67, 75),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'criterion' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::IN,
-                            array( 60, 64 )
+                            array(60, 64)
                         ),
                     )
                 )
@@ -1694,7 +1684,7 @@ class HandlerTest extends LanguageAwareTestCase
                         'criterion' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::IN,
-                            array( 4, 10 )
+                            array(4, 10)
                         ),
                     )
                 )

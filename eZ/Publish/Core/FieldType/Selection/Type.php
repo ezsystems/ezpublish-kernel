@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Selection class
+ * File containing the Selection class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -43,45 +45,41 @@ class Type extends FieldType
     );
 
     /**
-     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
      * @param mixed $fieldSettings
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateFieldSettings( $fieldSettings )
+    public function validateFieldSettings($fieldSettings)
     {
         $validationErrors = array();
 
-        foreach ( $fieldSettings as $settingKey => $settingValue )
-        {
-            switch ( $settingKey )
-            {
+        foreach ($fieldSettings as $settingKey => $settingValue) {
+            switch ($settingKey) {
                 case 'isMultiple':
-                    if ( !is_bool( $settingValue ) )
-                    {
+                    if (!is_bool($settingValue)) {
                         $validationErrors[] = new ValidationError(
                             "FieldType '%fieldType%' expects setting %setting% to be a of type %type%",
                             null,
                             array(
-                                "fieldType" => $this->getFieldTypeIdentifier(),
-                                "setting"   => $settingKey,
-                                "type"      => "bool",
+                                'fieldType' => $this->getFieldTypeIdentifier(),
+                                'setting' => $settingKey,
+                                'type' => 'bool',
                             ),
                             "[$settingKey]"
                         );
                     }
                     break;
                 case 'options':
-                    if ( !is_array( $settingValue ) )
-                    {
+                    if (!is_array($settingValue)) {
                         $validationErrors[] = new ValidationError(
                             "FieldType '%fieldType%' expects setting %setting% to be a of type %type%",
                             null,
                             array(
-                                "fieldType" => $this->getFieldTypeIdentifier(),
-                                "setting"   => $settingKey,
-                                "type"      => "hash",
+                                'fieldType' => $this->getFieldTypeIdentifier(),
+                                'setting' => $settingKey,
+                                'type' => 'hash',
                             ),
                             "[$settingKey]"
                         );
@@ -92,7 +90,7 @@ class Type extends FieldType
                         "Setting '%setting%' is unknown",
                         null,
                         array(
-                            "setting" => $settingKey
+                            'setting' => $settingKey,
                         ),
                         "[$settingKey]"
                     );
@@ -103,13 +101,13 @@ class Type extends FieldType
     }
 
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
     public function getFieldTypeIdentifier()
     {
-        return "ezselection";
+        return 'ezselection';
     }
 
     /**
@@ -122,9 +120,9 @@ class Type extends FieldType
      *
      * @return string
      */
-    public function getName( SPIValue $value )
+    public function getName(SPIValue $value)
     {
-        throw new \RuntimeException( 'Implement this method' );
+        throw new \RuntimeException('Implement this method');
     }
 
     /**
@@ -135,7 +133,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value;
+        return new Value();
     }
 
     /**
@@ -145,11 +143,10 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\Selection\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
-        if ( is_array( $inputValue ) )
-        {
-            $inputValue = new Value( $inputValue );
+        if (is_array($inputValue)) {
+            $inputValue = new Value($inputValue);
         }
 
         return $inputValue;
@@ -161,13 +158,10 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\Selection\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
-        if ( !is_array( $value->selection ) )
-        {
+        if (!is_array($value->selection)) {
             throw new InvalidArgumentType(
                 '$value->selection',
                 'array',
@@ -188,37 +182,33 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( FieldDefinition $fieldDefinition, SPIValue $fieldValue )
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
     {
         $validationErrors = array();
 
-        if ( $this->isEmptyValue( $fieldValue ) )
-        {
+        if ($this->isEmptyValue($fieldValue)) {
             return $validationErrors;
         }
 
         $fieldSettings = $fieldDefinition->getFieldSettings();
 
-        if ( ( !isset( $fieldSettings["isMultiple"] ) || $fieldSettings["isMultiple"] === false )
-            && count( $fieldValue->selection ) > 1 )
-        {
+        if ((!isset($fieldSettings['isMultiple']) || $fieldSettings['isMultiple'] === false)
+            && count($fieldValue->selection) > 1) {
             $validationErrors[] = new ValidationError(
-                "Field definition does not allow multiple options to be selected.",
+                'Field definition does not allow multiple options to be selected.',
                 null,
                 array(),
                 'selection'
             );
         }
 
-        foreach ( $fieldValue->selection as $optionIndex )
-        {
-            if ( !isset( $fieldSettings["options"][$optionIndex] ) )
-            {
+        foreach ($fieldValue->selection as $optionIndex) {
+            if (!isset($fieldSettings['options'][$optionIndex])) {
                 $validationErrors[] = new ValidationError(
-                    "Option with index %index% does not exist in the field definition.",
+                    'Option with index %index% does not exist in the field definition.',
                     null,
                     array(
-                        "index" => $optionIndex
+                        'index' => $optionIndex,
                     ),
                     'selection'
                 );
@@ -235,39 +225,39 @@ class Type extends FieldType
      *
      * @return array
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo(BaseValue $value)
     {
-        return implode( '-', $value->selection );
+        return implode('-', $value->selection);
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * @param mixed $hash
      *
      * @return \eZ\Publish\Core\FieldType\Selection\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        return new Value( $hash );
+        return new Value($hash);
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\Selection\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
         return $value->selection;
     }
 
     /**
-     * Returns whether the field type is searchable
+     * Returns whether the field type is searchable.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSearchable()
     {

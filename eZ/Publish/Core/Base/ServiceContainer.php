@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing ServiceContainer class
+ * File containing ServiceContainer class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,42 +26,42 @@ use RuntimeException;
 class ServiceContainer implements Container
 {
     /**
-     * Holds class name for generated container cache
+     * Holds class name for generated container cache.
      *
      * @var string
      */
-    protected $containerClassName = "EzPublishPublicAPIServiceContainer";
+    protected $containerClassName = 'EzPublishPublicAPIServiceContainer';
 
     /**
-     * Holds inner Symfony container instance
+     * Holds inner Symfony container instance.
      *
      * @var \Symfony\Component\DependencyInjection\Container|\Symfony\Component\DependencyInjection\ContainerBuilder
      */
     protected $innerContainer;
 
     /**
-     * Holds installation directory path
+     * Holds installation directory path.
      *
      * @var string
      */
     protected $installDir;
 
     /**
-     * Holds cache directory path
+     * Holds cache directory path.
      *
      * @var string
      */
     protected $cacheDir;
 
     /**
-     * Holds debug flag for cache service
+     * Holds debug flag for cache service.
      *
      * @var bool
      */
     protected $debug;
 
     /**
-     * Holds flag whether cache should be bypassed
+     * Holds flag whether cache should be bypassed.
      *
      * @var bool
      */
@@ -73,7 +75,7 @@ class ServiceContainer implements Container
      *                    and cache will be regenerated if necessary
      * @param bool $bypassCache Default false should be used for production, if true completely bypasses the cache
      */
-    public function __construct( $container, $installDir, $cacheDir, $debug = false, $bypassCache = false )
+    public function __construct($container, $installDir, $cacheDir, $debug = false, $bypassCache = false)
     {
         $this->innerContainer = $container;
         $this->installDir = $installDir;
@@ -85,7 +87,7 @@ class ServiceContainer implements Container
     }
 
     /**
-     * Get Repository object
+     * Get Repository object.
      *
      * Public API for
      *
@@ -93,7 +95,7 @@ class ServiceContainer implements Container
      */
     public function getRepository()
     {
-        return $this->innerContainer->get( "ezpublish.api.repository" );
+        return $this->innerContainer->get('ezpublish.api.repository');
     }
 
     /**
@@ -105,138 +107,128 @@ class ServiceContainer implements Container
     }
 
     /**
-     * Convenience method to inner container
+     * Convenience method to inner container.
      *
      * @param string $id
      *
      * @return object
      */
-    public function get( $id )
+    public function get($id)
     {
-        return $this->innerContainer->get( $id );
+        return $this->innerContainer->get($id);
     }
 
     /**
-     * Convenience method to inner container
+     * Convenience method to inner container.
      *
      * @param string $name
      *
      * @return mixed
      */
-    public function getParameter( $name )
+    public function getParameter($name)
     {
-        return $this->innerContainer->getParameter( $name );
+        return $this->innerContainer->getParameter($name);
     }
 
     /**
-     * Initializes inner container
+     * Initializes inner container.
      *
      * @throws \RuntimeException
      */
     protected function initializeContainer()
     {
         // First check if cache should be bypassed
-        if ( $this->bypassCache )
-        {
+        if ($this->bypassCache) {
             $this->getContainer();
+
             return;
         }
 
         // Prepare cache directory
-        $this->prepareDirectory( $this->cacheDir, "cache" );
+        $this->prepareDirectory($this->cacheDir, 'cache');
 
         // Instantiate cache
         $cache = new ConfigCache(
-            $this->cacheDir . "/container/" . $this->containerClassName . ".php",
+            $this->cacheDir . '/container/' . $this->containerClassName . '.php',
             $this->debug
         );
 
         // Check if cache needs to be regenerated, depends on debug being set to true
-        if ( !$cache->isFresh() )
-        {
+        if (!$cache->isFresh()) {
             $this->getContainer();
-            $this->dumpContainer( $cache );
+            $this->dumpContainer($cache);
         }
 
         // Include container cache
         require_once $cache;
 
         // Instantiate container
-        $this->innerContainer = new $this->containerClassName;
+        $this->innerContainer = new $this->containerClassName();
     }
 
     /**
-     * Returns ContainerBuilder by including the default file 'containerBuilder.php' from settings directory
+     * Returns ContainerBuilder by including the default file 'containerBuilder.php' from settings directory.
      *
      * @throws \RuntimeException
      */
     protected function getContainer()
     {
-        if ( $this->innerContainer instanceof ContainerInterface )
-        {
+        if ($this->innerContainer instanceof ContainerInterface) {
             // Do nothing
-        }
-        else if ( !is_readable( $this->innerContainer ) )
-        {
+        } elseif (!is_readable($this->innerContainer)) {
             throw new RuntimeException(
                 sprintf(
                     "Unable to read file %s\n",
                     $this->innerContainer
                 )
             );
-        }
-        else
-        {
+        } else {
             // 'containerBuilder.php' file expects $installDir variable to be set by caller
             $installDir = $this->installDir;
             $this->innerContainer = require_once $this->innerContainer;
         }
 
         // Compile container if necessary
-        if ( $this->innerContainer instanceof ContainerBuilder && !$this->innerContainer->isFrozen() )
-        {
+        if ($this->innerContainer instanceof ContainerBuilder && !$this->innerContainer->isFrozen()) {
             $this->innerContainer->compile();
         }
     }
 
     /**
-     * Dumps the service container to PHP code in the cache
+     * Dumps the service container to PHP code in the cache.
      *
      * @param \Symfony\Component\Config\ConfigCache $cache
      */
-    protected function dumpContainer( ConfigCache $cache )
+    protected function dumpContainer(ConfigCache $cache)
     {
-        $dumper = new PhpDumper( $this->innerContainer );
+        $dumper = new PhpDumper($this->innerContainer);
 
-        if ( class_exists( 'ProxyManager\Configuration' ) )
-        {
-            $dumper->setProxyDumper( new ProxyDumper() );
+        if (class_exists('ProxyManager\Configuration')) {
+            $dumper->setProxyDumper(new ProxyDumper());
         }
 
         $content = $dumper->dump(
             array(
                 'class' => $this->containerClassName,
-                'base_class' => "Container"
+                'base_class' => 'Container',
             )
         );
 
-        $cache->write( $content, $this->innerContainer->getResources() );
+        $cache->write($content, $this->innerContainer->getResources());
     }
 
     /**
-     * Checks for existence of given $directory and tries to create it if found missing
+     * Checks for existence of given $directory and tries to create it if found missing.
      *
      * @throws \RuntimeException
      *
      * @param string $directory Path to the directory
      * @param string $name Used for exception message
      */
-    protected function prepareDirectory( $directory, $name )
+    protected function prepareDirectory($directory, $name)
     {
-        if ( !is_dir( $directory ) )
-        {
-            if ( false === @mkdir( $directory, 0777, true ) )
-            {
+        if (!is_dir($directory)) {
+            if (false === @mkdir($directory, 0777, true)) {
                 throw new RuntimeException(
                     sprintf(
                         "Unable to create the %s directory (%s)\n",
@@ -245,9 +237,7 @@ class ServiceContainer implements Container
                     )
                 );
             }
-        }
-        else if ( !is_writable( $directory ) )
-        {
+        } elseif (!is_writable($directory)) {
             throw new RuntimeException(
                 sprintf(
                     "Unable to write in the %s directory (%s)\n",

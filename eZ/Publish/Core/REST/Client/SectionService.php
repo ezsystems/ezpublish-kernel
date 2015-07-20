@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the SectionService class
+ * File containing the SectionService class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,6 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
-
 use eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Common\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Common\RequestParser;
@@ -57,35 +58,32 @@ class SectionService implements APISectionService, Sessionable
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      */
-    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, RequestParser $requestParser )
+    public function __construct(HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, RequestParser $requestParser)
     {
-        $this->client          = $client;
+        $this->client = $client;
         $this->inputDispatcher = $inputDispatcher;
-        $this->outputVisitor   = $outputVisitor;
-        $this->requestParser   = $requestParser;
+        $this->outputVisitor = $outputVisitor;
+        $this->requestParser = $requestParser;
     }
 
     /**
-     * Set session ID
+     * Set session ID.
      *
      * Only for testing
      *
      * @param mixed $id
      *
      * @private
-     *
-     * @return void
      */
-    public function setSession( $id )
+    public function setSession($id)
     {
-        if ( $this->client instanceof Sessionable )
-        {
-            $this->client->setSession( $id );
+        if ($this->client instanceof Sessionable) {
+            $this->client->setSession($id);
         }
     }
 
     /**
-     * Creates the a new Section in the content repository
+     * Creates the a new Section in the content repository.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create a section
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the new identifier in $sectionCreateStruct already exists
@@ -94,29 +92,26 @@ class SectionService implements APISectionService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section The newly create section
      */
-    public function createSection( SectionCreateStruct $sectionCreateStruct )
+    public function createSection(SectionCreateStruct $sectionCreateStruct)
     {
-        $inputMessage = $this->outputVisitor->visit( $sectionCreateStruct );
-        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Section' );
+        $inputMessage = $this->outputVisitor->visit($sectionCreateStruct);
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType('Section');
 
         $result = $this->client->request(
             'POST',
-            $this->requestParser->generate( 'sections' ),
+            $this->requestParser->generate('sections'),
             $inputMessage
         );
 
-        try
-        {
-            return $this->inputDispatcher->parse( $result );
-        }
-        catch ( ForbiddenException $e )
-        {
-            throw new InvalidArgumentException( $e->getMessage(), $e->getCode() );
+        try {
+            return $this->inputDispatcher->parse($result);
+        } catch (ForbiddenException $e) {
+            throw new InvalidArgumentException($e->getMessage(), $e->getCode());
         }
     }
 
     /**
-     * Updates the given in the content repository
+     * Updates the given in the content repository.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create a section
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the new identifier already exists (if set in the update struct)
@@ -126,10 +121,10 @@ class SectionService implements APISectionService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function updateSection( Section $section, SectionUpdateStruct $sectionUpdateStruct )
+    public function updateSection(Section $section, SectionUpdateStruct $sectionUpdateStruct)
     {
-        $inputMessage = $this->outputVisitor->visit( $sectionUpdateStruct );
-        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Section' );
+        $inputMessage = $this->outputVisitor->visit($sectionUpdateStruct);
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType('Section');
         $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
 
         // Should originally be PATCH, but PHP's shiny new internal web server
@@ -140,18 +135,15 @@ class SectionService implements APISectionService, Sessionable
             $inputMessage
         );
 
-        try
-        {
-            return $this->inputDispatcher->parse( $result );
-        }
-        catch ( ForbiddenException $e )
-        {
-            throw new InvalidArgumentException( $e->getMessage(), $e->getCode() );
+        try {
+            return $this->inputDispatcher->parse($result);
+        } catch (ForbiddenException $e) {
+            throw new InvalidArgumentException($e->getMessage(), $e->getCode());
         }
     }
 
     /**
-     * Loads a Section from its id ($sectionId)
+     * Loads a Section from its id ($sectionId).
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if section could not be found
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
@@ -160,20 +152,21 @@ class SectionService implements APISectionService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function loadSection( $sectionId )
+    public function loadSection($sectionId)
     {
         $response = $this->client->request(
             'GET',
             $sectionId,
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'Section' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('Section'))
             )
         );
-        return $this->inputDispatcher->parse( $response );
+
+        return $this->inputDispatcher->parse($response);
     }
 
     /**
-     * Loads all sections
+     * Loads all sections.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
      *
@@ -183,16 +176,17 @@ class SectionService implements APISectionService, Sessionable
     {
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate( 'sections' ),
+            $this->requestParser->generate('sections'),
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'SectionList' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('SectionList'))
             )
         );
-        return $this->inputDispatcher->parse( $response );
+
+        return $this->inputDispatcher->parse($response);
     }
 
     /**
-     * Loads a Section from its identifier ($sectionIdentifier)
+     * Loads a Section from its identifier ($sectionIdentifier).
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if section could not be found
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
@@ -201,35 +195,35 @@ class SectionService implements APISectionService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function loadSectionByIdentifier( $sectionIdentifier )
+    public function loadSectionByIdentifier($sectionIdentifier)
     {
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate( 'sectionByIdentifier', array( 'section' => $sectionIdentifier ) ),
+            $this->requestParser->generate('sectionByIdentifier', array('section' => $sectionIdentifier)),
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'SectionList' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('SectionList'))
             )
         );
-        $result = $this->inputDispatcher->parse( $response );
+        $result = $this->inputDispatcher->parse($response);
 
-        return reset( $result );
+        return reset($result);
     }
 
     /**
-     * Counts the contents which $section is assigned to
+     * Counts the contents which $section is assigned to.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      *
      * @return int
      */
-    public function countAssignedContents( Section $section )
+    public function countAssignedContents(Section $section)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
      * Assigns the content to the given section
-     * this method overrides the current assigned section
+     * this method overrides the current assigned section.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to view provided object
      *
@@ -240,14 +234,14 @@ class SectionService implements APISectionService, Sessionable
      *       countAssignedContents() method must be implemented. Otherwise this
      *       should work fine.
      */
-    public function assignSection( ContentInfo $contentInfo, Section $section )
+    public function assignSection(ContentInfo $contentInfo, Section $section)
     {
         $inputMessage = $this->outputVisitor->visit(
             new RestContentMetadataUpdateStruct(
-                array( 'sectionId' => $section->id )
+                array('sectionId' => $section->id)
             )
         );
-        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Content' );
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType('Content');
         $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
 
         $this->client->request(
@@ -263,7 +257,7 @@ class SectionService implements APISectionService, Sessionable
     }
 
     /**
-     * Deletes $section from content repository
+     * Deletes $section from content repository.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified section is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to delete a section
@@ -272,7 +266,7 @@ class SectionService implements APISectionService, Sessionable
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      */
-    public function deleteSection( Section $section )
+    public function deleteSection(Section $section)
     {
         $response = $this->client->request(
             'DELETE',
@@ -282,16 +276,17 @@ class SectionService implements APISectionService, Sessionable
                 // all expected exceptions + none? Or is "Section" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'Section' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('Section'))
             )
         );
 
-        if ( !empty( $response->body ) )
-            $this->inputDispatcher->parse( $response );
+        if (!empty($response->body)) {
+            $this->inputDispatcher->parse($response);
+        }
     }
 
     /**
-     * Instantiates a new SectionCreateStruct
+     * Instantiates a new SectionCreateStruct.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */
@@ -301,7 +296,7 @@ class SectionService implements APISectionService, Sessionable
     }
 
     /**
-     * Instantiates a new SectionUpdateStruct
+     * Instantiates a new SectionUpdateStruct.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the KeywordStorage Converter class
+ * File containing the KeywordStorage Converter class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
- * Converter for Keyword field type external storage
+ * Converter for Keyword field type external storage.
  *
  * The keyword storage ships a list (array) of keywords in
  * $field->value->externalData. $field->value->data is simply empty, because no
@@ -25,17 +27,17 @@ class KeywordStorage extends GatewayBasedStorage
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
      */
-    public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
+    public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        if ( empty( $field->value->externalData ) )
-        {
+        if (empty($field->value->externalData)) {
             return;
         }
 
-        $gateway = $this->getGateway( $context );
+        $gateway = $this->getGateway($context);
 
-        $contentTypeId = $gateway->getContentTypeId( $field );
-        return $gateway->storeFieldData( $field, $contentTypeId );
+        $contentTypeId = $gateway->getContentTypeId($field);
+
+        return $gateway->storeFieldData($field, $contentTypeId);
     }
 
     /**
@@ -46,14 +48,12 @@ class KeywordStorage extends GatewayBasedStorage
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
-     *
-     * @return void
      */
-    public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
+    public function getFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        $gateway = $this->getGateway( $context );
+        $gateway = $this->getGateway($context);
         // @todo: This should already retrieve the ContentType ID
-        return $gateway->getFieldData( $field );
+        return $gateway->getFieldData($field);
     }
 
     /**
@@ -61,21 +61,20 @@ class KeywordStorage extends GatewayBasedStorage
      * @param array $fieldIds
      * @param array $context
      *
-     * @return boolean
+     * @return bool
      */
-    public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
+    public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds, array $context)
     {
-        $gateway = $this->getGateway( $context );
-        foreach ( $fieldIds as $fieldId )
-        {
-            $gateway->deleteFieldData( $fieldId );
+        $gateway = $this->getGateway($context);
+        foreach ($fieldIds as $fieldId) {
+            $gateway->deleteFieldData($fieldId);
         }
     }
 
     /**
-     * Checks if field type has external data to deal with
+     * Checks if field type has external data to deal with.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasFieldData()
     {
@@ -86,7 +85,7 @@ class KeywordStorage extends GatewayBasedStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
-    public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
+    public function getIndexData(VersionInfo $versionInfo, Field $field, array $context)
     {
         return null;
     }

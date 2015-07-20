@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the TemplatesTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,27 +24,27 @@ class TemplatesTest extends AbstractParserTestCase
     {
         return array(
             new EzPublishCoreExtension(
-                array( new FieldTemplates(), new FieldDefinitionSettingsTemplates() )
-            )
+                array(new FieldTemplates(), new FieldDefinitionSettingsTemplates())
+            ),
         );
     }
 
     protected function getMinimalConfiguration()
     {
-        return $this->config = Yaml::parse( file_get_contents( __DIR__ . '/../../Fixtures/ezpublish_templates.yml' ) );
+        return $this->config = Yaml::parse(file_get_contents(__DIR__ . '/../../Fixtures/ezpublish_templates.yml'));
     }
 
     public function testFieldTemplates()
     {
         $this->load();
-        $fixedUpConfig = $this->getExpectedConfigFieldTemplates( $this->config );
+        $fixedUpConfig = $this->getExpectedConfigFieldTemplates($this->config);
         $groupFieldTemplates = $fixedUpConfig['system']['ezdemo_frontend_group']['field_templates'];
         $demoSiteFieldTemplates = $fixedUpConfig['system']['ezdemo_site']['field_templates'];
         $this->assertConfigResolverParameterValue(
             'field_templates',
             array_merge(
                 // Adding default kernel value.
-                array( array( 'template' => 'EzPublishCoreBundle::content_fields.html.twig', 'priority' => 0 ) ),
+                array(array('template' => 'EzPublishCoreBundle::content_fields.html.twig', 'priority' => 0)),
                 $groupFieldTemplates,
                 $demoSiteFieldTemplates
             ),
@@ -53,7 +55,7 @@ class TemplatesTest extends AbstractParserTestCase
             'field_templates',
             array_merge(
                 // Adding default kernel value.
-                array( array( 'template' => 'EzPublishCoreBundle::content_fields.html.twig', 'priority' => 0 ) ),
+                array(array('template' => 'EzPublishCoreBundle::content_fields.html.twig', 'priority' => 0)),
                 $groupFieldTemplates
             ),
             'fre',
@@ -61,7 +63,7 @@ class TemplatesTest extends AbstractParserTestCase
         );
         $this->assertConfigResolverParameterValue(
             'field_templates',
-            array( array( 'template' => 'EzPublishCoreBundle::content_fields.html.twig', 'priority' => 0 ) ),
+            array(array('template' => 'EzPublishCoreBundle::content_fields.html.twig', 'priority' => 0)),
             'ezdemo_site_admin',
             false
         );
@@ -74,12 +76,10 @@ class TemplatesTest extends AbstractParserTestCase
      *
      * @return array
      */
-    private function getExpectedConfigFieldTemplates( array $config )
+    private function getExpectedConfigFieldTemplates(array $config)
     {
-        foreach ( $config['system']['ezdemo_frontend_group']['field_templates'] as &$block )
-        {
-            if ( !isset( $block['priority'] ) )
-            {
+        foreach ($config['system']['ezdemo_frontend_group']['field_templates'] as &$block) {
+            if (!isset($block['priority'])) {
                 $block['priority'] = 0;
             }
         }
@@ -90,7 +90,7 @@ class TemplatesTest extends AbstractParserTestCase
     public function testFieldDefinitionSettingsTemplates()
     {
         $this->load();
-        $fixedUpConfig = $this->getExpectedConfigFieldDefinitionSettingsTemplates( $this->config );
+        $fixedUpConfig = $this->getExpectedConfigFieldDefinitionSettingsTemplates($this->config);
         $groupFieldTemplates = $fixedUpConfig['system']['ezdemo_frontend_group']['fielddefinition_settings_templates'];
         $demoSiteFieldTemplates = $fixedUpConfig['system']['ezdemo_site']['fielddefinition_settings_templates'];
 
@@ -98,7 +98,7 @@ class TemplatesTest extends AbstractParserTestCase
             'fielddefinition_settings_templates',
             array_merge(
                 // Adding default kernel value.
-                array( array( 'template' => 'EzPublishCoreBundle::fielddefinition_settings.html.twig', 'priority' => 0 ) ),
+                array(array('template' => 'EzPublishCoreBundle::fielddefinition_settings.html.twig', 'priority' => 0)),
                 $groupFieldTemplates,
                 $demoSiteFieldTemplates
             ),
@@ -109,7 +109,7 @@ class TemplatesTest extends AbstractParserTestCase
             'fielddefinition_settings_templates',
             array_merge(
                 // Adding default kernel value.
-                array( array( 'template' => 'EzPublishCoreBundle::fielddefinition_settings.html.twig', 'priority' => 0 ) ),
+                array(array('template' => 'EzPublishCoreBundle::fielddefinition_settings.html.twig', 'priority' => 0)),
                 $groupFieldTemplates
             ),
             'fre',
@@ -117,7 +117,7 @@ class TemplatesTest extends AbstractParserTestCase
         );
         $this->assertConfigResolverParameterValue(
             'fielddefinition_settings_templates',
-            array( array( 'template' => 'EzPublishCoreBundle::fielddefinition_settings.html.twig', 'priority' => 0 ) ),
+            array(array('template' => 'EzPublishCoreBundle::fielddefinition_settings.html.twig', 'priority' => 0)),
             'ezdemo_site_admin',
             false
         );
@@ -130,12 +130,10 @@ class TemplatesTest extends AbstractParserTestCase
      *
      * @return array
      */
-    private function getExpectedConfigFieldDefinitionSettingsTemplates( array $config )
+    private function getExpectedConfigFieldDefinitionSettingsTemplates(array $config)
     {
-        foreach ( $config['system']['ezdemo_frontend_group']['fielddefinition_settings_templates'] as &$block )
-        {
-            if ( !isset( $block['priority'] ) )
-            {
+        foreach ($config['system']['ezdemo_frontend_group']['fielddefinition_settings_templates'] as &$block) {
+            if (!isset($block['priority'])) {
                 $block['priority'] = 0;
             }
         }

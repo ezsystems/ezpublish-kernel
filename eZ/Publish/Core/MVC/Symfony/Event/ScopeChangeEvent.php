@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ScopeChangeEvent class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,7 +24,7 @@ class ScopeChangeEvent extends Event
      */
     private $siteAccess;
 
-    public function __construct( SiteAccess $siteAccess )
+    public function __construct(SiteAccess $siteAccess)
     {
         $this->siteAccess = $siteAccess;
     }

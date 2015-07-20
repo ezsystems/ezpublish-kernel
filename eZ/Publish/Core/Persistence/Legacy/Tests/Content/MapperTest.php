@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\MapperTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\MapperTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,12 +26,12 @@ use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateSt
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
- * Test case for Mapper
+ * Test case for Mapper.
  */
 class MapperTest extends LanguageAwareTestCase
 {
     /**
-     * Value converter registry mock
+     * Value converter registry mock.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
@@ -37,8 +39,6 @@ class MapperTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::__construct
-     *
-     * @return void
      */
     public function testCtor()
     {
@@ -54,7 +54,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a eZ\Publish\SPI\Persistence\Content\CreateStruct fixture
+     * Returns a eZ\Publish\SPI\Persistence\Content\CreateStruct fixture.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\CreateStruct
      */
@@ -69,24 +69,22 @@ class MapperTest extends LanguageAwareTestCase
         $struct->initialLanguageId = 2;
         $struct->locations = array(
             new LocationCreateStruct(
-                array( 'parentId' => 2 )
+                array('parentId' => 2)
             ),
             new LocationCreateStruct(
-                array( 'parentId' => 3 )
+                array('parentId' => 3)
             ),
             new LocationCreateStruct(
-                array( 'parentId' => 4 )
-            )
+                array('parentId' => 4)
+            ),
         );
-        $struct->fields = array( new Field(), );
+        $struct->fields = array(new Field());
 
         return $struct;
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createVersionInfoForContent
-     *
-     * @return void
      */
     public function testCreateVersionInfoForContent()
     {
@@ -108,35 +106,35 @@ class MapperTest extends LanguageAwareTestCase
                 'creatorId' => 14,
                 'status' => 0,
                 'initialLanguageCode' => 'eng-GB',
-                'languageIds' => array( 4 ),
+                'languageIds' => array(4),
             ),
             $versionInfo
         );
-        $this->assertGreaterThanOrEqual( $time, $versionInfo->creationDate );
-        $this->assertGreaterThanOrEqual( $time, $versionInfo->modificationDate );
+        $this->assertGreaterThanOrEqual($time, $versionInfo->creationDate);
+        $this->assertGreaterThanOrEqual($time, $versionInfo->modificationDate);
     }
 
     /**
-     * Returns a Content fixture
+     * Returns a Content fixture.
      *
      * @return Content
      */
     protected function getFullContentFixture()
     {
-        $content = new Content;
+        $content = new Content();
 
         $content->fields = array(
-            new Field( array( "languageCode" => "eng-GB" ) ),
+            new Field(array('languageCode' => 'eng-GB')),
         );
         $content->versionInfo = new VersionInfo(
             array(
                 'versionNo' => 1,
                 'initialLanguageCode' => 'eng-GB',
-                'languageIds' => array( 4 ),
+                'languageIds' => array(4),
             )
         );
 
-        $content->versionInfo->contentInfo = new ContentInfo;
+        $content->versionInfo->contentInfo = new ContentInfo();
         $content->versionInfo->contentInfo->id = 2342;
         $content->versionInfo->contentInfo->contentTypeId = 23;
         $content->versionInfo->contentInfo->sectionId = 42;
@@ -146,7 +144,6 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::convertToStorageValue
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue
      */
@@ -155,8 +152,8 @@ class MapperTest extends LanguageAwareTestCase
         $convMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
         );
-        $convMock->expects( $this->once() )
-            ->method( 'toStorageValue' )
+        $convMock->expects($this->once())
+            ->method('toStorageValue')
             ->with(
                 $this->isInstanceOf(
                     'eZ\\Publish\\SPI\\Persistence\\Content\\FieldValue'
@@ -164,16 +161,16 @@ class MapperTest extends LanguageAwareTestCase
                 $this->isInstanceOf(
                     'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue'
                 )
-            )->will( $this->returnValue( new StorageFieldValue() ) );
+            )->will($this->returnValue(new StorageFieldValue()));
 
-        $reg = new Registry( array( 'some-type' => $convMock ) );
+        $reg = new Registry(array('some-type' => $convMock));
 
         $field = new Field();
         $field->type = 'some-type';
         $field->value = new FieldValue();
 
-        $mapper = new Mapper( $reg, $this->getLanguageHandler() );
-        $res = $mapper->convertToStorageValue( $field );
+        $mapper = new Mapper($reg, $this->getLanguageHandler());
+        $res = $mapper->convertToStorageValue($field);
 
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue',
@@ -182,7 +179,6 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentFromRows
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractFieldFromRow
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractFieldValueFromRow
@@ -193,8 +189,8 @@ class MapperTest extends LanguageAwareTestCase
         $convMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
         );
-        $convMock->expects( $this->exactly( 13 ) )
-            ->method( 'toFieldValue' )
+        $convMock->expects($this->exactly(13))
+            ->method('toFieldValue')
             ->with(
                 $this->isInstanceOf(
                     'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue'
@@ -214,14 +210,14 @@ class MapperTest extends LanguageAwareTestCase
                 'ezimage' => $convMock,
                 'ezdatetime' => $convMock,
                 'ezkeyword' => $convMock,
-                'ezsrrating' => $convMock
+                'ezsrrating' => $convMock,
             )
         );
 
         $rowsFixture = $this->getContentExtractFixture();
 
-        $mapper = new Mapper( $reg, $this->getLanguageHandler() );
-        $result = $mapper->extractContentFromRows( $rowsFixture );
+        $mapper = new Mapper($reg, $this->getLanguageHandler());
+        $result = $mapper->extractContentFromRows($rowsFixture);
 
         $this->assertEquals(
             array(
@@ -233,17 +229,15 @@ class MapperTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentFromRows
-     *
-     * @return void
      */
     public function testExtractContentFromRowsMultipleVersions()
     {
         $convMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
         );
-        $convMock->expects( $this->any() )
-            ->method( 'toFieldValue' )
-            ->will( $this->returnValue( new FieldValue() ) );
+        $convMock->expects($this->any())
+            ->method('toFieldValue')
+            ->will($this->returnValue(new FieldValue()));
 
         $reg = new Registry(
             array(
@@ -255,12 +249,12 @@ class MapperTest extends LanguageAwareTestCase
 
         $rowsFixture = $this->getMultipleVersionsExtractFixture();
 
-        $mapper = new Mapper( $reg, $this->getLanguageHandler() );
-        $result = $mapper->extractContentFromRows( $rowsFixture );
+        $mapper = new Mapper($reg, $this->getLanguageHandler());
+        $result = $mapper->extractContentFromRows($rowsFixture);
 
         $this->assertEquals(
             2,
-            count( $result )
+            count($result)
         );
 
         $this->assertEquals(
@@ -292,16 +286,17 @@ class MapperTest extends LanguageAwareTestCase
 
         $content = $this->getContentExtractReference();
 
-        $struct = $mapper->createCreateStructFromContent( $content );
+        $struct = $mapper->createCreateStructFromContent($content);
 
         $this->assertInstanceOf(
             'eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct',
             $struct
         );
+
         return array(
             'original' => $content,
             'result' => $struct,
-            'time' => $time
+            'time' => $time,
         );
 
         // parentLocations
@@ -312,7 +307,7 @@ class MapperTest extends LanguageAwareTestCase
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      * @depends testCreateCreateStructFromContent
      */
-    public function testCreateCreateStructFromContentBasicProperties( $data )
+    public function testCreateCreateStructFromContentBasicProperties($data)
     {
         $content = $data['original'];
         $struct = $data['result'];
@@ -320,20 +315,20 @@ class MapperTest extends LanguageAwareTestCase
         $this->assertStructsEqual(
             $content->versionInfo->contentInfo,
             $struct,
-            array( 'sectionId', 'ownerId' )
+            array('sectionId', 'ownerId')
         );
-        self::assertNotEquals( $content->versionInfo->contentInfo->remoteId, $struct->remoteId );
-        self::assertSame( $content->versionInfo->contentInfo->contentTypeId, $struct->typeId );
-        self::assertSame( 2, $struct->initialLanguageId );
-        self::assertSame( $content->versionInfo->contentInfo->alwaysAvailable, $struct->alwaysAvailable );
-        self::assertGreaterThanOrEqual( $time, $struct->modified );
+        self::assertNotEquals($content->versionInfo->contentInfo->remoteId, $struct->remoteId);
+        self::assertSame($content->versionInfo->contentInfo->contentTypeId, $struct->typeId);
+        self::assertSame(2, $struct->initialLanguageId);
+        self::assertSame($content->versionInfo->contentInfo->alwaysAvailable, $struct->alwaysAvailable);
+        self::assertGreaterThanOrEqual($time, $struct->modified);
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      * @depends testCreateCreateStructFromContent
      */
-    public function testCreateCreateStructFromContentParentLocationsEmpty( $data )
+    public function testCreateCreateStructFromContentParentLocationsEmpty($data)
     {
         $this->assertEquals(
             array(),
@@ -345,11 +340,11 @@ class MapperTest extends LanguageAwareTestCase
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      * @depends testCreateCreateStructFromContent
      */
-    public function testCreateCreateStructFromContentFieldCount( $data )
+    public function testCreateCreateStructFromContentFieldCount($data)
     {
         $this->assertEquals(
-            count( $data['original']->fields ),
-            count( $data['result']->fields )
+            count($data['original']->fields),
+            count($data['result']->fields)
         );
     }
 
@@ -357,11 +352,10 @@ class MapperTest extends LanguageAwareTestCase
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      * @depends testCreateCreateStructFromContent
      */
-    public function testCreateCreateStructFromContentFieldsNoId( $data )
+    public function testCreateCreateStructFromContentFieldsNoId($data)
     {
-        foreach ( $data['result']->fields as $field )
-        {
-            $this->assertNull( $field->id );
+        foreach ($data['result']->fields as $field) {
+            $this->assertNull($field->id);
         }
     }
 
@@ -371,7 +365,7 @@ class MapperTest extends LanguageAwareTestCase
 
         $rows = $this->getRelationExtractFixture();
 
-        $res = $mapper->extractRelationsFromRows( $rows );
+        $res = $mapper->extractRelationsFromRows($rows);
 
         $this->assertEquals(
             $this->getRelationExtractReference(),
@@ -382,21 +376,22 @@ class MapperTest extends LanguageAwareTestCase
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentInfoFromRow
      * @dataProvider extractContentInfoFromRowProvider
+     *
      * @param array $fixtures
      * @param string $prefix
      */
-    public function testExtractContentInfoFromRow( array $fixtures, $prefix )
+    public function testExtractContentInfoFromRow(array $fixtures, $prefix)
     {
         $contentInfoReference = $this->getContentExtractReference()->versionInfo->contentInfo;
         $mapper = new Mapper(
             $this->getValueConverterRegistryMock(),
             $this->getLanguageHandler()
         );
-        self::assertEquals( $contentInfoReference, $mapper->extractContentInfoFromRow( $fixtures, $prefix ) );
+        self::assertEquals($contentInfoReference, $mapper->extractContentInfoFromRow($fixtures, $prefix));
     }
 
     /**
-     * Returns test data for {@link testExtractContentInfoFromRow()}
+     * Returns test data for {@link testExtractContentInfoFromRow()}.
      *
      * @return array
      */
@@ -404,41 +399,37 @@ class MapperTest extends LanguageAwareTestCase
     {
         $fixtures = $this->getContentExtractFixture();
         $fixturesNoPrefix = array();
-        foreach ( $fixtures[0] as $key => $value )
-        {
-            $keyNoPrefix = $key === "ezcontentobject_tree_main_node_id"
+        foreach ($fixtures[0] as $key => $value) {
+            $keyNoPrefix = $key === 'ezcontentobject_tree_main_node_id'
                 ? $key
-                : str_replace( 'ezcontentobject_', '', $key );
+                : str_replace('ezcontentobject_', '', $key);
             $fixturesNoPrefix[$keyNoPrefix] = $value;
         }
 
         return array(
-            array( $fixtures[0], 'ezcontentobject_' ),
-            array( $fixturesNoPrefix, '' )
+            array($fixtures[0], 'ezcontentobject_'),
+            array($fixturesNoPrefix, ''),
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createRelationFromCreateStruct
-     *
-     * @return void
      */
     public function testCreateRelationFromCreateStruct()
     {
         $struct = $this->getRelationCreateStructFixture();
 
         $mapper = $this->getMapper();
-        $relation = $mapper->createRelationFromCreateStruct( $struct );
+        $relation = $mapper->createRelationFromCreateStruct($struct);
 
-        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Relation', $relation );
-        foreach ( $struct as $property => $value )
-        {
-            self::assertSame( $value, $relation->$property );
+        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Relation', $relation);
+        foreach ($struct as $property => $value) {
+            self::assertSame($value, $relation->$property);
         }
     }
 
     /**
-     * Returns test data for {@link testExtractVersionInfoFromRow()}
+     * Returns test data for {@link testExtractVersionInfoFromRow()}.
      *
      * @return array
      */
@@ -447,25 +438,24 @@ class MapperTest extends LanguageAwareTestCase
         $fixturesAll = $this->getContentExtractFixture();
         $fixtures = $fixturesAll[0];
         $fixtures['ezcontentobject_version_names'] = array(
-            array( 'content_translation' => 'eng-US', 'name' => 'Something' )
+            array('content_translation' => 'eng-US', 'name' => 'Something'),
         );
-        $fixtures['ezcontentobject_version_languages'] = array( 2 );
+        $fixtures['ezcontentobject_version_languages'] = array(2);
         $fixtures['ezcontentobject_version_initial_language_code'] = 'eng-US';
         $fixturesNoPrefix = array();
-        foreach ( $fixtures as $key => $value )
-        {
-            $keyNoPrefix = str_replace( 'ezcontentobject_version_', '', $key );
+        foreach ($fixtures as $key => $value) {
+            $keyNoPrefix = str_replace('ezcontentobject_version_', '', $key);
             $fixturesNoPrefix[$keyNoPrefix] = $value;
         }
 
         return array(
-            array( $fixtures, 'ezcontentobject_version_' ),
-            array( $fixturesNoPrefix, '' )
+            array($fixtures, 'ezcontentobject_version_'),
+            array($fixturesNoPrefix, ''),
         );
     }
 
     /**
-     * Returns a fixture of database rows for content extraction
+     * Returns a fixture of database rows for content extraction.
      *
      * Fixture is stored in _fixtures/extract_content_from_rows.php
      *
@@ -477,7 +467,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a reference result for content extraction
+     * Returns a reference result for content extraction.
      *
      * Fixture is stored in _fixtures/extract_content_from_rows_result.php
      *
@@ -489,7 +479,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a fixture for mapping multiple versions of a content object
+     * Returns a fixture for mapping multiple versions of a content object.
      *
      * @return string[][]
      */
@@ -499,7 +489,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a fixture of database rows for relations extraction
+     * Returns a fixture of database rows for relations extraction.
      *
      * Fixture is stored in _fixtures/relations.php
      *
@@ -511,7 +501,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a reference result for content extraction
+     * Returns a reference result for content extraction.
      *
      * Fixture is stored in _fixtures/relations_results.php
      *
@@ -523,11 +513,11 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a Mapper
+     * Returns a Mapper.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
-    protected function getMapper( $valueConverter = null )
+    protected function getMapper($valueConverter = null)
     {
         return new Mapper(
             $this->getValueConverterRegistryMock(),
@@ -536,25 +526,25 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a FieldValue converter registry mock
+     * Returns a FieldValue converter registry mock.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected function getValueConverterRegistryMock()
     {
-        if ( !isset( $this->valueConverterRegistryMock ) )
-        {
+        if (!isset($this->valueConverterRegistryMock)) {
             $this->valueConverterRegistryMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
                 array(),
-                array( array() )
+                array(array())
             );
         }
+
         return $this->valueConverterRegistryMock;
     }
 
     /**
-     * Returns a eZ\Publish\SPI\Persistence\Content\CreateStruct fixture
+     * Returns a eZ\Publish\SPI\Persistence\Content\CreateStruct fixture.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct
      */
@@ -572,7 +562,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a language handler mock
+     * Returns a language handler mock.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
      */
@@ -583,47 +573,40 @@ class MapperTest extends LanguageAwareTestCase
                 array(
                     'id' => 2,
                     'languageCode' => 'eng-US',
-                    'name' => 'US english'
+                    'name' => 'US english',
                 )
             ),
             new Language(
                 array(
                     'id' => 4,
                     'languageCode' => 'eng-GB',
-                    'name' => 'British english'
+                    'name' => 'British english',
                 )
-            )
+            ),
         );
 
-        if ( !isset( $this->languageHandler ) )
-        {
-            $this->languageHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
-            $this->languageHandler->expects( $this->any() )
-                ->method( 'load' )
+        if (!isset($this->languageHandler)) {
+            $this->languageHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler');
+            $this->languageHandler->expects($this->any())
+                ->method('load')
                 ->will(
                     $this->returnCallback(
-                        function ( $id ) use ( $languages )
-                        {
-                            foreach ( $languages as $language )
-                            {
-                                if ( $language->id == $id )
-                                {
+                        function ($id) use ($languages) {
+                            foreach ($languages as $language) {
+                                if ($language->id == $id) {
                                     return $language;
                                 }
                             }
                         }
                     )
                 );
-            $this->languageHandler->expects( $this->any() )
-                ->method( 'loadByLanguageCode' )
+            $this->languageHandler->expects($this->any())
+                ->method('loadByLanguageCode')
                 ->will(
                     $this->returnCallback(
-                        function ( $languageCode ) use ( $languages )
-                        {
-                            foreach ( $languages as $language )
-                            {
-                                if ( $language->languageCode == $languageCode )
-                                {
+                        function ($languageCode) use ($languages) {
+                            foreach ($languages as $language) {
+                                if ($language->languageCode == $languageCode) {
                                     return $language;
                                 }
                             }
@@ -631,6 +614,7 @@ class MapperTest extends LanguageAwareTestCase
                     )
                 );
         }
+
         return $this->languageHandler;
     }
 }

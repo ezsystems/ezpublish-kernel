@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentTypeIdentifier Criterion parser class
+ * File containing the ContentTypeIdentifier Criterion parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,24 +18,24 @@ use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as ContentTypeIdCriterion;
 
 /**
- * Parser for ViewInput
+ * Parser for ViewInput.
  */
 class ContentTypeIdentifier extends BaseParser
 {
     /**
-     * Content type service
+     * Content type service.
      *
      * @var \eZ\Publish\API\Repository\ContentTypeService
      */
     protected $contentTypeService;
 
-    public function __construct( ContentTypeService $contentTypeService )
+    public function __construct(ContentTypeService $contentTypeService)
     {
         $this->contentTypeService = $contentTypeService;
     }
 
     /**
-     * Parses input structure to a Criterion object
+     * Parses input structure to a Criterion object.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -42,13 +44,13 @@ class ContentTypeIdentifier extends BaseParser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        if ( !array_key_exists( "ContentTypeIdentifierCriterion", $data ) )
-        {
-            throw new Exceptions\Parser( "Invalid <ContentTypeIdCriterion> format" );
+        if (!array_key_exists('ContentTypeIdentifierCriterion', $data)) {
+            throw new Exceptions\Parser('Invalid <ContentTypeIdCriterion> format');
         }
-        $contentType = $this->contentTypeService->loadContentTypeByIdentifier( $data["ContentTypeIdentifierCriterion"] );
-        return new ContentTypeIdCriterion( $contentType->id );
+        $contentType = $this->contentTypeService->loadContentTypeByIdentifier($data['ContentTypeIdentifierCriterion']);
+
+        return new ContentTypeIdCriterion($contentType->id);
     }
 }

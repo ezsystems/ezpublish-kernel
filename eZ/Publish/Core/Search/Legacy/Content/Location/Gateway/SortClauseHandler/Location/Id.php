@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a DoctrineDatabase Location id sort clause handler class
+ * File containing a DoctrineDatabase Location id sort clause handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,15 +25,15 @@ class Id extends SortClauseHandler
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
-     * @return boolean
+     * @return bool
      */
-    public function accept( SortClause $sortClause )
+    public function accept(SortClause $sortClause)
     {
         return $sortClause instanceof SortClause\Location\Id;
     }
 
     /**
-     * Apply selects to the query
+     * Apply selects to the query.
      *
      * Returns the name of the (aliased) column, which information should be
      * used for sorting.
@@ -42,7 +44,7 @@ class Id extends SortClauseHandler
      *
      * @return string
      */
-    public function applySelect( SelectQuery $query, SortClause $sortClause, $number )
+    public function applySelect(SelectQuery $query, SortClause $sortClause, $number)
     {
         $query
             ->select(
@@ -51,7 +53,7 @@ class Id extends SortClauseHandler
                         'node_id',
                         'ezcontentobject_tree'
                     ),
-                    $column = $this->getSortColumnName( $number )
+                    $column = $this->getSortColumnName($number)
                 )
             );
 

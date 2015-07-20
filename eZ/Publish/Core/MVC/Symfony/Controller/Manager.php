@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the controller Manager class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -41,7 +43,7 @@ class Manager implements ManagerInterface
      */
     protected $blockMatcherFactory;
 
-    public function __construct( ContentBasedMatcherFactory $locationMatcherFactory, ContentBasedMatcherFactory $contentMatcherFactory, BlockMatcherFactory $blockMatcherFactory, LoggerInterface $logger )
+    public function __construct(ContentBasedMatcherFactory $locationMatcherFactory, ContentBasedMatcherFactory $contentMatcherFactory, BlockMatcherFactory $blockMatcherFactory, LoggerInterface $logger)
     {
         $this->locationMatcherFactory = $locationMatcherFactory;
         $this->contentMatcherFactory = $contentMatcherFactory;
@@ -50,7 +52,7 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * Returns a ControllerReference object corresponding to $valueObject and $viewType
+     * Returns a ControllerReference object corresponding to $valueObject and $viewType.
      *
      * @param ValueObject $valueObject
      * @param string $viewType
@@ -59,36 +61,29 @@ class Manager implements ManagerInterface
      *
      * @return \Symfony\Component\HttpKernel\Controller\ControllerReference|null
      */
-    public function getControllerReference( ValueObject $valueObject, $viewType )
+    public function getControllerReference(ValueObject $valueObject, $viewType)
     {
         $matchedType = null;
-        if ( $valueObject instanceof Location )
-        {
+        if ($valueObject instanceof Location) {
             $matcherProp = 'locationMatcherFactory';
             $matchedType = 'Location';
-        }
-        else if ( $valueObject instanceof ContentInfo )
-        {
+        } elseif ($valueObject instanceof ContentInfo) {
             $matcherProp = 'contentMatcherFactory';
             $matchedType = 'Content';
-        }
-        else if ( $valueObject instanceof Block )
-        {
+        } elseif ($valueObject instanceof Block) {
             $matcherProp = 'blockMatcherFactory';
             $matchedType = 'Block';
-        }
-        else
-        {
-            throw new InvalidArgumentException( 'Unsupported value object to match against' );
+        } else {
+            throw new InvalidArgumentException('Unsupported value object to match against');
         }
 
-        $configHash = $this->$matcherProp->match( $valueObject, $viewType );
-        if ( !is_array( $configHash ) || !isset( $configHash['controller'] ) )
-        {
+        $configHash = $this->$matcherProp->match($valueObject, $viewType);
+        if (!is_array($configHash) || !isset($configHash['controller'])) {
             return;
         }
 
-        $this->logger->debug( "Matched custom controller '{$configHash['controller']}' for $matchedType #$valueObject->id" );
-        return new ControllerReference( $configHash['controller'] );
+        $this->logger->debug("Matched custom controller '{$configHash['controller']}' for $matchedType #$valueObject->id");
+
+        return new ControllerReference($configHash['controller']);
     }
 }

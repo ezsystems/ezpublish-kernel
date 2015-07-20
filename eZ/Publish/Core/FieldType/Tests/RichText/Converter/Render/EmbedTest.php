@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RichText Embed Render converter test
+ * File containing the RichText Embed Render converter test.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -39,16 +41,16 @@ class EmbedTest extends PHPUnit_Framework_TestCase
                 array(),
                 array(
                     array(
-                        "method" => "renderContentEmbed",
-                        "id" => "106",
-                        "viewType" => "embed",
-                        "is_inline" => false,
-                        "embedParams" => array(
-                            "id" => "106",
-                            "viewType" => "embed",
+                        'method' => 'renderContentEmbed',
+                        'id' => '106',
+                        'viewType' => 'embed',
+                        'is_inline' => false,
+                        'embedParams' => array(
+                            'id' => '106',
+                            'viewType' => 'embed',
                         ),
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -67,25 +69,25 @@ class EmbedTest extends PHPUnit_Framework_TestCase
                 array(),
                 array(
                     array(
-                        "method" => "renderContentEmbed",
-                        "id" => "106",
-                        "viewType" => "embed",
-                        "is_inline" => false,
-                        "embedParams" => array(
-                            "id" => "106",
-                            "viewType" => "embed",
-                            "link" => array(
-                                "href" => "RESOLVED",
-                                "resourceType" => "URL",
-                                "resourceId" => null,
-                                "wrapped" => false,
-                                "target" => "_blank",
-                                "title" => "Link title",
-                                "id" => "link-id-1",
-                                "class" => "link-class",
+                        'method' => 'renderContentEmbed',
+                        'id' => '106',
+                        'viewType' => 'embed',
+                        'is_inline' => false,
+                        'embedParams' => array(
+                            'id' => '106',
+                            'viewType' => 'embed',
+                            'link' => array(
+                                'href' => 'RESOLVED',
+                                'resourceType' => 'URL',
+                                'resourceId' => null,
+                                'wrapped' => false,
+                                'target' => '_blank',
+                                'title' => 'Link title',
+                                'id' => 'link-id-1',
+                                'class' => 'link-class',
                             ),
-                            "class" => "embed-class",
-                            "align" => "left",
+                            'class' => 'embed-class',
+                            'align' => 'left',
                         ),
                     ),
                 ),
@@ -133,30 +135,30 @@ class EmbedTest extends PHPUnit_Framework_TestCase
                 array(),
                 array(
                     array(
-                        "method" => "renderLocationEmbed",
-                        "id" => "601",
-                        "viewType" => "embed-inline",
-                        "is_inline" => false,
-                        "embedParams" => array(
-                            "id" => "601",
-                            "viewType" => "embed-inline",
-                            "config" => array(
-                                "size" => "medium",
-                                "offset" => 10,
-                                "limit" => 5,
-                                "hey" => array(
-                                    "look" => array(
-                                        "at" => array(
-                                            "this" => "wohoo",
-                                            "that" => "weeee"
-                                        )
+                        'method' => 'renderLocationEmbed',
+                        'id' => '601',
+                        'viewType' => 'embed-inline',
+                        'is_inline' => false,
+                        'embedParams' => array(
+                            'id' => '601',
+                            'viewType' => 'embed-inline',
+                            'config' => array(
+                                'size' => 'medium',
+                                'offset' => 10,
+                                'limit' => 5,
+                                'hey' => array(
+                                    'look' => array(
+                                        'at' => array(
+                                            'this' => 'wohoo',
+                                            'that' => 'weeee',
+                                        ),
                                     ),
-                                    "what" => "get to the chopper"
-                                )
-                            )
+                                    'what' => 'get to the chopper',
+                                ),
+                            ),
                         ),
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -203,34 +205,34 @@ class EmbedTest extends PHPUnit_Framework_TestCase
                 array(),
                 array(
                     array(
-                        "method" => "renderLocationEmbed",
-                        "id" => "601",
-                        "viewType" => "embed-inline",
-                        "is_inline" => false,
-                        "embedParams" => array(
-                            "id" => "601",
-                            "viewType" => "embed-inline",
-                            "config" => array(
-                                "size" => "medium",
-                                "offset" => 10,
-                                "limit" => 5,
-                                "hey" => array(
-                                    "look" => array(
-                                        "at" => array(
-                                            "this" => "wohoo",
-                                            "that" => "weeee"
-                                        )
+                        'method' => 'renderLocationEmbed',
+                        'id' => '601',
+                        'viewType' => 'embed-inline',
+                        'is_inline' => false,
+                        'embedParams' => array(
+                            'id' => '601',
+                            'viewType' => 'embed-inline',
+                            'config' => array(
+                                'size' => 'medium',
+                                'offset' => 10,
+                                'limit' => 5,
+                                'hey' => array(
+                                    'look' => array(
+                                        'at' => array(
+                                            'this' => 'wohoo',
+                                            'that' => 'weeee',
+                                        ),
                                     ),
-                                    "what" => "get to the chopper"
+                                    'what' => 'get to the chopper',
                                 ),
                             ),
-                            "link" => array(
-                                "href" => "RESOLVED",
-                                "resourceType" => "CONTENT",
-                                "resourceId" => "95",
-                                "resourceFragmentIdentifier" => "fragment1",
-                                "wrapped" => false,
-                                "target" => "_self",
+                            'link' => array(
+                                'href' => 'RESOLVED',
+                                'resourceType' => 'CONTENT',
+                                'resourceId' => '95',
+                                'resourceFragmentIdentifier' => 'fragment1',
+                                'wrapped' => false,
+                                'target' => '_self',
                             ),
                         ),
                     ),
@@ -254,26 +256,26 @@ class EmbedTest extends PHPUnit_Framework_TestCase
                 array(),
                 array(
                     array(
-                        "method" => "renderLocationEmbed",
-                        "id" => "601",
-                        "viewType" => "embed",
-                        "is_inline" => false,
-                        "embedParams" => array(
-                            "id" => "601",
-                            "viewType" => "embed",
+                        'method' => 'renderLocationEmbed',
+                        'id' => '601',
+                        'viewType' => 'embed',
+                        'is_inline' => false,
+                        'embedParams' => array(
+                            'id' => '601',
+                            'viewType' => 'embed',
                         ),
                     ),
                     array(
-                        "method" => "renderContentEmbed",
-                        "id" => "106",
-                        "viewType" => "full",
-                        "is_inline" => true,
-                        "embedParams" => array(
-                            "id" => "106",
-                            "viewType" => "full",
+                        'method' => 'renderContentEmbed',
+                        'id' => '106',
+                        'viewType' => 'full',
+                        'is_inline' => true,
+                        'embedParams' => array(
+                            'id' => '106',
+                            'viewType' => 'full',
                         ),
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -311,45 +313,45 @@ class EmbedTest extends PHPUnit_Framework_TestCase
                 array(),
                 array(
                     array(
-                        "method" => "renderLocationEmbed",
-                        "id" => "601",
-                        "viewType" => "embed",
-                        "is_inline" => true,
-                        "embedParams" => array(
-                            "id" => "601",
-                            "viewType" => "embed",
-                            "config" => array(
-                                "size" => "medium",
+                        'method' => 'renderLocationEmbed',
+                        'id' => '601',
+                        'viewType' => 'embed',
+                        'is_inline' => true,
+                        'embedParams' => array(
+                            'id' => '601',
+                            'viewType' => 'embed',
+                            'config' => array(
+                                'size' => 'medium',
                             ),
-                            "link" => array(
-                                "href" => "RESOLVED",
-                                "resourceType" => "CONTENT",
-                                "resourceId" => "95",
-                                "wrapped" => false,
+                            'link' => array(
+                                'href' => 'RESOLVED',
+                                'resourceType' => 'CONTENT',
+                                'resourceId' => '95',
+                                'wrapped' => false,
                             ),
                         ),
                     ),
                     array(
-                        "method" => "renderContentEmbed",
-                        "id" => "106",
-                        "viewType" => "full",
-                        "is_inline" => true,
-                        "embedParams" => array(
-                            "id" => "106",
-                            "viewType" => "full",
-                            "config" => array(
-                                "size" => "small",
+                        'method' => 'renderContentEmbed',
+                        'id' => '106',
+                        'viewType' => 'full',
+                        'is_inline' => true,
+                        'embedParams' => array(
+                            'id' => '106',
+                            'viewType' => 'full',
+                            'config' => array(
+                                'size' => 'small',
                             ),
-                            "link" => array(
-                                "href" => "RESOLVED2",
-                                "resourceType" => "LOCATION",
-                                "resourceId" => "59",
-                                "resourceFragmentIdentifier" => "fragment",
-                                "wrapped" => true,
+                            'link' => array(
+                                'href' => 'RESOLVED2',
+                                'resourceType' => 'LOCATION',
+                                'resourceId' => '59',
+                                'resourceFragmentIdentifier' => 'fragment',
+                                'wrapped' => true,
                             ),
                         ),
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -361,9 +363,9 @@ class EmbedTest extends PHPUnit_Framework_TestCase
   <ezembed view="embed"/>
 </section>',
                 array(
-                    "Could not embed resource: empty 'xlink:href' attribute"
+                    "Could not embed resource: empty 'xlink:href' attribute",
                 ),
-                array()
+                array(),
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -375,9 +377,9 @@ class EmbedTest extends PHPUnit_Framework_TestCase
   <ezembed xlink:href="eznodeassignment://106" view="embed"/>
 </section>',
                 array(
-                    "Could not embed resource: unhandled resource reference 'eznodeassignment://106'"
+                    "Could not embed resource: unhandled resource reference 'eznodeassignment://106'",
                 ),
-                array()
+                array(),
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -394,17 +396,17 @@ class EmbedTest extends PHPUnit_Framework_TestCase
   </ezembed>
 </section>',
                 array(
-                    "Could not create link parameters: resolved embed link is missing",
+                    'Could not create link parameters: resolved embed link is missing',
                 ),
                 array(
                     array(
-                        "method" => "renderContentEmbed",
-                        "id" => "106",
-                        "viewType" => "embed",
-                        "is_inline" => false,
-                        "embedParams" => array(
-                            "id" => "106",
-                            "viewType" => "embed",
+                        'method' => 'renderContentEmbed',
+                        'id' => '106',
+                        'viewType' => 'embed',
+                        'is_inline' => false,
+                        'embedParams' => array(
+                            'id' => '106',
+                            'viewType' => 'embed',
                         ),
                     ),
                 ),
@@ -423,16 +425,16 @@ class EmbedTest extends PHPUnit_Framework_TestCase
                 array(),
                 array(
                     array(
-                        "method" => "renderContentEmbed",
-                        "id" => "106",
-                        "viewType" => "embed",
-                        "is_inline" => false,
-                        "embedParams" => array(
-                            "id" => "106",
-                            "viewType" => "embed",
+                        'method' => 'renderContentEmbed',
+                        'id' => '106',
+                        'viewType' => 'embed',
+                        'is_inline' => false,
+                        'embedParams' => array(
+                            'id' => '106',
+                            'viewType' => 'embed',
                         ),
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -448,16 +450,16 @@ class EmbedTest extends PHPUnit_Framework_TestCase
                 array(),
                 array(
                     array(
-                        "method" => "renderContentEmbed",
-                        "id" => "106",
-                        "viewType" => "embed-inline",
-                        "is_inline" => true,
-                        "embedParams" => array(
-                            "id" => "106",
-                            "viewType" => "embed-inline",
+                        'method' => 'renderContentEmbed',
+                        'id' => '106',
+                        'viewType' => 'embed-inline',
+                        'is_inline' => true,
+                        'embedParams' => array(
+                            'id' => '106',
+                            'viewType' => 'embed-inline',
                         ),
-                    )
-                )
+                    ),
+                ),
             ),
         );
     }
@@ -465,62 +467,54 @@ class EmbedTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider providerForTestConvert
      */
-    public function testConvert( $xmlString, $expectedXmlString, array $errors, array $renderParams )
+    public function testConvert($xmlString, $expectedXmlString, array $errors, array $renderParams)
     {
-        if ( isset( $errors ) )
-        {
-            foreach ( $errors as $index => $error )
-            {
+        if (isset($errors)) {
+            foreach ($errors as $index => $error) {
                 $this->loggerMock
-                    ->expects( $this->at( $index ) )
-                    ->method( "error" )
-                    ->with( $error );
+                    ->expects($this->at($index))
+                    ->method('error')
+                    ->with($error);
             }
-        }
-        else
-        {
-            $this->loggerMock->expects( $this->never() )->method( "error" );
+        } else {
+            $this->loggerMock->expects($this->never())->method('error');
         }
 
-        $this->rendererMock->expects( $this->never() )->method( "renderTag" );
+        $this->rendererMock->expects($this->never())->method('renderTag');
 
-        if ( !empty( $renderParams ) )
-        {
-            foreach ( $renderParams as $index => $params )
-            {
+        if (!empty($renderParams)) {
+            foreach ($renderParams as $index => $params) {
                 $this->rendererMock
-                    ->expects( $this->at( $index ) )
-                    ->method( $params["method"] )
+                    ->expects($this->at($index))
+                    ->method($params['method'])
                     ->with(
-                        $params["id"],
-                        $params["viewType"],
+                        $params['id'],
+                        $params['viewType'],
                         array(
-                            "embedParams" => $params["embedParams"],
+                            'embedParams' => $params['embedParams'],
                         ),
-                        $params["is_inline"]
+                        $params['is_inline']
                     )
-                    ->will( $this->returnValue( $params["id"] ) );
+                    ->will($this->returnValue($params['id']));
             }
-        }
-        else
-        {
-            $this->rendererMock->expects( $this->never() )->method( "renderContentEmbed" );
-            $this->rendererMock->expects( $this->never() )->method( "renderLocationEmbed" );
+        } else {
+            $this->rendererMock->expects($this->never())->method('renderContentEmbed');
+            $this->rendererMock->expects($this->never())->method('renderLocationEmbed');
         }
 
-        $document = new DOMDocument;
+        $document = new DOMDocument();
         $document->preserveWhiteSpace = false;
         $document->formatOutput = false;
-        $document->loadXML( $xmlString );
+        $document->loadXML($xmlString);
 
-        $document = $this->getConverter()->convert( $document );
+        $document = $this->getConverter()->convert($document);
 
-        $expectedDocument = new DOMDocument;
+        $expectedDocument = new DOMDocument();
         $expectedDocument->preserveWhiteSpace = false;
         $expectedDocument->formatOutput = false;
-        $expectedDocument->loadXML( $expectedXmlString );
+        $expectedDocument->loadXML($expectedXmlString);
 
-        $this->assertEquals( $expectedDocument, $document );
+        $this->assertEquals($expectedDocument, $document);
     }
 
     protected function getConverter()
@@ -542,7 +536,7 @@ class EmbedTest extends PHPUnit_Framework_TestCase
     protected function getRendererMock()
     {
         return $this->getMock(
-            "eZ\\Publish\\Core\\FieldType\\RichText\\RendererInterface"
+            'eZ\\Publish\\Core\\FieldType\\RichText\\RendererInterface'
         );
     }
 
@@ -557,7 +551,7 @@ class EmbedTest extends PHPUnit_Framework_TestCase
     protected function getLoggerMock()
     {
         return $this->getMock(
-            "Psr\\Log\\LoggerInterface"
+            'Psr\\Log\\LoggerInterface'
         );
     }
 }

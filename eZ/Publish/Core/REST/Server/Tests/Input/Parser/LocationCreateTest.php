@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,23 +18,23 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 class LocationCreateTest extends BaseTest
 {
     /**
-     * Tests the LocationCreate parser
+     * Tests the LocationCreate parser.
      */
     public function testParse()
     {
         $inputArray = array(
             'ParentLocation' => array(
-                '_href' => '/content/locations/1/2/42'
+                '_href' => '/content/locations/1/2/42',
             ),
             'priority' => '2',
             'hidden' => 'true',
             'remoteId' => 'remoteId12345678',
             'sortField' => 'PATH',
-            'sortOrder' => 'ASC'
+            'sortOrder' => 'ASC',
         );
 
         $locationCreate = $this->getParser();
-        $result = $locationCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $locationCreate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationCreateStruct',
@@ -78,7 +80,7 @@ class LocationCreateTest extends BaseTest
     }
 
     /**
-     * Test LocationCreate parser throwing exception on missing ParentLocation
+     * Test LocationCreate parser throwing exception on missing ParentLocation.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'ParentLocation' element for LocationCreate.
@@ -90,15 +92,15 @@ class LocationCreateTest extends BaseTest
             'hidden' => 'false',
             'remoteId' => 'remoteId12345678',
             'sortField' => 'PATH',
-            'sortOrder' => 'ASC'
+            'sortOrder' => 'ASC',
         );
 
         $locationCreate = $this->getParser();
-        $locationCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $locationCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test LocationCreate parser throwing exception on missing _href attribute for ParentLocation
+     * Test LocationCreate parser throwing exception on missing _href attribute for ParentLocation.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for ParentLocation element in LocationCreate.
@@ -111,15 +113,15 @@ class LocationCreateTest extends BaseTest
             'hidden' => 'false',
             'remoteId' => 'remoteId12345678',
             'sortField' => 'PATH',
-            'sortOrder' => 'ASC'
+            'sortOrder' => 'ASC',
         );
 
         $locationCreate = $this->getParser();
-        $locationCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $locationCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test LocationCreate parser throwing exception on missing sort field
+     * Test LocationCreate parser throwing exception on missing sort field.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'sortField' element for LocationCreate.
@@ -128,20 +130,20 @@ class LocationCreateTest extends BaseTest
     {
         $inputArray = array(
             'ParentLocation' => array(
-                '_href' => '/content/locations/1/2/42'
+                '_href' => '/content/locations/1/2/42',
             ),
             'priority' => '0',
             'hidden' => 'false',
             'remoteId' => 'remoteId12345678',
-            'sortOrder' => 'ASC'
+            'sortOrder' => 'ASC',
         );
 
         $locationCreate = $this->getParser();
-        $locationCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $locationCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test LocationCreate parser throwing exception on missing sort order
+     * Test LocationCreate parser throwing exception on missing sort order.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'sortOrder' element for LocationCreate.
@@ -150,20 +152,20 @@ class LocationCreateTest extends BaseTest
     {
         $inputArray = array(
             'ParentLocation' => array(
-                '_href' => '/content/locations/1/2/42'
+                '_href' => '/content/locations/1/2/42',
             ),
             'priority' => '0',
             'hidden' => 'false',
             'remoteId' => 'remoteId12345678',
-            'sortField' => 'PATH'
+            'sortField' => 'PATH',
         );
 
         $locationCreate = $this->getParser();
-        $locationCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $locationCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Returns the LocationCreateStruct parser
+     * Returns the LocationCreateStruct parser.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\LocationCreate
      */
@@ -176,7 +178,7 @@ class LocationCreateTest extends BaseTest
     }
 
     /**
-     * Get the location service mock object
+     * Get the location service mock object.
      *
      * @return \eZ\Publish\API\Repository\LocationService
      */
@@ -190,11 +192,11 @@ class LocationCreateTest extends BaseTest
             false
         );
 
-        $locationServiceMock->expects( $this->any() )
-            ->method( 'newLocationCreateStruct' )
-            ->with( $this->equalTo( 42 ) )
+        $locationServiceMock->expects($this->any())
+            ->method('newLocationCreateStruct')
+            ->with($this->equalTo(42))
             ->will(
-                $this->returnValue( new LocationCreateStruct( array( 'parentLocationId' => 42 ) ) )
+                $this->returnValue(new LocationCreateStruct(array('parentLocationId' => 42)))
             );
 
         return $locationServiceMock;
@@ -203,7 +205,7 @@ class LocationCreateTest extends BaseTest
     public function getParseHrefExpectationsMap()
     {
         return array(
-            array( '/content/locations/1/2/42', 'locationPath', '1/2/42' )
+            array('/content/locations/1/2/42', 'locationPath', '1/2/42'),
         );
     }
 }

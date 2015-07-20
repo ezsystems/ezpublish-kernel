@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandler\TransformationProcessorPreprocessedBasedTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandler\TransformationProcessorPreprocessedBasedTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,15 +16,15 @@ use eZ\Publish\Core\Persistence;
 use eZ\Publish\Core\Persistence\TransformationProcessor\PreprocessedBased;
 
 /**
- * Test case for LocationHandlerTest
+ * Test case for LocationHandlerTest.
  */
 class TransformationProcessorPreprocessedBasedTest extends TestCase
 {
     public function getProcessor()
     {
         return new PreprocessedBased(
-            new Persistence\TransformationProcessor\PcreCompiler( new Persistence\Utf8Converter() ),
-            glob( __DIR__ . '/_fixtures/transformations/*.tr.result' )
+            new Persistence\TransformationProcessor\PcreCompiler(new Persistence\Utf8Converter()),
+            glob(__DIR__ . '/_fixtures/transformations/*.tr.result')
         );
     }
 
@@ -32,7 +34,7 @@ class TransformationProcessorPreprocessedBasedTest extends TestCase
 
         $this->assertSame(
             'hello world!',
-            $processor->transform( 'Hello World!', array( 'ascii_lowercase' ) )
+            $processor->transform('Hello World!', array('ascii_lowercase'))
         );
     }
 
@@ -42,7 +44,7 @@ class TransformationProcessorPreprocessedBasedTest extends TestCase
 
         $this->assertSame(
             'HELLO WORLD!',
-            $processor->transform( 'Hello World!', array( 'ascii_uppercase' ) )
+            $processor->transform('Hello World!', array('ascii_uppercase'))
         );
     }
 
@@ -57,8 +59,7 @@ class TransformationProcessorPreprocessedBasedTest extends TestCase
 
         $this->assertSame(
             'HELLO WORLD.',
-            $processor->transform( 'Hello World!' )
+            $processor->transform('Hello World!')
         );
     }
 }
-

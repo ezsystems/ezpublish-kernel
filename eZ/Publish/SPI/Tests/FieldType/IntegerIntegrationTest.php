@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\SPI\Tests\FieldType\IntegerIntegrationTest class
+ * File contains: eZ\Publish\SPI\Tests\FieldType\IntegerIntegrationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
 
 /**
- * Integration test for legacy storage field types
+ * Integration test for legacy storage field types.
  *
  * This abstract base test case is supposed to be the base for field type
  * integration tests. It basically calls all involved methods in the field type
@@ -36,7 +38,7 @@ use eZ\Publish\SPI\Persistence\Content;
 class IntegerIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -46,14 +48,14 @@ class IntegerIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get handler with required custom field types registered
+     * Get handler with required custom field types registered.
      *
      * @return Handler
      */
     public function getCustomHandler()
     {
         $fieldType = new FieldType\Integer\Type();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
         return $this->getHandler(
             'ezinteger',
@@ -75,7 +77,7 @@ class IntegerIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field definition data values
+     * Get field definition data values.
      *
      * This is a PHPUnit data provider
      *
@@ -86,7 +88,7 @@ class IntegerIntegrationTest extends BaseIntegrationTest
         return array(
             // The ezint field type does not have any special field definition
             // properties
-            array( 'fieldType', 'ezinteger' ),
+            array('fieldType', 'ezinteger'),
             array(
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(
@@ -98,13 +100,13 @@ class IntegerIntegrationTest extends BaseIntegrationTest
                             ),
                         ),
                     )
-                )
+                ),
             ),
         );
     }
 
     /**
-     * Get initial field value
+     * Get initial field value.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -112,9 +114,9 @@ class IntegerIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => 42,
+                'data' => 42,
                 'externalData' => null,
-                'sortKey'      => 42,
+                'sortKey' => 42,
             )
         );
     }
@@ -130,11 +132,10 @@ class IntegerIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => 23,
+                'data' => 23,
                 'externalData' => null,
-                'sortKey'      => 23,
+                'sortKey' => 23,
             )
         );
     }
 }
-

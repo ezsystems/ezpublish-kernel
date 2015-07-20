@@ -10,9 +10,9 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'id' => 10,
                         'title' => 'Anonymous User',
                     ),
-                    'score' => NULL,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'score' => null,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
             1 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -21,16 +21,16 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'id' => 14,
                         'title' => 'Administrator User',
                     ),
-                    'score' => NULL,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'score' => null,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
         ),
-        'spellSuggestion' => NULL,
+        'spellSuggestion' => null,
         'time' => 1,
-        'timedOut' => NULL,
-        'maxScore' => NULL,
+        'timedOut' => null,
+        'maxScore' => null,
         'totalCount' => 2,
     )
 );

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Test Setup Factory base class
+ * File containing the Test Setup Factory base class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,11 +20,12 @@ abstract class SetupFactory
     /**
      * Returns a configured repository for testing.
      *
-     * @param boolean $initializeFromScratch if the back end should be initialized
+     * @param bool $initializeFromScratch if the back end should be initialized
      *                                    from scratch or re-used
+     *
      * @return \eZ\Publish\API\Repository\Repository
      */
-    abstract public function getRepository( $initializeFromScratch = true );
+    abstract public function getRepository($initializeFromScratch = true);
 
     /**
      * Returns a repository specific ID manager.
@@ -40,5 +43,5 @@ abstract class SetupFactory
      *
      * @return mixed
      */
-    abstract public function getConfigValue( $configKey );
+    abstract public function getConfigValue($configKey);
 }

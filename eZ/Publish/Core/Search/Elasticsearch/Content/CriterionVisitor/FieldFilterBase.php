@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the abstract FieldFilterBase criterion visitor class
+ * File containing the abstract FieldFilterBase criterion visitor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -27,37 +29,35 @@ abstract class FieldFilterBase extends CriterionVisitor
      *
      * @return array|null
      */
-    protected function getFieldFilter( array $fieldFilters )
+    protected function getFieldFilter(array $fieldFilters)
     {
         $filter = null;
 
         // Only 'languages' and 'useAlwaysAvailable' are available,
         // latter making sense only when former is set.
-        if ( !empty( $fieldFilters["languages"] ) )
-        {
+        if (!empty($fieldFilters['languages'])) {
             // For 'terms' filter caching is enabled by default
             $filter = array(
-                "terms" => array(
-                    "fields_doc.meta_language_code_s" => $fieldFilters["languages"],
+                'terms' => array(
+                    'fields_doc.meta_language_code_s' => $fieldFilters['languages'],
                 ),
             );
 
-            if ( !isset( $fieldFilters["useAlwaysAvailable"] ) || $fieldFilters["useAlwaysAvailable"] === true )
-            {
+            if (!isset($fieldFilters['useAlwaysAvailable']) || $fieldFilters['useAlwaysAvailable'] === true) {
                 $filter = array(
-                    "or" => array(
+                    'or' => array(
                         // Enabling caching requires filters to be wrapped in 'filters' element
-                        "filters" => array(
+                        'filters' => array(
                             $filter,
                             array(
-                                "term" => array(
-                                    "meta_is_always_available_b" => true,
+                                'term' => array(
+                                    'meta_is_always_available_b' => true,
                                 ),
                             ),
                         ),
                         // For 'or' filter caching is disabled by default
                         // We enable it as it should be heavily reused
-                        "_cache" => true,
+                        '_cache' => true,
                     ),
                 );
             }
@@ -68,52 +68,49 @@ abstract class FieldFilterBase extends CriterionVisitor
 
     /**
      * TODO: should really work something like this, but also
-     * needs update to the UrlAliasService etc
+     * needs update to the UrlAliasService etc.
      *
      * @param array $fieldFilters
      *
      * @return array|null
      */
-    protected function getTodoFieldFilter( array $fieldFilters )
+    protected function getTodoFieldFilter(array $fieldFilters)
     {
         $translationFilter = null;
 
-        if ( !empty( $fieldFilters["languages"] ) )
-        {
+        if (!empty($fieldFilters['languages'])) {
             $translationFilter = array(
-                "terms" => array(
-                    "fields_doc.meta_language_code_s" => $fieldFilters["languages"],
+                'terms' => array(
+                    'fields_doc.meta_language_code_s' => $fieldFilters['languages'],
                 ),
             );
 
-            if ( isset( $fieldFilters["defaultTranslationToMainLanguage"] ) )
-            {
-                switch ( $fieldFilters["defaultTranslationToMainLanguage"] )
-                {
+            if (isset($fieldFilters['defaultTranslationToMainLanguage'])) {
+                switch ($fieldFilters['defaultTranslationToMainLanguage']) {
                     case true:
                         $translationFilter = array(
-                            "or" => array(
+                            'or' => array(
                                 $translationFilter,
-                                "term" => array(
-                                    "meta_is_main_translation_b" => true,
+                                'term' => array(
+                                    'meta_is_main_translation_b' => true,
                                 ),
                             ),
                         );
                         break;
 
-                    case "use_always_available":
+                    case 'use_always_available':
                         $translationFilter = array(
-                            "or" => array(
+                            'or' => array(
                                 $translationFilter,
-                                "and" => array(
+                                'and' => array(
                                     array(
-                                        "term" => array(
-                                            "always_available_b" => true,
+                                        'term' => array(
+                                            'always_available_b' => true,
                                         ),
                                     ),
                                     array(
-                                        "term" => array(
-                                            "meta_is_main_translation_b" => true,
+                                        'term' => array(
+                                            'meta_is_main_translation_b' => true,
                                         ),
                                     ),
                                 ),
@@ -129,7 +126,7 @@ abstract class FieldFilterBase extends CriterionVisitor
                         throw new \RuntimeException(
                             "Invalid value for 'defaultTranslationToMainLanguage' field filter: expected one of: " .
                             "true, 'use_always_available', false, got: " .
-                            var_export( $fieldFilters["defaultTranslationToMainLanguage"], true )
+                            var_export($fieldFilters['defaultTranslationToMainLanguage'], true)
                         );
                 }
             }

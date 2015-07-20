@@ -1,9 +1,10 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: lolautruche
  * Date: 19/11/13
- * Time: 08:59
+ * Time: 08:59.
  */
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler;
@@ -19,35 +20,35 @@ class RegisterStorageEnginePassTest extends AbstractCompilerPassTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->setDefinition( 'ezpublish.api.storage_engine.factory', new Definition() );
-        $this->container->setParameter( 'ezpublish.api.storage_engine.default', 'default_storage_engine' );
+        $this->setDefinition('ezpublish.api.storage_engine.factory', new Definition());
+        $this->container->setParameter('ezpublish.api.storage_engine.default', 'default_storage_engine');
     }
 
     /**
      * Register the compiler pass under test, just like you would do inside a bundle's load()
-     * method:
+     * method:.
      *
      *   $container->addCompilerPass(new MyCompilerPass());
      */
-    protected function registerCompilerPass( ContainerBuilder $container )
+    protected function registerCompilerPass(ContainerBuilder $container)
     {
-        $container->addCompilerPass( new RegisterStorageEnginePass() );
+        $container->addCompilerPass(new RegisterStorageEnginePass());
     }
 
     public function testRegisterStorageEngine()
     {
         $storageEngineDef = new Definition();
         $storageEngineIdentifier = 'i_am_a_storage_engine';
-        $storageEngineDef->addTag( 'ezpublish.storageEngine', array( 'alias' => $storageEngineIdentifier ) );
+        $storageEngineDef->addTag('ezpublish.storageEngine', array('alias' => $storageEngineIdentifier));
         $serviceId = 'storage_engine_service';
-        $this->setDefinition( $serviceId, $storageEngineDef );
+        $this->setDefinition($serviceId, $storageEngineDef);
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.api.storage_engine.factory',
             'registerStorageEngine',
-            array( $serviceId, $storageEngineIdentifier )
+            array($serviceId, $storageEngineIdentifier)
         );
     }
 
@@ -56,17 +57,17 @@ class RegisterStorageEnginePassTest extends AbstractCompilerPassTestCase
         $storageEngineDef = new Definition();
         $storageEngineIdentifier = 'i_am_a_storage_engine';
 
-        $this->container->setParameter( 'ezpublish.api.storage_engine.default', $storageEngineIdentifier );
-        $storageEngineDef->addTag( 'ezpublish.storageEngine', array( 'alias' => $storageEngineIdentifier ) );
+        $this->container->setParameter('ezpublish.api.storage_engine.default', $storageEngineIdentifier);
+        $storageEngineDef->addTag('ezpublish.storageEngine', array('alias' => $storageEngineIdentifier));
         $serviceId = 'storage_engine_service';
-        $this->setDefinition( $serviceId, $storageEngineDef );
+        $this->setDefinition($serviceId, $storageEngineDef);
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.api.storage_engine.factory',
             'registerStorageEngine',
-            array( new Reference( $serviceId ), $storageEngineIdentifier )
+            array(new Reference($serviceId), $storageEngineIdentifier)
         );
     }
 
@@ -77,16 +78,16 @@ class RegisterStorageEnginePassTest extends AbstractCompilerPassTestCase
     {
         $storageEngineDef = new Definition();
         $storageEngineIdentifier = 'i_am_a_storage_engine';
-        $storageEngineDef->addTag( 'ezpublish.storageEngine' );
+        $storageEngineDef->addTag('ezpublish.storageEngine');
         $serviceId = 'storage_engine_service';
-        $this->setDefinition( $serviceId, $storageEngineDef );
+        $this->setDefinition($serviceId, $storageEngineDef);
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.api.storage_engine.factory',
             'registerStorageEngine',
-            array( $serviceId, $storageEngineIdentifier )
+            array($serviceId, $storageEngineIdentifier)
         );
     }
 }

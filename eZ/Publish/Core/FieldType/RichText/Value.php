@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RichText Value class
+ * File containing the RichText Value class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,7 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 use DOMDocument;
 
 /**
- * Value for RichText field type
+ * Value for RichText field type.
  */
 class Value extends BaseValue
 {
@@ -23,27 +25,24 @@ class Value extends BaseValue
 EOT;
 
     /**
-     * XML content as DOMDocument
+     * XML content as DOMDocument.
      *
      * @var \DOMDocument
      */
     public $xml;
 
     /**
-     * Initializes a new RichText Value object with $xmlDoc in
+     * Initializes a new RichText Value object with $xmlDoc in.
      *
      * @param \DOMDocument|string $xml
      */
-    public function __construct( $xml = null )
+    public function __construct($xml = null)
     {
-        if ( $xml instanceof DOMDocument )
-        {
+        if ($xml instanceof DOMDocument) {
             $this->xml = $xml;
-        }
-        else
-        {
-            $this->xml = new DOMDocument;
-            $this->xml->loadXML( $xml === null ? self::EMPTY_VALUE : $xml );
+        } else {
+            $this->xml = new DOMDocument();
+            $this->xml->loadXML($xml === null ? self::EMPTY_VALUE : $xml);
         }
     }
 
@@ -52,6 +51,6 @@ EOT;
      */
     public function __toString()
     {
-        return isset( $this->xml ) ? (string)$this->xml->saveXML() : self::EMPTY_VALUE;
+        return isset($this->xml) ? (string)$this->xml->saveXML() : self::EMPTY_VALUE;
     }
 }

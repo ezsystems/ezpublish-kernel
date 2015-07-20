@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the eZ Publish package.
  *
@@ -14,7 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
- * MatchNone criterion handler
+ * MatchNone criterion handler.
  */
 class MatchNone extends CriterionHandler
 {
@@ -23,15 +24,15 @@ class MatchNone extends CriterionHandler
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return boolean
+     * @return bool
      */
-    public function accept( Criterion $criterion )
+    public function accept(Criterion $criterion)
     {
         return $criterion instanceof Criterion\MatchNone;
     }
 
     /**
-     * Generate query expression for a Criterion this handler accepts
+     * Generate query expression for a Criterion this handler accepts.
      *
      * accept() must be called before calling this method.
      *
@@ -47,9 +48,7 @@ class MatchNone extends CriterionHandler
         SelectQuery $query,
         Criterion $criterion,
         array $fieldFilters
-    )
-    {
-        return $query->expr->not( $query->bindValue( '1' ) );
+    ) {
+        return $query->expr->not($query->bindValue('1'));
     }
 }
-

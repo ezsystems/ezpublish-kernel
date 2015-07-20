@@ -1,15 +1,16 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
 
-use eZ\Publish\Core\MVC\Symfony\FieldType\BinaryBase\ContentDownloadUrlGenerator;
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
@@ -21,7 +22,7 @@ use FileSystemIterator;
 use eZ\Publish\Core\IO\MimeTypeDetector\FileInfo;
 
 /**
- * Integration test for legacy storage field types
+ * Integration test for legacy storage field types.
  *
  * This abstract base test case is supposed to be the base for field type
  * integration tests. It basically calls all involved methods in the field type
@@ -43,17 +44,17 @@ use eZ\Publish\Core\IO\MimeTypeDetector\FileInfo;
 class BinaryFileIntegrationTest extends FileBaseIntegrationTest
 {
     /**
-     * Returns the storage identifier prefix used by the file service
+     * Returns the storage identifier prefix used by the file service.
      *
      * @return string
      */
     protected function getStoragePrefix()
     {
-        return self::$container->getParameter( 'binaryfile_storage_prefix' );
+        return self::$container->getParameter('binaryfile_storage_prefix');
     }
 
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -63,16 +64,17 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get handler with required custom field types registered
+     * Get handler with required custom field types registered.
      *
      * @return Handler
      */
     public function getCustomHandler()
     {
         $fieldType = new FieldType\BinaryFile\Type();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
-        $this->ioService = self::$container->get( "ezpublish.fieldType.ezbinaryfile.io_service" );
+        $this->ioService = self::$container->get('ezpublish.fieldType.ezbinaryfile.io_service');
+
         return $this->getHandler(
             'ezbinaryfile',
             $fieldType,
@@ -101,14 +103,14 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
                 'validators' => array(
                     'FileSizeValidator' => array(
                         'maxFileSize' => 2, // 2 MB
-                    )
-                )
+                    ),
+                ),
             )
         );
     }
 
     /**
-     * Get field definition data values
+     * Get field definition data values.
      *
      * This is a PHPUnit data provider
      *
@@ -119,7 +121,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         return array(
             // The ezint field type does not have any special field definition
             // properties
-            array( 'fieldType', 'ezbinaryfile' ),
+            array('fieldType', 'ezbinaryfile'),
             array(
                 'fieldTypeConstraints',
                 new FieldTypeConstraints(
@@ -127,16 +129,16 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
                         'validators' => array(
                             'FileSizeValidator' => array(
                                 'maxFileSize' => 2, // 2 MB
-                            )
-                        )
+                            ),
+                        ),
                     )
-                )
+                ),
             ),
         );
     }
 
     /**
-     * Get initial field value
+     * Get initial field value.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -144,23 +146,23 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => null,
+                'data' => null,
                 'externalData' => array(
                     'id' => null,
-                    'inputUri' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                    'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
                     'fileName' => 'Ice-Flower-Binary.jpg',
-                    'fileSize' => filesize( $path ),
+                    'fileSize' => filesize($path),
                     'mimeType' => 'image/jpeg',
                     'downloadCount' => 0,
                     'uri' => __DIR__ . '/_fixtures/image.jpg',
                 ),
-                'sortKey'      => '',
+                'sortKey' => '',
             )
         );
     }
 
     /**
-     * Asserts that the loaded field data is correct
+     * Asserts that the loaded field data is correct.
      *
      * Performs assertions on the loaded field, mainly checking that the
      * $field->value->externalData is loaded correctly. If the loading of
@@ -168,18 +170,18 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
      * also needs to be asserted. Make sure you implement this method agnostic
      * to the used SPI\Persistence implementation!
      */
-    public function assertLoadedFieldDataCorrect( Field $field )
+    public function assertLoadedFieldDataCorrect(Field $field)
     {
-        $this->assertNotNull( $field->value->externalData );
+        $this->assertNotNull($field->value->externalData);
 
-        $this->assertIOIdExists( $field->value->externalData['id'] );
+        $this->assertIOIdExists($field->value->externalData['id']);
 
-        $this->assertEquals( 'Ice-Flower-Binary.jpg', $field->value->externalData['fileName'] );
-        $this->assertEquals( $this->getFilesize( $field->value->externalData['id'] ), $field->value->externalData['fileSize'] );
-        $this->assertEquals( 'image/jpeg', $field->value->externalData['mimeType'] );
-        $this->assertEquals( 0, $field->value->externalData['downloadCount'] );
+        $this->assertEquals('Ice-Flower-Binary.jpg', $field->value->externalData['fileName']);
+        $this->assertEquals($this->getFilesize($field->value->externalData['id']), $field->value->externalData['fileSize']);
+        $this->assertEquals('image/jpeg', $field->value->externalData['mimeType']);
+        $this->assertEquals(0, $field->value->externalData['downloadCount']);
 
-        $this->assertNull( $field->value->data );
+        $this->assertNull($field->value->data);
     }
 
     /**
@@ -193,23 +195,23 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => null,
+                'data' => null,
                 'externalData' => array(
                     'id' => null,
-                    'inputUri' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                    'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
                     'fileName' => 'Blueish-Blue-Binary.jpg',
-                    'fileSize' => filesize( $path ),
+                    'fileSize' => filesize($path),
                     'mimeType' => 'image/png',
                     'downloadCount' => 23,
-                    'uri' => __DIR__ . '/_fixtures/image.jpg'
+                    'uri' => __DIR__ . '/_fixtures/image.jpg',
                 ),
-                'sortKey'      => '',
+                'sortKey' => '',
             )
         );
     }
 
     /**
-     * Asserts that the updated field data is loaded correct
+     * Asserts that the updated field data is loaded correct.
      *
      * Performs assertions on the loaded field after it has been updated,
      * mainly checking that the $field->value->externalData is loaded
@@ -217,38 +219,34 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
      * $field, their correctness also needs to be asserted. Make sure you
      * implement this method agnostic to the used SPI\Persistence
      * implementation!
-     *
-     * @return void
      */
-    public function assertUpdatedFieldDataCorrect( Field $field )
+    public function assertUpdatedFieldDataCorrect(Field $field)
     {
-        $this->assertNotNull( $field->value->externalData );
+        $this->assertNotNull($field->value->externalData);
 
-        $this->assertIOIdExists( $field->value->externalData['id'] );
+        $this->assertIOIdExists($field->value->externalData['id']);
 
-        $path = $this->getPathFromId( $field->value->externalData['id'] );
+        $path = $this->getPathFromId($field->value->externalData['id']);
         // Check old file removed before update
         $this->assertEquals(
             1,
-            count( glob( dirname( $path ) . '/*' ) )
+            count(glob(dirname($path) . '/*'))
         );
 
-        $this->assertEquals( 'Blueish-Blue-Binary.jpg', $field->value->externalData['fileName'] );
-        $this->assertEquals( filesize( $path ), $field->value->externalData['fileSize'] );
-        $this->assertEquals( 'image/png', $field->value->externalData['mimeType'] );
-        $this->assertEquals( 23, $field->value->externalData['downloadCount'] );
+        $this->assertEquals('Blueish-Blue-Binary.jpg', $field->value->externalData['fileName']);
+        $this->assertEquals(filesize($path), $field->value->externalData['fileSize']);
+        $this->assertEquals('image/png', $field->value->externalData['mimeType']);
+        $this->assertEquals(23, $field->value->externalData['downloadCount']);
 
-        $this->assertNull( $field->value->data );
+        $this->assertNull($field->value->data);
     }
 
     /**
-     * Can be overwritten to assert that additional data has been deleted
+     * Can be overwritten to assert that additional data has been deleted.
      *
      * @param Content $content
-     *
-     * @return void
      */
-    public function assertDeletedFieldDataCorrect( Content $content )
+    public function assertDeletedFieldDataCorrect(Content $content)
     {
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
@@ -258,10 +256,8 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
             RecursiveIteratorIterator::CHILD_FIRST
         );
 
-        foreach ( $iterator as $path => $fileInfo )
-        {
-            if ( $fileInfo->isFile() )
-            {
+        foreach ($iterator as $path => $fileInfo) {
+            if ($fileInfo->isFile()) {
                 $this->fail(
                     sprintf(
                         'Found undeleted file "%s"',

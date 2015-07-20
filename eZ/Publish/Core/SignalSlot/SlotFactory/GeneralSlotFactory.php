@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the GeneralSlotFactory class
+ * File containing the GeneralSlotFactory class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -28,13 +30,13 @@ class GeneralSlotFactory extends SlotFactory
     /**
      * @param \eZ\Publish\Core\SignalSlot\Slot[] $slots
      */
-    public function __construct( array $slots = array() )
+    public function __construct(array $slots = array())
     {
         $this->slots = $slots;
     }
 
     /**
-     * Returns a Slot with the given $slotIdentifier
+     * Returns a Slot with the given $slotIdentifier.
      *
      * @param string $slotIdentifier
      *
@@ -42,10 +44,11 @@ class GeneralSlotFactory extends SlotFactory
      *
      * @return \eZ\Publish\Core\SignalSlot\Slot
      */
-    public function getSlot( $slotIdentifier )
+    public function getSlot($slotIdentifier)
     {
-        if ( !isset( $this->slots[$slotIdentifier] ) )
-            throw new NotFoundException( 'slot', $slotIdentifier );
+        if (!isset($this->slots[$slotIdentifier])) {
+            throw new NotFoundException('slot', $slotIdentifier);
+        }
 
         return $this->slots[$slotIdentifier];
     }

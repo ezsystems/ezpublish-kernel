@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\FieldType\RichText\Converter\Ezxml\ToRichTextPreNormalize class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -37,25 +39,25 @@ class ToRichTextPreNormalize implements Converter
      * @param \eZ\Publish\Core\FieldType\XmlText\Converter\Expanding $expandingConverter
      * @param \eZ\Publish\Core\FieldType\XmlText\Converter\EmbedLinking $embedLinkingConverter
      */
-    public function __construct( Expanding $expandingConverter, EmbedLinking $embedLinkingConverter )
+    public function __construct(Expanding $expandingConverter, EmbedLinking $embedLinkingConverter)
     {
         $this->expandingConverter = $expandingConverter;
         $this->embedLinkingConverter = $embedLinkingConverter;
     }
 
     /**
-     * Converts given $document into another \DOMDocument object
+     * Converts given $document into another \DOMDocument object.
      *
      * @param \DOMDocument $document
      *
      * @return \DOMDocument
      */
-    public function convert( DOMDocument $document )
+    public function convert(DOMDocument $document)
     {
         // First
-        $this->expandingConverter->convert( $document );
+        $this->expandingConverter->convert($document);
         // Second
-        $this->embedLinkingConverter->convert( $document );
+        $this->embedLinkingConverter->convert($document);
 
         return $document;
     }

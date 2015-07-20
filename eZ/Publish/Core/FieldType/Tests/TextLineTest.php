@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the TextLineTest class
+ * File containing the TextLineTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -33,7 +35,7 @@ class TextLineTest extends FieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         $fieldType = new TextLineType();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
     }
@@ -49,13 +51,13 @@ class TextLineTest extends FieldTypeTest
             'StringLengthValidator' => array(
                 'minStringLength' => array(
                     'type' => 'int',
-                    'default' => 0
+                    'default' => 0,
                 ),
                 'maxStringLength' => array(
                     'type' => 'int',
-                    'default' => null
-                )
-            )
+                    'default' => null,
+                ),
+            ),
         );
     }
 
@@ -76,7 +78,7 @@ class TextLineTest extends FieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return new TextLineValue;
+        return new TextLineValue();
     }
 
     /**
@@ -110,7 +112,7 @@ class TextLineTest extends FieldTypeTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                new TextLineValue( 23 ),
+                new TextLineValue(23),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
@@ -150,46 +152,46 @@ class TextLineTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new TextLineValue,
+                new TextLineValue(),
             ),
             array(
-                "",
-                new TextLineValue,
+                '',
+                new TextLineValue(),
             ),
             array(
-                " ",
-                new TextLineValue,
+                ' ',
+                new TextLineValue(),
             ),
             array(
                 ' sindelfingen ',
-                new TextLineValue( ' sindelfingen ' ),
+                new TextLineValue(' sindelfingen '),
             ),
             array(
-                new TextLineValue( ' sindelfingen ' ),
-                new TextLineValue( ' sindelfingen ' ),
+                new TextLineValue(' sindelfingen '),
+                new TextLineValue(' sindelfingen '),
             ),
             array(
                 // 11+ numbers - EZP-21771
                 '12345678901',
-                new TextLineValue( '12345678901' ),
+                new TextLineValue('12345678901'),
             ),
             array(
-                new TextLineValue( '' ),
-                new TextLineValue,
+                new TextLineValue(''),
+                new TextLineValue(),
             ),
             array(
-                new TextLineValue( ' ' ),
-                new TextLineValue,
+                new TextLineValue(' '),
+                new TextLineValue(),
             ),
             array(
-                new TextLineValue( null ),
-                new TextLineValue,
+                new TextLineValue(null),
+                new TextLineValue(),
             ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -227,22 +229,22 @@ class TextLineTest extends FieldTypeTest
     {
         return array(
             array(
-                new TextLineValue,
-                null
+                new TextLineValue(),
+                null,
             ),
             array(
                 new TextLineValue(),
                 '',
             ),
             array(
-                new TextLineValue( 'sindelfingen' ),
+                new TextLineValue('sindelfingen'),
                 'sindelfingen',
             ),
         );
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -281,7 +283,7 @@ class TextLineTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new TextLineValue,
+                new TextLineValue(),
             ),
             array(
                 '',
@@ -289,7 +291,7 @@ class TextLineTest extends FieldTypeTest
             ),
             array(
                 'sindelfingen',
-                new TextLineValue( 'sindelfingen' ),
+                new TextLineValue('sindelfingen'),
             ),
         );
     }
@@ -326,43 +328,43 @@ class TextLineTest extends FieldTypeTest
     {
         return array(
             array(
-                array()
+                array(),
             ),
             array(
                 array(
                     'StringLengthValidator' => array(
                         'minStringLength' => null,
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 array(
                     'StringLengthValidator' => array(
                         'minStringLength' => 23,
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 array(
                     'StringLengthValidator' => array(
                         'maxStringLength' => null,
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 array(
                     'StringLengthValidator' => array(
                         'maxStringLength' => 23,
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 array(
                     'StringLengthValidator' => array(
                         'minStringLength' => 23,
                         'maxStringLength' => 42,
-                    )
-                )
+                    ),
+                ),
             ),
         );
     }
@@ -420,7 +422,7 @@ class TextLineTest extends FieldTypeTest
             array(
                 array(
                     'StringLengthValidator' => array(
-                        'nonExistentValue' => 23
+                        'nonExistentValue' => 23,
                     ),
                 ),
             ),
@@ -436,7 +438,7 @@ class TextLineTest extends FieldTypeTest
                     'StringLengthValidator' => array(
                         'maxStringLength' => .42,
                     ),
-                )
+                ),
             ),
         );
     }
@@ -449,8 +451,8 @@ class TextLineTest extends FieldTypeTest
     public function provideDataForGetName()
     {
         return array(
-            array( $this->getEmptyValueExpectation(), '' ),
-            array( new TextLineValue( 'This is a line of text' ), 'This is a line of text' )
+            array($this->getEmptyValueExpectation(), ''),
+            array(new TextLineValue('This is a line of text'), 'This is a line of text'),
         );
     }
 
@@ -504,24 +506,24 @@ class TextLineTest extends FieldTypeTest
         return array(
             array(
                 array(
-                    "validatorConfiguration" => array(
+                    'validatorConfiguration' => array(
                         'StringLengthValidator' => array(
                             'minStringLength' => 2,
                             'maxStringLength' => 10,
                         ),
                     ),
                 ),
-                new TextLineValue( "lalalala" ),
+                new TextLineValue('lalalala'),
             ),
             array(
                 array(
-                    "validatorConfiguration" => array(
+                    'validatorConfiguration' => array(
                         'StringLengthValidator' => array(
                             'maxStringLength' => 10,
                         ),
                     ),
                 ),
-                new TextLineValue( "lililili" ),
+                new TextLineValue('lililili'),
             ),
         );
     }
@@ -595,20 +597,20 @@ class TextLineTest extends FieldTypeTest
         return array(
             array(
                 array(
-                    "validatorConfiguration" => array(
+                    'validatorConfiguration' => array(
                         'StringLengthValidator' => array(
                             'minStringLength' => 5,
                             'maxStringLength' => 10,
                         ),
                     ),
                 ),
-                new TextLineValue( "aaa" ),
+                new TextLineValue('aaa'),
                 array(
                     new ValidationError(
-                        "The string can not be shorter than %size% character.",
-                        "The string can not be shorter than %size% characters.",
+                        'The string can not be shorter than %size% character.',
+                        'The string can not be shorter than %size% characters.',
                         array(
-                            "size" => 5
+                            'size' => 5,
                         ),
                         'text'
                     ),
@@ -616,20 +618,20 @@ class TextLineTest extends FieldTypeTest
             ),
             array(
                 array(
-                    "validatorConfiguration" => array(
+                    'validatorConfiguration' => array(
                         'StringLengthValidator' => array(
                             'minStringLength' => 5,
                             'maxStringLength' => 10,
                         ),
                     ),
                 ),
-                new TextLineValue( "0123456789012345" ),
+                new TextLineValue('0123456789012345'),
                 array(
                     new ValidationError(
-                        "The string can not exceed %size% character.",
-                        "The string can not exceed %size% characters.",
+                        'The string can not exceed %size% character.',
+                        'The string can not exceed %size% characters.',
                         array(
-                            "size" => 10
+                            'size' => 10,
                         ),
                         'text'
                     ),
@@ -637,28 +639,28 @@ class TextLineTest extends FieldTypeTest
             ),
             array(
                 array(
-                    "validatorConfiguration" => array(
+                    'validatorConfiguration' => array(
                         'StringLengthValidator' => array(
                             'minStringLength' => 10,
                             'maxStringLength' => 5,
                         ),
                     ),
                 ),
-                new TextLineValue( "1234567" ),
+                new TextLineValue('1234567'),
                 array(
                     new ValidationError(
-                        "The string can not exceed %size% character.",
-                        "The string can not exceed %size% characters.",
+                        'The string can not exceed %size% character.',
+                        'The string can not exceed %size% characters.',
                         array(
-                            "size" => 5
+                            'size' => 5,
                         ),
                         'text'
                     ),
                     new ValidationError(
-                        "The string can not be shorter than %size% character.",
-                        "The string can not be shorter than %size% characters.",
+                        'The string can not be shorter than %size% character.',
+                        'The string can not be shorter than %size% characters.',
                         array(
-                            "size" => 10
+                            'size' => 10,
                         ),
                         'text'
                     ),

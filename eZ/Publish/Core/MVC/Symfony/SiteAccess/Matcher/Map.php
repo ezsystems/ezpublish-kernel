@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -45,13 +47,14 @@ abstract class Map implements VersatileMatcher
      *
      * @param array $map Map used for matching.
      */
-    public function __construct( array $map )
+    public function __construct(array $map)
     {
         $this->map = $map;
     }
 
     /**
-     * Do not serialize the Siteaccess configuration in order to reduce ESI request URL size
+     * Do not serialize the Siteaccess configuration in order to reduce ESI request URL size.
+     *
      * @see https://jira.ez.no/browse/EZP-23168
      *
      * @return array
@@ -60,10 +63,11 @@ abstract class Map implements VersatileMatcher
     {
         $this->map = array();
         $this->reverseMap = array();
-        return array( 'map', 'reverseMap', 'key' );
+
+        return array('map', 'reverseMap', 'key');
     }
 
-    public function setRequest( SimplifiedRequest $request )
+    public function setRequest(SimplifiedRequest $request)
     {
         $this->request = $request;
     }
@@ -74,11 +78,11 @@ abstract class Map implements VersatileMatcher
     }
 
     /**
-     * Injects the key that will be used for matching against the map configuration
+     * Injects the key that will be used for matching against the map configuration.
      *
      * @param string $key
      */
-    public function setMapKey( $key )
+    public function setMapKey($key)
     {
         $this->key = $key;
     }
@@ -98,7 +102,7 @@ abstract class Map implements VersatileMatcher
      */
     public function match()
     {
-        return isset( $this->map[$this->key] )
+        return isset($this->map[$this->key])
             ? $this->map[$this->key]
             : false;
     }
@@ -108,36 +112,33 @@ abstract class Map implements VersatileMatcher
      *
      * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher|Map|null
      */
-    public function reverseMatch( $siteAccessName )
+    public function reverseMatch($siteAccessName)
     {
-        $reverseMap = $this->getReverseMap( $siteAccessName );
+        $reverseMap = $this->getReverseMap($siteAccessName);
 
-        if ( !isset( $reverseMap[$siteAccessName] ) )
-        {
+        if (!isset($reverseMap[$siteAccessName])) {
             return null;
         }
 
-        $this->setMapKey( $reverseMap[$siteAccessName] );
+        $this->setMapKey($reverseMap[$siteAccessName]);
+
         return $this;
     }
 
-    private function getReverseMap( $defaultSiteAccess )
+    private function getReverseMap($defaultSiteAccess)
     {
-        if ( !empty( $this->reverseMap ) )
-        {
+        if (!empty($this->reverseMap)) {
             return $this->reverseMap;
         }
 
         $map = $this->map;
-        foreach ( $map as &$value )
-        {
+        foreach ($map as &$value) {
             // $value can be true in the case of the use of a Compound matcher
-            if ( $value === true )
-            {
+            if ($value === true) {
                 $value = $defaultSiteAccess;
             }
         }
 
-        return $this->reverseMap = array_flip( $map );
+        return $this->reverseMap = array_flip($map);
     }
 }

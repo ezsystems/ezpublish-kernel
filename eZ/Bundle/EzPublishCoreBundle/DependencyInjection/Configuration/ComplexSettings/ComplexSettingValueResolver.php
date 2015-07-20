@@ -1,10 +1,12 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributd with this source code.
  */
+
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings;
 
 /**
@@ -36,7 +38,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Comple
 class ComplexSettingValueResolver
 {
     /**
-     * Can receive as many tuples of array( argumentName ), argumentValue as necessary
+     * Can receive as many tuples of array( argumentName ), argumentValue as necessary.
      *
      * @param $argumentString
      * @param string $dynamicSettingName..
@@ -44,15 +46,14 @@ class ComplexSettingValueResolver
      *
      * @return string
      */
-    public function resolveSetting( $argumentString )
+    public function resolveSetting($argumentString)
     {
-        $arguments = array_slice( func_get_args(), 1 );
+        $arguments = array_slice(func_get_args(), 1);
 
         $value = $argumentString;
-        while ( $dynamicSettingName = array_shift( $arguments ) )
-        {
-            $dynamicSettingValue = array_shift( $arguments );
-            $value = str_replace( "\$$dynamicSettingName\$", $dynamicSettingValue, $value );
+        while ($dynamicSettingName = array_shift($arguments)) {
+            $dynamicSettingValue = array_shift($arguments);
+            $value = str_replace("\$$dynamicSettingName\$", $dynamicSettingValue, $value);
         }
 
         return $value;

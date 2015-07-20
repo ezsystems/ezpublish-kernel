@@ -1,10 +1,12 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace eZ\Publish\Core\IO;
 
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
@@ -16,27 +18,25 @@ use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 interface IOBinarydataHandler
 {
     /**
-     * Creates a new file with data from $binaryFileCreateStruct
+     * Creates a new file with data from $binaryFileCreateStruct.
      *
      * @param BinaryFileCreateStruct $binaryFileCreateStruct
      *
-     * @return void
-     *
      * @throws \RuntimeException if an error occured creating the file
      */
-    public function create( BinaryFileCreateStruct $binaryFileCreateStruct );
+    public function create(BinaryFileCreateStruct $binaryFileCreateStruct);
 
     /**
-     * Deletes the file $path
+     * Deletes the file $path.
      *
      * @param string $spiBinaryFileId
      *
      * @throws BinaryFileNotFoundException If the file is not found
      */
-    public function delete( $spiBinaryFileId );
+    public function delete($spiBinaryFileId);
 
     /**
-     * Returns the binary content from $path
+     * Returns the binary content from $path.
      *
      * @param $spiBinaryFileId
      *
@@ -44,37 +44,39 @@ interface IOBinarydataHandler
      *
      * @return string
      */
-    public function getContents( $spiBinaryFileId );
+    public function getContents($spiBinaryFileId);
 
     /**
-     * Returns a read-only, binary file resource to $path
+     * Returns a read-only, binary file resource to $path.
      *
      * @param string $spiBinaryFileId
      *
      * @return resource A read-only binary resource to $path
      */
-    public function getResource( $spiBinaryFileId );
+    public function getResource($spiBinaryFileId);
 
     /**
-     * Returns the public URI for $path
+     * Returns the public URI for $path.
      *
      * @param string $spiBinaryFileId
      *
      * @return string
      */
-    public function getUri( $spiBinaryFileId );
+    public function getUri($spiBinaryFileId);
 
     /**
-     * Returns the id in $binaryFileUri
+     * Returns the id in $binaryFileUri.
+     *
      * @param string $binaryFileUri
+     *
      * @return string
      */
-    public function getIdFromUri( $binaryFileUri );
+    public function getIdFromUri($binaryFileUri);
 
     /**
-     * Deletes the directory $spiPath and all of its contents
+     * Deletes the directory $spiPath and all of its contents.
      *
      * @param string $spiPath
      */
-    public function deleteDirectory( $spiPath );
+    public function deleteDirectory($spiPath);
 }

@@ -7,7 +7,7 @@ use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 
 /**
- * Simple mock for a Language\Handler
+ * Simple mock for a Language\Handler.
  */
 class LanguageHandlerMock implements LanguageHandler
 {
@@ -19,49 +19,49 @@ class LanguageHandlerMock implements LanguageHandler
             array(
                 'id' => 2,
                 'languageCode' => 'eng-US',
-                'name' => 'US english'
+                'name' => 'US english',
             )
         );
         $this->languages[] = new Language(
             array(
                 'id' => 4,
                 'languageCode' => 'eng-GB',
-                'name' => 'British english'
+                'name' => 'British english',
             )
         );
         $this->languages[] = new Language(
             array(
                 'id' => 8,
                 'languageCode' => 'ger-DE',
-                'name' => 'German'
+                'name' => 'German',
             )
         );
     }
 
     /**
-     * Create a new language
+     * Create a new language.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct $struct
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
-    public function create( CreateStruct $struct )
+    public function create(CreateStruct $struct)
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException('Not implemented, yet.');
     }
 
     /**
-     * Update language
+     * Update language.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Language $struct
      */
-    public function update( Language $struct )
+    public function update(Language $struct)
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException('Not implemented, yet.');
     }
 
     /**
-     * Get language by id
+     * Get language by id.
      *
      * @param mixed $id
      *
@@ -69,20 +69,18 @@ class LanguageHandlerMock implements LanguageHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
-    public function load( $id )
+    public function load($id)
     {
-        foreach ( $this->languages as $language )
-        {
-            if ( $language->id == $id )
-            {
+        foreach ($this->languages as $language) {
+            if ($language->id == $id) {
                 return $language;
             }
         }
-        throw new \RuntimeException( "Language $id not found." );
+        throw new \RuntimeException("Language $id not found.");
     }
 
     /**
-     * Get language by Language Code (eg: eng-GB)
+     * Get language by Language Code (eg: eng-GB).
      *
      * @param string $languageCode
      *
@@ -90,20 +88,18 @@ class LanguageHandlerMock implements LanguageHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
-    public function loadByLanguageCode( $languageCode )
+    public function loadByLanguageCode($languageCode)
     {
-        foreach ( $this->languages as $language )
-        {
-            if ( $language->languageCode == $languageCode )
-            {
+        foreach ($this->languages as $language) {
+            if ($language->languageCode == $languageCode) {
                 return $language;
             }
         }
-        throw new \RuntimeException( "Language $languageCode not found." );
+        throw new \RuntimeException("Language $languageCode not found.");
     }
 
     /**
-     * Get all languages
+     * Get all languages.
      *
      * Return list of languages where key of hash is language code.
      *
@@ -115,14 +111,14 @@ class LanguageHandlerMock implements LanguageHandler
     }
 
     /**
-     * Delete a language
+     * Delete a language.
      *
      * @todo Might throw an exception if the language is still associated with some content / types / (...) ?
      *
      * @param mixed $id
      */
-    public function delete( $id )
+    public function delete($id)
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException('Not implemented, yet.');
     }
 }

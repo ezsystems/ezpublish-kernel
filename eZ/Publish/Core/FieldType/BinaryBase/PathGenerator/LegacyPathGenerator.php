@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the PathGenerator interface
+ * File containing the PathGenerator interface.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,13 +17,13 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 
 class LegacyPathGenerator extends PathGenerator
 {
-    public function getStoragePathForField( Field $field, VersionInfo $versionInfo )
+    public function getStoragePathForField(Field $field, VersionInfo $versionInfo)
     {
-        $extension = pathinfo( $field->value->externalData['fileName'], PATHINFO_EXTENSION );
+        $extension = pathinfo($field->value->externalData['fileName'], PATHINFO_EXTENSION);
 
-        return $this->getFirstPartOfMimeType( $field->value->externalData['mimeType'] )
-            . '/' . md5( uniqid( microtime( true ), true ) )
-            . ( !empty( $extension ) ? '.' . $extension : '' );
+        return $this->getFirstPartOfMimeType($field->value->externalData['mimeType'])
+            . '/' . md5(uniqid(microtime(true), true))
+            . (!empty($extension) ? '.' . $extension : '');
     }
 
     /**
@@ -31,8 +33,8 @@ class LegacyPathGenerator extends PathGenerator
      *
      * @return string
      */
-    protected function getFirstPartOfMimeType( $mimeType )
+    protected function getFirstPartOfMimeType($mimeType)
     {
-        return substr( $mimeType, 0, strpos( $mimeType, '/' ) );
+        return substr($mimeType, 0, strpos($mimeType, '/'));
     }
 }

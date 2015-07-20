@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: Abstract Base service test class
+ * File contains: Abstract Base service test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,7 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 /**
  * Base test case for tests on services
- * Initializes repository
+ * Initializes repository.
  */
 abstract class Base extends PHPUnit_Framework_TestCase
 {
@@ -28,23 +30,23 @@ abstract class Base extends PHPUnit_Framework_TestCase
     protected $repository;
 
     /**
-     * Setup test
+     * Setup test.
      */
     protected function setUp()
     {
         parent::setUp();
         $this->repository = static::getRepository();
-        $this->repository->setCurrentUser( $this->getStubbedUser( 14 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(14));
     }
 
     /**
-     * Returns User stub with $id as User/Content id
+     * Returns User stub with $id as User/Content id.
      *
      * @param int $id
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    protected function getStubbedUser( $id )
+    protected function getStubbedUser($id)
     {
         return new User(
             array(
@@ -52,12 +54,12 @@ abstract class Base extends PHPUnit_Framework_TestCase
                     array(
                         'versionInfo' => new VersionInfo(
                             array(
-                                'contentInfo' => new ContentInfo( array( 'id' => $id ) )
+                                'contentInfo' => new ContentInfo(array('id' => $id)),
                             )
                         ),
-                        'internalFields' => array()
+                        'internalFields' => array(),
                     )
-                )
+                ),
             )
         );
     }
@@ -85,30 +87,30 @@ abstract class Base extends PHPUnit_Framework_TestCase
         $userCreate->enabled = true;
 
         // Set some fields required by the user ContentType
-        $userCreate->setField( 'first_name', 'Example' );
-        $userCreate->setField( 'last_name', 'User' );
+        $userCreate->setField('first_name', 'Example');
+        $userCreate->setField('last_name', 'User');
 
         // Load parent group for the user
-        $group = $userService->loadUserGroup( $editorsGroupId );
+        $group = $userService->loadUserGroup($editorsGroupId);
 
         // Create a new user instance.
-        $user = $userService->createUser( $userCreate, array( $group ) );
+        $user = $userService->createUser($userCreate, array($group));
         /* END: Inline */
 
         return $user;
     }
 
     /**
-     * Tear down test (properties)
+     * Tear down test (properties).
      */
     protected function tearDown()
     {
-        unset( $this->repository );
+        unset($this->repository);
         parent::tearDown();
     }
 
     /**
-     * Generate \eZ\Publish\API\Repository\Repository
+     * Generate \eZ\Publish\API\Repository\Repository.
      *
      * Makes it possible to inject different Io / Persistence handlers
      *
@@ -123,18 +125,15 @@ abstract class Base extends PHPUnit_Framework_TestCase
      * @param mixed[] $expectedValues
      * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
      * @param array $skipProperties
-     *
-     * @return void
      */
-    protected function assertPropertiesCorrect( array $expectedValues, ValueObject $actualObject, array $skipProperties = array() )
+    protected function assertPropertiesCorrect(array $expectedValues, ValueObject $actualObject, array $skipProperties = array())
     {
-        foreach ( $expectedValues as $propertyName => $propertyValue )
-        {
-            if ( in_array( $propertyName, $skipProperties ) ) continue;
+        foreach ($expectedValues as $propertyName => $propertyValue) {
+            if (in_array($propertyName, $skipProperties)) {
+                continue;
+            }
 
-            $this->assertProperty(
-                $propertyName, $propertyValue, $actualObject->$propertyName
-            );
+            $this->assertProperty($propertyName, $propertyValue, $actualObject->$propertyName);
         }
     }
 
@@ -144,15 +143,13 @@ abstract class Base extends PHPUnit_Framework_TestCase
         ValueObject $actualObject,
         array $skipProperties = array(),
         $equal = true
-    )
-    {
-        foreach ( $propertiesNames as $propertyName )
-        {
-            if ( in_array( $propertyName, $skipProperties ) ) continue;
+    ) {
+        foreach ($propertiesNames as $propertyName) {
+            if (in_array($propertyName, $skipProperties)) {
+                continue;
+            }
 
-            $this->assertProperty(
-                $propertyName, $expectedValues->$propertyName, $actualObject->$propertyName, $equal
-            );
+            $this->assertProperty($propertyName, $expectedValues->$propertyName, $actualObject->$propertyName, $equal);
         }
     }
 
@@ -163,50 +160,47 @@ abstract class Base extends PHPUnit_Framework_TestCase
      * @param \eZ\Publish\API\Repository\Values\ValueObject $expectedValues
      * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
      * @param array $skipProperties
-     *
-     * @return void
      */
-    protected function assertStructPropertiesCorrect( ValueObject $expectedValues, ValueObject $actualObject, array $skipProperties = array() )
+    protected function assertStructPropertiesCorrect(ValueObject $expectedValues, ValueObject $actualObject, array $skipProperties = array())
     {
-        foreach ( $expectedValues as $propertyName => $propertyValue )
-        {
-            if ( in_array( $propertyName, $skipProperties ) ) continue;
+        foreach ($expectedValues as $propertyName => $propertyValue) {
+            if (in_array($propertyName, $skipProperties)) {
+                continue;
+            }
 
-            $this->assertProperty(
-                $propertyName, $propertyValue, $actualObject->$propertyName
-            );
+            $this->assertProperty($propertyName, $propertyValue, $actualObject->$propertyName);
         }
     }
 
-    private function assertProperty( $propertyName, $expectedValue, $actualValue, $equal = true )
+    private function assertProperty($propertyName, $expectedValue, $actualValue, $equal = true)
     {
-        if ( $expectedValue instanceof \ArrayObject )
-        {
+        if ($expectedValue instanceof \ArrayObject) {
             $expectedValue = $expectedValue->getArrayCopy();
         }
-        if ( $actualValue instanceof \ArrayObject )
-        {
+        if ($actualValue instanceof \ArrayObject) {
             $actualValue = $actualValue->getArrayCopy();
         }
 
-        if ( $equal )
+        if ($equal) {
             $this->assertEquals(
                 $expectedValue,
                 $actualValue,
-                sprintf( 'Object property "%s" incorrect.', $propertyName )
+                sprintf('Object property "%s" incorrect.', $propertyName)
             );
-        else
+        } else {
             $this->assertNotEquals(
                 $expectedValue,
                 $actualValue,
-                sprintf( 'Object property "%s" incorrect.', $propertyName )
+                sprintf('Object property "%s" incorrect.', $propertyName)
             );
+        }
     }
 
-    protected function getDateTime( $timestamp )
+    protected function getDateTime($timestamp)
     {
         $dateTime = new \DateTime();
-        $dateTime->setTimestamp( $timestamp );
+        $dateTime->setTimestamp($timestamp);
+
         return $dateTime;
     }
 }

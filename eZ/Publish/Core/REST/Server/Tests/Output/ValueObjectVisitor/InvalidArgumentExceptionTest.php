@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,12 +13,11 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Exceptions;
-use eZ\Publish\Core\REST\Common;
 
 class InvalidArgumentExceptionTest extends ExceptionTest
 {
     /**
-     * Get expected status code
+     * Get expected status code.
      *
      * @return int
      */
@@ -26,27 +27,27 @@ class InvalidArgumentExceptionTest extends ExceptionTest
     }
 
     /**
-     * Get expected message
+     * Get expected message.
      *
      * @return string
      */
     protected function getExpectedMessage()
     {
-        return "Not Acceptable";
+        return 'Not Acceptable';
     }
 
     /**
-     * Gets the exception
+     * Gets the exception.
      *
      * @return \Exception
      */
     protected function getException()
     {
-        return new Exceptions\InvalidArgumentException( "Test" );
+        return new Exceptions\InvalidArgumentException('Test');
     }
 
     /**
-     * Gets the exception visitor
+     * Gets the exception visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\InvalidArgumentException
      */

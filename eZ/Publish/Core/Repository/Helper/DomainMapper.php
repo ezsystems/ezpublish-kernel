@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the DomainMapper class
+ * File containing the DomainMapper class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,6 @@ use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as TypeHandler;
-
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
@@ -23,7 +24,6 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
@@ -31,12 +31,10 @@ use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Relation as SPIRelation;
 use eZ\Publish\SPI\Persistence\Content\Type as SPIType;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as SPILocationCreateStruct;
-
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
-
 use DateTime;
 
 /**
@@ -86,8 +84,7 @@ class DomainMapper
         TypeHandler $contentTypeHandler,
         LanguageHandler $contentLanguageHandler,
         FieldTypeRegistry $fieldTypeRegistry
-    )
-    {
+    ) {
         $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
         $this->contentTypeHandler = $contentTypeHandler;
@@ -103,10 +100,9 @@ class DomainMapper
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\Content
      */
-    public function buildContentDomainObject( SPIContent $spiContent, $contentType = null )
+    public function buildContentDomainObject(SPIContent $spiContent, $contentType = null)
     {
-        if ( $contentType === null )
-        {
+        if ($contentType === null) {
             $contentType = $this->contentTypeHandler->load(
                 $spiContent->versionInfo->contentInfo->contentTypeId
             );
@@ -114,43 +110,40 @@ class DomainMapper
 
         return new Content(
             array(
-                "internalFields" => $this->buildDomainFields( $spiContent->fields, $contentType ),
-                "versionInfo" => $this->buildVersionInfoDomainObject( $spiContent->versionInfo )
+                'internalFields' => $this->buildDomainFields($spiContent->fields, $contentType),
+                'versionInfo' => $this->buildVersionInfoDomainObject($spiContent->versionInfo),
             )
         );
     }
 
     /**
-     * Returns an array of domain fields created from given array of SPI fields
+     * Returns an array of domain fields created from given array of SPI fields.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $spiFields
      * @param ContentType|SPIType $contentType
      *
      * @return array
      */
-    public function buildDomainFields( array $spiFields, $contentType )
+    public function buildDomainFields(array $spiFields, $contentType)
     {
         $fieldIdentifierMap = array();
-        if ( !$contentType instanceof SPIType && !$contentType instanceof ContentType )
-        {
-            throw new InvalidArgumentType( "\$contentType", "SPI ContentType | API ContentType" );
+        if (!$contentType instanceof SPIType && !$contentType instanceof ContentType) {
+            throw new InvalidArgumentType("\$contentType", 'SPI ContentType | API ContentType');
         }
 
-        foreach ( $contentType->fieldDefinitions as $fieldDefinitions )
-        {
+        foreach ($contentType->fieldDefinitions as $fieldDefinitions) {
             $fieldIdentifierMap[$fieldDefinitions->id] = $fieldDefinitions->identifier;
         }
 
         $fields = array();
-        foreach ( $spiFields as $spiField )
-        {
+        foreach ($spiFields as $spiField) {
             $fields[] = new Field(
                 array(
-                    "id" => $spiField->id,
-                    "value" => $this->fieldTypeRegistry->getFieldType( $spiField->type )
-                        ->fromPersistenceValue( $spiField->value ),
-                    "languageCode" => $spiField->languageCode,
-                    "fieldDefIdentifier" => $fieldIdentifierMap[$spiField->fieldDefinitionId]
+                    'id' => $spiField->id,
+                    'value' => $this->fieldTypeRegistry->getFieldType($spiField->type)
+                        ->fromPersistenceValue($spiField->value),
+                    'languageCode' => $spiField->languageCode,
+                    'fieldDefIdentifier' => $fieldIdentifierMap[$spiField->fieldDefinitionId],
                 )
             );
         }
@@ -159,23 +152,21 @@ class DomainMapper
     }
 
     /**
-     * Builds a VersionInfo domain object from value object returned from persistence
+     * Builds a VersionInfo domain object from value object returned from persistence.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $spiVersionInfo
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\VersionInfo
      */
-    public function buildVersionInfoDomainObject( SPIVersionInfo $spiVersionInfo )
+    public function buildVersionInfoDomainObject(SPIVersionInfo $spiVersionInfo)
     {
         $languageCodes = array();
-        foreach ( $spiVersionInfo->languageIds as $languageId )
-        {
-            $languageCodes[] = $this->contentLanguageHandler->load( $languageId )->languageCode;
+        foreach ($spiVersionInfo->languageIds as $languageId) {
+            $languageCodes[] = $this->contentLanguageHandler->load($languageId)->languageCode;
         }
 
         // Map SPI statuses to API
-        switch ( $spiVersionInfo->status )
-        {
+        switch ($spiVersionInfo->status) {
             case SPIVersionInfo::STATUS_ARCHIVED:
                 $status = APIVersionInfo::STATUS_ARCHIVED;
                 break;
@@ -191,16 +182,16 @@ class DomainMapper
 
         return new VersionInfo(
             array(
-                "id" => $spiVersionInfo->id,
-                "versionNo" => $spiVersionInfo->versionNo,
-                "modificationDate" => $this->getDateTime( $spiVersionInfo->modificationDate ),
-                "creatorId" => $spiVersionInfo->creatorId,
-                "creationDate" => $this->getDateTime( $spiVersionInfo->creationDate ),
-                "status" => $status,
-                "initialLanguageCode" => $spiVersionInfo->initialLanguageCode,
-                "languageCodes" => $languageCodes,
-                "names" => $spiVersionInfo->names,
-                "contentInfo" => $this->buildContentInfoDomainObject( $spiVersionInfo->contentInfo )
+                'id' => $spiVersionInfo->id,
+                'versionNo' => $spiVersionInfo->versionNo,
+                'modificationDate' => $this->getDateTime($spiVersionInfo->modificationDate),
+                'creatorId' => $spiVersionInfo->creatorId,
+                'creationDate' => $this->getDateTime($spiVersionInfo->creationDate),
+                'status' => $status,
+                'initialLanguageCode' => $spiVersionInfo->initialLanguageCode,
+                'languageCodes' => $languageCodes,
+                'names' => $spiVersionInfo->names,
+                'contentInfo' => $this->buildContentInfoDomainObject($spiVersionInfo->contentInfo),
             )
         );
     }
@@ -212,33 +203,33 @@ class DomainMapper
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
-    public function buildContentInfoDomainObject( SPIContentInfo $spiContentInfo )
+    public function buildContentInfoDomainObject(SPIContentInfo $spiContentInfo)
     {
         return new ContentInfo(
             array(
-                "id" => $spiContentInfo->id,
-                "contentTypeId" => $spiContentInfo->contentTypeId,
-                "name" => $spiContentInfo->name,
-                "sectionId" => $spiContentInfo->sectionId,
-                "currentVersionNo" => $spiContentInfo->currentVersionNo,
-                "published" => $spiContentInfo->isPublished,
-                "ownerId" => $spiContentInfo->ownerId,
-                "modificationDate" => $spiContentInfo->modificationDate == 0 ?
+                'id' => $spiContentInfo->id,
+                'contentTypeId' => $spiContentInfo->contentTypeId,
+                'name' => $spiContentInfo->name,
+                'sectionId' => $spiContentInfo->sectionId,
+                'currentVersionNo' => $spiContentInfo->currentVersionNo,
+                'published' => $spiContentInfo->isPublished,
+                'ownerId' => $spiContentInfo->ownerId,
+                'modificationDate' => $spiContentInfo->modificationDate == 0 ?
                     null :
-                    $this->getDateTime( $spiContentInfo->modificationDate ),
-                "publishedDate" => $spiContentInfo->publicationDate == 0 ?
+                    $this->getDateTime($spiContentInfo->modificationDate),
+                'publishedDate' => $spiContentInfo->publicationDate == 0 ?
                     null :
-                    $this->getDateTime( $spiContentInfo->publicationDate ),
-                "alwaysAvailable" => $spiContentInfo->alwaysAvailable,
-                "remoteId" => $spiContentInfo->remoteId,
-                "mainLanguageCode" => $spiContentInfo->mainLanguageCode,
-                "mainLocationId" => $spiContentInfo->mainLocationId
+                    $this->getDateTime($spiContentInfo->publicationDate),
+                'alwaysAvailable' => $spiContentInfo->alwaysAvailable,
+                'remoteId' => $spiContentInfo->remoteId,
+                'mainLanguageCode' => $spiContentInfo->mainLanguageCode,
+                'mainLocationId' => $spiContentInfo->mainLocationId,
             )
         );
     }
 
     /**
-     * Builds API Relation object from provided SPI Relation object
+     * Builds API Relation object from provided SPI Relation object.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Relation $spiRelation
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $sourceContentInfo
@@ -250,16 +241,14 @@ class DomainMapper
         SPIRelation $spiRelation,
         ContentInfo $sourceContentInfo,
         ContentInfo $destinationContentInfo
-    )
-    {
+    ) {
         $sourceFieldDefinitionIdentifier = null;
-        if ( $spiRelation->sourceFieldDefinitionId !== null )
-        {
-            $contentType = $this->contentTypeHandler->load( $sourceContentInfo->contentTypeId  );
-            foreach ( $contentType->fieldDefinitions as $fieldDefinition )
-            {
-                if ( $fieldDefinition->id !== $spiRelation->sourceFieldDefinitionId )
+        if ($spiRelation->sourceFieldDefinitionId !== null) {
+            $contentType = $this->contentTypeHandler->load($sourceContentInfo->contentTypeId);
+            foreach ($contentType->fieldDefinitions as $fieldDefinition) {
+                if ($fieldDefinition->id !== $spiRelation->sourceFieldDefinitionId) {
                     continue;
+                }
 
                 $sourceFieldDefinitionIdentifier = $fieldDefinition->identifier;
                 break;
@@ -268,27 +257,26 @@ class DomainMapper
 
         return new Relation(
             array(
-                "id" => $spiRelation->id,
-                "sourceFieldDefinitionIdentifier" => $sourceFieldDefinitionIdentifier,
-                "type" => $spiRelation->type,
-                "sourceContentInfo" => $sourceContentInfo,
-                "destinationContentInfo" => $destinationContentInfo
+                'id' => $spiRelation->id,
+                'sourceFieldDefinitionIdentifier' => $sourceFieldDefinitionIdentifier,
+                'type' => $spiRelation->type,
+                'sourceContentInfo' => $sourceContentInfo,
+                'destinationContentInfo' => $destinationContentInfo,
             )
         );
     }
 
     /**
-     * Builds domain location object from provided persistence location
+     * Builds domain location object from provided persistence location.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location $spiLocation
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function buildLocationDomainObject( SPILocation $spiLocation )
+    public function buildLocationDomainObject(SPILocation $spiLocation)
     {
         // TODO: this is hardcoded workaround for missing ContentInfo on root location
-        if ( $spiLocation->id == 1 )
-        {
+        if ($spiLocation->id == 1) {
             $contentInfo = new ContentInfo(
                 array(
                     'id' => 0,
@@ -298,11 +286,9 @@ class DomainMapper
                     'contentTypeId' => 1,
                 )
             );
-        }
-        else
-        {
+        } else {
             $contentInfo = $this->buildContentInfoDomainObject(
-                $this->contentHandler->loadContentInfo( $spiLocation->contentId )
+                $this->contentHandler->loadContentInfo($spiLocation->contentId)
             );
         }
 
@@ -324,7 +310,7 @@ class DomainMapper
     }
 
     /**
-     * Creates an array of SPI location create structs from given array of API location create structs
+     * Creates an array of SPI location create structs from given array of API location create structs.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
@@ -342,72 +328,60 @@ class DomainMapper
         $mainLocation,
         $contentId,
         $contentVersionNo
-    )
-    {
-        if ( $locationCreateStruct->priority !== null && !is_int( $locationCreateStruct->priority ) )
-        {
-            throw new InvalidArgumentValue( "priority", $locationCreateStruct->priority, "LocationCreateStruct" );
+    ) {
+        if ($locationCreateStruct->priority !== null && !is_int($locationCreateStruct->priority)) {
+            throw new InvalidArgumentValue('priority', $locationCreateStruct->priority, 'LocationCreateStruct');
         }
 
-        if ( !is_bool( $locationCreateStruct->hidden ) )
-        {
-            throw new InvalidArgumentValue( "hidden", $locationCreateStruct->hidden, "LocationCreateStruct" );
+        if (!is_bool($locationCreateStruct->hidden)) {
+            throw new InvalidArgumentValue('hidden', $locationCreateStruct->hidden, 'LocationCreateStruct');
         }
 
-        if ( $locationCreateStruct->remoteId !== null && ( !is_string( $locationCreateStruct->remoteId ) || empty( $locationCreateStruct->remoteId ) ) )
-        {
-            throw new InvalidArgumentValue( "remoteId", $locationCreateStruct->remoteId, "LocationCreateStruct" );
+        if ($locationCreateStruct->remoteId !== null && (!is_string($locationCreateStruct->remoteId) || empty($locationCreateStruct->remoteId))) {
+            throw new InvalidArgumentValue('remoteId', $locationCreateStruct->remoteId, 'LocationCreateStruct');
         }
 
-        if ( $locationCreateStruct->sortField !== null && !$this->isValidLocationSortField( $locationCreateStruct->sortField ) )
-        {
-            throw new InvalidArgumentValue( "sortField", $locationCreateStruct->sortField, "LocationCreateStruct" );
+        if ($locationCreateStruct->sortField !== null && !$this->isValidLocationSortField($locationCreateStruct->sortField)) {
+            throw new InvalidArgumentValue('sortField', $locationCreateStruct->sortField, 'LocationCreateStruct');
         }
 
-        if ( $locationCreateStruct->sortOrder !== null && !$this->isValidLocationSortOrder( $locationCreateStruct->sortOrder ) )
-        {
-            throw new InvalidArgumentValue( "sortOrder", $locationCreateStruct->sortOrder, "LocationCreateStruct" );
+        if ($locationCreateStruct->sortOrder !== null && !$this->isValidLocationSortOrder($locationCreateStruct->sortOrder)) {
+            throw new InvalidArgumentValue('sortOrder', $locationCreateStruct->sortOrder, 'LocationCreateStruct');
         }
 
         $remoteId = $locationCreateStruct->remoteId;
-        if ( null === $remoteId )
-        {
-            $remoteId = $this->getUniqueHash( $locationCreateStruct );
-        }
-        else
-        {
-            try
-            {
-                $this->locationHandler->loadByRemoteId( $remoteId );
+        if (null === $remoteId) {
+            $remoteId = $this->getUniqueHash($locationCreateStruct);
+        } else {
+            try {
+                $this->locationHandler->loadByRemoteId($remoteId);
                 throw new InvalidArgumentException(
                     "\$locationCreateStructs",
                     "Another Location with remoteId '{$remoteId}' exists"
                 );
-            }
-            catch ( NotFoundException $e )
-            {
+            } catch (NotFoundException $e) {
                 // Do nothing
             }
         }
 
         return new SPILocationCreateStruct(
             array(
-                "priority" => $locationCreateStruct->priority,
-                "hidden" => $locationCreateStruct->hidden,
+                'priority' => $locationCreateStruct->priority,
+                'hidden' => $locationCreateStruct->hidden,
                 // If we declare the new Location as hidden, it is automatically invisible
                 // Otherwise it picks up visibility from parent Location
                 // Note: There is no need to check for hidden status of parent, as hidden Location
                 // is always invisible as well
-                "invisible" => ( $locationCreateStruct->hidden === true || $parentLocation->invisible ),
-                "remoteId" => $remoteId,
-                "contentId" => $contentId,
-                "contentVersion" => $contentVersionNo,
+                'invisible' => ($locationCreateStruct->hidden === true || $parentLocation->invisible),
+                'remoteId' => $remoteId,
+                'contentId' => $contentId,
+                'contentVersion' => $contentVersionNo,
                 // pathIdentificationString will be set in storage
-                "pathIdentificationString" => null,
-                "mainLocationId" => $mainLocation,
-                "sortField" => $locationCreateStruct->sortField !== null ? $locationCreateStruct->sortField : Location::SORT_FIELD_NAME,
-                "sortOrder" => $locationCreateStruct->sortOrder !== null ? $locationCreateStruct->sortOrder : Location::SORT_ORDER_ASC,
-                "parentId" => $locationCreateStruct->parentLocationId
+                'pathIdentificationString' => null,
+                'mainLocationId' => $mainLocation,
+                'sortField' => $locationCreateStruct->sortField !== null ? $locationCreateStruct->sortField : Location::SORT_FIELD_NAME,
+                'sortOrder' => $locationCreateStruct->sortOrder !== null ? $locationCreateStruct->sortOrder : Location::SORT_ORDER_ASC,
+                'parentId' => $locationCreateStruct->parentLocationId,
             )
         );
     }
@@ -419,10 +393,9 @@ class DomainMapper
      *
      * @return bool
      */
-    public function isValidLocationSortField( $sortField )
+    public function isValidLocationSortField($sortField)
     {
-        switch ( $sortField )
-        {
+        switch ($sortField) {
             case APILocation::SORT_FIELD_PATH:
             case APILocation::SORT_FIELD_PUBLISHED:
             case APILocation::SORT_FIELD_MODIFIED:
@@ -448,10 +421,9 @@ class DomainMapper
      *
      * @return bool
      */
-    public function isValidLocationSortOrder( $sortOrder )
+    public function isValidLocationSortOrder($sortOrder)
     {
-        switch ( $sortOrder )
-        {
+        switch ($sortOrder) {
             case APILocation::SORT_ORDER_DESC:
             case APILocation::SORT_ORDER_ASC:
                 return true;
@@ -467,23 +439,18 @@ class DomainMapper
      *
      * @param mixed $list
      * @param string $argumentName
-     *
-     * @return void
      */
-    public function validateTranslatedList( $list, $argumentName )
+    public function validateTranslatedList($list, $argumentName)
     {
-        if ( !is_array( $list ) )
-        {
-            throw new InvalidArgumentType( $argumentName, "array", $list );
+        if (!is_array($list)) {
+            throw new InvalidArgumentType($argumentName, 'array', $list);
         }
 
-        foreach ( $list as $languageCode => $translation )
-        {
-            $this->contentLanguageHandler->loadByLanguageCode( $languageCode );
+        foreach ($list as $languageCode => $translation) {
+            $this->contentLanguageHandler->loadByLanguageCode($languageCode);
 
-            if ( !is_string( $translation ) )
-            {
-                throw new InvalidArgumentType( $argumentName . "['$languageCode']", "string", $translation );
+            if (!is_string($translation)) {
+                throw new InvalidArgumentType($argumentName . "['$languageCode']", 'string', $translation);
             }
         }
     }
@@ -498,10 +465,11 @@ class DomainMapper
      *
      * @return \DateTime
      */
-    public function getDateTime( $timestamp )
+    public function getDateTime($timestamp)
     {
         $dateTime = new DateTime();
-        $dateTime->setTimestamp( $timestamp );
+        $dateTime->setTimestamp($timestamp);
+
         return $dateTime;
     }
 
@@ -514,8 +482,8 @@ class DomainMapper
      *
      * @return string
      */
-    public function getUniqueHash( $object )
+    public function getUniqueHash($object)
     {
-        return md5( uniqid( get_class( $object ), true ) );
+        return md5(uniqid(get_class($object), true));
     }
 }

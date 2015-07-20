@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the LocaleParameterProvider class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -27,7 +29,7 @@ class LocaleParameterProvider implements ParameterProviderInterface
      */
     protected $localeConverter;
 
-    public function __construct( LocaleConverterInterface $localeConverter )
+    public function __construct(LocaleConverterInterface $localeConverter)
     {
         $this->localeConverter = $localeConverter;
     }
@@ -42,18 +44,15 @@ class LocaleParameterProvider implements ParameterProviderInterface
      *
      * @return array
      */
-    public function getViewParameters( Field $field )
+    public function getViewParameters(Field $field)
     {
         $parameters = array();
 
         $request = $this->getCurrentRequest();
-        if ( $request && $request->attributes->has( '_locale' ) )
-        {
-            $parameters['locale'] = $request->attributes->get( '_locale' );
-        }
-        else
-        {
-            $parameters['locale'] = $this->localeConverter->convertToPOSIX( $field->languageCode );
+        if ($request && $request->attributes->has('_locale')) {
+            $parameters['locale'] = $request->attributes->get('_locale');
+        } else {
+            $parameters['locale'] = $this->localeConverter->convertToPOSIX($field->languageCode);
         }
 
         return $parameters;

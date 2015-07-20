@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ParentOwnerLimitationTest class
+ * File containing the ParentOwnerLimitationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,31 +27,30 @@ class ParentOwnerLimitationTest extends BaseLimitationTest
     /**
      * Tests the ParentOwnerLimitation.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ParentOwnerLimitation
      */
     public function testParentOwnerLimitationAllow()
     {
         $repository = $this->getRepository();
 
-        $parentContentId = $this->generateId( 'content', 58 );
+        $parentContentId = $this->generateId('content', 58);
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         $roleService = $repository->getRoleService();
 
-        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+        $role = $roleService->loadRoleByIdentifier('Editor');
 
-        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new ParentOwnerLimitation(
-                array( 'limitationValues' => array( 1 ) )
+                array('limitationValues' => array(1))
             )
         );
 
-        $role = $roleService->addPolicy( $role, $policyCreate );
+        $role = $roleService->addPolicy($role, $policyCreate);
 
-        $roleService->assignRoleToUser( $role, $user );
+        $roleService->assignRoleToUser($role, $user);
 
         $contentService = $repository->getContentService();
 
@@ -57,25 +58,24 @@ class ParentOwnerLimitationTest extends BaseLimitationTest
         $metadataUpdate->ownerId = $user->id;
 
         $contentService->updateContentMetadata(
-            $contentService->loadContentInfo( $parentContentId ),
+            $contentService->loadContentInfo($parentContentId),
             $metadataUpdate
         );
 
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $draft = $this->createWikiPageDraft();
         /* END: Use Case */
 
         $this->assertEquals(
             'An awesome wiki page',
-            $draft->getFieldValue( 'title' )->text
+            $draft->getFieldValue('title')->text
         );
     }
 
     /**
      * Tests the ParentOwnerLimitation.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ParentOwnerLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
@@ -88,20 +88,20 @@ class ParentOwnerLimitationTest extends BaseLimitationTest
 
         $roleService = $repository->getRoleService();
 
-        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+        $role = $roleService->loadRoleByIdentifier('Editor');
 
-        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new ParentOwnerLimitation(
-                array( 'limitationValues' => array( 1 ) )
+                array('limitationValues' => array(1))
             )
         );
 
-        $role = $roleService->addPolicy( $role, $policyCreate );
+        $role = $roleService->addPolicy($role, $policyCreate);
 
-        $roleService->assignRoleToUser( $role, $user );
+        $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $this->createWikiPageDraft();
         /* END: Use Case */

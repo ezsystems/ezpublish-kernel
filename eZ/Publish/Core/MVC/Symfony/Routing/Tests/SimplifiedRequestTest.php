@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the SimplifiedRequestTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,11 +23,11 @@ class SimplifiedRequestTest extends PHPUnit_Framework_TestCase
      * @dataProvider fromUrlProvider
      * @covers \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest::fromUrl
      */
-    public function testFromUrl( $url, $expectedRequest )
+    public function testFromUrl($url, $expectedRequest)
     {
         self::assertEquals(
             $expectedRequest,
-            SimplifiedRequest::fromUrl( $url )
+            SimplifiedRequest::fromUrl($url)
         );
     }
 
@@ -36,33 +38,33 @@ class SimplifiedRequestTest extends PHPUnit_Framework_TestCase
                 'http://www.example.com/foo/bar',
                 new SimplifiedRequest(
                     array(
-                        'scheme'       => 'http',
-                        'host'         => 'www.example.com',
-                        'pathinfo'     => '/foo/bar'
+                        'scheme' => 'http',
+                        'host' => 'www.example.com',
+                        'pathinfo' => '/foo/bar',
                     )
-                )
+                ),
             ),
             array(
                 'https://www.example.com/',
                 new SimplifiedRequest(
                     array(
-                        'scheme'       => 'https',
-                        'host'         => 'www.example.com',
-                        'pathinfo'     => '/'
+                        'scheme' => 'https',
+                        'host' => 'www.example.com',
+                        'pathinfo' => '/',
                     )
-                )
+                ),
             ),
             array(
                 'http://www.example.com/foo?param=value&this=that',
                 new SimplifiedRequest(
                     array(
-                        'scheme'       => 'http',
-                        'host'         => 'www.example.com',
-                        'pathinfo'     => '/foo',
-                        'queryParams'    => array( 'param' => 'value', 'this' => 'that' )
+                        'scheme' => 'http',
+                        'host' => 'www.example.com',
+                        'pathinfo' => '/foo',
+                        'queryParams' => array('param' => 'value', 'this' => 'that'),
                     )
-                )
-            )
+                ),
+            ),
         );
     }
 }

@@ -1,9 +1,12 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
+ *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace EzSystems\PlatformInstallerBundle\Installer;
 
 use Doctrine\DBAL\Connection;
@@ -17,7 +20,7 @@ class DbBasedInstaller
     /** @var \Symfony\Component\Console\Output\OutputInterface */
     protected $output;
 
-    public function __construct( Connection $db )
+    public function __construct(Connection $db)
     {
         $this->db = $db;
     }
@@ -25,41 +28,38 @@ class DbBasedInstaller
     /**
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    public function setOutput( $output )
+    public function setOutput($output)
     {
         $this->output = $output;
     }
 
-    protected function copyConfigurationFile( $source, $target )
+    protected function copyConfigurationFile($source, $target)
     {
         $fs = new Filesystem();
-        $fs->copy( $source, $target );
+        $fs->copy($source, $target);
 
-        if ( !$this->output->isQuiet() )
-        {
-            $this->output->writeln( "Copied $source to $target" );
+        if (!$this->output->isQuiet()) {
+            $this->output->writeln("Copied $source to $target");
         }
     }
 
-    protected function runQueriesFromFile( $file )
+    protected function runQueriesFromFile($file)
     {
-        $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $file ) ) );
+        $queries = array_filter(preg_split('(;\\s*$)m', file_get_contents($file)));
 
-        if ( !$this->output->isQuiet() )
-        {
+        if (!$this->output->isQuiet()) {
             $this->output->writeln(
                 sprintf(
-                    "Executing %d queries from %s on database %s",
-                    count( $queries ),
+                    'Executing %d queries from %s on database %s',
+                    count($queries),
                     $file,
                     $this->db->getDatabase()
                 )
             );
         }
 
-        foreach ( $queries as $query )
-        {
-            $this->db->exec( $query );
+        foreach ($queries as $query) {
+            $this->db->exec($query);
         }
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -30,7 +32,7 @@ class SearchEngineFactory
      */
     protected $searchEngines = array();
 
-    public function __construct( RepositoryConfigurationProvider $repositoryConfigurationProvider )
+    public function __construct(RepositoryConfigurationProvider $repositoryConfigurationProvider)
     {
         $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
     }
@@ -43,7 +45,7 @@ class SearchEngineFactory
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param string $searchEngineIdentifier
      */
-    public function registerSearchEngine( SearchHandler $searchHandler, $searchEngineIdentifier )
+    public function registerSearchEngine(SearchHandler $searchHandler, $searchEngineIdentifier)
     {
         $this->searchEngines[$searchEngineIdentifier] = $searchHandler;
     }
@@ -72,11 +74,10 @@ class SearchEngineFactory
 
         if (
             !(
-                isset( $repositoryConfig['search']['engine'] )
-                && isset( $this->searchEngines[$repositoryConfig['search']['engine']] )
+                isset($repositoryConfig['search']['engine'])
+                && isset($this->searchEngines[$repositoryConfig['search']['engine']])
             )
-        )
-        {
+        ) {
             throw new InvalidSearchEngine(
                 "Invalid search engine '{$repositoryConfig['search']['engine']}'. " .
                 "Could not find a service tagged as 'ezpublish.searchEngine' " .

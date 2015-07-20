@@ -1,9 +1,11 @@
 <?php
+
 /**
- * LanguageService class
+ * LanguageService class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,27 +21,26 @@ use eZ\Publish\Core\SignalSlot\Signal\LanguageService\DisableLanguageSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LanguageService\DeleteLanguageSignal;
 
 /**
- * LanguageService class
- * @package eZ\Publish\Core\SignalSlot
+ * LanguageService class.
  */
 class LanguageService implements LanguageServiceInterface
 {
     /**
-     * Aggregated service
+     * Aggregated service.
      *
      * @var \eZ\Publish\API\Repository\LanguageService
      */
     protected $service;
 
     /**
-     * SignalDispatcher
+     * SignalDispatcher.
      *
      * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * Construct service object from aggregated service and signal
      * dispatcher
@@ -47,14 +48,14 @@ class LanguageService implements LanguageServiceInterface
      * @param \eZ\Publish\API\Repository\LanguageService $service
      * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
      */
-    public function __construct( LanguageServiceInterface $service, SignalDispatcher $signalDispatcher )
+    public function __construct(LanguageServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->signalDispatcher = $signalDispatcher;
     }
 
     /**
-     * Creates the a new Language in the content repository
+     * Creates the a new Language in the content repository.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the languageCode already exists
@@ -63,9 +64,9 @@ class LanguageService implements LanguageServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      */
-    public function createLanguage( LanguageCreateStruct $languageCreateStruct )
+    public function createLanguage(LanguageCreateStruct $languageCreateStruct)
     {
-        $returnValue = $this->service->createLanguage( $languageCreateStruct );
+        $returnValue = $this->service->createLanguage($languageCreateStruct);
         $this->signalDispatcher->emit(
             new CreateLanguageSignal(
                 array(
@@ -73,11 +74,12 @@ class LanguageService implements LanguageServiceInterface
                 )
             )
         );
+
         return $returnValue;
     }
 
     /**
-     * Changes the name of the language in the content repository
+     * Changes the name of the language in the content repository.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
@@ -86,9 +88,9 @@ class LanguageService implements LanguageServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      */
-    public function updateLanguageName( Language $language, $newName )
+    public function updateLanguageName(Language $language, $newName)
     {
-        $returnValue = $this->service->updateLanguageName( $language, $newName );
+        $returnValue = $this->service->updateLanguageName($language, $newName);
         $this->signalDispatcher->emit(
             new UpdateLanguageNameSignal(
                 array(
@@ -97,11 +99,12 @@ class LanguageService implements LanguageServiceInterface
                 )
             )
         );
+
         return $returnValue;
     }
 
     /**
-     * Enables a language
+     * Enables a language.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
@@ -109,9 +112,9 @@ class LanguageService implements LanguageServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      */
-    public function enableLanguage( Language $language )
+    public function enableLanguage(Language $language)
     {
-        $returnValue = $this->service->enableLanguage( $language );
+        $returnValue = $this->service->enableLanguage($language);
         $this->signalDispatcher->emit(
             new EnableLanguageSignal(
                 array(
@@ -119,11 +122,12 @@ class LanguageService implements LanguageServiceInterface
                 )
             )
         );
+
         return $returnValue;
     }
 
     /**
-     * Disables a language
+     * Disables a language.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
@@ -131,9 +135,9 @@ class LanguageService implements LanguageServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      */
-    public function disableLanguage( Language $language )
+    public function disableLanguage(Language $language)
     {
-        $returnValue = $this->service->disableLanguage( $language );
+        $returnValue = $this->service->disableLanguage($language);
         $this->signalDispatcher->emit(
             new DisableLanguageSignal(
                 array(
@@ -141,11 +145,12 @@ class LanguageService implements LanguageServiceInterface
                 )
             )
         );
+
         return $returnValue;
     }
 
     /**
-     * Loads a Language from its language code ($languageCode)
+     * Loads a Language from its language code ($languageCode).
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if language could not be found
      *
@@ -153,13 +158,13 @@ class LanguageService implements LanguageServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      */
-    public function loadLanguage( $languageCode )
+    public function loadLanguage($languageCode)
     {
-        return $this->service->loadLanguage( $languageCode );
+        return $this->service->loadLanguage($languageCode);
     }
 
     /**
-     * Loads all Languages
+     * Loads all Languages.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language[]
      */
@@ -169,7 +174,7 @@ class LanguageService implements LanguageServiceInterface
     }
 
     /**
-     * Loads a Language by its id ($languageId)
+     * Loads a Language by its id ($languageId).
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if language could not be found
      *
@@ -177,13 +182,13 @@ class LanguageService implements LanguageServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      */
-    public function loadLanguageById( $languageId )
+    public function loadLanguageById($languageId)
     {
-        return $this->service->loadLanguageById( $languageId );
+        return $this->service->loadLanguageById($languageId);
     }
 
     /**
-     * Deletes  a language from content repository
+     * Deletes  a language from content repository.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *         if language can not be deleted
@@ -192,9 +197,9 @@ class LanguageService implements LanguageServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      */
-    public function deleteLanguage( Language $language )
+    public function deleteLanguage(Language $language)
     {
-        $returnValue = $this->service->deleteLanguage( $language );
+        $returnValue = $this->service->deleteLanguage($language);
         $this->signalDispatcher->emit(
             new DeleteLanguageSignal(
                 array(
@@ -202,11 +207,12 @@ class LanguageService implements LanguageServiceInterface
                 )
             )
         );
+
         return $returnValue;
     }
 
     /**
-     * Returns a configured default language code
+     * Returns a configured default language code.
      *
      * @return string
      */
@@ -216,7 +222,7 @@ class LanguageService implements LanguageServiceInterface
     }
 
     /**
-     * Instantiates an object to be used for creating languages
+     * Instantiates an object to be used for creating languages.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
      */

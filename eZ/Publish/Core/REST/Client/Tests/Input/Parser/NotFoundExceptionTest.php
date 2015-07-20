@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a NotFoundExceptionTest class
+ * File containing a NotFoundExceptionTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\Core\REST\Client\Input\Parser;
 class NotFoundExceptionTest extends BaseTest
 {
     /**
-     * Tests parsing of NotFoundException
+     * Tests parsing of NotFoundException.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @expectedExceptionMessage Section with ID "23" not found.
@@ -25,14 +27,14 @@ class NotFoundExceptionTest extends BaseTest
 
         $inputArray = array(
             'errorDescription' => 'Section with ID "23" not found.',
-            'errorCode'        => '404',
+            'errorCode' => '404',
         );
 
-        $parser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $parser->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Gets the parser for error message
+     * Gets the parser for error message.
      *
      * @return \eZ\Publish\Core\REST\Client\Input\Parser\ErrorMessage;
      */

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,23 +20,23 @@ use eZ\Publish\Core\Search\Common\Slot;
 class PublishVersion extends Slot
 {
     /**
-     * Receive the given $signal and react on it
+     * Receive the given $signal and react on it.
      *
      * @param \eZ\Publish\Core\SignalSlot\Signal $signal
      */
-    public function receive( Signal $signal )
+    public function receive(Signal $signal)
     {
-        if ( !$signal instanceof Signal\ContentService\PublishVersionSignal )
+        if (!$signal instanceof Signal\ContentService\PublishVersionSignal) {
             return;
+        }
 
         $this->searchHandler->contentSearchHandler()->indexContent(
-            $this->persistenceHandler->contentHandler()->load( $signal->contentId, $signal->versionNo )
+            $this->persistenceHandler->contentHandler()->load($signal->contentId, $signal->versionNo)
         );
 
-        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $signal->contentId );
-        foreach ( $locations as $location )
-        {
-            $this->searchHandler->locationSearchHandler()->indexLocation( $location );
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($signal->contentId);
+        foreach ($locations as $location) {
+            $this->searchHandler->locationSearchHandler()->indexLocation($location);
         }
     }
 }

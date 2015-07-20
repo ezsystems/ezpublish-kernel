@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Functional\ContentTest class
+ * File containing the Functional\ContentTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,15 +15,15 @@ use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTes
 
 class ContentTest extends RESTFunctionalTestCase
 {
-
     /**
      * @covers POST /content/objects
+     *
      * @return string REST content ID
      */
     public function testCreateContent()
     {
-        $request = $this->createHttpRequest( "POST", "/api/ezp/v2/content/objects", 'ContentCreate+xml', 'ContentInfo+json' );
-        $string = $this->addTestSuffix( __FUNCTION__ );
+        $request = $this->createHttpRequest('POST', '/api/ezp/v2/content/objects', 'ContentCreate+xml', 'ContentInfo+json');
+        $string = $this->addTestSuffix(__FUNCTION__);
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentCreate>
@@ -48,29 +50,31 @@ class ContentTest extends RESTFunctionalTestCase
   </fields>
 </ContentCreate>
 XML;
-        $request->setContent( $body );
+        $request->setContent($body);
 
-        $response = $this->sendHttpRequest( $request );
+        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals( $response, 201 );
-        self::assertHttpResponseHasHeader( $response, 'Location' );
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader( 'Location' );
-        $this->addCreatedElement( $href );
+        $href = $response->getHeader('Location');
+        $this->addCreatedElement($href);
+
         return $href;
     }
 
     /**
      * @depends testCreateContent
      * @covers PUBLISH /content/objects/<contentId>/versions/<versionNumber>
+     *
      * @return string REST content ID
      */
-    public function testPublishContent( $restContentHref )
+    public function testPublishContent($restContentHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'PUBLISH', "$restContentHref/versions/1" )
+            $this->createHttpRequest('PUBLISH', "$restContentHref/versions/1")
         );
-        self::assertHttpResponseCodeEquals( $response, 204 );
+        self::assertHttpResponseCodeEquals($response, 204);
 
         return $restContentHref;
     }
@@ -79,35 +83,35 @@ XML;
      * @depends testPublishContent
      * @covers GET /content/objects?remoteId=<remoteId>
      */
-    public function testRedirectContent( $restContentHref )
+    public function testRedirectContent($restContentHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'GET', '/api/ezp/v2/content/objects?remoteId=' . $this->addTestSuffix( 'testCreateContent' ) )
+            $this->createHttpRequest('GET', '/api/ezp/v2/content/objects?remoteId=' . $this->addTestSuffix('testCreateContent'))
         );
 
-        self::assertHttpResponseCodeEquals( $response, 307 );
-        self::assertEquals( $response->getHeader( 'Location' ), $restContentHref );
+        self::assertHttpResponseCodeEquals($response, 307);
+        self::assertEquals($response->getHeader('Location'), $restContentHref);
     }
 
     /**
      * @depends testPublishContent
      */
-    public function testLoadContent( $restContentHref )
+    public function testLoadContent($restContentHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'GET', $restContentHref )
+            $this->createHttpRequest('GET', $restContentHref)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
         // @todo test data a bit ?
     }
 
     /**
      * @depends testPublishContent
      */
-    public function testUpdateContentMetadata( $restContentHref )
+    public function testUpdateContentMetadata($restContentHref)
     {
-        $string = $this->addTestSuffix( __FUNCTION__ );
+        $string = $this->addTestSuffix(__FUNCTION__);
         $content = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentUpdate>
@@ -115,28 +119,29 @@ XML;
   <remoteId>{$string}</remoteId>
 </ContentUpdate>
 XML;
-        $request = $this->createHttpRequest( 'PATCH', $restContentHref, "ContentUpdate+xml", "ContentInfo+json" );
-        $request->setContent( $content );
-        $response = $this->sendHttpRequest( $request );
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        $request = $this->createHttpRequest('PATCH', $restContentHref, 'ContentUpdate+xml', 'ContentInfo+json');
+        $request->setContent($content);
+        $response = $this->sendHttpRequest($request);
+        self::assertHttpResponseCodeEquals($response, 200);
 
         // @todo test data
     }
 
     /**
      * @depends testPublishContent
+     *
      * @return string ContentVersion REST ID
      */
-    public function testCreateDraftFromVersion( $restContentHref )
+    public function testCreateDraftFromVersion($restContentHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'COPY', "{$restContentHref}/versions/1" )
+            $this->createHttpRequest('COPY', "{$restContentHref}/versions/1")
         );
 
-        self::assertHttpResponseCodeEquals( $response, 201 );
-        self::assertEquals( $response->getHeader( 'Location' ), "{$restContentHref}/versions/2" );
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertEquals($response->getHeader('Location'), "{$restContentHref}/versions/2");
 
-        return $response->getHeader( 'Location' );
+        return $response->getHeader('Location');
     }
 
     /**
@@ -144,29 +149,30 @@ XML;
      * @covers GET /content/objects/<contentId>/currentversion
      * @covers \eZ\Publish\Core\REST\Server\Controller\Content::redirectCurrentVersion
      */
-    public function testRedirectCurrentVersion( $restContentHref )
+    public function testRedirectCurrentVersion($restContentHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'GET', "$restContentHref/currentversion" )
+            $this->createHttpRequest('GET', "$restContentHref/currentversion")
         );
 
-        self::assertHttpResponseCodeEquals( $response, 307 );
+        self::assertHttpResponseCodeEquals($response, 307);
 
-        self::assertHttpResponseHasHeader( $response, 'Location', "$restContentHref/versions/1" );
+        self::assertHttpResponseHasHeader($response, 'Location', "$restContentHref/versions/1");
     }
 
     /**
      * @depends testCreateDraftFromVersion
      * @covers GET /content/objects/<contentId>/versions/<versionNumber>
+     *
      * @param string $restContentVersionHref
      */
-    public function testLoadContentVersion( $restContentVersionHref )
+    public function testLoadContentVersion($restContentVersionHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'GET', $restContentVersionHref )
+            $this->createHttpRequest('GET', $restContentVersionHref)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
         // @todo test data
         // @todo test filtering (language, fields, etc)
     }
@@ -174,89 +180,94 @@ XML;
     /**
      * @covers COPY /content/objects/<contentId>
      * @depends testPublishContent
+     *
      * @return string the copied content href
      */
-    public function testCopyContent( $restContentHref )
+    public function testCopyContent($restContentHref)
     {
-        $testContent = $this->loadContent( $restContentHref );
+        $testContent = $this->loadContent($restContentHref);
 
-        $request = $this->createHttpRequest( 'COPY', $restContentHref );
-        $request->addHeader( 'Destination: ' . $testContent['MainLocation']['_href'] );
+        $request = $this->createHttpRequest('COPY', $restContentHref);
+        $request->addHeader('Destination: ' . $testContent['MainLocation']['_href']);
 
-        $response = $this->sendHttpRequest( $request );
+        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals( $response, 201 );
-        self::assertStringStartsWith( "/api/ezp/v2/content/objects/", $response->getHeader( 'Location' ) );
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertStringStartsWith('/api/ezp/v2/content/objects/', $response->getHeader('Location'));
 
-        $this->addCreatedElement( $response->getHeader( 'Location' ) );
+        $this->addCreatedElement($response->getHeader('Location'));
 
-        return $response->getHeader( 'Location' );
+        return $response->getHeader('Location');
     }
 
     /**
      * @covers DELETE /content/objects/<versionNumber>
      * @depends testCopyContent
      */
-    public function testDeleteContent( $restContentHref )
+    public function testDeleteContent($restContentHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'DELETE', $restContentHref )
+            $this->createHttpRequest('DELETE', $restContentHref)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 204 );
+        self::assertHttpResponseCodeEquals($response, 204);
     }
 
     /**
      * @depends testPublishContent
      * @covers GET /content/objects/<contentId>/versions
      */
-    public function testLoadContentVersions( $restContentHref )
+    public function testLoadContentVersions($restContentHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'GET', "$restContentHref/versions", '', 'VersionList' )
+            $this->createHttpRequest('GET', "$restContentHref/versions", '', 'VersionList')
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @depends testPublishContent
+     *
      * @param string $restContentHref /content/objects/<contentId>
      * @covers COPY /content/objects/<contentId>/currentversion
+     *
      * @return string the ID of the created version (/content/objects/<contentId>/versions/<versionNumber>
      */
-    public function testCreateDraftFromCurrentVersion( $restContentHref )
+    public function testCreateDraftFromCurrentVersion($restContentHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'COPY', "$restContentHref/currentversion" )
+            $this->createHttpRequest('COPY', "$restContentHref/currentversion")
         );
 
-        self::assertHttpResponseCodeEquals( $response, 201 );
-        self::assertHttpResponseHasHeader( $response, 'Location' );
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
 
-        return $response->getHeader( 'Location' );
+        return $response->getHeader('Location');
     }
 
     /**
      * @depends testCreateDraftFromCurrentVersion
+     *
      * @param string $restContentVersionHref /api/ezp/v2/content/objects/<contentId>/versions>/<versionNumber>
      * @covers DELETE /api/ezp/v2/content/objects/<contentId>/versions>/<versionNumber>
      */
-    public function testDeleteContentVersion( $restContentVersionHref )
+    public function testDeleteContentVersion($restContentVersionHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'DELETE', $restContentVersionHref )
+            $this->createHttpRequest('DELETE', $restContentVersionHref)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 204 );
+        self::assertHttpResponseCodeEquals($response, 204);
     }
 
     /**
      * @depends testCreateDraftFromVersion
      * @covers PATCH /content/objects/<contentId>/versions>/<versionNumber>
+     *
      * @param string $restContentVersionHref /content/objects/<contentId>/versions>/<versionNumber>
      */
-    public function testUpdateVersion( $restContentVersionHref )
+    public function testUpdateVersion($restContentVersionHref)
     {
         $xml = <<< XML
 <VersionUpdate>
@@ -270,52 +281,53 @@ XML;
 </VersionUpdate>
 XML;
 
-        $request = $this->createHttpRequest( 'PATCH', $restContentVersionHref, 'VersionUpdate+xml', 'Version+json' );
-        $request->setContent( $xml );
+        $request = $this->createHttpRequest('PATCH', $restContentVersionHref, 'VersionUpdate+xml', 'Version+json');
+        $request->setContent($xml);
         $response = $this->sendHttpRequest(
             $request
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @depends testPublishContent
      * @covers GET /content/objects/<contentId>/relations
      */
-    public function testRedirectCurrentVersionRelations( $restContentHref )
+    public function testRedirectCurrentVersionRelations($restContentHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'GET', "$restContentHref/relations" )
+            $this->createHttpRequest('GET', "$restContentHref/relations")
         );
 
-        self::assertHttpResponseCodeEquals( $response, 307 );
+        self::assertHttpResponseCodeEquals($response, 307);
 
         // @todo Fix, see EZP-21059. Meanwhile, the test is skipped if it fails as expected
         // self::assertHttpResponseHasHeader( $response, 'Location', "$restContentHref/versions/1/relations" );
-        self::assertHttpResponseHasHeader( $response, 'Location', "$restContentHref/relations?versionNumber=1" );
-        self::markTestIncomplete( "@todo Fix issue EZP-21059" );
+        self::assertHttpResponseHasHeader($response, 'Location', "$restContentHref/relations?versionNumber=1");
+        self::markTestIncomplete('@todo Fix issue EZP-21059');
     }
 
     /**
      * @depends testCreateDraftFromVersion
      * @covers GET /content/objects/<contentId>/versions/<versionNumber>/relations
      */
-    public function testLoadVersionRelations( $restContentVersionHref )
+    public function testLoadVersionRelations($restContentVersionHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'GET', "$restContentVersionHref/relations" )
+            $this->createHttpRequest('GET', "$restContentVersionHref/relations")
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @depends testCreateDraftFromVersion
      * @covers POST /content/objects/<contentId>/versions/<versionNumber>/relations/<relationId>
+     *
      * @return string created relation HREF (/content/objects/<contentId>/versions/<versionNumber>/relations/<relationId>
      */
-    public function testCreateRelation( $restContentVersionHref )
+    public function testCreateRelation($restContentVersionHref)
     {
         $content = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -324,14 +336,15 @@ XML;
 </RelationCreate>
 XML;
 
-        $request = $this->createHttpRequest( 'POST', "$restContentVersionHref/relations", 'RelationCreate+xml', 'Relation+json' );
-        $request->setContent( $content );
+        $request = $this->createHttpRequest('POST', "$restContentVersionHref/relations", 'RelationCreate+xml', 'Relation+json');
+        $request->setContent($content);
 
-        $response = $this->sendHttpRequest( $request );
+        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals( $response, 201 );
+        self::assertHttpResponseCodeEquals($response, 201);
 
-        $response = json_decode( $response->getContent(), true );
+        $response = json_decode($response->getContent(), true);
+
         return $response['Relation']['_href'];
     }
 
@@ -339,41 +352,42 @@ XML;
      * @depends testCreateRelation
      * @covers GET /content/objects/<contentId>/versions/<versionNo>/relations/<relationId>
      */
-    public function testLoadVersionRelation( $restContentRelationHref )
+    public function testLoadVersionRelation($restContentRelationHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'GET', $restContentRelationHref )
+            $this->createHttpRequest('GET', $restContentRelationHref)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
 
         // @todo test data
     }
 
     /**
-     * Returns the Content key from the decoded JSON of $restContentId's contentInfo
+     * Returns the Content key from the decoded JSON of $restContentId's contentInfo.
      *
      *
      * @throws \InvalidArgumentException
+     *
      * @param string $restContentHref /api/ezp/v2/content/objects/<contentId>
+     *
      * @return array
      */
-    private function loadContent( $restContentHref )
+    private function loadContent($restContentHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'GET', $restContentHref, '', 'ContentInfo+json' )
+            $this->createHttpRequest('GET', $restContentHref, '', 'ContentInfo+json')
         );
 
-        if ( $response->getStatusCode() != 200 )
-        {
-            throw new \InvalidArgumentException( "Content with ID $restContentHref could not be loaded" );
+        if ($response->getStatusCode() != 200) {
+            throw new \InvalidArgumentException("Content with ID $restContentHref could not be loaded");
         }
 
-        $array = json_decode( $response->getContent(), true );
-        if ( $array === null )
-        {
-            self::fail( "Error loading content. Response: " . $response->getContent() );
+        $array = json_decode($response->getContent(), true);
+        if ($array === null) {
+            self::fail('Error loading content. Response: ' . $response->getContent());
         }
+
         return $array['Content'];
     }
 
@@ -392,18 +406,18 @@ XML;
   </Query>
 </ViewInput>
 XML;
-        $request = $this->createHttpRequest( 'POST', '/api/ezp/v2/content/views', 'ViewInput+xml', 'View+json' );
-        $request->setContent( $body );
+        $request = $this->createHttpRequest('POST', '/api/ezp/v2/content/views', 'ViewInput+xml', 'View+json');
+        $request->setContent($body);
         $response = $this->sendHttpRequest(
             $request
         );
 
         // @todo Fix
         // self::assertHttpResponseCodeEquals( $response, 201 );
-        self::assertHttpResponseCodeEquals( $response, 200 );
-        self::markTestIncomplete( "Should be 201, but is 200 temporarily, since it doesn't actually create (doesn't match specs)" );
+        self::assertHttpResponseCodeEquals($response, 200);
+        self::markTestIncomplete("Should be 201, but is 200 temporarily, since it doesn't actually create (doesn't match specs)");
 
-        self::assertHttpResponseHasHeader( $response, 'Location' );
+        self::assertHttpResponseHasHeader($response, 'Location');
         // @todo test data
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Docbook validation test
+ * File containing the Docbook validation test.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -27,7 +29,7 @@ class DocbookTest extends PHPUnit_Framework_TestCase
 </section>
 ',
                 array(
-                    "link must not occur in the descendants of link",
+                    'link must not occur in the descendants of link',
                 ),
             ),
             array(
@@ -39,7 +41,7 @@ class DocbookTest extends PHPUnit_Framework_TestCase
 </section>
 ',
                 array(
-                    "ezlink must not occur in the descendants of link",
+                    'ezlink must not occur in the descendants of link',
                 ),
             ),
         );
@@ -48,19 +50,18 @@ class DocbookTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider providerForTestValidate
      */
-    public function testValidate( $input, $expectedErrors )
+    public function testValidate($input, $expectedErrors)
     {
         $document = new DOMDocument();
-        $document->loadXML( $input );
+        $document->loadXML($input);
 
         $validator = $this->getConversionValidator();
-        $errors = $validator->validate( $document );
+        $errors = $validator->validate($document);
 
-        $this->assertEquals( count( $expectedErrors ), count( $errors ) );
+        $this->assertEquals(count($expectedErrors), count($errors));
 
-        foreach ( $errors as $index => $error )
-        {
-            $this->assertStringEndsWith( $expectedErrors[$index], $error );
+        foreach ($errors as $index => $error) {
+            $this->assertStringEndsWith($expectedErrors[$index], $error);
         }
     }
 
@@ -75,9 +76,8 @@ class DocbookTest extends PHPUnit_Framework_TestCase
     protected function getConversionValidator()
     {
         $validationSchema = $this->getConversionValidationSchemas();
-        if ( $validationSchema !== null && $this->validator === null )
-        {
-            $this->validator = new Validator( $validationSchema );
+        if ($validationSchema !== null && $this->validator === null) {
+            $this->validator = new Validator($validationSchema);
         }
 
         return $this->validator;
@@ -91,8 +91,8 @@ class DocbookTest extends PHPUnit_Framework_TestCase
     protected function getConversionValidationSchemas()
     {
         return array(
-            __DIR__ . "/../../../RichText/Resources/schemas/docbook/ezpublish.rng",
-            __DIR__ . "/../../../RichText/Resources/schemas/docbook/docbook.iso.sch.xsl",
+            __DIR__ . '/../../../RichText/Resources/schemas/docbook/ezpublish.rng',
+            __DIR__ . '/../../../RichText/Resources/schemas/docbook/docbook.iso.sch.xsl',
         );
     }
 }

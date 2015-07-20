@@ -1,14 +1,15 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace eZ\Publish\Core\IO\IOBinarydataHandler;
 
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
-use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
 use eZ\Publish\Core\IO\IOBinarydataHandler;
 use eZ\Publish\Core\IO\UrlDecorator;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
@@ -27,93 +28,82 @@ class Flysystem implements IOBinaryDataHandler
      */
     private $urlDecorator;
 
-    public function __construct( FilesystemInterface $filesystem, UrlDecorator $urlDecorator = null )
+    public function __construct(FilesystemInterface $filesystem, UrlDecorator $urlDecorator = null)
     {
         $this->filesystem = $filesystem;
         $this->urlDecorator = $urlDecorator;
     }
 
-    public function create( BinaryFileCreateStruct $binaryFileCreateStruct )
+    public function create(BinaryFileCreateStruct $binaryFileCreateStruct)
     {
-        try
-        {
+        try {
             $this->filesystem->writeStream(
                 $binaryFileCreateStruct->id,
                 $binaryFileCreateStruct->getInputStream(),
                 array(
                     'mimetype' => $binaryFileCreateStruct->mimeType,
-                    'visibility' => AdapterInterface::VISIBILITY_PUBLIC
+                    'visibility' => AdapterInterface::VISIBILITY_PUBLIC,
                 )
             );
-        }
-        catch ( FileExistsException $e )
-        {
+        } catch (FileExistsException $e) {
             $this->filesystem->updateStream(
                 $binaryFileCreateStruct->id,
                 $binaryFileCreateStruct->getInputStream(),
                 array(
                     'mimetype' => $binaryFileCreateStruct->mimeType,
-                    'visibility' => AdapterInterface::VISIBILITY_PUBLIC
+                    'visibility' => AdapterInterface::VISIBILITY_PUBLIC,
                 )
             );
         }
     }
 
-    public function delete( $spiBinaryFileId )
+    public function delete($spiBinaryFileId)
     {
-        try
-        {
-            $this->filesystem->delete( $spiBinaryFileId );
-        }
-        catch ( FlysystemNotFoundException $e )
-        {
-            throw new BinaryFileNotFoundException( $spiBinaryFileId, $e );
+        try {
+            $this->filesystem->delete($spiBinaryFileId);
+        } catch (FlysystemNotFoundException $e) {
+            throw new BinaryFileNotFoundException($spiBinaryFileId, $e);
         }
     }
 
-    public function getContents( $spiBinaryFileId )
+    public function getContents($spiBinaryFileId)
     {
-        try
-        {
-            return $this->filesystem->read( $spiBinaryFileId );
-        }
-        catch ( FlysystemNotFoundException $e )
-        {
-            throw new BinaryFileNotFoundException( $spiBinaryFileId, $e );
+        try {
+            return $this->filesystem->read($spiBinaryFileId);
+        } catch (FlysystemNotFoundException $e) {
+            throw new BinaryFileNotFoundException($spiBinaryFileId, $e);
         }
     }
 
-    public function getResource( $spiBinaryFileId )
+    public function getResource($spiBinaryFileId)
     {
-        try
-        {
-            return $this->filesystem->readStream( $spiBinaryFileId );
-        }
-        catch ( FlysystemNotFoundException $e )
-        {
-            throw new BinaryFileNotFoundException( $spiBinaryFileId, $e );
+        try {
+            return $this->filesystem->readStream($spiBinaryFileId);
+        } catch (FlysystemNotFoundException $e) {
+            throw new BinaryFileNotFoundException($spiBinaryFileId, $e);
         }
     }
 
-    public function getUri( $spiBinaryFileId )
+    public function getUri($spiBinaryFileId)
     {
-        if ( isset( $this->urlDecorator ) )
-            return $this->urlDecorator->decorate( $spiBinaryFileId );
-        else
-            return '/'. $spiBinaryFileId;
+        if (isset($this->urlDecorator)) {
+            return $this->urlDecorator->decorate($spiBinaryFileId);
+        } else {
+            return '/' . $spiBinaryFileId;
+        }
     }
 
-    public function getIdFromUri( $binaryFileUri )
+    public function getIdFromUri($binaryFileUri)
     {
-        if ( isset( $this->urlDecorator ) )
-            return $this->urlDecorator->undecorate( $binaryFileUri );
-        else
-            return ltrim( $binaryFileUri, '/' );
-
+        if (isset($this->urlDecorator)) {
+            return $this->urlDecorator->undecorate($binaryFileUri);
+        } else {
+            return ltrim($binaryFileUri, '/');
+        }
     }
 
-    public function deleteDirectory( $spiPath )
+    public function deleteDirectory($spiPath)
     {
-        $this->filesystem->deleteDir( $spiPath );
+        $this->filesystem->deleteDir($spiPath);
     }
 }

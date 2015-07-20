@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the View\Provider\Content interface.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,12 +21,12 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 interface Content
 {
     /**
-     * Returns a ContentView object corresponding to $contentInfo, or null if not applicable
+     * Returns a ContentView object corresponding to $contentInfo, or null if not applicable.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param string $viewType Variation of display for your content
      *
      * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|null
      */
-    public function getView( ContentInfo $contentInfo, $viewType );
+    public function getView(ContentInfo $contentInfo, $viewType);
 }

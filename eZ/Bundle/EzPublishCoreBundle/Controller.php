@@ -1,16 +1,17 @@
 <?php
+
 /**
  * File containing the Controller class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Bundle\EzPublishCoreBundle;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
-use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 
 class Controller extends BaseController
 {
@@ -21,7 +22,7 @@ class Controller extends BaseController
      */
     public function getRepository()
     {
-        return $this->container->get( 'ezpublish.api.repository' );
+        return $this->container->get('ezpublish.api.repository');
     }
 
     /**
@@ -29,7 +30,7 @@ class Controller extends BaseController
      */
     protected function getConfigResolver()
     {
-        return $this->container->get( 'ezpublish.config.resolver' );
+        return $this->container->get('ezpublish.config.resolver');
     }
 
     /**
@@ -39,7 +40,7 @@ class Controller extends BaseController
      */
     public function getGlobalHelper()
     {
-        return $this->container->get( 'ezpublish.templating.global_helper' );
+        return $this->container->get('ezpublish.templating.global_helper');
     }
 
     /**

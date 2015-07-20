@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ConfigSuggesterInterface class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,7 +23,7 @@ interface SuggestionCollectorInterface
      *
      * @param \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\ConfigSuggestion $suggestion
      */
-    public function addSuggestion( ConfigSuggestion $suggestion );
+    public function addSuggestion(ConfigSuggestion $suggestion);
 
     /**
      * Returns all config suggestions.
@@ -31,7 +33,7 @@ interface SuggestionCollectorInterface
     public function getSuggestions();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasSuggestions();
 }

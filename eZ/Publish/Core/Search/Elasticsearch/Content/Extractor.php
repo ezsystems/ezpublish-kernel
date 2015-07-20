@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Elasticsearch base Extractor class
+ * File containing the Elasticsearch base Extractor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,7 +13,6 @@ namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor;
 
 /**
  * Abstract implementation of Search Extractor, which extracts search result
@@ -20,13 +21,13 @@ use eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor;
 abstract class Extractor
 {
     /**
-     * Facet builder visitor
+     * Facet builder visitor.
      *
      * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor
      */
     protected $facetBuilderVisitor;
 
-    public function __construct( FacetBuilderVisitor $facetBuilderVisitor )
+    public function __construct(FacetBuilderVisitor $facetBuilderVisitor)
     {
         $this->facetBuilderVisitor = $facetBuilderVisitor;
     }
@@ -38,20 +39,18 @@ abstract class Extractor
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function extract( $data )
+    public function extract($data)
     {
         $result = new SearchResult(
             array(
-                "time" => $data->took,
-                "maxScore" => $data->hits->max_score,
-                "totalCount" => $data->hits->total,
+                'time' => $data->took,
+                'maxScore' => $data->hits->max_score,
+                'totalCount' => $data->hits->total,
             )
         );
 
-        if ( isset( $data->aggregations ) )
-        {
-            foreach ( $data->aggregations as $name => $aggregationData )
-            {
+        if (isset($data->aggregations)) {
+            foreach ($data->aggregations as $name => $aggregationData) {
                 $result->facets[] = $this->facetBuilderVisitor->map(
                     $name,
                     $aggregationData
@@ -59,12 +58,11 @@ abstract class Extractor
             }
         }
 
-        foreach ( $data->hits->hits as $hit )
-        {
+        foreach ($data->hits->hits as $hit) {
             $searchHit = new SearchHit(
                 array(
-                    "score" => $hit->_score,
-                    "valueObject" => $this->extractHit( $hit ),
+                    'score' => $hit->_score,
+                    'valueObject' => $this->extractHit($hit),
                 )
             );
             $result->searchHits[] = $searchHit;
@@ -82,5 +80,5 @@ abstract class Extractor
      *
      * @return \eZ\Publish\API\Repository\Values\ValueObject
      */
-    abstract public function extractHit( $hit );
+    abstract public function extractHit($hit);
 }

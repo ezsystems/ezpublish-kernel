@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the UrlTest class
+ * File containing the UrlTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,7 +19,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldD
 use PHPUnit_Framework_TestCase;
 
 /**
- * Test case for Url converter in Legacy storage
+ * Test case for Url converter in Legacy storage.
  */
 class UrlTest extends PHPUnit_Framework_TestCase
 {
@@ -29,7 +31,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->converter = new UrlConverter;
+        $this->converter = new UrlConverter();
     }
 
     /**
@@ -39,15 +41,15 @@ class UrlTest extends PHPUnit_Framework_TestCase
      */
     public function testToStorageValue()
     {
-        $value = new FieldValue;
-        $text = "eZ Systems";
-        $value->data = array( "text" => $text );
-        $value->externalData = "http://ez.no/";
+        $value = new FieldValue();
+        $text = 'eZ Systems';
+        $value->data = array('text' => $text);
+        $value->externalData = 'http://ez.no/';
         $value->sortKey = false;
-        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue = new StorageFieldValue();
 
-        $this->converter->toStorageValue( $value, $storageFieldValue );
-        self::assertSame( $text, $storageFieldValue->dataText );
+        $this->converter->toStorageValue($value, $storageFieldValue);
+        self::assertSame($text, $storageFieldValue->dataText);
     }
 
     /**
@@ -59,18 +61,18 @@ class UrlTest extends PHPUnit_Framework_TestCase
     {
         $text = "A link's text";
         $urlId = 842;
-        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue = new StorageFieldValue();
         $storageFieldValue->dataText = $text;
         $storageFieldValue->dataInt = $urlId;
         $storageFieldValue->sortKeyString = false;
         $storageFieldValue->sortKeyInt = false;
-        $fieldValue = new FieldValue;
+        $fieldValue = new FieldValue();
 
-        $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInternalType( "array", $fieldValue->data );
-        self::assertFalse( $fieldValue->sortKey );
-        self::assertSame( $text, $fieldValue->data["text"] );
-        self::assertEquals( $urlId, $fieldValue->data["urlId"] );
+        $this->converter->toFieldValue($storageFieldValue, $fieldValue);
+        self::assertInternalType('array', $fieldValue->data);
+        self::assertFalse($fieldValue->sortKey);
+        self::assertSame($text, $fieldValue->data['text']);
+        self::assertEquals($urlId, $fieldValue->data['urlId']);
     }
 
     /**
@@ -80,7 +82,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
      */
     public function testToStorageFieldDefinition()
     {
-        $this->converter->toStorageFieldDefinition( new PersistenceFieldDefinition, new StorageFieldDefinition );
+        $this->converter->toStorageFieldDefinition(new PersistenceFieldDefinition(), new StorageFieldDefinition());
     }
 
     /**
@@ -90,6 +92,6 @@ class UrlTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldDefinition()
     {
-        $this->converter->toFieldDefinition( new StorageFieldDefinition, new PersistenceFieldDefinition );
+        $this->converter->toFieldDefinition(new StorageFieldDefinition(), new PersistenceFieldDefinition());
     }
 }

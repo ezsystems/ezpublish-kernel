@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the DecoratedFragmentRenderer class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -28,7 +30,7 @@ class DecoratedFragmentRenderer implements FragmentRendererInterface, SiteAccess
      */
     private $siteAccess;
 
-    public function __construct( FragmentRendererInterface $innerRenderer )
+    public function __construct(FragmentRendererInterface $innerRenderer)
     {
         $this->innerRenderer = $innerRenderer;
     }
@@ -36,24 +38,22 @@ class DecoratedFragmentRenderer implements FragmentRendererInterface, SiteAccess
     /**
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
      */
-    public function setSiteAccess( SiteAccess $siteAccess = null )
+    public function setSiteAccess(SiteAccess $siteAccess = null)
     {
         $this->siteAccess = $siteAccess;
     }
 
-    public function setFragmentPath( $path )
+    public function setFragmentPath($path)
     {
-        if ( !$this->innerRenderer instanceof RoutableFragmentRenderer )
-        {
+        if (!$this->innerRenderer instanceof RoutableFragmentRenderer) {
             return null;
         }
 
-        if ( $this->siteAccess && $this->siteAccess->matcher instanceof SiteAccess\URILexer )
-        {
-            $path = $this->siteAccess->matcher->analyseLink( $path );
+        if ($this->siteAccess && $this->siteAccess->matcher instanceof SiteAccess\URILexer) {
+            $path = $this->siteAccess->matcher->analyseLink($path);
         }
 
-        $this->innerRenderer->setFragmentPath( $path );
+        $this->innerRenderer->setFragmentPath($path);
     }
 
     /**
@@ -65,16 +65,15 @@ class DecoratedFragmentRenderer implements FragmentRendererInterface, SiteAccess
      *
      * @return Response A Response instance
      */
-    public function render( $uri, Request $request, array $options = array() )
+    public function render($uri, Request $request, array $options = array())
     {
-        if ( $uri instanceof ControllerReference && $request->attributes->has( 'siteaccess' ) )
-        {
+        if ($uri instanceof ControllerReference && $request->attributes->has('siteaccess')) {
             // Serialize the siteaccess to get it back after.
             // @see eZ\Publish\Core\MVC\Symfony\EventListener\SiteAccessMatchListener
-            $uri->attributes['serialized_siteaccess'] = serialize( $request->attributes->get( 'siteaccess' ) );
+            $uri->attributes['serialized_siteaccess'] = serialize($request->attributes->get('siteaccess'));
         }
 
-        return $this->innerRenderer->render( $uri, $request, $options );
+        return $this->innerRenderer->render($uri, $request, $options);
     }
 
     /**

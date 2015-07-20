@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,15 +15,16 @@ use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct as APIContentCr
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * This class is used for creating a new content object
+ * This class is used for creating a new content object.
+ *
  * @property-write \eZ\Publish\API\Repository\Values\Content\Field[] $fields
  */
 class ContentCreateStruct extends APIContentCreateStruct
 {
     /**
-     * Field collection
+     * Field collection.
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\Field[] $fields
+     * @var \eZ\Publish\API\Repository\Values\Content\Field[]
      */
     public $fields = array();
 
@@ -33,22 +36,21 @@ class ContentCreateStruct extends APIContentCreateStruct
      * is an equivalent call.
      *
      * @param string $fieldDefIdentifier the identifier of the field definition
-     *
      * @param mixed $value Either a plain value which is understandable by the corresponding
      *                     field type or an instance of a Value class provided by the field type
-     *
      * @param string|null $language If not given on a translatable field the initial language is used
      */
-    public function setField( $fieldDefIdentifier, $value, $language = null )
+    public function setField($fieldDefIdentifier, $value, $language = null)
     {
-        if ( !isset( $language ) )
+        if (!isset($language)) {
             $language = $this->mainLanguageCode;
+        }
 
         $this->fields[] = new Field(
             array(
                 'fieldDefIdentifier' => $fieldDefIdentifier,
                 'value' => $value,
-                'languageCode' => $language
+                'languageCode' => $language,
             )
         );
     }

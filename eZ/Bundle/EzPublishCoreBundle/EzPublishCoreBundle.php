@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the EzPublishCoreBundle class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -49,33 +51,33 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class EzPublishCoreBundle extends Bundle
 {
-    public function build( ContainerBuilder $container )
+    public function build(ContainerBuilder $container)
     {
-        parent::build( $container );
-        $container->addCompilerPass( new FieldTypeCollectionPass, PassConfig::TYPE_OPTIMIZE );
-        $container->addCompilerPass( new FieldTypeParameterProviderRegistryPass );
-        $container->addCompilerPass( new ChainRoutingPass );
-        $container->addCompilerPass( new ChainConfigResolverPass );
-        $container->addCompilerPass( new RegisterLimitationTypePass );
-        $container->addCompilerPass( new RegisterStorageEnginePass );
-        $container->addCompilerPass( new RegisterSearchEnginePass );
-        $container->addCompilerPass( new LegacyStorageEnginePass );
-        $container->addCompilerPass( new LocalePass );
-        $container->addCompilerPass( new ContentViewPass );
-        $container->addCompilerPass( new LocationViewPass );
-        $container->addCompilerPass( new BlockViewPass );
-        $container->addCompilerPass( new SignalSlotPass );
-        $container->addCompilerPass( new IdentityDefinerPass );
-        $container->addCompilerPass( new XmlTextConverterPass );
-        $container->addCompilerPass( new SecurityPass );
-        $container->addCompilerPass( new RichTextHtml5ConverterPass );
-        $container->addCompilerPass( new FragmentPass );
-        $container->addCompilerPass( new StorageConnectionPass );
-        $container->addCompilerPass( new ImaginePass );
-        $container->addCompilerPass( new HttpCachePass );
-        $container->addCompilerPass( new ComplexSettingsPass( new ComplexSettingParser() ) );
-        $container->addCompilerPass( new ConfigResolverParameterPass( new DynamicSettingParser() ) );
-        $container->addCompilerPass( new AsseticPass() );
+        parent::build($container);
+        $container->addCompilerPass(new FieldTypeCollectionPass(), PassConfig::TYPE_OPTIMIZE);
+        $container->addCompilerPass(new FieldTypeParameterProviderRegistryPass());
+        $container->addCompilerPass(new ChainRoutingPass());
+        $container->addCompilerPass(new ChainConfigResolverPass());
+        $container->addCompilerPass(new RegisterLimitationTypePass());
+        $container->addCompilerPass(new RegisterStorageEnginePass());
+        $container->addCompilerPass(new RegisterSearchEnginePass());
+        $container->addCompilerPass(new LegacyStorageEnginePass());
+        $container->addCompilerPass(new LocalePass());
+        $container->addCompilerPass(new ContentViewPass());
+        $container->addCompilerPass(new LocationViewPass());
+        $container->addCompilerPass(new BlockViewPass());
+        $container->addCompilerPass(new SignalSlotPass());
+        $container->addCompilerPass(new IdentityDefinerPass());
+        $container->addCompilerPass(new XmlTextConverterPass());
+        $container->addCompilerPass(new SecurityPass());
+        $container->addCompilerPass(new RichTextHtml5ConverterPass());
+        $container->addCompilerPass(new FragmentPass());
+        $container->addCompilerPass(new StorageConnectionPass());
+        $container->addCompilerPass(new ImaginePass());
+        $container->addCompilerPass(new HttpCachePass());
+        $container->addCompilerPass(new ComplexSettingsPass(new ComplexSettingParser()));
+        $container->addCompilerPass(new ConfigResolverParameterPass(new DynamicSettingParser()));
+        $container->addCompilerPass(new AsseticPass());
         $container->addCompilerPass(
             new RegisterListenersPass(
                 'ezpublish.http_cache.event_dispatcher',
@@ -84,39 +86,38 @@ class EzPublishCoreBundle extends Bundle
             ),
             PassConfig::TYPE_BEFORE_REMOVING
         );
-        $container->addCompilerPass( new BinaryContentDownloadPass() );
+        $container->addCompilerPass(new BinaryContentDownloadPass());
 
         // Storage passes
-        $container->addCompilerPass( new ExternalStorageRegistryPass );
+        $container->addCompilerPass(new ExternalStorageRegistryPass());
         // Legacy Storage passes
-        $container->addCompilerPass( new FieldValueConverterRegistryPass );
-        $container->addCompilerPass( new RoleLimitationConverterPass );
+        $container->addCompilerPass(new FieldValueConverterRegistryPass());
+        $container->addCompilerPass(new RoleLimitationConverterPass());
 
-        $securityExtension = $container->getExtension( 'security' );
-        $securityExtension->addSecurityListenerFactory( new HttpBasicFactory );
+        $securityExtension = $container->getExtension('security');
+        $securityExtension->addSecurityListenerFactory(new HttpBasicFactory());
     }
 
     public function getContainerExtension()
     {
-        if ( !isset( $this->extension ) )
-        {
+        if (!isset($this->extension)) {
             $this->extension = new EzPublishCoreExtension(
                 array(
-                    new ConfigParser\LocationView,
-                    new ConfigParser\ContentView,
-                    new ConfigParser\BlockView,
-                    new ConfigParser\Common,
-                    new ConfigParser\Content,
-                    new ConfigParser\FieldType\RichText,
-                    new ConfigParser\FieldType\XmlText,
-                    new ConfigParser\FieldTemplates,
-                    new ConfigParser\FieldEditTemplates,
-                    new ConfigParser\FieldDefinitionSettingsTemplates,
-                    new ConfigParser\FieldDefinitionEditTemplates,
-                    new ConfigParser\Image,
-                    new ConfigParser\Page,
-                    new ConfigParser\Languages,
-                    new ConfigParser\IO( new ComplexSettingParser() )
+                    new ConfigParser\LocationView(),
+                    new ConfigParser\ContentView(),
+                    new ConfigParser\BlockView(),
+                    new ConfigParser\Common(),
+                    new ConfigParser\Content(),
+                    new ConfigParser\FieldType\RichText(),
+                    new ConfigParser\FieldType\XmlText(),
+                    new ConfigParser\FieldTemplates(),
+                    new ConfigParser\FieldEditTemplates(),
+                    new ConfigParser\FieldDefinitionSettingsTemplates(),
+                    new ConfigParser\FieldDefinitionEditTemplates(),
+                    new ConfigParser\Image(),
+                    new ConfigParser\Page(),
+                    new ConfigParser\Languages(),
+                    new ConfigParser\IO(new ComplexSettingParser()),
                 )
             );
         }

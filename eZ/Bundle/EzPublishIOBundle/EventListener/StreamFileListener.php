@@ -1,10 +1,12 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributd with this source code.
  */
+
 namespace eZ\Bundle\EzPublishIOBundle\EventListener;
 
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
@@ -26,7 +28,7 @@ class StreamFileListener implements EventSubscriberInterface
     /** @var ConfigResolverInterface */
     private $configResolver;
 
-    public function __construct( IOServiceInterface $ioService, ConfigResolverInterface $configResolver )
+    public function __construct(IOServiceInterface $ioService, ConfigResolverInterface $configResolver)
     {
         $this->ioService = $ioService;
         $this->configResolver = $configResolver;
@@ -35,43 +37,43 @@ class StreamFileListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            KernelEvents::REQUEST => array( 'onKernelRequest', 42 ),
+            KernelEvents::REQUEST => array('onKernelRequest', 42),
         );
     }
 
     /**
      * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
      */
-    public function onKernelRequest( GetResponseEvent $event )
+    public function onKernelRequest(GetResponseEvent $event)
     {
-        if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
-        {
+        if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
             return;
         }
 
-        $uri = $event->getRequest()->attributes->get( 'semanticPathinfo' );
+        $uri = $event->getRequest()->attributes->get('semanticPathinfo');
 
-        if ( !$this->isIoUri( $uri ) )
-        {
+        if (!$this->isIoUri($uri)) {
             return;
         }
 
         // Will throw an API 404 if not found, we can let it pass
         $event->setResponse(
             new BinaryStreamResponse(
-                $this->ioService->loadBinaryFileByUri( $uri ),
+                $this->ioService->loadBinaryFileByUri($uri),
                 $this->ioService
             )
         );
     }
 
     /**
-     * Tests if $uri is an IO file uri root
+     * Tests if $uri is an IO file uri root.
+     *
      * @param string $uri
+     *
      * @return bool
      */
-    private function isIoUri( $uri )
+    private function isIoUri($uri)
     {
-        return ( strpos( ltrim( $uri, '/' ), $this->configResolver->getParameter( 'io.url_prefix' ) ) === 0 );
+        return (strpos(ltrim($uri, '/'), $this->configResolver->getParameter('io.url_prefix')) === 0);
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState\Gateway\DoctrineDatabaseTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState\Gateway\DoctrineDatabaseTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -27,7 +29,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     protected $databaseGateway;
 
     /**
-     * Language mask generator
+     * Language mask generator.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
      */
@@ -35,8 +37,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * Inserts DB fixture.
-     *
-     * @return void
      */
     public function setUp()
     {
@@ -53,8 +53,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::__construct
-     *
-     * @return void
      */
     public function testCtor()
     {
@@ -70,14 +68,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateData
-     *
-     * @return void
      */
     public function testLoadObjectStateData()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $result = $gateway->loadObjectStateData( 1 );
+        $result = $gateway->loadObjectStateData(1);
 
         $this->assertEquals(
             array(
@@ -90,8 +86,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_priority' => 0,
                     'ezcobj_state_language_description' => '',
                     'ezcobj_state_language_language_id' => 3,
-                    'ezcobj_state_language_name' => 'Not locked'
-                )
+                    'ezcobj_state_language_name' => 'Not locked',
+                ),
             ),
             $result
         );
@@ -99,14 +95,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateDataByIdentifier
-     *
-     * @return void
      */
     public function testLoadObjectStateDataByIdentifier()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $result = $gateway->loadObjectStateDataByIdentifier( 'not_locked', 2 );
+        $result = $gateway->loadObjectStateDataByIdentifier('not_locked', 2);
 
         $this->assertEquals(
             array(
@@ -119,8 +113,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_priority' => 0,
                     'ezcobj_state_language_description' => '',
                     'ezcobj_state_language_language_id' => 3,
-                    'ezcobj_state_language_name' => 'Not locked'
-                )
+                    'ezcobj_state_language_name' => 'Not locked',
+                ),
             ),
             $result
         );
@@ -128,14 +122,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateListData
-     *
-     * @return void
      */
     public function testLoadObjectStateListData()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $result = $gateway->loadObjectStateListData( 2 );
+        $result = $gateway->loadObjectStateListData(2);
 
         $this->assertEquals(
             array(
@@ -149,8 +141,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                         'ezcobj_state_priority' => 0,
                         'ezcobj_state_language_description' => '',
                         'ezcobj_state_language_language_id' => 3,
-                        'ezcobj_state_language_name' => 'Not locked'
-                    )
+                        'ezcobj_state_language_name' => 'Not locked',
+                    ),
                 ),
                 array(
                     array(
@@ -162,9 +154,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                         'ezcobj_state_priority' => 1,
                         'ezcobj_state_language_description' => '',
                         'ezcobj_state_language_language_id' => 3,
-                        'ezcobj_state_language_name' => 'Locked'
-                    )
-                )
+                        'ezcobj_state_language_name' => 'Locked',
+                    ),
+                ),
             ),
             $result
         );
@@ -172,14 +164,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateGroupData
-     *
-     * @return void
      */
     public function testLoadObjectStateGroupData()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $result = $gateway->loadObjectStateGroupData( 2 );
+        $result = $gateway->loadObjectStateGroupData(2);
 
         $this->assertEquals(
             array(
@@ -191,8 +181,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_group_language_description' => '',
                     'ezcobj_state_group_language_language_id' => 3,
                     'ezcobj_state_group_language_real_language_id' => 2,
-                    'ezcobj_state_group_language_name' => 'Lock'
-                )
+                    'ezcobj_state_group_language_name' => 'Lock',
+                ),
             ),
             $result
         );
@@ -200,14 +190,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateGroupDataByIdentifier
-     *
-     * @return void
      */
     public function testLoadObjectStateGroupDataByIdentifier()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $result = $gateway->loadObjectStateGroupDataByIdentifier( 'ez_lock' );
+        $result = $gateway->loadObjectStateGroupDataByIdentifier('ez_lock');
 
         $this->assertEquals(
             array(
@@ -219,8 +207,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_group_language_description' => '',
                     'ezcobj_state_group_language_language_id' => 3,
                     'ezcobj_state_group_language_real_language_id' => 2,
-                    'ezcobj_state_group_language_name' => 'Lock'
-                )
+                    'ezcobj_state_group_language_name' => 'Lock',
+                ),
             ),
             $result
         );
@@ -228,14 +216,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateGroupListData
-     *
-     * @return void
      */
     public function testLoadObjectStateGroupListData()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $result = $gateway->loadObjectStateGroupListData( 0, -1 );
+        $result = $gateway->loadObjectStateGroupListData(0, -1);
 
         $this->assertEquals(
             array(
@@ -248,9 +234,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                         'ezcobj_state_group_language_description' => '',
                         'ezcobj_state_group_language_language_id' => 3,
                         'ezcobj_state_group_language_real_language_id' => 2,
-                        'ezcobj_state_group_language_name' => 'Lock'
-                    )
-                )
+                        'ezcobj_state_group_language_name' => 'Lock',
+                    ),
+                ),
             ),
             $result
         );
@@ -258,14 +244,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::insertObjectState
-     *
-     * @return void
      */
     public function testInsertObjectState()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $gateway->insertObjectState( $this->getObjectStateFixture(), 2 );
+        $gateway->insertObjectState($this->getObjectStateFixture(), 2);
 
         $this->assertEquals(
             array(
@@ -280,25 +264,23 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_priority' => 2,
                     'ezcobj_state_language_description' => 'Test state description',
                     'ezcobj_state_language_language_id' => 5,
-                    'ezcobj_state_language_name' => 'Test state'
-                )
+                    'ezcobj_state_language_name' => 'Test state',
+                ),
             ),
             // The new state should be added with state ID = 3
-            $this->getDatabaseGateway()->loadObjectStateData( 3 )
+            $this->getDatabaseGateway()->loadObjectStateData(3)
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::insertObjectState
-     *
-     * @return void
      */
     public function testInsertObjectStateInEmptyGroup()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $gateway->insertObjectStateGroup( $this->getObjectStateGroupFixture() );
-        $gateway->insertObjectState( $this->getObjectStateFixture(), 3 );
+        $gateway->insertObjectStateGroup($this->getObjectStateGroupFixture());
+        $gateway->insertObjectState($this->getObjectStateFixture(), 3);
 
         $this->assertEquals(
             array(
@@ -314,24 +296,22 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_priority' => 0,
                     'ezcobj_state_language_description' => 'Test state description',
                     'ezcobj_state_language_language_id' => 5,
-                    'ezcobj_state_language_name' => 'Test state'
-                )
+                    'ezcobj_state_language_name' => 'Test state',
+                ),
             ),
             // The new state should be added with state ID = 3
-            $this->getDatabaseGateway()->loadObjectStateData( 3 )
+            $this->getDatabaseGateway()->loadObjectStateData(3)
         );
 
         $this->assertEquals(
             // 185 is the number of objects in the fixture
             185,
-            $gateway->getContentCount( 3 )
+            $gateway->getContentCount(3)
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::updateObjectState
-     *
-     * @return void
      */
     public function testUpdateObjectState()
     {
@@ -340,7 +320,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $objectStateFixture = $this->getObjectStateFixture();
         $objectStateFixture->id = 1;
 
-        $gateway->updateObjectState( $objectStateFixture );
+        $gateway->updateObjectState($objectStateFixture);
 
         $this->assertEquals(
             array(
@@ -353,46 +333,42 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_priority' => 0,
                     'ezcobj_state_language_description' => 'Test state description',
                     'ezcobj_state_language_language_id' => 5,
-                    'ezcobj_state_language_name' => 'Test state'
-                )
+                    'ezcobj_state_language_name' => 'Test state',
+                ),
             ),
-            $this->getDatabaseGateway()->loadObjectStateData( 1 )
+            $this->getDatabaseGateway()->loadObjectStateData(1)
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::deleteObjectState
-     *
-     * @return void
      */
     public function testDeleteObjectState()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $gateway->deleteObjectState( 1 );
+        $gateway->deleteObjectState(1);
 
         $this->assertEquals(
             array(),
-            $this->getDatabaseGateway()->loadObjectStateData( 1 )
+            $this->getDatabaseGateway()->loadObjectStateData(1)
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::updateObjectStateLinks
-     *
-     * @return void
      */
     public function testUpdateObjectStateLinks()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $gateway->updateObjectStateLinks( 1, 2 );
+        $gateway->updateObjectStateLinks(1, 2);
 
         $query = $this->getDatabaseHandler()->createSelectQuery();
         $query
-        ->select( $query->expr->count( '*' ) )
-        ->from( 'ezcobj_state_link' )
-        ->where( 'contentobject_state_id = 1' );
+        ->select($query->expr->count('*'))
+        ->from('ezcobj_state_link')
+        ->where('contentobject_state_id = 1');
 
         $statement = $query->prepare();
         $statement->execute();
@@ -404,9 +380,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $query = $this->getDatabaseHandler()->createSelectQuery();
         $query
-        ->select( $query->expr->count( '*' ) )
-        ->from( 'ezcobj_state_link' )
-        ->where( 'contentobject_state_id = 2' );
+        ->select($query->expr->count('*'))
+        ->from('ezcobj_state_link')
+        ->where('contentobject_state_id = 2');
 
         $statement = $query->prepare();
         $statement->execute();
@@ -420,20 +396,18 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::deleteObjectStateLinks
-     *
-     * @return void
      */
     public function testDeleteObjectStateLinks()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $gateway->deleteObjectStateLinks( 1 );
+        $gateway->deleteObjectStateLinks(1);
 
         $query = $this->getDatabaseHandler()->createSelectQuery();
         $query
-            ->select( $query->expr->count( '*' ) )
-            ->from( 'ezcobj_state_link' )
-            ->where( 'contentobject_state_id = 1' );
+            ->select($query->expr->count('*'))
+            ->from('ezcobj_state_link')
+            ->where('contentobject_state_id = 1');
 
         $statement = $query->prepare();
         $statement->execute();
@@ -446,14 +420,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::insertObjectStateGroup
-     *
-     * @return void
      */
     public function testInsertObjectStateGroup()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $gateway->insertObjectStateGroup( $this->getObjectStateGroupFixture() );
+        $gateway->insertObjectStateGroup($this->getObjectStateGroupFixture());
 
         $this->assertEquals(
             array(
@@ -466,18 +438,16 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_group_language_description' => 'Test group description',
                     'ezcobj_state_group_language_language_id' => 5,
                     'ezcobj_state_group_language_real_language_id' => 4,
-                    'ezcobj_state_group_language_name' => 'Test group'
-                )
+                    'ezcobj_state_group_language_name' => 'Test group',
+                ),
             ),
             // The new state group should be added with state group ID = 3
-            $this->getDatabaseGateway()->loadObjectStateGroupData( 3 )
+            $this->getDatabaseGateway()->loadObjectStateGroupData(3)
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::updateObjectStateGroup
-     *
-     * @return void
      */
     public function testUpdateObjectStateGroup()
     {
@@ -486,7 +456,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $groupFixture = $this->getObjectStateGroupFixture();
         $groupFixture->id = 2;
 
-        $gateway->updateObjectStateGroup( $groupFixture );
+        $gateway->updateObjectStateGroup($groupFixture);
 
         $this->assertEquals(
             array(
@@ -498,65 +468,59 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_group_language_description' => 'Test group description',
                     'ezcobj_state_group_language_language_id' => 5,
                     'ezcobj_state_group_language_real_language_id' => 4,
-                    'ezcobj_state_group_language_name' => 'Test group'
-                )
+                    'ezcobj_state_group_language_name' => 'Test group',
+                ),
             ),
-            $this->getDatabaseGateway()->loadObjectStateGroupData( 2 )
+            $this->getDatabaseGateway()->loadObjectStateGroupData(2)
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::deleteObjectStateGroup
-     *
-     * @return void
      */
     public function testDeleteObjectStateGroup()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $gateway->deleteObjectStateGroup( 2 );
+        $gateway->deleteObjectStateGroup(2);
 
         $this->assertEquals(
             array(),
-            $this->getDatabaseGateway()->loadObjectStateGroupData( 2 )
+            $this->getDatabaseGateway()->loadObjectStateGroupData(2)
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::setContentState
-     *
-     * @return void
      */
     public function testSetContentState()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $gateway->setContentState( 42, 2, 2 );
+        $gateway->setContentState(42, 2, 2);
 
         $this->assertQueryResult(
             array(
                 array(
                     'contentobject_id' => 42,
-                    'contentobject_state_id' => 2
-                )
+                    'contentobject_state_id' => 2,
+                ),
             ),
             $this->getDatabaseHandler()->createSelectQuery()
-                ->select( 'contentobject_id', 'contentobject_state_id' )
-                ->from( 'ezcobj_state_link' )
-                ->where( 'contentobject_id = 42' )
+                ->select('contentobject_id', 'contentobject_state_id')
+                ->from('ezcobj_state_link')
+                ->where('contentobject_id = 42')
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateDataForContent
-     *
-     * @return void
      */
     public function testLoadObjectStateDataForContent()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $result = $gateway->loadObjectStateDataForContent( 42, 2 );
+        $result = $gateway->loadObjectStateDataForContent(42, 2);
 
         $this->assertEquals(
             array(
@@ -569,8 +533,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_priority' => 0,
                     'ezcobj_state_language_description' => '',
                     'ezcobj_state_language_language_id' => 3,
-                    'ezcobj_state_language_name' => 'Not locked'
-                )
+                    'ezcobj_state_language_name' => 'Not locked',
+                ),
             ),
             $result
         );
@@ -578,31 +542,27 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::getContentCount
-     *
-     * @return void
      */
     public function testGetContentCount()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $result = $gateway->getContentCount( 1 );
+        $result = $gateway->getContentCount(1);
 
         // 185 is the number of objects in the fixture
-        $this->assertEquals( 185, $result );
+        $this->assertEquals(185, $result);
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::updateObjectStatePriority
-     *
-     * @return void
      */
     public function testUpdateObjectStatePriority()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $gateway->updateObjectStatePriority( 1, 10 );
+        $gateway->updateObjectStatePriority(1, 10);
 
-        $objectStateData = $gateway->loadObjectStateData( 1 );
+        $objectStateData = $gateway->loadObjectStateData(1);
 
         $this->assertEquals(
             array(
@@ -615,15 +575,15 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_priority' => 10,
                     'ezcobj_state_language_description' => '',
                     'ezcobj_state_language_language_id' => 3,
-                    'ezcobj_state_language_name' => 'Not locked'
-                )
+                    'ezcobj_state_language_name' => 'Not locked',
+                ),
             ),
             $objectStateData
         );
     }
 
     /**
-     * Returns an object state fixture
+     * Returns an object state fixture.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
@@ -632,15 +592,15 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $objectState = new ObjectState();
         $objectState->identifier = 'test_state';
         $objectState->defaultLanguage = 'eng-GB';
-        $objectState->languageCodes = array( 'eng-GB' );
-        $objectState->name = array( 'eng-GB' => 'Test state' );
-        $objectState->description = array( 'eng-GB' => 'Test state description' );
+        $objectState->languageCodes = array('eng-GB');
+        $objectState->name = array('eng-GB' => 'Test state');
+        $objectState->description = array('eng-GB' => 'Test state description');
 
         return $objectState;
     }
 
     /**
-     * Returns an object state group fixture
+     * Returns an object state group fixture.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
      */
@@ -649,27 +609,27 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $group = new Group();
         $group->identifier = 'test_group';
         $group->defaultLanguage = 'eng-GB';
-        $group->languageCodes = array( 'eng-GB' );
-        $group->name = array( 'eng-GB' => 'Test group' );
-        $group->description = array( 'eng-GB' => 'Test group description' );
+        $group->languageCodes = array('eng-GB');
+        $group->name = array('eng-GB' => 'Test group');
+        $group->description = array('eng-GB' => 'Test group description');
 
         return $group;
     }
 
     /**
-     * Returns a ready to test DoctrineDatabase gateway
+     * Returns a ready to test DoctrineDatabase gateway.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase
      */
     protected function getDatabaseGateway()
     {
-        if ( !isset( $this->databaseGateway ) )
-        {
+        if (!isset($this->databaseGateway)) {
             $this->databaseGateway = new DoctrineDatabase(
                 $this->getDatabaseHandler(),
                 $this->getLanguageMaskGenerator()
             );
         }
+
         return $this->databaseGateway;
     }
 }

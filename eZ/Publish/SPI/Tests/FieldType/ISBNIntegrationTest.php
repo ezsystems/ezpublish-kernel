@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
 
 /**
- * Integration test for legacy storage field types
+ * Integration test for legacy storage field types.
  *
  * This abstract base test case is supposed to be the base for field type
  * integration tests. It basically calls all involved methods in the field type
@@ -37,7 +39,7 @@ use eZ\Publish\SPI\Persistence\Content;
 class ISBNIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -47,14 +49,14 @@ class ISBNIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get handler with required custom field types registered
+     * Get handler with required custom field types registered.
      *
      * @return Handler
      */
     public function getCustomHandler()
     {
         $fieldType = new FieldType\ISBN\Type();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
         return $this->getHandler(
             'ezisbn',
@@ -76,7 +78,7 @@ class ISBNIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field definition data values
+     * Get field definition data values.
      *
      * This is a PHPUnit data provider
      *
@@ -87,24 +89,24 @@ class ISBNIntegrationTest extends BaseIntegrationTest
         return array(
             // The ezisbn field type does not have any special field definition
             // properties
-            array( 'fieldType', 'ezisbn' ),
+            array('fieldType', 'ezisbn'),
             array(
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(
                     array(
                         'fieldSettings' => new FieldType\FieldSettings(
                             array(
-                                'isISBN13' => true
+                                'isISBN13' => true,
                             )
                         ),
                     )
-                )
+                ),
             ),
         );
     }
 
     /**
-     * Get initial field value
+     * Get initial field value.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -112,9 +114,9 @@ class ISBNIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => "978-972-25-1409-5",
+                'data' => '978-972-25-1409-5',
                 'externalData' => null,
-                'sortKey'      => "978-972-25-1409-5",
+                'sortKey' => '978-972-25-1409-5',
             )
         );
     }
@@ -130,9 +132,9 @@ class ISBNIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => "978-972-25-1409-5",
+                'data' => '978-972-25-1409-5',
                 'externalData' => null,
-                'sortKey'      => "978-972-25-1409-5",
+                'sortKey' => '978-972-25-1409-5',
             )
         );
     }

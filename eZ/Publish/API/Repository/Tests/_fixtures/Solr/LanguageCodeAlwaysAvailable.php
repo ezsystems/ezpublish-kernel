@@ -11,8 +11,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'title' => 'Files',
                     ),
                     'score' => 0.20774001,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
             1 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -22,8 +22,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'title' => 'Multimedia',
                     ),
                     'score' => 0.20774001,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
             2 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -33,8 +33,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'title' => 'Design',
                     ),
                     'score' => 0.20774001,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
             3 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -44,8 +44,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'title' => 'Home',
                     ),
                     'score' => 3.007218,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
             4 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -55,8 +55,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'title' => 'Contact Us',
                     ),
                     'score' => 1.295869,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
             5 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -66,14 +66,14 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'title' => 'Partners',
                     ),
                     'score' => 0.20774001,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
         ),
-        'spellSuggestion' => NULL,
+        'spellSuggestion' => null,
         'time' => 1,
-        'timedOut' => NULL,
+        'timedOut' => null,
         'maxScore' => 3.007218,
         'totalCount' => 16,
     )

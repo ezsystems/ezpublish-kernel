@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the eZPublish RequestParser class
+ * File containing the EzPublish RequestParser class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Common\RequestParser;
 /**
  * Pattern based Request parser pre-configured for eZ Publish
  */
-class eZPublish extends Pattern
+class EzPublish extends Pattern
 {
     /**
      * Map of URL types to their URL patterns

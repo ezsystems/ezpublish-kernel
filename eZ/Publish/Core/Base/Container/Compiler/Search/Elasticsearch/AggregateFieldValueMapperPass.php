@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the AggregateFieldValueMapperPass class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,14 +23,13 @@ class AggregateFieldValueMapperPass implements CompilerPassInterface
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
         if (
             !$container->hasDefinition(
                 'ezpublish.search.elasticsearch.content.field_value_mapper.aggregate'
             )
-        )
-        {
+        ) {
             return;
         }
 
@@ -36,17 +37,13 @@ class AggregateFieldValueMapperPass implements CompilerPassInterface
             'ezpublish.search.elasticsearch.content.field_value_mapper.aggregate'
         );
 
-        foreach (
-            $container->findTaggedServiceIds(
-                'ezpublish.search.elasticsearch.content.field_value_mapper'
-            ) as $id => $attributes
-        )
-        {
+        $taggedServiceIds = $container->findTaggedServiceIds(
+            'ezpublish.search.elasticsearch.content.field_value_mapper'
+        );
+        foreach ($taggedServiceIds as $id => $attributes) {
             $aggregateFieldValueMapperDefinition->addMethodCall(
                 'addMapper',
-                array(
-                    new Reference( $id ),
-                )
+                [new Reference($id)]
             );
         }
     }

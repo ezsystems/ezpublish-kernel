@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing an interface for the Doctrine database abstractions
+ * File containing an interface for the Doctrine database abstractions.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,8 +18,8 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
 {
     private $parts = array(
         'select' => array(),
-        'from'   => array(),
-        'where'  => array(),
+        'from' => array(),
+        'where' => array(),
         'orderBy' => array(),
         'groupBy' => array(),
         'having' => array(),
@@ -29,12 +31,12 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
     private $distinct = false;
 
     /**
-     * @var integer
+     * @var int
      */
     private $limit;
 
     /**
-     * @var integer
+     * @var int
      */
     private $offset;
 
@@ -43,10 +45,11 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      * with alias 'permission_subtree'.
      *
      * @internal This is intended for use by PermissionSubtree criterion handler only
+     *
      * @see \eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler\PermissionSubtree
      * @see https://jira.ez.no/browse/EZP-23037
      *
-     * @var boolean
+     * @var bool
      */
     public $permissionSubtreeJoinAdded = false;
 
@@ -78,15 +81,16 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      * Each of above code produce SQL clause 'SELECT column1, column2' for the query.
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters..
+     *
      * @param string|array(string) $... Either a string with a column name or an array of column names.
+     *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery returns a pointer to $this.
      */
     public function select()
     {
-        $args = $this->parseArguments( func_get_args() );
+        $args = $this->parseArguments(func_get_args());
 
-        foreach ( $args as $selectPart )
-        {
+        foreach ($args as $selectPart) {
             $this->parts['select'][] = $selectPart;
         }
 
@@ -94,7 +98,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
     }
 
     /**
-     * Returns SQL to create an alias
+     * Returns SQL to create an alias.
      *
      * This method can be used to create an alias for either a
      * table or a column.
@@ -108,9 +112,10 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      *
      * @param string $name
      * @param string $alias
+     *
      * @return string the query string "columnname as targetname"
      */
-    public function alias( $name, $alias )
+    public function alias($name, $alias)
     {
         return $name . ' ' . $alias;
     }
@@ -148,14 +153,16 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      * select() will result in an \eZ\Publish\Core\Persistence\Database\SelectQueryInvalidException.
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters..
+     *
      * @param string|array(string) $... Either a string with a column name or an array of column names.
+     *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery returns a pointer to $this.
      */
     public function selectDistinct()
     {
         $this->distinct = true;
 
-        return call_user_func_array( array( $this, 'select' ), func_get_args() );
+        return call_user_func_array(array($this, 'select'), func_get_args());
     }
 
     /**
@@ -175,15 +182,16 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      * </code>
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
+     *
      * @param string|array(string) $... Either a string with a table name or an array of table names.
+     *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery a pointer to $this
      */
     public function from()
     {
-        $args = $this->parseArguments( func_get_args() );
+        $args = $this->parseArguments(func_get_args());
 
-        foreach ( $args as $tableName )
-        {
+        foreach ($args as $tableName) {
             $this->parts['from'][] = array(
                 'table' => $tableName,
                 'type' => 'FROM',
@@ -241,42 +249,40 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      *
      * @param string $table2,... The table to join with, followed by either the
      *                           two join columns, or a join condition.
+     *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     public function innerJoin()
     {
-        return $this->doJoin( 'INNER', func_get_args() );
+        return $this->doJoin('INNER', func_get_args());
     }
 
     /**
-     * Helper function to generate join
+     * Helper function to generate join.
      *
      * @param string $type
      * @param array $args
+     *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
-    protected function doJoin( $type, array $args )
+    protected function doJoin($type, array $args)
     {
-        if ( count( $args ) === 0 )
-        {
-            throw new QueryException( 'No arguments given' );
+        if (count($args) === 0) {
+            throw new QueryException('No arguments given');
         }
 
         $tableName = $args[0];
         $condition = '';
 
-        if ( count( $args ) == 2 )
-        {
+        if (count($args) == 2) {
             $condition = $args[1];
-        }
-        else if ( count( $args ) == 3 )
-        {
+        } elseif (count($args) == 3) {
             $condition = $args[1] . ' = ' . $args[2];
         }
 
         $this->parts['from'][] = array(
-            'table'     => $tableName,
-            'type'      => $type,
+            'table' => $tableName,
+            'type' => $type,
             'condition' => $condition,
         );
 
@@ -331,11 +337,12 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      *
      * @param string $table2,... The table to join with, followed by either the
      *                           two join columns, or a join condition.
+     *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     public function leftJoin()
     {
-        return $this->doJoin( 'LEFT', func_get_args() );
+        return $this->doJoin('LEFT', func_get_args());
     }
 
     /**
@@ -386,11 +393,12 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      *
      * @param string $table2,... The table to join with, followed by either the
      *                           two join columns, or a join condition.
+     *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     public function rightJoin()
     {
-        return $this->doJoin( 'RIGHT', func_get_args() );
+        return $this->doJoin('RIGHT', func_get_args());
     }
 
     /**
@@ -409,21 +417,21 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      * </code>
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
+     *
      * @param string|array(string) $... Either a string with a logical expression name
      * or an array with logical expressions.
+     *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     public function where()
     {
         $args = func_get_args();
 
-        if ( count( $args ) === 0 )
-        {
-            throw new QueryException( 'No arguments given' );
+        if (count($args) === 0) {
+            throw new QueryException('No arguments given');
         }
 
-        foreach ( $args as $whereCondition )
-        {
+        foreach ($args as $whereCondition) {
             $this->parts['where'][] = $whereCondition;
         }
 
@@ -449,9 +457,10 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      *
      * @param string $limit integer expression
      * @param string $offset integer expression
+     *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
-    public function limit( $limit, $offset = '' )
+    public function limit($limit, $offset = '')
     {
         $this->limit = $limit;
         $this->offset = $offset;
@@ -473,13 +482,13 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      * @param string $type if the column should be sorted ascending or descending.
      *        you can specify this using \eZ\Publish\Core\Persistence\Database\SelectQuery::ASC
      *        or \eZ\Publish\Core\Persistence\Database\SelectQuery::DESC
+     *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery a pointer to $this
      */
-    public function orderBy( $column, $type = self::ASC )
+    public function orderBy($column, $type = self::ASC)
     {
-        if ( $type !== self::ASC && $type !== self::DESC )
-        {
-            throw new QueryException( 'Invalid value for type of order by orientation: ' . $type );
+        if ($type !== self::ASC && $type !== self::DESC) {
+            throw new QueryException('Invalid value for type of order by orientation: ' . $type);
         }
 
         $this->parts['orderBy'][] = $column . ' ' . $type;
@@ -500,15 +509,16 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      * </code>
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
+     *
      * @param string $column a column name in the result set
+     *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery a pointer to $this
      */
     public function groupBy()
     {
-        $args = $this->parseArguments( func_get_args() );
+        $args = $this->parseArguments(func_get_args());
 
-        foreach ( $args as $groupByExpression )
-        {
+        foreach ($args as $groupByExpression) {
             $this->parts['groupBy'][] = $groupByExpression;
         }
 
@@ -529,21 +539,21 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException
      *         if called with no parameters.
+     *
      * @param string|array(string) $... Either a string with a logical expression name
      *                             or an array with logical expressions.
+     *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery a pointer to $this
      */
     public function having()
     {
         $args = func_get_args();
 
-        if ( count( $args ) === 0 )
-        {
-            throw new QueryException( 'No arguments given' );
+        if (count($args) === 0) {
+            throw new QueryException('No arguments given');
         }
 
-        foreach ( $args as $whereCondition )
-        {
+        foreach ($args as $whereCondition) {
             $this->parts['having'][] = $whereCondition;
         }
 
@@ -554,76 +564,63 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      * Returns the query string for this query object.
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if it was not possible to build a valid query.
+     *
      * @return string
      */
     public function getQuery()
     {
-        if ( count( $this->parts['select'] ) === 0 )
-        {
-            throw new QueryException( 'Missing "select" parts to generate query.' );
+        if (count($this->parts['select']) === 0) {
+            throw new QueryException('Missing "select" parts to generate query.');
         }
 
         $sql = 'SELECT ';
 
-        if ( $this->distinct )
-        {
+        if ($this->distinct) {
             $sql .= 'DISTINCT ';
         }
 
-        $sql .= implode( ', ', $this->parts['select'] ) . ' FROM';
+        $sql .= implode(', ', $this->parts['select']) . ' FROM';
 
-        if ( count( $this->parts['from'] ) === 0 )
-        {
-            throw new QueryException( 'Missing "from" parts to generate query.' );
+        if (count($this->parts['from']) === 0) {
+            throw new QueryException('Missing "from" parts to generate query.');
         }
 
         $renderedFromBefore = false;
 
-        foreach ( $this->parts['from'] as $fromPart )
-        {
-            if ( $fromPart['type'] === 'FROM' )
-            {
-                if ( $renderedFromBefore === true )
-                {
+        foreach ($this->parts['from'] as $fromPart) {
+            if ($fromPart['type'] === 'FROM') {
+                if ($renderedFromBefore === true) {
                     $sql .= ',';
                 }
 
                 $sql .= ' ' . $fromPart['table'];
                 $renderedFromBefore = true;
-            }
-            else
-            {
+            } else {
                 $sql .= ' ' . $fromPart['type'] . ' JOIN ' . $fromPart['table'];
 
-                if ( $fromPart['condition'] )
-                {
+                if ($fromPart['condition']) {
                     $sql .= ' ON ' . $fromPart['condition'];
                 }
             }
         }
 
-        if ( count( $this->parts['where'] ) > 0 )
-        {
-            $sql .= ' WHERE ' . implode( ' AND ', $this->parts['where'] );
+        if (count($this->parts['where']) > 0) {
+            $sql .= ' WHERE ' . implode(' AND ', $this->parts['where']);
         }
 
-        if ( count( $this->parts['groupBy'] ) > 0 )
-        {
-            $sql .= ' GROUP BY ' . implode( ', ', $this->parts['groupBy'] );
+        if (count($this->parts['groupBy']) > 0) {
+            $sql .= ' GROUP BY ' . implode(', ', $this->parts['groupBy']);
         }
 
-        if ( count( $this->parts['having'] ) > 0 )
-        {
-            $sql .= ' HAVING ' . implode( ' AND ', $this->parts['having'] );
+        if (count($this->parts['having']) > 0) {
+            $sql .= ' HAVING ' . implode(' AND ', $this->parts['having']);
         }
 
-        if ( count( $this->parts['orderBy'] ) > 0 )
-        {
-            $sql .= ' ORDER BY ' . implode( ', ', $this->parts['orderBy'] );
+        if (count($this->parts['orderBy']) > 0) {
+            $sql .= ' ORDER BY ' . implode(', ', $this->parts['orderBy']);
         }
 
-        if ( $this->limit || $this->offset )
-        {
+        if ($this->limit || $this->offset) {
             $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery(
                 $sql,
                 $this->limit,

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RoutingExtension class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,7 +22,7 @@ class RoutingExtension extends Twig_Extension
      */
     private $routeReferenceGenerator;
 
-    public function __construct( RouteReferenceGeneratorInterface $routeReferenceGenerator )
+    public function __construct(RouteReferenceGeneratorInterface $routeReferenceGenerator)
     {
         $this->routeReferenceGenerator = $routeReferenceGenerator;
     }
@@ -30,8 +32,8 @@ class RoutingExtension extends Twig_Extension
         return array(
             new Twig_SimpleFunction(
                 'ez_route',
-                array( $this, 'getRouteReference' )
-            )
+                array($this, 'getRouteReference')
+            ),
         );
     }
 
@@ -46,8 +48,8 @@ class RoutingExtension extends Twig_Extension
      *
      * @return \eZ\Publish\Core\MVC\Symfony\Routing\RouteReference
      */
-    public function getRouteReference( $resource = null, $params = array() )
+    public function getRouteReference($resource = null, $params = array())
     {
-        return $this->routeReferenceGenerator->generate( $resource, $params );
+        return $this->routeReferenceGenerator->generate($resource, $params);
     }
 }

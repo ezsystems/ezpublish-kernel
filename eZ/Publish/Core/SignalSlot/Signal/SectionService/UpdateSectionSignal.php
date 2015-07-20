@@ -1,9 +1,11 @@
 <?php
+
 /**
- * UpdateSectionSignal class
+ * UpdateSectionSignal class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,13 +14,12 @@ namespace eZ\Publish\Core\SignalSlot\Signal\SectionService;
 use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
- * UpdateSectionSignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\SectionService
+ * UpdateSectionSignal class.
  */
 class UpdateSectionSignal extends Signal
 {
     /**
-     * SectionId
+     * SectionId.
      *
      * @var mixed
      */

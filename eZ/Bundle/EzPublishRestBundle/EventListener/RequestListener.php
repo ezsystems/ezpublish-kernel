@@ -1,11 +1,14 @@
 <?php
+
 /**
  * File containing the RequestListener class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
+
 namespace eZ\Bundle\EzPublishRestBundle\EventListener;
 
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -29,7 +32,7 @@ class RequestListener implements EventSubscriberInterface
     /**
      * @param string $restPrefix
      */
-    public function __construct( $restPrefix )
+    public function __construct($restPrefix)
     {
         $this->restPrefix = $restPrefix;
     }
@@ -41,37 +44,36 @@ class RequestListener implements EventSubscriberInterface
     {
         return array(
             // 10001 is to ensure that REST requests are tagged before CorsListener is called
-            KernelEvents::REQUEST => array( 'onKernelRequest', 10001 ),
+            KernelEvents::REQUEST => array('onKernelRequest', 10001),
         );
     }
 
     /**
-     * If the request is a REST one, sets the is_rest_request request attribute
+     * If the request is a REST one, sets the is_rest_request request attribute.
+     *
      * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
      */
-    public function onKernelRequest( GetResponseEvent $event )
+    public function onKernelRequest(GetResponseEvent $event)
     {
         $isRestRequest = true;
 
-        if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
-        {
+        if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
             $isRestRequest = false;
         }
 
-        if ( !$this->hasRestPrefix( $event->getRequest() ) )
-        {
+        if (!$this->hasRestPrefix($event->getRequest())) {
             $isRestRequest = false;
         }
 
-        $event->getRequest()->attributes->set( 'is_rest_request', $isRestRequest );
+        $event->getRequest()->attributes->set('is_rest_request', $isRestRequest);
     }
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return boolean
+     * @return bool
      */
-    protected function hasRestPrefix( Request $request )
+    protected function hasRestPrefix(Request $request)
     {
         return (
             strpos(

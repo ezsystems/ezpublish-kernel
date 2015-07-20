@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\FieldType\RichText\Converter\Render\Embed class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -27,93 +29,82 @@ class Embed extends Render implements Converter
     protected $logger;
 
     /**
-     * Maps embed tag names to their default views
+     * Maps embed tag names to their default views.
      *
      * @var array
      */
     protected $tagDefaultViewMap = array(
-        "ezembed" => "embed",
-        "ezembedinline" => "embed-inline"
+        'ezembed' => 'embed',
+        'ezembedinline' => 'embed-inline',
     );
 
     /**
-     * Maps Docbook target to HTML target
+     * Maps Docbook target to HTML target.
      *
      * @var array
      */
     protected $docbookToHtmlTargetMap = array(
-        "new" => "_blank",
-        "replace" => "_self",
+        'new' => '_blank',
+        'replace' => '_self',
     );
 
-    public function __construct( RendererInterface $renderer, LoggerInterface $logger = null )
+    public function __construct(RendererInterface $renderer, LoggerInterface $logger = null)
     {
-        parent::__construct( $renderer );
+        parent::__construct($renderer);
         $this->logger = $logger;
     }
 
     /**
-     * Processes single embed element type (ezembed or ezembedinline)
+     * Processes single embed element type (ezembed or ezembedinline).
      *
      * @param \DOMDocument $document
      * @param $tagName string name of the tag to extract
-     * @param boolean $isInline
+     * @param bool $isInline
      */
-    protected function processTag( DOMDocument $document, $tagName, $isInline )
+    protected function processTag(DOMDocument $document, $tagName, $isInline)
     {
         /** @var $embed \DOMElement */
-        foreach ( $document->getElementsByTagName( $tagName ) as $embed )
-        {
+        foreach ($document->getElementsByTagName($tagName) as $embed) {
             $embedContent = null;
-            $parameters = $this->extractParameters( $embed, $tagName );
-            $resourceReference = $embed->getAttribute( "xlink:href" );
+            $parameters = $this->extractParameters($embed, $tagName);
+            $resourceReference = $embed->getAttribute('xlink:href');
 
-            if ( empty( $resourceReference ) )
-            {
-                if ( isset( $this->logger ) )
-                {
-                    $this->logger->error( "Could not embed resource: empty 'xlink:href' attribute" );
+            if (empty($resourceReference)) {
+                if (isset($this->logger)) {
+                    $this->logger->error("Could not embed resource: empty 'xlink:href' attribute");
                 }
-            }
-            else if ( 0 === preg_match( "~^(ezcontent|ezlocation)://(.*)$~", $resourceReference, $matches ) )
-            {
-                if ( isset( $this->logger ) )
-                {
+            } elseif (0 === preg_match('~^(ezcontent|ezlocation)://(.*)$~', $resourceReference, $matches)) {
+                if (isset($this->logger)) {
                     $this->logger->error(
                         "Could not embed resource: unhandled resource reference '{$resourceReference}'"
                     );
                 }
-            }
-            else if ( $matches[1] === "ezcontent" )
-            {
-                $parameters["id"] = $matches[2];
+            } elseif ($matches[1] === 'ezcontent') {
+                $parameters['id'] = $matches[2];
                 $embedContent = $this->renderer->renderContentEmbed(
-                    $parameters["id"],
-                    $parameters["viewType"],
+                    $parameters['id'],
+                    $parameters['viewType'],
                     array(
-                        "embedParams" => $parameters,
+                        'embedParams' => $parameters,
                     ),
                     $isInline
                 );
-            }
-            else if ( $matches[1] === "ezlocation" )
-            {
-                $parameters["id"] = $matches[2];
+            } elseif ($matches[1] === 'ezlocation') {
+                $parameters['id'] = $matches[2];
                 $embedContent = $this->renderer->renderLocationEmbed(
-                    $parameters["id"],
-                    $parameters["viewType"],
+                    $parameters['id'],
+                    $parameters['viewType'],
                     array(
-                        "embedParams" => $parameters,
+                        'embedParams' => $parameters,
                     ),
                     $isInline
                 );
             }
 
-            if ( isset( $embedContent ) )
-            {
-                $payload = $document->createElement( "ezpayload" );
-                $payload->appendChild( $document->createCDATASection( $embedContent ) );
-                $embed->appendChild( $payload );
+            if (isset($embedContent)) {
+                $payload = $document->createElement('ezpayload');
+                $payload->appendChild($document->createCDATASection($embedContent));
+                $embed->appendChild($payload);
             }
         }
     }
@@ -126,41 +117,36 @@ class Embed extends Render implements Converter
      *
      * @return array
      */
-    protected function extractParameters( DOMElement $embed, $tagName )
+    protected function extractParameters(DOMElement $embed, $tagName)
     {
-        if ( !$viewType = $embed->getAttribute( "view" ) )
-        {
+        if (!$viewType = $embed->getAttribute('view')) {
             $viewType = $this->tagDefaultViewMap[$tagName];
         }
 
-        $class = $embed->getAttribute( "ezxhtml:class" );
-        $align = $embed->getAttribute( "ezxhtml:align" );
-        $linkParameters = $this->extractLinkParameters( $embed );
-        $configuration = $this->extractConfiguration( $embed );
+        $class = $embed->getAttribute('ezxhtml:class');
+        $align = $embed->getAttribute('ezxhtml:align');
+        $linkParameters = $this->extractLinkParameters($embed);
+        $configuration = $this->extractConfiguration($embed);
 
         // Setting template parameters only if not empty
         $parameters = array(
-            "viewType" => $viewType,
+            'viewType' => $viewType,
         );
 
-        if ( !empty( $class ) )
-        {
-            $parameters["class"] = $class;
+        if (!empty($class)) {
+            $parameters['class'] = $class;
         }
 
-        if ( !empty( $align ) )
-        {
-            $parameters["align"] = $align;
+        if (!empty($align)) {
+            $parameters['align'] = $align;
         }
 
-        if ( !empty( $linkParameters ) )
-        {
-            $parameters["link"] = $linkParameters;
+        if (!empty($linkParameters)) {
+            $parameters['link'] = $linkParameters;
         }
 
-        if ( !empty( $configuration ) )
-        {
-            $parameters["config"] = $configuration;
+        if (!empty($configuration)) {
+            $parameters['config'] = $configuration;
         }
 
         return $parameters;
@@ -173,48 +159,41 @@ class Embed extends Render implements Converter
      *
      * @return array
      */
-    protected function extractLinkParameters( DOMElement $embed )
+    protected function extractLinkParameters(DOMElement $embed)
     {
-        $links = $embed->getElementsByTagName( "ezlink" );
+        $links = $embed->getElementsByTagName('ezlink');
 
-        if ( $links->length !== 1 )
-        {
+        if ($links->length !== 1) {
             return null;
         }
 
         /** @var \DOMElement $link */
-        $link = $links->item( 0 );
+        $link = $links->item(0);
 
-        $hrefResolved = $link->getAttribute( "href_resolved" );
+        $hrefResolved = $link->getAttribute('href_resolved');
 
-        if ( empty( $hrefResolved ) )
-        {
-            $this->logger->error( "Could not create link parameters: resolved embed link is missing" );
+        if (empty($hrefResolved)) {
+            $this->logger->error('Could not create link parameters: resolved embed link is missing');
 
             return null;
         }
 
-        $href = $link->getAttribute( "xlink:href" );
-        $target = $link->getAttribute( "xlink:show" );
-        $target = $this->mapLinkTarget( $target );
-        $title = $link->getAttribute( "xlink:title" );
-        $id = $link->getAttribute( "xml:id" );
-        $class = $link->getAttribute( "ezxhtml:class" );
+        $href = $link->getAttribute('xlink:href');
+        $target = $link->getAttribute('xlink:show');
+        $target = $this->mapLinkTarget($target);
+        $title = $link->getAttribute('xlink:title');
+        $id = $link->getAttribute('xml:id');
+        $class = $link->getAttribute('ezxhtml:class');
 
-        if ( strpos( $href, "ezcontent://" ) === 0 )
-        {
-            $resourceType = "CONTENT";
-            $resourceId = substr( $href, strlen( "ezcontent://" ) );
-        }
-        else if ( strpos( $href, "ezlocation://" ) === 0 )
-        {
-            $resourceType = "LOCATION";
-            $resourceId = substr( $href, strlen( "ezlocation://" ) );
-        }
-        // If link is not Content or Location based, it must be an URL (Url field type) link
-        else
-        {
-            $resourceType = "URL";
+        if (strpos($href, 'ezcontent://') === 0) {
+            $resourceType = 'CONTENT';
+            $resourceId = substr($href, strlen('ezcontent://'));
+        } elseif (strpos($href, 'ezlocation://') === 0) {
+            $resourceType = 'LOCATION';
+            $resourceId = substr($href, strlen('ezlocation://'));
+        } else {
+            // If link is not Content or Location based, it must be an URL (Url field type) link
+            $resourceType = 'URL';
             // ATM there is no way to find out the URL's ID here.
             // The whole implementation is actually lacking:
             // UrlService which would be used here and in Url and RichText field type's external storage,
@@ -226,60 +205,51 @@ class Embed extends Render implements Converter
             $resourceId = null;
         }
 
-        $fragmentPosition = strpos( $resourceId, "#" );
+        $fragmentPosition = strpos($resourceId, '#');
 
-        if ( $fragmentPosition !== false )
-        {
-            $resourceFragmentIdentifier = substr( $resourceId, $fragmentPosition + 1 );
-            $resourceId = substr( $resourceId, 0, $fragmentPosition );
+        if ($fragmentPosition !== false) {
+            $resourceFragmentIdentifier = substr($resourceId, $fragmentPosition + 1);
+            $resourceId = substr($resourceId, 0, $fragmentPosition);
         }
 
         $parameters = array(
-            "href" => $hrefResolved,
-            "resourceType" => $resourceType,
-            "resourceId" => $resourceId,
-            "wrapped" => $this->isLinkWrapped( $embed ),
+            'href' => $hrefResolved,
+            'resourceType' => $resourceType,
+            'resourceId' => $resourceId,
+            'wrapped' => $this->isLinkWrapped($embed),
         );
 
-        if ( !empty( $resourceFragmentIdentifier ) )
-        {
-            $parameters["resourceFragmentIdentifier"] = $resourceFragmentIdentifier;
+        if (!empty($resourceFragmentIdentifier)) {
+            $parameters['resourceFragmentIdentifier'] = $resourceFragmentIdentifier;
         }
 
-        if ( !empty( $target ) )
-        {
-            $parameters["target"] = $target;
+        if (!empty($target)) {
+            $parameters['target'] = $target;
         }
 
-        if ( !empty( $title ) )
-        {
-            $parameters["title"] = $title;
+        if (!empty($title)) {
+            $parameters['title'] = $title;
         }
 
-        if ( !empty( $id ) )
-        {
-            $parameters["id"] = $id;
+        if (!empty($id)) {
+            $parameters['id'] = $id;
         }
 
-        if ( !empty( $class ) )
-        {
-            $parameters["class"] = $class;
+        if (!empty($class)) {
+            $parameters['class'] = $class;
         }
 
         return $parameters;
     }
 
     /**
-     * Converts Docbook target to HTML target
+     * Converts Docbook target to HTML target.
      *
      * @param string $docbookLinkTarget
-     *
-     * @return null
      */
-    protected function mapLinkTarget( $docbookLinkTarget )
+    protected function mapLinkTarget($docbookLinkTarget)
     {
-        if ( isset( $this->docbookToHtmlTargetMap[$docbookLinkTarget] ) )
-        {
+        if (isset($this->docbookToHtmlTargetMap[$docbookLinkTarget])) {
             return $this->docbookToHtmlTargetMap[$docbookLinkTarget];
         }
 
@@ -293,53 +263,45 @@ class Embed extends Render implements Converter
      *
      * @param \DOMElement $element
      *
-     * @return boolean
+     * @return bool
      */
-    protected function isLinkWrapped( DOMElement $element )
+    protected function isLinkWrapped(DOMElement $element)
     {
         $parentNode = $element->parentNode;
 
-        if ( $parentNode instanceof DOMDocument )
-        {
+        if ($parentNode instanceof DOMDocument) {
             return false;
-        }
-        else if ( $parentNode->localName === "link" )
-        {
+        } elseif ($parentNode->localName === 'link') {
             $childCount = 0;
 
             /** @var \DOMText|\DOMElement $node */
-            foreach ( $parentNode->childNodes as $node )
-            {
-                if ( !( $node->nodeType === XML_TEXT_NODE && $node->isWhitespaceInElementContent() ) )
-                {
+            foreach ($parentNode->childNodes as $node) {
+                if (!($node->nodeType === XML_TEXT_NODE && $node->isWhitespaceInElementContent())) {
                     $childCount += 1;
                 }
             }
 
-            if ( $childCount === 1 )
-            {
+            if ($childCount === 1) {
                 return false;
-            }
-            else
-            {
+            } else {
                 return true;
             }
         }
 
-        return $this->isLinkWrapped( $parentNode );
+        return $this->isLinkWrapped($parentNode);
     }
 
     /**
-     * Injects rendered payloads into embed elements
+     * Injects rendered payloads into embed elements.
      *
      * @param \DOMDocument $document
      *
      * @return \DOMDocument
      */
-    public function convert( DOMDocument $document )
+    public function convert(DOMDocument $document)
     {
-        $this->processTag( $document, 'ezembed', false );
-        $this->processTag( $document, 'ezembedinline', true );
+        $this->processTag($document, 'ezembed', false);
+        $this->processTag($document, 'ezembedinline', true);
 
         return $document;
     }

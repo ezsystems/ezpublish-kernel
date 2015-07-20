@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Page Zone class
+ * File containing the Page Zone class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -49,12 +51,11 @@ class Zone extends Base
      */
     protected $action;
 
-    public function __construct( array $properties = array() )
+    public function __construct(array $properties = array())
     {
-        parent::__construct( $properties );
+        parent::__construct($properties);
 
-        foreach ( $this->blocks as $block )
-        {
+        foreach ($this->blocks as $block) {
             $this->blocksById[$block->id] = $block;
         }
     }

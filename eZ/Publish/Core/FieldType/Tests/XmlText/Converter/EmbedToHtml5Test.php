@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the EmbedToHtml5 EzXml test
+ * File containing the EmbedToHtml5 EzXml test.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,8 +19,7 @@ use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
 /**
  * Tests the EmbedToHtml5 Preconverter
- * Class EmbedToHtml5Test
- * @package eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Converter
+ * Class EmbedToHtml5Test.
  */
 class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
 {
@@ -44,9 +45,9 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                     'noLayout' => true,
                 ),
                 array(
-                    array( 'content', 'read', true ),
-                    array( 'content', 'versionread', true ),
-                )
+                    array('content', 'read', true),
+                    array('content', 'versionread', true),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -63,10 +64,10 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                     'noLayout' => true,
                 ),
                 array(
-                    array( 'content', 'read', false ),
-                    array( 'content', 'view_embed', true ),
-                    array( 'content', 'versionread', true ),
-                )
+                    array('content', 'read', false),
+                    array('content', 'view_embed', true),
+                    array('content', 'versionread', true),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -77,12 +78,12 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                 array(
                     'noLayout' => true,
                     'objectParameters' => array(
-                        'size' => 'small'
+                        'size' => 'small',
                     ),
                 ),
                 array(
-                    array( 'content', 'read', true ),
-                )
+                    array('content', 'read', true),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -100,9 +101,9 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                     ),
                 ),
                 array(
-                    array( 'content', 'read', true ),
-                    array( 'content', 'versionread', true ),
-                )
+                    array('content', 'read', true),
+                    array('content', 'versionread', true),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -139,9 +140,9 @@ url="http://ez.no"
                     ),
                 ),
                 array(
-                    array( 'content', 'read', true ),
-                    array( 'content', 'versionread', true ),
-                )
+                    array('content', 'read', true),
+                    array('content', 'versionread', true),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -185,10 +186,10 @@ ezlegacytmp-embed-link-node_id="111"
                     ),
                 ),
                 array(
-                    array( 'content', 'read', false ),
-                    array( 'content', 'view_embed', true ),
-                    array( 'content', 'versionread', true ),
-                )
+                    array('content', 'read', false),
+                    array('content', 'view_embed', true),
+                    array('content', 'versionread', true),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -208,7 +209,7 @@ url="http://ez.no"
                 array(
                     'noLayout' => true,
                     'objectParameters' => array(
-                        'size' => 'small'
+                        'size' => 'small',
                     ),
                     'linkParameters' => array(
                         'href' => 'http://ez.no',
@@ -218,8 +219,8 @@ url="http://ez.no"
                     ),
                 ),
                 array(
-                    array( 'content', 'read', true ),
-                )
+                    array('content', 'read', true),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -264,9 +265,9 @@ ezlegacytmp-embed-link-url_id="333"
                     ),
                 ),
                 array(
-                    array( 'content', 'read', true ),
-                    array( 'content', 'versionread', true ),
-                )
+                    array('content', 'read', true),
+                    array('content', 'versionread', true),
+                ),
             ),
         );
     }
@@ -292,8 +293,8 @@ ezlegacytmp-embed-link-url_id="333"
                     'noLayout' => true,
                 ),
                 array(
-                    array( 'content', 'read', true ),
-                )
+                    array('content', 'read', true),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -310,9 +311,9 @@ ezlegacytmp-embed-link-url_id="333"
                     'noLayout' => true,
                 ),
                 array(
-                    array( 'content', 'read', false ),
-                    array( 'content', 'view_embed', true ),
-                )
+                    array('content', 'read', false),
+                    array('content', 'view_embed', true),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -351,8 +352,8 @@ ezlegacytmp-embed-link-object_id="333"
                     ),
                 ),
                 array(
-                    array( 'content', 'read', true ),
-                )
+                    array('content', 'read', true),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -401,9 +402,9 @@ ezlegacytmp-embed-link-anchor_name="anchovy"
                     ),
                 ),
                 array(
-                    array( 'content', 'read', false ),
-                    array( 'content', 'view_embed', true ),
-                )
+                    array('content', 'read', false),
+                    array('content', 'view_embed', true),
+                ),
             ),
         );
     }
@@ -430,8 +431,8 @@ ezlegacytmp-embed-link-anchor_name="anchovy"
                     ),
                 ),
                 array(
-                    array( 'content', 'read', true ),
-                )
+                    array('content', 'read', true),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -479,8 +480,8 @@ ezlegacytmp-embed-link-node_id="222"
                     ),
                 ),
                 array(
-                    array( 'content', 'read', true ),
-                )
+                    array('content', 'read', true),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -531,8 +532,8 @@ and that was embedded
                     ),
                 ),
                 array(
-                    array( 'content', 'read', true ),
-                )
+                    array('content', 'read', true),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -582,8 +583,8 @@ ezlegacytmp-embed-link-node_id="222"
                     ),
                 ),
                 array(
-                    array( 'content', 'read', true ),
-                )
+                    array('content', 'read', true),
+                ),
             ),
         );
     }
@@ -593,7 +594,7 @@ ezlegacytmp-embed-link-node_id="222"
      */
     protected function getMockFragmentHandler()
     {
-        return $this->getMockBuilder( 'Symfony\\Component\\HttpKernel\\Fragment\\FragmentHandler' )
+        return $this->getMockBuilder('Symfony\\Component\\HttpKernel\\Fragment\\FragmentHandler')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -603,7 +604,7 @@ ezlegacytmp-embed-link-node_id="222"
      */
     protected function getMockContentService()
     {
-        return $this->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\ContentService' )
+        return $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\ContentService')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -613,7 +614,7 @@ ezlegacytmp-embed-link-node_id="222"
      */
     protected function getMockLocationService()
     {
-        return $this->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\LocationService' )
+        return $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\LocationService')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -623,35 +624,36 @@ ezlegacytmp-embed-link-node_id="222"
      */
     protected function getLoggerMock()
     {
-        return $this->getMock( "Psr\\Log\\LoggerInterface" );
+        return $this->getMock('Psr\\Log\\LoggerInterface');
     }
 
     /**
      * @param $contentService
      * @param $locationService
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockRepository( $contentService, $locationService )
+    protected function getMockRepository($contentService, $locationService)
     {
         $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
         $repository = $this
-            ->getMockBuilder( $repositoryClass )
+            ->getMockBuilder($repositoryClass)
             ->disableOriginalConstructor()
             ->setMethods(
                 array_diff(
-                    get_class_methods( $repositoryClass ),
-                    array( 'sudo' )
+                    get_class_methods($repositoryClass),
+                    array('sudo')
                 )
             )
             ->getMock();
 
-        $repository->expects( $this->any() )
-            ->method( 'getContentService' )
-            ->will( $this->returnValue( $contentService ) );
+        $repository->expects($this->any())
+            ->method('getContentService')
+            ->will($this->returnValue($contentService));
 
-        $repository->expects( $this->any() )
-            ->method( 'getLocationService' )
-            ->will( $this->returnValue( $locationService ) );
+        $repository->expects($this->any())
+            ->method('getLocationService')
+            ->will($this->returnValue($locationService));
 
         return $repository;
     }
@@ -664,35 +666,34 @@ ezlegacytmp-embed-link-node_id="222"
      * @param $parameters
      * @param $permissionsMap
      */
-    public function runNodeEmbedContent( $xmlString, $contentId, $status, $view, $parameters, $permissionsMap )
+    public function runNodeEmbedContent($xmlString, $contentId, $status, $view, $parameters, $permissionsMap)
     {
         $dom = new \DOMDocument();
-        $dom->loadXML( $xmlString );
+        $dom->loadXML($xmlString);
 
         $fragmentHandler = $this->getMockFragmentHandler();
         $contentService = $this->getMockContentService();
 
-        $versionInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo' );
-        $versionInfo->expects( $this->any() )
-            ->method( "__get" )
-            ->with( "status" )
-            ->will( $this->returnValue( $status ) );
+        $versionInfo = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
+        $versionInfo->expects($this->any())
+            ->method('__get')
+            ->with('status')
+            ->will($this->returnValue($status));
 
-        $content = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content' );
-        $content->expects( $this->any() )
-            ->method( "getVersionInfo" )
-            ->will( $this->returnValue( $versionInfo ) );
+        $content = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
+        $content->expects($this->any())
+            ->method('getVersionInfo')
+            ->will($this->returnValue($versionInfo));
 
-        $contentService->expects( $this->once() )
-            ->method( 'loadContent' )
-            ->with( $this->equalTo( $contentId ) )
-            ->will( $this->returnValue( $content ) );
+        $contentService->expects($this->once())
+            ->method('loadContent')
+            ->with($this->equalTo($contentId))
+            ->will($this->returnValue($content));
 
-        $repository = $this->getMockRepository( $contentService, null );
-        foreach ( $permissionsMap as $index => $permissions )
-        {
-            $repository->expects( $this->at( $index + 1 ) )
-                ->method( "canUser" )
+        $repository = $this->getMockRepository($contentService, null);
+        foreach ($permissionsMap as $index => $permissions) {
+            $repository->expects($this->at($index + 1))
+                ->method('canUser')
                 ->with(
                     $permissions[0],
                     $permissions[1],
@@ -700,12 +701,12 @@ ezlegacytmp-embed-link-node_id="222"
                     null
                 )
                 ->will(
-                    $this->returnValue( $permissions[2] )
+                    $this->returnValue($permissions[2])
                 );
         }
 
-        $fragmentHandler->expects( $this->once() )
-            ->method( 'render' )
+        $fragmentHandler->expects($this->once())
+            ->method('render')
             ->with(
                 new ControllerReference(
                     'ez_content:embedContent',
@@ -713,7 +714,7 @@ ezlegacytmp-embed-link-node_id="222"
                         'contentId' => $contentId,
                         'viewType' => $view,
                         'layout' => false,
-                        'params' => $parameters
+                        'params' => $parameters,
                     )
                 )
             );
@@ -721,11 +722,11 @@ ezlegacytmp-embed-link-node_id="222"
         $converter = new EmbedToHtml5(
             $fragmentHandler,
             $repository,
-            array( 'view', 'class', 'node_id', 'object_id' ),
-            $this->getMock( 'Psr\\Log\\LoggerInterface' )
+            array('view', 'class', 'node_id', 'object_id'),
+            $this->getMock('Psr\\Log\\LoggerInterface')
         );
 
-        $converter->convert( $dom );
+        $converter->convert($dom);
     }
 
     /**
@@ -735,31 +736,30 @@ ezlegacytmp-embed-link-node_id="222"
      * @param $parameters
      * @param $permissionsMap
      */
-    public function runNodeEmbedLocation( $xmlString, $locationId, $view, $parameters, $permissionsMap )
+    public function runNodeEmbedLocation($xmlString, $locationId, $view, $parameters, $permissionsMap)
     {
         $dom = new \DOMDocument();
-        $dom->loadXML( $xmlString );
+        $dom->loadXML($xmlString);
 
         $fragmentHandler = $this->getMockFragmentHandler();
         $locationService = $this->getMockLocationService();
 
-        $contentInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' );
-        $location = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
+        $contentInfo = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
+        $location = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
         $location
-            ->expects( $this->atLeastOnce() )
-            ->method( "getContentInfo" )
-            ->will( $this->returnValue( $contentInfo ) );
+            ->expects($this->atLeastOnce())
+            ->method('getContentInfo')
+            ->will($this->returnValue($contentInfo));
 
-        $locationService->expects( $this->once() )
-            ->method( 'loadLocation' )
-            ->with( $this->equalTo( $locationId ) )
-            ->will( $this->returnValue( $location ) );
+        $locationService->expects($this->once())
+            ->method('loadLocation')
+            ->with($this->equalTo($locationId))
+            ->will($this->returnValue($location));
 
-        $repository = $this->getMockRepository( null, $locationService );
-        foreach ( $permissionsMap as $index => $permissions )
-        {
-            $repository->expects( $this->at( $index + 1 ) )
-                ->method( "canUser" )
+        $repository = $this->getMockRepository(null, $locationService);
+        foreach ($permissionsMap as $index => $permissions) {
+            $repository->expects($this->at($index + 1))
+                ->method('canUser')
                 ->with(
                     $permissions[0],
                     $permissions[1],
@@ -767,12 +767,12 @@ ezlegacytmp-embed-link-node_id="222"
                     $location
                 )
                 ->will(
-                    $this->returnValue( $permissions[2] )
+                    $this->returnValue($permissions[2])
                 );
         }
 
-        $fragmentHandler->expects( $this->once() )
-            ->method( 'render' )
+        $fragmentHandler->expects($this->once())
+            ->method('render')
             ->with(
                 new ControllerReference(
                     'ez_content:embedLocation',
@@ -780,7 +780,7 @@ ezlegacytmp-embed-link-node_id="222"
                         'locationId' => $locationId,
                         'viewType' => $view,
                         'layout' => false,
-                        'params' => $parameters
+                        'params' => $parameters,
                     )
                 )
             );
@@ -788,38 +788,41 @@ ezlegacytmp-embed-link-node_id="222"
         $converter = new EmbedToHtml5(
             $fragmentHandler,
             $repository,
-            array( 'view', 'class', 'node_id', 'object_id' ),
-            $this->getMock( 'Psr\\Log\\LoggerInterface' )
+            array('view', 'class', 'node_id', 'object_id'),
+            $this->getMock('Psr\\Log\\LoggerInterface')
         );
 
-        $converter->convert( $dom );
+        $converter->convert($dom);
     }
 
     /**
-     * Basic test to see if preconverter will build an embed
+     * Basic test to see if preconverter will build an embed.
+     *
      * @dataProvider providerEmbedXmlSampleContent
      */
-    public function testProperEmbedsContent( $xmlString, $contentId, $status, $view, $parameters, $permissionsMap )
+    public function testProperEmbedsContent($xmlString, $contentId, $status, $view, $parameters, $permissionsMap)
     {
-        $this->runNodeEmbedContent( $xmlString, $contentId, $status, $view, $parameters, $permissionsMap );
+        $this->runNodeEmbedContent($xmlString, $contentId, $status, $view, $parameters, $permissionsMap);
     }
 
     /**
-     * Basic test to see if preconverter will build an embed
+     * Basic test to see if preconverter will build an embed.
+     *
      * @dataProvider providerEmbedXmlSampleLocation
      */
-    public function testProperEmbedsLocation( $xmlString, $locationId, $view, $parameters, $permissionsMap )
+    public function testProperEmbedsLocation($xmlString, $locationId, $view, $parameters, $permissionsMap)
     {
-        $this->runNodeEmbedLocation( $xmlString, $locationId, $view, $parameters, $permissionsMap );
+        $this->runNodeEmbedLocation($xmlString, $locationId, $view, $parameters, $permissionsMap);
     }
 
     /**
-     * Ensure converter doesn't pass on non-custom attributes
+     * Ensure converter doesn't pass on non-custom attributes.
+     *
      * @dataProvider providerEmbedXmlBadSample
      */
-    public function testImproperEmbeds( $xmlString, $contentId, $status, $view, $parameters, $permissionsMap )
+    public function testImproperEmbeds($xmlString, $contentId, $status, $view, $parameters, $permissionsMap)
     {
-        $this->runNodeEmbedContent( $xmlString, $contentId, $status, $view, $parameters, $permissionsMap );
+        $this->runNodeEmbedContent($xmlString, $contentId, $status, $view, $parameters, $permissionsMap);
     }
 
     public function providerForTestEmbedContentThrowsUnauthorizedException()
@@ -827,22 +830,22 @@ ezlegacytmp-embed-link-node_id="222"
         return array(
             array(
                 array(
-                    array( 'content', 'read', false ),
-                    array( 'content', 'view_embed', false ),
-                )
+                    array('content', 'read', false),
+                    array('content', 'view_embed', false),
+                ),
             ),
             array(
                 array(
-                    array( 'content', 'read', false ),
-                    array( 'content', 'view_embed', true ),
-                    array( 'content', 'versionread', false ),
-                )
+                    array('content', 'read', false),
+                    array('content', 'view_embed', true),
+                    array('content', 'versionread', false),
+                ),
             ),
             array(
                 array(
-                    array( 'content', 'read', true ),
-                    array( 'content', 'versionread', false ),
-                )
+                    array('content', 'read', true),
+                    array('content', 'versionread', false),
+                ),
             ),
         );
     }
@@ -851,35 +854,34 @@ ezlegacytmp-embed-link-node_id="222"
      * @dataProvider providerForTestEmbedContentThrowsUnauthorizedException
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testEmbedContentThrowsUnauthorizedException( $permissionsMap )
+    public function testEmbedContentThrowsUnauthorizedException($permissionsMap)
     {
         $dom = new \DOMDocument();
-        $dom->loadXML( '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed view="embed" object_id="42" url="http://www.ez.no"/></paragraph></section>' );
+        $dom->loadXML('<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed view="embed" object_id="42" url="http://www.ez.no"/></paragraph></section>');
 
         $fragmentHandler = $this->getMockFragmentHandler();
         $contentService = $this->getMockContentService();
 
-        $versionInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo' );
-        $versionInfo->expects( $this->any() )
-            ->method( "__get" )
-            ->with( "status" )
-            ->will( $this->returnValue( APIVersionInfo::STATUS_DRAFT ) );
+        $versionInfo = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
+        $versionInfo->expects($this->any())
+            ->method('__get')
+            ->with('status')
+            ->will($this->returnValue(APIVersionInfo::STATUS_DRAFT));
 
-        $content = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content' );
-        $content->expects( $this->any() )
-            ->method( "getVersionInfo" )
-            ->will( $this->returnValue( $versionInfo ) );
+        $content = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
+        $content->expects($this->any())
+            ->method('getVersionInfo')
+            ->will($this->returnValue($versionInfo));
 
-        $contentService->expects( $this->once() )
-            ->method( 'loadContent' )
-            ->with( $this->equalTo( 42 ) )
-            ->will( $this->returnValue( $content ) );
+        $contentService->expects($this->once())
+            ->method('loadContent')
+            ->with($this->equalTo(42))
+            ->will($this->returnValue($content));
 
-        $repository = $this->getMockRepository( $contentService, null );
-        foreach ( $permissionsMap as $index => $permissions )
-        {
-            $repository->expects( $this->at( $index + 1 ) )
-                ->method( "canUser" )
+        $repository = $this->getMockRepository($contentService, null);
+        foreach ($permissionsMap as $index => $permissions) {
+            $repository->expects($this->at($index + 1))
+                ->method('canUser')
                 ->with(
                     $permissions[0],
                     $permissions[1],
@@ -887,18 +889,18 @@ ezlegacytmp-embed-link-node_id="222"
                     null
                 )
                 ->will(
-                    $this->returnValue( $permissions[2] )
+                    $this->returnValue($permissions[2])
                 );
         }
 
         $converter = new EmbedToHtml5(
             $fragmentHandler,
             $repository,
-            array( 'view', 'class', 'node_id', 'object_id' ),
-            $this->getMock( 'Psr\\Log\\LoggerInterface' )
+            array('view', 'class', 'node_id', 'object_id'),
+            $this->getMock('Psr\\Log\\LoggerInterface')
         );
 
-        $converter->convert( $dom );
+        $converter->convert($dom);
     }
 
     /**
@@ -907,49 +909,45 @@ ezlegacytmp-embed-link-node_id="222"
     public function testEmbedLocationThrowsUnauthorizedException()
     {
         $dom = new \DOMDocument();
-        $dom->loadXML( '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed view="embed" node_id="42" url="http://www.ez.no"/></paragraph></section>' );
+        $dom->loadXML('<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed view="embed" node_id="42" url="http://www.ez.no"/></paragraph></section>');
 
         $fragmentHandler = $this->getMockFragmentHandler();
         $locationService = $this->getMockLocationService();
 
-        $contentInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' );
-        $location = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
+        $contentInfo = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
+        $location = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
         $location
-            ->expects( $this->exactly( 2 ) )
-            ->method( "getContentInfo" )
-            ->will( $this->returnValue( $contentInfo ) );
+            ->expects($this->exactly(2))
+            ->method('getContentInfo')
+            ->will($this->returnValue($contentInfo));
 
-        $locationService->expects( $this->once() )
-            ->method( 'loadLocation' )
-            ->with( $this->equalTo( 42 ) )
-            ->will( $this->returnValue( $location ) );
+        $locationService->expects($this->once())
+            ->method('loadLocation')
+            ->with($this->equalTo(42))
+            ->will($this->returnValue($location));
 
-        $repository = $this->getMockRepository( null, $locationService );
-        $repository->expects( $this->at( 1 ) )
-            ->method( "canUser" )
-            ->with(
-                "content", "read", $contentInfo, $location
-            )
+        $repository = $this->getMockRepository(null, $locationService);
+        $repository->expects($this->at(1))
+            ->method('canUser')
+            ->with('content', 'read', $contentInfo, $location)
             ->will(
-                $this->returnValue( false )
+                $this->returnValue(false)
             );
-        $repository->expects( $this->at( 2 ) )
-            ->method( "canUser" )
-            ->with(
-                "content", "view_embed", $contentInfo, $location
-            )
+        $repository->expects($this->at(2))
+            ->method('canUser')
+            ->with('content', 'view_embed', $contentInfo, $location)
             ->will(
-                $this->returnValue( false )
+                $this->returnValue(false)
             );
 
         $converter = new EmbedToHtml5(
             $fragmentHandler,
             $repository,
-            array( 'view', 'class', 'node_id', 'object_id' ),
-            $this->getMock( 'Psr\\Log\\LoggerInterface' )
+            array('view', 'class', 'node_id', 'object_id'),
+            $this->getMock('Psr\\Log\\LoggerInterface')
         );
 
-        $converter->convert( $dom );
+        $converter->convert($dom);
     }
 
     public function dataProviderForTestEmbedContentNotFound()
@@ -980,50 +978,50 @@ ezlegacytmp-embed-link-node_id="222"
      *
      * @dataProvider dataProviderForTestEmbedContentNotFound
      */
-    public function testEmbedContentNotFound( $input, $output )
+    public function testEmbedContentNotFound($input, $output)
     {
         $fragmentHandler = $this->getMockFragmentHandler();
         $contentService = $this->getMockContentService();
-        $repository = $this->getMockRepository( $contentService, null );
+        $repository = $this->getMockRepository($contentService, null);
         $logger = $this->getLoggerMock();
 
-        $contentService->expects( $this->once() )
-            ->method( "loadContent" )
-            ->with( $this->equalTo( 42 ) )
+        $contentService->expects($this->once())
+            ->method('loadContent')
+            ->with($this->equalTo(42))
             ->will(
                 $this->throwException(
-                    $this->getMock( "eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException" )
+                    $this->getMock('eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException')
                 )
             );
 
-        $logger->expects( $this->at( 0 ) )
-            ->method( "error" )
+        $logger->expects($this->at(0))
+            ->method('error')
             ->with(
-                "Could not resolve XmlText embed link resource type and ID"
+                'Could not resolve XmlText embed link resource type and ID'
             );
 
-        $logger->expects( $this->at( 1 ) )
-            ->method( "error" )
+        $logger->expects($this->at(1))
+            ->method('error')
             ->with(
-                "While generating embed for xmltext, could not locate Content object with ID 42"
+                'While generating embed for xmltext, could not locate Content object with ID 42'
             );
 
         $converter = new EmbedToHtml5(
             $fragmentHandler,
             $repository,
-            array( "view", "class", "node_id", "object_id" ),
+            array('view', 'class', 'node_id', 'object_id'),
             $logger
         );
 
         $document = new DOMDocument();
-        $document->loadXML( $input );
+        $document->loadXML($input);
 
-        $converter->convert( $document );
+        $converter->convert($document);
 
         $outputDocument = new DOMDocument();
-        $outputDocument->loadXML( $output );
+        $outputDocument->loadXML($output);
 
-        $this->assertEquals( $outputDocument, $document );
+        $this->assertEquals($outputDocument, $document);
     }
 
     public function dataProviderForTestEmbedLocationNotFound()
@@ -1054,49 +1052,49 @@ ezlegacytmp-embed-link-node_id="222"
      *
      * @dataProvider dataProviderForTestEmbedLocationNotFound
      */
-    public function testEmbedLocationNotFound( $input, $output )
+    public function testEmbedLocationNotFound($input, $output)
     {
         $fragmentHandler = $this->getMockFragmentHandler();
         $locationService = $this->getMockLocationService();
-        $repository = $this->getMockRepository( null, $locationService );
+        $repository = $this->getMockRepository(null, $locationService);
         $logger = $this->getLoggerMock();
 
-        $locationService->expects( $this->once() )
-            ->method( "loadLocation" )
-            ->with( $this->equalTo( 42 ) )
+        $locationService->expects($this->once())
+            ->method('loadLocation')
+            ->with($this->equalTo(42))
             ->will(
                 $this->throwException(
-                    $this->getMock( "eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException" )
+                    $this->getMock('eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException')
                 )
             );
 
-        $logger->expects( $this->at( 0 ) )
-            ->method( "error" )
+        $logger->expects($this->at(0))
+            ->method('error')
             ->with(
-                "Could not resolve XmlText embed link resource type and ID"
+                'Could not resolve XmlText embed link resource type and ID'
             );
 
-        $logger->expects( $this->at( 1 ) )
-            ->method( "error" )
+        $logger->expects($this->at(1))
+            ->method('error')
             ->with(
-                "While generating embed for xmltext, could not locate Location with ID 42"
+                'While generating embed for xmltext, could not locate Location with ID 42'
             );
 
         $converter = new EmbedToHtml5(
             $fragmentHandler,
             $repository,
-            array( "view", "class", "node_id", "object_id" ),
+            array('view', 'class', 'node_id', 'object_id'),
             $logger
         );
 
         $document = new DOMDocument();
-        $document->loadXML( $input );
+        $document->loadXML($input);
 
-        $converter->convert( $document );
+        $converter->convert($document);
 
         $outputDocument = new DOMDocument();
-        $outputDocument->loadXML( $output );
+        $outputDocument->loadXML($output);
 
-        $this->assertEquals( $outputDocument, $document );
+        $this->assertEquals($outputDocument, $document);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the eZ Publish package.
  *
@@ -13,21 +14,21 @@ use Exception;
 use RuntimeException;
 
 /**
- * FieldType Not Found Exception
+ * FieldType Not Found Exception.
  */
 class FieldTypeNotFoundException extends RuntimeException implements Httpable
 {
     /**
-     * Creates a FieldType Not Found exception with info on how to fix
+     * Creates a FieldType Not Found exception with info on how to fix.
      *
      * @param string $fieldType
      * @param \Exception|null $previous
      */
-    public function __construct( $fieldType, Exception $previous = null )
+    public function __construct($fieldType, Exception $previous = null)
     {
         parent::__construct(
             "FieldType '{$fieldType}' not found, needs to be implemented or configured to use "
-            . "FieldType\\Null\\Type (%ezpublish.fieldType.eznull.class%)",
+            . 'FieldType\\Null\\Type (%ezpublish.fieldType.eznull.class%)',
             self::INTERNAL_ERROR,
             $previous
         );

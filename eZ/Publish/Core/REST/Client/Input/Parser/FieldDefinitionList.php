@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the FieldDefinitionList parser class
+ * File containing the FieldDefinitionList parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,7 +18,7 @@ use eZ\Publish\Core\REST\Client\Values;
 use eZ\Publish\API\Repository\ContentTypeService;
 
 /**
- * Parser for FieldDefinitionList
+ * Parser for FieldDefinitionList.
  */
 class FieldDefinitionList extends BaseParser
 {
@@ -34,26 +36,25 @@ class FieldDefinitionList extends BaseParser
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      */
-    public function __construct( ParserTools $parserTools, ContentTypeService $contentTypeService )
+    public function __construct(ParserTools $parserTools, ContentTypeService $contentTypeService)
     {
         $this->parserTools = $parserTools;
         $this->contentTypeService = $contentTypeService;
     }
 
     /**
-     * Parse input structure
+     * Parse input structure.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      *
      * @return \eZ\Publish\Core\REST\Client\Values\FieldDefinitionList
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
         $fieldDefinitionReferences = array();
 
-        foreach ( $data['FieldDefinition'] as $fieldDefinitionData )
-        {
+        foreach ($data['FieldDefinition'] as $fieldDefinitionData) {
             $fieldDefinitionReferences[] = $this->parserTools->parseObjectElement(
                 $fieldDefinitionData,
                 $parsingDispatcher

@@ -1,17 +1,17 @@
 <?php
 
-return array (
+return array(
   'ezcontent_language' =>
-  array (
+  array(
     0 =>
-    array (
+    array(
       'disabled' => '0',
       'id' => '2',
       'locale' => 'eng-US',
       'name' => 'English (American)',
     ),
     1 =>
-    array (
+    array(
       'disabled' => '0',
       'id' => '4',
       'locale' => 'eng-GB',
@@ -19,4 +19,3 @@ return array (
     ),
   ),
 );
-

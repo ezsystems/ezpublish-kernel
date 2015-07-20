@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,7 +22,7 @@ class XmlTextExtension extends Twig_Extension
      */
     private $xmlTextConverter;
 
-    public function __construct( Html5Converter $xmlTextConverter )
+    public function __construct(Html5Converter $xmlTextConverter)
     {
         $this->xmlTextConverter = $xmlTextConverter;
     }
@@ -35,21 +37,21 @@ class XmlTextExtension extends Twig_Extension
         return array(
             new Twig_SimpleFilter(
                 'xmltext_to_html5',
-                array( $this, 'xmlTextToHtml5' ),
-                array( 'is_safe' => array( 'html' ) )
+                array($this, 'xmlTextToHtml5'),
+                array('is_safe' => array('html'))
             ),
         );
     }
 
     /**
-     * Implements the "xmltext_to_html5" filter
+     * Implements the "xmltext_to_html5" filter.
      *
      * @param string $xmlData
      *
      * @return string
      */
-    public function xmltextToHtml5( $xmlData )
+    public function xmltextToHtml5($xmlData)
     {
-        return $this->xmlTextConverter->convert( $xmlData );
+        return $this->xmlTextConverter->convert($xmlData);
     }
 }

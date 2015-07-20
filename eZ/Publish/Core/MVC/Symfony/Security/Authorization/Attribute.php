@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the authorization Attribute class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -47,7 +49,7 @@ class Attribute
      */
     public $limitations;
 
-    public function __construct( $module = null, $function = null, array $limitations = array() )
+    public function __construct($module = null, $function = null, array $limitations = array())
     {
         $this->module = $module;
         $this->function = $function;
@@ -55,7 +57,7 @@ class Attribute
     }
 
     /**
-     * String representation so that it's understandable by basic voters
+     * String representation so that it's understandable by basic voters.
      *
      * @return string
      */

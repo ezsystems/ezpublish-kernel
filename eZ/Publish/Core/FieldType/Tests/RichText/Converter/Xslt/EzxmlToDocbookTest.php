@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the EzxmlToDocbookTest conversion test
+ * File containing the EzxmlToDocbookTest conversion test.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,7 +18,7 @@ use eZ\Publish\Core\FieldType\XmlText\Converter\EmbedLinking;
 use eZ\Publish\Core\FieldType\RichText\Converter\Xslt;
 
 /**
- * Tests conversion from legacy ezxml to docbook format
+ * Tests conversion from legacy ezxml to docbook format.
  */
 class EzxmlToDocbookTest extends BaseTest
 {
@@ -25,15 +27,14 @@ class EzxmlToDocbookTest extends BaseTest
      */
     protected function getConverter()
     {
-        if ( $this->converter === null )
-        {
+        if ($this->converter === null) {
             $this->converter = new Aggregate(
                 array(
-                    new ToRichTextPreNormalize( new Expanding(), new EmbedLinking() ),
+                    new ToRichTextPreNormalize(new Expanding(), new EmbedLinking()),
                     new Xslt(
                         $this->getConversionTransformationStylesheet(),
                         $this->getCustomConversionTransformationStylesheets()
-                    )
+                    ),
                 )
             );
         }
@@ -61,8 +62,8 @@ class EzxmlToDocbookTest extends BaseTest
     public function getFixtureSubdirectories()
     {
         return array(
-            "input" => "ezxml",
-            "output" => "docbook"
+            'input' => 'ezxml',
+            'output' => 'docbook',
         );
     }
 
@@ -73,7 +74,7 @@ class EzxmlToDocbookTest extends BaseTest
      */
     protected function getConversionTransformationStylesheet()
     {
-        return __DIR__ . "/../../../../RichText/Resources/stylesheets/ezxml/docbook/docbook.xsl";
+        return __DIR__ . '/../../../../RichText/Resources/stylesheets/ezxml/docbook/docbook.xsl';
     }
 
     /**
@@ -102,12 +103,12 @@ class EzxmlToDocbookTest extends BaseTest
     {
         return array(
             array(
-                "path" => __DIR__ . "/../../../../RichText/Resources/stylesheets/ezxml/docbook/core.xsl",
-                "priority" => 99
+                'path' => __DIR__ . '/../../../../RichText/Resources/stylesheets/ezxml/docbook/core.xsl',
+                'priority' => 99,
             ),
             array(
-                "path" => __DIR__ . "/_fixtures/ezxml/custom_stylesheets/youtube_docbook.xsl",
-                "priority" => 100
+                'path' => __DIR__ . '/_fixtures/ezxml/custom_stylesheets/youtube_docbook.xsl',
+                'priority' => 100,
             ),
         );
     }
@@ -120,8 +121,8 @@ class EzxmlToDocbookTest extends BaseTest
     protected function getConversionValidationSchema()
     {
         return array(
-            __DIR__ . "/_fixtures/docbook/custom_schemas/youtube.rng",
-            __DIR__ . "/../../../../RichText/Resources/schemas/docbook/docbook.iso.sch.xsl",
+            __DIR__ . '/_fixtures/docbook/custom_schemas/youtube.rng',
+            __DIR__ . '/../../../../RichText/Resources/schemas/docbook/docbook.iso.sch.xsl',
         );
     }
 }

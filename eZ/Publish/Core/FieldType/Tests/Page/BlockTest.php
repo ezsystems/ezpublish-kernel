@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the BlockTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,11 +18,12 @@ class BlockTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @param array $properties
+     *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Block
      */
-    private function getBlock( array $properties = array() )
+    private function getBlock(array $properties = array())
     {
-        return new Block( $properties );
+        return new Block($properties);
     }
 
     /**
@@ -30,28 +33,28 @@ class BlockTest extends PHPUnit_Framework_TestCase
     public function testGetState()
     {
         $item = $this
-            ->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Item' )
+            ->getMockBuilder('eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Item')
             ->disableOriginalConstructor()
             ->getMock();
 
         $properties = array(
-            'id'                => '4efd68496edd8184aade729b4d2ee17b',
-            'name'              => 'Main Story',
-            'type'              => 'Campaign',
-            'view'              => 'default',
-            'overflowId'        => '',
-            'customAttributes'  => null,
-            'action'            => null,
-            'rotation'          => null,
-            'zoneId'            => '6c7f907b831a819ed8562e3ddce5b264',
-            'items'             => array( $item ),
-            'attributes'        => array(
-                'foo'   => 'bar',
-                'some'  => 'thing'
-            )
+            'id' => '4efd68496edd8184aade729b4d2ee17b',
+            'name' => 'Main Story',
+            'type' => 'Campaign',
+            'view' => 'default',
+            'overflowId' => '',
+            'customAttributes' => null,
+            'action' => null,
+            'rotation' => null,
+            'zoneId' => '6c7f907b831a819ed8562e3ddce5b264',
+            'items' => array($item),
+            'attributes' => array(
+                'foo' => 'bar',
+                'some' => 'thing',
+            ),
         );
 
-        $block = $this->getBlock( $properties );
-        $this->assertSame( $properties, $block->getState() );
+        $block = $this->getBlock($properties);
+        $this->assertSame($properties, $block->getState());
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ProviderTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -37,19 +39,19 @@ class ProviderTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->userService = $this->getMock( 'eZ\Publish\API\Repository\UserService' );
-        $this->repository = $this->getMock( 'eZ\Publish\API\Repository\Repository' );
+        $this->userService = $this->getMock('eZ\Publish\API\Repository\UserService');
+        $this->repository = $this->getMock('eZ\Publish\API\Repository\Repository');
         $this->repository
-            ->expects( $this->any() )
-            ->method( 'getUserService' )
-            ->will( $this->returnValue( $this->userService ) );
-        $this->userProvider = new Provider( $this->repository );
+            ->expects($this->any())
+            ->method('getUserService')
+            ->will($this->returnValue($this->userService));
+        $this->userProvider = new Provider($this->repository);
     }
 
     public function testLoadUserByUsernameAlreadyUserObject()
     {
-        $user = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\Security\UserInterface' );
-        $this->assertSame( $user, $this->userProvider->loadUserByUsername( $user ) );
+        $user = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\UserInterface');
+        $this->assertSame($user, $this->userProvider->loadUserByUsername($user));
     }
 
     /**
@@ -59,27 +61,27 @@ class ProviderTest extends PHPUnit_Framework_TestCase
     {
         $username = 'foobar';
         $this->userService
-            ->expects( $this->once() )
-            ->method( 'loadUserByLogin' )
-            ->with( $username )
-            ->will( $this->throwException( new NotFoundException( 'user', $username ) ) );
-        $this->userProvider->loadUserByUsername( $username );
+            ->expects($this->once())
+            ->method('loadUserByLogin')
+            ->with($username)
+            ->will($this->throwException(new NotFoundException('user', $username)));
+        $this->userProvider->loadUserByUsername($username);
     }
 
     public function testLoadUserByUsername()
     {
         $username = 'foobar';
-        $apiUser = $this->getMock( 'eZ\Publish\API\Repository\Values\User\User' );
+        $apiUser = $this->getMock('eZ\Publish\API\Repository\Values\User\User');
         $this->userService
-            ->expects( $this->once() )
-            ->method( 'loadUserByLogin' )
-            ->with( $username )
-            ->will( $this->returnValue( $apiUser ) );
+            ->expects($this->once())
+            ->method('loadUserByLogin')
+            ->with($username)
+            ->will($this->returnValue($apiUser));
 
-        $user = $this->userProvider->loadUserByUsername( $username );
-        $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\Security\UserInterface', $user );
-        $this->assertSame( $apiUser, $user->getAPIUser() );
-        $this->assertSame( array( 'ROLE_USER' ), $user->getRoles() );
+        $user = $this->userProvider->loadUserByUsername($username);
+        $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\Security\UserInterface', $user);
+        $this->assertSame($apiUser, $user->getAPIUser());
+        $this->assertSame(array('ROLE_USER'), $user->getRoles());
     }
 
     /**
@@ -87,8 +89,8 @@ class ProviderTest extends PHPUnit_Framework_TestCase
      */
     public function testRefreshUserNotSupported()
     {
-        $user = $this->getMock( 'Symfony\Component\Security\Core\User\UserInterface' );
-        $this->userProvider->refreshUser( $user );
+        $user = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
+        $this->userProvider->refreshUser($user);
     }
 
     public function testRefreshUser()
@@ -99,35 +101,35 @@ class ProviderTest extends PHPUnit_Framework_TestCase
                 'content' => new Content(
                     array(
                         'versionInfo' => new VersionInfo(
-                            array( 'contentInfo' => new ContentInfo( array( 'id' => $userId ) ) )
-                        )
+                            array('contentInfo' => new ContentInfo(array('id' => $userId)))
+                        ),
                     )
-                )
+                ),
             )
         );
         $refreshedAPIUser = clone $apiUser;
-        $user = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\Security\UserInterface' );
+        $user = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\UserInterface');
         $user
-            ->expects( $this->once() )
-            ->method( 'getAPIUser' )
-            ->will( $this->returnValue( $apiUser ) );
+            ->expects($this->once())
+            ->method('getAPIUser')
+            ->will($this->returnValue($apiUser));
         $user
-            ->expects( $this->once() )
-            ->method( 'setAPIUser' )
-            ->with( $refreshedAPIUser );
+            ->expects($this->once())
+            ->method('setAPIUser')
+            ->with($refreshedAPIUser);
 
         $this->userService
-            ->expects( $this->once() )
-            ->method( 'loadUser' )
-            ->with( $userId )
-            ->will( $this->returnValue( $refreshedAPIUser ) );
+            ->expects($this->once())
+            ->method('loadUser')
+            ->with($userId)
+            ->will($this->returnValue($refreshedAPIUser));
 
         $this->repository
-            ->expects( $this->once() )
-            ->method( 'setCurrentUser' )
-            ->with( $refreshedAPIUser );
+            ->expects($this->once())
+            ->method('setCurrentUser')
+            ->with($refreshedAPIUser);
 
-        $this->assertSame( $user, $this->userProvider->refreshUser( $user ) );
+        $this->assertSame($user, $this->userProvider->refreshUser($user));
     }
 
     /**
@@ -141,49 +143,49 @@ class ProviderTest extends PHPUnit_Framework_TestCase
                 'content' => new Content(
                     array(
                         'versionInfo' => new VersionInfo(
-                            array( 'contentInfo' => new ContentInfo( array( 'id' => $userId ) ) )
-                        )
+                            array('contentInfo' => new ContentInfo(array('id' => $userId)))
+                        ),
                     )
-                )
+                ),
             )
         );
-        $user = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\Security\UserInterface' );
+        $user = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\UserInterface');
         $user
-            ->expects( $this->once() )
-            ->method( 'getAPIUser' )
-            ->will( $this->returnValue( $apiUser ) );
+            ->expects($this->once())
+            ->method('getAPIUser')
+            ->will($this->returnValue($apiUser));
 
         $this->userService
-            ->expects( $this->once() )
-            ->method( 'loadUser' )
-            ->with( $userId )
-            ->will( $this->throwException( new NotFoundException( 'user', 'foo' ) ) );
+            ->expects($this->once())
+            ->method('loadUser')
+            ->with($userId)
+            ->will($this->throwException(new NotFoundException('user', 'foo')));
 
-        $this->userProvider->refreshUser( $user );
+        $this->userProvider->refreshUser($user);
     }
 
     /**
      * @dataProvider supportsClassProvider
      */
-    public function testSupportsClass( $class, $supports )
+    public function testSupportsClass($class, $supports)
     {
-        $this->assertSame( $supports, $this->userProvider->supportsClass( $class ) );
+        $this->assertSame($supports, $this->userProvider->supportsClass($class));
     }
 
     public function supportsClassProvider()
     {
         return array(
-            array( 'Symfony\Component\Security\Core\User\UserInterface', false ),
-            array( 'eZ\Publish\Core\MVC\Symfony\Security\User', true ),
-            array( get_class( $this->getMock( 'eZ\Publish\Core\MVC\Symfony\Security\User' ) ), true ),
+            array('Symfony\Component\Security\Core\User\UserInterface', false),
+            array('eZ\Publish\Core\MVC\Symfony\Security\User', true),
+            array(get_class($this->getMock('eZ\Publish\Core\MVC\Symfony\Security\User')), true),
         );
     }
 
     public function testLoadUserByAPIUser()
     {
-        $apiUser = $this->getMock( 'eZ\Publish\API\Repository\Values\User\User' );
-        $user = $this->userProvider->loadUserByAPIUser( $apiUser );
-        $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\Security\User', $user );
-        $this->assertSame( $apiUser, $user->getAPIUser() );
+        $apiUser = $this->getMock('eZ\Publish\API\Repository\Values\User\User');
+        $user = $this->userProvider->loadUserByAPIUser($apiUser);
+        $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\Security\User', $user);
+        $this->assertSame($apiUser, $user->getAPIUser());
     }
 }

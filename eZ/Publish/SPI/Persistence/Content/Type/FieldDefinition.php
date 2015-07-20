@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Field class for content type
+ * File containing the Field class for content type.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,72 +22,72 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
 class FieldDefinition extends ValueObject
 {
     /**
-     * Primary key
+     * Primary key.
      *
      * @var mixed
      */
     public $id;
 
     /**
-     * Name
+     * Name.
      *
      * @var string[]
      */
     public $name;
 
     /**
-     * Description
+     * Description.
      *
      * @var string[]
      */
     public $description = array();
 
     /**
-     * Readable string identifier of a field definition
+     * Readable string identifier of a field definition.
      *
      * @var string
      */
     public $identifier;
 
     /**
-     * Field group name
+     * Field group name.
      *
      * @var string
      */
     public $fieldGroup;
 
     /**
-     * Position
+     * Position.
      *
      * @var int
      */
     public $position;
 
     /**
-     * String identifier of the field type
+     * String identifier of the field type.
      *
      * @var string
      */
     public $fieldType;
 
     /**
-     * If the field type is translatable
+     * If the field type is translatable.
      *
-     * @var boolean
+     * @var bool
      */
     public $isTranslatable;
 
     /**
-     * Is the field required
+     * Is the field required.
      *
-     * @var boolean
+     * @var bool
      */
     public $isRequired;
 
     /**
-     * Just a flag
+     * Just a flag.
      *
-     * @var boolean
+     * @var bool
      */
     public $isInfoCollector;
 
@@ -93,14 +95,14 @@ class FieldDefinition extends ValueObject
      * A map of field type constraints.
      * 2 constraints are available (as keys):
      *   - validators
-     *   - fieldSettings
+     *   - fieldSettings.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints
      */
     public $fieldTypeConstraints;
 
     /**
-     * Default value of the field
+     * Default value of the field.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -109,17 +111,17 @@ class FieldDefinition extends ValueObject
     /**
      * @todo: Document
      *
-     * @var boolean
+     * @var bool
      */
     public $isSearchable;
 
     /**
-     * Constructor
+     * Constructor.
      */
-    public function __construct( array $properties = array() )
+    public function __construct(array $properties = array())
     {
-        $this->fieldTypeConstraints = new FieldTypeConstraints;
-        $this->defaultValue = new FieldValue;
-        parent::__construct( $properties );
+        $this->fieldTypeConstraints = new FieldTypeConstraints();
+        $this->defaultValue = new FieldValue();
+        parent::__construct($properties);
     }
 }

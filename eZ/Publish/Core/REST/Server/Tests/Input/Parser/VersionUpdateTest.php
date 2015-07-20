@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 class VersionUpdateTest extends BaseTest
 {
     /**
-     * Tests the VersionUpdate parser
+     * Tests the VersionUpdate parser.
      */
     public function testParse()
     {
@@ -25,15 +27,15 @@ class VersionUpdateTest extends BaseTest
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'subject',
-                        'fieldValue' => array()
-                    )
-                )
+                        'fieldValue' => array(),
+                    ),
+                ),
             ),
-            '__url' => '/content/objects/42/versions/1'
+            '__url' => '/content/objects/42/versions/1',
         );
 
         $VersionUpdate = $this->getParser();
-        $result = $VersionUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $VersionUpdate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentUpdateStruct',
@@ -47,8 +49,7 @@ class VersionUpdateTest extends BaseTest
             'initialLanguageCode not created correctly'
         );
 
-        foreach ( $result->fields as $field )
-        {
+        foreach ($result->fields as $field) {
             $this->assertEquals(
                 'foo',
                 $field->value,
@@ -58,7 +59,7 @@ class VersionUpdateTest extends BaseTest
     }
 
     /**
-     * Test VersionUpdate parser throwing exception on invalid fields data
+     * Test VersionUpdate parser throwing exception on invalid fields data.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'fields' element for VersionUpdate.
@@ -68,15 +69,15 @@ class VersionUpdateTest extends BaseTest
         $inputArray = array(
             'initialLanguageCode' => 'eng-US',
             'fields' => array(),
-            '__url' => '/content/objects/42/versions/1'
+            '__url' => '/content/objects/42/versions/1',
         );
 
         $VersionUpdate = $this->getParser();
-        $VersionUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $VersionUpdate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test VersionUpdate parser throwing exception on missing field definition identifier
+     * Test VersionUpdate parser throwing exception on missing field definition identifier.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldDefinitionIdentifier' element in field data for VersionUpdate.
@@ -88,19 +89,19 @@ class VersionUpdateTest extends BaseTest
             'fields' => array(
                 'field' => array(
                     array(
-                        'fieldValue' => array()
-                    )
-                )
+                        'fieldValue' => array(),
+                    ),
+                ),
             ),
-            '__url' => '/content/objects/42/versions/1'
+            '__url' => '/content/objects/42/versions/1',
         );
 
         $VersionUpdate = $this->getParser();
-        $VersionUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $VersionUpdate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test VersionUpdate parser throwing exception on missing field value
+     * Test VersionUpdate parser throwing exception on missing field value.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldValue' element for 'subject' identifier in VersionUpdate.
@@ -112,19 +113,19 @@ class VersionUpdateTest extends BaseTest
             'fields' => array(
                 'field' => array(
                     array(
-                        'fieldDefinitionIdentifier' => 'subject'
-                    )
-                )
+                        'fieldDefinitionIdentifier' => 'subject',
+                    ),
+                ),
             ),
-            '__url' => '/content/objects/42/versions/1'
+            '__url' => '/content/objects/42/versions/1',
         );
 
         $VersionUpdate = $this->getParser();
-        $VersionUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $VersionUpdate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Returns the VersionUpdate parser
+     * Returns the VersionUpdate parser.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\VersionUpdate
      */
@@ -137,7 +138,7 @@ class VersionUpdateTest extends BaseTest
     }
 
     /**
-     * Get the field type parser mock object
+     * Get the field type parser mock object.
      *
      * @return \eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
      */
@@ -161,22 +162,22 @@ class VersionUpdateTest extends BaseTest
                     array(),
                     '',
                     false
-                )
+                ),
             ),
             '',
             false
         );
 
-        $fieldTypeParserMock->expects( $this->any() )
-            ->method( 'parseFieldValue' )
-            ->with( 42, 'subject', array() )
-            ->will( $this->returnValue( 'foo' ) );
+        $fieldTypeParserMock->expects($this->any())
+            ->method('parseFieldValue')
+            ->with(42, 'subject', array())
+            ->will($this->returnValue('foo'));
 
         return $fieldTypeParserMock;
     }
 
     /**
-     * Get the Content service mock object
+     * Get the Content service mock object.
      *
      * @return \eZ\Publish\API\Repository\ContentService
      */
@@ -190,10 +191,10 @@ class VersionUpdateTest extends BaseTest
             false
         );
 
-        $contentServiceMock->expects( $this->any() )
-            ->method( 'newContentUpdateStruct' )
+        $contentServiceMock->expects($this->any())
+            ->method('newContentUpdateStruct')
             ->will(
-                $this->returnValue( new ContentUpdateStruct() )
+                $this->returnValue(new ContentUpdateStruct())
             );
 
         return $contentServiceMock;
@@ -202,7 +203,7 @@ class VersionUpdateTest extends BaseTest
     public function getParseHrefExpectationsMap()
     {
         return array(
-            array( '/content/objects/42/versions/1', 'contentId', 42 )
+            array('/content/objects/42/versions/1', 'contentId', 42),
         );
     }
 }

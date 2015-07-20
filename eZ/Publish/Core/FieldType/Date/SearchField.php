@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,37 +18,37 @@ use eZ\Publish\SPI\Search;
 use DateTime;
 
 /**
- * Indexable definition for Date field type
+ * Indexable definition for Date field type.
  */
 class SearchField implements Indexable
 {
     /**
-     * Get index data for field for search backend
+     * Get index data for field for search backend.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      *
      * @return \eZ\Publish\SPI\Search\Field[]
      */
-    public function getIndexData( Field $field, FieldDefinition $fieldDefinition )
+    public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
         // The field type stores date value as a timestamp of the start of the day in the
         // environment's timezone.
         // We format this as Y-m-d and add Z to signify UTC (zero offset).
         $dateTime = new DateTime();
-        $dateTime->setTimestamp( $field->value->data["timestamp"] );
+        $dateTime->setTimestamp($field->value->data['timestamp']);
 
         return array(
             new Search\Field(
                 'value',
-                $dateTime->format( "Y-m-d\\Z" ),
+                $dateTime->format('Y-m-d\\Z'),
                 new Search\FieldType\DateField()
             ),
         );
     }
 
     /**
-     * Get index field types for search backend
+     * Get index field types for search backend.
      *
      * @return \eZ\Publish\SPI\Search\FieldType[]
      */
@@ -68,7 +70,7 @@ class SearchField implements Indexable
      */
     public function getDefaultMatchField()
     {
-        return "value";
+        return 'value';
     }
 
     /**

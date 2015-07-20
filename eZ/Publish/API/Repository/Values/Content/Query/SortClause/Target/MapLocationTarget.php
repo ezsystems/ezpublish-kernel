@@ -1,13 +1,12 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\MapLocationTarget class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
- *
- *
- * @package eZ\Publish\API\Repository\Values\Content\Query
  */
 
 namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target;
@@ -15,41 +14,40 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target;
 
 /**
- * Struct that stores extra value information for a MapLocationDistance SortClause object
- * @package eZ\Publish\API\Repository\Values\Content\Query
+ * Struct that stores extra value information for a MapLocationDistance SortClause object.
  */
 class MapLocationTarget extends Target
 {
     /**
-     * Latitude of a geographical location
+     * Latitude of a geographical location.
      *
      * @var float
      */
     public $latitude;
 
     /**
-     * Longitude of a geographical location
+     * Longitude of a geographical location.
      *
      * @var float
      */
     public $longitude;
 
     /**
-     * Identifier of a targeted Field ContentType
+     * Identifier of a targeted Field ContentType.
      *
      * @var string
      */
     public $typeIdentifier;
 
     /**
-     * Identifier of a targeted Field FieldDefinition
+     * Identifier of a targeted Field FieldDefinition.
      *
      * @var string
      */
     public $fieldIdentifier;
 
     /**
-     * Language code of the targeted Field
+     * Language code of the targeted Field.
      *
      * @var null|string
      */
@@ -68,8 +66,7 @@ class MapLocationTarget extends Target
         $typeIdentifier,
         $fieldIdentifier,
         $languageCode
-    )
-    {
+    ) {
         $this->latitude = $latitude;
         $this->longitude = $longitude;
         $this->typeIdentifier = $typeIdentifier;

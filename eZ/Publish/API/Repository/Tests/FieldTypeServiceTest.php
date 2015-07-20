@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the FieldTypeServiceTest class
+ * File containing the FieldTypeServiceTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,8 +23,6 @@ class FieldTypeServiceTest extends BaseTest
      * Test for the getFieldTypes() method.
      *
      * @see \eZ\Publish\API\Repository\FieldTypeService::getFieldTypes()
-     *
-     * @return void
      */
     public function testGetFieldTypes()
     {
@@ -36,10 +36,9 @@ class FieldTypeServiceTest extends BaseTest
         /* END: Use Case */
 
         // Require at least 1 field type
-        $this->assertNotEquals( 0, count( $fieldTypes ) );
+        $this->assertNotEquals(0, count($fieldTypes));
 
-        foreach ( $fieldTypes as $fieldType )
-        {
+        foreach ($fieldTypes as $fieldType) {
             $this->assertInstanceOf(
                 'eZ\\Publish\\API\\Repository\\FieldType',
                 $fieldType
@@ -53,8 +52,6 @@ class FieldTypeServiceTest extends BaseTest
      * Expects FieldType "ezurl" to be available!
      *
      * @see \eZ\Publish\API\Repository\FieldTypeService::getFieldType()
-     *
-     * @return void
      */
     public function testGetFieldType()
     {
@@ -64,7 +61,7 @@ class FieldTypeServiceTest extends BaseTest
         $fieldTypeService = $repository->getFieldTypeService();
 
         // Contains the "ezurl" FieldType
-        $fieldType = $fieldTypeService->getFieldType( 'ezurl' );
+        $fieldType = $fieldTypeService->getFieldType('ezurl');
         /* END: Use Case */
 
         $this->assertInstanceof(
@@ -80,7 +77,6 @@ class FieldTypeServiceTest extends BaseTest
     /**
      * Test for the getFieldType() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\FieldTypeService::getFieldType()
      * @expectedException \RuntimeException
      */
@@ -92,16 +88,14 @@ class FieldTypeServiceTest extends BaseTest
         $fieldTypeService = $repository->getFieldTypeService();
 
         // Throws and exception since type does not exist
-        $fieldType = $fieldTypeService->getFieldType( 'sindelfingen' );
+        $fieldType = $fieldTypeService->getFieldType('sindelfingen');
         /* END: Use Case */
     }
 
     /**
      * Test for the hasFieldType() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\FieldTypeService::hasFieldType()
-     *
      */
     public function testHasFieldTypeReturnsTrue()
     {
@@ -111,18 +105,16 @@ class FieldTypeServiceTest extends BaseTest
         $fieldTypeService = $repository->getFieldTypeService();
 
         // Returns true, since 'ezurl' type exists
-        $typeExists = $fieldTypeService->hasFieldType( 'ezurl' );
+        $typeExists = $fieldTypeService->hasFieldType('ezurl');
         /* END: Use Case */
 
-        $this->assertTrue( $typeExists );
+        $this->assertTrue($typeExists);
     }
 
     /**
      * Test for the hasFieldType() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\FieldTypeService::hasFieldType()
-     *
      */
     public function testHasFieldTypeReturnsFalse()
     {
@@ -132,9 +124,9 @@ class FieldTypeServiceTest extends BaseTest
         $fieldTypeService = $repository->getFieldTypeService();
 
         // Returns false, since type does not exist
-        $typeExists = $fieldTypeService->hasFieldType( 'sindelfingen' );
+        $typeExists = $fieldTypeService->hasFieldType('sindelfingen');
         /* END: Use Case */
 
-        $this->assertFalse( $typeExists );
+        $this->assertFalse($typeExists);
     }
 }

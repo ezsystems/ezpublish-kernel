@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a LocationTest class
+ * File containing a LocationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 class LocationTest extends BaseTest
 {
     /**
-     * Tests the location parser
+     * Tests the location parser.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
@@ -31,32 +33,32 @@ class LocationTest extends BaseTest
             'invisible' => 'false',
             'remoteId' => 'remote-id',
             'ParentLocation' => array(
-                '_href' => '/content/locations/1/2/21'
+                '_href' => '/content/locations/1/2/21',
             ),
             'pathString' => '/1/2/21/42',
             'depth' => '3',
             'Content' => array(
-                '_href' => '/content/objects/42'
+                '_href' => '/content/objects/42',
             ),
             'sortField' => 'PATH',
             'sortOrder' => 'ASC',
         );
 
-        $result = $locationParser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $locationParser->parse($inputArray, $this->getParsingDispatcherMock());
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Tests that the resulting location is in fact an instance of Location class
+     * Tests that the resulting location is in fact an instance of Location class.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
      *
      * @depends testParse
      */
-    public function testResultIsLocation( $result )
+    public function testResultIsLocation($result)
     {
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
@@ -65,13 +67,13 @@ class LocationTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting location contains the ID
+     * Tests that the resulting location contains the ID.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
      *
      * @depends testParse
      */
-    public function testResultContainsId( $result )
+    public function testResultContainsId($result)
     {
         $this->assertEquals(
             '/content/locations/1/2/21/42',
@@ -80,13 +82,13 @@ class LocationTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting location contains the priority
+     * Tests that the resulting location contains the priority.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
      *
      * @depends testParse
      */
-    public function testResultContainsPriority( $result )
+    public function testResultContainsPriority($result)
     {
         $this->assertEquals(
             0,
@@ -95,13 +97,13 @@ class LocationTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting location contains hidden property
+     * Tests that the resulting location contains hidden property.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
      *
      * @depends testParse
      */
-    public function testResultContainsHidden( $result )
+    public function testResultContainsHidden($result)
     {
         $this->assertEquals(
             false,
@@ -110,13 +112,13 @@ class LocationTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting location contains invisible property
+     * Tests that the resulting location contains invisible property.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
      *
      * @depends testParse
      */
-    public function testResultContainsInvisible( $result )
+    public function testResultContainsInvisible($result)
     {
         $this->assertEquals(
             false,
@@ -125,13 +127,13 @@ class LocationTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting location contains remote ID
+     * Tests that the resulting location contains remote ID.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
      *
      * @depends testParse
      */
-    public function testResultContainsRemoteId( $result )
+    public function testResultContainsRemoteId($result)
     {
         $this->assertEquals(
             'remote-id',
@@ -140,13 +142,13 @@ class LocationTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting location contains parent location ID
+     * Tests that the resulting location contains parent location ID.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
      *
      * @depends testParse
      */
-    public function testResultContainsParentLocationId( $result )
+    public function testResultContainsParentLocationId($result)
     {
         $this->assertEquals(
             '/content/locations/1/2/21',
@@ -155,13 +157,13 @@ class LocationTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting location contains path string
+     * Tests that the resulting location contains path string.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
      *
      * @depends testParse
      */
-    public function testResultContainsPathString( $result )
+    public function testResultContainsPathString($result)
     {
         $this->assertEquals(
             '/1/2/21/42',
@@ -170,13 +172,13 @@ class LocationTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting location contains depth
+     * Tests that the resulting location contains depth.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
      *
      * @depends testParse
      */
-    public function testResultContainsDepth( $result )
+    public function testResultContainsDepth($result)
     {
         $this->assertEquals(
             3,
@@ -185,13 +187,13 @@ class LocationTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting location contains sort field
+     * Tests that the resulting location contains sort field.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
      *
      * @depends testParse
      */
-    public function testResultContainsSortField( $result )
+    public function testResultContainsSortField($result)
     {
         $this->assertEquals(
             Location::SORT_FIELD_PATH,
@@ -200,13 +202,13 @@ class LocationTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting location contains sort order
+     * Tests that the resulting location contains sort order.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $result
      *
      * @depends testParse
      */
-    public function testResultContainsSortOrder( $result )
+    public function testResultContainsSortOrder($result)
     {
         $this->assertEquals(
             Location::SORT_ORDER_ASC,
@@ -215,12 +217,12 @@ class LocationTest extends BaseTest
     }
 
     /**
-     * Gets the parser for location
+     * Gets the parser for location.
      *
      * @return \eZ\Publish\Core\REST\Client\Input\Parser\Location;
      */
     protected function getParser()
     {
-        return new Parser\Location( new ParserTools() );
+        return new Parser\Location(new ParserTools());
     }
 }

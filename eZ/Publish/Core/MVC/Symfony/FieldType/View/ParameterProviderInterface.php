@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ParameterProviderInterface interface.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,7 +23,7 @@ interface ParameterProviderInterface
 {
     /**
      * Returns a hash of parameters to inject to the associated fieldtype's view template.
-     * Returned parameters will only be available for associated field type
+     * Returned parameters will only be available for associated field type.
      *
      * Key is the parameter name (the variable name exposed in the template, in the 'parameters' array).
      * Value is the parameter's value.
@@ -30,5 +32,5 @@ interface ParameterProviderInterface
      *
      * @return array
      */
-    public function getViewParameters( Field $field );
+    public function getViewParameters(Field $field);
 }

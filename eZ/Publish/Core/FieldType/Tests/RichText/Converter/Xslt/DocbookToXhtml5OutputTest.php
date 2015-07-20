@@ -1,16 +1,18 @@
 <?php
+
 /**
- * File containing the DocbookToXhtml5Output conversion test
+ * File containing the DocbookToXhtml5Output conversion test.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\FieldType\Tests\RichText\Converter\Xslt;
 
 /**
- * Tests conversion from docbook to xhtml5 output format
+ * Tests conversion from docbook to xhtml5 output format.
  */
 class DocbookToXhtml5OutputTest extends BaseTest
 {
@@ -34,8 +36,8 @@ class DocbookToXhtml5OutputTest extends BaseTest
     public function getFixtureSubdirectories()
     {
         return array(
-            "input" => "docbook",
-            "output" => "xhtml5/output"
+            'input' => 'docbook',
+            'output' => 'xhtml5/output',
         );
     }
 
@@ -46,7 +48,7 @@ class DocbookToXhtml5OutputTest extends BaseTest
      */
     protected function getConversionTransformationStylesheet()
     {
-        return __DIR__ . "/../../../../RichText/Resources/stylesheets/docbook/xhtml5/output/xhtml5.xsl";
+        return __DIR__ . '/../../../../RichText/Resources/stylesheets/docbook/xhtml5/output/xhtml5.xsl';
     }
 
     /**
@@ -75,12 +77,12 @@ class DocbookToXhtml5OutputTest extends BaseTest
     {
         return array(
             array(
-                "path" => __DIR__ . "/../../../../RichText/Resources/stylesheets/docbook/xhtml5/output/core.xsl",
-                "priority" => 100
+                'path' => __DIR__ . '/../../../../RichText/Resources/stylesheets/docbook/xhtml5/output/core.xsl',
+                'priority' => 100,
             ),
             array(
-                "path" => __DIR__ . "/_fixtures/docbook/custom_stylesheets/youtube_xhtml5_output.xsl",
-                "priority" => 99
+                'path' => __DIR__ . '/_fixtures/docbook/custom_stylesheets/youtube_xhtml5_output.xsl',
+                'priority' => 99,
             ),
         );
     }
@@ -93,7 +95,7 @@ class DocbookToXhtml5OutputTest extends BaseTest
     protected function getConversionValidationSchema()
     {
         return array(
-            __DIR__ . "/_fixtures/xhtml5/output/custom_schemas/youtube.xsd"
+            __DIR__ . '/_fixtures/xhtml5/output/custom_schemas/youtube.xsd',
         );
     }
 }

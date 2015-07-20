@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the SymfonyEventConverterSlotTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,13 +23,13 @@ class SymfonyEventConverterSlotTest extends PHPUnit_Framework_TestCase
      */
     public function testReceive()
     {
-        $eventDispatcher = $this->getMock( 'Symfony\\Component\\EventDispatcher\\EventDispatcherInterface' );
+        $eventDispatcher = $this->getMock('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface');
         $eventDispatcher
-            ->expects( $this->once() )
-            ->method( 'dispatch' )
-            ->with( MVCEvents::API_SIGNAL, $this->isInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\Event\\SignalEvent' ) );
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with(MVCEvents::API_SIGNAL, $this->isInstanceOf('eZ\\Publish\\Core\\MVC\\Symfony\\Event\\SignalEvent'));
 
-        $slot = new SymfonyEventConverterSlot( $eventDispatcher );
-        $slot->receive( $this->getMock( 'eZ\\Publish\\Core\\SignalSlot\\Signal' ) );
+        $slot = new SymfonyEventConverterSlot($eventDispatcher);
+        $slot->receive($this->getMock('eZ\\Publish\\Core\\SignalSlot\\Signal'));
     }
 }

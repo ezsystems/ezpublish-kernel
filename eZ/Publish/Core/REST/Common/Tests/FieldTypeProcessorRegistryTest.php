@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the FieldTypeProcessorRegistryTest class
+ * File containing the FieldTypeProcessorRegistryTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,9 +22,9 @@ class FieldTypeProcessorRegistryTest extends BaseTest
 
         $processor = $this->getAProcessorMock();
 
-        $registry->registerProcessor( 'my-type', $processor );
+        $registry->registerProcessor('my-type', $processor);
 
-        $this->assertTrue( $registry->hasProcessor( 'my-type' ) );
+        $this->assertTrue($registry->hasProcessor('my-type'));
     }
 
     public function testRegisterMultipleProcessors()
@@ -32,18 +34,18 @@ class FieldTypeProcessorRegistryTest extends BaseTest
         $processorA = $this->getAProcessorMock();
         $processorB = $this->getAProcessorMock();
 
-        $registry->registerProcessor( 'my-type', $processorA );
-        $registry->registerProcessor( 'your-type', $processorB );
+        $registry->registerProcessor('my-type', $processorA);
+        $registry->registerProcessor('your-type', $processorB);
 
-        $this->assertTrue( $registry->hasProcessor( 'my-type' ) );
-        $this->assertTrue( $registry->hasProcessor( 'your-type' ) );
+        $this->assertTrue($registry->hasProcessor('my-type'));
+        $this->assertTrue($registry->hasProcessor('your-type'));
     }
 
     public function testHasProcessorFailure()
     {
         $registry = new FieldTypeProcessorRegistry();
 
-        $this->assertFalse( $registry->hasProcessor( 'my-type' ) );
+        $this->assertFalse($registry->hasProcessor('my-type'));
     }
 
     public function testGetProcessor()
@@ -52,11 +54,11 @@ class FieldTypeProcessorRegistryTest extends BaseTest
 
         $processor = $this->getAProcessorMock();
 
-        $registry->registerProcessor( 'my-type', $processor );
+        $registry->registerProcessor('my-type', $processor);
 
         $this->assertSame(
             $processor,
-            $registry->getProcessor( 'my-type' )
+            $registry->getProcessor('my-type')
         );
     }
 
@@ -67,7 +69,7 @@ class FieldTypeProcessorRegistryTest extends BaseTest
     {
         $registry = new FieldTypeProcessorRegistry();
 
-        $registry->getProcessor( 'my-type' );
+        $registry->getProcessor('my-type');
     }
 
     public function testRegisterProcessorsOverwrite()
@@ -77,17 +79,17 @@ class FieldTypeProcessorRegistryTest extends BaseTest
         $processorA = $this->getAProcessorMock();
         $processorB = $this->getAProcessorMock();
 
-        $registry->registerProcessor( 'my-type', $processorA );
-        $registry->registerProcessor( 'my-type', $processorB );
+        $registry->registerProcessor('my-type', $processorA);
+        $registry->registerProcessor('my-type', $processorB);
 
         $this->assertSame(
             $processorB,
-            $registry->getProcessor( 'my-type' )
+            $registry->getProcessor('my-type')
         );
     }
 
     /**
-     * Get FieldTypeProcessor mock object
+     * Get FieldTypeProcessor mock object.
      *
      * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor
      */

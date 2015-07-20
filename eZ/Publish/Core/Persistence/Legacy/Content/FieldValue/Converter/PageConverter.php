@@ -1,11 +1,14 @@
 <?php
+
 /**
- * File containing the Page converter
+ * File containing the Page converter.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
+
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
@@ -21,51 +24,51 @@ use DOMElement;
 class PageConverter implements Converter
 {
     /**
-     * Converts data from $value to $storageFieldValue
+     * Converts data from $value to $storageFieldValue.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
      */
-    public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
+    public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
     {
         $storageFieldValue->dataText = $value->data === null
             ? null
-            : $this->generateXmlString( $value->data );
+            : $this->generateXmlString($value->data);
     }
 
     /**
-     * Converts data from $value to $fieldValue
+     * Converts data from $value to $fieldValue.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      */
-    public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
+    public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
     {
         $fieldValue->data = $value->dataText === null
             ? null
-            : $this->restoreValueFromXmlString( $value->dataText );
+            : $this->restoreValueFromXmlString($value->dataText);
     }
 
     /**
-     * Converts field definition data in $fieldDef into $storageFieldDef
+     * Converts field definition data in $fieldDef into $storageFieldDef.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      */
-    public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
+    public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
-        $storageDef->dataText1 = ( isset( $fieldDef->fieldTypeConstraints->fieldSettings['defaultLayout'] )
+        $storageDef->dataText1 = (isset($fieldDef->fieldTypeConstraints->fieldSettings['defaultLayout'])
             ? $fieldDef->fieldTypeConstraints->fieldSettings['defaultLayout']
-            : '' );
+            : '');
     }
 
     /**
-     * Converts field definition data in $storageDef into $fieldDef
+     * Converts field definition data in $storageDef into $fieldDef.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      */
-    public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
+    public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
@@ -75,7 +78,7 @@ class PageConverter implements Converter
     }
 
     /**
-     * Returns the name of the index column in the attribute table
+     * Returns the name of the index column in the attribute table.
      *
      * Returns the name of the index column the datatype uses, which is either
      * "sort_key_int" or "sort_key_string". This column is then used for
@@ -89,48 +92,44 @@ class PageConverter implements Converter
     }
 
     /**
-     * Generates XML string from $page object to be stored in storage engine
+     * Generates XML string from $page object to be stored in storage engine.
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Page $page
      *
      * @return string
      */
-    public function generateXmlString( Parts\Page $page )
+    public function generateXmlString(Parts\Page $page)
     {
-        $dom = new DOMDocument( '1.0', 'utf-8' );
+        $dom = new DOMDocument('1.0', 'utf-8');
         $dom->formatOutput = true;
-        $dom->loadXML( '<page />' );
+        $dom->loadXML('<page />');
 
         $pageNode = $dom->documentElement;
 
-        foreach ( $page->getState() as $attrName => $attrValue )
-        {
-            switch ( $attrName )
-            {
+        foreach ($page->getState() as $attrName => $attrValue) {
+            switch ($attrName) {
                 case 'id':
-                    $pageNode->setAttribute( 'id', $attrValue );
+                    $pageNode->setAttribute('id', $attrValue);
                     break;
                 case 'zones':
-                    foreach ( $page->{$attrName} as $zone )
-                    {
-                        $pageNode->appendChild( $this->generateZoneXmlString( $zone, $dom ) );
+                    foreach ($page->{$attrName} as $zone) {
+                        $pageNode->appendChild($this->generateZoneXmlString($zone, $dom));
                     }
                     break;
                 case 'layout':
-                    $node = $dom->createElement( 'zone_layout', $attrValue );
-                    $pageNode->appendChild( $node );
+                    $node = $dom->createElement('zone_layout', $attrValue);
+                    $pageNode->appendChild($node);
                     break;
                 case 'attributes':
-                    foreach ( $attrValue as $arrayItemKey => $arrayItemValue )
-                    {
-                        $this->addNewXmlElement( $dom, $pageNode, $arrayItemKey, $arrayItemValue );
+                    foreach ($attrValue as $arrayItemKey => $arrayItemValue) {
+                        $this->addNewXmlElement($dom, $pageNode, $arrayItemKey, $arrayItemValue);
                     }
                     break;
                 case 'zonesById':
                     // Do not store
                     break;
                 default:
-                    $this->addNewNotEmptyXmlElement( $dom, $pageNode, $attrName, $attrValue );
+                    $this->addNewNotEmptyXmlElement($dom, $pageNode, $attrName, $attrValue);
                     break;
             }
         }
@@ -139,49 +138,44 @@ class PageConverter implements Converter
     }
 
     /**
-     * Generates XML string for a given $zone object
+     * Generates XML string for a given $zone object.
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Zone $zone
      * @param \DOMDocument $dom
      *
      * @return \DOMElement
      */
-    protected function generateZoneXmlString( Parts\Zone $zone, DOMDocument $dom )
+    protected function generateZoneXmlString(Parts\Zone $zone, DOMDocument $dom)
     {
-        $zoneNode = $dom->createElement( 'zone' );
-        foreach ( $zone->getState() as $attrName => $attrValue )
-        {
-            switch ( $attrName )
-            {
+        $zoneNode = $dom->createElement('zone');
+        foreach ($zone->getState() as $attrName => $attrValue) {
+            switch ($attrName) {
                 case 'id':
-                    $zoneNode->setAttribute( 'id', 'id_' . $attrValue );
+                    $zoneNode->setAttribute('id', 'id_' . $attrValue);
                     break;
                 case 'action':
-                    if ( $attrValue !== null )
-                    {
-                        $zoneNode->setAttribute( 'action', $attrValue );
+                    if ($attrValue !== null) {
+                        $zoneNode->setAttribute('action', $attrValue);
                     }
                     break;
                 case 'identifier':
-                    $this->addNewXmlElement( $dom, $zoneNode, 'zone_identifier', $attrValue );
+                    $this->addNewXmlElement($dom, $zoneNode, 'zone_identifier', $attrValue);
                     break;
                 case 'blocks':
-                    foreach ( $zone->{$attrName} as $block )
-                    {
-                        $zoneNode->appendChild( $this->generateBlockXmlString( $block, $dom ) );
+                    foreach ($zone->{$attrName} as $block) {
+                        $zoneNode->appendChild($this->generateBlockXmlString($block, $dom));
                     }
                     break;
                 case 'attributes':
-                    foreach ( $attrValue as $arrayItemKey => $arrayItemValue )
-                    {
-                        $this->addNewXmlElement( $dom, $zoneNode, $arrayItemKey, $arrayItemValue );
+                    foreach ($attrValue as $arrayItemKey => $arrayItemValue) {
+                        $this->addNewXmlElement($dom, $zoneNode, $arrayItemKey, $arrayItemValue);
                     }
                     break;
                 case 'blocksById':
                     // Do not store
                     break;
                 default:
-                    $this->addNewNotEmptyXmlElement( $dom, $zoneNode, $attrName, $attrValue );
+                    $this->addNewNotEmptyXmlElement($dom, $zoneNode, $attrName, $attrValue);
                     break;
             }
         }
@@ -190,69 +184,61 @@ class PageConverter implements Converter
     }
 
     /**
-     * Generates XML string for a given $block object
+     * Generates XML string for a given $block object.
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Block $block
      * @param \DOMDocument $dom
      *
      * @return \DOMElement
      */
-    protected function generateBlockXmlString( Parts\Block $block, DOMDocument $dom )
+    protected function generateBlockXmlString(Parts\Block $block, DOMDocument $dom)
     {
-        $blockNode = $dom->createElement( 'block' );
+        $blockNode = $dom->createElement('block');
 
-        foreach ( $block->getState() as $attrName => $attrValue )
-        {
-            switch ( $attrName )
-            {
+        foreach ($block->getState() as $attrName => $attrValue) {
+            switch ($attrName) {
                 case 'id':
-                    $blockNode->setAttribute( 'id', 'id_' . $attrValue );
+                    $blockNode->setAttribute('id', 'id_' . $attrValue);
                     break;
                 case 'zoneId':
-                    $blockNode->appendChild( $dom->createElement( 'zone_id', $attrValue ) );
+                    $blockNode->appendChild($dom->createElement('zone_id', $attrValue));
                     break;
                 case 'action':
-                    if ( $attrValue !== null )
-                    {
-                        $blockNode->setAttribute( 'action', $attrValue );
+                    if ($attrValue !== null) {
+                        $blockNode->setAttribute('action', $attrValue);
                     }
                     break;
                 case 'items':
-                    foreach ( $block->items as $item )
-                    {
-                        $itemNode = $this->generateItemXmlString( $item, $dom );
-                        if ( $itemNode )
-                        {
-                            $blockNode->appendChild( $itemNode );
+                    foreach ($block->items as $item) {
+                        $itemNode = $this->generateItemXmlString($item, $dom);
+                        if ($itemNode) {
+                            $blockNode->appendChild($itemNode);
                         }
                     }
                     break;
                 case 'overflowId':
-                    $this->addNewXmlElement( $dom, $blockNode, 'overflow_id', $attrValue );
+                    $this->addNewXmlElement($dom, $blockNode, 'overflow_id', $attrValue);
                     break;
                 case 'rotation':
                 case 'customAttributes':
-                    if ( $attrValue === null )
-                    {
+                    if ($attrValue === null) {
                         continue 2;
                     }
 
-                    $node = $dom->createElement( $attrName );
-                    $blockNode->appendChild( $node );
+                    $node = $dom->createElement($attrName);
+                    $blockNode->appendChild($node);
 
-                    foreach ( $attrValue as $arrayItemKey => $arrayItemValue )
-                    {
-                        $this->addNewXmlElement( $dom, $blockNode, $arrayItemKey, $arrayItemValue );
+                    foreach ($attrValue as $arrayItemKey => $arrayItemValue) {
+                        $this->addNewXmlElement($dom, $blockNode, $arrayItemKey, $arrayItemValue);
                     }
                     break;
                 case 'attributes':
-                    foreach ( $attrValue as $arrayItemKey => $arrayItemValue )
-                    {
-                        $this->addNewXmlElement( $dom, $blockNode, $arrayItemKey, $arrayItemValue );
+                    foreach ($attrValue as $arrayItemKey => $arrayItemValue) {
+                        $this->addNewXmlElement($dom, $blockNode, $arrayItemKey, $arrayItemValue);
                     }
                     break;
                 default:
-                    $this->addNewNotEmptyXmlElement( $dom, $blockNode, $attrName, $attrValue );
+                    $this->addNewNotEmptyXmlElement($dom, $blockNode, $attrName, $attrValue);
                     break;
             }
         }
@@ -261,55 +247,51 @@ class PageConverter implements Converter
     }
 
     /**
-     * Generates XML string for a given $item object
+     * Generates XML string for a given $item object.
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Item $item
      * @param \DOMDocument $dom
      *
-     * @return boolean|\DOMElement
+     * @return bool|\DOMElement
      */
-    protected function generateItemXmlString( Parts\Item $item, DOMDocument $dom )
+    protected function generateItemXmlString(Parts\Item $item, DOMDocument $dom)
     {
-        $itemNode = $dom->createElement( 'item' );
+        $itemNode = $dom->createElement('item');
 
-        foreach ( $item->getState() as $attrName => $attrValue )
-        {
-            switch ( $attrName )
-            {
+        foreach ($item->getState() as $attrName => $attrValue) {
+            switch ($attrName) {
                 case 'action':
-                    if ( $attrValue !== null )
-                    {
-                        $itemNode->setAttribute( 'action', $attrValue );
+                    if ($attrValue !== null) {
+                        $itemNode->setAttribute('action', $attrValue);
                     }
                     break;
                 case 'contentId':
-                    $this->addNewNotEmptyXmlElement( $dom, $itemNode, 'object_id', $attrValue );
+                    $this->addNewNotEmptyXmlElement($dom, $itemNode, 'object_id', $attrValue);
                     break;
                 case 'locationId':
-                    $this->addNewNotEmptyXmlElement( $dom, $itemNode, 'node_id', $attrValue );
+                    $this->addNewNotEmptyXmlElement($dom, $itemNode, 'node_id', $attrValue);
                     break;
                 case 'priority':
-                    $this->addNewNotEmptyXmlElement( $dom, $itemNode, 'priority', $attrValue );
+                    $this->addNewNotEmptyXmlElement($dom, $itemNode, 'priority', $attrValue);
                     break;
                 case 'publicationDate':
-                    $this->addNewNotEmptyXmlElement( $dom, $itemNode, 'ts_publication', $attrValue );
+                    $this->addNewNotEmptyXmlElement($dom, $itemNode, 'ts_publication', $attrValue);
                     break;
                 case 'visibilityDate':
-                    $this->addNewNotEmptyXmlElement( $dom, $itemNode, 'ts_visible', $attrValue );
+                    $this->addNewNotEmptyXmlElement($dom, $itemNode, 'ts_visible', $attrValue);
                     break;
                 case 'hiddenDate':
-                    $this->addNewNotEmptyXmlElement( $dom, $itemNode, 'ts_hidden', $attrValue );
+                    $this->addNewNotEmptyXmlElement($dom, $itemNode, 'ts_hidden', $attrValue);
                     break;
                 case 'rotationUntilDate':
-                    $this->addNewNotEmptyXmlElement( $dom, $itemNode, 'rotation_until', $attrValue );
+                    $this->addNewNotEmptyXmlElement($dom, $itemNode, 'rotation_until', $attrValue);
                     break;
                 case 'movedTo':
-                    $this->addNewNotEmptyXmlElement( $dom, $itemNode, 'moved_to', $attrValue );
+                    $this->addNewNotEmptyXmlElement($dom, $itemNode, 'moved_to', $attrValue);
                     break;
                 case 'attributes':
-                    foreach ( $attrValue as $arrayItemKey => $arrayItemValue )
-                    {
-                        $this->addNewNotEmptyXmlElement( $dom, $itemNode, $arrayItemKey, $arrayItemValue );
+                    foreach ($attrValue as $arrayItemKey => $arrayItemValue) {
+                        $this->addNewNotEmptyXmlElement($dom, $itemNode, $arrayItemKey, $arrayItemValue);
                     }
                     break;
             }
@@ -319,64 +301,61 @@ class PageConverter implements Converter
     }
 
     /**
-     * Utility method to add new elements to an xml node if their value is not empty
+     * Utility method to add new elements to an xml node if their value is not empty.
      *
      * @param \DOMDocument $dom xml document
      * @param \DOMElement $node where to add the new element
      * @param string $name of the new element
      * @param string $value of the new element
      */
-    private function addNewNotEmptyXmlElement( DOMDocument $dom, DOMElement $node, $name, $value)
+    private function addNewNotEmptyXmlElement(DOMDocument $dom, DOMElement $node, $name, $value)
     {
-        if ( !empty( $value ) )
-        {
-            $this->addNewXmlElement( $dom, $node, $name, $value );
+        if (!empty($value)) {
+            $this->addNewXmlElement($dom, $node, $name, $value);
         }
     }
 
     /**
-     * Utility method to add new elements to an xml node
+     * Utility method to add new elements to an xml node.
      *
      * @param \DOMDocument $dom xml document
      * @param \DOMElement $node where to add the new element
      * @param string $name of the new element
      * @param string $value of the new element
      */
-    private function addNewXmlElement( DOMDocument $dom, DOMElement $node, $name, $value)
+    private function addNewXmlElement(DOMDocument $dom, DOMElement $node, $name, $value)
     {
-        $new = $dom->createElement( $name );
-        $new->appendChild( $dom->createTextNode( $value ) );
-        $node->appendChild( $new );
+        $new = $dom->createElement($name);
+        $new->appendChild($dom->createTextNode($value));
+        $node->appendChild($new);
     }
 
     /**
-     * Restores value from XML string
+     * Restores value from XML string.
      *
      * @param string $xmlString
      *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Page
      */
-    public function restoreValueFromXmlString( $xmlString )
+    public function restoreValueFromXmlString($xmlString)
     {
         $zones = array();
         $attributes = array();
         $layout = null;
 
-        if ( $xmlString )
-        {
-            $dom = new DOMDocument( '1.0', 'utf-8' );
-            $dom->loadXML( $xmlString );
+        if ($xmlString) {
+            $dom = new DOMDocument('1.0', 'utf-8');
+            $dom->loadXML($xmlString);
             $root = $dom->documentElement;
 
-            foreach ( $root->childNodes as $node )
-            {
-                if ( $node->nodeType !== XML_ELEMENT_NODE )
+            foreach ($root->childNodes as $node) {
+                if ($node->nodeType !== XML_ELEMENT_NODE) {
                     continue;
+                }
 
-                switch ( $node->nodeName )
-                {
+                switch ($node->nodeName) {
                     case 'zone':
-                        $zone = $this->restoreZoneFromXml( $node );
+                        $zone = $this->restoreZoneFromXml($node);
                         $zones[] = $zone;
                         break;
                     case 'zone_layout':
@@ -388,10 +367,8 @@ class PageConverter implements Converter
                 }
             }
 
-            if ( $root->hasAttributes() )
-            {
-                foreach ( $root->attributes as $attr )
-                {
+            if ($root->hasAttributes()) {
+                foreach ($root->attributes as $attr) {
                     $attributes[$attr->name] = $attr->value;
                 }
             }
@@ -399,21 +376,21 @@ class PageConverter implements Converter
 
         return new Parts\Page(
             array(
-                'zones'        => $zones,
-                'layout'       => $layout,
-                'attributes'   => $attributes
+                'zones' => $zones,
+                'layout' => $layout,
+                'attributes' => $attributes,
             )
         );
     }
 
     /**
-     * Restores value for a given Zone $node
+     * Restores value for a given Zone $node.
      *
      * @param \DOMElement $node
      *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Zone
      */
-    protected function restoreZoneFromXml( DOMElement $node )
+    protected function restoreZoneFromXml(DOMElement $node)
     {
         $zoneId = null;
         $zoneIdentifier = null;
@@ -421,17 +398,14 @@ class PageConverter implements Converter
         $blocks = array();
         $attributes = array();
 
-        if ( $node->hasAttributes() )
-        {
-            foreach ( $node->attributes as $attr )
-            {
-                switch ( $attr->name )
-                {
+        if ($node->hasAttributes()) {
+            foreach ($node->attributes as $attr) {
+                switch ($attr->name) {
                     case 'id':
                         // Stored Id has following format : id_<zoneId>, so extract <zoneId>
                         $zoneId = substr(
                             $attr->value,
-                            strpos( $attr->value, '_' ) + 1
+                            strpos($attr->value, '_') + 1
                         );
                         break;
                     case 'action':
@@ -443,15 +417,14 @@ class PageConverter implements Converter
             }
         }
 
-        foreach ( $node->childNodes as $node )
-        {
-            if ( $node->nodeType !== XML_ELEMENT_NODE )
+        foreach ($node->childNodes as $node) {
+            if ($node->nodeType !== XML_ELEMENT_NODE) {
                 continue;
+            }
 
-            switch ( $node->nodeName )
-            {
+            switch ($node->nodeName) {
                 case 'block':
-                    $block = $this->restoreBlockFromXml( $node );
+                    $block = $this->restoreBlockFromXml($node);
                     $blocks[] = $block;
                     break;
                 case 'zone_identifier':
@@ -464,23 +437,23 @@ class PageConverter implements Converter
 
         return new Parts\Zone(
             array(
-                'id'            => $zoneId,
-                'identifier'    => $zoneIdentifier,
-                'attributes'    => $attributes,
-                'action'        => $action,
-                'blocks'        => $blocks
+                'id' => $zoneId,
+                'identifier' => $zoneIdentifier,
+                'attributes' => $attributes,
+                'action' => $action,
+                'blocks' => $blocks,
             )
         );
     }
 
     /**
-     * Restores value for a given Block $node
+     * Restores value for a given Block $node.
      *
      * @param \DOMElement $node
      *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Block
      */
-    protected function restoreBlockFromXml( DOMElement $node )
+    protected function restoreBlockFromXml(DOMElement $node)
     {
         $blockId = null;
         $items = array();
@@ -494,17 +467,14 @@ class PageConverter implements Converter
         $action = null;
         $zoneId = null;
 
-        if ( $node->hasAttributes() )
-        {
-            foreach ( $node->attributes as $attr )
-            {
-                switch ( $attr->name )
-                {
+        if ($node->hasAttributes()) {
+            foreach ($node->attributes as $attr) {
+                switch ($attr->name) {
                     case 'id':
                         // Stored Id has following format : id_<blockId>, so extract <blockId>
                         $blockId = substr(
                             $attr->value,
-                            strpos( $attr->value, '_' ) + 1
+                            strpos($attr->value, '_') + 1
                         );
                         break;
                     case 'action':
@@ -516,36 +486,35 @@ class PageConverter implements Converter
             }
         }
 
-        foreach ( $node->childNodes as $node )
-        {
-            if ( $node->nodeType !== XML_ELEMENT_NODE )
+        foreach ($node->childNodes as $node) {
+            if ($node->nodeType !== XML_ELEMENT_NODE) {
                 continue;
+            }
 
-            switch ( $node->nodeName )
-            {
+            switch ($node->nodeName) {
                 case 'item':
-                    $items[] = $this->restoreItemFromXml( $node );
+                    $items[] = $this->restoreItemFromXml($node);
                     break;
                 case 'rotation':
-                    if ( $rotation === null )
+                    if ($rotation === null) {
                         $rotation = array();
+                    }
 
-                    foreach ( $node->childNodes as $subNode )
-                    {
-                        if ( $subNode->nodeType !== XML_ELEMENT_NODE )
+                    foreach ($node->childNodes as $subNode) {
+                        if ($subNode->nodeType !== XML_ELEMENT_NODE) {
                             continue;
+                        }
 
                         $rotation[$subNode->nodeName] = $subNode->nodeValue;
                     }
                     break;
                 case 'custom_attributes':
-                    if ( $customAttributes === null )
+                    if ($customAttributes === null) {
                         $customAttributes = array();
+                    }
 
-                    foreach ( $node->childNodes as $subNode )
-                    {
-                        if ( $subNode->nodeType !== XML_ELEMENT_NODE )
-                        {
+                    foreach ($node->childNodes as $subNode) {
+                        if ($subNode->nodeType !== XML_ELEMENT_NODE) {
                             continue;
                         }
 
@@ -570,38 +539,35 @@ class PageConverter implements Converter
 
         return new Parts\Block(
             array(
-                'id'                => $blockId,
-                'action'            => $action,
-                'items'             => $items,
-                'rotation'          => $rotation,
-                'customAttributes'  => $customAttributes,
-                'attributes'        => $attributes,
-                'name'              => $name,
-                'type'              => $type,
-                'view'              => $view,
-                'overflowId'        => $overflowId,
-                'zoneId'            => $zoneId
+                'id' => $blockId,
+                'action' => $action,
+                'items' => $items,
+                'rotation' => $rotation,
+                'customAttributes' => $customAttributes,
+                'attributes' => $attributes,
+                'name' => $name,
+                'type' => $type,
+                'view' => $view,
+                'overflowId' => $overflowId,
+                'zoneId' => $zoneId,
             )
         );
     }
 
     /**
-     * Restores value for a given Item $node
+     * Restores value for a given Item $node.
      *
      * @param \DOMElement $node
      *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Item
      */
-    protected function restoreItemFromXml( DOMElement $node )
+    protected function restoreItemFromXml(DOMElement $node)
     {
-        $item = array( 'attributes' => array() );
+        $item = array('attributes' => array());
 
-        if ( $node->hasAttributes() )
-        {
-            foreach ( $node->attributes as $attr )
-            {
-                switch ( $attr->name )
-                {
+        if ($node->hasAttributes()) {
+            foreach ($node->attributes as $attr) {
+                switch ($attr->name) {
                     case 'action':
                         $item['action'] = $attr->value;
                         break;
@@ -611,13 +577,12 @@ class PageConverter implements Converter
             }
         }
 
-        foreach ( $node->childNodes as $node )
-        {
-            if ( $node->nodeType !== XML_ELEMENT_NODE )
+        foreach ($node->childNodes as $node) {
+            if ($node->nodeType !== XML_ELEMENT_NODE) {
                 continue;
+            }
 
-            switch ( $node->nodeName )
-            {
+            switch ($node->nodeName) {
                 case 'object_id':
                     $item['contentId'] = $node->nodeValue;
                     break;
@@ -645,6 +610,6 @@ class PageConverter implements Converter
             }
         }
 
-        return new Parts\Item( $item );
+        return new Parts\Item($item);
     }
 }

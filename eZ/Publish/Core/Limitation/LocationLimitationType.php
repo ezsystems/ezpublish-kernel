@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -28,7 +30,7 @@ use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 
 /**
- * LocationLimitation is a Content limitation
+ * LocationLimitation is a Content limitation.
  */
 class LocationLimitationType extends AbstractPersistenceLimitationType implements SPILimitationTypeInterface
 {
@@ -41,22 +43,17 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
      */
-    public function acceptValue( APILimitationValue $limitationValue )
+    public function acceptValue(APILimitationValue $limitationValue)
     {
-        if ( !$limitationValue instanceof APILocationLimitation )
-        {
-            throw new InvalidArgumentType( "\$limitationValue", "APILocationLimitation", $limitationValue );
-        }
-        else if ( !is_array( $limitationValue->limitationValues ) )
-        {
-            throw new InvalidArgumentType( "\$limitationValue->limitationValues", "array", $limitationValue->limitationValues );
+        if (!$limitationValue instanceof APILocationLimitation) {
+            throw new InvalidArgumentType("\$limitationValue", 'APILocationLimitation', $limitationValue);
+        } elseif (!is_array($limitationValue->limitationValues)) {
+            throw new InvalidArgumentType("\$limitationValue->limitationValues", 'array', $limitationValue->limitationValues);
         }
 
-        foreach ( $limitationValue->limitationValues as $key => $id )
-        {
-            if ( !is_string( $id ) && !is_int( $id ) )
-            {
-                throw new InvalidArgumentType( "\$limitationValue->limitationValues[{$key}]", "int|string", $id );
+        foreach ($limitationValue->limitationValues as $key => $id) {
+            if (!is_string($id) && !is_int($id)) {
+                throw new InvalidArgumentType("\$limitationValue->limitationValues[{$key}]", 'int|string', $id);
             }
         }
     }
@@ -70,44 +67,41 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( APILimitationValue $limitationValue )
+    public function validate(APILimitationValue $limitationValue)
     {
         $validationErrors = array();
-        foreach ( $limitationValue->limitationValues as $key => $id )
-        {
-            try
-            {
-                $this->persistence->locationHandler()->load( $id );
-            }
-            catch ( APINotFoundException $e )
-            {
+        foreach ($limitationValue->limitationValues as $key => $id) {
+            try {
+                $this->persistence->locationHandler()->load($id);
+            } catch (APINotFoundException $e) {
                 $validationErrors[] = new ValidationError(
                     "limitationValues[%key%] => '%value%' does not exist in the backend",
                     null,
                     array(
-                        "value" => $id,
-                        "key" => $key
+                        'value' => $id,
+                        'key' => $key,
                     )
                 );
             }
         }
+
         return $validationErrors;
     }
 
     /**
-     * Create the Limitation Value
+     * Create the Limitation Value.
      *
      * @param mixed[] $limitationValues
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation
      */
-    public function buildValue( array $limitationValues )
+    public function buildValue(array $limitationValues)
     {
-        return new APILocationLimitation( array( 'limitationValues' => $limitationValues ) );
+        return new APILocationLimitation(array('limitationValues' => $limitationValues));
     }
 
     /**
-     * Evaluate permission against content & target(placement/parent/assignment)
+     * Evaluate permission against content & target(placement/parent/assignment).
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      *         Example: If LimitationValue is instance of ContentTypeLimitationValue, and Type is SectionLimitationType.
@@ -119,29 +113,21 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
      * @param \eZ\Publish\API\Repository\Values\ValueObject[]|null $targets The context of the $object, like Location of Content, if null none where provided by caller
      *
-     * @return boolean
+     * @return bool
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = null )
+    public function evaluate(APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = null)
     {
-        if ( !$value instanceof APILocationLimitation )
-        {
-            throw new InvalidArgumentException( '$value', 'Must be of type: APILocationLimitation' );
+        if (!$value instanceof APILocationLimitation) {
+            throw new InvalidArgumentException('$value', 'Must be of type: APILocationLimitation');
         }
 
-        if ( $object instanceof ContentCreateStruct )
-        {
-            return $this->evaluateForContentCreateStruct( $value, $targets );
-        }
-        else if ( $object instanceof Content )
-        {
+        if ($object instanceof ContentCreateStruct) {
+            return $this->evaluateForContentCreateStruct($value, $targets);
+        } elseif ($object instanceof Content) {
             $object = $object->getVersionInfo()->getContentInfo();
-        }
-        else if ( $object instanceof VersionInfo )
-        {
+        } elseif ($object instanceof VersionInfo) {
             $object = $object->getContentInfo();
-        }
-        else if ( !$object instanceof ContentInfo )
-        {
+        } elseif (!$object instanceof ContentInfo) {
             throw new InvalidArgumentException(
                 '$object',
                 'Must be of type: ContentCreateStruct, Content, VersionInfo or ContentInfo'
@@ -149,24 +135,22 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
         }
 
         // Load locations if no specific placement was provided
-        if ( $targets === null )
-        {
-            if ( $object->published )
-                $targets = $this->persistence->locationHandler()->loadLocationsByContent( $object->id );
-            else// @todo Need support for draft locations to to work correctly
-                $targets = $this->persistence->locationHandler()->loadParentLocationsForDraftContent( $object->id );
+        if ($targets === null) {
+            if ($object->published) {
+                $targets = $this->persistence->locationHandler()->loadLocationsByContent($object->id);
+            } else {
+                // @todo Need support for draft locations to to work correctly
+                $targets = $this->persistence->locationHandler()->loadParentLocationsForDraftContent($object->id);
+            }
         }
 
-        foreach ( $targets as $target )
-        {
-            if ( !$target instanceof Location && !$target instanceof SPILocation )
-            {
-                throw new InvalidArgumentException( '$targets', 'Must contain objects of type: Location' );
+        foreach ($targets as $target) {
+            if (!$target instanceof Location && !$target instanceof SPILocation) {
+                throw new InvalidArgumentException('$targets', 'Must contain objects of type: Location');
             }
 
             // Single match is sufficient
-            if ( in_array( $target->id, $value->limitationValues ) )
-            {
+            if (in_array($target->id, $value->limitationValues)) {
                 return true;
             }
         }
@@ -185,19 +169,16 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
      *
      * @return bool
      */
-    protected function evaluateForContentCreateStruct( APILimitationValue $value, array $targets = null )
+    protected function evaluateForContentCreateStruct(APILimitationValue $value, array $targets = null)
     {
         // If targets is empty/null return false as user does not have access
         // to content w/o location with this limitation
-        if ( empty( $targets ) )
-        {
+        if (empty($targets)) {
             return false;
         }
 
-        foreach ( $targets as $target )
-        {
-            if ( !$target instanceof LocationCreateStruct )
-            {
+        foreach ($targets as $target) {
+            if (!$target instanceof LocationCreateStruct) {
                 throw new InvalidArgumentException(
                     '$targets',
                     'If $object is ContentCreateStruct must contain objects of type: LocationCreateStruct'
@@ -205,8 +186,7 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
             }
 
             // For ContentCreateStruct all placements must match
-            if ( !in_array( $target->parentLocationId, $value->limitationValues ) )
-            {
+            if (!in_array($target->parentLocationId, $value->limitationValues)) {
                 return false;
             }
         }
@@ -215,27 +195,31 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
     }
 
     /**
-     * Returns Criterion for use in find() query
+     * Returns Criterion for use in find() query.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
      */
-    public function getCriterion( APILimitationValue $value, APIUser $currentUser )
+    public function getCriterion(APILimitationValue $value, APIUser $currentUser)
     {
-        if ( empty( $value->limitationValues )  )// no limitation values
-            throw new \RuntimeException( "\$value->limitationValues is empty, it should not have been stored in the first place" );
+        if (empty($value->limitationValues)) {
+            // no limitation values
+            throw new \RuntimeException("\$value->limitationValues is empty, it should not have been stored in the first place");
+        }
 
-        if ( !isset( $value->limitationValues[1] ) )// 1 limitation value: EQ operation
-            return new Criterion\LocationId( $value->limitationValues[0] );
+        if (!isset($value->limitationValues[1])) {
+            // 1 limitation value: EQ operation
+            return new Criterion\LocationId($value->limitationValues[0]);
+        }
 
         // several limitation values: IN operation
-        return new Criterion\LocationId( $value->limitationValues );
+        return new Criterion\LocationId($value->limitationValues);
     }
 
     /**
-     * Returns info on valid $limitationValues
+     * Returns info on valid $limitationValues.
      *
      * @return mixed[]|int In case of array, a hash with key as valid limitations value and value as human readable name
      *                     of that option, in case of int on of VALUE_SCHEMA_ constants.

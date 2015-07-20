@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the GrayscaleFilterLoader class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,7 +20,7 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
  */
 class GrayscaleFilterLoader implements LoaderInterface
 {
-    public function load( ImageInterface $image, array $options = array() )
+    public function load(ImageInterface $image, array $options = array())
     {
         $image->effects()->grayscale();
 

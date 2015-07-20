@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version = '1.0' encoding = 'UTF-8' ?>
 <!--
 This is the Solr schema file. This file should be named "schema.xml" and should
 be in the conf directory under the solr home (i.e. ./solr/conf/schema.xml by

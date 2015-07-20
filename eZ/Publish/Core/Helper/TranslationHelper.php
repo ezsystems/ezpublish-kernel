@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContentHelper class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,7 +23,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Helper class for translation
+ * Helper class for translation.
  */
 class TranslationHelper
 {
@@ -45,7 +47,7 @@ class TranslationHelper
      */
     private $logger;
 
-    public function __construct( ConfigResolverInterface $configResolver, ContentService $contentService, array $siteAccessesByLanguage, LoggerInterface $logger = null )
+    public function __construct(ConfigResolverInterface $configResolver, ContentService $contentService, array $siteAccessesByLanguage, LoggerInterface $logger = null)
     {
         $this->configResolver = $configResolver;
         $this->contentService = $contentService;
@@ -62,13 +64,11 @@ class TranslationHelper
      *
      * @return string
      */
-    public function getTranslatedContentName( Content $content, $forcedLanguage = null )
+    public function getTranslatedContentName(Content $content, $forcedLanguage = null)
     {
-        foreach ( $this->getLanguages( $forcedLanguage ) as $lang )
-        {
-            $translatedName = $content->getVersionInfo()->getName( $lang );
-            if ( $translatedName !== null )
-            {
+        foreach ($this->getLanguages($forcedLanguage) as $lang) {
+            $translatedName = $content->getVersionInfo()->getName($lang);
+            if ($translatedName !== null) {
                 return $translatedName;
             }
         }
@@ -85,15 +85,14 @@ class TranslationHelper
      *
      * @return string
      */
-    public function getTranslatedContentNameByContentInfo( ContentInfo $contentInfo, $forcedLanguage = null )
+    public function getTranslatedContentNameByContentInfo(ContentInfo $contentInfo, $forcedLanguage = null)
     {
-        if ( isset( $forcedLanguage ) && $forcedLanguage === $contentInfo->mainLanguageCode )
-        {
+        if (isset($forcedLanguage) && $forcedLanguage === $contentInfo->mainLanguageCode) {
             return $contentInfo->name;
         }
 
         return $this->getTranslatedContentName(
-            $this->contentService->loadContentByContentInfo( $contentInfo ),
+            $this->contentService->loadContentByContentInfo($contentInfo),
             $forcedLanguage
         );
     }
@@ -109,21 +108,19 @@ class TranslationHelper
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field|null
      */
-    public function getTranslatedField( Content $content, $fieldDefIdentifier, $forcedLanguage = null )
+    public function getTranslatedField(Content $content, $fieldDefIdentifier, $forcedLanguage = null)
     {
         // Loop over prioritized languages to get the appropriate translated field.
-        foreach ( $this->getLanguages( $forcedLanguage ) as $lang )
-        {
-            $field = $content->getField( $fieldDefIdentifier, $lang );
-            if ( $field instanceof Field )
-            {
+        foreach ($this->getLanguages($forcedLanguage) as $lang) {
+            $field = $content->getField($fieldDefIdentifier, $lang);
+            if ($field instanceof Field) {
                 return $field;
             }
         }
     }
 
     /**
-     * Returns Field definition name in the appropriate language for a given content
+     * Returns Field definition name in the appropriate language for a given content.
      *
      * By default, this method will return the field definition name in current language if translation is present. If not, main language will be used.
      * If $forcedLanguage is provided, will return the field definition name in this language, if translation is present.
@@ -134,6 +131,7 @@ class TranslationHelper
      * @param string $forcedLanguage Locale we want the field definition name translated in in (e.g. "fre-FR"). Null by default (takes current locale)
      *
      * @throws InvalidArgumentException
+     *
      * @return string|null
      */
     public function getTranslatedFieldDefinitionProperty(
@@ -141,11 +139,9 @@ class TranslationHelper
         $fieldDefIdentifier,
         $property = 'name',
         $forcedLanguage = null
-    )
-    {
-        $fieldDefinition = $contentType->getFieldDefinition( $fieldDefIdentifier );
-        if ( !$fieldDefinition instanceof FieldDefinition )
-        {
+    ) {
+        $fieldDefinition = $contentType->getFieldDefinition($fieldDefIdentifier);
+        if (!$fieldDefinition instanceof FieldDefinition) {
             throw new InvalidArgumentException(
                 '$fieldDefIdentifier',
                 "Field '{$fieldDefIdentifier}' not found on {$contentType->identifier}"
@@ -153,24 +149,21 @@ class TranslationHelper
         }
 
         $method = 'get' . $property;
-        if ( !method_exists( $fieldDefinition, $method ) )
-        {
-            throw new InvalidArgumentException( '$property', "Method get'{$property}'() not found on FieldDefinition" );
+        if (!method_exists($fieldDefinition, $method)) {
+            throw new InvalidArgumentException('$property', "Method get'{$property}'() not found on FieldDefinition");
         }
 
         // Loop over prioritized languages to get the appropriate translated field definition name
         // Should ideally have used array_unique, but in that case the loop should ideally never reach last item
-        foreach ( $this->getLanguages( $forcedLanguage, $contentType->mainLanguageCode ) as $lang )
-        {
-            if ( $name = $fieldDefinition->$method( $lang ) )
-            {
+        foreach ($this->getLanguages($forcedLanguage, $contentType->mainLanguageCode) as $lang) {
+            if ($name = $fieldDefinition->$method($lang)) {
                 return $name;
             }
         }
     }
 
     /**
-     * Gets translated property generic helper
+     * Gets translated property generic helper.
      *
      * For generic use, expects array property as-is on value object, typically $object->$property[$language]
      *
@@ -182,39 +175,34 @@ class TranslationHelper
      * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
      *
      * @throws InvalidArgumentException
+     *
      * @return string|null
      */
-    public function getTranslatedByProperty( ValueObject $object, $property, $forcedLanguage = null )
+    public function getTranslatedByProperty(ValueObject $object, $property, $forcedLanguage = null)
     {
-        if ( !isset( $object->$property ) )
-        {
-            throw new InvalidArgumentException( '$property', "Property '{$property}' not found on " . get_class( $object ) );
+        if (!isset($object->$property)) {
+            throw new InvalidArgumentException('$property', "Property '{$property}' not found on " . get_class($object));
         }
 
         // Always force main language as fallback, if defined and if either alwaysAvailable is true or not defined
         // if language is already is set on array we still do this as ideally the loop will never
-        if ( isset( $object->mainLanguageCode ) && ( !isset( $object->alwaysAvailable ) || $object->alwaysAvailable ) )
-        {
-            $languages = $this->getLanguages( $forcedLanguage, $object->mainLanguageCode );
-        }
-        else
-        {
-            $languages = $this->getLanguages( $forcedLanguage );
+        if (isset($object->mainLanguageCode) && (!isset($object->alwaysAvailable) || $object->alwaysAvailable)) {
+            $languages = $this->getLanguages($forcedLanguage, $object->mainLanguageCode);
+        } else {
+            $languages = $this->getLanguages($forcedLanguage);
         }
 
         // Get property value first in case it is magic (__isset and __get) property
         $propertyValue = $object->$property;
-        foreach ( $languages as $lang )
-        {
-            if ( isset( $propertyValue[$lang] ) )
-            {
+        foreach ($languages as $lang) {
+            if (isset($propertyValue[$lang])) {
                 return $propertyValue[$lang];
             }
         }
     }
 
     /**
-     * Gets translated method generic helper
+     * Gets translated method generic helper.
      *
      * For generic use, expects method exposing translated property as-is on value object, typically $object->$method($language)
      *
@@ -226,19 +214,17 @@ class TranslationHelper
      * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
      *
      * @throws InvalidArgumentException
+     *
      * @return string|null
      */
-    public function getTranslatedByMethod( ValueObject $object, $method, $forcedLanguage = null )
+    public function getTranslatedByMethod(ValueObject $object, $method, $forcedLanguage = null)
     {
-        if ( !method_exists( $object, $method ) )
-        {
-            throw new InvalidArgumentException( '$method', "Method '{$method}' not found on " . get_class( $object ) );
+        if (!method_exists($object, $method)) {
+            throw new InvalidArgumentException('$method', "Method '{$method}' not found on " . get_class($object));
         }
 
-        foreach ( $this->getLanguages( $forcedLanguage ) as $lang )
-        {
-            if ( $value = $object->$method( $lang ) )
-            {
+        foreach ($this->getLanguages($forcedLanguage) as $lang) {
+            if ($value = $object->$method($lang)) {
                 return $value;
             }
         }
@@ -255,24 +241,23 @@ class TranslationHelper
      *
      * @return string|null
      */
-    public function getTranslationSiteAccess( $languageCode )
+    public function getTranslationSiteAccess($languageCode)
     {
-        $translationSiteAccesses = $this->configResolver->getParameter( 'translation_siteaccesses' );
-        $relatedSiteAccesses = $this->configResolver->getParameter( 'related_siteaccesses' );
+        $translationSiteAccesses = $this->configResolver->getParameter('translation_siteaccesses');
+        $relatedSiteAccesses = $this->configResolver->getParameter('related_siteaccesses');
 
-        if ( !isset( $this->siteAccessesByLanguage[$languageCode] ) )
-        {
-            if ( $this->logger )
-            {
-                $this->logger->error( "Couldn't find any SiteAccess with '$languageCode' as main language." );
+        if (!isset($this->siteAccessesByLanguage[$languageCode])) {
+            if ($this->logger) {
+                $this->logger->error("Couldn't find any SiteAccess with '$languageCode' as main language.");
             }
 
             return null;
         }
 
         $relatedSiteAccesses = $translationSiteAccesses ?: $relatedSiteAccesses;
-        $translationSiteAccesses = array_intersect( $this->siteAccessesByLanguage[$languageCode], $relatedSiteAccesses );
-        return array_shift( $translationSiteAccesses );
+        $translationSiteAccesses = array_intersect($this->siteAccessesByLanguage[$languageCode], $relatedSiteAccesses);
+
+        return array_shift($translationSiteAccesses);
     }
 
     /**
@@ -282,41 +267,40 @@ class TranslationHelper
      */
     public function getAvailableLanguages()
     {
-        $translationSiteAccesses = $this->configResolver->getParameter( 'translation_siteaccesses' );
-        $relatedSiteAccesses = $translationSiteAccesses ?: $this->configResolver->getParameter( 'related_siteaccesses' );
+        $translationSiteAccesses = $this->configResolver->getParameter('translation_siteaccesses');
+        $relatedSiteAccesses = $translationSiteAccesses ?: $this->configResolver->getParameter('related_siteaccesses');
         $availableLanguages = array();
-        $currentLanguages = $this->configResolver->getParameter( 'languages' );
-        $availableLanguages[] = array_shift( $currentLanguages );
+        $currentLanguages = $this->configResolver->getParameter('languages');
+        $availableLanguages[] = array_shift($currentLanguages);
 
-        foreach ( $relatedSiteAccesses as $sa )
-        {
-            $languages = $this->configResolver->getParameter( 'languages', null, $sa );
-            $availableLanguages[] = array_shift( $languages );
+        foreach ($relatedSiteAccesses as $sa) {
+            $languages = $this->configResolver->getParameter('languages', null, $sa);
+            $availableLanguages[] = array_shift($languages);
         }
 
-        sort( $availableLanguages );
-        return array_unique( $availableLanguages );
+        sort($availableLanguages);
+
+        return array_unique($availableLanguages);
     }
 
     /**
      * @param string|null $forcedLanguage
      * @param string|null $fallbackLanguage
+     *
      * @return array|mixed
      */
-    private function getLanguages( $forcedLanguage = null, $fallbackLanguage = null )
+    private function getLanguages($forcedLanguage = null, $fallbackLanguage = null)
     {
-        if ( $forcedLanguage !== null )
-        {
-            $languages = array( $forcedLanguage );
-        }
-        else
-        {
-            $languages = $this->configResolver->getParameter( 'languages' );
+        if ($forcedLanguage !== null) {
+            $languages = array($forcedLanguage);
+        } else {
+            $languages = $this->configResolver->getParameter('languages');
         }
 
         // Always add $fallbackLanguage, even if null, as last entry so that we can fallback to
         // main/initial language if domain supports it.
         $languages[] = $fallbackLanguage;
+
         return $languages;
     }
 }

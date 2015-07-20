@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the EzPublishDataCollector class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,16 +24,15 @@ class EzPublishCoreCollector extends DataCollector
         $this->data = [
             'collectors' => [],
             'panelTemplates' => [],
-            'toolbarTemplates' => []
+            'toolbarTemplates' => [],
         ];
     }
 
-    public function collect( Request $request, Response $response, \Exception $exception = null )
+    public function collect(Request $request, Response $response, \Exception $exception = null)
     {
         /** @var DataCollectorInterface $innerCollector */
-        foreach ( $this->data['collectors'] as $innerCollector )
-        {
-            $innerCollector->collect( $request, $response, $exception );
+        foreach ($this->data['collectors'] as $innerCollector) {
+            $innerCollector->collect($request, $response, $exception);
         }
     }
 
@@ -43,7 +44,7 @@ class EzPublishCoreCollector extends DataCollector
     /**
      * @param DataCollectorInterface $collector
      */
-    public function addCollector( DataCollectorInterface $collector, $panelTemplate = null, $toolbarTemplate = null )
+    public function addCollector(DataCollectorInterface $collector, $panelTemplate = null, $toolbarTemplate = null)
     {
         $name = $collector->getName();
         $this->data['collectors'][$name] = $collector;
@@ -58,11 +59,10 @@ class EzPublishCoreCollector extends DataCollector
      *
      * @throws \InvalidArgumentException
      */
-    public function getCollector( $name )
+    public function getCollector($name)
     {
-        if ( !isset( $this->data['collectors'][$name] ) )
-        {
-            throw new InvalidArgumentException( "Invalid debug collector '$name'" );
+        if (!isset($this->data['collectors'][$name])) {
+            throw new InvalidArgumentException("Invalid debug collector '$name'");
         }
 
         return $this->data['collectors'][$name];
@@ -83,10 +83,9 @@ class EzPublishCoreCollector extends DataCollector
      *
      * @return string
      */
-    public function getToolbarTemplate( $collectorName )
+    public function getToolbarTemplate($collectorName)
     {
-        if ( !isset( $this->data['toolbarTemplates'][$collectorName] ) )
-        {
+        if (!isset($this->data['toolbarTemplates'][$collectorName])) {
             return null;
         }
 
@@ -100,10 +99,9 @@ class EzPublishCoreCollector extends DataCollector
      *
      * @return string
      */
-    public function getPanelTemplate( $collectorName )
+    public function getPanelTemplate($collectorName)
     {
-        if ( !isset( $this->data['panelTemplates'][$collectorName] ) )
-        {
+        if (!isset($this->data['panelTemplates'][$collectorName])) {
             return null;
         }
 

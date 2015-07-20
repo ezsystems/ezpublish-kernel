@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Location Handler interface
+ * File containing the Location Handler interface.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,7 +27,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function load( $locationId );
+    public function load($locationId);
 
     /**
      * Loads the subtree ids of the location identified by $locationId.
@@ -36,7 +38,7 @@ interface Handler
      *
      * @return array Location ids are in the index, Content ids in the value.
      */
-    public function loadSubtreeIds( $locationId );
+    public function loadSubtreeIds($locationId);
 
     /**
      * Loads the data for the location identified by $remoteId.
@@ -47,29 +49,28 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function loadByRemoteId( $remoteId );
+    public function loadByRemoteId($remoteId);
 
     /**
      * Loads all locations for $contentId, optionally limited to a sub tree
-     * identified by $rootLocationId
+     * identified by $rootLocationId.
      *
      * @param int $contentId
      * @param int $rootLocationId
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */
-    public function loadLocationsByContent( $contentId, $rootLocationId = null );
+    public function loadLocationsByContent($contentId, $rootLocationId = null);
 
     /**
      * Loads all parent Locations for unpublished Content by given $contentId.
      *
-     * @access private This method is stopgap solution and will be removed once loading draft Locations is implemented.
      *
      * @param mixed $contentId
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */
-    public function loadParentLocationsForDraftContent( $contentId );
+    public function loadParentLocationsForDraftContent($contentId);
 
     /**
      * Copy location object identified by $sourceId, into destination identified by $destinationParentId.
@@ -86,7 +87,7 @@ interface Handler
      *
      * @return Location the newly created Location.
      */
-    public function copySubtree( $sourceId, $destinationParentId );
+    public function copySubtree($sourceId, $destinationParentId);
 
     /**
      * Moves location identified by $sourceId into new parent identified by $destinationParentId.
@@ -98,29 +99,27 @@ interface Handler
      * @param mixed $sourceId
      * @param mixed $destinationParentId
      *
-     * @return boolean
+     * @return bool
      */
-    public function move( $sourceId, $destinationParentId );
+    public function move($sourceId, $destinationParentId);
 
     /**
-     * Marks the given nodes and all ancestors as modified
+     * Marks the given nodes and all ancestors as modified.
      *
      * Optionally a time stamp with the modification date may be specified,
      * otherwise the current time is used.
      *
      * @param int|string $locationId
      * @param int $timestamp
-     *
-     * @return void
      */
-    public function markSubtreeModified( $locationId, $timestamp = null );
+    public function markSubtreeModified($locationId, $timestamp = null);
 
     /**
      * Sets a location to be hidden, and it self + all children to invisible.
      *
      * @param mixed $id Location ID
      */
-    public function hide( $id );
+    public function hide($id);
 
     /**
      * Sets a location to be unhidden, and self + children to visible unless a parent is hiding the tree.
@@ -128,7 +127,7 @@ interface Handler
      *
      * @param mixed $id
      */
-    public function unHide( $id );
+    public function unHide($id);
 
     /**
      * Swaps the content object being pointed to by a location object.
@@ -139,19 +138,17 @@ interface Handler
      * @param mixed $locationId1
      * @param mixed $locationId2
      *
-     * @return boolean
+     * @return bool
      */
-    public function swap( $locationId1, $locationId2 );
+    public function swap($locationId1, $locationId2);
 
     /**
      * Updates an existing location.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
-     *
-     * @return void
      */
-    public function update( UpdateStruct $location, $locationId );
+    public function update(UpdateStruct $location, $locationId);
 
     /**
      * Creates a new location rooted at $location->parentId.
@@ -160,7 +157,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function create( CreateStruct $location );
+    public function create(CreateStruct $location);
 
     /**
      * Removes all Locations under and including $locationId.
@@ -173,13 +170,13 @@ interface Handler
      *
      * @param mixed $locationId
      *
-     * @return boolean
+     * @return bool
      */
-    public function removeSubtree( $locationId );
+    public function removeSubtree($locationId);
 
     /**
      * Set section on all content objects in the subtree.
-     * Only main locations will be updated
+     * Only main locations will be updated.
      *
      * @todo This can be confusing (regarding permissions and main/multi location).
      * So method is for the time being not in PublicAPI so people can instead
@@ -187,18 +184,14 @@ interface Handler
      *
      * @param mixed $locationId
      * @param mixed $sectionId
-     *
-     * @return void
      */
-    public function setSectionForSubtree( $locationId, $sectionId );
+    public function setSectionForSubtree($locationId, $sectionId);
 
     /**
-     * Changes main location of content identified by given $contentId to location identified by given $locationId
+     * Changes main location of content identified by given $contentId to location identified by given $locationId.
      *
      * @param mixed $contentId
      * @param mixed $locationId
-     *
-     * @return void
      */
-    public function changeMainLocation( $contentId, $locationId );
+    public function changeMainLocation($contentId, $locationId);
 }

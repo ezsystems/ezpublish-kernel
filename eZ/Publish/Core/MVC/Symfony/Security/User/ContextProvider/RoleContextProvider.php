@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RoleId identify definer class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,43 +26,39 @@ class RoleContextProvider implements ContextProviderInterface
      */
     protected $repository;
 
-    public function __construct( Repository $repository )
+    public function __construct(Repository $repository)
     {
         $this->repository = $repository;
     }
 
-    public function updateUserContext( UserContext $context )
+    public function updateUserContext(UserContext $context)
     {
         $user = $this->repository->getCurrentUser();
         /** @var \eZ\Publish\API\Repository\Values\User\RoleAssignment[] $roleAssignments */
         $roleAssignments = $this->repository->sudo(
-            function ( Repository $repository ) use ( $user )
-            {
-                return $repository->getRoleService()->getRoleAssignmentsForUser( $user, true );
+            function (Repository $repository) use ($user) {
+                return $repository->getRoleService()->getRoleAssignmentsForUser($user, true);
             }
         );
 
         $roleIds = array();
         $limitationValues = array();
         /** @var UserRoleAssignment $roleAssignment */
-        foreach ( $roleAssignments as $roleAssignment )
-        {
+        foreach ($roleAssignments as $roleAssignment) {
             $roleId = $roleAssignment->getRole()->id;
             $roleIds[] = $roleId;
             $limitation = $roleAssignment->getRoleLimitation();
             // If a limitation is present, store the limitation values by roleId
-            if ( $limitation !== null )
-            {
-                $limitationValuesKey = sprintf( '%s-%s', $roleId, $limitation->getIdentifier() );
+            if ($limitation !== null) {
+                $limitationValuesKey = sprintf('%s-%s', $roleId, $limitation->getIdentifier());
                 $limitationValues[$limitationValuesKey] = array();
-                foreach ( $limitation->limitationValues as $value )
-                {
+                foreach ($limitation->limitationValues as $value) {
                     $limitationValues[$limitationValuesKey][] = $value;
                 }
             }
         }
 
-        $context->addParameter( 'roleIdList', $roleIds );
-        $context->addParameter( 'roleLimitationList', $limitationValues );
+        $context->addParameter('roleIdList', $roleIds);
+        $context->addParameter('roleLimitationList', $limitationValues);
     }
 }

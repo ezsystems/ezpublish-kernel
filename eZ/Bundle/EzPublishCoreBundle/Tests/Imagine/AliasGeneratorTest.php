@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the AliasGeneratorTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -55,14 +57,14 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->dataLoader = $this->getMock( '\Liip\ImagineBundle\Binary\Loader\LoaderInterface' );
+        $this->dataLoader = $this->getMock('\Liip\ImagineBundle\Binary\Loader\LoaderInterface');
         $this->filterManager = $this
-            ->getMockBuilder( '\Liip\ImagineBundle\Imagine\Filter\FilterManager' )
+            ->getMockBuilder('\Liip\ImagineBundle\Imagine\Filter\FilterManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->ioResolver = $this->getMock( '\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface' );
+        $this->ioResolver = $this->getMock('\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface');
         $this->filterConfiguration = new FilterConfiguration();
-        $this->logger = $this->getMock( '\Psr\Log\LoggerInterface' );
+        $this->logger = $this->getMock('\Psr\Log\LoggerInterface');
         $this->aliasGenerator = new AliasGenerator(
             $this->dataLoader,
             $this->filterManager,
@@ -75,18 +77,18 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider supportsValueProvider
      */
-    public function testSupportsValue( $value, $isSupported )
+    public function testSupportsValue($value, $isSupported)
     {
-        $this->assertSame( $isSupported, $this->aliasGenerator->supportsValue( $value ) );
+        $this->assertSame($isSupported, $this->aliasGenerator->supportsValue($value));
     }
 
     public function supportsValueProvider()
     {
         return array(
-            array( $this->getMock( '\eZ\Publish\Core\FieldType\Value' ), false ),
-            array( new TextLineValue(), false ),
-            array( new ImageValue(), true ),
-            array( $this->getMock( '\eZ\Publish\Core\FieldType\Image\Value' ), true )
+            array($this->getMock('\eZ\Publish\Core\FieldType\Value'), false),
+            array(new TextLineValue(), false),
+            array(new ImageValue(), true),
+            array($this->getMock('\eZ\Publish\Core\FieldType\Image\Value'), true),
         );
     }
 
@@ -95,50 +97,50 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testGetVariationWrongValue()
     {
-        $field = new Field( array( 'value' => $this->getMock( 'eZ\Publish\Core\FieldType\Value' ) ) );
-        $this->aliasGenerator->getVariation( $field, new VersionInfo(), 'foo' );
+        $field = new Field(array('value' => $this->getMock('eZ\Publish\Core\FieldType\Value')));
+        $this->aliasGenerator->getVariation($field, new VersionInfo(), 'foo');
     }
 
     public function testGetVariationNotStored()
     {
         $originalPath = 'foo/bar/image.jpg';
         $variationName = 'my_variation';
-        $this->filterConfiguration->set( $variationName, array() );
+        $this->filterConfiguration->set($variationName, array());
         $imageId = '123-45';
-        $imageValue = new ImageValue( array( 'id' => $originalPath, 'imageId' => $imageId ) );
-        $field = new Field( array( 'value' => $imageValue ) );
+        $imageValue = new ImageValue(array('id' => $originalPath, 'imageId' => $imageId));
+        $field = new Field(array('value' => $imageValue));
         $expectedUrl = "http://localhost/foo/bar/image_$variationName.jpg";
 
         $this->ioResolver
-            ->expects( $this->once() )
-            ->method( 'isStored' )
-            ->with( $originalPath, $variationName )
-            ->will( $this->returnValue( false ) );
+            ->expects($this->once())
+            ->method('isStored')
+            ->with($originalPath, $variationName)
+            ->will($this->returnValue(false));
 
         $this->logger
-            ->expects( $this->once() )
-            ->method( 'debug' );
+            ->expects($this->once())
+            ->method('debug');
 
-        $binary = $this->getMock( '\Liip\ImagineBundle\Binary\BinaryInterface' );
+        $binary = $this->getMock('\Liip\ImagineBundle\Binary\BinaryInterface');
         $this->dataLoader
-            ->expects( $this->once() )
-            ->method( 'find' )
-            ->with( $originalPath )
-            ->will( $this->returnValue( $binary ) );
+            ->expects($this->once())
+            ->method('find')
+            ->with($originalPath)
+            ->will($this->returnValue($binary));
         $this->filterManager
-            ->expects( $this->once() )
-            ->method( 'applyFilter' )
-            ->with( $binary, $variationName )
-            ->will( $this->returnValue( $binary ) );
+            ->expects($this->once())
+            ->method('applyFilter')
+            ->with($binary, $variationName)
+            ->will($this->returnValue($binary));
         $this->ioResolver
-            ->expects( $this->once() )
-            ->method( 'store' )
-            ->with( $binary, $originalPath, $variationName );
+            ->expects($this->once())
+            ->method('store')
+            ->with($binary, $originalPath, $variationName);
         $this->ioResolver
-            ->expects( $this->once() )
-            ->method( 'resolve' )
-            ->with( $originalPath, $variationName )
-            ->will( $this->returnValue( $expectedUrl ) );
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($originalPath, $variationName)
+            ->will($this->returnValue($expectedUrl));
 
         $expected = new ImageVariation(
             array(
@@ -146,10 +148,10 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
                 'fileName' => "image_$variationName.jpg",
                 'dirPath' => 'http://localhost/foo/bar',
                 'uri' => $expectedUrl,
-                'imageId' => $imageId
+                'imageId' => $imageId,
             )
         );
-        $this->assertEquals( $expected, $this->aliasGenerator->getVariation( $field, new VersionInfo(), $variationName ) );
+        $this->assertEquals($expected, $this->aliasGenerator->getVariation($field, new VersionInfo(), $variationName));
     }
 
     public function testGetVariationOriginal()
@@ -157,51 +159,51 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
         $originalPath = 'foo/bar/image.jpg';
         $variationName = 'original';
         $imageId = '123-45';
-        $imageValue = new ImageValue( array( 'id' => $originalPath, 'imageId' => $imageId ) );
-        $field = new Field( array( 'value' => $imageValue ) );
-        $expectedUrl = "http://localhost/foo/bar/image.jpg";
+        $imageValue = new ImageValue(array('id' => $originalPath, 'imageId' => $imageId));
+        $field = new Field(array('value' => $imageValue));
+        $expectedUrl = 'http://localhost/foo/bar/image.jpg';
 
         $this->ioResolver
-            ->expects( $this->never() )
-            ->method( 'isStored' )
-            ->with( $originalPath, $variationName )
-            ->will( $this->returnValue( false ) );
+            ->expects($this->never())
+            ->method('isStored')
+            ->with($originalPath, $variationName)
+            ->will($this->returnValue(false));
 
         $this->logger
-            ->expects( $this->once() )
-            ->method( 'debug' );
+            ->expects($this->once())
+            ->method('debug');
 
-        $binary = $this->getMock( '\Liip\ImagineBundle\Binary\BinaryInterface' );
+        $binary = $this->getMock('\Liip\ImagineBundle\Binary\BinaryInterface');
         $this->dataLoader
-            ->expects( $this->once() )
-            ->method( 'find' )
-            ->with( $originalPath )
-            ->will( $this->returnValue( $binary ) );
+            ->expects($this->once())
+            ->method('find')
+            ->with($originalPath)
+            ->will($this->returnValue($binary));
         $this->filterManager
-            ->expects( $this->never() )
-            ->method( 'applyFilter' )
-            ->with( $binary, $variationName )
-            ->will( $this->returnValue( $binary ) );
+            ->expects($this->never())
+            ->method('applyFilter')
+            ->with($binary, $variationName)
+            ->will($this->returnValue($binary));
         $this->ioResolver
-            ->expects( $this->never() )
-            ->method( 'store' )
-            ->with( $binary, $originalPath, $variationName );
+            ->expects($this->never())
+            ->method('store')
+            ->with($binary, $originalPath, $variationName);
         $this->ioResolver
-            ->expects( $this->once() )
-            ->method( 'resolve' )
-            ->with( $originalPath, $variationName )
-            ->will( $this->returnValue( $expectedUrl ) );
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($originalPath, $variationName)
+            ->will($this->returnValue($expectedUrl));
 
         $expected = new ImageVariation(
             array(
                 'name' => $variationName,
-                'fileName' => "image.jpg",
+                'fileName' => 'image.jpg',
                 'dirPath' => 'http://localhost/foo/bar',
                 'uri' => $expectedUrl,
-                'imageId' => $imageId
+                'imageId' => $imageId,
             )
         );
-        $this->assertEquals( $expected, $this->aliasGenerator->getVariation( $field, new VersionInfo(), $variationName ) );
+        $this->assertEquals($expected, $this->aliasGenerator->getVariation($field, new VersionInfo(), $variationName));
     }
 
     public function testGetVariationNotStoredHavingReferences()
@@ -210,60 +212,60 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
         $variationName = 'my_variation';
         $reference1 = 'reference1';
         $reference2 = 'reference2';
-        $configVariation = array( 'reference' => $reference1 );
-        $configReference1 = array( 'reference' => $reference2 );
+        $configVariation = array('reference' => $reference1);
+        $configReference1 = array('reference' => $reference2);
         $configReference2 = array();
-        $this->filterConfiguration->set( $variationName, $configVariation );
-        $this->filterConfiguration->set( $reference1, $configReference1 );
-        $this->filterConfiguration->set( $reference2, $configReference2 );
+        $this->filterConfiguration->set($variationName, $configVariation);
+        $this->filterConfiguration->set($reference1, $configReference1);
+        $this->filterConfiguration->set($reference2, $configReference2);
         $imageId = '123-45';
-        $imageValue = new ImageValue( array( 'id' => $originalPath, 'imageId' => $imageId ) );
-        $field = new Field( array( 'value' => $imageValue ) );
+        $imageValue = new ImageValue(array('id' => $originalPath, 'imageId' => $imageId));
+        $field = new Field(array('value' => $imageValue));
         $expectedUrl = "http://localhost/foo/bar/image_$variationName.jpg";
 
         $this->ioResolver
-            ->expects( $this->once() )
-            ->method( 'isStored' )
-            ->with( $originalPath, $variationName )
-            ->will( $this->returnValue( false ) );
+            ->expects($this->once())
+            ->method('isStored')
+            ->with($originalPath, $variationName)
+            ->will($this->returnValue(false));
 
         $this->logger
-            ->expects( $this->once() )
-            ->method( 'debug' );
+            ->expects($this->once())
+            ->method('debug');
 
-        $binary = $this->getMock( '\Liip\ImagineBundle\Binary\BinaryInterface' );
+        $binary = $this->getMock('\Liip\ImagineBundle\Binary\BinaryInterface');
         $this->dataLoader
-            ->expects( $this->once() )
-            ->method( 'find' )
-            ->with( $originalPath )
-            ->will( $this->returnValue( $binary ) );
+            ->expects($this->once())
+            ->method('find')
+            ->with($originalPath)
+            ->will($this->returnValue($binary));
 
         // Filter manager is supposed to be called 3 times to generate references, and then passed variation.
         $this->filterManager
-            ->expects( $this->at( 0 ) )
-            ->method( 'applyFilter' )
-            ->with( $binary, $reference2 )
-            ->will( $this->returnValue( $binary ) );
+            ->expects($this->at(0))
+            ->method('applyFilter')
+            ->with($binary, $reference2)
+            ->will($this->returnValue($binary));
         $this->filterManager
-            ->expects( $this->at( 1 ) )
-            ->method( 'applyFilter' )
-            ->with( $binary, $reference1 )
-            ->will( $this->returnValue( $binary ) );
+            ->expects($this->at(1))
+            ->method('applyFilter')
+            ->with($binary, $reference1)
+            ->will($this->returnValue($binary));
         $this->filterManager
-            ->expects( $this->at( 2 ) )
-            ->method( 'applyFilter' )
-            ->with( $binary, $variationName )
-            ->will( $this->returnValue( $binary ) );
+            ->expects($this->at(2))
+            ->method('applyFilter')
+            ->with($binary, $variationName)
+            ->will($this->returnValue($binary));
 
         $this->ioResolver
-            ->expects( $this->once() )
-            ->method( 'store' )
-            ->with( $binary, $originalPath, $variationName );
+            ->expects($this->once())
+            ->method('store')
+            ->with($binary, $originalPath, $variationName);
         $this->ioResolver
-            ->expects( $this->once() )
-            ->method( 'resolve' )
-            ->with( $originalPath, $variationName )
-            ->will( $this->returnValue( $expectedUrl ) );
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($originalPath, $variationName)
+            ->will($this->returnValue($expectedUrl));
 
         $expected = new ImageVariation(
             array(
@@ -271,10 +273,10 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
                 'fileName' => "image_$variationName.jpg",
                 'dirPath' => 'http://localhost/foo/bar',
                 'uri' => $expectedUrl,
-                'imageId' => $imageId
+                'imageId' => $imageId,
             )
         );
-        $this->assertEquals( $expected, $this->aliasGenerator->getVariation( $field, new VersionInfo(), $variationName ) );
+        $this->assertEquals($expected, $this->aliasGenerator->getVariation($field, new VersionInfo(), $variationName));
     }
 
     public function testGetVariationAlreadyStored()
@@ -282,35 +284,35 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
         $originalPath = 'foo/bar/image.jpg';
         $variationName = 'my_variation';
         $imageId = '123-45';
-        $imageValue = new ImageValue( array( 'id' => $originalPath, 'imageId' => $imageId ) );
-        $field = new Field( array( 'value' => $imageValue ) );
+        $imageValue = new ImageValue(array('id' => $originalPath, 'imageId' => $imageId));
+        $field = new Field(array('value' => $imageValue));
         $expectedUrl = "http://localhost/foo/bar/image_$variationName.jpg";
 
         $this->ioResolver
-            ->expects( $this->once() )
-            ->method( 'isStored' )
-            ->with( $originalPath, $variationName )
-            ->will( $this->returnValue( true ) );
+            ->expects($this->once())
+            ->method('isStored')
+            ->with($originalPath, $variationName)
+            ->will($this->returnValue(true));
 
         $this->logger
-            ->expects( $this->once() )
-            ->method( 'debug' );
+            ->expects($this->once())
+            ->method('debug');
 
         $this->dataLoader
-            ->expects( $this->once() )
-            ->method( 'find' );
+            ->expects($this->once())
+            ->method('find');
         $this->filterManager
-            ->expects( $this->never() )
-            ->method( 'applyFilter' );
+            ->expects($this->never())
+            ->method('applyFilter');
         $this->ioResolver
-            ->expects( $this->never() )
-            ->method( 'store' );
+            ->expects($this->never())
+            ->method('store');
 
         $this->ioResolver
-            ->expects( $this->once() )
-            ->method( 'resolve' )
-            ->with( $originalPath, $variationName )
-            ->will( $this->returnValue( $expectedUrl ) );
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($originalPath, $variationName)
+            ->will($this->returnValue($expectedUrl));
 
         $expected = new ImageVariation(
             array(
@@ -318,10 +320,10 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
                 'fileName' => "image_$variationName.jpg",
                 'dirPath' => 'http://localhost/foo/bar',
                 'uri' => $expectedUrl,
-                'imageId' => $imageId
+                'imageId' => $imageId,
             )
         );
-        $this->assertEquals( $expected, $this->aliasGenerator->getVariation( $field, new VersionInfo(), $variationName ) );
+        $this->assertEquals($expected, $this->aliasGenerator->getVariation($field, new VersionInfo(), $variationName));
     }
 
     /**
@@ -330,12 +332,12 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
     public function testGetVariationOriginalNotFound()
     {
         $this->dataLoader
-            ->expects( $this->once() )
-            ->method( 'find' )
-            ->will( $this->throwException( new NotLoadableException() ) );
+            ->expects($this->once())
+            ->method('find')
+            ->will($this->throwException(new NotLoadableException()));
 
-        $field = new Field( array( 'value' => new ImageValue() ) );
-        $this->aliasGenerator->getVariation( $field, new VersionInfo(), 'foo' );
+        $field = new Field(array('value' => new ImageValue()));
+        $this->aliasGenerator->getVariation($field, new VersionInfo(), 'foo');
     }
 
     /**
@@ -346,35 +348,35 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
         $originalPath = 'foo/bar/image.jpg';
         $variationName = 'my_variation';
         $imageId = '123-45';
-        $imageValue = new ImageValue( array( 'id' => $originalPath, 'imageId' => $imageId ) );
-        $field = new Field( array( 'value' => $imageValue ) );
+        $imageValue = new ImageValue(array('id' => $originalPath, 'imageId' => $imageId));
+        $field = new Field(array('value' => $imageValue));
 
         $this->ioResolver
-            ->expects( $this->once() )
-            ->method( 'isStored' )
-            ->with( $originalPath, $variationName )
-            ->will( $this->returnValue( true ) );
+            ->expects($this->once())
+            ->method('isStored')
+            ->with($originalPath, $variationName)
+            ->will($this->returnValue(true));
 
         $this->logger
-            ->expects( $this->once() )
-            ->method( 'debug' );
+            ->expects($this->once())
+            ->method('debug');
 
         $this->dataLoader
-            ->expects( $this->once() )
-            ->method( 'find' );
+            ->expects($this->once())
+            ->method('find');
         $this->filterManager
-            ->expects( $this->never() )
-            ->method( 'applyFilter' );
+            ->expects($this->never())
+            ->method('applyFilter');
         $this->ioResolver
-            ->expects( $this->never() )
-            ->method( 'store' );
+            ->expects($this->never())
+            ->method('store');
 
         $this->ioResolver
-            ->expects( $this->once() )
-            ->method( 'resolve' )
-            ->with( $originalPath, $variationName )
-            ->will( $this->throwException( new NotResolvableException() ) );
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($originalPath, $variationName)
+            ->will($this->throwException(new NotResolvableException()));
 
-        $this->aliasGenerator->getVariation( $field, new VersionInfo(), $variationName );
+        $this->aliasGenerator->getVariation($field, new VersionInfo(), $variationName);
     }
 }

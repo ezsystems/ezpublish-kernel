@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,7 +26,7 @@ class ImageExtension extends Twig_Extension
      */
     private $imageVariationService;
 
-    public function __construct( VariationHandler $imageVariationService )
+    public function __construct(VariationHandler $imageVariationService)
     {
         $this->imageVariationService = $imageVariationService;
     }
@@ -39,14 +41,14 @@ class ImageExtension extends Twig_Extension
         return array(
             new Twig_SimpleFunction(
                 'ez_image_alias',
-                array( $this, 'getImageVariation' ),
-                array( 'is_safe' => array( 'html' ) )
+                array($this, 'getImageVariation'),
+                array('is_safe' => array('html'))
             ),
         );
     }
 
     /**
-     * Returns the image variation object for $field/$versionInfo
+     * Returns the image variation object for $field/$versionInfo.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
@@ -54,23 +56,16 @@ class ImageExtension extends Twig_Extension
      *
      * @return \eZ\Publish\SPI\Variation\Values\Variation
      */
-    public function getImageVariation( Field $field, VersionInfo $versionInfo, $variationName )
+    public function getImageVariation(Field $field, VersionInfo $versionInfo, $variationName)
     {
-        try
-        {
-            return $this->imageVariationService->getVariation( $field, $versionInfo, $variationName );
-        }
-        catch ( InvalidVariationException $e )
-        {
-            if ( isset( $this->logger ) )
-            {
-                $this->logger->error( "Couldn't get variation '{$variationName}' for image with id {$field->value->id}" );
+        try {
+            return $this->imageVariationService->getVariation($field, $versionInfo, $variationName);
+        } catch (InvalidVariationException $e) {
+            if (isset($this->logger)) {
+                $this->logger->error("Couldn't get variation '{$variationName}' for image with id {$field->value->id}");
             }
-        }
-        catch ( SourceImageNotFoundException $e )
-        {
-            if ( isset( $this->logger ) )
-            {
+        } catch (SourceImageNotFoundException $e) {
+            if (isset($this->logger)) {
                 $this->logger->error(
                     "Couldn't create variation '{$variationName}' for image with id {$field->value->id} because source image can't be found"
                 );

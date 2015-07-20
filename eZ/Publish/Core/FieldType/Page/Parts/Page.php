@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Page class
+ * File containing the Page class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -31,12 +33,11 @@ class Page extends Base
      */
     protected $layout;
 
-    public function __construct( array $properties = array() )
+    public function __construct(array $properties = array())
     {
-        parent::__construct( $properties );
+        parent::__construct($properties);
 
-        foreach ( $this->zones as $zone )
-        {
+        foreach ($this->zones as $zone) {
             $this->zonesById[$zone->id] = $zone;
         }
     }

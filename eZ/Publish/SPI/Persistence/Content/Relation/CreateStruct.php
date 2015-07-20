@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Relation CreateStruct class
+ * File containing the Relation CreateStruct class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,40 +19,41 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class CreateStruct extends ValueObject
 {
     /**
-     * Source Content ID
+     * Source Content ID.
      *
      * @var mixed
      */
     public $sourceContentId;
 
     /**
-     * Source Content Version number
+     * Source Content Version number.
      *
      * @var int
      */
     public $sourceContentVersionNo;
 
     /**
-     * Source Content Type Field Definition Id
+     * Source Content Type Field Definition Id.
      *
      * @var mixed
      */
     public $sourceFieldDefinitionId;
 
     /**
-     * Destination Content ID
+     * Destination Content ID.
      *
      * @var mixed
      */
     public $destinationContentId;
 
     /**
-     * Type bitmask
+     * Type bitmask.
      *
      * @see \eZ\Publish\API\Repository\Values\Content\Relation::COMMON,
      *      \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
      *      \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
      *      \eZ\Publish\API\Repository\Values\Content\Relation::FIELD
+     *
      * @var int
      */
     public $type;

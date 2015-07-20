@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the DateTime class
+ * File containing the DateTime class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,40 +21,40 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 class Type extends FieldType
 {
     /**
-     * Default value types
+     * Default value types.
      */
     const DEFAULT_EMPTY = 0,
           DEFAULT_CURRENT_DATE = 1,
           DEFAULT_CURRENT_DATE_ADJUSTED = 2;
 
     protected $settingsSchema = array(
-        "useSeconds" => array(
-            "type" => "bool",
-            "default" => false
+        'useSeconds' => array(
+            'type' => 'bool',
+            'default' => false,
         ),
         // One of the DEFAULT_* class constants
-        "defaultType" => array(
-            "type" => "choice",
-            "default" => self::DEFAULT_EMPTY
+        'defaultType' => array(
+            'type' => 'choice',
+            'default' => self::DEFAULT_EMPTY,
         ),
         /*
          * @var \DateInterval
          * Used only if defaultValueType is set to DEFAULT_CURRENT_DATE_ADJUSTED
          */
-        "dateInterval" => array(
-            "type" => "dateInterval",
-            "default" => null
-        )
+        'dateInterval' => array(
+            'type' => 'dateInterval',
+            'default' => null,
+        ),
     );
 
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
     public function getFieldTypeIdentifier()
     {
-        return "ezdatetime";
+        return 'ezdatetime';
     }
 
     /**
@@ -65,14 +67,13 @@ class Type extends FieldType
      *
      * @return string
      */
-    public function getName( SPIValue $value )
+    public function getName(SPIValue $value)
     {
-        if ( $this->isEmptyValue( $value ) )
-        {
-            return "";
+        if ($this->isEmptyValue($value)) {
+            return '';
         }
 
-        return $value->value->format( 'D Y-d-m H:i:s' );
+        return $value->value->format('D Y-d-m H:i:s');
     }
 
     /**
@@ -83,7 +84,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value;
+        return new Value();
     }
 
     /**
@@ -93,21 +94,18 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\DateAndTime\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
-        if ( is_string( $inputValue ) )
-        {
-            $inputValue = Value::fromString( $inputValue );
+        if (is_string($inputValue)) {
+            $inputValue = Value::fromString($inputValue);
         }
 
-        if ( is_int( $inputValue ) )
-        {
-            $inputValue = Value::fromTimestamp( $inputValue );
+        if (is_int($inputValue)) {
+            $inputValue = Value::fromTimestamp($inputValue);
         }
 
-        if ( $inputValue instanceof \DateTime )
-        {
-            $inputValue = new Value( $inputValue );
+        if ($inputValue instanceof \DateTime) {
+            $inputValue = new Value($inputValue);
         }
 
         return $inputValue;
@@ -119,13 +117,10 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\DateAndTime\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
-        if ( !$value->value instanceof DateTime )
-        {
+        if (!$value->value instanceof DateTime) {
             throw new InvalidArgumentType(
                 '$value->value',
                 'DateTime',
@@ -141,69 +136,65 @@ class Type extends FieldType
      *
      * @return array
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo(BaseValue $value)
     {
-        if ( $value->value === null )
-        {
+        if ($value->value === null) {
             return null;
         }
+
         return $value->value->getTimestamp();
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * @param mixed $hash Null or associative array containing timestamp and optionally date in RFC850 format.
      *
      * @return \eZ\Publish\Core\FieldType\DateAndTime\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        if ( $hash === null )
-        {
+        if ($hash === null) {
             return $this->getEmptyValue();
         }
 
-        if ( isset( $hash['rfc850'] ) && $hash['rfc850'] )
-        {
-            return Value::fromString( $hash['rfc850'] );
+        if (isset($hash['rfc850']) && $hash['rfc850']) {
+            return Value::fromString($hash['rfc850']);
         }
 
-        return Value::fromTimestamp( (int)$hash['timestamp'] );
+        return Value::fromTimestamp((int)$hash['timestamp']);
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\DateAndTime\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
-        if ( $this->isEmptyValue( $value ) )
-        {
+        if ($this->isEmptyValue($value)) {
             return null;
         }
 
-        if ( $value->value instanceof DateTime )
-        {
+        if ($value->value instanceof DateTime) {
             return array(
                 'timestamp' => $value->value->getTimestamp(),
-                'rfc850'    => $value->value->format( \DateTime::RFC850  ),
+                'rfc850' => $value->value->format(\DateTime::RFC850),
             );
         }
 
         return array(
             'timestamp' => 0,
-            'rfc850'    => null,
+            'rfc850' => null,
         );
     }
 
     /**
-     * Returns whether the field type is searchable
+     * Returns whether the field type is searchable.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSearchable()
     {
@@ -211,77 +202,68 @@ class Type extends FieldType
     }
 
     /**
-     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
      * @param mixed $fieldSettings
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateFieldSettings( $fieldSettings )
+    public function validateFieldSettings($fieldSettings)
     {
         $validationErrors = array();
 
-        foreach ( $fieldSettings as $name => $value )
-        {
-            if ( isset( $this->settingsSchema[$name] ) )
-            {
-                switch ( $name )
-                {
-                    case "useSeconds":
-                        if ( !is_bool( $value ) )
-                        {
+        foreach ($fieldSettings as $name => $value) {
+            if (isset($this->settingsSchema[$name])) {
+                switch ($name) {
+                    case 'useSeconds':
+                        if (!is_bool($value)) {
                             $validationErrors[] = new ValidationError(
                                 "Setting '%setting%' value must be of boolean type",
                                 null,
                                 array(
-                                    "setting" => $name
+                                    'setting' => $name,
                                 ),
                                 "[$name]"
                             );
                         }
                         break;
-                    case "defaultType":
+                    case 'defaultType':
                         $definedTypes = array(
                             self::DEFAULT_EMPTY,
                             self::DEFAULT_CURRENT_DATE,
-                            self::DEFAULT_CURRENT_DATE_ADJUSTED
+                            self::DEFAULT_CURRENT_DATE_ADJUSTED,
                         );
-                        if ( !in_array( $value, $definedTypes, true ) )
-                        {
+                        if (!in_array($value, $definedTypes, true)) {
                             $validationErrors[] = new ValidationError(
                                 "Setting '%setting%' is of unknown type",
                                 null,
                                 array(
-                                    "setting" => $name
+                                    'setting' => $name,
                                 ),
                                 "[$name]"
                             );
                         }
                         break;
-                    case "dateInterval":
-                        if ( isset( $value ) )
-                        {
-                            if ( isset( $fieldSettings["defaultType"] ) &&
-                                $fieldSettings["defaultType"] !== self::DEFAULT_CURRENT_DATE_ADJUSTED )
-                            {
+                    case 'dateInterval':
+                        if (isset($value)) {
+                            if (isset($fieldSettings['defaultType']) &&
+                                $fieldSettings['defaultType'] !== self::DEFAULT_CURRENT_DATE_ADJUSTED) {
                                 $validationErrors[] = new ValidationError(
                                     "Setting '%setting%' can be used only when setting '%defaultType%' is set to '%DEFAULT_CURRENT_DATE_ADJUSTED%'",
                                     null,
                                     array(
-                                        "setting" => $name,
-                                        "defaultType" => "defaultType",
-                                        "DEFAULT_CURRENT_DATE_ADJUSTED" => "DEFAULT_CURRENT_DATE_ADJUSTED"
+                                        'setting' => $name,
+                                        'defaultType' => 'defaultType',
+                                        'DEFAULT_CURRENT_DATE_ADJUSTED' => 'DEFAULT_CURRENT_DATE_ADJUSTED',
                                     ),
                                     "[$name]"
                                 );
-                            }
-                            else if ( !( $value instanceof \DateInterval ) )
-                            {
+                            } elseif (!($value instanceof \DateInterval)) {
                                 $validationErrors[] = new ValidationError(
                                     "Setting '%setting%' value must be an instance of 'DateInterval' class",
                                     null,
                                     array(
-                                        "setting" => $name
+                                        'setting' => $name,
                                     ),
                                     "[$name]"
                                 );
@@ -289,14 +271,12 @@ class Type extends FieldType
                         }
                         break;
                 }
-            }
-            else
-            {
+            } else {
                 $validationErrors[] = new ValidationError(
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        "setting" => $name
+                        'setting' => $name,
                     ),
                     "[$name]"
                 );
@@ -307,7 +287,7 @@ class Type extends FieldType
     }
 
     /**
-     * Converts the given $fieldSettings to a simple hash format
+     * Converts the given $fieldSettings to a simple hash format.
      *
      * This is the default implementation, which just returns the given
      * $fieldSettings, assuming they are already in a hash format. Overwrite
@@ -317,12 +297,11 @@ class Type extends FieldType
      *
      * @return array|hash|scalar|null
      */
-    public function fieldSettingsToHash( $fieldSettings )
+    public function fieldSettingsToHash($fieldSettings)
     {
-        $fieldSettingsHash = parent::fieldSettingsToHash( $fieldSettings );
+        $fieldSettingsHash = parent::fieldSettingsToHash($fieldSettings);
 
-        if ( isset( $fieldSettingsHash['dateInterval'] ) )
-        {
+        if (isset($fieldSettingsHash['dateInterval'])) {
             $fieldSettingsHash['dateInterval'] = $fieldSettingsHash['dateInterval']->format(
                 'P%r%yY%r%mM%r%dDT%r%hH%iM%r%sS'
             );
@@ -332,7 +311,7 @@ class Type extends FieldType
     }
 
     /**
-     * Converts the given $fieldSettingsHash to field settings of the type
+     * Converts the given $fieldSettingsHash to field settings of the type.
      *
      * This is the reverse operation of {@link fieldSettingsToHash()}.
      *
@@ -345,13 +324,12 @@ class Type extends FieldType
      *
      * @return mixed
      */
-    public function fieldSettingsFromHash( $fieldSettingsHash )
+    public function fieldSettingsFromHash($fieldSettingsHash)
     {
-        $fieldSettings = parent::fieldSettingsFromHash( $fieldSettingsHash );
+        $fieldSettings = parent::fieldSettingsFromHash($fieldSettingsHash);
 
-        if ( isset( $fieldSettings['dateInterval'] ) )
-        {
-            $fieldSettings['dateInterval'] = new \DateInterval( $fieldSettings['dateInterval'] );
+        if (isset($fieldSettings['dateInterval'])) {
+            $fieldSettings['dateInterval'] = new \DateInterval($fieldSettings['dateInterval']);
         }
 
         return $fieldSettings;

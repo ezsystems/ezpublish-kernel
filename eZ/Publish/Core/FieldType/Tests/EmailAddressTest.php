@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the EmailAddressValueTest class
+ * File containing the EmailAddressValueTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -34,20 +36,19 @@ class EmailAddressTest extends FieldTypeTest
     {
         $transformationProcessorMock = $this->getTransformationProcessorMock();
 
-        $transformationProcessorMock->expects( $this->any() )
-            ->method( 'transformByGroup' )
-            ->with( $this->anything(), 'lowercase' )
+        $transformationProcessorMock->expects($this->any())
+            ->method('transformByGroup')
+            ->with($this->anything(), 'lowercase')
             ->will(
                 $this->returnCallback(
-                    function( $value, $group )
-                    {
-                        return strtolower( $value );
+                    function ($value, $group) {
+                        return strtolower($value);
                     }
                 )
             );
 
         $fieldType = new EmailAddressType();
-        $fieldType->setTransformationProcessor( $transformationProcessorMock );
+        $fieldType->setTransformationProcessor($transformationProcessorMock);
 
         return $fieldType;
     }
@@ -60,7 +61,7 @@ class EmailAddressTest extends FieldTypeTest
     protected function getValidatorConfigurationSchemaExpectation()
     {
         return array(
-            'EmailAddressValidator' => array()
+            'EmailAddressValidator' => array(),
         );
     }
 
@@ -76,12 +77,10 @@ class EmailAddressTest extends FieldTypeTest
 
     /**
      * Returns the empty value expected from the field type.
-     *
-     * @return void
      */
     protected function getEmptyValueExpectation()
     {
-        return new EmailAddressValue;
+        return new EmailAddressValue();
     }
 
     /**
@@ -115,7 +114,7 @@ class EmailAddressTest extends FieldTypeTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                new EmailAddressValue( 23 ),
+                new EmailAddressValue(23),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
@@ -155,21 +154,21 @@ class EmailAddressTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new EmailAddressValue,
+                new EmailAddressValue(),
             ),
             array(
                 'spam_mail@ex-something.no',
-                new EmailAddressValue( 'spam_mail@ex-something.no' ),
+                new EmailAddressValue('spam_mail@ex-something.no'),
             ),
             array(
-                new EmailAddressValue( 'spam_mail@ex-something.no' ),
-                new EmailAddressValue( 'spam_mail@ex-something.no' ),
+                new EmailAddressValue('spam_mail@ex-something.no'),
+                new EmailAddressValue('spam_mail@ex-something.no'),
             ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -211,14 +210,14 @@ class EmailAddressTest extends FieldTypeTest
                 '',
             ),
             array(
-                new EmailAddressValue( 'spam_mail@ex-something.no' ),
+                new EmailAddressValue('spam_mail@ex-something.no'),
                 'spam_mail@ex-something.no',
             ),
         );
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -265,7 +264,7 @@ class EmailAddressTest extends FieldTypeTest
             ),
             array(
                 'spam_mail@ex-something.no',
-                new EmailAddressValue( 'spam_mail@ex-something.no' ),
+                new EmailAddressValue('spam_mail@ex-something.no'),
             ),
         );
     }
@@ -302,19 +301,19 @@ class EmailAddressTest extends FieldTypeTest
     {
         return array(
             array(
-                array()
+                array(),
             ),
             array(
                 array(
-                    'EmailAddressValidator' => array()
-                )
+                    'EmailAddressValidator' => array(),
+                ),
             ),
             array(
                 array(
                     'EmailAddressValidator' => array(
                         'Extent' => 'regex',
-                    )
-                )
+                    ),
+                ),
             ),
         );
     }
@@ -372,7 +371,7 @@ class EmailAddressTest extends FieldTypeTest
             array(
                 array(
                     'EmailAddressValidator' => array(
-                        'Extent' => 23
+                        'Extent' => 23,
                     ),
                 ),
             ),
@@ -388,7 +387,7 @@ class EmailAddressTest extends FieldTypeTest
                     'EmailAddressValidator' => array(
                         'Extent' => '\\http\\',
                     ),
-                )
+                ),
             ),
         );
     }
@@ -402,13 +401,13 @@ class EmailAddressTest extends FieldTypeTest
     {
         return array(
             array(
-                new EmailAddressValue( 'john.doe@example.com' ),
-                'john.doe@example.com'
+                new EmailAddressValue('john.doe@example.com'),
+                'john.doe@example.com',
             ),
             array(
-                new EmailAddressValue( 'JANE.DOE@EXAMPLE.COM' ),
-                'jane.doe@example.com'
-            )
+                new EmailAddressValue('JANE.DOE@EXAMPLE.COM'),
+                'jane.doe@example.com',
+            ),
         );
     }
 
@@ -462,9 +461,9 @@ class EmailAddressTest extends FieldTypeTest
         return array(
             array(
                 array(
-                    "validatorConfiguration" => array()
+                    'validatorConfiguration' => array(),
                 ),
-                new EmailAddressValue( "jane.doe@example.com" ),
+                new EmailAddressValue('jane.doe@example.com'),
             ),
         );
     }
@@ -538,14 +537,11 @@ class EmailAddressTest extends FieldTypeTest
         return array(
             array(
                 array(
-                    "validatorConfiguration" => array()
+                    'validatorConfiguration' => array(),
                 ),
-                new EmailAddressValue( "jane.doe.example.com" ),
+                new EmailAddressValue('jane.doe.example.com'),
                 array(
-                    new ValidationError(
-                        "The value must be a valid email address.",
-                        null, array(), 'email'
-                    ),
+                    new ValidationError('The value must be a valid email address.', null, array(), 'email'),
                 ),
             ),
         );

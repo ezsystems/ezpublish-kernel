@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,14 +22,14 @@ use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 class FieldDefinitionUpdateTest extends BaseTest
 {
     /**
-     * Tests the FieldDefinitionUpdate parser
+     * Tests the FieldDefinitionUpdate parser.
      */
     public function testParse()
     {
         $inputArray = $this->getInputArray();
 
         $fieldDefinitionUpdate = $this->getParser();
-        $result = $fieldDefinitionUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $fieldDefinitionUpdate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinitionUpdateStruct',
@@ -84,19 +86,19 @@ class FieldDefinitionUpdateTest extends BaseTest
         );
 
         $this->assertEquals(
-            array( 'eng-US' => 'Title' ),
+            array('eng-US' => 'Title'),
             $result->names,
             'names not created correctly'
         );
 
         $this->assertEquals(
-            array( 'eng-US' => 'This is the title' ),
+            array('eng-US' => 'This is the title'),
             $result->descriptions,
             'descriptions not created correctly'
         );
 
         $this->assertEquals(
-            array( 'textRows' => 24 ),
+            array('textRows' => 24),
             $result->fieldSettings,
             'fieldSettings not created correctly'
         );
@@ -105,8 +107,8 @@ class FieldDefinitionUpdateTest extends BaseTest
             array(
                 'StringLengthValidator' => array(
                     'minStringLength' => 12,
-                    'maxStringLength' => 24
-                )
+                    'maxStringLength' => 24,
+                ),
             ),
             $result->validatorConfiguration,
             'validatorConfiguration not created correctly'
@@ -114,7 +116,7 @@ class FieldDefinitionUpdateTest extends BaseTest
     }
 
     /**
-     * Test FieldDefinitionUpdate parser throwing exception on invalid names
+     * Test FieldDefinitionUpdate parser throwing exception on invalid names.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'names' element for FieldDefinitionUpdate.
@@ -122,14 +124,14 @@ class FieldDefinitionUpdateTest extends BaseTest
     public function testParseExceptionOnInvalidNames()
     {
         $inputArray = $this->getInputArray();
-        unset( $inputArray['names']['value'] );
+        unset($inputArray['names']['value']);
 
         $fieldDefinitionUpdate = $this->getParser();
-        $fieldDefinitionUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $fieldDefinitionUpdate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test FieldDefinitionUpdate parser throwing exception on invalid descriptions
+     * Test FieldDefinitionUpdate parser throwing exception on invalid descriptions.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'descriptions' element for FieldDefinitionUpdate.
@@ -137,14 +139,14 @@ class FieldDefinitionUpdateTest extends BaseTest
     public function testParseExceptionOnInvalidDescriptions()
     {
         $inputArray = $this->getInputArray();
-        unset( $inputArray['descriptions']['value'] );
+        unset($inputArray['descriptions']['value']);
 
         $fieldDefinitionUpdate = $this->getParser();
-        $fieldDefinitionUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $fieldDefinitionUpdate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Returns the FieldDefinitionUpdate parser
+     * Returns the FieldDefinitionUpdate parser.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\FieldDefinitionUpdate
      */
@@ -158,7 +160,7 @@ class FieldDefinitionUpdateTest extends BaseTest
     }
 
     /**
-     * Get the FieldTypeParser mock object
+     * Get the FieldTypeParser mock object.
      *
      * @return \eZ\Publish\Core\REST\Common\Input\FieldTypeParser
      */
@@ -172,23 +174,23 @@ class FieldDefinitionUpdateTest extends BaseTest
             false
         );
 
-        $fieldTypeParserMock->expects( $this->any() )
-            ->method( 'parseValue' )
-            ->will( $this->returnValue( 'New title' ) );
+        $fieldTypeParserMock->expects($this->any())
+            ->method('parseValue')
+            ->will($this->returnValue('New title'));
 
-        $fieldTypeParserMock->expects( $this->any() )
-            ->method( 'parseFieldSettings' )
-            ->will( $this->returnValue( array( 'textRows' => 24 ) ) );
+        $fieldTypeParserMock->expects($this->any())
+            ->method('parseFieldSettings')
+            ->will($this->returnValue(array('textRows' => 24)));
 
-        $fieldTypeParserMock->expects( $this->any() )
-            ->method( 'parseValidatorConfiguration' )
+        $fieldTypeParserMock->expects($this->any())
+            ->method('parseValidatorConfiguration')
             ->will(
                 $this->returnValue(
                     array(
                         'StringLengthValidator' => array(
                             'minStringLength' => 12,
-                            'maxStringLength' => 24
-                        )
+                            'maxStringLength' => 24,
+                        ),
                     )
                 )
             );
@@ -197,7 +199,7 @@ class FieldDefinitionUpdateTest extends BaseTest
     }
 
     /**
-     * Get the content type service mock object
+     * Get the content type service mock object.
      *
      * @return \eZ\Publish\API\Repository\ContentTypeService
      */
@@ -211,29 +213,29 @@ class FieldDefinitionUpdateTest extends BaseTest
             false
         );
 
-        $contentTypeServiceMock->expects( $this->any() )
-            ->method( 'newFieldDefinitionUpdateStruct' )
+        $contentTypeServiceMock->expects($this->any())
+            ->method('newFieldDefinitionUpdateStruct')
             ->will(
                 $this->returnValue(
                     new FieldDefinitionUpdateStruct()
                 )
             );
 
-        $contentTypeServiceMock->expects( $this->any() )
-            ->method( 'loadContentTypeDraft' )
-            ->with( $this->equalTo( 42 ) )
+        $contentTypeServiceMock->expects($this->any())
+            ->method('loadContentTypeDraft')
+            ->with($this->equalTo(42))
             ->will(
                 $this->returnValue(
                     new ContentType(
                         array(
-                            "fieldDefinitions" => array(
+                            'fieldDefinitions' => array(
                                 new FieldDefinition(
                                     array(
-                                        "id" => 24,
-                                        "fieldTypeIdentifier" => "ezstring"
+                                        'id' => 24,
+                                        'fieldTypeIdentifier' => 'ezstring',
                                     )
-                                )
-                            )
+                                ),
+                            ),
                         )
                     )
                 )
@@ -243,7 +245,7 @@ class FieldDefinitionUpdateTest extends BaseTest
     }
 
     /**
-     * Returns the array under test
+     * Returns the array under test.
      *
      * @return array
      */
@@ -263,26 +265,26 @@ class FieldDefinitionUpdateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-US',
-                        '#text' => 'Title'
-                    )
-                )
+                        '#text' => 'Title',
+                    ),
+                ),
             ),
             'descriptions' => array(
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-US',
-                        '#text' => 'This is the title'
-                    )
-                )
+                        '#text' => 'This is the title',
+                    ),
+                ),
             ),
             'fieldSettings' => array(
-                'textRows' => 24
+                'textRows' => 24,
             ),
             'validatorConfiguration' => array(
                 'StringLengthValidator' => array(
                     'minStringLength' => '12',
-                    'maxStringLength' => '24'
-                )
+                    'maxStringLength' => '24',
+                ),
             ),
         );
     }
@@ -290,8 +292,8 @@ class FieldDefinitionUpdateTest extends BaseTest
     public function getParseHrefExpectationsMap()
     {
         return array(
-            array( '/content/types/42/draft/fieldDefinitions/24', 'contentTypeId', 42 ),
-            array( '/content/types/42/draft/fieldDefinitions/24', 'fieldDefinitionId', 24 ),
+            array('/content/types/42/draft/fieldDefinitions/24', 'contentTypeId', 42),
+            array('/content/types/42/draft/fieldDefinitions/24', 'fieldDefinitionId', 24),
         );
     }
 }

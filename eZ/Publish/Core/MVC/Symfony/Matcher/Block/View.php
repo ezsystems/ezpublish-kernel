@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the View block matcher class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,10 +20,10 @@ class View extends MultipleValued
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Block $block
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchBlock( Block $block )
+    public function matchBlock(Block $block)
     {
-        return isset( $this->values[$block->view] );
+        return isset($this->values[$block->view]);
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a Test Case for LimitationType class
+ * File containing a Test Case for LimitationType class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,7 +13,6 @@ namespace eZ\Publish\Core\Limitation\Tests;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\NewObjectStateLimitation;
@@ -23,7 +24,7 @@ use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
 
 /**
- * Test Case for LimitationType
+ * Test Case for LimitationType.
  */
 class NewObjectStateLimitationTypeTest extends Base
 {
@@ -33,14 +34,14 @@ class NewObjectStateLimitationTypeTest extends Base
     private $objectStateHandlerMock;
 
     /**
-     * Setup Handler mock
+     * Setup Handler mock.
      */
     public function setUp()
     {
         parent::setUp();
 
         $this->objectStateHandlerMock = $this->getMock(
-            "eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler",
+            'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler',
             array(),
             array(),
             '',
@@ -49,21 +50,20 @@ class NewObjectStateLimitationTypeTest extends Base
     }
 
     /**
-     * Tear down Handler mock
+     * Tear down Handler mock.
      */
     public function tearDown()
     {
-        unset( $this->objectStateHandlerMock );
+        unset($this->objectStateHandlerMock);
         parent::tearDown();
     }
 
     /**
-     *
      * @return \eZ\Publish\Core\Limitation\NewObjectStateLimitationType
      */
     public function testConstruct()
     {
-        return new NewObjectStateLimitationType( $this->getPersistenceMock() );
+        return new NewObjectStateLimitationType($this->getPersistenceMock());
     }
 
     /**
@@ -72,9 +72,9 @@ class NewObjectStateLimitationTypeTest extends Base
     public function providerForTestAcceptValue()
     {
         return array(
-            array( new NewObjectStateLimitation() ),
-            array( new NewObjectStateLimitation( array() ) ),
-            array( new NewObjectStateLimitation( array( 'limitationValues' => array( 0, PHP_INT_MAX, '2', 's3fdaf32r' ) ) ) ),
+            array(new NewObjectStateLimitation()),
+            array(new NewObjectStateLimitation(array())),
+            array(new NewObjectStateLimitation(array('limitationValues' => array(0, PHP_INT_MAX, '2', 's3fdaf32r')))),
         );
     }
 
@@ -85,9 +85,9 @@ class NewObjectStateLimitationTypeTest extends Base
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\NewObjectStateLimitation $limitation
      * @param \eZ\Publish\Core\Limitation\NewObjectStateLimitationType $limitationType
      */
-    public function testAcceptValue( NewObjectStateLimitation $limitation, NewObjectStateLimitationType $limitationType )
+    public function testAcceptValue(NewObjectStateLimitation $limitation, NewObjectStateLimitationType $limitationType)
     {
-        $limitationType->acceptValue( $limitation );
+        $limitationType->acceptValue($limitation);
     }
 
     /**
@@ -96,8 +96,8 @@ class NewObjectStateLimitationTypeTest extends Base
     public function providerForTestAcceptValueException()
     {
         return array(
-            array( new ObjectStateLimitation() ),
-            array( new NewObjectStateLimitation( array( 'limitationValues' => array( true ) ) ) ),
+            array(new ObjectStateLimitation()),
+            array(new NewObjectStateLimitation(array('limitationValues' => array(true)))),
         );
     }
 
@@ -109,9 +109,9 @@ class NewObjectStateLimitationTypeTest extends Base
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
      * @param \eZ\Publish\Core\Limitation\NewObjectStateLimitationType $limitationType
      */
-    public function testAcceptValueException( Limitation $limitation, NewObjectStateLimitationType $limitationType )
+    public function testAcceptValueException(Limitation $limitation, NewObjectStateLimitationType $limitationType)
     {
-        $limitationType->acceptValue( $limitation );
+        $limitationType->acceptValue($limitation);
     }
 
     /**
@@ -120,9 +120,9 @@ class NewObjectStateLimitationTypeTest extends Base
     public function providerForTestValidatePass()
     {
         return array(
-            array( new NewObjectStateLimitation() ),
-            array( new NewObjectStateLimitation( array() ) ),
-            array( new NewObjectStateLimitation( array( 'limitationValues' => array( 2 ) ) ) ),
+            array(new NewObjectStateLimitation()),
+            array(new NewObjectStateLimitation(array())),
+            array(new NewObjectStateLimitation(array('limitationValues' => array(2)))),
         );
     }
 
@@ -131,29 +131,27 @@ class NewObjectStateLimitationTypeTest extends Base
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\NewObjectStateLimitation $limitation
      */
-    public function testValidatePass( NewObjectStateLimitation $limitation )
+    public function testValidatePass(NewObjectStateLimitation $limitation)
     {
-        if ( !empty( $limitation->limitationValues ) )
-        {
+        if (!empty($limitation->limitationValues)) {
             $this->getPersistenceMock()
-                ->expects( $this->any() )
-                ->method( "objectStateHandler" )
-                ->will( $this->returnValue( $this->objectStateHandlerMock ) );
+                ->expects($this->any())
+                ->method('objectStateHandler')
+                ->will($this->returnValue($this->objectStateHandlerMock));
 
-            foreach ( $limitation->limitationValues as $key => $value )
-            {
+            foreach ($limitation->limitationValues as $key => $value) {
                 $this->objectStateHandlerMock
-                    ->expects( $this->at( $key ) )
-                    ->method( "load" )
-                    ->with( $value );
+                    ->expects($this->at($key))
+                    ->method('load')
+                    ->with($value);
             }
         }
 
         // Need to create inline instead of depending on testConstruct() to get correct mock instance
         $limitationType = $this->testConstruct();
 
-        $validationErrors = $limitationType->validate( $limitation );
-        self::assertEmpty( $validationErrors );
+        $validationErrors = $limitationType->validate($limitation);
+        self::assertEmpty($validationErrors);
     }
 
     /**
@@ -162,9 +160,9 @@ class NewObjectStateLimitationTypeTest extends Base
     public function providerForTestValidateError()
     {
         return array(
-            array( new NewObjectStateLimitation(), 0 ),
-            array( new NewObjectStateLimitation( array( 'limitationValues' => array( 0 ) ) ), 1 ),
-            array( new NewObjectStateLimitation( array( 'limitationValues' => array( 0, PHP_INT_MAX ) ) ), 2 ),
+            array(new NewObjectStateLimitation(), 0),
+            array(new NewObjectStateLimitation(array('limitationValues' => array(0))), 1),
+            array(new NewObjectStateLimitation(array('limitationValues' => array(0, PHP_INT_MAX))), 2),
         );
     }
 
@@ -174,36 +172,32 @@ class NewObjectStateLimitationTypeTest extends Base
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\NewObjectStateLimitation $limitation
      * @param int $errorCount
      */
-    public function testValidateError( NewObjectStateLimitation $limitation, $errorCount )
+    public function testValidateError(NewObjectStateLimitation $limitation, $errorCount)
     {
-        if ( !empty( $limitation->limitationValues ) )
-        {
+        if (!empty($limitation->limitationValues)) {
             $this->getPersistenceMock()
-                ->expects( $this->any() )
-                ->method( "objectStateHandler" )
-                ->will( $this->returnValue( $this->objectStateHandlerMock ) );
+                ->expects($this->any())
+                ->method('objectStateHandler')
+                ->will($this->returnValue($this->objectStateHandlerMock));
 
-            foreach ( $limitation->limitationValues as $key => $value )
-            {
+            foreach ($limitation->limitationValues as $key => $value) {
                 $this->objectStateHandlerMock
-                    ->expects( $this->at( $key ) )
-                    ->method( "load" )
-                    ->with( $value )
-                    ->will( $this->throwException( new NotFoundException( 'contentType', $value ) ) );
+                    ->expects($this->at($key))
+                    ->method('load')
+                    ->with($value)
+                    ->will($this->throwException(new NotFoundException('contentType', $value)));
             }
-        }
-        else
-        {
+        } else {
             $this->getPersistenceMock()
-                ->expects( $this->never() )
-                ->method( $this->anything() );
+                ->expects($this->never())
+                ->method($this->anything());
         }
 
         // Need to create inline instead of depending on testConstruct() to get correct mock instance
         $limitationType = $this->testConstruct();
 
-        $validationErrors = $limitationType->validate( $limitation );
-        self::assertCount( $errorCount, $validationErrors );
+        $validationErrors = $limitationType->validate($limitation);
+        self::assertCount($errorCount, $validationErrors);
     }
 
     /**
@@ -211,14 +205,14 @@ class NewObjectStateLimitationTypeTest extends Base
      *
      * @param \eZ\Publish\Core\Limitation\NewObjectStateLimitationType $limitationType
      */
-    public function testBuildValue( NewObjectStateLimitationType $limitationType )
+    public function testBuildValue(NewObjectStateLimitationType $limitationType)
     {
-        $expected = array( 'test', 'test' => 9 );
-        $value = $limitationType->buildValue( $expected );
+        $expected = array('test', 'test' => 9);
+        $value = $limitationType->buildValue($expected);
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Limitation\NewObjectStateLimitation', $value );
-        self::assertInternalType( 'array', $value->limitationValues );
-        self::assertEquals( $expected, $value->limitationValues );
+        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\User\Limitation\NewObjectStateLimitation', $value);
+        self::assertInternalType('array', $value->limitationValues);
+        self::assertEquals($expected, $value->limitationValues);
     }
 
     /**
@@ -231,43 +225,43 @@ class NewObjectStateLimitationTypeTest extends Base
             array(
                 'limitation' => new NewObjectStateLimitation(),
                 'object' => new ContentInfo(),
-                'targets' => array( new ObjectState( array( 'id' => 66 ) ) ),
-                'expected' => false
+                'targets' => array(new ObjectState(array('id' => 66))),
+                'expected' => false,
             ),
             // Content, no access
             array(
-                'limitation' => new NewObjectStateLimitation( array( 'limitationValues' => array( 2 ) ) ),
+                'limitation' => new NewObjectStateLimitation(array('limitationValues' => array(2))),
                 'object' => new Content(),
-                'targets' => array( new ObjectState( array( 'id' => 66 ) ) ),
-                'expected' => false
+                'targets' => array(new ObjectState(array('id' => 66))),
+                'expected' => false,
             ),
             // Content, no access  (both must match!)
             array(
-                'limitation' => new NewObjectStateLimitation( array( 'limitationValues' => array( 2, 22 ) ) ),
+                'limitation' => new NewObjectStateLimitation(array('limitationValues' => array(2, 22))),
                 'object' => new Content(),
-                'targets' => array( new ObjectState( array( 'id' => 2 ) ), new ObjectState( array( 'id' => 66 ) ) ),
-                'expected' => false
+                'targets' => array(new ObjectState(array('id' => 2)), new ObjectState(array('id' => 66))),
+                'expected' => false,
             ),
             // ContentInfo, with access
             array(
-                'limitation' => new NewObjectStateLimitation( array( 'limitationValues' => array( 66 ) ) ),
+                'limitation' => new NewObjectStateLimitation(array('limitationValues' => array(66))),
                 'object' => new ContentInfo(),
-                'targets' => array( new ObjectState( array( 'id' => 66 ) ) ),
-                'expected' => true
+                'targets' => array(new ObjectState(array('id' => 66))),
+                'expected' => true,
             ),
             // VersionInfo, with access
             array(
-                'limitation' => new NewObjectStateLimitation( array( 'limitationValues' => array( 2, 66 ) ) ),
+                'limitation' => new NewObjectStateLimitation(array('limitationValues' => array(2, 66))),
                 'object' => new VersionInfo(),
-                'targets' => array( new ObjectState( array( 'id' => 66 ) ) ),
-                'expected' => true
+                'targets' => array(new ObjectState(array('id' => 66))),
+                'expected' => true,
             ),
             // Content, with access
             array(
-                'limitation' => new NewObjectStateLimitation( array( 'limitationValues' => array( 2, 66 ) ) ),
+                'limitation' => new NewObjectStateLimitation(array('limitationValues' => array(2, 66))),
                 'object' => new Content(),
-                'targets' => array( new ObjectState( array( 'id' => 66 ) ), new ObjectState( array( 'id' => 2 ) ) ),
-                'expected' => true
+                'targets' => array(new ObjectState(array('id' => 66)), new ObjectState(array('id' => 2))),
+                'expected' => true,
             ),
         );
     }
@@ -280,20 +274,19 @@ class NewObjectStateLimitationTypeTest extends Base
         ValueObject $object,
         array $targets,
         $expected
-    )
-    {
+    ) {
         // Need to create inline instead of depending on testConstruct() to get correct mock instance
         $limitationType = $this->testConstruct();
 
         $userMock = $this->getUserMock();
         $userMock
-            ->expects( $this->never() )
-            ->method( $this->anything() );
+            ->expects($this->never())
+            ->method($this->anything());
 
         $persistenceMock = $this->getPersistenceMock();
         $persistenceMock
-            ->expects( $this->never() )
-            ->method( $this->anything() );
+            ->expects($this->never())
+            ->method($this->anything());
 
         $value = $limitationType->evaluate(
             $limitation,
@@ -302,8 +295,8 @@ class NewObjectStateLimitationTypeTest extends Base
             $targets
         );
 
-        self::assertInternalType( 'boolean', $value );
-        self::assertEquals( $expected, $value );
+        self::assertInternalType('boolean', $value);
+        self::assertEquals($expected, $value);
     }
 
     /**
@@ -316,13 +309,13 @@ class NewObjectStateLimitationTypeTest extends Base
             array(
                 'limitation' => new ObjectStateLimitation(),
                 'object' => new ContentInfo(),
-                'targets' => array( new Location() ),
+                'targets' => array(new Location()),
             ),
             // invalid object
             array(
                 'limitation' => new NewObjectStateLimitation(),
                 'object' => new ObjectStateLimitation(),
-                'targets' => array( new Location() ),
+                'targets' => array(new Location()),
             ),
             // empty targets
             array(
@@ -341,20 +334,19 @@ class NewObjectStateLimitationTypeTest extends Base
         Limitation $limitation,
         ValueObject $object,
         array $targets
-    )
-    {
+    ) {
         // Need to create inline instead of depending on testConstruct() to get correct mock instance
         $limitationType = $this->testConstruct();
 
         $userMock = $this->getUserMock();
         $userMock
-            ->expects( $this->never() )
-            ->method( $this->anything() );
+            ->expects($this->never())
+            ->method($this->anything());
 
         $persistenceMock = $this->getPersistenceMock();
         $persistenceMock
-            ->expects( $this->never() )
-            ->method( $this->anything() );
+            ->expects($this->never())
+            ->method($this->anything());
 
         $v = $limitationType->evaluate(
             $limitation,
@@ -362,7 +354,7 @@ class NewObjectStateLimitationTypeTest extends Base
             $object,
             $targets
         );
-        var_dump( $v );// intentional, debug in case no exception above
+        var_dump($v);// intentional, debug in case no exception above
     }
 
     /**
@@ -371,10 +363,10 @@ class NewObjectStateLimitationTypeTest extends Base
      *
      * @param \eZ\Publish\Core\Limitation\NewObjectStateLimitationType $limitationType
      */
-    public function testGetCriterion( NewObjectStateLimitationType $limitationType )
+    public function testGetCriterion(NewObjectStateLimitationType $limitationType)
     {
         $limitationType->getCriterion(
-            new NewObjectStateLimitation( array() ),
+            new NewObjectStateLimitation(array()),
             $this->getUserMock()
         );
     }
@@ -385,7 +377,7 @@ class NewObjectStateLimitationTypeTest extends Base
      *
      * @param \eZ\Publish\Core\Limitation\NewObjectStateLimitationType $limitationType
      */
-    public function testValueSchema( NewObjectStateLimitationType $limitationType )
+    public function testValueSchema(NewObjectStateLimitationType $limitationType)
     {
         self::assertEquals(
             array(),

@@ -1,16 +1,17 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\Search\Legacy\Tests\Content\Location;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
-use eZ\Publish\Core\Persistence;
 use eZ\Publish\Core\Search\Legacy\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
@@ -29,49 +30,43 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 
 /**
- * Test case for LocationSearchHandler
+ * Test case for LocationSearchHandler.
  */
 class HandlerSortTest extends LanguageAwareTestCase
 {
     protected static $setUp = false;
 
     /**
-     * Only set up once for these read only tests on a large fixture
+     * Only set up once for these read only tests on a large fixture.
      *
      * Skipping the reset-up, since setting up for these tests takes quite some
      * time, which is not required to spent, since we are only reading from the
      * database anyways.
-     *
-     * @return void
      */
     public function setUp()
     {
-        if ( !self::$setUp )
-        {
+        if (!self::$setUp) {
             parent::setUp();
-            $this->insertDatabaseFixture( __DIR__ . '/../../_fixtures/full_dump.php' );
+            $this->insertDatabaseFixture(__DIR__ . '/../../_fixtures/full_dump.php');
             self::$setUp = $this->handler;
-        }
-        else
-        {
+        } else {
             $this->handler = self::$setUp;
         }
     }
 
     /**
-     * Assert that the elements are
+     * Assert that the elements are.
      */
-    protected function assertSearchResults( $expectedIds, $locations )
+    protected function assertSearchResults($expectedIds, $locations)
     {
-        $ids = $this->getIds( $locations );
-        $this->assertEquals( $expectedIds, $ids );
+        $ids = $this->getIds($locations);
+        $this->assertEquals($expectedIds, $ids);
     }
 
-    protected function getIds( $searchResult )
+    protected function getIds($searchResult)
     {
         $ids = array_map(
-            function ( $hit )
-            {
+            function ($hit) {
                 return $hit->valueObject->id;
             },
             $searchResult->searchHits
@@ -81,7 +76,7 @@ class HandlerSortTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns the location search handler to test
+     * Returns the location search handler to test.
      *
      * This method returns a fully functional search handler to perform tests on.
      *
@@ -94,11 +89,11 @@ class HandlerSortTest extends LanguageAwareTestCase
                 $this->getDatabaseHandler(),
                 new CriteriaConverter(
                     array(
-                        new LocationCriterionHandler\LocationId( $this->getDatabaseHandler() ),
-                        new LocationCriterionHandler\ParentLocationId( $this->getDatabaseHandler() ),
-                        new CommonCriterionHandler\LogicalAnd( $this->getDatabaseHandler() ),
-                        new CommonCriterionHandler\MatchAll( $this->getDatabaseHandler() ),
-                        new CommonCriterionHandler\SectionId( $this->getDatabaseHandler() ),
+                        new LocationCriterionHandler\LocationId($this->getDatabaseHandler()),
+                        new LocationCriterionHandler\ParentLocationId($this->getDatabaseHandler()),
+                        new CommonCriterionHandler\LogicalAnd($this->getDatabaseHandler()),
+                        new CommonCriterionHandler\MatchAll($this->getDatabaseHandler()),
+                        new CommonCriterionHandler\SectionId($this->getDatabaseHandler()),
                         new CommonCriterionHandler\ContentTypeIdentifier(
                             $this->getDatabaseHandler(),
                             $this->getContentTypeHandler()
@@ -107,18 +102,18 @@ class HandlerSortTest extends LanguageAwareTestCase
                 ),
                 new SortClauseConverter(
                     array(
-                        new LocationSortClauseHandler\Location\Id( $this->getDatabaseHandler() ),
-                        new LocationSortClauseHandler\Location\Depth( $this->getDatabaseHandler() ),
-                        new LocationSortClauseHandler\Location\Path( $this->getDatabaseHandler() ),
-                        new LocationSortClauseHandler\Location\Priority( $this->getDatabaseHandler() ),
-                        new LocationSortClauseHandler\Location\Visibility( $this->getDatabaseHandler() ),
-                        new LocationSortClauseHandler\Location\IsMainLocation( $this->getDatabaseHandler() ),
-                        new CommonSortClauseHandler\ContentId( $this->getDatabaseHandler() ),
-                        new CommonSortClauseHandler\ContentName( $this->getDatabaseHandler() ),
-                        new CommonSortClauseHandler\DateModified( $this->getDatabaseHandler() ),
-                        new CommonSortClauseHandler\DatePublished( $this->getDatabaseHandler() ),
-                        new CommonSortClauseHandler\SectionIdentifier( $this->getDatabaseHandler() ),
-                        new CommonSortClauseHandler\SectionName( $this->getDatabaseHandler() ),
+                        new LocationSortClauseHandler\Location\Id($this->getDatabaseHandler()),
+                        new LocationSortClauseHandler\Location\Depth($this->getDatabaseHandler()),
+                        new LocationSortClauseHandler\Location\Path($this->getDatabaseHandler()),
+                        new LocationSortClauseHandler\Location\Priority($this->getDatabaseHandler()),
+                        new LocationSortClauseHandler\Location\Visibility($this->getDatabaseHandler()),
+                        new LocationSortClauseHandler\Location\IsMainLocation($this->getDatabaseHandler()),
+                        new CommonSortClauseHandler\ContentId($this->getDatabaseHandler()),
+                        new CommonSortClauseHandler\ContentName($this->getDatabaseHandler()),
+                        new CommonSortClauseHandler\DateModified($this->getDatabaseHandler()),
+                        new CommonSortClauseHandler\DatePublished($this->getDatabaseHandler()),
+                        new CommonSortClauseHandler\SectionIdentifier($this->getDatabaseHandler()),
+                        new CommonSortClauseHandler\SectionName($this->getDatabaseHandler()),
                         new CommonSortClauseHandler\Field(
                             $this->getDatabaseHandler(),
                             $this->getLanguageHandler(),
@@ -135,15 +130,14 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     protected function getContentTypeHandler()
     {
-        if ( !isset( $this->contentTypeHandler ) )
-        {
+        if (!isset($this->contentTypeHandler)) {
             $this->contentTypeHandler = new ContentTypeHandler(
                 new ContentTypeGateway(
                     $this->getDatabaseHandler(),
                     $this->getLanguageMaskGenerator()
                 ),
-                new ContentTypeMapper( $this->getConverterRegistry() ),
-                $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler" )
+                new ContentTypeMapper($this->getConverterRegistry()),
+                $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler')
             );
         }
 
@@ -154,8 +148,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     protected function getConverterRegistry()
     {
-        if ( !isset( $this->fieldRegistry ) )
-        {
+        if (!isset($this->fieldRegistry)) {
             $this->fieldRegistry = new ConverterRegistry(
                 array(
                     'ezdatetime' => new Converter\DateAndTimeConverter(),
@@ -178,7 +171,7 @@ class HandlerSortTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a location mapper mock
+     * Returns a location mapper mock.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
      */
@@ -186,30 +179,29 @@ class HandlerSortTest extends LanguageAwareTestCase
     {
         $mapperMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper',
-            array( 'createLocationsFromRows' )
+            array('createLocationsFromRows')
         );
         $mapperMock
-            ->expects( $this->any() )
-            ->method( 'createLocationsFromRows' )
-            ->with( $this->isType( 'array' ) )
+            ->expects($this->any())
+            ->method('createLocationsFromRows')
+            ->with($this->isType('array'))
             ->will(
                 $this->returnCallback(
-                    function ( $rows )
-                    {
+                    function ($rows) {
                         $locations = array();
-                        foreach ( $rows as $row )
-                        {
+                        foreach ($rows as $row) {
                             $locationId = (int)$row['node_id'];
-                            if ( !isset( $locations[$locationId] ) )
-                            {
+                            if (!isset($locations[$locationId])) {
                                 $locations[$locationId] = new SPILocation();
                                 $locations[$locationId]->id = $locationId;
                             }
                         }
-                        return array_values( $locations );
+
+                        return array_values($locations);
                     }
                 )
             );
+
         return $mapperMock;
     }
 
@@ -220,18 +212,18 @@ class HandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\ParentLocationId( array( 178 ) ),
+                    'filter' => new Criterion\ParentLocationId(array(178)),
                     'offset' => 0,
                     'limit' => 5,
-                    'sortClauses' => array()
+                    'sortClauses' => array(),
                 )
             )
         );
 
-        $ids = $this->getIds( $locations );
-        sort( $ids );
+        $ids = $this->getIds($locations);
+        sort($ids);
         $this->assertEquals(
-            array( 179, 180, 181, 182, 183 ),
+            array(179, 180, 181, 182, 183),
             $ids
         );
     }
@@ -243,16 +235,16 @@ class HandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\ParentLocationId( array( 178 ) ),
+                    'filter' => new Criterion\ParentLocationId(array(178)),
                     'offset' => 0,
                     'limit' => 10,
-                    'sortClauses' => array( new SortClause\Location\Path( LocationQuery::SORT_DESC ) )
+                    'sortClauses' => array(new SortClause\Location\Path(LocationQuery::SORT_DESC)),
                 )
             )
         );
 
         $this->assertSearchResults(
-            array( 186, 185, 184, 183, 182, 181, 180, 179 ),
+            array(186, 185, 184, 183, 182, 181, 180, 179),
             $locations
         );
     }
@@ -264,16 +256,16 @@ class HandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\LocationId( array( 148, 167, 169, 172 ) ),
+                    'filter' => new Criterion\LocationId(array(148, 167, 169, 172)),
                     'offset' => 0,
                     'limit' => 10,
-                    'sortClauses' => array( new SortClause\Location\Depth( LocationQuery::SORT_ASC ) )
+                    'sortClauses' => array(new SortClause\Location\Depth(LocationQuery::SORT_ASC)),
                 )
             )
         );
 
         $this->assertSearchResults(
-            array( 167, 172, 169, 148 ),
+            array(167, 172, 169, 148),
             $locations
         );
     }
@@ -285,19 +277,19 @@ class HandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\LocationId( array( 141, 142, 143, 144, 146, 147 ) ),
+                    'filter' => new Criterion\LocationId(array(141, 142, 143, 144, 146, 147)),
                     'offset' => 0,
                     'limit' => 10,
                     'sortClauses' => array(
-                        new SortClause\Location\Depth( LocationQuery::SORT_ASC ),
-                        new SortClause\Location\Path( LocationQuery::SORT_DESC ),
-                    )
+                        new SortClause\Location\Depth(LocationQuery::SORT_ASC),
+                        new SortClause\Location\Path(LocationQuery::SORT_DESC),
+                    ),
                 )
             )
         );
 
         $this->assertSearchResults(
-            array( 147, 146, 141, 144, 143, 142 ),
+            array(147, 146, 141, 144, 143, 142),
             $locations
         );
     }
@@ -309,18 +301,18 @@ class HandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\LocationId( array( 149, 156, 167 ) ),
+                    'filter' => new Criterion\LocationId(array(149, 156, 167)),
                     'offset' => 0,
                     'limit' => 10,
                     'sortClauses' => array(
-                        new SortClause\Location\Priority( LocationQuery::SORT_DESC ),
-                    )
+                        new SortClause\Location\Priority(LocationQuery::SORT_DESC),
+                    ),
                 )
             )
         );
 
         $this->assertSearchResults(
-            array( 167, 156, 149 ),
+            array(167, 156, 149),
             $locations
         );
     }
@@ -332,18 +324,18 @@ class HandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\LocationId( array( 148, 167, 169, 172 ) ),
+                    'filter' => new Criterion\LocationId(array(148, 167, 169, 172)),
                     'offset' => 0,
-                    'limit'  => 10,
+                    'limit' => 10,
                     'sortClauses' => array(
                         new SortClause\DateModified(),
-                    )
+                    ),
                 )
             )
         );
 
         $this->assertSearchResults(
-            array( 169, 172, 167, 148 ),
+            array(169, 172, 167, 148),
             $locations
         );
     }
@@ -355,18 +347,18 @@ class HandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\LocationId( array( 148, 167, 169, 172 ) ),
+                    'filter' => new Criterion\LocationId(array(148, 167, 169, 172)),
                     'offset' => 0,
                     'limit' => 10,
                     'sortClauses' => array(
-                        new SortClause\DatePublished( LocationQuery::SORT_DESC ),
-                    )
+                        new SortClause\DatePublished(LocationQuery::SORT_DESC),
+                    ),
                 )
             )
         );
 
         $this->assertSearchResults(
-            array( 148, 172, 169, 167 ),
+            array(148, 172, 169, 167),
             $locations
         );
     }
@@ -379,13 +371,13 @@ class HandlerSortTest extends LanguageAwareTestCase
             new LocationQuery(
                 array(
                     'filter' => new Criterion\LocationId(
-                        array( 5, 43, 45, 48, 51, 54, 156, 157 )
+                        array(5, 43, 45, 48, 51, 54, 156, 157)
                     ),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
                         new SortClause\SectionIdentifier(),
-                    )
+                    ),
                 )
             )
         );
@@ -395,19 +387,18 @@ class HandlerSortTest extends LanguageAwareTestCase
         // the logic is then to have a set of sorted id's to compare with
         // the comparison being done slice by slice.
         $idMapSet = array(
-            2 => array( 5, 45 ),
-            3 => array( 43, 51 ),
-            4 => array( 48, 54 ),
-            6 => array( 156, 157 ),
+            2 => array(5, 45),
+            3 => array(43, 51),
+            4 => array(48, 54),
+            6 => array(156, 157),
         );
-        $locationIds = $this->getIds( $locations );
+        $locationIds = $this->getIds($locations);
         $index = 0;
 
-        foreach ( $idMapSet as $idSet )
-        {
-            $locationIdsSubset = array_slice( $locationIds, $index, $count = count( $idSet ) );
+        foreach ($idMapSet as $idSet) {
+            $locationIdsSubset = array_slice($locationIds, $index, $count = count($idSet));
             $index += $count;
-            sort( $locationIdsSubset );
+            sort($locationIdsSubset);
             $this->assertEquals(
                 $idSet,
                 $locationIdsSubset
@@ -422,18 +413,18 @@ class HandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\LocationId( array( 13, 15, 44, 45, 228 ) ),
+                    'filter' => new Criterion\LocationId(array(13, 15, 44, 45, 228)),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
                         new SortClause\ContentName(),
-                    )
+                    ),
                 )
             )
         );
 
         $this->assertSearchResults(
-            array( 228, 15, 13, 45, 44 ),
+            array(228, 15, 13, 45, 44),
             $locations
         );
     }
@@ -445,18 +436,18 @@ class HandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\LocationId( array( 13, 15, 44, 45, 228 ) ),
+                    'filter' => new Criterion\LocationId(array(13, 15, 44, 45, 228)),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
                         new SortClause\ContentId(),
-                    )
+                    ),
                 )
             )
         );
 
         $this->assertSearchResults(
-            array( 45, 13, 15, 44, 228 ),
+            array(45, 13, 15, 44, 228),
             $locations
         );
     }
@@ -468,18 +459,18 @@ class HandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\LocationId( array( 13, 15, 44, 45, 228 ) ),
+                    'filter' => new Criterion\LocationId(array(13, 15, 44, 45, 228)),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
-                        new SortClause\Location\Id( LocationQuery::SORT_DESC ),
-                    )
+                        new SortClause\Location\Id(LocationQuery::SORT_DESC),
+                    ),
                 )
             )
         );
 
         $this->assertSearchResults(
-            array( 228, 45, 44, 15, 13 ),
+            array(228, 45, 44, 15, 13),
             $locations
         );
     }
@@ -491,18 +482,18 @@ class HandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\LocationId( array( 45, 228 ) ),
+                    'filter' => new Criterion\LocationId(array(45, 228)),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
-                        new SortClause\Location\Visibility( LocationQuery::SORT_ASC ),
-                    )
+                        new SortClause\Location\Visibility(LocationQuery::SORT_ASC),
+                    ),
                 )
             )
         );
 
         $this->assertSearchResults(
-            array( 45, 228 ),
+            array(45, 228),
             $locations
         );
     }
@@ -514,18 +505,18 @@ class HandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\LocationId( array( 45, 228 ) ),
+                    'filter' => new Criterion\LocationId(array(45, 228)),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
-                        new SortClause\Location\Visibility( LocationQuery::SORT_DESC ),
-                    )
+                        new SortClause\Location\Visibility(LocationQuery::SORT_DESC),
+                    ),
                 )
             )
         );
 
         $this->assertSearchResults(
-            array( 228, 45 ),
+            array(228, 45),
             $locations
         );
     }
@@ -537,12 +528,12 @@ class HandlerSortTest extends LanguageAwareTestCase
         $result = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\SectionId( array( 4, 2, 6, 3 ) ),
+                    'filter' => new Criterion\SectionId(array(4, 2, 6, 3)),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
                         new SortClause\SectionName(),
-                    )
+                    ),
                 )
             )
         );
@@ -553,33 +544,30 @@ class HandlerSortTest extends LanguageAwareTestCase
         // the logic is then to have a set of sorted id's to compare with
         // the comparison being done slice by slice.
         $idMapSet = array(
-            "media" => array( 43, 51, 52, 53, 59, 60, 61, 62, 63, 64, 65, 66, 68, 202, 203 ),
-            "protected" => array( 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166 ),
-            "setup" => array( 48, 54 ),
-            "users" => array( 5, 12, 13, 14, 15, 44, 45, 228 ),
+            'media' => array(43, 51, 52, 53, 59, 60, 61, 62, 63, 64, 65, 66, 68, 202, 203),
+            'protected' => array(156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166),
+            'setup' => array(48, 54),
+            'users' => array(5, 12, 13, 14, 15, 44, 45, 228),
         );
         $locationIds = array_map(
-            function ( $hit )
-            {
+            function ($hit) {
                 return $hit->valueObject->id;
             },
             $result->searchHits
         );
 
         $expectedCount = 0;
-        foreach ( $idMapSet as $set )
-        {
-            $expectedCount += count( $set );
+        foreach ($idMapSet as $set) {
+            $expectedCount += count($set);
         }
 
-        $this->assertEquals( $expectedCount, $result->totalCount );
+        $this->assertEquals($expectedCount, $result->totalCount);
 
         $index = 0;
-        foreach ( $idMapSet as $idSet )
-        {
-            $locationIdsSubset = array_slice( $locationIds, $index, $count = count( $idSet ) );
+        foreach ($idMapSet as $idSet) {
+            $locationIdsSubset = array_slice($locationIds, $index, $count = count($idSet));
             $index += $count;
-            sort( $locationIdsSubset );
+            sort($locationIdsSubset);
             $this->assertEquals(
                 $idSet,
                 $locationIdsSubset
@@ -596,62 +584,60 @@ class HandlerSortTest extends LanguageAwareTestCase
                 array(
                     'filter' => new Criterion\LogicalAnd(
                         array(
-                            new Criterion\SectionId( array( 1 ) ),
-                            new Criterion\ContentTypeIdentifier( array( "article" ) ),
+                            new Criterion\SectionId(array(1)),
+                            new Criterion\ContentTypeIdentifier(array('article')),
                         )
                     ),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
-                        new SortClause\Field( "article", "title", LocationQuery::SORT_ASC, "eng-US" ),
-                    )
+                        new SortClause\Field('article', 'title', LocationQuery::SORT_ASC, 'eng-US'),
+                    ),
                 )
             )
         );
 
         // There are several identical titles, need to take care about this
         $idMapSet = array(
-            "aenean malesuada ligula" => array( 85 ),
-            "aliquam pulvinar suscipit tellus" => array( 104 ),
-            "asynchronous publishing" => array( 150, 217 ),
-            "canonical links" => array( 149, 218 ),
-            "class aptent taciti" => array( 90 ),
-            "class aptent taciti sociosqu" => array( 84 ),
-            "duis auctor vehicula erat" => array( 91 ),
-            "etiam posuere sodales arcu" => array( 80 ),
-            "etiam sodales mauris" => array( 89 ),
-            "ez publish enterprise" => array( 153 ),
-            "fastcgi" => array( 146, 220 ),
-            "fusce sagittis sagittis" => array( 79 ),
-            "fusce sagittis sagittis urna" => array( 83 ),
-            "get involved" => array( 109 ),
-            "how to develop with ez publish" => array( 129, 213 ),
-            "how to manage ez publish" => array( 120, 204 ),
-            "how to use ez publish" => array( 110, 195 ),
-            "improved block editing" => array( 138 ),
-            "improved front-end editing" => array( 141 ),
-            "improved user registration workflow" => array( 134 ),
-            "in hac habitasse platea" => array( 81 ),
-            "lots of websites, one ez publish installation" => array( 132 ),
-            "rest api interface" => array( 152, 216 ),
-            "separate content & design in ez publish" => array( 193 ),
-            "support for red hat enterprise" => array( 147, 219 ),
-            "tutorials for" => array( 108 ),
+            'aenean malesuada ligula' => array(85),
+            'aliquam pulvinar suscipit tellus' => array(104),
+            'asynchronous publishing' => array(150, 217),
+            'canonical links' => array(149, 218),
+            'class aptent taciti' => array(90),
+            'class aptent taciti sociosqu' => array(84),
+            'duis auctor vehicula erat' => array(91),
+            'etiam posuere sodales arcu' => array(80),
+            'etiam sodales mauris' => array(89),
+            'ez publish enterprise' => array(153),
+            'fastcgi' => array(146, 220),
+            'fusce sagittis sagittis' => array(79),
+            'fusce sagittis sagittis urna' => array(83),
+            'get involved' => array(109),
+            'how to develop with ez publish' => array(129, 213),
+            'how to manage ez publish' => array(120, 204),
+            'how to use ez publish' => array(110, 195),
+            'improved block editing' => array(138),
+            'improved front-end editing' => array(141),
+            'improved user registration workflow' => array(134),
+            'in hac habitasse platea' => array(81),
+            'lots of websites, one ez publish installation' => array(132),
+            'rest api interface' => array(152, 216),
+            'separate content & design in ez publish' => array(193),
+            'support for red hat enterprise' => array(147, 219),
+            'tutorials for' => array(108),
         );
         $locationIds = array_map(
-            function ( $hit )
-            {
+            function ($hit) {
                 return $hit->valueObject->id;
             },
             $result->searchHits
         );
         $index = 0;
 
-        foreach ( $idMapSet as $idSet )
-        {
-            $locationIdsSubset = array_slice( $locationIds, $index, $count = count( $idSet ) );
+        foreach ($idMapSet as $idSet) {
+            $locationIdsSubset = array_slice($locationIds, $index, $count = count($idSet));
             $index += $count;
-            sort( $locationIdsSubset );
+            sort($locationIdsSubset);
             $this->assertEquals(
                 $idSet,
                 $locationIdsSubset
@@ -668,24 +654,23 @@ class HandlerSortTest extends LanguageAwareTestCase
                 array(
                     'filter' => new Criterion\LogicalAnd(
                         array(
-                            new Criterion\SectionId( array( 1 ) ),
-                            new Criterion\ContentTypeIdentifier( "product" ),
+                            new Criterion\SectionId(array(1)),
+                            new Criterion\ContentTypeIdentifier('product'),
                         )
                     ),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
-                        new SortClause\Field( "product", "price", LocationQuery::SORT_ASC, "eng-US" ),
-                    )
+                        new SortClause\Field('product', 'price', LocationQuery::SORT_ASC, 'eng-US'),
+                    ),
                 )
             )
         );
 
         $this->assertEquals(
-            array( 75, 73, 74, 71 ),
+            array(75, 73, 74, 71),
             array_map(
-                function ( $hit )
-                {
+                function ($hit) {
                     return $hit->valueObject->id;
                 },
                 $result->searchHits
@@ -700,18 +685,18 @@ class HandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\ParentLocationId( 224 ),
+                    'filter' => new Criterion\ParentLocationId(224),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
-                        new SortClause\Location\IsMainLocation( LocationQuery::SORT_ASC ),
-                    )
+                        new SortClause\Location\IsMainLocation(LocationQuery::SORT_ASC),
+                    ),
                 )
             )
         );
 
         $this->assertSearchResults(
-            array( 510, 225 ),
+            array(510, 225),
             $locations
         );
     }
@@ -723,18 +708,18 @@ class HandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\ParentLocationId( 224 ),
+                    'filter' => new Criterion\ParentLocationId(224),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
-                        new SortClause\Location\IsMainLocation( LocationQuery::SORT_DESC ),
-                    )
+                        new SortClause\Location\IsMainLocation(LocationQuery::SORT_DESC),
+                    ),
                 )
             )
         );
 
         $this->assertSearchResults(
-            array( 225, 510 ),
+            array(225, 510),
             $locations
         );
     }

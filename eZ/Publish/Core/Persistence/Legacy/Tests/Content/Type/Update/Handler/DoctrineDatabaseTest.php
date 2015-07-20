@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentTypeHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentTypeHandlerTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,17 +18,17 @@ use PHPUnit_Framework_TestCase;
 /**
  * Test case for Content Type Handler.
  */
-class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
+class DoctrineDatabaseTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Gateway mock
+     * Gateway mock.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
     protected $gatewayMock;
 
     /**
-     * Content Updater mock
+     * Content Updater mock.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
      */
@@ -34,8 +36,6 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::updateContentObjects
-     *
-     * @return void
      */
     public function testUpdateContentObjects()
     {
@@ -43,8 +43,8 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
 
         $updaterMock = $this->getContentUpdaterMock();
 
-        $updaterMock->expects( $this->once() )
-            ->method( 'determineActions' )
+        $updaterMock->expects($this->once())
+            ->method('determineActions')
             ->with(
                 $this->isInstanceOf(
                     'eZ\\Publish\\SPI\\Persistence\\Content\\Type'
@@ -52,24 +52,22 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
                 $this->isInstanceOf(
                     'eZ\\Publish\\SPI\\Persistence\\Content\\Type'
                 )
-            )->will( $this->returnValue( array() ) );
+            )->will($this->returnValue(array()));
 
-        $updaterMock->expects( $this->once() )
-            ->method( 'applyUpdates' )
+        $updaterMock->expects($this->once())
+            ->method('applyUpdates')
             ->with(
-                $this->equalTo( 23 ),
-                $this->equalTo( array() )
+                $this->equalTo(23),
+                $this->equalTo(array())
             );
 
         $types = $this->getTypeFixtures();
 
-        $handler->updateContentObjects( $types['from'], $types['to'] );
+        $handler->updateContentObjects($types['from'], $types['to']);
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::deleteOldType
-     *
-     * @return void
      */
     public function testDeleteOldType()
     {
@@ -77,22 +75,20 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
 
         $gatewayMock = $this->getGatewayMock();
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'delete' )
+        $gatewayMock->expects($this->once())
+            ->method('delete')
             ->with(
-                $this->equalTo( 23 ),
-                $this->equalTo( 0 )
+                $this->equalTo(23),
+                $this->equalTo(0)
             );
 
         $types = $this->getTypeFixtures();
 
-        $handler->deleteOldType( $types['from'], $types['to'] );
+        $handler->deleteOldType($types['from'], $types['to']);
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::publishNewType
-     *
-     * @return void
      */
     public function testPublishNewType()
     {
@@ -101,17 +97,17 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
         $gatewayMock = $this->getGatewayMock();
         $updaterMock = $this->getContentUpdaterMock();
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'publishTypeAndFields' )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 1 ), $this->equalTo( 0 ) );
+        $gatewayMock->expects($this->once())
+            ->method('publishTypeAndFields')
+            ->with($this->equalTo(23), $this->equalTo(1), $this->equalTo(0));
 
         $types = $this->getTypeFixtures();
 
-        $handler->publishNewType( $types['to'], 0 );
+        $handler->publishNewType($types['to'], 0);
     }
 
     /**
-     * Returns an array with 'from' and 'to' types
+     * Returns an array with 'from' and 'to' types.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type[]
      */
@@ -131,7 +127,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns the Update Handler to test
+     * Returns the Update Handler to test.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase
      */
@@ -144,30 +140,29 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns a gateway mock
+     * Returns a gateway mock.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
     protected function getGatewayMock()
     {
-        if ( !isset( $this->gatewayMock ) )
-        {
+        if (!isset($this->gatewayMock)) {
             $this->gatewayMock = $this->getMockForAbstractClass(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Gateway'
             );
         }
+
         return $this->gatewayMock;
     }
 
     /**
-     * Returns a Content Updater mock
+     * Returns a Content Updater mock.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
      */
     protected function getContentUpdaterMock()
     {
-        if ( !isset( $this->contentUpdaterMock ) )
-        {
+        if (!isset($this->contentUpdaterMock)) {
             $this->contentUpdaterMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\ContentUpdater',
                 array(),
@@ -176,6 +171,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
                 false
             );
         }
+
         return $this->contentUpdaterMock;
     }
 }

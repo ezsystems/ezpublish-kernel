@@ -1,43 +1,43 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\Core\REST\Common\Values;
-use eZ\Publish\Core\REST\Common;
 
 class RestObjectStateTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the RestObjectState visitor
+     * Test the RestObjectState visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $objectState = new Values\RestObjectState(
             new ObjectState(
                 array(
-                    'id'         => 42,
+                    'id' => 42,
                     'identifier' => 'test-state',
                     'priority' => '0',
                     'defaultLanguageCode' => 'eng-GB',
-                    'languageCodes' => array( 'eng-GB', 'eng-US' ),
+                    'languageCodes' => array('eng-GB', 'eng-US'),
                     'names' => array(
                         'eng-GB' => 'State name EN',
                         'eng-US' => 'State name EN US',
@@ -45,7 +45,7 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
                     'descriptions' => array(
                         'eng-GB' => 'State description EN',
                         'eng-US' => 'State description EN US',
-                    )
+                    ),
                 )
             ),
             21
@@ -53,12 +53,12 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadObjectState',
-            array( 'objectStateGroupId' => $objectState->groupId, 'objectStateId' => $objectState->objectState->id ),
+            array('objectStateGroupId' => $objectState->groupId, 'objectStateId' => $objectState->objectState->id),
             "/content/objectstategroups/{$objectState->groupId}/objectstates/{$objectState->objectState->id}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadObjectStateGroup',
-            array( 'objectStateGroupId' => $objectState->groupId ),
+            array('objectStateGroupId' => $objectState->groupId),
             "/content/objectstategroups/{$objectState->groupId}"
         );
 
@@ -68,28 +68,28 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
             $objectState
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains ObjectState element
+     * Test if result contains ObjectState element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsObjectStateElement( $result )
+    public function testResultContainsObjectStateElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'ObjectState',
+                'tag' => 'ObjectState',
                 'children' => array(
-                    'count' => 8
-                )
+                    'count' => 8,
+                ),
             ),
             $result,
             'Invalid <ObjectState> element.',
@@ -98,21 +98,21 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains ObjectState element attributes
+     * Test if result contains ObjectState element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsObjectStateAttributes( $result )
+    public function testResultContainsObjectStateAttributes($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'ObjectState',
+                'tag' => 'ObjectState',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ObjectState+xml',
-                    'href'       => '/content/objectstategroups/21/objectstates/42',
-                )
+                    'href' => '/content/objectstategroups/21/objectstates/42',
+                ),
             ),
             $result,
             'Invalid <ObjectState> attributes.',
@@ -121,17 +121,17 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains ObjectStateGroup element
+     * Test if result contains ObjectStateGroup element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsObjectStateGroupElement( $result )
+    public function testResultContainsObjectStateGroupElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'ObjectStateGroup',
+                'tag' => 'ObjectStateGroup',
             ),
             $result,
             'Invalid <ObjectStateGroup> element.',
@@ -140,21 +140,21 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains ObjectStateGroup element attributes
+     * Test if result contains ObjectStateGroup element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsObjectStateGroupAttributes( $result )
+    public function testResultContainsObjectStateGroupAttributes($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'ObjectStateGroup',
+                'tag' => 'ObjectStateGroup',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ObjectStateGroup+xml',
-                    'href'       => '/content/objectstategroups/21',
-                )
+                    'href' => '/content/objectstategroups/21',
+                ),
             ),
             $result,
             'Invalid <ObjectStateGroup> attributes.',
@@ -163,18 +163,18 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains id value element
+     * Test if result contains id value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsIdValueElement( $result )
+    public function testResultContainsIdValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'id',
-                'content'  => '42'
+                'tag' => 'id',
+                'content' => '42',
             ),
             $result,
             'Invalid or non-existing <ObjectState> id value element.',
@@ -183,18 +183,18 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains identifier value element
+     * Test if result contains identifier value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsIdentifierValueElement( $result )
+    public function testResultContainsIdentifierValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'identifier',
-                'content'  => 'test-state'
+                'tag' => 'identifier',
+                'content' => 'test-state',
             ),
             $result,
             'Invalid or non-existing <ObjectState> identifier value element.',
@@ -203,18 +203,18 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains priority value element
+     * Test if result contains priority value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsPriorityValueElement( $result )
+    public function testResultContainsPriorityValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'priority',
-                'content'  => '0'
+                'tag' => 'priority',
+                'content' => '0',
             ),
             $result,
             'Invalid or non-existing <ObjectState> priority value element.',
@@ -223,18 +223,18 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains defaultLanguageCode value element
+     * Test if result contains defaultLanguageCode value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsDefaultLanguageCodeValueElement( $result )
+    public function testResultContainsDefaultLanguageCodeValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'defaultLanguageCode',
-                'content'  => 'eng-GB'
+                'tag' => 'defaultLanguageCode',
+                'content' => 'eng-GB',
             ),
             $result,
             'Invalid or non-existing <ObjectState> defaultLanguageCode value element.',
@@ -243,18 +243,18 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains languageCodes value element
+     * Test if result contains languageCodes value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsLanguageCodesValueElement( $result )
+    public function testResultContainsLanguageCodesValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'languageCodes',
-                'content'  => 'eng-GB,eng-US'
+                'tag' => 'languageCodes',
+                'content' => 'eng-GB,eng-US',
             ),
             $result,
             'Invalid or non-existing <ObjectState> languageCodes value element.',
@@ -263,20 +263,20 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains names element
+     * Test if result contains names element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsNamesElement( $result )
+    public function testResultContainsNamesElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'names',
+                'tag' => 'names',
                 'children' => array(
-                    'count' => 2
-                )
+                    'count' => 2,
+                ),
             ),
             $result,
             'Invalid <names> element.',
@@ -285,20 +285,20 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains descriptions element
+     * Test if result contains descriptions element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsDescriptionsElement( $result )
+    public function testResultContainsDescriptionsElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'descriptions',
+                'tag' => 'descriptions',
                 'children' => array(
-                    'count' => 2
-                )
+                    'count' => 2,
+                ),
             ),
             $result,
             'Invalid <descriptions> element.',
@@ -307,12 +307,12 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the ObjectState visitor
+     * Get the ObjectState visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestObjectState
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\RestObjectState;
+        return new ValueObjectVisitor\RestObjectState();
     }
 }

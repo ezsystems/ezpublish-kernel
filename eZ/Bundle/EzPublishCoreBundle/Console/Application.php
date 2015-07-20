@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the Application class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,7 +20,7 @@ use Symfony\Component\Console\Input\InputOption;
 
 /**
  * eZ Publish console application.
- * Adds options specific to an eZ Publish environment, such as the siteaccess to use
+ * Adds options specific to an eZ Publish environment, such as the siteaccess to use.
  */
 class Application extends BaseApplication
 {
@@ -27,18 +29,19 @@ class Application extends BaseApplication
      */
     private $siteAccessName;
 
-    public function __construct( KernelInterface $kernel )
+    public function __construct(KernelInterface $kernel)
     {
-        parent::__construct( $kernel );
+        parent::__construct($kernel);
         $this->getDefinition()->addOption(
-            new InputOption( '--siteaccess', null, InputOption::VALUE_OPTIONAL, 'SiteAccess to use for operations. If not provided, default siteaccess will be used' )
+            new InputOption('--siteaccess', null, InputOption::VALUE_OPTIONAL, 'SiteAccess to use for operations. If not provided, default siteaccess will be used')
         );
     }
 
-    public function doRun( InputInterface $input, OutputInterface $output )
+    public function doRun(InputInterface $input, OutputInterface $output)
     {
-        $this->siteAccessName = $input->getParameterOption( '--siteaccess', null );
-        return parent::doRun( $input, $output );
+        $this->siteAccessName = $input->getParameterOption('--siteaccess', null);
+
+        return parent::doRun($input, $output);
     }
 
     protected function registerCommands()
@@ -46,9 +49,8 @@ class Application extends BaseApplication
         parent::registerCommands();
 
         $container = $this->getKernel()->getContainer();
-        $siteAccess = $container->get( 'ezpublish.siteaccess' );
-        $siteAccess->name = $this->siteAccessName ?: $container->getParameter( 'ezpublish.siteaccess.default' );
+        $siteAccess = $container->get('ezpublish.siteaccess');
+        $siteAccess->name = $this->siteAccessName ?: $container->getParameter('ezpublish.siteaccess.default');
         $siteAccess->matchingType = 'cli';
     }
-
 }

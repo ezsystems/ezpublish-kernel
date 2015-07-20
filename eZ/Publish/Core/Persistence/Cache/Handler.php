@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Persistence Cache Handler class
+ * File containing the Persistence Cache Handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,19 +14,17 @@ namespace eZ\Publish\Core\Persistence\Cache;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandlerInterface;
 use eZ\Publish\Core\Persistence\Cache\SectionHandler as CacheSectionHandler;
 use eZ\Publish\Core\Persistence\Cache\LocationHandler as CacheLocationHandler;
-use eZ\Publish\Core\Persistence\Cache\LocationSearchHandler as CacheLocationSearchHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentHandler as CacheContentHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler as CacheContentLanguageHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
 use eZ\Publish\Core\Persistence\Cache\UserHandler as CacheUserHandler;
-use eZ\Publish\Core\Persistence\Cache\SearchHandler as CacheSearchHandler;
 use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHandler;
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use eZ\Publish\Core\Persistence\Cache\ObjectStateHandler as CacheObjectStateHandler;
 
 /**
- * Persistence Cache Handler class
+ * Persistence Cache Handler class.
  */
 class Handler implements PersistenceHandlerInterface
 {
@@ -89,7 +89,7 @@ class Handler implements PersistenceHandlerInterface
     protected $logger;
 
     /**
-     * Construct the class
+     * Construct the class.
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler Must be factory for inner persistence, ie: legacy
      * @param \eZ\Publish\Core\Persistence\Cache\SectionHandler $sectionHandler
@@ -117,8 +117,7 @@ class Handler implements PersistenceHandlerInterface
         CacheUrlAliasHandler $urlAliasHandler,
         CacheObjectStateHandler $objectStateHandler,
         PersistenceLogger $logger
-    )
-    {
+    ) {
         $this->persistenceHandler = $persistenceHandler;
         $this->sectionHandler = $sectionHandler;
         $this->locationHandler = $locationHandler;
@@ -207,11 +206,13 @@ class Handler implements PersistenceHandlerInterface
 
     /**
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
+     *
      * @todo Create cache implementation so we can avoid injecting persistenceHandler and logger
      */
     public function urlWildcardHandler()
     {
-        $this->logger->logUnCachedHandler( __METHOD__ );
+        $this->logger->logUnCachedHandler(__METHOD__);
+
         return $this->persistenceHandler->urlWildcardHandler();
     }
 
@@ -224,7 +225,7 @@ class Handler implements PersistenceHandlerInterface
     }
 
     /**
-     * Begin transaction
+     * Begin transaction.
      *
      * @deprecated Since 5.3 {@use transactionHandler()->beginTransaction()}
      */
@@ -234,7 +235,7 @@ class Handler implements PersistenceHandlerInterface
     }
 
     /**
-     * Commit transaction
+     * Commit transaction.
      *
      * Commit transaction, or throw exceptions if no transactions has been started.
      *
@@ -248,7 +249,7 @@ class Handler implements PersistenceHandlerInterface
     }
 
     /**
-     * Rollback transaction
+     * Rollback transaction.
      *
      * Rollback transaction, or throw exceptions if no transactions has been started.
      *

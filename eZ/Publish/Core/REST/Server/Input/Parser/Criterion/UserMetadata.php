@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentIdCriterion parser class
+ * File containing the ContentIdCriterion parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,12 +15,12 @@ use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
 /**
- * Parser for ViewInput
+ * Parser for ViewInput.
  */
 class UserMetadata extends BaseParser
 {
     /**
-     * Parses input structure to a Criterion object
+     * Parses input structure to a Criterion object.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -27,8 +29,8 @@ class UserMetadata extends BaseParser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\UserMetadata
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        throw new \Exception( '@todo implement' );
+        throw new \Exception('@todo implement');
     }
 }

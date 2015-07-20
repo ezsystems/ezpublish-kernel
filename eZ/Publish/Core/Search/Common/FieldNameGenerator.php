@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,7 @@ namespace eZ\Publish\Core\Search\Common;
 use eZ\Publish\SPI\Search\FieldType;
 
 /**
- * Generator for search backend field names
+ * Generator for search backend field names.
  */
 class FieldNameGenerator
 {
@@ -40,13 +42,13 @@ class FieldNameGenerator
      */
     protected $fieldNameMapping;
 
-    public function __construct( array $fieldNameMapping )
+    public function __construct(array $fieldNameMapping)
     {
         $this->fieldNameMapping = $fieldNameMapping;
     }
 
     /**
-     * Get name for document field
+     * Get name for document field.
      *
      * Consists of a name, and optionally field name and a content type name.
      *
@@ -56,13 +58,13 @@ class FieldNameGenerator
      *
      * @return string
      */
-    public function getName( $name, $field = null, $type = null )
+    public function getName($name, $field = null, $type = null)
     {
-        return implode( "_", array_filter( array( $type, $field, $name ) ) );
+        return implode('_', array_filter(array($type, $field, $name)));
     }
 
     /**
-     * Map field type
+     * Map field type.
      *
      * For indexing backend the following scheme will always be used for names:
      * {name}_{type}.
@@ -77,20 +79,18 @@ class FieldNameGenerator
      *
      * @return string
      */
-    public function getTypedName( $name, FieldType $type )
+    public function getTypedName($name, FieldType $type)
     {
-        if ( $name === "id" )
-        {
+        if ($name === 'id') {
             return $name;
         }
 
         $typeName = $type->type;
 
-        if ( isset( $this->fieldNameMapping[$typeName] ) )
-        {
+        if (isset($this->fieldNameMapping[$typeName])) {
             $typeName = $this->fieldNameMapping[$typeName];
         }
 
-        return $name . "_" . $typeName;
+        return $name . '_' . $typeName;
     }
 }

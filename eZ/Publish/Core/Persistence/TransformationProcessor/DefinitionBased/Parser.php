@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Transformation Parser class
+ * File containing the Transformation Parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,7 @@ use eZ\Publish\Core\Persistence\TransformationProcessor;
 use RuntimeException;
 
 /**
- * Parser for transformation specifications
+ * Parser for transformation specifications.
  *
  * The transformation specifications look like:
  *
@@ -47,11 +49,9 @@ class Parser
     protected $tokenSpecifications = null;
 
     /**
-     * Construct
-     *
-     * @return void
+     * Construct.
      */
-    public function __construct( )
+    public function __construct()
     {
         $character = '(?:U\\+[0-9a-fA-F]{4}|remove|keep|[0-9a-fA-F]+|"(?:[^\\\\"]+|\\\\\\\\|\\\\\'|\\\\")*?")';
 
@@ -60,17 +60,14 @@ class Parser
             TransformationProcessor::T_WHITESPACE => '(\\A\\s+)',
             TransformationProcessor::T_SECTION => '(\\A(?P<section>[a-z0-9_-]+):\s*$)m',
             TransformationProcessor::T_MAP => '(\\A(?P<src>' . $character . ')\\s*=\\s*(?P<dest>' .  $character . '))',
-            TransformationProcessor::T_REPLACE =>
-                '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
+            TransformationProcessor::T_REPLACE => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
                 '(?P<srcEnd>'   . $character . ')\\s*=\\s*' .
                 '(?P<dest>'    .  $character . '))',
-            TransformationProcessor::T_TRANSPOSE =>
-                '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
+            TransformationProcessor::T_TRANSPOSE => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
                 '(?P<srcEnd>'   . $character . ')\\s*' .
                 '(?P<op>[+-])\\s*' .
                 '(?P<dest>' .     $character . '))',
-            TransformationProcessor::T_TRANSPOSE_MODULO =>
-                '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
+            TransformationProcessor::T_TRANSPOSE_MODULO => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
                 '(?P<srcEnd>'   . $character . ')\\s*%\\s*' .
                 '(?P<modulo>'   . $character . ')\\s*' .
                 '(?P<op>[+-])\\s*' .
@@ -79,52 +76,48 @@ class Parser
     }
 
     /**
-     * Parse the specified transformation file into an AST
+     * Parse the specified transformation file into an AST.
      *
      * @param string $file
      *
      * @return array
      */
-    public function parse( $file )
+    public function parse($file)
     {
         return $this->parseString(
-            file_get_contents( $file )
+            file_get_contents($file)
         );
     }
 
     /**
-     * Parse the given string into an AST
+     * Parse the given string into an AST.
      *
      * @param string $string
      *
      * @return array
      */
-    public function parseString( $string )
+    public function parseString($string)
     {
-        $tokens = $this->tokenize( $string );
+        $tokens = $this->tokenize($string);
 
         $tokens = array_filter(
             $tokens,
-            function ( $token )
-            {
-                return !( $token['type'] === TransformationProcessor::T_WHITESPACE ||
-                          $token['type'] === TransformationProcessor::T_COMMENT );
+            function ($token) {
+                return !($token['type'] === TransformationProcessor::T_WHITESPACE ||
+                          $token['type'] === TransformationProcessor::T_COMMENT);
             }
         );
 
         $ast = array();
         $section = null;
-        while ( $token = array_shift( $tokens ) )
-        {
-            if ( $token['type'] === TransformationProcessor::T_SECTION )
-            {
+        while ($token = array_shift($tokens)) {
+            if ($token['type'] === TransformationProcessor::T_SECTION) {
                 $section = $token['data']['section'];
                 continue;
             }
 
-            if ( $section === null )
-            {
-                throw new RuntimeException( "Expected section." );
+            if ($section === null) {
+                throw new RuntimeException('Expected section.');
             }
 
             $ast[$section][] = $token;
@@ -134,7 +127,7 @@ class Parser
     }
 
     /**
-     * Tokenize transformation input file
+     * Tokenize transformation input file.
      *
      * Returns an array of tokens
      *
@@ -142,55 +135,50 @@ class Parser
      *
      * @return array
      */
-    protected function tokenize( $string )
+    protected function tokenize($string)
     {
-        $string = preg_replace( '(\\r\\n|\\r)', "\n", $string );
+        $string = preg_replace('(\\r\\n|\\r)', "\n", $string);
         $tokens = array();
         $line = 1;
 
-        while ( strlen( $string ) )
-        {
-            foreach ( $this->tokenSpecifications as $token => $regexp )
-            {
-                if ( !preg_match( $regexp, $string, $matches ) )
-                {
+        while (strlen($string)) {
+            foreach ($this->tokenSpecifications as $token => $regexp) {
+                if (!preg_match($regexp, $string, $matches)) {
                     continue;
                 }
 
                 // Remove matched string
-                $string = substr( $string, strlen( $matches[0] ) );
-                $line += substr_count( $matches[0], "\n" );
+                $string = substr($string, strlen($matches[0]));
+                $line += substr_count($matches[0], "\n");
 
                 // Append token to list
                 $tokens[] = array(
                     'type' => $token,
-                    'data' => $this->filterValues( $matches ),
+                    'data' => $this->filterValues($matches),
                 );
 
                 // Continue with outer loop
                 continue 2;
             }
 
-            throw new RuntimeException( "Parse error in line $line: " . substr( $string, 0, 100 ) );
+            throw new RuntimeException("Parse error in line $line: " . substr($string, 0, 100));
         }
 
         return $tokens;
     }
 
     /**
-     * Filter out numeric array keys
+     * Filter out numeric array keys.
      *
      * @param array $data
      *
      * @return array
      */
-    protected function filterValues( array $data )
+    protected function filterValues(array $data)
     {
-        foreach ( $data as $key => $value )
-        {
-            if ( is_int( $key ) )
-            {
-                unset( $data[$key] );
+        foreach ($data as $key => $value) {
+            if (is_int($key)) {
+                unset($data[$key]);
             }
         }
 

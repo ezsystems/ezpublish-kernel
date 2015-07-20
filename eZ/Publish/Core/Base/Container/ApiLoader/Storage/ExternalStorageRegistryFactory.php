@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ExternalStorageRegistryFactory class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 class ExternalStorageRegistryFactory extends ContainerAware
 {
     /**
-     * Collection of external storage handlers for field types that need them
+     * Collection of external storage handlers for field types that need them.
      *
      * @var \Closure[]
      */
@@ -27,17 +29,16 @@ class ExternalStorageRegistryFactory extends ContainerAware
      * @param string $serviceId The external storage handler service Id
      * @param string $fieldTypeAlias The field type alias (e.g. "ezstring")
      */
-    public function registerExternalStorageHandler( $serviceId, $fieldTypeAlias )
+    public function registerExternalStorageHandler($serviceId, $fieldTypeAlias)
     {
         $container = $this->container;
-        $this->externalStorages[$fieldTypeAlias] = function () use ( $container, $serviceId )
-        {
-            return $container->get( $serviceId );
+        $this->externalStorages[$fieldTypeAlias] = function () use ($container, $serviceId) {
+            return $container->get($serviceId);
         };
     }
 
     /**
-     * Returns registered external storage handlers for field types (as closures to be lazy loaded in the public API)
+     * Returns registered external storage handlers for field types (as closures to be lazy loaded in the public API).
      *
      * @return \Closure[]
      */
@@ -47,14 +48,14 @@ class ExternalStorageRegistryFactory extends ContainerAware
     }
 
     /**
-     * Returns external storage registry
+     * Returns external storage registry.
      *
      * @param string $externalStorageRegistryClass
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
      */
-    public function buildExternalStorageRegistry( $externalStorageRegistryClass )
+    public function buildExternalStorageRegistry($externalStorageRegistryClass)
     {
-        return new $externalStorageRegistryClass( $this->getExternalStorageHandlers() );
+        return new $externalStorageRegistryClass($this->getExternalStorageHandlers());
     }
 }

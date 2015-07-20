@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the PostSiteAccessMatchEvent class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -30,13 +32,13 @@ class PostSiteAccessMatchEvent extends Event
 
     /**
      * The request type the kernel is currently processing.  One of
-     * HttpKernelInterface::MASTER_REQUEST and HttpKernelInterface::SUB_REQUEST
+     * HttpKernelInterface::MASTER_REQUEST and HttpKernelInterface::SUB_REQUEST.
      *
-     * @var integer
+     * @var int
      */
     private $requestType;
 
-    public function __construct( SiteAccess $siteAccess, Request $request, $requestType )
+    public function __construct(SiteAccess $siteAccess, Request $request, $requestType)
     {
         $this->siteAccess = $siteAccess;
         $this->request = $request;
@@ -52,7 +54,7 @@ class PostSiteAccessMatchEvent extends Event
     }
 
     /**
-     * Returns matched SiteAccess instance
+     * Returns matched SiteAccess instance.
      *
      * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess
      */
@@ -62,9 +64,9 @@ class PostSiteAccessMatchEvent extends Event
     }
 
     /**
-     * Returns the request type the kernel is currently processing
+     * Returns the request type the kernel is currently processing.
      *
-     * @return integer  One of HttpKernelInterface::MASTER_REQUEST and
+     * @return int  One of HttpKernelInterface::MASTER_REQUEST and
      *                  HttpKernelInterface::SUB_REQUEST
      */
     public function getRequestType()

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the FieldType\XmlTextTypeTest class
+ * File containing the FieldType\XmlTextTypeTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,7 +26,7 @@ use PHPUnit_Framework_TestCase;
 class XmlTextTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Normally this should be enough:
+     * Normally this should be enough:.
      *
      * $ft = new XmlTextType( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\XmlText\\Input\\Parser' ) );
      *
@@ -37,7 +39,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
     protected function getFieldType()
     {
         $fieldType = new XmlTextType();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
     }
@@ -48,7 +50,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
     protected function getTransformationProcessorMock()
     {
         return $this->getMockForAbstractClass(
-            "eZ\\Publish\\Core\\Persistence\\TransformationProcessor",
+            'eZ\\Publish\\Core\\Persistence\\TransformationProcessor',
             array(),
             '',
             false,
@@ -65,7 +67,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
         $ft = $this->getFieldType();
         self::assertEmpty(
             $ft->getValidatorConfigurationSchema(),
-            "The validator configuration schema does not match what is expected."
+            'The validator configuration schema does not match what is expected.'
         );
     }
 
@@ -77,17 +79,17 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
         $ft = $this->getFieldType();
         self::assertSame(
             array(
-                "numRows" => array(
-                    "type" => "int",
-                    "default" => 10
+                'numRows' => array(
+                    'type' => 'int',
+                    'default' => 10,
                 ),
-                "tagPreset" => array(
-                    "type" => "choice",
-                    "default" => XmlTextType::TAG_PRESET_DEFAULT
+                'tagPreset' => array(
+                    'type' => 'choice',
+                    'default' => XmlTextType::TAG_PRESET_DEFAULT,
                 ),
             ),
             $ft->getSettingsSchema(),
-            "The settings schema does not match what is expected."
+            'The settings schema does not match what is expected.'
         );
     }
 
@@ -97,39 +99,34 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
      */
     public function testAcceptValueInvalidType()
     {
-        $this->getFieldType()->acceptValue( $this->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\Value' )->disableOriginalConstructor()->getMock() );
+        $this->getFieldType()->acceptValue($this->getMockBuilder('eZ\\Publish\\Core\\FieldType\\Value')->disableOriginalConstructor()->getMock());
     }
 
     /**
      * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
      * @dataProvider providerForTestAcceptValueValidFormat
      */
-    public function testAcceptValueValidFormat( $input )
+    public function testAcceptValueValidFormat($input)
     {
         $fieldType = $this->getFieldType();
-        $fieldType->acceptValue( $input );
+        $fieldType->acceptValue($input);
     }
 
     /**
      * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
      * @dataProvider providerForTestAcceptValueInvalidFormat
      */
-    public function testAcceptValueInvalidFormat( $input, $errorMessage )
+    public function testAcceptValueInvalidFormat($input, $errorMessage)
     {
-        try
-        {
+        try {
             $fieldType = $this->getFieldType();
-            $fieldType->acceptValue( $input );
-            $this->fail( "An InvalidArgumentException was expected! None thrown." );
-        }
-        catch ( InvalidArgumentException $e )
-        {
-            $this->assertEquals( $errorMessage, $e->getMessage() );
-        }
-        catch ( Exception $e )
-        {
+            $fieldType->acceptValue($input);
+            $this->fail('An InvalidArgumentException was expected! None thrown.');
+        } catch (InvalidArgumentException $e) {
+            $this->assertEquals($errorMessage, $e->getMessage());
+        } catch (Exception $e) {
             $this->fail(
-                "An InvalidArgumentException was expected! " . get_class( $e ) . " thrown with message: " . $e->getMessage()
+                'An InvalidArgumentException was expected! ' . get_class($e) . ' thrown with message: ' . $e->getMessage()
             );
         }
     }
@@ -143,15 +140,15 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">Header 1</header></section>';
-        $xmlDoc = new DOMDocument;
-        $xmlDoc->loadXML( $xmlData );
+        $xmlDoc = new DOMDocument();
+        $xmlDoc->loadXML($xmlData);
         // @todo Do one per value class
         $ft = $this->getFieldType();
 
-        $fieldValue = $ft->toPersistenceValue( $ft->acceptValue( $xmlData ) );
+        $fieldValue = $ft->toPersistenceValue($ft->acceptValue($xmlData));
 
-        self::assertInstanceOf( 'DOMDocument', $fieldValue->data );
-        self::assertSame( $xmlDoc->saveXML(), $fieldValue->data->saveXML() );
+        self::assertInstanceOf('DOMDocument', $fieldValue->data);
+        self::assertSame($xmlDoc->saveXML(), $fieldValue->data->saveXML());
     }
 
     public static function providerForTestAcceptValueValidFormat()
@@ -164,7 +161,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of text</header></section>',
             ),
-            array( new EzXml( $xml ) ),
+            array(new EzXml($xml)),
 
             array(
                 $xml = '<?xml version="1.0" encoding="utf-8"?>
@@ -172,7 +169,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
             ),
-            array( new EzXml( $xml ) ),
+            array(new EzXml($xml)),
         );
     }
 
@@ -183,17 +180,17 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
 <section><h1>This is a piece of text</h1></section>',
-                "Argument 'xmlString' is invalid: Validation of XML content failed: Element 'h1': This element is not expected. Expected is one of ( section, paragraph, header )."
+                "Argument 'xmlString' is invalid: Validation of XML content failed: Element 'h1': This element is not expected. Expected is one of ( section, paragraph, header ).",
             ),
 
             array(
                 'This is not XML at all!',
-                "Argument 'xmlString' is invalid: Validation of XML content failed: Start tag expected, '<' not found\nThe document has no document element."
+                "Argument 'xmlString' is invalid: Validation of XML content failed: Start tag expected, '<' not found\nThe document has no document element.",
             ),
 
             array(
                 '<unknown><format /></unknown>',
-                "Argument 'xmlString' is invalid: Validation of XML content failed: Element 'unknown': No matching global declaration available for the validation root."
+                "Argument 'xmlString' is invalid: Validation of XML content failed: Element 'unknown': No matching global declaration available for the validation root.",
             ),
         );
     }
@@ -202,12 +199,12 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\Core\FieldType\XmlText\Type::getName
      * @dataProvider providerForTestGetName
      */
-    public function testGetNamePassingValue( $xml, $value )
+    public function testGetNamePassingValue($xml, $value)
     {
         $ft = $this->getFieldType();
         $this->assertEquals(
             $value,
-            $ft->getName( $ft->acceptValue( $xml ) )
+            $ft->getName($ft->acceptValue($xml))
         );
     }
 
@@ -215,13 +212,13 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\Core\FieldType\XmlText\Type::getName
      * @dataProvider providerForTestGetName
      */
-    public function testGetNamePassingXML( $xml, $value )
+    public function testGetNamePassingXML($xml, $value)
     {
         $ft = $this->getFieldType();
         $this->assertEquals(
             $value,
             $ft->getName(
-                $ft->acceptValue( $xml )
+                $ft->acceptValue($xml)
             )
         );
     }
@@ -235,7 +232,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of text</header></section>',
-                "This is a piece of text"
+                'This is a piece of text',
             ),
 
             array(
@@ -243,8 +240,8 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of <emphasize>text</emphasize></header></section>',
-                /** @todo FIXME: should probably be "This is a piece of text" */
-                "This is a piece of"
+                /* @todo FIXME: should probably be "This is a piece of text" */
+                'This is a piece of',
             ),
 
             array(
@@ -252,8 +249,8 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1"><strong>This is a piece</strong> of text</header></section>',
-                /** @todo FIXME: should probably be "This is a piece of text" */
-                "This is a piece"
+                /* @todo FIXME: should probably be "This is a piece of text" */
+                'This is a piece',
             ),
 
             array(
@@ -261,8 +258,8 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1"><strong><emphasize>This is</emphasize> a piece</strong> of text</header></section>',
-                /** @todo FIXME: should probably be "This is a piece of text" */
-                "This is"
+                /* @todo FIXME: should probably be "This is a piece of text" */
+                'This is',
             ),
 
             array(
@@ -270,8 +267,8 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph><table class="default" border="0" width="100%" custom:summary="wai" custom:caption=""><tr><td><paragraph>First cell</paragraph></td><td><paragraph>Second cell</paragraph></td></tr><tr><td><paragraph>Third cell</paragraph></td><td><paragraph>Fourth cell</paragraph></td></tr></table></paragraph><paragraph>Text after table</paragraph></section>',
-                /** @todo FIXME: should probably be "First cell" */
-                "First cellSecond cell"
+                /* @todo FIXME: should probably be "First cell" */
+                'First cellSecond cell',
             ),
 
             array(
@@ -279,7 +276,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><ul><li><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">List item</paragraph></li></ul></paragraph></section>',
-                "List item"
+                'List item',
             ),
 
             array(
@@ -287,7 +284,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><ul><li><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">List <emphasize>item</emphasize></paragraph></li></ul></paragraph></section>',
-                "List item"
+                'List item',
             ),
 
             array(
@@ -295,7 +292,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
-                ""
+                '',
             ),
 
             array(
@@ -303,12 +300,12 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph><strong><emphasize>A simple</emphasize></strong> paragraph!</paragraph></section>',
-                "A simple"
+                'A simple',
             ),
 
-            array( '<section><paragraph>test</paragraph></section>', "test" ),
+            array('<section><paragraph>test</paragraph></section>', 'test'),
 
-            array( '<section><paragraph><link node_id="1">test</link><link object_id="1">test</link></paragraph></section>', "test" ),
+            array('<section><paragraph><link node_id="1">test</link><link object_id="1">test</link></paragraph></section>', 'test'),
         );
     }
 
@@ -317,8 +314,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
      */
     public function testGetRelations()
     {
-        $xml =
-<<<EOT
+        $xml = <<<EOT
 <?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
@@ -344,15 +340,15 @@ EOT;
         $this->assertEquals(
             array(
                 Relation::LINK => array(
-                    "locationIds" => array( 72, 61 ),
-                    "contentIds" => array( 70, 75 ),
+                    'locationIds' => array(72, 61),
+                    'contentIds' => array(70, 75),
                 ),
                 Relation::EMBED => array(
-                    "locationIds" => array( 52, 42 ),
-                    "contentIds" => array( 72, 74 ),
+                    'locationIds' => array(52, 42),
+                    'contentIds' => array(72, 74),
                 ),
             ),
-            $ft->getRelations( $ft->acceptValue( $xml ) )
+            $ft->getRelations($ft->acceptValue($xml))
         );
     }
 

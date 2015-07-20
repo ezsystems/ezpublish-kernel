@@ -1,16 +1,18 @@
 <?php
+
 /**
- * File containing the IdManager base class
+ * File containing the IdManager base class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\API\Repository\Tests;
 
 /**
- * Base class for ID manager used in the tests suite
+ * Base class for ID manager used in the tests suite.
  */
 abstract class IdManager
 {
@@ -25,7 +27,7 @@ abstract class IdManager
      *
      * @return mixed
      */
-    abstract public function generateId( $type, $rawId );
+    abstract public function generateId($type, $rawId);
 
     /**
      * Parses the given $id for $type into its raw form.
@@ -38,5 +40,5 @@ abstract class IdManager
      *
      * @return mixed
      */
-    abstract public function parseId( $type, $id );
+    abstract public function parseId($type, $id);
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the EmbedLinking class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,28 +27,26 @@ class EmbedLinking implements Converter
      *
      * @const string
      */
-    const TEMP_PREFIX = "ezlegacytmp-embed-link-";
+    const TEMP_PREFIX = 'ezlegacytmp-embed-link-';
 
-    public function convert( DOMDocument $document )
+    public function convert(DOMDocument $document)
     {
-        $xpath = new DOMXPath( $document );
+        $xpath = new DOMXPath($document);
         // Select embeds that are linked
         // After Expanding converter such links will contain only single embed element
-        $xpathExpression = "//embed[parent::link]|//embed-inline[parent::link]";
+        $xpathExpression = '//embed[parent::link]|//embed-inline[parent::link]';
 
-        $linkedEmbeds = $xpath->query( $xpathExpression );
+        $linkedEmbeds = $xpath->query($xpathExpression);
 
         $collection = array();
-        foreach ( $linkedEmbeds as $embed )
-        {
+        foreach ($linkedEmbeds as $embed) {
             $collection[] = $embed;
         }
 
         /** @var \DOMElement $embed */
-        foreach ( $collection as $embed )
-        {
-            $this->copyLinkAttributes( $embed );
-            $this->unwrap( $embed );
+        foreach ($collection as $embed) {
+            $this->copyLinkAttributes($embed);
+            $this->unwrap($embed);
         }
     }
 
@@ -56,53 +56,44 @@ class EmbedLinking implements Converter
      *
      * @param \DOMElement $embed
      */
-    protected function copyLinkAttributes( DOMElement $embed )
+    protected function copyLinkAttributes(DOMElement $embed)
     {
         $link = $embed->parentNode;
 
-        if ( $link->hasAttribute( "object_id" ) )
-        {
-            $embed->setAttribute( static::TEMP_PREFIX . "object_id", $link->getAttribute( "object_id" ) );
+        if ($link->hasAttribute('object_id')) {
+            $embed->setAttribute(static::TEMP_PREFIX . 'object_id', $link->getAttribute('object_id'));
         }
 
-        if ( $link->hasAttribute( "node_id" ) )
-        {
-            $embed->setAttribute( static::TEMP_PREFIX . "node_id", $link->getAttribute( "node_id" ) );
+        if ($link->hasAttribute('node_id')) {
+            $embed->setAttribute(static::TEMP_PREFIX . 'node_id', $link->getAttribute('node_id'));
         }
 
-        if ( $link->hasAttribute( "anchor_name" ) )
-        {
-            $embed->setAttribute( static::TEMP_PREFIX . "anchor_name", $link->getAttribute( "anchor_name" ) );
+        if ($link->hasAttribute('anchor_name')) {
+            $embed->setAttribute(static::TEMP_PREFIX . 'anchor_name', $link->getAttribute('anchor_name'));
         }
 
-        if ( $link->hasAttribute( "target" ) )
-        {
-            $embed->setAttribute( static::TEMP_PREFIX . "target", $link->getAttribute( "target" ) );
+        if ($link->hasAttribute('target')) {
+            $embed->setAttribute(static::TEMP_PREFIX . 'target', $link->getAttribute('target'));
         }
 
-        if ( $link->hasAttribute( "xhtml:title" ) )
-        {
-            $embed->setAttribute( static::TEMP_PREFIX . "title", $link->getAttribute( "xhtml:title" ) );
+        if ($link->hasAttribute('xhtml:title')) {
+            $embed->setAttribute(static::TEMP_PREFIX . 'title', $link->getAttribute('xhtml:title'));
         }
 
-        if ( $link->hasAttribute( "xhtml:id" ) )
-        {
-            $embed->setAttribute( static::TEMP_PREFIX . "id", $link->getAttribute( "xhtml:id" ) );
+        if ($link->hasAttribute('xhtml:id')) {
+            $embed->setAttribute(static::TEMP_PREFIX . 'id', $link->getAttribute('xhtml:id'));
         }
 
-        if ( $link->hasAttribute( "class" ) )
-        {
-            $embed->setAttribute( static::TEMP_PREFIX . "class", $link->getAttribute( "class" ) );
+        if ($link->hasAttribute('class')) {
+            $embed->setAttribute(static::TEMP_PREFIX . 'class', $link->getAttribute('class'));
         }
 
-        if ( $link->hasAttribute( "url" ) )
-        {
-            $embed->setAttribute( static::TEMP_PREFIX . "url", $link->getAttribute( "url" ) );
+        if ($link->hasAttribute('url')) {
+            $embed->setAttribute(static::TEMP_PREFIX . 'url', $link->getAttribute('url'));
         }
 
-        if ( $link->hasAttribute( "url_id" ) )
-        {
-            $embed->setAttribute( static::TEMP_PREFIX . "url_id", $link->getAttribute( "url_id" ) );
+        if ($link->hasAttribute('url_id')) {
+            $embed->setAttribute(static::TEMP_PREFIX . 'url_id', $link->getAttribute('url_id'));
         }
     }
 
@@ -116,23 +107,20 @@ class EmbedLinking implements Converter
      *
      * @param \DOMElement $embed
      */
-    protected function unwrap( DOMElement $embed )
+    protected function unwrap(DOMElement $embed)
     {
         $link = $embed->parentNode;
         $childCount = 0;
 
         /** @var \DOMText|\DOMElement $node */
-        foreach ( $link->childNodes as $node )
-        {
-            if ( !( $node->nodeType === XML_TEXT_NODE && $node->isWhitespaceInElementContent() ) )
-            {
+        foreach ($link->childNodes as $node) {
+            if (!($node->nodeType === XML_TEXT_NODE && $node->isWhitespaceInElementContent())) {
                 $childCount += 1;
             }
         }
 
-        if ( $childCount === 1 )
-        {
-            $link->parentNode->replaceChild( $embed, $link );
+        if ($childCount === 1) {
+            $link->parentNode->replaceChild($embed, $link);
         }
     }
 }

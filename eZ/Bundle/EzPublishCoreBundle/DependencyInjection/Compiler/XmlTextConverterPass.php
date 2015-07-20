@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the XmlTextConverterPass class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,31 +21,27 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class XmlTextConverterPass implements CompilerPassInterface
 {
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
-        if ( !$container->hasDefinition( 'ezpublish.fieldType.ezxmltext.converter.html5' ) )
-        {
+        if (!$container->hasDefinition('ezpublish.fieldType.ezxmltext.converter.html5')) {
             return;
         }
 
-        $html5ConverterDef = $container->getDefinition( 'ezpublish.fieldType.ezxmltext.converter.html5' );
-        $taggedServiceIds = $container->findTaggedServiceIds( 'ezpublish.ezxml.converter' );
+        $html5ConverterDef = $container->getDefinition('ezpublish.fieldType.ezxmltext.converter.html5');
+        $taggedServiceIds = $container->findTaggedServiceIds('ezpublish.ezxml.converter');
 
         $converterIdsByPriority = array();
-        foreach ( $taggedServiceIds as $id => $tags )
-        {
-            foreach ( $tags as $tag )
-            {
-                $priority = isset( $tag['priority'] ) ? (int)$tag['priority'] : 0;
+        foreach ($taggedServiceIds as $id => $tags) {
+            foreach ($tags as $tag) {
+                $priority = isset($tag['priority']) ? (int)$tag['priority'] : 0;
                 $converterIdsByPriority[$priority][] = $id;
             }
         }
 
-        $converterIdsByPriority = $this->sortConverterIds( $converterIdsByPriority );
+        $converterIdsByPriority = $this->sortConverterIds($converterIdsByPriority);
 
-        foreach ( $converterIdsByPriority as $referenceId )
-        {
-            $html5ConverterDef->addMethodCall( 'addPreConverter', array( new Reference( $referenceId ) ) );
+        foreach ($converterIdsByPriority as $referenceId) {
+            $html5ConverterDef->addMethodCall('addPreConverter', array(new Reference($referenceId)));
         }
     }
 
@@ -55,10 +53,10 @@ class XmlTextConverterPass implements CompilerPassInterface
      *
      * @return \Symfony\Component\DependencyInjection\Reference[]
      */
-    protected function sortConverterIds( array $converterIdsByPriority )
+    protected function sortConverterIds(array $converterIdsByPriority)
     {
-        krsort( $converterIdsByPriority, SORT_NUMERIC );
+        krsort($converterIdsByPriority, SORT_NUMERIC);
 
-        return call_user_func_array( 'array_merge', $converterIdsByPriority );
+        return call_user_func_array('array_merge', $converterIdsByPriority);
     }
 }

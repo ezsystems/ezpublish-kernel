@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ImagineAliasGenerator class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -70,8 +72,7 @@ class AliasGenerator implements VariationHandler
         ResolverInterface $ioResolver,
         FilterConfiguration $filterConfiguration,
         LoggerInterface $logger = null
-    )
-    {
+    ) {
         $this->dataLoader = $dataLoader;
         $this->filterManager = $filterManager;
         $this->ioResolver = $ioResolver;
@@ -86,64 +87,55 @@ class AliasGenerator implements VariationHandler
      * @throws \eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException If source image cannot be found.
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidVariationException If a problem occurs with generated variation.
      */
-    public function getVariation( Field $field, VersionInfo $versionInfo, $variationName, array $parameters = array() )
+    public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = array())
     {
         /** @var \eZ\Publish\Core\FieldType\Image\Value $imageValue */
         $imageValue = $field->value;
         $fieldId = $field->id;
         $fieldDefIdentifier = $field->fieldDefIdentifier;
-        if ( !$this->supportsValue( $imageValue ) )
-        {
-            throw new InvalidArgumentException( "Value for field #$fieldId ($fieldDefIdentifier) cannot be used for image alias generation." );
+        if (!$this->supportsValue($imageValue)) {
+            throw new InvalidArgumentException("Value for field #$fieldId ($fieldDefIdentifier) cannot be used for image alias generation.");
         }
 
         $originalPath = $imageValue->id;
 
-        try
-        {
-            $originalBinary = $this->dataLoader->find( $originalPath );
-        }
-        catch ( NotLoadableException $e )
-        {
-            throw new SourceImageNotFoundException( $originalPath, 0, $e );
+        try {
+            $originalBinary = $this->dataLoader->find($originalPath);
+        } catch (NotLoadableException $e) {
+            throw new SourceImageNotFoundException($originalPath, 0, $e);
         }
 
         // Create the image alias only if it does not already exist.
-        if ( $variationName !== IORepositoryResolver::VARIATION_ORIGINAL && !$this->ioResolver->isStored( $originalPath, $variationName ) )
-        {
-            if ( $this->logger )
-                $this->logger->debug( "Generating '$variationName' variation on $originalPath, field #$fieldId ($fieldDefIdentifier)" );
+        if ($variationName !== IORepositoryResolver::VARIATION_ORIGINAL && !$this->ioResolver->isStored($originalPath, $variationName)) {
+            if ($this->logger) {
+                $this->logger->debug("Generating '$variationName' variation on $originalPath, field #$fieldId ($fieldDefIdentifier)");
+            }
 
             $this->ioResolver->store(
-                $this->applyFilter( $originalBinary, $variationName ),
+                $this->applyFilter($originalBinary, $variationName),
                 $originalPath,
                 $variationName
             );
-        }
-        else if ( $this->logger )
-        {
-            $this->logger->debug( "'$variationName' variation on $originalPath is already generated. Loading from cache." );
+        } elseif ($this->logger) {
+            $this->logger->debug("'$variationName' variation on $originalPath is already generated. Loading from cache.");
         }
 
-        try
-        {
+        try {
             $aliasInfo = new SplFileInfo(
-                $this->ioResolver->resolve( $originalPath, $variationName )
+                $this->ioResolver->resolve($originalPath, $variationName)
             );
-        }
-        // If for some reason image alias cannot be resolved, throw the appropriate exception.
-        catch ( NotResolvableException $e )
-        {
-            throw new InvalidVariationException( $variationName, 'image', 0, $e );
+        } catch (NotResolvableException $e) {
+            // If for some reason image alias cannot be resolved, throw the appropriate exception.
+            throw new InvalidVariationException($variationName, 'image', 0, $e);
         }
 
         return new ImageVariation(
             array(
-                'name'         => $variationName,
-                'fileName'     => $aliasInfo->getFilename(),
-                'dirPath'      => $aliasInfo->getPath(),
-                'uri'          => $aliasInfo->getPathname(),
-                'imageId'      => $imageValue->imageId
+                'name' => $variationName,
+                'fileName' => $aliasInfo->getFilename(),
+                'dirPath' => $aliasInfo->getPath(),
+                'uri' => $aliasInfo->getPathname(),
+                'imageId' => $imageValue->imageId,
             )
         );
     }
@@ -161,19 +153,18 @@ class AliasGenerator implements VariationHandler
      *
      * @return \Liip\ImagineBundle\Binary\BinaryInterface
      */
-    private function applyFilter( BinaryInterface $image, $variationName )
+    private function applyFilter(BinaryInterface $image, $variationName)
     {
-        $filterConfig = $this->filterConfiguration->get( $variationName );
+        $filterConfig = $this->filterConfiguration->get($variationName);
         // If the variation has a reference, we recursively call this method to apply reference's filters.
-        if ( isset( $filterConfig['reference'] ) && $filterConfig['reference'] !== IORepositoryResolver::VARIATION_ORIGINAL )
-        {
-            $image = $this->applyFilter( $image, $filterConfig['reference'] );
+        if (isset($filterConfig['reference']) && $filterConfig['reference'] !== IORepositoryResolver::VARIATION_ORIGINAL) {
+            $image = $this->applyFilter($image, $filterConfig['reference']);
         }
 
-        return $this->filterManager->applyFilter( $image, $variationName );
+        return $this->filterManager->applyFilter($image, $variationName);
     }
 
-    public function supportsValue( Value $value )
+    public function supportsValue(Value $value)
     {
         return $value instanceof ImageValue;
     }

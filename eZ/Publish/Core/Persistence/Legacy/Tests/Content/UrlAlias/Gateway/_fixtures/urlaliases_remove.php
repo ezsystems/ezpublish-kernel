@@ -1,8 +1,8 @@
 <?php
 
-return array (
-    'ezurlalias_ml' => array (
-        0 => array (
+return array(
+    'ezurlalias_ml' => array(
+        0 => array(
             'action' => 'eznode:2',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -15,7 +15,7 @@ return array (
             'text' => '',
             'text_md5' => 'd41d8cd98f00b204e9800998ecf8427e',
         ),
-        1 => array (
+        1 => array(
             'action' => 'eznode:314',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -28,7 +28,7 @@ return array (
             'text' => 'location',
             'text_md5' => 'd5189de027922f81005951e6efe0efd5',
         ),
-        2 => array (
+        2 => array(
             'action' => 'eznode:314',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -41,7 +41,7 @@ return array (
             'text' => 'location-history',
             'text_md5' => 'a59d9f07e3d5fcf77911155650956a73',
         ),
-        3 => array (
+        3 => array(
             'action' => 'eznode:314',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -54,7 +54,7 @@ return array (
             'text' => 'location-custom',
             'text_md5' => '6449cba11bb134a57af94c8cb7f6c99c',
         ),
-        4 => array (
+        4 => array(
             'action' => 'eznode:315',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -67,7 +67,7 @@ return array (
             'text' => 'location2',
             'text_md5' => '0a06c09b6dd9a4606b4eb6d60ab188f0',
         ),
-        5 => array (
+        5 => array(
             'action' => 'eznode:315',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -80,7 +80,7 @@ return array (
             'text' => 'location2-translation',
             'text_md5' => '82f2bce3283a0806a398fe78beda17d9',
         ),
-        6 => array (
+        6 => array(
             'action' => 'eznode:315',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -94,26 +94,26 @@ return array (
             'text_md5' => '863d659d9fec68e5ab117b5f585a4ee7',
         ),
     ),
-    'ezurlalias_ml_incr' => array (
-        0 => array (
+    'ezurlalias_ml_incr' => array(
+        0 => array(
             'id' => '1',
         ),
-        1 => array (
+        1 => array(
             'id' => '2',
         ),
-        2 => array (
+        2 => array(
             'id' => '3',
         ),
-        3 => array (
+        3 => array(
             'id' => '4',
         ),
-        4 => array (
+        4 => array(
             'id' => '5',
         ),
-        5 => array (
+        5 => array(
             'id' => '6',
         ),
-        6 => array (
+        6 => array(
             'id' => '7',
         ),
     ),

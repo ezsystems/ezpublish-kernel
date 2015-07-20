@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the SessionSetDynamicNameListener class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
-use eZ\Bundle\EzPublishCoreBundle\Kernel;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -27,7 +28,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  */
 class SessionSetDynamicNameListener implements EventSubscriberInterface
 {
-    const MARKER = "{siteaccess_hash}";
+    const MARKER = '{siteaccess_hash}';
 
     /**
      * Prefix for session name.
@@ -54,7 +55,7 @@ class SessionSetDynamicNameListener implements EventSubscriberInterface
      * @param SessionInterface $session
      * @param \Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface $sessionStorage
      */
-    public function __construct( ConfigResolverInterface $configResolver, SessionInterface $session = null, SessionStorageInterface $sessionStorage = null )
+    public function __construct(ConfigResolverInterface $configResolver, SessionInterface $session = null, SessionStorageInterface $sessionStorage = null)
     {
         $this->configResolver = $configResolver;
         $this->session = $session;
@@ -64,28 +65,27 @@ class SessionSetDynamicNameListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            MVCEvents::SITEACCESS => array( 'onSiteAccessMatch', 250 )
+            MVCEvents::SITEACCESS => array('onSiteAccessMatch', 250),
         );
     }
 
-    public function onSiteAccessMatch( PostSiteAccessMatchEvent $event )
+    public function onSiteAccessMatch(PostSiteAccessMatchEvent $event)
     {
         if (
             !(
                 $event->getRequestType() === HttpKernelInterface::MASTER_REQUEST
-                && isset( $this->session )
+                && isset($this->session)
                 && !$this->session->isStarted()
                 && $this->sessionStorage instanceof NativeSessionStorage
             )
-        )
-        {
+        ) {
             return;
         }
 
-        $sessionOptions = (array)$this->configResolver->getParameter( 'session' );
-        $sessionName = isset( $sessionOptions['name'] ) ? $sessionOptions['name'] : $this->session->getName();
-        $sessionOptions['name'] = $this->getSessionName( $sessionName, $event->getSiteAccess() );
-        $this->sessionStorage->setOptions( $sessionOptions );
+        $sessionOptions = (array)$this->configResolver->getParameter('session');
+        $sessionName = isset($sessionOptions['name']) ? $sessionOptions['name'] : $this->session->getName();
+        $sessionOptions['name'] = $this->getSessionName($sessionName, $event->getSiteAccess());
+        $this->sessionStorage->setOptions($sessionOptions);
     }
 
     /**
@@ -94,18 +94,16 @@ class SessionSetDynamicNameListener implements EventSubscriberInterface
      *
      * @return string
      */
-    private function getSessionName( $sessionName, SiteAccess $siteAccess )
+    private function getSessionName($sessionName, SiteAccess $siteAccess)
     {
         // Add session prefix if needed.
-        if ( strpos( $sessionName, static::SESSION_NAME_PREFIX ) !== 0 )
-        {
+        if (strpos($sessionName, static::SESSION_NAME_PREFIX) !== 0) {
             $sessionName = static::SESSION_NAME_PREFIX . '_' . $sessionName;
         }
 
         // Check if uniqueness marker is present. If so, session name will be unique for current siteaccess.
-        if ( strpos( $sessionName, self::MARKER ) !== false )
-        {
-            $sessionName = str_replace( self::MARKER, md5( $siteAccess->name ), $sessionName );
+        if (strpos($sessionName, self::MARKER) !== false) {
+            $sessionName = str_replace(self::MARKER, md5($siteAccess->name), $sessionName);
         }
 
         return $sessionName;

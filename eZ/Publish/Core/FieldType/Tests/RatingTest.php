@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RatingTest class
+ * File containing the RatingTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -34,7 +36,7 @@ class RatingTest extends FieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         $fieldType = new Rating();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
     }
@@ -104,7 +106,7 @@ class RatingTest extends FieldTypeTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                new Value( 'sindelfingen' ),
+                new Value('sindelfingen'),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
@@ -144,25 +146,25 @@ class RatingTest extends FieldTypeTest
         return array(
             array(
                 false,
-                new Value( false )
+                new Value(false),
             ),
             array(
                 true,
-                new Value( true )
+                new Value(true),
             ),
             array(
                 new Value(),
-                new Value( false )
+                new Value(false),
             ),
             array(
-                new Value( true ),
-                new Value( true )
+                new Value(true),
+                new Value(true),
             ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -200,18 +202,18 @@ class RatingTest extends FieldTypeTest
     {
         return array(
             array(
-                new Value( true ),
+                new Value(true),
                 true,
             ),
             array(
-                new Value( false ),
+                new Value(false),
                 false,
             ),
         );
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -250,18 +252,18 @@ class RatingTest extends FieldTypeTest
         return array(
             array(
                 true,
-                new Value( true ),
+                new Value(true),
             ),
             array(
                 false,
-                new Value( false ),
+                new Value(false),
             ),
         );
     }
 
     public function testEmptyValueIsEmpty()
     {
-        $this->markTestSkipped( "Rating value is never empty" );
+        $this->markTestSkipped('Rating value is never empty');
     }
 
     /**
@@ -272,7 +274,7 @@ class RatingTest extends FieldTypeTest
         $ft = $this->createFieldTypeUnderTest();
         self::assertEmpty(
             $ft->getValidatorConfigurationSchema(),
-            "The validator configuration schema does not match what is expected."
+            'The validator configuration schema does not match what is expected.'
         );
     }
 
@@ -284,7 +286,7 @@ class RatingTest extends FieldTypeTest
         $ft = $this->createFieldTypeUnderTest();
         self::assertEmpty(
             $ft->getSettingsSchema(),
-            "The settings schema does not match what is expected."
+            'The settings schema does not match what is expected.'
         );
     }
 
@@ -295,12 +297,12 @@ class RatingTest extends FieldTypeTest
     public function testAcceptValueInvalidFormat()
     {
         $ft = $this->createFieldTypeUnderTest();
-        $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "acceptValue" );
-        $refMethod->setAccessible( true );
+        $ref = new ReflectionObject($ft);
+        $refMethod = $ref->getMethod('acceptValue');
+        $refMethod->setAccessible(true);
         $ratingValue = new Value();
-        $ratingValue->isDisabled = "Strings should not work.";
-        $refMethod->invoke( $ft, $ratingValue );
+        $ratingValue->isDisabled = 'Strings should not work.';
+        $refMethod->invoke($ft, $ratingValue);
     }
 
     /**
@@ -309,12 +311,12 @@ class RatingTest extends FieldTypeTest
     public function testAcceptValueValidFormat()
     {
         $ft = $this->createFieldTypeUnderTest();
-        $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "acceptValue" );
-        $refMethod->setAccessible( true );
+        $ref = new ReflectionObject($ft);
+        $refMethod = $ref->getMethod('acceptValue');
+        $refMethod->setAccessible(true);
 
-        $value = new Value( false );
-        self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
+        $value = new Value(false);
+        self::assertSame($value, $refMethod->invoke($ft, $value));
     }
 
     /**
@@ -324,9 +326,9 @@ class RatingTest extends FieldTypeTest
     {
         $rating = false;
         $ft = $this->createFieldTypeUnderTest();
-        $fieldValue = $ft->toPersistenceValue( $fv = new Value( $rating ) );
+        $fieldValue = $ft->toPersistenceValue($fv = new Value($rating));
 
-        self::assertSame( $rating, $fieldValue->data );
+        self::assertSame($rating, $fieldValue->data);
     }
 
     /**
@@ -334,8 +336,8 @@ class RatingTest extends FieldTypeTest
      */
     public function testBuildFieldValueWithParamFalse()
     {
-        $value = new Value( false );
-        self::assertSame( false, $value->isDisabled );
+        $value = new Value(false);
+        self::assertSame(false, $value->isDisabled);
     }
 
     /**
@@ -343,8 +345,8 @@ class RatingTest extends FieldTypeTest
      */
     public function testBuildFieldValueWithParamTrue()
     {
-        $value = new Value( true );
-        self::assertSame( true, $value->isDisabled );
+        $value = new Value(true);
+        self::assertSame(true, $value->isDisabled);
     }
 
     /**
@@ -352,8 +354,8 @@ class RatingTest extends FieldTypeTest
      */
     public function testBuildFieldValueWithoutParam()
     {
-        $value = new Value;
-        self::assertSame( false, $value->isDisabled );
+        $value = new Value();
+        self::assertSame(false, $value->isDisabled);
     }
 
     protected function provideFieldTypeIdentifier()
@@ -365,7 +367,7 @@ class RatingTest extends FieldTypeTest
      * @dataProvider provideDataForGetName
      * @expectedException \RuntimeException
      */
-    public function testGetName( SPIValue $value, $expected )
+    public function testGetName(SPIValue $value, $expected)
     {
         $this->getFieldTypeUnderTest()->getName(
             $value
@@ -375,7 +377,7 @@ class RatingTest extends FieldTypeTest
     public function provideDataForGetName()
     {
         return array(
-            array( $this->getEmptyValueExpectation(), '' )
+            array($this->getEmptyValueExpectation(), ''),
         );
     }
 }

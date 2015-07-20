@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a RoleTest class
+ * File containing a RoleTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\Core\REST\Client\Input\Parser;
 class RoleTest extends BaseTest
 {
     /**
-     * Tests the role parser
+     * Tests the role parser.
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
@@ -23,25 +25,25 @@ class RoleTest extends BaseTest
         $roleParser = $this->getParser();
 
         $inputArray = array(
-            '_href'      => '/user/roles/6',
-            'identifier' => 'some-role'
+            '_href' => '/user/roles/6',
+            'identifier' => 'some-role',
         );
 
-        $result = $roleParser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $roleParser->parse($inputArray, $this->getParsingDispatcherMock());
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Tests that the resulting role is in fact an instance of Role class
+     * Tests that the resulting role is in fact an instance of Role class.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $result
      *
      * @depends testParse
      */
-    public function testResultIsRole( $result )
+    public function testResultIsRole($result)
     {
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role',
@@ -50,13 +52,13 @@ class RoleTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting role contains the ID
+     * Tests that the resulting role contains the ID.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $result
      *
      * @depends testParse
      */
-    public function testResultContainsId( $result )
+    public function testResultContainsId($result)
     {
         $this->assertEquals(
             '/user/roles/6',
@@ -65,13 +67,13 @@ class RoleTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting role contains identifier
+     * Tests that the resulting role contains identifier.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $result
      *
      * @depends testParse
      */
-    public function testResultContainsIdentifier( $result )
+    public function testResultContainsIdentifier($result)
     {
         $this->assertEquals(
             'some-role',
@@ -80,7 +82,7 @@ class RoleTest extends BaseTest
     }
 
     /**
-     * Gets the parser for role
+     * Gets the parser for role.
      *
      * @return \eZ\Publish\Core\REST\Client\Input\Parser\Role;
      */

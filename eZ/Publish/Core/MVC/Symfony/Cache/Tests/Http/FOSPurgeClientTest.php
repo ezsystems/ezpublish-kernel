@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the FOSPurgeClientTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -27,66 +29,66 @@ class FOSPurgeClientTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->cacheManager = $this->getMockBuilder( '\FOS\HttpCacheBundle\CacheManager' )
+        $this->cacheManager = $this->getMockBuilder('\FOS\HttpCacheBundle\CacheManager')
             ->setConstructorArgs(
                 array(
-                    $this->getMock( '\FOS\HttpCache\ProxyClient\ProxyClientInterface' ),
+                    $this->getMock('\FOS\HttpCache\ProxyClient\ProxyClientInterface'),
                     $this->getMock(
                         '\Symfony\Component\Routing\Generator\UrlGeneratorInterface'
-                    )
+                    ),
                 )
             )
             ->getMock();
-        $this->purgeClient = new FOSPurgeClient( $this->cacheManager );
+        $this->purgeClient = new FOSPurgeClient($this->cacheManager);
     }
 
     public function testPurgeNoLocationIds()
     {
         $this->cacheManager
-            ->expects( $this->never() )
-            ->method( 'invalidate' );
-        $this->purgeClient->purge( array() );
+            ->expects($this->never())
+            ->method('invalidate');
+        $this->purgeClient->purge(array());
     }
 
     public function testPurgeOneLocationId()
     {
         $locationId = 123;
         $this->cacheManager
-            ->expects( $this->once() )
-            ->method( 'invalidate' )
-            ->with( array( 'X-Location-Id' => "($locationId)" ) );
+            ->expects($this->once())
+            ->method('invalidate')
+            ->with(array('X-Location-Id' => "($locationId)"));
 
-        $this->purgeClient->purge( $locationId );
+        $this->purgeClient->purge($locationId);
     }
 
     /**
      * @dataProvider purgeTestProvider
      */
-    public function testPurge( array $locationIds )
+    public function testPurge(array $locationIds)
     {
         $this->cacheManager
-            ->expects( $this->once() )
-            ->method( 'invalidate' )
-            ->with( array( 'X-Location-Id' => '(' . implode( '|', $locationIds ) . ')' ) );
+            ->expects($this->once())
+            ->method('invalidate')
+            ->with(array('X-Location-Id' => '(' . implode('|', $locationIds) . ')'));
 
-        $this->purgeClient->purge( $locationIds );
+        $this->purgeClient->purge($locationIds);
     }
 
     public function purgeTestProvider()
     {
         return array(
-            array( array( 123 ) ),
-            array( array( 123, 456 ) ),
-            array( array( 123, 456, 789 ) ),
+            array(array(123)),
+            array(array(123, 456)),
+            array(array(123, 456, 789)),
         );
     }
 
     public function testPurgeAll()
     {
         $this->cacheManager
-            ->expects( $this->once() )
-            ->method( 'invalidate' )
-            ->with( array( 'X-Location-Id' => '.*' ) );
+            ->expects($this->once())
+            ->method('invalidate')
+            ->with(array('X-Location-Id' => '.*'));
 
         $this->purgeClient->purgeAll();
     }

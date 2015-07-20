@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the VersatileMatcher class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,7 +28,7 @@ interface VersatileMatcher extends Matcher
      *
      * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher|null Typically the current matcher, with updated request.
      */
-    public function reverseMatch( $siteAccessName );
+    public function reverseMatch($siteAccessName);
 
     /**
      * Returns the SimplifiedRequest object corresponding to the reverse match.

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ObjectStateServiceTest class
+ * File containing the ObjectStateServiceTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,7 +23,6 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
     /**
      * Test for the createObjectStateGroup() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::createObjectStateGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testCreateObjectStateGroup
@@ -30,13 +31,13 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
         // Set anonymous user
         $userService = $repository->getUserService();
-        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         $objectStateService = $repository->getObjectStateService();
 
@@ -64,7 +65,6 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
     /**
      * Test for the updateObjectStateGroup() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::updateObjectStateGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testUpdateObjectStateGroup
@@ -73,14 +73,14 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $objectStateGroupId = $this->generateId( 'objectstategroup', 2 );
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $objectStateGroupId = $this->generateId('objectstategroup', 2);
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
         // Set anonymous user
         $userService = $repository->getUserService();
-        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // $objectStateGroupId contains the ID of the standard object state
         // group ez_lock.
@@ -97,7 +97,7 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
             'ger-DE' => 'Sindelfingen',
         );
         $groupUpdateStruct->descriptions = array(
-            'ger-DE' => 'Sindelfingen ist nicht nur eine Stadt'
+            'ger-DE' => 'Sindelfingen ist nicht nur eine Stadt',
         );
 
         // Throws unauthorized exception, since the anonymous user must not
@@ -112,7 +112,6 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
     /**
      * Test for the deleteObjectStateGroup() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::deleteObjectStateGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testDeleteObjectStateGroup
@@ -121,14 +120,14 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $objectStateGroupId = $this->generateId( 'objectstategroup', 2 );
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $objectStateGroupId = $this->generateId('objectstategroup', 2);
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
         // Set anonymous user
         $userService = $repository->getUserService();
-        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // $objectStateGroupId contains the ID of the standard object state
         // group ez_lock.
@@ -140,14 +139,13 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
 
         // Throws unauthorized exception, since the anonymous user must not
         // delete object state groups
-        $objectStateService->deleteObjectStateGroup( $loadedObjectStateGroup );
+        $objectStateService->deleteObjectStateGroup($loadedObjectStateGroup);
         /* END: Use Case */
     }
 
     /**
      * Test for the createObjectState() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::createObjectState()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testCreateObjectState
@@ -156,14 +154,14 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $objectStateGroupId = $this->generateId( 'objectstategroup', 2 );
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $objectStateGroupId = $this->generateId('objectstategroup', 2);
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
         // Set anonymous user
         $userService = $repository->getUserService();
-        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // $objectStateGroupId contains the ID of the standard object state
         // group ez_lock.
@@ -197,7 +195,6 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
     /**
      * Test for the updateObjectState() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::updateObjectState()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testUpdateObjectState
@@ -206,14 +203,14 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $objectStateId = $this->generateId( 'objectstate', 2 );
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $objectStateId = $this->generateId('objectstate', 2);
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
         // Set anonymous user
         $userService = $repository->getUserService();
-        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // $objectStateId contains the ID of the "locked" state
         $objectStateService = $repository->getObjectStateService();
@@ -246,7 +243,6 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
     /**
      * Test for the setPriorityOfObjectState() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::setPriorityOfObjectState()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testSetPriorityOfObjectState
@@ -255,14 +251,14 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $objectStateId = $this->generateId( 'objectstate', 2 );
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $objectStateId = $this->generateId('objectstate', 2);
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
         // Set anonymous user
         $userService = $repository->getUserService();
-        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // $objectStateId contains the ID of the "locked" state
         $objectStateService = $repository->getObjectStateService();
@@ -283,7 +279,6 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
     /**
      * Test for the deleteObjectState() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::deleteObjectState()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testDeleteObjectState
@@ -292,31 +287,30 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $notLockedObjectStateId = $this->generateId( 'objectstate', 1 );
-        $lockedObjectStateId = $this->generateId( 'objectstate', 2 );
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $notLockedObjectStateId = $this->generateId('objectstate', 1);
+        $lockedObjectStateId = $this->generateId('objectstate', 2);
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
         // Set anonymous user
         $userService = $repository->getUserService();
-        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // $notLockedObjectStateId is the ID of the state "not_locked"
         $objectStateService = $repository->getObjectStateService();
 
-        $notLockedObjectState = $objectStateService->loadObjectState( $notLockedObjectStateId );
+        $notLockedObjectState = $objectStateService->loadObjectState($notLockedObjectStateId);
 
         // Throws unauthorized exception, since the anonymous user must not
         // delete object states
-        $objectStateService->deleteObjectState( $notLockedObjectState );
+        $objectStateService->deleteObjectState($notLockedObjectState);
         /* END: Use Case */
     }
 
     /**
      * Test for the setContentState() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ObjectStateService::setContentState()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testSetContentState
@@ -325,29 +319,29 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
-        $ezLockObjectStateGroupId = $this->generateId( 'objectstategroup', 2 );
-        $lockedObjectStateId = $this->generateId( 'objectstate', 2 );
+        $anonymousUserId = $this->generateId('user', 10);
+        $ezLockObjectStateGroupId = $this->generateId('objectstategroup', 2);
+        $lockedObjectStateId = $this->generateId('objectstate', 2);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
         // Set anonymous user
         $userService = $repository->getUserService();
-        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // $anonymousUserId is the content ID of "Anonymous User"
         // $ezLockObjectStateGroupId contains the ID of the "ez_lock" object
         // state group
         // $lockedObjectStateId is the ID of the state "locked"
-        $contentService     = $repository->getContentService();
+        $contentService = $repository->getContentService();
         $objectStateService = $repository->getObjectStateService();
 
-        $contentInfo = $contentService->loadContentInfo( $anonymousUserId );
+        $contentInfo = $contentService->loadContentInfo($anonymousUserId);
 
         $ezLockObjectStateGroup = $objectStateService->loadObjectStateGroup(
             $ezLockObjectStateGroupId
         );
-        $lockedObjectState = $objectStateService->loadObjectState( $lockedObjectStateId );
+        $lockedObjectState = $objectStateService->loadObjectState($lockedObjectStateId);
 
         // Throws unauthorized exception, since the anonymous user must not
         // set object state

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specificat
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
- * A criterion that matches content based on its own location id
+ * A criterion that matches content based on its own location id.
  *
  * Parent location id is done using {@see ParentLocationId}
  *
@@ -25,16 +27,16 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 class LocationId extends Criterion implements CriterionInterface
 {
     /**
-     * Creates a new LocationId criterion
+     * Creates a new LocationId criterion.
      *
      * @param int|int[] $value One or more locationId that must be matched
      *
      * @throws \InvalidArgumentException if a non numeric id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct( $value )
+    public function __construct($value)
     {
-        parent::__construct( null, null, $value );
+        parent::__construct(null, null, $value);
     }
 
     public function getSpecifications()
@@ -53,8 +55,8 @@ class LocationId extends Criterion implements CriterionInterface
         );
     }
 
-    public static function createFromQueryBuilder( $target, $operator, $value )
+    public static function createFromQueryBuilder($target, $operator, $value)
     {
-        return new self( $value );
+        return new self($value);
     }
 }

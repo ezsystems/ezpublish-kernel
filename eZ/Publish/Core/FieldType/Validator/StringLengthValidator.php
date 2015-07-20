@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the StringLengthValidator class
+ * File containing the StringLengthValidator class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,37 +24,34 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 class StringLengthValidator extends Validator
 {
     protected $constraints = array(
-        "maxStringLength" => false,
-        "minStringLength" => false
+        'maxStringLength' => false,
+        'minStringLength' => false,
     );
 
     protected $constraintsSchema = array(
-        "minStringLength" => array(
-            "type" => "int",
-            "default" => 0
+        'minStringLength' => array(
+            'type' => 'int',
+            'default' => 0,
         ),
-        "maxStringLength" => array(
-            "type" => "int",
-            "default" => null
-        )
+        'maxStringLength' => array(
+            'type' => 'int',
+            'default' => null,
+        ),
     );
 
-    public function validateConstraints( $constraints )
+    public function validateConstraints($constraints)
     {
         $validationErrors = array();
-        foreach ( $constraints as $name => $value )
-        {
-            switch ( $name )
-            {
-                case "minStringLength":
-                case "maxStringLength":
-                    if ( $value !== false && !is_integer( $value ) )
-                    {
+        foreach ($constraints as $name => $value) {
+            switch ($name) {
+                case 'minStringLength':
+                case 'maxStringLength':
+                    if ($value !== false && !is_integer($value)) {
                         $validationErrors[] = new ValidationError(
                             "Validator parameter '%parameter%' value must be of integer type",
                             null,
                             array(
-                                "parameter" => $name
+                                'parameter' => $name,
                             )
                         );
                     }
@@ -62,7 +61,7 @@ class StringLengthValidator extends Validator
                         "Validator parameter '%parameter%' is unknown",
                         null,
                         array(
-                            "parameter" => $name
+                            'parameter' => $name,
                         )
                     );
             }
@@ -78,34 +77,32 @@ class StringLengthValidator extends Validator
      *
      * @param \eZ\Publish\Core\FieldType\TextLine\Value $value
      *
-     * @return boolean
+     * @return bool
      */
-    public function validate( BaseValue $value )
+    public function validate(BaseValue $value)
     {
         $isValid = true;
 
-        if ( $this->constraints['maxStringLength'] !== false &&
+        if ($this->constraints['maxStringLength'] !== false &&
             $this->constraints['maxStringLength'] !== 0 &&
-            strlen( $value->text ) > $this->constraints['maxStringLength'] )
-        {
+            strlen($value->text) > $this->constraints['maxStringLength']) {
             $this->errors[] = new ValidationError(
-                "The string can not exceed %size% character.",
-                "The string can not exceed %size% characters.",
+                'The string can not exceed %size% character.',
+                'The string can not exceed %size% characters.',
                 array(
-                    "size" => $this->constraints['maxStringLength']
+                    'size' => $this->constraints['maxStringLength'],
                 )
             );
             $isValid = false;
         }
-        if ( $this->constraints['minStringLength'] !== false &&
+        if ($this->constraints['minStringLength'] !== false &&
             $this->constraints['minStringLength'] !== 0 &&
-            strlen( $value->text ) < $this->constraints['minStringLength'] )
-        {
+            strlen($value->text) < $this->constraints['minStringLength']) {
             $this->errors[] = new ValidationError(
-                "The string can not be shorter than %size% character.",
-                "The string can not be shorter than %size% characters.",
+                'The string can not be shorter than %size% character.',
+                'The string can not be shorter than %size% characters.',
                 array(
-                    "size" => $this->constraints['minStringLength']
+                    'size' => $this->constraints['minStringLength'],
                 )
             );
             $isValid = false;

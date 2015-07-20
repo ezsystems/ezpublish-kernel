@@ -1,45 +1,44 @@
 <?php
+
 /**
- * File containing the content updater class
+ * File containing the content updater class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
-use eZ\Publish\SPI\Search\Content\Handler as SearchHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
-use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
- * Class to update content objects to a new type version
+ * Class to update content objects to a new type version.
  */
 class ContentUpdater
 {
     /**
-     * Content gateway
+     * Content gateway.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected $contentGateway;
 
     /**
-     * FieldValue converter registry
+     * FieldValue converter registry.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $converterRegistry;
 
     /**
-     * Storage handler
+     * Storage handler.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
@@ -51,7 +50,7 @@ class ContentUpdater
     protected $contentMapper;
 
     /**
-     * Creates a new content updater
+     * Creates a new content updater.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry
@@ -62,8 +61,8 @@ class ContentUpdater
         ContentGateway $contentGateway,
         Registry $converterRegistry,
         StorageHandler $storageHandler,
-        ContentMapper $contentMapper )
-    {
+        ContentMapper $contentMapper
+    ) {
         $this->contentGateway = $contentGateway;
         $this->converterRegistry = $converterRegistry;
         $this->storageHandler = $storageHandler;
@@ -72,20 +71,18 @@ class ContentUpdater
     }
 
     /**
-     * Determines the necessary update actions
+     * Determines the necessary update actions.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $fromType
      * @param \eZ\Publish\SPI\Persistence\Content\Type $toType
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action[]
      */
-    public function determineActions( Type $fromType, Type $toType )
+    public function determineActions(Type $fromType, Type $toType)
     {
         $actions = array();
-        foreach ( $fromType->fieldDefinitions as $fieldDef )
-        {
-            if ( !$this->hasFieldDefinition( $toType, $fieldDef ) )
-            {
+        foreach ($fromType->fieldDefinitions as $fieldDef) {
+            if (!$this->hasFieldDefinition($toType, $fieldDef)) {
                 $actions[] = new ContentUpdater\Action\RemoveField(
                     $this->contentGateway,
                     $fieldDef,
@@ -94,10 +91,8 @@ class ContentUpdater
                 );
             }
         }
-        foreach ( $toType->fieldDefinitions as $fieldDef )
-        {
-            if ( !$this->hasFieldDefinition( $fromType, $fieldDef ) )
-            {
+        foreach ($toType->fieldDefinitions as $fieldDef) {
+            if (!$this->hasFieldDefinition($fromType, $fieldDef)) {
                 $actions[] = new ContentUpdater\Action\AddField(
                     $this->contentGateway,
                     $fieldDef,
@@ -109,62 +104,57 @@ class ContentUpdater
                 );
             }
         }
+
         return $actions;
     }
 
     /**
-     * hasFieldDefinition
+     * hasFieldDefinition.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $type
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      *
-     * @return boolean
+     * @return bool
      */
-    protected function hasFieldDefinition( Type $type, FieldDefinition $fieldDef )
+    protected function hasFieldDefinition(Type $type, FieldDefinition $fieldDef)
     {
-        foreach ( $type->fieldDefinitions as $existFieldDef )
-        {
-            if ( $existFieldDef->id == $fieldDef->id )
-            {
+        foreach ($type->fieldDefinitions as $existFieldDef) {
+            if ($existFieldDef->id == $fieldDef->id) {
                 return true;
             }
         }
+
         return false;
     }
 
     /**
-     * Applies all given updates
+     * Applies all given updates.
      *
      * @param mixed $contentTypeId
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action[] $actions
-     *
-     * @return void
      */
-    public function applyUpdates( $contentTypeId, array $actions )
+    public function applyUpdates($contentTypeId, array $actions)
     {
-        if ( empty( $actions ) )
-        {
+        if (empty($actions)) {
             return;
         }
 
-        foreach ( $this->getContentIdsByContentTypeId( $contentTypeId ) as $contentId )
-        {
-            foreach ( $actions as $action )
-            {
-                $action->apply( $contentId );
+        foreach ($this->getContentIdsByContentTypeId($contentTypeId) as $contentId) {
+            foreach ($actions as $action) {
+                $action->apply($contentId);
             }
         }
     }
 
     /**
-     * Returns all content objects of $contentTypeId
+     * Returns all content objects of $contentTypeId.
      *
      * @param mixed $contentTypeId
      *
      * @return int[]
      */
-    protected function getContentIdsByContentTypeId( $contentTypeId )
+    protected function getContentIdsByContentTypeId($contentTypeId)
     {
-        return $this->contentGateway->getContentIdsByContentTypeId( $contentTypeId );
+        return $this->contentGateway->getContentIdsByContentTypeId($contentTypeId);
     }
 }

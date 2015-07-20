@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Elasticsearch Serializer class
+ * File containing the Elasticsearch Serializer class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,14 +21,14 @@ use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 class Serializer
 {
     /**
-     * Field value mapper
+     * Field value mapper.
      *
      * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper
      */
     protected $fieldValueMapper;
 
     /**
-     * Field name generator
+     * Field name generator.
      *
      * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator
      */
@@ -39,8 +41,7 @@ class Serializer
     public function __construct(
         FieldValueMapper $fieldValueMapper,
         FieldNameGenerator $nameGenerator
-    )
-    {
+    ) {
         $this->fieldValueMapper = $fieldValueMapper;
         $this->nameGenerator = $nameGenerator;
     }
@@ -52,9 +53,9 @@ class Serializer
      *
      * @return string
      */
-    public function getIndexDocument( Document $document )
+    public function getIndexDocument(Document $document)
     {
-        return json_encode( $this->getDocumentHash( $document ) );
+        return json_encode($this->getDocumentHash($document));
     }
 
     /**
@@ -70,16 +71,16 @@ class Serializer
      *
      * @return string
      */
-    public function getIndexMetadata( Document $document )
+    public function getIndexMetadata(Document $document)
     {
         $metadataHash = array(
-            "index" => array(
-                "_type" => $document->type,
-                "_id" => $document->id,
+            'index' => array(
+                '_type' => $document->type,
+                '_id' => $document->id,
             ),
         );
 
-        return json_encode( $metadataHash );
+        return json_encode($metadataHash);
     }
 
     /**
@@ -93,25 +94,20 @@ class Serializer
      *
      * @return array
      */
-    protected function getDocumentHash( Document $document )
+    protected function getDocumentHash(Document $document)
     {
         $hash = array();
 
-        foreach ( $document->fields as $field )
-        {
-            if ( $field->type instanceof DocumentField )
-            {
-                $documents = $this->fieldValueMapper->map( $field );
+        foreach ($document->fields as $field) {
+            if ($field->type instanceof DocumentField) {
+                $documents = $this->fieldValueMapper->map($field);
                 $values = array();
 
-                foreach ( $documents as $document )
-                {
-                    $values[] = $this->getDocumentHash( $document );
+                foreach ($documents as $document) {
+                    $values[] = $this->getDocumentHash($document);
                 }
-            }
-            else
-            {
-                $values = (array)$this->fieldValueMapper->map( $field );
+            } else {
+                $values = (array)$this->fieldValueMapper->map($field);
             }
 
             $name = $this->nameGenerator->getTypedName(
@@ -119,12 +115,9 @@ class Serializer
                 $field->type
             );
 
-            if ( count( $values ) === 1 )
-            {
-                $hash[$name] = reset( $values );
-            }
-            else
-            {
+            if (count($values) === 1) {
+                $hash[$name] = reset($values);
+            } else {
                 $hash[$name] = $values;
             }
         }

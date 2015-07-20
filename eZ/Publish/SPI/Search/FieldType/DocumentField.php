@@ -1,17 +1,20 @@
 <?php
+
 /**
  * File containing the eZ\Publish\SPI\Search\FieldType\DocumentField class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
+
 namespace eZ\Publish\SPI\Search\FieldType;
 
 use eZ\Publish\SPI\Search\FieldType;
 
 /**
- * (Nested)Document document field
+ * (Nested)Document document field.
  */
 class DocumentField extends FieldType
 {
@@ -22,4 +25,3 @@ class DocumentField extends FieldType
      */
     protected $type = 'ez_document';
 }
-

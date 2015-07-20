@@ -1,36 +1,36 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\LocationList;
-use eZ\Publish\Core\REST\Common;
 
 class LocationListTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the LocationList visitor
+     * Test the LocationList visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         // @todo coverage test with a list of values
-        $locationList = new LocationList( array(), '/content/objects/42/locations' );
+        $locationList = new LocationList(array(), '/content/objects/42/locations');
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -38,21 +38,21 @@ class LocationListTest extends ValueObjectVisitorBaseTest
             $locationList
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains LocationList element
+     * Test if result contains LocationList element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsLocationListElement( $result )
+    public function testResultContainsLocationListElement($result)
     {
         $this->assertXMLTag(
             array(
@@ -65,21 +65,21 @@ class LocationListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains LocationList element attributes
+     * Test if result contains LocationList element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsLocationListAttributes( $result )
+    public function testResultContainsLocationListAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'LocationList',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.LocationList+xml',
-                    'href'       => '/content/objects/42/locations',
-                )
+                    'href' => '/content/objects/42/locations',
+                ),
             ),
             $result,
             'Invalid <LocationList> attributes.',
@@ -88,12 +88,12 @@ class LocationListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the LocationList visitor
+     * Get the LocationList visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\LocationList
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\LocationList;
+        return new ValueObjectVisitor\LocationList();
     }
 }

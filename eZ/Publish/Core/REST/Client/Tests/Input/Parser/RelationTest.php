@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a RelationTest class
+ * File containing a RelationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,7 +22,7 @@ class RelationTest extends BaseTest
     protected $contentServiceMock;
 
     /**
-     * Tests the section parser
+     * Tests the section parser.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation
      */
@@ -29,7 +31,7 @@ class RelationTest extends BaseTest
         $relationParser = $this->getParser();
 
         $inputArray = array(
-            '_href'      => '/content/objects/23/relations/32',
+            '_href' => '/content/objects/23/relations/32',
             '_media-type' => 'application/vnd.ez.api.Relation+xml',
             'SourceContent' => array(
                 '_media-type' => 'application/vnd.ez.api.ContentInfo+xml',
@@ -42,12 +44,12 @@ class RelationTest extends BaseTest
             'RelationType' => 'COMMON',
         );
 
-        $this->getContentServiceMock()->expects( $this->exactly( 2 ) )
-            ->method( 'loadContentInfo' );
+        $this->getContentServiceMock()->expects($this->exactly(2))
+            ->method('loadContentInfo');
 
-        $result = $relationParser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $relationParser->parse($inputArray, $this->getParsingDispatcherMock());
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
@@ -55,7 +57,7 @@ class RelationTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedId( $parsedRelation )
+    public function testParsedId($parsedRelation)
     {
         $this->assertEquals(
             '/content/objects/23/relations/32',
@@ -66,7 +68,7 @@ class RelationTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedType( $parsedRelation )
+    public function testParsedType($parsedRelation)
     {
         $this->assertEquals(
             Values\Content\Relation::COMMON,
@@ -75,13 +77,13 @@ class RelationTest extends BaseTest
     }
 
     /**
-     * Gets the section parser
+     * Gets the section parser.
      *
      * @return \eZ\Publish\Core\REST\Client\Input\Parser\Relation
      */
     protected function getParser()
     {
-        return new Parser\Relation( $this->getContentServiceMock() );
+        return new Parser\Relation($this->getContentServiceMock());
     }
 
     /**
@@ -89,8 +91,7 @@ class RelationTest extends BaseTest
      */
     protected function getContentServiceMock()
     {
-        if ( !isset( $this->contentServiceMock ) )
-        {
+        if (!isset($this->contentServiceMock)) {
             $this->contentServiceMock = $this->getMock(
                 'eZ\\Publish\\Core\\REST\\Client\\ContentService',
                 array(),
@@ -99,6 +100,7 @@ class RelationTest extends BaseTest
                 false
             );
         }
+
         return $this->contentServiceMock;
     }
 }

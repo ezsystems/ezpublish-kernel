@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\API\Repository\Tests\FieldType\SelectionIntegrationTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\SelectionIntegrationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,7 @@ use eZ\Publish\Core\FieldType\Selection\Value as SelectionValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
@@ -21,7 +23,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -31,7 +33,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     }
 
     /**
-     * Get expected settings schema
+     * Get expected settings schema.
      *
      * @return array
      */
@@ -50,7 +52,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get a valid $fieldSettings value.
      *
      * @return mixed
      */
@@ -64,12 +66,12 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
                 2 => 'Sindelfingen',
                 3 => 'Turtles',
                 4 => 'Zombies',
-            )
+            ),
         );
     }
 
     /**
-     * Get $fieldSettings value not accepted by the field type
+     * Get $fieldSettings value not accepted by the field type.
      *
      * @return mixed
      */
@@ -83,7 +85,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     }
 
     /**
-     * Get expected validator schema
+     * Get expected validator schema.
      *
      * @return array
      */
@@ -93,7 +95,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $validatorConfiguration.
      *
      * @return mixed
      */
@@ -103,25 +105,25 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     }
 
     /**
-     * Get $validatorConfiguration not accepted by the field type
+     * Get $validatorConfiguration not accepted by the field type.
      *
      * @return mixed
      */
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            'unknown' => array( 'value' => 23 )
+            'unknown' => array('value' => 23),
         );
     }
 
     /**
-     * Get initial field data for valid object creation
+     * Get initial field data for valid object creation.
      *
      * @return mixed
      */
     public function getValidCreationFieldData()
     {
-        return new SelectionValue( array( 0, 2 ) );
+        return new SelectionValue(array(0, 2));
     }
 
     /**
@@ -131,10 +133,8 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field )
+    public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Selection\\Value',
@@ -142,7 +142,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
         );
 
         $expectedData = array(
-            'selection' => array( 0, 2 ),
+            'selection' => array(0, 2),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -151,7 +151,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during creation
+     * Get field data which will result in errors during creation.
      *
      * This is a PHPUnit data provider.
      *
@@ -179,30 +179,30 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(
-                new SelectionValue( array( 7 ) ),
+                new SelectionValue(array(7)),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
             ),
         );
     }
 
     /**
-     * Get update field externals data
+     * Get update field externals data.
      *
      * @return array
      */
     public function getValidUpdateFieldData()
     {
-        return new SelectionValue( array( 1 ) );
+        return new SelectionValue(array(1));
     }
 
     /**
-     * Get externals updated field data values
+     * Get externals updated field data values.
      *
      * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Selection\\Value',
@@ -210,7 +210,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
         );
 
         $expectedData = array(
-            'selection' => array( 1 ),
+            'selection' => array(1),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -219,7 +219,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during update
+     * Get field data which will result in errors during update.
      *
      * This is a PHPUnit data provider.
      *
@@ -252,7 +252,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      *
      * @param Field $field
      */
-    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Selection\\Value',
@@ -260,7 +260,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
         );
 
         $expectedData = array(
-            'selection' => array( 0, 2 ),
+            'selection' => array(0, 2),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -269,7 +269,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     }
 
     /**
-     * Get data to test to hash method
+     * Get data to test to hash method.
      *
      * This is a PHPUnit data provider
      *
@@ -292,14 +292,14 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     {
         return array(
             array(
-                new SelectionValue( array( 0, 2 ) ),
-                array( 0, 2 ),
+                new SelectionValue(array(0, 2)),
+                array(0, 2),
             ),
         );
     }
 
     /**
-     * Get expectations for the fromHash call on our field value
+     * Get expectations for the fromHash call on our field value.
      *
      * This is a PHPUnit data provider
      *
@@ -309,8 +309,8 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     {
         return array(
             array(
-                array( 0, 2 ),
-                new SelectionValue( array( 0, 2 ) )
+                array(0, 2),
+                new SelectionValue(array(0, 2)),
             ),
         );
     }
@@ -318,8 +318,8 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new SelectionValue ),
-            array( new SelectionValue( array() ) ),
+            array(new SelectionValue()),
+            array(new SelectionValue(array())),
         );
     }
 
@@ -327,22 +327,22 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     {
         return array(
             array(
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
             ),
             array(
-                new SelectionValue( array( 0 ) )
+                new SelectionValue(array(0)),
             ),
         );
     }
 
     protected function getValidSearchValueOne()
     {
-        return array( 1 );
+        return array(1);
     }
 
     protected function getValidSearchValueTwo()
     {
-        return array( 2 );
+        return array(2);
     }
 
     protected function getSearchTargetValueOne()
@@ -359,35 +359,35 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     {
         return array(
             array(
-                "selected_option_value",
-                "Bielefeld",
-                "Sindelfingen",
+                'selected_option_value',
+                'Bielefeld',
+                'Sindelfingen',
             ),
             array(
-                "sort_value",
-                "1",
-                "2",
+                'sort_value',
+                '1',
+                '2',
             ),
         );
     }
 
     protected function getValidMultivaluedSearchValuesOne()
     {
-        return array( 0, 1 );
+        return array(0, 1);
     }
 
     protected function getValidMultivaluedSearchValuesTwo()
     {
-        return array( 2, 3, 4 );
+        return array(2, 3, 4);
     }
 
     protected function getAdditionallyIndexedMultivaluedFieldData()
     {
         return array(
             array(
-                "selected_option_value",
-                array( "A first", "Bielefeld" ),
-                array( "Sindelfingen", "Turtles", "Zombies" ),
+                'selected_option_value',
+                array('A first', 'Bielefeld'),
+                array('Sindelfingen', 'Turtles', 'Zombies'),
             ),
         );
     }

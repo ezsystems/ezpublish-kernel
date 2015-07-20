@@ -1,21 +1,23 @@
 <?php
+
 /**
  * File containing the DriverHelper trait for RestDrivers.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient;
 
 /**
- * DriverHelper has some generic actions
+ * DriverHelper has some generic actions.
  */
 trait DriverHelper
 {
     /**
-     * Make/Crypt the authentication value
+     * Make/Crypt the authentication value.
      *
      * @param string $user
      * @param string $password
@@ -25,37 +27,34 @@ trait DriverHelper
      *
      * @throws \UnexpectedValueException If the $type doesn't exists
      */
-    protected function makeAuthentication( $username, $password, $type )
+    protected function makeAuthentication($username, $password, $type)
     {
-        switch ( $type )
-        {
+        switch ($type) {
             case self::AUTH_TYPE_BASIC:
-                return "Basic " . base64_encode( "$username:$password" );
+                return 'Basic ' . base64_encode("$username:$password");
 
             default:
-                throw new \UnexpectedValueException( "Authentication '$authType' invalid or not implemented yet" );
+                throw new \UnexpectedValueException("Authentication '$authType' invalid or not implemented yet");
         }
     }
 
     /**
-     * Set authentication
+     * Set authentication.
      *
      * @param string $user
      * @param string $password
      * @param string $type Authentication type
-     *
-     * @return void
      */
-    public function setAuthentication( $user, $password, $type = self::AUTH_TYPE_BASIC )
+    public function setAuthentication($user, $password, $type = self::AUTH_TYPE_BASIC)
     {
         $this->setHeader(
             'Authorization',
-            $this->makeAuthentication( $user, $password, $type )
+            $this->makeAuthentication($user, $password, $type)
         );
     }
 
     /**
-     * Get response header
+     * Get response header.
      *
      * @param string $header Header to fetch
      *
@@ -63,26 +62,23 @@ trait DriverHelper
      *
      * @throws \RuntimeException If request hasn't been send already
      */
-    public function getHeader( $header )
+    public function getHeader($header)
     {
-        $header = strtolower( $header );
+        $header = strtolower($header);
         $headers = $this->getHeaders();
 
-        return empty( $headers[$header] ) ? null : $headers[$header];
+        return empty($headers[$header]) ? null : $headers[$header];
     }
 
     /**
-     * Set request headers
+     * Set request headers.
      *
      * @param array $headers Associative array with $header => $value (value can be an array if it hasn't a single value)
-     *
-     * @return void
      */
-    public function setHeaders( $headers )
+    public function setHeaders($headers)
     {
-        foreach ( $headers as $header => $value )
-        {
-            $this->setHeader( $header, $value );
+        foreach ($headers as $header => $value) {
+            $this->setHeader($header, $value);
         }
     }
 }

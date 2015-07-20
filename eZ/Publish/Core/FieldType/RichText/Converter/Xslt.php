@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\FieldType\RichText\Converter\Xslt class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,7 +24,7 @@ use RuntimeException;
 class Xslt extends XmlBase implements Converter
 {
     /**
-     * Path to stylesheet to use
+     * Path to stylesheet to use.
      *
      * @var string
      */
@@ -36,18 +38,17 @@ class Xslt extends XmlBase implements Converter
     protected $customStylesheets = array();
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $stylesheet Stylesheet to use for conversion
      * @param array $customStylesheets Array of XSL stylesheets. Each entry consists in a hash having "path" and "priority" keys.
      */
-    public function __construct( $stylesheet, array $customStylesheets = array() )
+    public function __construct($stylesheet, array $customStylesheets = array())
     {
         $this->stylesheet = $stylesheet;
 
         // Grouping stylesheets by priority.
-        foreach ( $customStylesheets as $customStylesheet )
-        {
+        foreach ($customStylesheets as $customStylesheet) {
             $this->customStylesheets[$customStylesheet['priority']][] = $customStylesheet['path'];
         }
     }
@@ -61,35 +62,33 @@ class Xslt extends XmlBase implements Converter
      */
     protected function getXSLTProcessor()
     {
-        if ( isset( $this->xsltProcessor ) )
-        {
+        if (isset($this->xsltProcessor)) {
             return $this->xsltProcessor;
         }
 
-        $xslDoc = $this->loadFile( $this->stylesheet );
+        $xslDoc = $this->loadFile($this->stylesheet);
 
         // Now loading custom xsl stylesheets dynamically.
         // According to XSL spec, each <xsl:import> tag MUST be loaded BEFORE any other element.
         $insertBeforeEl = $xslDoc->documentElement->firstChild;
-        foreach ( $this->getSortedCustomStylesheets() as $stylesheet )
-        {
-            if ( !file_exists( $stylesheet ) )
-            {
-                throw new RuntimeException( "Cannot find XSL stylesheet for RichText rendering: $stylesheet" );
+        foreach ($this->getSortedCustomStylesheets() as $stylesheet) {
+            if (!file_exists($stylesheet)) {
+                throw new RuntimeException("Cannot find XSL stylesheet for RichText rendering: $stylesheet");
             }
 
-            $newEl = $xslDoc->createElement( 'xsl:import' );
-            $hrefAttr = $xslDoc->createAttribute( 'href' );
+            $newEl = $xslDoc->createElement('xsl:import');
+            $hrefAttr = $xslDoc->createAttribute('href');
             $hrefAttr->value = $stylesheet;
-            $newEl->appendChild( $hrefAttr );
-            $xslDoc->documentElement->insertBefore( $newEl, $insertBeforeEl );
+            $newEl->appendChild($hrefAttr);
+            $xslDoc->documentElement->insertBefore($newEl, $insertBeforeEl);
         }
         // Now reload XSL DOM to "refresh" it.
-        $xslDoc->loadXML( $xslDoc->saveXML() );
+        $xslDoc->loadXML($xslDoc->saveXML());
 
         $this->xsltProcessor = new XSLTProcessor();
-        $this->xsltProcessor->importStyleSheet( $xslDoc );
+        $this->xsltProcessor->importStyleSheet($xslDoc);
         $this->xsltProcessor->registerPHPFunctions();
+
         return $this->xsltProcessor;
     }
 
@@ -103,10 +102,9 @@ class Xslt extends XmlBase implements Converter
     protected function getSortedCustomStylesheets()
     {
         $sortedStylesheets = array();
-        ksort( $this->customStylesheets );
-        foreach ( $this->customStylesheets as $stylesheets )
-        {
-            $sortedStylesheets = array_merge( $sortedStylesheets, $stylesheets );
+        ksort($this->customStylesheets);
+        foreach ($this->customStylesheets as $stylesheets) {
+            $sortedStylesheets = array_merge($sortedStylesheets, $stylesheets);
         }
 
         return $sortedStylesheets;
@@ -122,12 +120,11 @@ class Xslt extends XmlBase implements Converter
      *
      * @return \DOMDocument
      */
-    public function convert( DOMDocument $document )
+    public function convert(DOMDocument $document)
     {
-        if ( !file_exists( $this->stylesheet ) )
-        {
+        if (!file_exists($this->stylesheet)) {
             throw new InvalidArgumentException(
-                "stylesheetPath",
+                'stylesheetPath',
                 "Conversion of XML document cannot be performed, file '{$this->stylesheet}' does not exist."
             );
         }
@@ -136,15 +133,14 @@ class Xslt extends XmlBase implements Converter
 
         $this->startRecordingErrors();
 
-        $document = $processor->transformToDoc( $document );
+        $document = $processor->transformToDoc($document);
 
         $errors = $this->collectErrors();
 
-        if ( !empty( $errors ) )
-        {
+        if (!empty($errors)) {
             throw new InvalidArgumentException(
                 "\$xmlDoc",
-                "Transformation of XML content failed: " . join( "\n", $errors )
+                'Transformation of XML content failed: ' . implode("\n", $errors)
             );
         }
 

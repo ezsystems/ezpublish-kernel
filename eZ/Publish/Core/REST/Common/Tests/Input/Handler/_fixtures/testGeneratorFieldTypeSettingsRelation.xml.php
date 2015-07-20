@@ -1,10 +1,10 @@
 <?php
 
-return array (
+return array(
   'ContentTypeCreate' =>
-  array (
+  array(
     'FieldDefinitions' =>
-    array (
+    array(
       'FieldDefinition' =>
       array(
         array(

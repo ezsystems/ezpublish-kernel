@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the URLWildcardServiceTest class
+ * File containing the URLWildcardServiceTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,6 +24,7 @@ class URLWildcardServiceAuthorizationTest extends BaseTest
      * Test for the create() method.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLWildcard
+     *
      * @see \eZ\Publish\API\Repository\URLWildcardService::create()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testCreate
@@ -30,7 +33,7 @@ class URLWildcardServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
@@ -38,17 +41,16 @@ class URLWildcardServiceAuthorizationTest extends BaseTest
         $userService = $repository->getUserService();
         $urlWildcardService = $repository->getURLWildcardService();
 
-        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will fail with an UnauthorizedException
-        $urlWildcardService->create( '/articles/*', '/content/{1}' );
+        $urlWildcardService->create('/articles/*', '/content/{1}');
         /* END: Use Case */
     }
 
     /**
      * Test for the remove() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\URLWildcardService::remove()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testRemove
@@ -57,7 +59,7 @@ class URLWildcardServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
@@ -65,15 +67,15 @@ class URLWildcardServiceAuthorizationTest extends BaseTest
         $urlWildcardService = $repository->getURLWildcardService();
 
         // Create a new url wildcard
-        $urlWildcardId = $urlWildcardService->create( '/articles/*', '/content/{1}' )->id;
+        $urlWildcardId = $urlWildcardService->create('/articles/*', '/content/{1}')->id;
 
-        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // Load newly created url wildcard
-        $urlWildcard = $urlWildcardService->load( $urlWildcardId );
+        $urlWildcard = $urlWildcardService->load($urlWildcardId);
 
         // This call will fail with an UnauthorizedException
-        $urlWildcardService->remove( $urlWildcard );
+        $urlWildcardService->remove($urlWildcard);
         /* END: Use Case */
     }
 }

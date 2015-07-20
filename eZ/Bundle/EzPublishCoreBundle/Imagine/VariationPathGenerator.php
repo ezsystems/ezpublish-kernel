@@ -1,7 +1,9 @@
 <?php
+
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 
 /**
@@ -10,12 +12,12 @@ namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 interface VariationPathGenerator
 {
     /**
-     * Returns the variation for image $originalPath with $filter
+     * Returns the variation for image $originalPath with $filter.
      *
      * @param string $originalPath
      * @param string $filter
      *
      * @return string
      */
-    public function getVariationPath( $originalPath, $filter );
+    public function getVariationPath($originalPath, $filter);
 }

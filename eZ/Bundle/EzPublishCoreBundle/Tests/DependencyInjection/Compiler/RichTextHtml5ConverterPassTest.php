@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RichTextHtml5ConverterPassTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,13 +21,13 @@ class RichTextHtml5ConverterPassTest extends AbstractCompilerPassTestCase
 {
     /**
      * Register the compiler pass under test, just like you would do inside a bundle's load()
-     * method:
+     * method:.
      *
      *   $container->addCompilerPass(new MyCompilerPass());
      */
-    protected function registerCompilerPass( ContainerBuilder $container )
+    protected function registerCompilerPass(ContainerBuilder $container)
     {
-        $container->addCompilerPass( new RichTextHtml5ConverterPass() );
+        $container->addCompilerPass(new RichTextHtml5ConverterPass());
     }
 
     public function testCollectProviders()
@@ -37,20 +39,20 @@ class RichTextHtml5ConverterPassTest extends AbstractCompilerPassTestCase
         );
 
         $configurationProvider = new Definition();
-        $configurationProvider->addTag( 'ezpublish.ezrichtext.converter.output.xhtml5' );
-        $this->setDefinition( 'ezrichtext.converter.test1', $configurationProvider );
+        $configurationProvider->addTag('ezpublish.ezrichtext.converter.output.xhtml5');
+        $this->setDefinition('ezrichtext.converter.test1', $configurationProvider);
 
         $configurationProvider = new Definition();
-        $configurationProvider->addTag( 'ezpublish.ezrichtext.converter.output.xhtml5', array( 'priority' => 10 ) );
-        $this->setDefinition( 'ezrichtext.converter.test2', $configurationProvider );
+        $configurationProvider->addTag('ezpublish.ezrichtext.converter.output.xhtml5', array('priority' => 10));
+        $this->setDefinition('ezrichtext.converter.test2', $configurationProvider);
 
         $configurationProvider = new Definition();
-        $configurationProvider->addTag( 'ezpublish.ezrichtext.converter.output.xhtml5', array( 'priority' => 5 ) );
-        $this->setDefinition( 'ezrichtext.converter.test3', $configurationProvider );
+        $configurationProvider->addTag('ezpublish.ezrichtext.converter.output.xhtml5', array('priority' => 5));
+        $this->setDefinition('ezrichtext.converter.test3', $configurationProvider);
 
         $configurationProvider = new Definition();
-        $configurationProvider->addTag( 'ezpublish.ezrichtext.converter.output.xhtml5', array( 'priority' => 5 ) );
-        $this->setDefinition( 'ezrichtext.converter.test4', $configurationProvider );
+        $configurationProvider->addTag('ezpublish.ezrichtext.converter.output.xhtml5', array('priority' => 5));
+        $this->setDefinition('ezrichtext.converter.test4', $configurationProvider);
 
         $this->compile();
 
@@ -58,10 +60,10 @@ class RichTextHtml5ConverterPassTest extends AbstractCompilerPassTestCase
             'ezpublish.fieldType.ezrichtext.converter.output.xhtml5',
             0,
             array(
-                new Reference( 'ezrichtext.converter.test1' ),
-                new Reference( 'ezrichtext.converter.test3' ),
-                new Reference( 'ezrichtext.converter.test4' ),
-                new Reference( 'ezrichtext.converter.test2' )
+                new Reference('ezrichtext.converter.test1'),
+                new Reference('ezrichtext.converter.test3'),
+                new Reference('ezrichtext.converter.test4'),
+                new Reference('ezrichtext.converter.test2'),
             )
         );
     }

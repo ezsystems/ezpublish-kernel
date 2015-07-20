@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\User\Role\LimitationConverter class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\User\Role\LimitationConverter class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,37 +18,38 @@ use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler\ObjectStateHa
 use eZ\Publish\SPI\Persistence\User\Policy;
 
 /**
- * Test case for LimitationConverter
+ * Test case for LimitationConverter.
  */
 class LimitationConverterTest extends TestCase
 {
     protected function getLimitationConverter()
     {
         $dbHandler = $this->getDatabaseHandler();
-        return new LimitationConverter( array( new ObjectStateLimitationHandler( $dbHandler ) ) );
+
+        return new LimitationConverter(array(new ObjectStateLimitationHandler($dbHandler)));
     }
 
     /**
-     * Test Object State from SPI value (supported by API) to legacy value (database)
+     * Test Object State from SPI value (supported by API) to legacy value (database).
      */
     public function testObjectStateToLegacy()
     {
-        $this->insertDatabaseFixture( __DIR__ . '/../../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
+        $this->insertDatabaseFixture(__DIR__ . '/../../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php');
 
         $converter = $this->getLimitationConverter();
 
         $policy = new Policy();
-        $policy->module = "content";
-        $policy->function = "read";
+        $policy->module = 'content';
+        $policy->function = 'read';
 
         // #1 Test wildcard
         $policy->limitations = array(
-            Limitation::STATE => '*'
+            Limitation::STATE => '*',
         );
-        $converter->toLegacy( $policy );
+        $converter->toLegacy($policy);
         $this->assertEquals(
             array(
-                ObjectStateLimitationHandler::STATE_GROUP . 'ez_lock' => '*'
+                ObjectStateLimitationHandler::STATE_GROUP . 'ez_lock' => '*',
             ),
             $policy->limitations,
             'Expected State limitation to be transformed into StateGroup_ limitations'
@@ -54,12 +57,12 @@ class LimitationConverterTest extends TestCase
 
         // #2 Test valid state values
         $policy->limitations = array(
-            Limitation::STATE => array( 1, 2 )
+            Limitation::STATE => array(1, 2),
         );
-        $converter->toLegacy( $policy );
+        $converter->toLegacy($policy);
         $this->assertEquals(
             array(
-                ObjectStateLimitationHandler::STATE_GROUP . 'ez_lock' => array( 1, 2 )
+                ObjectStateLimitationHandler::STATE_GROUP . 'ez_lock' => array(1, 2),
             ),
             $policy->limitations,
             'Expected State limitation to be transformed into StateGroup_ limitations'
@@ -67,12 +70,12 @@ class LimitationConverterTest extends TestCase
 
         // #3 Test invalid state values (the invalid values are just ignored as validation is done on higher level)
         $policy->limitations = array(
-            Limitation::STATE => array( 1, 2, 3, 4 )
+            Limitation::STATE => array(1, 2, 3, 4),
         );
-        $converter->toLegacy( $policy );
+        $converter->toLegacy($policy);
         $this->assertEquals(
             array(
-                ObjectStateLimitationHandler::STATE_GROUP . 'ez_lock' => array( 1, 2 )
+                ObjectStateLimitationHandler::STATE_GROUP . 'ez_lock' => array(1, 2),
             ),
             $policy->limitations,
             'Expected State limitation to be transformed into StateGroup_ limitations'
@@ -80,26 +83,26 @@ class LimitationConverterTest extends TestCase
     }
 
     /**
-     * Test Object State from legacy value (database) to SPI value (supported by API)
+     * Test Object State from legacy value (database) to SPI value (supported by API).
      */
     public function testObjectStateToSPI()
     {
-        $this->insertDatabaseFixture( __DIR__ . '/../../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
+        $this->insertDatabaseFixture(__DIR__ . '/../../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php');
 
         $converter = $this->getLimitationConverter();
 
         $policy = new Policy();
-        $policy->module = "content";
-        $policy->function = "read";
+        $policy->module = 'content';
+        $policy->function = 'read';
 
         // #1 Test wildcard
         $policy->limitations = array(
-            ObjectStateLimitationHandler::STATE_GROUP . 'ez_lock' => '*'
+            ObjectStateLimitationHandler::STATE_GROUP . 'ez_lock' => '*',
         );
-        $converter->toSPI( $policy );
+        $converter->toSPI($policy);
         $this->assertEquals(
             array(
-                Limitation::STATE => '*'
+                Limitation::STATE => '*',
             ),
             $policy->limitations,
             'Expected State limitation to be transformed into StateGroup_ limitations'
@@ -107,12 +110,12 @@ class LimitationConverterTest extends TestCase
 
         // #2 Test valid state values
         $policy->limitations = array(
-            ObjectStateLimitationHandler::STATE_GROUP . 'ez_lock' => array( 1, 2 )
+            ObjectStateLimitationHandler::STATE_GROUP . 'ez_lock' => array(1, 2),
         );
-        $converter->toSPI( $policy );
+        $converter->toSPI($policy);
         $this->assertEquals(
             array(
-                Limitation::STATE => array( 1, 2 )
+                Limitation::STATE => array(1, 2),
             ),
             $policy->limitations,
             'Expected State limitation to be transformed into StateGroup_ limitations'
@@ -120,12 +123,12 @@ class LimitationConverterTest extends TestCase
 
         // #3 Test invalid state values (as the values supposedly comes from database they are carried over)
         $policy->limitations = array(
-            ObjectStateLimitationHandler::STATE_GROUP . 'ez_lock' => array( 1, 2, 3, 4 )
+            ObjectStateLimitationHandler::STATE_GROUP . 'ez_lock' => array(1, 2, 3, 4),
         );
-        $converter->toSPI( $policy );
+        $converter->toSPI($policy);
         $this->assertEquals(
             array(
-                Limitation::STATE => array( 1, 2, 3, 4 )
+                Limitation::STATE => array(1, 2, 3, 4),
             ),
             $policy->limitations,
             'Expected State limitation to be transformed into StateGroup_ limitations'
@@ -134,17 +137,17 @@ class LimitationConverterTest extends TestCase
         // #4 Test invalid state values with mix of wildcard (wildcard values is loaded from db, rest kept as is)
         $policy->limitations = array(
             ObjectStateLimitationHandler::STATE_GROUP . 'ez_lock' => '*',
-            ObjectStateLimitationHandler::STATE_GROUP . 'invalid' => array( 5 )
+            ObjectStateLimitationHandler::STATE_GROUP . 'invalid' => array(5),
         );
-        $converter->toSPI( $policy );
+        $converter->toSPI($policy);
 
-        $this->assertArrayHasKey( Limitation::STATE, $policy->limitations );
+        $this->assertArrayHasKey(Limitation::STATE, $policy->limitations);
 
         // Don't expect backend to return sorted result, so lets sort values before testing
-        sort( $policy->limitations[Limitation::STATE], SORT_NUMERIC );
+        sort($policy->limitations[Limitation::STATE], SORT_NUMERIC);
 
         $this->assertEquals(
-            array( 1, 2, 5 ),
+            array(1, 2, 5),
             $policy->limitations[Limitation::STATE],
             'Expected State limitation to be transformed into StateGroup_ limitations'
         );

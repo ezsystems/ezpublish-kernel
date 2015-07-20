@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,14 +19,14 @@ use eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeCreate;
 class ContentTypeCreateTest extends BaseTest
 {
     /**
-     * Tests the ContentTypeCreate parser
+     * Tests the ContentTypeCreate parser.
      */
     public function testParse()
     {
         $inputArray = $this->getInputArray();
 
         $contentTypeCreate = $this->getParser();
-        $result = $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $contentTypeCreate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeCreateStruct',
@@ -87,19 +89,19 @@ class ContentTypeCreateTest extends BaseTest
         );
 
         $this->assertEquals(
-            array( 'eng-US' => 'New content type' ),
+            array('eng-US' => 'New content type'),
             $result->names,
             'names not created correctly'
         );
 
         $this->assertEquals(
-            array( 'eng-US' => 'New content type description' ),
+            array('eng-US' => 'New content type description'),
             $result->descriptions,
             'descriptions not created correctly'
         );
 
         $this->assertEquals(
-            new \DateTime( '2012-12-31T12:30:00' ),
+            new \DateTime('2012-12-31T12:30:00'),
             $result->creationDate,
             'creationDate not created correctly'
         );
@@ -110,8 +112,7 @@ class ContentTypeCreateTest extends BaseTest
             'creatorId not created correctly'
         );
 
-        foreach ( $result->fieldDefinitions as $fieldDefinition )
-        {
+        foreach ($result->fieldDefinitions as $fieldDefinition) {
             $this->assertInstanceOf(
                 '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinitionCreateStruct',
                 $fieldDefinition,
@@ -121,7 +122,7 @@ class ContentTypeCreateTest extends BaseTest
     }
 
     /**
-     * Test ContentTypeCreate parser throwing exception on missing identifier
+     * Test ContentTypeCreate parser throwing exception on missing identifier.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'identifier' element for ContentTypeCreate.
@@ -129,14 +130,14 @@ class ContentTypeCreateTest extends BaseTest
     public function testParseExceptionOnMissingIdentifier()
     {
         $inputArray = $this->getInputArray();
-        unset( $inputArray['identifier'] );
+        unset($inputArray['identifier']);
 
         $contentTypeCreate = $this->getParser();
-        $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentTypeCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentTypeCreate parser throwing exception on missing mainLanguageCode
+     * Test ContentTypeCreate parser throwing exception on missing mainLanguageCode.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'mainLanguageCode' element for ContentTypeCreate.
@@ -144,14 +145,14 @@ class ContentTypeCreateTest extends BaseTest
     public function testParseExceptionOnMissingMainLanguageCode()
     {
         $inputArray = $this->getInputArray();
-        unset( $inputArray['mainLanguageCode'] );
+        unset($inputArray['mainLanguageCode']);
 
         $contentTypeCreate = $this->getParser();
-        $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentTypeCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentTypeCreate parser throwing exception on invalid names
+     * Test ContentTypeCreate parser throwing exception on invalid names.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'names' element for ContentTypeCreate.
@@ -159,14 +160,14 @@ class ContentTypeCreateTest extends BaseTest
     public function testParseExceptionOnInvalidNames()
     {
         $inputArray = $this->getInputArray();
-        unset( $inputArray['names']['value'] );
+        unset($inputArray['names']['value']);
 
         $contentTypeCreate = $this->getParser();
-        $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentTypeCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentTypeCreate parser throwing exception on invalid descriptions
+     * Test ContentTypeCreate parser throwing exception on invalid descriptions.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'descriptions' element for ContentTypeCreate.
@@ -174,14 +175,14 @@ class ContentTypeCreateTest extends BaseTest
     public function testParseExceptionOnInvalidDescriptions()
     {
         $inputArray = $this->getInputArray();
-        unset( $inputArray['descriptions']['value'] );
+        unset($inputArray['descriptions']['value']);
 
         $contentTypeCreate = $this->getParser();
-        $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentTypeCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentTypeCreate parser throwing exception on invalid User
+     * Test ContentTypeCreate parser throwing exception on invalid User.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for User element in ContentTypeCreate.
@@ -189,14 +190,14 @@ class ContentTypeCreateTest extends BaseTest
     public function testParseExceptionOnInvalidUser()
     {
         $inputArray = $this->getInputArray();
-        unset( $inputArray['User']['_href'] );
+        unset($inputArray['User']['_href']);
 
         $contentTypeCreate = $this->getParser();
-        $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentTypeCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentTypeCreate parser throwing exception on invalid FieldDefinitions
+     * Test ContentTypeCreate parser throwing exception on invalid FieldDefinitions.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'FieldDefinitions' element for ContentTypeCreate.
@@ -204,14 +205,14 @@ class ContentTypeCreateTest extends BaseTest
     public function testParseExceptionOnInvalidFieldDefinitions()
     {
         $inputArray = $this->getInputArray();
-        unset( $inputArray['FieldDefinitions']['FieldDefinition'] );
+        unset($inputArray['FieldDefinitions']['FieldDefinition']);
 
         $contentTypeCreate = $this->getParser();
-        $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentTypeCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentTypeCreate parser throwing exception on invalid FieldDefinitions
+     * Test ContentTypeCreate parser throwing exception on invalid FieldDefinitions.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage ContentTypeCreate should provide at least one field definition.
@@ -220,15 +221,15 @@ class ContentTypeCreateTest extends BaseTest
     {
         $inputArray = $this->getInputArray();
         // Field definitions are required only with immediate publish
-        $inputArray["__publish"] = true;
+        $inputArray['__publish'] = true;
         $inputArray['FieldDefinitions']['FieldDefinition'] = array();
 
         $contentTypeCreate = $this->getParser();
-        $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentTypeCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentTypeCreate parser throwing exception on invalid FieldDefinitions
+     * Test ContentTypeCreate parser throwing exception on invalid FieldDefinitions.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'FieldDefinition' element for ContentTypeCreate.
@@ -236,14 +237,14 @@ class ContentTypeCreateTest extends BaseTest
     public function testParseExceptionOnInvalidFieldDefinition()
     {
         $inputArray = $this->getInputArray();
-        $inputArray['FieldDefinitions']['FieldDefinition'] = array( 'hi there' );
+        $inputArray['FieldDefinitions']['FieldDefinition'] = array('hi there');
 
         $contentTypeCreate = $this->getParser();
-        $contentTypeCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentTypeCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Returns the ContentTypeCreate parser
+     * Returns the ContentTypeCreate parser.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeCreate
      */
@@ -257,7 +258,7 @@ class ContentTypeCreateTest extends BaseTest
     }
 
     /**
-     * Returns the FieldDefinitionCreate parser mock object
+     * Returns the FieldDefinitionCreate parser mock object.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\FieldDefinitionCreate
      */
@@ -271,16 +272,16 @@ class ContentTypeCreateTest extends BaseTest
             false
         );
 
-        $fieldDefinitionCreateParserMock->expects( $this->any() )
-            ->method( 'parse' )
-            ->with( array(), $this->getParsingDispatcherMock() )
-            ->will( $this->returnValue( new FieldDefinitionCreateStruct() ) );
+        $fieldDefinitionCreateParserMock->expects($this->any())
+            ->method('parse')
+            ->with(array(), $this->getParsingDispatcherMock())
+            ->will($this->returnValue(new FieldDefinitionCreateStruct()));
 
         return $fieldDefinitionCreateParserMock;
     }
 
     /**
-     * Get the content type service mock object
+     * Get the content type service mock object.
      *
      * @return \eZ\Publish\API\Repository\ContentTypeService
      */
@@ -294,14 +295,14 @@ class ContentTypeCreateTest extends BaseTest
             false
         );
 
-        $contentTypeServiceMock->expects( $this->any() )
-            ->method( 'newContentTypeCreateStruct' )
-            ->with( $this->equalTo( 'new_content_type' ) )
+        $contentTypeServiceMock->expects($this->any())
+            ->method('newContentTypeCreateStruct')
+            ->with($this->equalTo('new_content_type'))
             ->will(
                 $this->returnValue(
                     new ContentTypeCreateStruct(
                         array(
-                            'identifier' => 'new_content_type'
+                            'identifier' => 'new_content_type',
                         )
                     )
                 )
@@ -311,7 +312,7 @@ class ContentTypeCreateTest extends BaseTest
     }
 
     /**
-     * Returns the array under test
+     * Returns the array under test.
      *
      * @return array
      */
@@ -331,37 +332,37 @@ class ContentTypeCreateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-US',
-                        '#text' => 'New content type'
-                    )
-                )
+                        '#text' => 'New content type',
+                    ),
+                ),
             ),
             'descriptions' => array(
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-US',
-                        '#text' => 'New content type description'
-                    )
-                )
+                        '#text' => 'New content type description',
+                    ),
+                ),
             ),
             'modificationDate' => '2012-12-31T12:30:00',
             'User' => array(
-                '_href' => '/user/users/14'
+                '_href' => '/user/users/14',
             ),
 
             // mocked
             'FieldDefinitions' => array(
                 'FieldDefinition' => array(
                     array(),
-                    array()
-                )
-            )
+                    array(),
+                ),
+            ),
         );
     }
 
     public function getParseHrefExpectationsMap()
     {
         return array(
-            array( '/user/users/14', 'userId', 14 )
+            array('/user/users/14', 'userId', 14),
         );
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Test Setup Factory base class
+ * File containing the Test Setup Factory base class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,68 +26,69 @@ use Symfony\Component\Filesystem\Filesystem;
 class Legacy extends SetupFactory
 {
     /**
-     * Data source name
+     * Data source name.
      *
      * @var string
      */
     protected static $dsn;
 
     /**
-     * Root dir for IO operations
+     * Root dir for IO operations.
      *
      * @var string
      */
     protected static $ioRootDir;
 
     /**
-     * Database type (sqlite, mysql, ...)
+     * Database type (sqlite, mysql, ...).
      *
      * @var string
      */
     protected static $db;
 
     /**
-     * Service container
+     * Service container.
      *
      * @var \eZ\Publish\Core\Base\ServiceContainer
      */
     protected static $serviceContainer;
 
     /**
-     * If the DB schema has already been initialized
+     * If the DB schema has already been initialized.
      *
-     * @var boolean
+     * @var bool
      */
     protected static $schemaInitialized = false;
 
     /**
-     * Initial database data
+     * Initial database data.
      *
      * @var array
      */
     protected static $initialData;
 
-    protected $repositoryReference = "ezpublish.api.repository";
+    protected $repositoryReference = 'ezpublish.api.repository';
 
     /**
-     * Creates a new setup factory
+     * Creates a new setup factory.
      */
     public function __construct()
     {
-        self::$dsn = getenv( "DATABASE" );
-        if ( !self::$dsn )
-            self::$dsn = "sqlite://:memory:";
+        self::$dsn = getenv('DATABASE');
+        if (!self::$dsn) {
+            self::$dsn = 'sqlite://:memory:';
+        }
 
-        self::$db = preg_replace( '(^([a-z]+).*)', '\\1', self::$dsn );
+        self::$db = preg_replace('(^([a-z]+).*)', '\\1', self::$dsn);
 
-        if ( !isset( self::$ioRootDir ) )
-        {
+        if (!isset(self::$ioRootDir)) {
             self::$ioRootDir = $this->createTemporaryDirectory();
         }
     }
 
     /**
-     * Creates a temporary directory and returns it
+     * Creates a temporary directory and returns it.
+     *
      * @return string
      * @throw \RuntimeException If the root directory can't be created
      */
@@ -95,40 +98,39 @@ class Legacy extends SetupFactory
             sys_get_temp_dir(),
             'ez_legacy_tests_' . time()
         );
-        unlink( $tmpFile );
+        unlink($tmpFile);
 
         $fs = new Filesystem();
-        $fs->mkdir( $tmpFile );
+        $fs->mkdir($tmpFile);
 
         $varDir = $tmpFile . '/var';
-        if ( $fs->exists( $varDir ) )
-        {
-            $fs->remove( $varDir );
+        if ($fs->exists($varDir)) {
+            $fs->remove($varDir);
         }
-        $fs->mkdir( $varDir );
+        $fs->mkdir($varDir);
 
         return $tmpFile;
     }
     /**
      * Returns a configured repository for testing.
      *
-     * @param boolean $initializeFromScratch if the back end should be initialized
+     * @param bool $initializeFromScratch if the back end should be initialized
      *                                    from scratch or re-used
+     *
      * @return \eZ\Publish\API\Repository\Repository
      */
-    public function getRepository( $initializeFromScratch = true )
+    public function getRepository($initializeFromScratch = true)
     {
-        if ( $initializeFromScratch || !self::$schemaInitialized )
-        {
+        if ($initializeFromScratch || !self::$schemaInitialized) {
             $this->initializeSchema();
             $this->insertData();
         }
 
         $this->clearInternalCaches();
-        $repository = $this->getServiceContainer()->get( $this->repositoryReference );
+        $repository = $this->getServiceContainer()->get($this->repositoryReference);
 
         $repository->setCurrentUser(
-            $repository->getUserService()->loadUser( 14 )
+            $repository->getUserService()->loadUser(14)
         );
 
         return $repository;
@@ -143,9 +145,9 @@ class Legacy extends SetupFactory
      *
      * @return mixed
      */
-    public function getConfigValue( $configKey )
+    public function getConfigValue($configKey)
     {
-        return $this->getServiceContainer()->getParameter( $configKey );
+        return $this->getServiceContainer()->getParameter($configKey);
     }
 
     /**
@@ -155,19 +157,17 @@ class Legacy extends SetupFactory
      */
     public function getIdManager()
     {
-        return new IdManager\Php;
+        return new IdManager\Php();
     }
 
     /**
-     * Insert the database data
-     *
-     * @return void
+     * Insert the database data.
      */
     public function insertData()
     {
         $data = $this->getInitialData();
         $handler = $this->getDatabaseHandler();
-        $this->cleanupVarDir( $this->getInitialVarDir() );
+        $this->cleanupVarDir($this->getInitialVarDir());
 
         // @todo FIXME: Needs to be in fixture
         $data['ezcontentobject_trash'] = array();
@@ -175,61 +175,53 @@ class Legacy extends SetupFactory
         $data['ezmedia'] = array();
         $data['ezkeyword'] = array();
 
-        foreach ( $data as $table => $rows )
-        {
+        foreach ($data as $table => $rows) {
             // Cleanup before inserting
             $deleteQuery = $handler->createDeleteQuery();
-            $deleteQuery->deleteFrom( $handler->quoteIdentifier( $table ) );
+            $deleteQuery->deleteFrom($handler->quoteIdentifier($table));
             $stmt = $deleteQuery->prepare();
             $stmt->execute();
 
             // Check that at least one row exists
-            if ( !isset( $rows[0] ) )
-            {
+            if (!isset($rows[0])) {
                 continue;
             }
 
             $q = $handler->createInsertQuery();
-            $q->insertInto( $handler->quoteIdentifier( $table ) );
+            $q->insertInto($handler->quoteIdentifier($table));
 
             // Contains the bound parameters
             $values = array();
 
             // Binding the parameters
-            foreach ( $rows[0] as $col => $val )
-            {
+            foreach ($rows[0] as $col => $val) {
                 $q->set(
-                    $handler->quoteIdentifier( $col ),
-                    $q->bindParam( $values[$col] )
+                    $handler->quoteIdentifier($col),
+                    $q->bindParam($values[$col])
                 );
             }
 
             $stmt = $q->prepare();
 
-            foreach ( $rows as $row )
-            {
-                try
-                {
+            foreach ($rows as $row) {
+                try {
                     // This CANNOT be replaced by:
                     // $values = $row
                     // each $values[$col] is a PHP reference which should be
                     // kept for parameters binding to work
-                    foreach ( $row as $col => $val )
-                    {
+                    foreach ($row as $col => $val) {
                         $values[$col] = $val;
                     }
 
                     $stmt->execute();
-                }
-                catch ( Exception $e )
-                {
-                    echo "$table ( ", implode( ', ', $row ), " )\n";
+                } catch (Exception $e) {
+                    echo "$table ( ", implode(', ', $row), " )\n";
                     throw $e;
                 }
             }
         }
 
-        $this->applyStatements( $this->getPostInsertStatements() );
+        $this->applyStatements($this->getPostInsertStatements());
     }
 
     protected function getInitialVarDir()
@@ -237,117 +229,106 @@ class Legacy extends SetupFactory
         return __DIR__ . '/../../../../../../var';
     }
 
-    protected function cleanupVarDir( $sourceDir )
+    protected function cleanupVarDir($sourceDir)
     {
-        if ( $this->getServiceContainer()->getInnerContainer()->has( 'ezpublish.core.io.flysystem.default_filesystem' ) )
-        {
-            $this->getServiceContainer()->getInnerContainer()->get( 'ezpublish.core.io.flysystem.default_filesystem' )->flushCache();
+        if ($this->getServiceContainer()->getInnerContainer()->has('ezpublish.core.io.flysystem.default_filesystem')) {
+            $this->getServiceContainer()->getInnerContainer()->get('ezpublish.core.io.flysystem.default_filesystem')->flushCache();
         }
         $fs = new Filesystem();
         $varDir = self::$ioRootDir . '/var';
-        if ( $fs->exists( $varDir ) )
-        {
-            $fs->remove( $varDir );
+        if ($fs->exists($varDir)) {
+            $fs->remove($varDir);
         }
-        $fs->mkdir( $varDir );
-        $fs->mirror( $sourceDir, $varDir );
+        $fs->mkdir($varDir);
+        $fs->mirror($sourceDir, $varDir);
     }
 
     /**
      * CLears internal in memory caches after inserting data circumventing the
      * API.
-     *
-     * @return void
      */
     protected function clearInternalCaches()
     {
         /** @var $handler \eZ\Publish\Core\Persistence\Legacy\Handler */
-        $handler = $this->getServiceContainer()->get( 'ezpublish.spi.persistence.legacy' );
+        $handler = $this->getServiceContainer()->get('ezpublish.spi.persistence.legacy');
 
         $contentLanguageHandler = $handler->contentLanguageHandler();
-        if ( $contentLanguageHandler instanceof CachingLanguageHandler )
-        {
+        if ($contentLanguageHandler instanceof CachingLanguageHandler) {
             $contentLanguageHandler->clearCache();
         }
 
         $contentTypeHandler = $handler->contentTypeHandler();
-        if ( $contentTypeHandler instanceof CachingContentTypeHandler )
-        {
+        if ($contentTypeHandler instanceof CachingContentTypeHandler) {
             $contentTypeHandler->clearCache();
         }
 
         /** @var $decorator \eZ\Publish\Core\Persistence\Cache\Tests\Helpers\IntegrationTestCacheServiceDecorator */
-        $decorator = $this->getServiceContainer()->get( 'ezpublish.cache_pool.spi.cache.decorator' );
+        $decorator = $this->getServiceContainer()->get('ezpublish.cache_pool.spi.cache.decorator');
 
         $decorator->clearAllTestData();
     }
 
     /**
-     * Returns statements to be executed after data insert
+     * Returns statements to be executed after data insert.
      *
      * @return string[]
      */
     protected function getPostInsertStatements()
     {
-        if ( self::$db === 'pgsql' )
-        {
+        if (self::$db === 'pgsql') {
             $setvalPath = __DIR__ . '/../../../../Core/Persistence/Legacy/Tests/_fixtures/setval.pgsql.sql';
-            return array_filter( preg_split( '(;\\s*$)m', file_get_contents( $setvalPath ) ) );
+
+            return array_filter(preg_split('(;\\s*$)m', file_get_contents($setvalPath)));
         }
+
         return array();
     }
 
     /**
-     * Returns the initial database data
+     * Returns the initial database data.
      *
      * @return array
      */
     protected function getInitialData()
     {
-        if ( !isset( self::$initialData ) )
-        {
+        if (!isset(self::$initialData)) {
             self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php';
             // self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Legacy/_fixtures/full_dump.php';
         }
+
         return self::$initialData;
     }
 
     /**
-     * Initializes the database schema
-     *
-     * @return void
+     * Initializes the database schema.
      */
     protected function initializeSchema()
     {
-        if ( !self::$schemaInitialized )
-        {
+        if (!self::$schemaInitialized) {
             $statements = $this->getSchemaStatements();
 
-            $this->applyStatements( $statements );
+            $this->applyStatements($statements);
 
             self::$schemaInitialized = true;
         }
     }
 
     /**
-     * Applies the given SQL $statements to the database in use
+     * Applies the given SQL $statements to the database in use.
      *
      * @param array $statements
-     *
-     * @return void
      */
-    protected function applyStatements( array $statements )
+    protected function applyStatements(array $statements)
     {
-        foreach ( $statements as $statement )
-        {
-            $this->getDatabaseHandler()->exec( $statement );
+        foreach ($statements as $statement) {
+            $this->getDatabaseHandler()->exec($statement);
         }
     }
 
     // ************* Setup copied and refactored from common.php ************
 
     /**
-     * Returns the database schema as an array of SQL statements
+     * Returns the database schema as an array of SQL statements.
      *
      * @return string[]
      */
@@ -355,45 +336,44 @@ class Legacy extends SetupFactory
     {
         $schemaPath = __DIR__ . '/../../../../Core/Persistence/Legacy/Tests/_fixtures/schema.' . self::$db . '.sql';
 
-        return array_filter( preg_split( '(;\\s*$)m', file_get_contents( $schemaPath ) ) );
+        return array_filter(preg_split('(;\\s*$)m', file_get_contents($schemaPath)));
     }
 
     /**
-     * Returns the database handler from the service container
+     * Returns the database handler from the service container.
      *
      * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
      */
     protected function getDatabaseHandler()
     {
-        return $this->getServiceContainer()->get( 'ezpublish.api.storage_engine.legacy.dbhandler' );
+        return $this->getServiceContainer()->get('ezpublish.api.storage_engine.legacy.dbhandler');
     }
 
     /**
-     * Returns the service container used for initialization of the repository
+     * Returns the service container used for initialization of the repository.
      *
      * @return \eZ\Publish\Core\Base\ServiceContainer
      */
     protected function getServiceContainer()
     {
-        if ( !isset( self::$serviceContainer ) )
-        {
-            $config = include __DIR__ . "/../../../../../../config.php";
+        if (!isset(self::$serviceContainer)) {
+            $config = include __DIR__ . '/../../../../../../config.php';
             $installDir = $config['install_dir'];
 
             /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
             $containerBuilder = include $config['container_builder_path'];
 
-            /** @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
-            $loader->load( 'tests/integration_legacy.yml' );
+            /* @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
+            $loader->load('tests/integration_legacy.yml');
 
             $containerBuilder->setParameter(
-                "legacy_dsn",
+                'legacy_dsn',
                 self::$dsn
             );
 
             $containerBuilder->setParameter(
-                "io_root_dir",
-                self::$ioRootDir . '/' . $containerBuilder->getParameter( 'storage_dir' )
+                'io_root_dir',
+                self::$ioRootDir . '/' . $containerBuilder->getParameter('storage_dir')
             );
 
             self::$serviceContainer = new ServiceContainer(
@@ -409,7 +389,7 @@ class Legacy extends SetupFactory
     }
 
     /**
-     * Get the Database name
+     * Get the Database name.
      *
      * @return string
      */

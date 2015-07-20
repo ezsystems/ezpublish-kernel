@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Rating converter
+ * File containing the Rating converter.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,7 +20,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 class RatingConverter implements Converter
 {
     /**
-     * Factory for current class
+     * Factory for current class.
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
@@ -26,54 +28,54 @@ class RatingConverter implements Converter
      */
     public static function create()
     {
-        return new self;
+        return new self();
     }
 
     /**
-     * Converts data from $value to $storageFieldValue
+     * Converts data from $value to $storageFieldValue.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
      */
-    public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
+    public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
     {
         $storageFieldValue->dataInt = $value->data ? 1 : null;
     }
 
     /**
-     * Converts data from $value to $fieldValue
+     * Converts data from $value to $fieldValue.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      */
-    public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
+    public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
     {
         $fieldValue->data = (bool)$value->dataInt;
     }
 
     /**
-     * Converts field definition data in $fieldDef into $storageFieldDef
+     * Converts field definition data in $fieldDef into $storageFieldDef.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      */
-    public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
+    public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
     }
 
     /**
-     * Converts field definition data in $storageDef into $fieldDef
+     * Converts field definition data in $storageDef into $fieldDef.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      */
-    public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
+    public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         $fieldDef->defaultValue->data = false;
     }
 
     /**
-     * Returns the name of the index column in the attribute table
+     * Returns the name of the index column in the attribute table.
      *
      * Returns the name of the index column the datatype uses, which is either
      * "sort_key_int" or "sort_key_string". This column is then used for

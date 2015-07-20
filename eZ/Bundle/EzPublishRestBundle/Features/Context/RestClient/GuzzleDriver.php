@@ -1,16 +1,16 @@
 <?php
+
 /**
  * File containing the GuzzleDriver class for RestBundle.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient;
 
-use eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\DriverInterface;
-use eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\DriverHelper;
 use Guzzle\Http\Client;
 use Guzzle\Http\Message\Header;
 use Guzzle\Http\Exception\BadResponseException;
@@ -20,7 +20,7 @@ class GuzzleDriver implements DriverInterface
     use DriverHelper;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $sent = false;
 
@@ -65,7 +65,7 @@ class GuzzleDriver implements DriverInterface
     protected $body;
 
     /**
-     * Instanciate a client
+     * Instanciate a client.
      */
     public function __construct()
     {
@@ -73,7 +73,7 @@ class GuzzleDriver implements DriverInterface
     }
 
     /**
-     * Get reponse
+     * Get reponse.
      *
      * @return \Guzzle\Http\Message\Response
      *
@@ -81,16 +81,15 @@ class GuzzleDriver implements DriverInterface
      */
     protected function getResponse()
     {
-        if ( $this->sent )
-        {
+        if ($this->sent) {
             return $this->response;
         }
 
-        throw new \RuntimeException( "Attempt to get response data when request hasn't been sent yet" );
+        throw new \RuntimeException("Attempt to get response data when request hasn't been sent yet");
     }
 
     /**
-     * Send the request
+     * Send the request.
      */
     public function send()
     {
@@ -101,26 +100,21 @@ class GuzzleDriver implements DriverInterface
         );
 
         // set headers
-        foreach ( $this->headers as $header => $value )
-        {
-            $this->request->setHeader( $header, $value );
+        foreach ($this->headers as $header => $value) {
+            $this->request->setHeader($header, $value);
         }
 
         // set body
-        if ( !empty( $this->body ) )
-        {
-            $this->request->setBody( $this->body );
+        if (!empty($this->body)) {
+            $this->request->setBody($this->body);
         }
 
-        try
-        {
+        try {
             // finally send the request
-            $this->response = $this->client->send( $this->request );
-        }
-        // if the response is an 40x or a 50x then it will throw an exception
-        // we catch and get the response stored on the request object
-        catch ( BadResponseException $e )
-        {
+            $this->response = $this->client->send($this->request);
+        } catch (BadResponseException $e) {
+            // if the response is an 40x or a 50x then it will throw an exception
+            // we catch and get the response stored on the request object
             $this->response = $this->request->getResponse();
         }
 
@@ -128,48 +122,41 @@ class GuzzleDriver implements DriverInterface
     }
 
     /**
-     * Set request host
+     * Set request host.
      *
      * @param string $host
-     *
-     * @return void
      */
-    public function setHost( $host )
+    public function setHost($host)
     {
-        if ( substr( $host, -1 ) === '/' )
-        {
-            $host = substr( $host, 0, strlen( $host ) - 1 );
+        if (substr($host, -1) === '/') {
+            $host = substr($host, 0, strlen($host) - 1);
         }
 
         $this->host = $host;
     }
 
     /**
-     * Set request resource url
+     * Set request resource url.
      *
      * @param string $resource
-     *
-     * @return void
      */
-    public function setResource( $resource )
+    public function setResource($resource)
     {
         $this->resource = $resource;
     }
 
     /**
-     * Set request method
+     * Set request method.
      *
      * @param string $method Can be GET, POST, PATCH, ...
-     *
-     * @return void
      */
-    public function setMethod( $method )
+    public function setMethod($method)
     {
         $this->method = $method;
     }
 
     /**
-     * Get response status code
+     * Get response status code.
      *
      * @return string
      *
@@ -181,7 +168,7 @@ class GuzzleDriver implements DriverInterface
     }
 
     /**
-     * Get response status message
+     * Get response status message.
      *
      * @return string
      *
@@ -193,24 +180,21 @@ class GuzzleDriver implements DriverInterface
     }
 
     /**
-     * Set request header
+     * Set request header.
      *
      * @param string $header Header to be set
-     *
-     * @return void
      */
-    public function setHeader( $header, $value )
+    public function setHeader($header, $value)
     {
-        if ( is_array( $value ) )
-        {
-            $value = implode( ';', $value );
+        if (is_array($value)) {
+            $value = implode(';', $value);
         }
 
         $this->headers[$header] = $value;
     }
 
     /**
-     * Get all response headers
+     * Get all response headers.
      *
      * @return array Associative array with $header => $value (value can be an array if it hasn't a single value)
      *
@@ -219,17 +203,16 @@ class GuzzleDriver implements DriverInterface
     public function getHeaders()
     {
         $headers = array();
-        foreach ( $this->response->getHeaders()->getAll() as $header => $headerObject )
-        {
+        foreach ($this->response->getHeaders()->getAll() as $header => $headerObject) {
             $allHeaderValues = $headerObject->toArray();
-            $headers[strtolower( $header )] = implode( ";", $allHeaderValues );
+            $headers[strtolower($header)] = implode(';', $allHeaderValues);
         }
 
         return $headers;
     }
 
     /**
-     * Get response body
+     * Get response body.
      *
      * @return string
      *
@@ -242,22 +225,19 @@ class GuzzleDriver implements DriverInterface
         $bodyObject->rewind();
 
         $length = $bodyObject->getContentLength();
-        if ( $length === false || $length <= 0 )
-        {
-            return "";
+        if ($length === false || $length <= 0) {
+            return '';
         }
 
-        return $bodyObject->read( $length );
+        return $bodyObject->read($length);
     }
 
     /**
-     * Set request body
+     * Set request body.
      *
      * @param string $body
-     *
-     * @return void
      */
-    public function setBody( $body )
+    public function setBody($body)
     {
         $this->body = $body;
     }

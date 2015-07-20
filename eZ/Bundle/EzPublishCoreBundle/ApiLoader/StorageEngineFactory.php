@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the StorageEngineFactory class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -30,7 +32,7 @@ class StorageEngineFactory
      */
     protected $storageEngines = array();
 
-    public function __construct( RepositoryConfigurationProvider $repositoryConfigurationProvider )
+    public function __construct(RepositoryConfigurationProvider $repositoryConfigurationProvider)
     {
         $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
     }
@@ -43,7 +45,7 @@ class StorageEngineFactory
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param string $storageEngineIdentifier
      */
-    public function registerStorageEngine( PersistenceHandler $persistenceHandler, $storageEngineIdentifier )
+    public function registerStorageEngine(PersistenceHandler $persistenceHandler, $storageEngineIdentifier)
     {
         $this->storageEngines[$storageEngineIdentifier] = $persistenceHandler;
     }
@@ -69,14 +71,13 @@ class StorageEngineFactory
 
         if (
             !(
-                isset( $repositoryConfig['storage']['engine'] )
-                && isset( $this->storageEngines[$repositoryConfig['storage']['engine']] )
+                isset($repositoryConfig['storage']['engine'])
+                && isset($this->storageEngines[$repositoryConfig['storage']['engine']])
             )
-        )
-        {
+        ) {
             throw new InvalidStorageEngine(
                 "Invalid storage engine '{$repositoryConfig['storage']['engine']}'. " .
-                "Could not find any service tagged as ezpublish.storageEngine " .
+                'Could not find any service tagged as ezpublish.storageEngine ' .
                 "with alias {$repositoryConfig['storage']['engine']}."
             );
         }

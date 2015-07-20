@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Content parser class
+ * File containing the Content parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,7 +20,7 @@ use eZ\Publish\Core\REST\Client\Values;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * Parser for Version
+ * Parser for Version.
  *
  * @todo Integrate FieldType fromHash()
  * @todo Caching for extracted embedded objects
@@ -26,7 +28,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class Content extends BaseParser
 {
     /**
-     * VersionInfo parser
+     * VersionInfo parser.
      *
      * @var \eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo
      */
@@ -53,7 +55,7 @@ class Content extends BaseParser
      * @param \eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo $versionInfoParser
      * @param \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
      */
-    public function __construct( ParserTools $parserTools, ContentService $contentService, VersionInfo $versionInfoParser, FieldTypeParser $fieldTypeParser )
+    public function __construct(ParserTools $parserTools, ContentService $contentService, VersionInfo $versionInfoParser, FieldTypeParser $fieldTypeParser)
     {
         $this->parserTools = $parserTools;
         $this->contentService = $contentService;
@@ -62,7 +64,7 @@ class Content extends BaseParser
     }
 
     /**
-     * Parse input structure
+     * Parse input structure.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -71,39 +73,37 @@ class Content extends BaseParser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
         $versionInfo = $this->versionInfoParser->parse(
             $data['VersionInfo'],
             $parsingDispatcher
         );
-        $fields = $this->parseFields( $data['Fields'], $versionInfo->contentInfoId );
+        $fields = $this->parseFields($data['Fields'], $versionInfo->contentInfoId);
 
         return new Values\Content\Content(
             $this->contentService,
             array(
                 'versionInfo' => $versionInfo,
-                'internalFields' => $fields
+                'internalFields' => $fields,
             )
         );
     }
 
     /**
-     * Parses the fields from the given $rawFieldsData
+     * Parses the fields from the given $rawFieldsData.
      *
      * @param array $rawFieldsData
      * @param string $contentId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[]
      */
-    protected function parseFields( array $rawFieldsData, $contentId )
+    protected function parseFields(array $rawFieldsData, $contentId)
     {
         $fields = array();
 
-        if ( isset( $rawFieldsData['Field'] ) )
-        {
-            foreach ( $rawFieldsData['Field'] as $rawFieldData )
-            {
+        if (isset($rawFieldsData['Field'])) {
+            foreach ($rawFieldsData['Field'] as $rawFieldData) {
                 $fields[] = new Field(
                     array(
                         'id' => $rawFieldData['id'],
@@ -113,7 +113,7 @@ class Content extends BaseParser
                             $contentId,
                             $rawFieldData['fieldDefinitionIdentifier'],
                             $rawFieldData['fieldValue']
-                        )
+                        ),
                     )
                 );
             }

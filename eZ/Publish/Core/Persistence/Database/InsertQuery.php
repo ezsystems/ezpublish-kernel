@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing an interface for the database abstractions
+ * File containing an interface for the database abstractions.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,9 +22,10 @@ interface InsertQuery extends Query
      * insertInto() returns a pointer to $this.
      *
      * @param string $table
+     *
      * @return \eZ\Publish\Core\Persistence\Database\InsertQuery
      */
-    public function insertInto( $table );
+    public function insertInto($table);
 
     /**
      * The insert query will set the column $column to the value $expression.
@@ -31,7 +34,8 @@ interface InsertQuery extends Query
      *
      * @param string $column
      * @param string $expression
+     *
      * @return \eZ\Publish\Core\Persistence\Database\InsertQuery
      */
-    public function set( $column, $expression );
+    public function set($column, $expression);
 }

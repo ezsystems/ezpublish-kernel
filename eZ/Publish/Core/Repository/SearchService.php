@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\Repository\SearchService class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,9 +28,7 @@ use eZ\Publish\SPI\Search\Content\Handler;
 use eZ\Publish\SPI\Search\Content\Location\Handler as LocationSearchHandler;
 
 /**
- * Search service
- *
- * @package eZ\Publish\Core\Repository
+ * Search service.
  */
 class SearchService implements SearchServiceInterface
 {
@@ -63,7 +63,7 @@ class SearchService implements SearchServiceInterface
     protected $permissionsCriterionHandler;
 
     /**
-     * Setups service with reference to repository object that created it & corresponding handler
+     * Setups service with reference to repository object that created it & corresponding handler.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Search\Content\Handler $searchHandler
@@ -79,8 +79,7 @@ class SearchService implements SearchServiceInterface
         Helper\DomainMapper $domainMapper,
         PermissionsCriterionHandler $permissionsCriterionHandler,
         array $settings = array()
-    )
-    {
+    ) {
         $this->repository = $repository;
         $this->searchHandler = $searchHandler;
         $this->locationSearchHandler = $locationSearchHandler;
@@ -103,26 +102,24 @@ class SearchService implements SearchServiceInterface
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
      *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations.
-     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
+     * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContent( Query $query, array $fieldFilters = array(), $filterOnUserPermissions = true )
+    public function findContent(Query $query, array $fieldFilters = array(), $filterOnUserPermissions = true)
     {
-        if ( !is_int( $query->offset ) )
-        {
+        if (!is_int($query->offset)) {
             throw new InvalidArgumentType(
                 "\$query->offset",
-                "integer",
+                'integer',
                 $query->offset
             );
         }
 
-        if ( !is_int( $query->limit ) )
-        {
+        if (!is_int($query->limit)) {
             throw new InvalidArgumentType(
                 "\$query->limit",
-                "integer",
+                'integer',
                 $query->limit
             );
         }
@@ -130,27 +127,25 @@ class SearchService implements SearchServiceInterface
         $query = clone $query;
         $query->filter = $query->filter ?: new Criterion\MatchAll();
 
-        $this->validateContentCriteria( array( $query->query ), "\$query" );
-        $this->validateContentCriteria( array( $query->filter ), "\$query" );
-        $this->validateContentSortClauses( $query );
-        $this->validateSortClauses( $query );
+        $this->validateContentCriteria(array($query->query), "\$query");
+        $this->validateContentCriteria(array($query->filter), "\$query");
+        $this->validateContentSortClauses($query);
+        $this->validateSortClauses($query);
 
-        if ( $filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion( $query->filter ) )
-        {
-            return new SearchResult( array( 'time' => 0, 'totalCount' => 0 ) );
+        if ($filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion($query->filter)) {
+            return new SearchResult(array('time' => 0, 'totalCount' => 0));
         }
 
-        $result = $this->searchHandler->findContent( $query, $fieldFilters );
+        $result = $this->searchHandler->findContent($query, $fieldFilters);
 
         $contentService = $this->repository->getContentService();
-        foreach ( $result->searchHits as $hit )
-        {
+        foreach ($result->searchHits as $hit) {
             $hit->valueObject = $contentService->internalLoadContent(
                 $hit->valueObject->id,
-                ( !empty( $fieldFilters['languages'] ) ? $fieldFilters['languages'] : null ),
+                (!empty($fieldFilters['languages']) ? $fieldFilters['languages'] : null),
                 null,
                 false,
-                ( isset( $fieldFilters['useAlwaysAvailable'] ) ? $fieldFilters['useAlwaysAvailable'] : true )
+                (isset($fieldFilters['useAlwaysAvailable']) ? $fieldFilters['useAlwaysAvailable'] : true)
             );
         }
 
@@ -165,19 +160,17 @@ class SearchService implements SearchServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion[] $criteria
      * @param string $argumentName
      */
-    protected function validateContentCriteria( array $criteria, $argumentName )
+    protected function validateContentCriteria(array $criteria, $argumentName)
     {
-        foreach ( $criteria as $criterion )
-        {
-            if ( $criterion instanceof LocationCriterion )
-            {
+        foreach ($criteria as $criterion) {
+            if ($criterion instanceof LocationCriterion) {
                 throw new InvalidArgumentException(
-                    $argumentName, "Location criterions cannot be used in Content search"
+                    $argumentName,
+                    'Location criterions cannot be used in Content search'
                 );
             }
-            if ( $criterion instanceof LogicalOperator )
-            {
-                $this->validateContentCriteria( $criterion->criteria, $argumentName );
+            if ($criterion instanceof LogicalOperator) {
+                $this->validateContentCriteria($criterion->criteria, $argumentName);
             }
         }
     }
@@ -189,15 +182,11 @@ class SearchService implements SearchServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      */
-    protected function validateContentSortClauses( Query $query )
+    protected function validateContentSortClauses(Query $query)
     {
-        foreach ( $query->sortClauses as $sortClause )
-        {
-            if ( $sortClause instanceof LocationSortClause )
-            {
-                throw new InvalidArgumentException(
-                    "\$query", "Location sort clauses cannot be used in Content search"
-                );
+        foreach ($query->sortClauses as $sortClause) {
+            if ($sortClause instanceof LocationSortClause) {
+                throw new InvalidArgumentException("\$query", 'Location sort clauses cannot be used in Content search');
             }
         }
     }
@@ -212,15 +201,11 @@ class SearchService implements SearchServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If sort clauses are not valid
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     *
-     * @return void
      */
-    protected function validateSortClauses( Query $query )
+    protected function validateSortClauses(Query $query)
     {
-        foreach ( $query->sortClauses as $key => $sortClause )
-        {
-            if ( !$sortClause instanceof SortClause\Field && !$sortClause instanceof SortClause\MapLocationDistance )
-            {
+        foreach ($query->sortClauses as $key => $sortClause) {
+            if (!$sortClause instanceof SortClause\Field && !$sortClause instanceof SortClause\MapLocationDistance) {
                 continue;
             }
 
@@ -230,70 +215,68 @@ class SearchService implements SearchServiceInterface
                 $fieldTarget->typeIdentifier
             );
 
-            if ( $contentType->getFieldDefinition( $fieldTarget->fieldIdentifier )->isTranslatable )
-            {
-                if ( $fieldTarget->languageCode === null )
-                {
+            if ($contentType->getFieldDefinition($fieldTarget->fieldIdentifier)->isTranslatable) {
+                if ($fieldTarget->languageCode === null) {
                     throw new InvalidArgumentException(
-                        "\$query->sortClauses[{$key}]", "No language is specified for translatable field"
+                        "\$query->sortClauses[{$key}]",
+                        'No language is specified for translatable field'
                     );
                 }
-            }
-            else if ( $fieldTarget->languageCode !== null )
-            {
+            } elseif ($fieldTarget->languageCode !== null) {
                 throw new InvalidArgumentException(
-                    "\$query->sortClauses[{$key}]", "Language is specified for non-translatable field, null should be used instead"
+                    "\$query->sortClauses[{$key}]",
+                    'Language is specified for non-translatable field, null should be used instead'
                 );
             }
         }
     }
 
     /**
-     * Performs a query for a single content object
+     * Performs a query for a single content object.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if criterion is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than one result matching the criterions
      *
      * @todo define structs for the field filters
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
      *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations.
-     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
+     * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle( Criterion $filter, array $fieldFilters = array(), $filterOnUserPermissions = true )
+    public function findSingle(Criterion $filter, array $fieldFilters = array(), $filterOnUserPermissions = true)
     {
-        $this->validateContentCriteria( array( $filter ), "\$filter" );
+        $this->validateContentCriteria(array($filter), "\$filter");
 
-        if ( $filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion( $filter ) )
-        {
-            throw new NotFoundException( 'Content', '*' );
+        if ($filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion($filter)) {
+            throw new NotFoundException('Content', '*');
         }
 
-        $contentInfo = $this->searchHandler->findSingle( $filter, $fieldFilters );
+        $contentInfo = $this->searchHandler->findSingle($filter, $fieldFilters);
+
         return $this->repository->getContentService()->internalLoadContent(
             $contentInfo->id,
-            ( !empty( $fieldFilters['languages'] ) ? $fieldFilters['languages'] : null ),
+            (!empty($fieldFilters['languages']) ? $fieldFilters['languages'] : null),
             null,
             false,
-            ( isset( $fieldFilters['useAlwaysAvailable'] ) ? $fieldFilters['useAlwaysAvailable'] : true )
+            (isset($fieldFilters['useAlwaysAvailable']) ? $fieldFilters['useAlwaysAvailable'] : true)
         );
     }
 
     /**
-     * Suggests a list of values for the given prefix
+     * Suggests a list of values for the given prefix.
      *
      * @param string $prefix
      * @param string[] $fieldPaths
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
-    public function suggest( $prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null )
+    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null)
     {
-
     }
 
     /**
@@ -305,26 +288,24 @@ class SearchService implements SearchServiceInterface
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
      *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations
-     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
+     * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findLocations( LocationQuery $query, array $fieldFilters = array(), $filterOnUserPermissions = true )
+    public function findLocations(LocationQuery $query, array $fieldFilters = array(), $filterOnUserPermissions = true)
     {
-        if ( !is_int( $query->offset ) )
-        {
+        if (!is_int($query->offset)) {
             throw new InvalidArgumentType(
                 "\$query->offset",
-                "integer",
+                'integer',
                 $query->offset
             );
         }
 
-        if ( !is_int( $query->limit ) )
-        {
+        if (!is_int($query->limit)) {
             throw new InvalidArgumentType(
                 "\$query->limit",
-                "integer",
+                'integer',
                 $query->limit
             );
         }
@@ -332,17 +313,15 @@ class SearchService implements SearchServiceInterface
         $query = clone $query;
         $query->filter = $query->filter ?: new Criterion\MatchAll();
 
-        $this->validateSortClauses( $query );
+        $this->validateSortClauses($query);
 
-        if ( $filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion( $query->filter ) )
-        {
-            return new SearchResult( array( 'time' => 0, 'totalCount' => 0 ) );
+        if ($filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion($query->filter)) {
+            return new SearchResult(array('time' => 0, 'totalCount' => 0));
         }
 
-        $result = $this->locationSearchHandler->findLocations( $query, $fieldFilters );
+        $result = $this->locationSearchHandler->findLocations($query, $fieldFilters);
 
-        foreach ( $result->searchHits as $hit )
-        {
+        foreach ($result->searchHits as $hit) {
             $hit->valueObject = $this->domainMapper->buildLocationDomainObject(
                 $hit->valueObject
             );

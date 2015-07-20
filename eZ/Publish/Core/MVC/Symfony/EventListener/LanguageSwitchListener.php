@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the LanguageSwitchListener class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,7 +27,7 @@ class LanguageSwitchListener implements EventSubscriberInterface
      */
     private $translationHelper;
 
-    public function __construct( TranslationHelper $translationHelper )
+    public function __construct(TranslationHelper $translationHelper)
     {
         $this->translationHelper = $translationHelper;
     }
@@ -33,7 +35,7 @@ class LanguageSwitchListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            MVCEvents::ROUTE_REFERENCE_GENERATION => 'onRouteReferenceGeneration'
+            MVCEvents::ROUTE_REFERENCE_GENERATION => 'onRouteReferenceGeneration',
         );
     }
 
@@ -47,20 +49,18 @@ class LanguageSwitchListener implements EventSubscriberInterface
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Event\RouteReferenceGenerationEvent $event
      */
-    public function onRouteReferenceGeneration( RouteReferenceGenerationEvent $event )
+    public function onRouteReferenceGeneration(RouteReferenceGenerationEvent $event)
     {
         $routeReference = $event->getRouteReference();
-        if ( !$routeReference->has( 'language' ) )
-        {
+        if (!$routeReference->has('language')) {
             return;
         }
 
-        $language = $routeReference->get( 'language' );
-        $routeReference->remove( 'language' );
-        $siteAccess = $this->translationHelper->getTranslationSiteAccess( $language );
-        if ( $siteAccess !== null )
-        {
-            $routeReference->set( 'siteaccess', $siteAccess );
+        $language = $routeReference->get('language');
+        $routeReference->remove('language');
+        $siteAccess = $this->translationHelper->getTranslationSiteAccess($language);
+        if ($siteAccess !== null) {
+            $routeReference->set('siteaccess', $siteAccess);
         }
     }
 }

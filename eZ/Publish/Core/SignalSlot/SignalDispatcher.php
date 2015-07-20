@@ -1,16 +1,18 @@
 <?php
+
 /**
- * File containing the SignalDispatcher class
+ * File containing the SignalDispatcher class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\SignalSlot;
 
 /**
- * Dispatches Signals to their assigned Slots
+ * Dispatches Signals to their assigned Slots.
  *
  * An instance of this class is required by each object that needs to send
  * Signals. It is recommended, that a SignalDispatcher works together with a
@@ -22,13 +24,11 @@ namespace eZ\Publish\Core\SignalSlot;
 abstract class SignalDispatcher
 {
     /**
-     * Emits the given $signal
+     * Emits the given $signal.
      *
      * All assigned slots will eventually receive the $signal
      *
      * @param Signal $signal
-     *
-     * @return void
      */
-    abstract public function emit( Signal $signal );
+    abstract public function emit(Signal $signal);
 }

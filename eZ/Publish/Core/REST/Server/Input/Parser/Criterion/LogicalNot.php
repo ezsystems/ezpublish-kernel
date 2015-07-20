@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the LogicalNot Criterion parser class
+ * File containing the LogicalNot Criterion parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,12 +17,12 @@ use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot as LogicalNotCriterion;
 
 /**
- * Parser for LogicalNot Criterion
+ * Parser for LogicalNot Criterion.
  */
 class LogicalNot extends CriterionParser
 {
     /**
-     * Parses input structure to a Criterion object
+     * Parses input structure to a Criterion object.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -29,20 +31,18 @@ class LogicalNot extends CriterionParser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        if ( !array_key_exists( "NOT", $data ) && !is_array( $data["NOT"] ) )
-        {
-            throw new Exceptions\Parser( "Invalid <NOT> format" );
+        if (!array_key_exists('NOT', $data) && !is_array($data['NOT'])) {
+            throw new Exceptions\Parser('Invalid <NOT> format');
         }
 
-        if ( count( $data['NOT'] ) > 1 )
-        {
-            throw new Exceptions\Parser( "NOT element can only contain one subitem" );
+        if (count($data['NOT']) > 1) {
+            throw new Exceptions\Parser('NOT element can only contain one subitem');
         }
-        list( $criterionName, $criterionData ) = each( $data['NOT'] );
-        $criteria = $this->dispatchCriterion( $criterionName, $criterionData, $parsingDispatcher );
+        list($criterionName, $criterionData) = each($data['NOT']);
+        $criteria = $this->dispatchCriterion($criterionName, $criterionData, $parsingDispatcher);
 
-        return new LogicalNotCriterion( $criteria );
+        return new LogicalNotCriterion($criteria);
     }
 }

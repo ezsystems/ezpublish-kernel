@@ -6,7 +6,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigR
 use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
 use PHPUnit_Framework_TestCase;
 
-class ChainRouterTest extends PHPUnit_Framework_TestCase
+class ChainConfigResolverTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver
@@ -25,12 +25,12 @@ class ChainRouterTest extends PHPUnit_Framework_TestCase
      */
     public function testPriority()
     {
-        $this->assertEquals( array(), $this->chainResolver->getAllResolvers() );
+        $this->assertEquals(array(), $this->chainResolver->getAllResolvers());
 
         list($low, $high) = $this->createResolverMocks();
 
-        $this->chainResolver->addResolver( $low, 10 );
-        $this->chainResolver->addResolver( $high, 100 );
+        $this->chainResolver->addResolver($low, 10);
+        $this->chainResolver->addResolver($high, 100);
 
         $this->assertEquals(
             array(
@@ -51,29 +51,28 @@ class ChainRouterTest extends PHPUnit_Framework_TestCase
      */
     public function testSortResolvers()
     {
-        list( $low, $medium, $high ) = $this->createResolverMocks();
+        list($low, $medium, $high) = $this->createResolverMocks();
         // We're using a mock here and not $this->chainResolver because we need to ensure that the sorting operation is done only once.
         $resolver = $this->buildMock(
             'eZ\\Bundle\\EzPublishCoreBundle\\DependencyInjection\\Configuration\\ChainConfigResolver',
-            array( 'sortResolvers' )
+            array('sortResolvers')
         );
         $resolver
-            ->expects( $this->once() )
-            ->method( 'sortResolvers' )
+            ->expects($this->once())
+            ->method('sortResolvers')
             ->will(
                 $this->returnValue(
-                    array( $high, $medium, $low )
+                    array($high, $medium, $low)
                 )
             );
 
-        $resolver->addResolver( $low, 10 );
-        $resolver->addResolver( $medium, 50 );
-        $resolver->addResolver( $high, 100 );
-        $expectedSortedRouters = array( $high, $medium, $low );
+        $resolver->addResolver($low, 10);
+        $resolver->addResolver($medium, 50);
+        $resolver->addResolver($high, 100);
+        $expectedSortedRouters = array($high, $medium, $low);
         // Let's get all routers 5 times, we should only sort once.
-        for ( $i = 0; $i < 5; ++$i )
-        {
-            $this->assertSame( $expectedSortedRouters, $resolver->getAllResolvers() );
+        for ($i = 0; $i < 5; ++$i) {
+            $this->assertSame($expectedSortedRouters, $resolver->getAllResolvers());
         }
     }
 
@@ -86,43 +85,43 @@ class ChainRouterTest extends PHPUnit_Framework_TestCase
      */
     public function testReSortResolvers()
     {
-        list( $low, $medium, $high ) = $this->createResolverMocks();
+        list($low, $medium, $high) = $this->createResolverMocks();
         $highest = clone $high;
         // We're using a mock here and not $this->chainResolver because we need to ensure that the sorting operation is done only once.
         $resolver = $this->buildMock(
             'eZ\\Bundle\\EzPublishCoreBundle\\DependencyInjection\\Configuration\\ChainConfigResolver',
-            array( 'sortResolvers' )
+            array('sortResolvers')
         );
         $resolver
-            ->expects( $this->at( 0 ) )
-            ->method( 'sortResolvers' )
+            ->expects($this->at(0))
+            ->method('sortResolvers')
             ->will(
                 $this->returnValue(
-                    array( $high, $medium, $low )
+                    array($high, $medium, $low)
                 )
             );
         // The second time sortResolvers() is called, we're supposed to get the newly added router ($highest)
         $resolver
-            ->expects( $this->at( 1 ) )
-            ->method( 'sortResolvers' )
+            ->expects($this->at(1))
+            ->method('sortResolvers')
             ->will(
                 $this->returnValue(
-                    array( $highest, $high, $medium, $low )
+                    array($highest, $high, $medium, $low)
                 )
             );
 
-        $resolver->addResolver( $low, 10 );
-        $resolver->addResolver( $medium, 50 );
-        $resolver->addResolver( $high, 100 );
+        $resolver->addResolver($low, 10);
+        $resolver->addResolver($medium, 50);
+        $resolver->addResolver($high, 100);
         $this->assertSame(
-            array( $high, $medium, $low ),
+            array($high, $medium, $low),
             $resolver->getAllResolvers()
         );
 
         // Now adding another resolver on the fly, sorting must have been reset
-        $resolver->addResolver( $highest, 101 );
+        $resolver->addResolver($highest, 101);
         $this->assertSame(
-            array( $highest, $high, $medium, $low ),
+            array($highest, $high, $medium, $low),
             $resolver->getAllResolvers()
         );
     }
@@ -142,16 +141,15 @@ class ChainRouterTest extends PHPUnit_Framework_TestCase
     public function testSetDefaultNamespace()
     {
         $namespace = 'foo';
-        foreach ( $this->createResolverMocks() as $i => $resolver )
-        {
+        foreach ($this->createResolverMocks() as $i => $resolver) {
             $resolver
-                ->expects( $this->once() )
-                ->method( 'setDefaultNamespace' )
-                ->with( $namespace );
-            $this->chainResolver->addResolver( $resolver, $i );
+                ->expects($this->once())
+                ->method('setDefaultNamespace')
+                ->with($namespace);
+            $this->chainResolver->addResolver($resolver, $i);
         }
 
-        $this->chainResolver->setDefaultNamespace( $namespace );
+        $this->chainResolver->setDefaultNamespace($namespace);
     }
 
     /**
@@ -163,17 +161,16 @@ class ChainRouterTest extends PHPUnit_Framework_TestCase
         $paramName = 'foo';
         $namespace = 'namespace';
         $scope = 'scope';
-        foreach ( $this->createResolverMocks() as $resolver )
-        {
+        foreach ($this->createResolverMocks() as $resolver) {
             $resolver
-                ->expects( $this->once() )
-                ->method( 'getParameter' )
-                ->with( $paramName, $namespace, $scope )
-                ->will( $this->throwException( new ParameterNotFoundException( $paramName, $namespace ) ) );
-            $this->chainResolver->addResolver( $resolver );
+                ->expects($this->once())
+                ->method('getParameter')
+                ->with($paramName, $namespace, $scope)
+                ->will($this->throwException(new ParameterNotFoundException($paramName, $namespace)));
+            $this->chainResolver->addResolver($resolver);
         }
 
-        $this->chainResolver->getParameter( $paramName, $namespace, $scope );
+        $this->chainResolver->getParameter($paramName, $namespace, $scope);
     }
 
     /**
@@ -186,26 +183,26 @@ class ChainRouterTest extends PHPUnit_Framework_TestCase
      * @param string $scope
      * @param mixed $expectedValue
      */
-    public function testGetParameter( $paramName, $namespace, $scope, $expectedValue )
+    public function testGetParameter($paramName, $namespace, $scope, $expectedValue)
     {
-        $resolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
+        $resolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
         $resolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( $paramName, $namespace, $scope )
-            ->will( $this->returnValue( $expectedValue ) );
+            ->expects($this->once())
+            ->method('getParameter')
+            ->with($paramName, $namespace, $scope)
+            ->will($this->returnValue($expectedValue));
 
-        $this->chainResolver->addResolver( $resolver );
-        $this->assertSame( $expectedValue, $this->chainResolver->getParameter( $paramName, $namespace, $scope ) );
+        $this->chainResolver->addResolver($resolver);
+        $this->assertSame($expectedValue, $this->chainResolver->getParameter($paramName, $namespace, $scope));
     }
 
     public function getParameterProvider()
     {
         return array(
-            array( 'foo', 'namespace', 'scope', 'someValue' ),
-            array( 'some.parameter', 'wowNamespace', 'mySiteaccess', array( 'foo', 'bar' ) ),
-            array( 'another.parameter.but.longer.name', 'yetAnotherNamespace', 'anotherSiteaccess', array( 'foo', array( 'fruit' => 'apple' ) ) ),
-            array( 'boolean.parameter', 'yetAnotherNamespace', 'admin', false ),
+            array('foo', 'namespace', 'scope', 'someValue'),
+            array('some.parameter', 'wowNamespace', 'mySiteaccess', array('foo', 'bar')),
+            array('another.parameter.but.longer.name', 'yetAnotherNamespace', 'anotherSiteaccess', array('foo', array('fruit' => 'apple'))),
+            array('boolean.parameter', 'yetAnotherNamespace', 'admin', false),
         );
     }
 
@@ -219,29 +216,29 @@ class ChainRouterTest extends PHPUnit_Framework_TestCase
         $namespace = 'yetAnotherNamespace';
         $scope = 'mySiteaccess';
 
-        $resolver1 = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
+        $resolver1 = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
         $resolver1
-            ->expects( $this->once() )
-            ->method( 'hasParameter' )
-            ->with( $paramName, $namespace, $scope )
-            ->will( $this->returnValue( false ) );
-        $this->chainResolver->addResolver( $resolver1 );
+            ->expects($this->once())
+            ->method('hasParameter')
+            ->with($paramName, $namespace, $scope)
+            ->will($this->returnValue(false));
+        $this->chainResolver->addResolver($resolver1);
 
-        $resolver2 = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
+        $resolver2 = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
         $resolver2
-            ->expects( $this->once() )
-            ->method( 'hasParameter' )
-            ->with( $paramName, $namespace, $scope )
-            ->will( $this->returnValue( true ) );
-        $this->chainResolver->addResolver( $resolver2 );
+            ->expects($this->once())
+            ->method('hasParameter')
+            ->with($paramName, $namespace, $scope)
+            ->will($this->returnValue(true));
+        $this->chainResolver->addResolver($resolver2);
 
-        $resolver3 = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
+        $resolver3 = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
         $resolver3
-            ->expects( $this->never() )
-            ->method( 'hasParameter' );
-        $this->chainResolver->addResolver( $resolver3 );
+            ->expects($this->never())
+            ->method('hasParameter');
+        $this->chainResolver->addResolver($resolver3);
 
-        $this->assertTrue( $this->chainResolver->hasParameter( $paramName, $namespace, $scope ) );
+        $this->assertTrue($this->chainResolver->hasParameter($paramName, $namespace, $scope));
     }
 
     public function testHasParameterFalse()
@@ -250,15 +247,15 @@ class ChainRouterTest extends PHPUnit_Framework_TestCase
         $namespace = 'yetAnotherNamespace';
         $scope = 'mySiteaccess';
 
-        $resolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
+        $resolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
         $resolver
-            ->expects( $this->once() )
-            ->method( 'hasParameter' )
-            ->with( $paramName, $namespace, $scope )
-            ->will( $this->returnValue( false ) );
-        $this->chainResolver->addResolver( $resolver );
+            ->expects($this->once())
+            ->method('hasParameter')
+            ->with($paramName, $namespace, $scope)
+            ->will($this->returnValue(false));
+        $this->chainResolver->addResolver($resolver);
 
-        $this->assertFalse( $this->chainResolver->hasParameter( $paramName, $namespace, $scope ) );
+        $this->assertFalse($this->chainResolver->hasParameter($paramName, $namespace, $scope));
     }
 
     /**
@@ -267,18 +264,18 @@ class ChainRouterTest extends PHPUnit_Framework_TestCase
     private function createResolverMocks()
     {
         return array(
-            $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' ),
-            $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' ),
-            $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' ),
+            $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface'),
+            $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface'),
+            $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface'),
         );
     }
 
-    private function buildMock( $class, array $methods = array() )
+    private function buildMock($class, array $methods = array())
     {
         return $this
-            ->getMockBuilder( $class )
+            ->getMockBuilder($class)
             ->disableOriginalConstructor()
-            ->setMethods( $methods )
+            ->setMethods($methods)
             ->getMock();
     }
 }

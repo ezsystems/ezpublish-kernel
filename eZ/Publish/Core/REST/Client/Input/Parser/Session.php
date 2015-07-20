@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Session parser class
+ * File containing the Session parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,7 +18,7 @@ use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\API\Repository\UserService;
 
 /**
- * Value for Session
+ * Value for Session.
  */
 class Session extends BaseParser
 {
@@ -26,7 +28,7 @@ class Session extends BaseParser
     protected $parserTools;
 
     /**
-     * User Service
+     * User Service.
      *
      * @var \eZ\Publish\Core\REST\Client\userService
      */
@@ -36,14 +38,14 @@ class Session extends BaseParser
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      * @param \eZ\Publish\API\Repository\UserService $userService
      */
-    public function __construct( ParserTools $parserTools, UserService $userService )
+    public function __construct(ParserTools $parserTools, UserService $userService)
     {
         $this->parserTools = $parserTools;
         $this->userService = $userService;
     }
 
     /**
-     * Parse input structure
+     * Parse input structure.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -52,16 +54,15 @@ class Session extends BaseParser
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        if ( !array_key_exists( '_href', $data['User'] ) )
-        {
-            throw new Exceptions\Parser( "Missing '_href' attribute for User element in Session." );
+        if (!array_key_exists('_href', $data['User'])) {
+            throw new Exceptions\Parser("Missing '_href' attribute for User element in Session.");
         }
 
-        $userId = $this->requestParser->parseHref( $data['User']['_href'], 'userId' );
+        $userId = $this->requestParser->parseHref($data['User']['_href'], 'userId');
 
-        $user = $this->userService->loadUser( $userId );
+        $user = $this->userService->loadUser($userId);
 
         return new Values\UserSession(
             $user,

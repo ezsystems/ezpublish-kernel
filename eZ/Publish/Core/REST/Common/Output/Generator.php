@@ -1,21 +1,23 @@
 <?php
+
 /**
- * File containing the Generator base class
+ * File containing the Generator base class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Common\Output;
 
 /**
- * Output generator
+ * Output generator.
  */
 abstract class Generator
 {
     /**
-     * Generator creation stack
+     * Generator creation stack.
      *
      * Use to check if it is OK to start / close the requested element in the
      * current state.
@@ -25,18 +27,19 @@ abstract class Generator
     protected $stack = array();
 
     /**
-     * If set to true, output will be formatted and indented
+     * If set to true, output will be formatted and indented.
+     *
      * @var bool
      */
     protected $formatOutput = false;
 
-    public function setFormatOutput( $formatOutput )
+    public function setFormatOutput($formatOutput)
     {
         $this->formatOutput = (bool)$formatOutput;
     }
 
     /**
-     * Reset output visitor to a virgin state
+     * Reset output visitor to a virgin state.
      */
     public function reset()
     {
@@ -45,38 +48,37 @@ abstract class Generator
     }
 
     /**
-     * Start document
+     * Start document.
      *
      * @param mixed $data
      */
-    abstract public function startDocument( $data );
+    abstract public function startDocument($data);
 
     /**
-     * Returns if the document is empty or already contains data
+     * Returns if the document is empty or already contains data.
      *
-     * @return boolean
+     * @return bool
      */
     abstract public function isEmpty();
 
     /**
-     * Check start document
+     * Check start document.
      *
      * @param mixed $data
      */
-    protected function checkStartDocument( $data )
+    protected function checkStartDocument($data)
     {
-        if ( count( $this->stack ) )
-        {
+        if (count($this->stack)) {
             throw new Exceptions\OutputGeneratorException(
-                "Starting a document may only be the very first operation."
+                'Starting a document may only be the very first operation.'
             );
         }
 
-        $this->stack[] = array( 'document', $data, array() );
+        $this->stack[] = array('document', $data, array());
     }
 
     /**
-     * End document
+     * End document.
      *
      * Returns the generated document as a string.
      *
@@ -84,41 +86,39 @@ abstract class Generator
      *
      * @return string
      */
-    abstract public function endDocument( $data );
+    abstract public function endDocument($data);
 
     /**
-     * Check end document
+     * Check end document.
      *
      * @param mixed $data
      */
-    protected function checkEndDocument( $data )
+    protected function checkEndDocument($data)
     {
-        $this->checkEnd( 'document', $data );
+        $this->checkEnd('document', $data);
     }
 
     /**
-     * Start object element
+     * Start object element.
      *
      * @param string $name
      * @param string $mediaTypeName
      */
-    abstract public function startObjectElement( $name, $mediaTypeName = null );
+    abstract public function startObjectElement($name, $mediaTypeName = null);
 
     /**
-     * Check start object element
+     * Check start object element.
      *
      * @param mixed $data
      */
-    protected function checkStartObjectElement( $data )
+    protected function checkStartObjectElement($data)
     {
-        $this->checkStart( 'objectElement', $data, array( 'document', 'objectElement', 'hashElement', 'list' ) );
+        $this->checkStart('objectElement', $data, array('document', 'objectElement', 'hashElement', 'list'));
 
-        $last = count( $this->stack ) - 2;
-        if ( $this->stack[$last][0] !== 'list' )
-        {
+        $last = count($this->stack) - 2;
+        if ($this->stack[$last][0] !== 'list') {
             // Ensure object element type only occurs once outside of lists
-            if ( isset( $this->stack[$last][2][$data] ) )
-            {
+            if (isset($this->stack[$last][2][$data])) {
                 throw new Exceptions\OutputGeneratorException(
                     "Element {$data} may only occur once inside of {$this->stack[$last][0]}."
                 );
@@ -128,44 +128,42 @@ abstract class Generator
     }
 
     /**
-     * End object element
+     * End object element.
      *
      * @param string $name
      */
-    abstract public function endObjectElement( $name );
+    abstract public function endObjectElement($name);
 
     /**
-     * Check end object element
+     * Check end object element.
      *
      * @param mixed $data
      */
-    protected function checkEndObjectElement( $data )
+    protected function checkEndObjectElement($data)
     {
-        $this->checkEnd( 'objectElement', $data );
+        $this->checkEnd('objectElement', $data);
     }
 
     /**
-     * Start hash element
+     * Start hash element.
      *
      * @param string $name
      */
-    abstract public function startHashElement( $name );
+    abstract public function startHashElement($name);
 
     /**
-     * Check start hash element
+     * Check start hash element.
      *
      * @param mixed $data
      */
-    protected function checkStartHashElement( $data )
+    protected function checkStartHashElement($data)
     {
-        $this->checkStart( 'hashElement', $data, array( 'document', 'objectElement', 'hashElement', 'list' ) );
+        $this->checkStart('hashElement', $data, array('document', 'objectElement', 'hashElement', 'list'));
 
-        $last = count( $this->stack ) - 2;
-        if ( $this->stack[$last][0] !== 'list' )
-        {
+        $last = count($this->stack) - 2;
+        if ($this->stack[$last][0] !== 'list') {
             // Ensure hash element type only occurs once outside of lists
-            if ( isset( $this->stack[$last][2][$data] ) )
-            {
+            if (isset($this->stack[$last][2][$data])) {
                 throw new Exceptions\OutputGeneratorException(
                     "Element {$data} may only occur once inside of {$this->stack[$last][0]}."
                 );
@@ -175,144 +173,144 @@ abstract class Generator
     }
 
     /**
-     * End hash element
+     * End hash element.
      *
      * @param string $name
      */
-    abstract public function endHashElement( $name );
+    abstract public function endHashElement($name);
 
     /**
-     * Check end hash element
+     * Check end hash element.
      *
      * @param mixed $data
      */
-    protected function checkEndHashElement( $data )
+    protected function checkEndHashElement($data)
     {
-        $this->checkEnd( 'hashElement', $data );
+        $this->checkEnd('hashElement', $data);
     }
 
     /**
-     * Start value element
-     *
-     * @param string $name
-     * @param string $value
-     */
-    abstract public function startValueElement( $name, $value );
-
-    /**
-     * Check start value element
-     *
-     * @param mixed $data
-     */
-    protected function checkStartValueElement( $data )
-    {
-        $this->checkStart( 'valueElement', $data, array( 'objectElement', 'hashElement', 'list' ) );
-    }
-
-    /**
-     * End value element
-     *
-     * @param string $name
-     */
-    abstract public function endValueElement( $name );
-
-    /**
-     * Check end value element
-     *
-     * @param mixed $data
-     */
-    protected function checkEndValueElement( $data )
-    {
-        $this->checkEnd( 'valueElement', $data );
-    }
-
-    /**
-     * Start list
-     *
-     * @param string $name
-     */
-    abstract public function startList( $name );
-
-    /**
-     * Check start list
-     *
-     * @param mixed $data
-     */
-    protected function checkStartList( $data )
-    {
-        $this->checkStart( 'list', $data, array( 'objectElement', 'hashElement' ) );
-    }
-
-    /**
-     * End list
-     *
-     * @param string $name
-     */
-    abstract public function endList( $name );
-
-    /**
-     * Check end list
-     *
-     * @param mixed $data
-     */
-    protected function checkEndList( $data )
-    {
-        $this->checkEnd( 'list', $data );
-    }
-
-    /**
-     * Start attribute
+     * Start value element.
      *
      * @param string $name
      * @param string $value
      */
-    abstract public function startAttribute( $name, $value );
+    abstract public function startValueElement($name, $value);
 
     /**
-     * Check start attribute
+     * Check start value element.
      *
      * @param mixed $data
      */
-    protected function checkStartAttribute( $data )
+    protected function checkStartValueElement($data)
     {
-        $this->checkStart( 'attribute', $data, array( 'objectElement', 'hashElement' ) );
+        $this->checkStart('valueElement', $data, array('objectElement', 'hashElement', 'list'));
     }
 
     /**
-     * End attribute
+     * End value element.
      *
      * @param string $name
      */
-    abstract public function endAttribute( $name );
+    abstract public function endValueElement($name);
 
     /**
-     * Check end attribute
+     * Check end value element.
      *
      * @param mixed $data
      */
-    protected function checkEndAttribute( $data )
+    protected function checkEndValueElement($data)
     {
-        $this->checkEnd( 'attribute', $data );
+        $this->checkEnd('valueElement', $data);
     }
 
     /**
-     * Get media type
+     * Start list.
+     *
+     * @param string $name
+     */
+    abstract public function startList($name);
+
+    /**
+     * Check start list.
+     *
+     * @param mixed $data
+     */
+    protected function checkStartList($data)
+    {
+        $this->checkStart('list', $data, array('objectElement', 'hashElement'));
+    }
+
+    /**
+     * End list.
+     *
+     * @param string $name
+     */
+    abstract public function endList($name);
+
+    /**
+     * Check end list.
+     *
+     * @param mixed $data
+     */
+    protected function checkEndList($data)
+    {
+        $this->checkEnd('list', $data);
+    }
+
+    /**
+     * Start attribute.
+     *
+     * @param string $name
+     * @param string $value
+     */
+    abstract public function startAttribute($name, $value);
+
+    /**
+     * Check start attribute.
+     *
+     * @param mixed $data
+     */
+    protected function checkStartAttribute($data)
+    {
+        $this->checkStart('attribute', $data, array('objectElement', 'hashElement'));
+    }
+
+    /**
+     * End attribute.
+     *
+     * @param string $name
+     */
+    abstract public function endAttribute($name);
+
+    /**
+     * Check end attribute.
+     *
+     * @param mixed $data
+     */
+    protected function checkEndAttribute($data)
+    {
+        $this->checkEnd('attribute', $data);
+    }
+
+    /**
+     * Get media type.
      *
      * @param string $name
      *
      * @return string
      */
-    abstract public function getMediaType( $name );
+    abstract public function getMediaType($name);
 
     /**
-     * Generates a media type from $name and $type
+     * Generates a media type from $name and $type.
      *
      * @param string $name
      * @param string $type
      *
      * @return string
      */
-    protected function generateMediaType( $name, $type )
+    protected function generateMediaType($name, $type)
     {
         return "application/vnd.ez.api.{$name}+{$type}";
     }
@@ -320,72 +318,68 @@ abstract class Generator
     /**
      * Generates a generic representation of the scalar, hash or list given in
      * $hashValue into the document, using an element of $hashElementName as
-     * its parent
+     * its parent.
      *
      * @param string $hashElementName
      * @param mixed $hashValue
      */
-    abstract public function generateFieldTypeHash( $hashElementName, $hashValue );
+    abstract public function generateFieldTypeHash($hashElementName, $hashValue);
 
     /**
-     * Check close / end operation
+     * Check close / end operation.
      *
      * @param string $type
      * @param mixed $data
      * @param array $validParents
      */
-    protected function checkStart( $type, $data, array $validParents )
+    protected function checkStart($type, $data, array $validParents)
     {
-        $lastTag = end( $this->stack );
+        $lastTag = end($this->stack);
 
-        if ( !is_array( $lastTag ) )
-        {
+        if (!is_array($lastTag)) {
             throw new Exceptions\OutputGeneratorException(
                 sprintf(
-                    "Invalid start: Trying to open outside of a document."
+                    'Invalid start: Trying to open outside of a document.'
                 )
             );
         }
 
-        if ( !in_array( $lastTag[0], $validParents ) )
-        {
+        if (!in_array($lastTag[0], $validParents)) {
             throw new Exceptions\OutputGeneratorException(
                 sprintf(
-                    "Invalid start: Trying to open %s inside %s, valid parent nodes are: %s.",
+                    'Invalid start: Trying to open %s inside %s, valid parent nodes are: %s.',
                     $type,
                     $lastTag[0],
-                    implode( ', ', $validParents )
+                    implode(', ', $validParents)
                 )
             );
         }
 
-        $this->stack[] = array( $type, $data, array() );
+        $this->stack[] = array($type, $data, array());
     }
 
     /**
-     * Check close / end operation
+     * Check close / end operation.
      *
      * @param string $type
      * @param mixed $data
      */
-    protected function checkEnd( $type, $data )
+    protected function checkEnd($type, $data)
     {
-        $lastTag = array_pop( $this->stack );
+        $lastTag = array_pop($this->stack);
 
-        if ( !is_array( $lastTag ) )
-        {
+        if (!is_array($lastTag)) {
             throw new Exceptions\OutputGeneratorException(
                 sprintf(
-                    "Invalid close: Trying to close on empty stack."
+                    'Invalid close: Trying to close on empty stack.'
                 )
             );
         }
 
-        if ( array( $lastTag[0], $lastTag[1] ) !== array( $type, $data ) )
-        {
+        if (array($lastTag[0], $lastTag[1]) !== array($type, $data)) {
             throw new Exceptions\OutputGeneratorException(
                 sprintf(
-                    "Invalid close: Trying to close %s:%s, while last element was %s:%s.",
+                    'Invalid close: Trying to close %s:%s, while last element was %s:%s.',
                     $type,
                     $data,
                     $lastTag[0],
@@ -396,10 +390,11 @@ abstract class Generator
     }
 
     /**
-     * Serializes a boolean value
+     * Serializes a boolean value.
      *
-     * @param boolean $boolValue
+     * @param bool $boolValue
+     *
      * @return mixed
      */
-    abstract public function serializeBool( $boolValue );
+    abstract public function serializeBool($boolValue);
 }

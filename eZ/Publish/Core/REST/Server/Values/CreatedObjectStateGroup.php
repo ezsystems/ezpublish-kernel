@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the CreatedObjectStateGroup class
+ * File containing the CreatedObjectStateGroup class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,7 +19,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class CreatedObjectStateGroup extends ValueObject
 {
     /**
-     * The created object state group
+     * The created object state group.
      *
      * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */

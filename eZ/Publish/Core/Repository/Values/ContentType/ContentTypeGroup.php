@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentTypeGroup class
+ * File containing the ContentTypeGroup class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,7 @@ namespace eZ\Publish\Core\Repository\Values\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentTypeGroup;
 
 /**
- * This class represents a content type group value
+ * This class represents a content type group value.
  *
  * @property-read string[] $names calls getNames() or on access getName($language)
  * @property-read string[] $descriptions calls getDescriptions() or on access getDescription($language)
@@ -38,7 +40,7 @@ class ContentTypeGroup extends APIContentTypeGroup
 
     /**
      * This method returns the human readable name in all provided languages
-     * of the content type
+     * of the content type.
      *
      * The structure of the return value is:
      * <code>
@@ -55,7 +57,7 @@ class ContentTypeGroup extends APIContentTypeGroup
     }
 
     /**
-     * This method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language.
      *
      * @since 5.0
      *
@@ -63,10 +65,9 @@ class ContentTypeGroup extends APIContentTypeGroup
      *
      * @return string the name for the given language or null if none exists.
      */
-    public function getName( $languageCode )
+    public function getName($languageCode)
     {
-        if ( array_key_exists( $languageCode, $this->names ) )
-        {
+        if (array_key_exists($languageCode, $this->names)) {
             return $this->names[$languageCode];
         }
 
@@ -74,7 +75,7 @@ class ContentTypeGroup extends APIContentTypeGroup
     }
 
     /**
-     * This method returns the human readable description of the content type
+     * This method returns the human readable description of the content type.
      *
      * The structure of this field is:
      * <code>
@@ -91,7 +92,7 @@ class ContentTypeGroup extends APIContentTypeGroup
     }
 
     /**
-     * This method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language.
      *
      * @since 5.0
      *
@@ -99,10 +100,9 @@ class ContentTypeGroup extends APIContentTypeGroup
      *
      * @return string the description for the given language or null if none exists.
      */
-    public function getDescription( $languageCode )
+    public function getDescription($languageCode)
     {
-        if ( array_key_exists( $languageCode, $this->descriptions ) )
-        {
+        if (array_key_exists($languageCode, $this->descriptions)) {
             return $this->descriptions[$languageCode];
         }
 

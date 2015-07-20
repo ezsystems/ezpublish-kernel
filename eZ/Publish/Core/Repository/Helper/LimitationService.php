@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing LimitationService class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,9 +16,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 
 /**
- * Internal service to deal with limitations and limitation types
- *
- * @package eZ\Publish\Core\Repository
+ * Internal service to deal with limitations and limitation types.
  */
 class LimitationService
 {
@@ -28,14 +28,14 @@ class LimitationService
     /**
      * @param array $settings
      */
-    public function __construct( array $settings = array() )
+    public function __construct(array $settings = array())
     {
         // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array( 'limitationTypes' => array() );
+        $this->settings = $settings + array('limitationTypes' => array());
     }
 
     /**
-     * Returns the LimitationType registered with the given identifier
+     * Returns the LimitationType registered with the given identifier.
      *
      * Returns the correct implementation of API Limitation value object
      * based on provided identifier
@@ -43,12 +43,14 @@ class LimitationService
      * @param string $identifier
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException
+     *
      * @return \eZ\Publish\SPI\Limitation\Type
      */
-    public function getLimitationType( $identifier )
+    public function getLimitationType($identifier)
     {
-        if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
-            throw new LimitationNotFoundException( $identifier );
+        if (!isset($this->settings['limitationTypes'][$identifier])) {
+            throw new LimitationNotFoundException($identifier);
+        }
 
         return $this->settings['limitationTypes'][$identifier];
     }
@@ -62,14 +64,12 @@ class LimitationService
      *
      * @return \eZ\Publish\Core\FieldType\ValidationError[][]
      */
-    public function validateLimitations( array $limitations )
+    public function validateLimitations(array $limitations)
     {
         $allErrors = array();
-        foreach ( $limitations as $limitation )
-        {
-            $errors = $this->validateLimitation( $limitation );
-            if ( !empty( $errors ) )
-            {
+        foreach ($limitations as $limitation) {
+            $errors = $this->validateLimitation($limitation);
+            if (!empty($errors)) {
                 $allErrors[$limitation->getIdentifier()] = $errors;
             }
         }
@@ -86,11 +86,10 @@ class LimitationService
      *
      * @return \eZ\Publish\Core\FieldType\ValidationError[]
      */
-    public function validateLimitation( Limitation $limitation )
+    public function validateLimitation(Limitation $limitation)
     {
         $identifier = $limitation->getIdentifier();
-        if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
-        {
+        if (!isset($this->settings['limitationTypes'][$identifier])) {
             throw new BadStateException(
                 '$identifier',
                 "limitationType[{$identifier}] is not configured"
@@ -98,14 +97,14 @@ class LimitationService
         }
 
         /**
-         * @var $type \eZ\Publish\SPI\Limitation\Type
+         * @var \eZ\Publish\SPI\Limitation\Type
          */
         $type = $this->settings['limitationTypes'][$identifier];
 
         // This will throw if it does not pass
-        $type->acceptValue( $limitation );
+        $type->acceptValue($limitation);
 
         // This return array of validation errors
-        return $type->validate( $limitation );
+        return $type->validate($limitation);
     }
 }

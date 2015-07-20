@@ -1,12 +1,12 @@
 <?php
+
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator;
-use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway as ImageStorageGateway;
-use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\SPI\Variation\VariationPurger;
 use Iterator;
@@ -33,7 +33,7 @@ class ImageFileVariationPurger implements VariationPurger
      */
     private $logger;
 
-    public function __construct( Iterator $imageFileList, IOServiceInterface $ioService, VariationPathGenerator $variationPathGenerator )
+    public function __construct(Iterator $imageFileList, IOServiceInterface $ioService, VariationPathGenerator $variationPathGenerator)
     {
         $this->imageFileList = $imageFileList;
         $this->ioService = $ioService;
@@ -41,27 +41,23 @@ class ImageFileVariationPurger implements VariationPurger
     }
 
     /**
-     * Purge all variations generated for aliases in $aliasName
+     * Purge all variations generated for aliases in $aliasName.
      *
      * @param array $aliasNames
      */
-    public function purge( array $aliasNames )
+    public function purge(array $aliasNames)
     {
-        foreach ( $this->imageFileList as $originalImageId )
-        {
-            foreach ( $aliasNames as $aliasName )
-            {
-                $variationImageId = $this->variationPathGenerator->getVariationPath( $originalImageId, $aliasName );
-                if ( !$this->ioService->exists( $variationImageId ) )
-                {
+        foreach ($this->imageFileList as $originalImageId) {
+            foreach ($aliasNames as $aliasName) {
+                $variationImageId = $this->variationPathGenerator->getVariationPath($originalImageId, $aliasName);
+                if (!$this->ioService->exists($variationImageId)) {
                     continue;
                 }
 
-                $binaryFile = $this->ioService->loadBinaryFile( $variationImageId );
-                $this->ioService->deleteBinaryFile( $binaryFile );
-                if ( isset( $this->logger ) )
-                {
-                    $this->logger->info( "Purging $aliasName variation $variationImageId for original image $originalImageId" );
+                $binaryFile = $this->ioService->loadBinaryFile($variationImageId);
+                $this->ioService->deleteBinaryFile($binaryFile);
+                if (isset($this->logger)) {
+                    $this->logger->info("Purging $aliasName variation $variationImageId for original image $originalImageId");
                 }
             }
         }
@@ -70,7 +66,7 @@ class ImageFileVariationPurger implements VariationPurger
     /**
      * @param \Psr\Log\LoggerInterface $logger
      */
-    public function setLogger( $logger )
+    public function setLogger($logger)
     {
         $this->logger = $logger;
     }

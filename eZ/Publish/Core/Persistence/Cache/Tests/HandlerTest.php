@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains Test class
+ * File contains Test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,11 +22,10 @@ use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHand
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use eZ\Publish\Core\Persistence\Cache\ObjectStateHandler as CacheObjectStateHandler;
-use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Abstract test case for spi cache impl
+ * Abstract test case for spi cache impl.
  */
 abstract class HandlerTest extends PHPUnit_Framework_TestCase
 {
@@ -65,44 +66,44 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->persistenceHandlerMock = $this->getMock( 'eZ\Publish\SPI\Persistence\Handler' );
+        $this->persistenceHandlerMock = $this->getMock('eZ\Publish\SPI\Persistence\Handler');
 
         $this->cacheMock = $this->getMock(
-            "eZ\\Publish\\Core\\Persistence\\Cache\\CacheServiceDecorator",
+            'eZ\\Publish\\Core\\Persistence\\Cache\\CacheServiceDecorator',
             array(),
             array(),
             '',
             false
         );
 
-        $this->loggerMock = $this->getMock( "eZ\\Publish\\Core\\Persistence\\Cache\\PersistenceLogger" );
+        $this->loggerMock = $this->getMock('eZ\\Publish\\Core\\Persistence\\Cache\\PersistenceLogger');
 
         $this->persistenceCacheHandler = new CacheHandler(
             $this->persistenceHandlerMock,
-            new CacheSectionHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
-            new CacheLocationHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
-            new CacheContentHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
-            new CacheContentLanguageHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
-            new CacheContentTypeHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
-            new CacheUserHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
-            new CacheTransactionHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
-            new CacheTrashHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
-            new CacheUrlAliasHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
-            new CacheObjectStateHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
+            new CacheSectionHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheLocationHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheContentHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheContentLanguageHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheContentTypeHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheUserHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheTransactionHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheTrashHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheUrlAliasHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheObjectStateHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             $this->loggerMock,
             $this->cacheMock
         );
     }
 
     /**
-     * Tear down test (properties)
+     * Tear down test (properties).
      */
     protected function tearDown()
     {
-        unset( $this->cacheMock );
-        unset( $this->persistenceHandlerMock );
-        unset( $this->persistenceCacheHandler );
-        unset( $this->loggerMock );
+        unset($this->cacheMock);
+        unset($this->persistenceHandlerMock);
+        unset($this->persistenceCacheHandler);
+        unset($this->loggerMock);
         parent::tearDown();
     }
 }

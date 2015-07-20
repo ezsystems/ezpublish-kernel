@@ -1,15 +1,16 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\RepositoryTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\RepositoryTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
-use eZ\Publish\API\Repository;
 use eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue;
 use eZ\Publish\Core\FieldType\RelationList\Type as RelationListType;
 use eZ\Publish\API\Repository\Values\Content\Field;
@@ -17,15 +18,15 @@ use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\Content;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
  */
-class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBaseIntegrationTest
+class RelationListIntegrationTest extends RelationSearchMultivaluedBaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -39,25 +40,25 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
      *
      * @return array|\eZ\Publish\API\Repository\Values\Content\Relation[]
      */
-    public function getCreateExpectedRelations( Content $content )
+    public function getCreateExpectedRelations(Content $content)
     {
         $contentService = $this->getRepository()->getContentService();
 
         return array(
             new Relation(
                 array(
-                    "sourceFieldDefinitionIdentifier" => "data",
-                    "type" => Relation::FIELD,
-                    "sourceContentInfo" => $content->contentInfo,
-                    "destinationContentInfo" => $contentService->loadContentInfo( 4 )
+                    'sourceFieldDefinitionIdentifier' => 'data',
+                    'type' => Relation::FIELD,
+                    'sourceContentInfo' => $content->contentInfo,
+                    'destinationContentInfo' => $contentService->loadContentInfo(4),
                 )
             ),
             new Relation(
                 array(
-                    "sourceFieldDefinitionIdentifier" => "data",
-                    "type" => Relation::FIELD,
-                    "sourceContentInfo" => $content->contentInfo,
-                    "destinationContentInfo" => $contentService->loadContentInfo( 49 )
+                    'sourceFieldDefinitionIdentifier' => 'data',
+                    'type' => Relation::FIELD,
+                    'sourceContentInfo' => $content->contentInfo,
+                    'destinationContentInfo' => $contentService->loadContentInfo(49),
                 )
             ),
         );
@@ -68,35 +69,35 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
      *
      * @return array|\eZ\Publish\API\Repository\Values\Content\Relation[]
      */
-    public function getUpdateExpectedRelations( Content $content )
+    public function getUpdateExpectedRelations(Content $content)
     {
         $contentService = $this->getRepository()->getContentService();
 
         return array(
             new Relation(
                 array(
-                    "id" => null,
-                    "sourceFieldDefinitionIdentifier" => "data",
-                    "type" => Relation::FIELD,
-                    "sourceContentInfo" => $content->contentInfo,
-                    "destinationContentInfo" => $contentService->loadContentInfo( 4 )
+                    'id' => null,
+                    'sourceFieldDefinitionIdentifier' => 'data',
+                    'type' => Relation::FIELD,
+                    'sourceContentInfo' => $content->contentInfo,
+                    'destinationContentInfo' => $contentService->loadContentInfo(4),
                 )
             ),
             new Relation(
                 array(
-                    "sourceFieldDefinitionIdentifier" => "data",
-                    "type" => Relation::FIELD,
-                    "sourceContentInfo" => $content->contentInfo,
-                    "destinationContentInfo" => $contentService->loadContentInfo( 49 )
+                    'sourceFieldDefinitionIdentifier' => 'data',
+                    'type' => Relation::FIELD,
+                    'sourceContentInfo' => $content->contentInfo,
+                    'destinationContentInfo' => $contentService->loadContentInfo(49),
                 )
             ),
             new Relation(
                 array(
-                    "id" => null,
-                    "sourceFieldDefinitionIdentifier" => "data",
-                    "type" => Relation::FIELD,
-                    "sourceContentInfo" => $content->contentInfo,
-                    "destinationContentInfo" => $contentService->loadContentInfo( 54 )
+                    'id' => null,
+                    'sourceFieldDefinitionIdentifier' => 'data',
+                    'type' => Relation::FIELD,
+                    'sourceContentInfo' => $content->contentInfo,
+                    'destinationContentInfo' => $contentService->loadContentInfo(54),
                 )
             ),
         );
@@ -132,7 +133,7 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get a valid $fieldSettings value.
      *
      * @todo Implement correctly
      *
@@ -143,12 +144,12 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
         return array(
             'selectionMethod' => 1,
             'selectionDefaultLocation' => '2',
-            'selectionContentTypes' => array( 'blog_post' ),
+            'selectionContentTypes' => array('blog_post'),
         );
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $validatorConfiguration.
      *
      * @todo Implement correctly
      *
@@ -160,7 +161,7 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
     }
 
     /**
-     * Get $fieldSettings value not accepted by the field type
+     * Get $fieldSettings value not accepted by the field type.
      *
      * @todo Implement correctly
      *
@@ -168,11 +169,11 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
      */
     public function getInvalidFieldSettings()
     {
-        return array( 'selectionMethod' => 'a', 'selectionDefaultLocation' => true, 'unknownSetting' => false );
+        return array('selectionMethod' => 'a', 'selectionDefaultLocation' => true, 'unknownSetting' => false);
     }
 
     /**
-     * Get $validatorConfiguration not accepted by the field type
+     * Get $validatorConfiguration not accepted by the field type.
      *
      * @todo Implement correctly
      *
@@ -180,17 +181,17 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array( 'noValidator' => true );
+        return array('noValidator' => true);
     }
 
     /**
-     * Get initial field data for valid object creation
+     * Get initial field data for valid object creation.
      *
      * @return mixed
      */
     public function getValidCreationFieldData()
     {
-        return new RelationListValue( array( 4, 49 ) );
+        return new RelationListValue(array(4, 49));
     }
 
     /**
@@ -200,10 +201,8 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
      * was stored and loaded correctly.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field )
+    public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\RelationList\\Value',
@@ -211,7 +210,7 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
         );
 
         $expectedData = array(
-            'destinationContentIds' => array( 4, 49 ),
+            'destinationContentIds' => array(4, 49),
         );
         $this->assertPropertiesCorrectUnsorted(
             $expectedData,
@@ -220,7 +219,7 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
     }
 
     /**
-     * Get field data which will result in errors during creation
+     * Get field data which will result in errors during creation.
      *
      * This is a PHPUnit data provider.
      *
@@ -244,30 +243,30 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
     {
         return array(
             array(
-                new RelationListValue( array( null ) ),
+                new RelationListValue(array(null)),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
         );
     }
 
     /**
-     * Get update field externals data
+     * Get update field externals data.
      *
      * @return array
      */
     public function getValidUpdateFieldData()
     {
-        return new RelationListValue( array( 49, 54, 4 ) );
+        return new RelationListValue(array(49, 54, 4));
     }
 
     /**
-     * Get externals updated field data values
+     * Get externals updated field data values.
      *
      * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\RelationList\\Value',
@@ -275,7 +274,7 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
         );
 
         $expectedData = array(
-            'destinationContentIds' => array( 49, 54, 4 ),
+            'destinationContentIds' => array(49, 54, 4),
         );
         $this->assertPropertiesCorrectUnsorted(
             $expectedData,
@@ -284,7 +283,7 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
     }
 
     /**
-     * Get field data which will result in errors during update
+     * Get field data which will result in errors during update.
      *
      * This is a PHPUnit data provider.
      *
@@ -317,7 +316,7 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
      *
      * @param Field $field
      */
-    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\RelationList\\Value',
@@ -325,7 +324,7 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
         );
 
         $expectedData = array(
-            'destinationContentIds' => array( 4, 49 )
+            'destinationContentIds' => array(4, 49),
         );
         $this->assertPropertiesCorrectUnsorted(
             $expectedData,
@@ -334,7 +333,7 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
     }
 
     /**
-     * Get data to test to hash method
+     * Get data to test to hash method.
      *
      * This is a PHPUnit data provider
      *
@@ -357,16 +356,16 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
     {
         return array(
             array(
-                new RelationListValue( array( 4, 49 ) ),
+                new RelationListValue(array(4, 49)),
                 array(
-                    'destinationContentIds' => array( 4, 49 ),
-                )
+                    'destinationContentIds' => array(4, 49),
+                ),
             ),
         );
     }
 
     /**
-     * Get expectations for the fromHash call on our field value
+     * Get expectations for the fromHash call on our field value.
      *
      * This is a PHPUnit data provider
      *
@@ -376,8 +375,8 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
     {
         return array(
             array(
-                array( 'destinationContentIds' => array( 4, 49 ) ),
-                new RelationListValue( array( 4, 49 ) )
+                array('destinationContentIds' => array(4, 49)),
+                new RelationListValue(array(4, 49)),
             ),
         );
     }
@@ -385,8 +384,8 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new RelationListValue ),
-            array( new RelationListValue( array() ) ),
+            array(new RelationListValue()),
+            array(new RelationListValue(array())),
         );
     }
 
@@ -394,15 +393,14 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
     {
         return array(
             array(
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
             ),
         );
     }
 
     protected function checkSearchEngineSupport()
     {
-        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy' )
-        {
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
             $this->markTestSkipped(
                 "'ezobjectrelationlist' field type is not searchable with Legacy Search Engine"
             );
@@ -411,12 +409,12 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
 
     protected function getValidSearchValueOne()
     {
-        return array( 11 );
+        return array(11);
     }
 
     protected function getValidSearchValueTwo()
     {
-        return array( 12 );
+        return array(12);
     }
 
     protected function getSearchTargetValueOne()
@@ -431,11 +429,11 @@ class RelationListFieldTypeIntegrationTest extends RelationSearchMultivaluedBase
 
     protected function getValidMultivaluedSearchValuesOne()
     {
-        return array( 11, 12 );
+        return array(11, 12);
     }
 
     protected function getValidMultivaluedSearchValuesTwo()
     {
-        return array( 13, 14 );
+        return array(13, 14);
     }
 }

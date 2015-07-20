@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentTypeGroup class
+ * File containing the ContentTypeGroup class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,7 @@ namespace eZ\Publish\API\Repository\Values\ContentType;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * This class represents a content type group value
+ * This class represents a content type group value.
  *
  * @property-read mixed $id the id of the content type group
  * @property-read string $identifier the identifier of the content type group
@@ -24,45 +26,44 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 abstract class ContentTypeGroup extends ValueObject
 {
     /**
-     * Primary key
+     * Primary key.
      *
      * @var mixed
      */
     protected $id;
 
     /**
-     * Readable string identifier of a group
+     * Readable string identifier of a group.
      *
      * @var string
      */
     protected $identifier;
 
     /**
-     * Created date (timestamp)
+     * Created date (timestamp).
      *
      * @var \DateTime
      */
     protected $creationDate;
 
     /**
-     * Modified date (timestamp)
+     * Modified date (timestamp).
      *
      * @var \DateTime
      */
     protected $modificationDate;
 
     /**
-     * Creator user id
+     * Creator user id.
      *
      * @var mixed
      */
     protected $creatorId;
 
     /**
-     * Modifier user id
+     * Modifier user id.
      *
      * @var mixed
-     *
      */
     protected $modifierId;
 }

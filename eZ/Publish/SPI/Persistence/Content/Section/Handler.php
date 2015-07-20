@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Section Handler interface
+ * File containing the Section Handler interface.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,19 +16,20 @@ namespace eZ\Publish\SPI\Persistence\Content\Section;
 interface Handler
 {
     /**
-     * Create a new section
+     * Create a new section.
      *
      * @param string $name
      * @param string $identifier
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Section
+     *
      * @todo Should validate that $identifier is unique??
      * @todo What about translatable $name?
      */
-    public function create( $name, $identifier );
+    public function create($name, $identifier);
 
     /**
-     * Update name and identifier of a section
+     * Update name and identifier of a section.
      *
      * @param mixed $id
      * @param string $name
@@ -34,10 +37,10 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
-    public function update( $id, $name, $identifier );
+    public function update($id, $name, $identifier);
 
     /**
-     * Get section data
+     * Get section data.
      *
      * @param mixed $id
      *
@@ -45,17 +48,17 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
-    public function load( $id );
+    public function load($id);
 
     /**
-     * Get all section data
+     * Get all section data.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Section[]
      */
     public function loadAll();
 
     /**
-     * Get section data by identifier
+     * Get section data by identifier.
      *
      * @param string $identifier
      *
@@ -63,10 +66,10 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
-    public function loadByIdentifier( $identifier );
+    public function loadByIdentifier($identifier);
 
     /**
-     * Delete a section
+     * Delete a section.
      *
      * Might throw an exception if the section is still associated with some
      * content objects. Make sure that no content objects are associated with
@@ -74,22 +77,22 @@ interface Handler
      *
      * @param mixed $id
      */
-    public function delete( $id );
+    public function delete($id);
 
     /**
-     * Assigns section to single content object
+     * Assigns section to single content object.
      *
      * @param mixed $sectionId
      * @param mixed $contentId
      */
-    public function assign( $sectionId, $contentId );
+    public function assign($sectionId, $contentId);
 
     /**
-     * Number of content assignments a Section has
+     * Number of content assignments a Section has.
      *
      * @param mixed $sectionId
      *
      * @return int
      */
-    public function assignmentsCount( $sectionId );
+    public function assignmentsCount($sectionId);
 }

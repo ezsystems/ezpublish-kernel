@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -25,20 +26,20 @@ class ContentDownloadRouteReferenceListenerTest extends PHPUnit_Framework_TestCa
     public function setUp()
     {
         $this->translationHelperMock = $this
-            ->getMockBuilder( 'eZ\Publish\Core\Helper\TranslationHelper' )
+            ->getMockBuilder('eZ\Publish\Core\Helper\TranslationHelper')
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     public function testIgnoresOtherRoutes()
     {
-        $routeReference = new RouteReference( 'some_route' );
-        $event = new RouteReferenceGenerationEvent( $routeReference, new Request() );
+        $routeReference = new RouteReference('some_route');
+        $event = new RouteReferenceGenerationEvent($routeReference, new Request());
         $eventListener = $this->getListener();
 
-        $eventListener->onRouteReferenceGeneration( $event );
+        $eventListener->onRouteReferenceGeneration($event);
 
-        self::assertEquals( 'some_route', $routeReference->getRoute() );
+        self::assertEquals('some_route', $routeReference->getRoute());
     }
 
     /**
@@ -50,13 +51,13 @@ class ContentDownloadRouteReferenceListenerTest extends PHPUnit_Framework_TestCa
             ContentDownloadRouteReferenceListener::ROUTE_NAME,
             [
                 ContentDownloadRouteReferenceListener::OPT_CONTENT => new stdClass(),
-                ContentDownloadRouteReferenceListener::OPT_FIELD_IDENTIFIER => null
+                ContentDownloadRouteReferenceListener::OPT_FIELD_IDENTIFIER => null,
             ]
         );
-        $event = new RouteReferenceGenerationEvent( $routeReference, new Request() );
+        $event = new RouteReferenceGenerationEvent($routeReference, new Request());
         $eventListener = $this->getListener();
 
-        $eventListener->onRouteReferenceGeneration( $event );
+        $eventListener->onRouteReferenceGeneration($event);
     }
 
     /**
@@ -69,9 +70,9 @@ class ContentDownloadRouteReferenceListenerTest extends PHPUnit_Framework_TestCa
                 'internalFields' => [],
                 'versionInfo' => new VersionInfo(
                     [
-                        'contentInfo' => new ContentInfo( ['mainLanguageCode' => 'eng-GB'] )
+                        'contentInfo' => new ContentInfo(['mainLanguageCode' => 'eng-GB']),
                     ]
-                )
+                ),
             ]
         );
 
@@ -79,13 +80,13 @@ class ContentDownloadRouteReferenceListenerTest extends PHPUnit_Framework_TestCa
             ContentDownloadRouteReferenceListener::ROUTE_NAME,
             [
                 ContentDownloadRouteReferenceListener::OPT_CONTENT => $content,
-                ContentDownloadRouteReferenceListener::OPT_FIELD_IDENTIFIER => 'field'
+                ContentDownloadRouteReferenceListener::OPT_FIELD_IDENTIFIER => 'field',
             ]
         );
-        $event = new RouteReferenceGenerationEvent( $routeReference, new Request() );
+        $event = new RouteReferenceGenerationEvent($routeReference, new Request());
         $eventListener = $this->getListener();
 
-        $eventListener->onRouteReferenceGeneration( $event );
+        $eventListener->onRouteReferenceGeneration($event);
     }
 
     public function testGeneratesCorrectRouteReference()
@@ -96,22 +97,22 @@ class ContentDownloadRouteReferenceListenerTest extends PHPUnit_Framework_TestCa
             ContentDownloadRouteReferenceListener::ROUTE_NAME,
             [
                 ContentDownloadRouteReferenceListener::OPT_CONTENT => $content,
-                ContentDownloadRouteReferenceListener::OPT_FIELD_IDENTIFIER => 'file'
+                ContentDownloadRouteReferenceListener::OPT_FIELD_IDENTIFIER => 'file',
             ]
         );
-        $event = new RouteReferenceGenerationEvent( $routeReference, new Request() );
+        $event = new RouteReferenceGenerationEvent($routeReference, new Request());
         $eventListener = $this->getListener();
 
         $this
             ->translationHelperMock
-            ->expects( $this->once() )
-            ->method( 'getTranslatedField' )
-            ->will( $this->returnValue( $content->getField( 'file', 'eng-GB' ) ) );
-        $eventListener->onRouteReferenceGeneration( $event );
+            ->expects($this->once())
+            ->method('getTranslatedField')
+            ->will($this->returnValue($content->getField('file', 'eng-GB')));
+        $eventListener->onRouteReferenceGeneration($event);
 
-        self::assertEquals( '42', $routeReference->get( ContentDownloadRouteReferenceListener::OPT_CONTENT_ID ) );
-        self::assertEquals( 'file', $routeReference->get( ContentDownloadRouteReferenceListener::OPT_FIELD_IDENTIFIER ) );
-        self::assertEquals( 'Test-file.pdf', $routeReference->get( ContentDownloadRouteReferenceListener::OPT_DOWNLOAD_NAME ) );
+        self::assertEquals('42', $routeReference->get(ContentDownloadRouteReferenceListener::OPT_CONTENT_ID));
+        self::assertEquals('file', $routeReference->get(ContentDownloadRouteReferenceListener::OPT_FIELD_IDENTIFIER));
+        self::assertEquals('Test-file.pdf', $routeReference->get(ContentDownloadRouteReferenceListener::OPT_DOWNLOAD_NAME));
     }
 
     public function testDownloadNameOverrideWorks()
@@ -123,15 +124,15 @@ class ContentDownloadRouteReferenceListenerTest extends PHPUnit_Framework_TestCa
             [
                 ContentDownloadRouteReferenceListener::OPT_CONTENT => $content,
                 ContentDownloadRouteReferenceListener::OPT_FIELD_IDENTIFIER => 'file',
-                ContentDownloadRouteReferenceListener::OPT_DOWNLOAD_NAME => 'My-custom-filename.pdf'
+                ContentDownloadRouteReferenceListener::OPT_DOWNLOAD_NAME => 'My-custom-filename.pdf',
             ]
         );
-        $event = new RouteReferenceGenerationEvent( $routeReference, new Request() );
+        $event = new RouteReferenceGenerationEvent($routeReference, new Request());
         $eventListener = $this->getListener();
 
-        $eventListener->onRouteReferenceGeneration( $event );
+        $eventListener->onRouteReferenceGeneration($event);
 
-        self::assertEquals( 'My-custom-filename.pdf', $routeReference->get( ContentDownloadRouteReferenceListener::OPT_DOWNLOAD_NAME ) );
+        self::assertEquals('My-custom-filename.pdf', $routeReference->get(ContentDownloadRouteReferenceListener::OPT_DOWNLOAD_NAME));
     }
 
     /**
@@ -141,27 +142,26 @@ class ContentDownloadRouteReferenceListenerTest extends PHPUnit_Framework_TestCa
     {
         return new Content(
             [
-                'internalFields' =>
-                    [
+                'internalFields' => [
                         new Field(
                             [
                                 'fieldDefIdentifier' => 'file',
                                 'languageCode' => 'eng-GB',
-                                'value' => new BinaryFileValue( [ 'fileName' => 'Test-file.pdf' ] )
+                                'value' => new BinaryFileValue(['fileName' => 'Test-file.pdf']),
                             ]
-                        )
+                        ),
                     ],
                 'versionInfo' => new VersionInfo(
                     [
-                        'contentInfo' => new ContentInfo( [ 'id' => 42, 'mainLanguageCode' => 'eng-GB' ] )
+                        'contentInfo' => new ContentInfo(['id' => 42, 'mainLanguageCode' => 'eng-GB']),
                     ]
-                )
+                ),
             ]
         );
     }
 
     protected function getListener()
     {
-        return new ContentDownloadRouteReferenceListener( $this->translationHelperMock );
+        return new ContentDownloadRouteReferenceListener($this->translationHelperMock);
     }
 }

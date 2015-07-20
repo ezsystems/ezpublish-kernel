@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the MultipleStringMapper class
+ * File containing the MultipleStringMapper class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,34 +20,32 @@ use eZ\Publish\SPI\Search\FieldType\MultipleStringField;
 class MultipleStringMapper extends StringMapper
 {
     /**
-     * Check if field can be mapped
+     * Check if field can be mapped.
      *
      * @param Field $field
      *
      * @return bool
      */
-    public function canMap( Field $field )
+    public function canMap(Field $field)
     {
         return $field->type instanceof MultipleStringField;
     }
 
     /**
-     * Map field value to a proper Solr representation
+     * Map field value to a proper Solr representation.
      *
      * @param Field $field
      *
      * @return array
      */
-    public function map( Field $field )
+    public function map(Field $field)
     {
         $values = array();
 
-        foreach ( (array)$field->value as $value )
-        {
-            $values[] = $this->convert( $value );
+        foreach ((array)$field->value as $value) {
+            $values[] = $this->convert($value);
         }
 
         return $values;
     }
 }
-

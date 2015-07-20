@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentTypeGroup class
+ * File containing the ContentTypeGroup class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,30 +18,32 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class Group extends ValueObject
 {
     /**
-     * Primary key
+     * Primary key.
      *
      * @var mixed
      */
     public $id;
 
     /**
-     * Name
+     * Name.
      *
      * @since 5.0
+     *
      * @var string[]
      */
     public $name = array();
 
     /**
-     * Description
+     * Description.
      *
      * @since 5.0
+     *
      * @var string[]
      */
     public $description = array();
 
     /**
-     * Readable string identifier of a group
+     * Readable string identifier of a group.
      *
      * Legacy note: Maps to existing name property
      *
@@ -48,31 +52,30 @@ class Group extends ValueObject
     public $identifier;
 
     /**
-     * Created date (timestamp)
+     * Created date (timestamp).
      *
      * @var int
      */
     public $created;
 
     /**
-     * Modified date (timestamp)
+     * Modified date (timestamp).
      *
      * @var int
      */
     public $modified;
 
     /**
-     * Creator user id
+     * Creator user id.
      *
      * @var mixed
      */
     public $creatorId;
 
     /**
-     * Modifier user id
+     * Modifier user id.
      *
      * @var mixed
-     *
      */
     public $modifierId;
 }

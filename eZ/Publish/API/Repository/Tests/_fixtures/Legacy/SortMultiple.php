@@ -1,60 +1,59 @@
 <?php
 
 return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state(array(
-   'facets' => 
-  array (
+   'facets' =>
+  array(
   ),
-   'searchHits' => 
-  array (
+   'searchHits' =>
+  array(
     0 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
-       'valueObject' => 
-      array (
+       'valueObject' =>
+      array(
         'id' => 51,
         'title' => 'Multimedia',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     1 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
-       'valueObject' => 
-      array (
+       'valueObject' =>
+      array(
         'id' => 50,
         'title' => 'Files',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     2 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
-       'valueObject' => 
-      array (
+       'valueObject' =>
+      array(
         'id' => 49,
         'title' => 'Images',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     3 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
         'valueObject' =>
-        array (
+        array(
             'id' => 41,
             'title' => 'Media',
         ),
-        'score' => NULL,
-        'index' => NULL,
-        'highlight' => NULL,
+        'score' => null,
+        'index' => null,
+        'highlight' => null,
     )),
   ),
-   'spellSuggestion' => NULL,
+   'spellSuggestion' => null,
    'time' => 1,
-   'timedOut' => NULL,
-   'maxScore' => NULL,
+   'timedOut' => null,
+   'maxScore' => null,
    'totalCount' => 4,
 ));
-

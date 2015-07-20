@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Tree Handler class
+ * File containing the Tree Handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,14 +23,14 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 class TreeHandler
 {
     /**
-     * Gateway for handling location data
+     * Gateway for handling location data.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected $locationGateway;
 
     /**
-     * Location Mapper
+     * Location Mapper.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
      */
@@ -42,14 +44,14 @@ class TreeHandler
     protected $contentGateway;
 
     /**
-     * Content handler
+     * Content handler.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected $contentMapper;
 
     /**
-     * FieldHandler
+     * FieldHandler.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
      */
@@ -68,8 +70,7 @@ class TreeHandler
         ContentGateway $contentGateway,
         ContentMapper $contentMapper,
         FieldHandler $fieldHandler
-    )
-    {
+    ) {
         $this->locationGateway = $locationGateway;
         $this->locationMapper = $locationMapper;
         $this->contentGateway = $contentGateway;
@@ -84,47 +85,46 @@ class TreeHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
-    public function loadContentInfo( $contentId )
+    public function loadContentInfo($contentId)
     {
         return $this->contentMapper->extractContentInfoFromRow(
-            $this->contentGateway->loadContentInfo( $contentId )
+            $this->contentGateway->loadContentInfo($contentId)
         );
     }
 
     /**
-     * Deletes raw content data
+     * Deletes raw content data.
      *
      * @param int $contentId
      */
-    public function removeRawContent( $contentId )
+    public function removeRawContent($contentId)
     {
         $this->locationGateway->removeElementFromTrash(
-            $this->loadContentInfo( $contentId )->mainLocationId
+            $this->loadContentInfo($contentId)->mainLocationId
         );
 
-        foreach ( $this->listVersions( $contentId ) as $versionInfo )
-        {
-            $this->fieldHandler->deleteFields( $contentId, $versionInfo );
+        foreach ($this->listVersions($contentId) as $versionInfo) {
+            $this->fieldHandler->deleteFields($contentId, $versionInfo);
         }
         // Must be called before deleteRelations()
-        $this->contentGateway->removeReverseFieldRelations( $contentId );
-        $this->contentGateway->deleteRelations( $contentId );
-        $this->contentGateway->deleteVersions( $contentId );
-        $this->contentGateway->deleteNames( $contentId );
-        $this->contentGateway->deleteContent( $contentId );
+        $this->contentGateway->removeReverseFieldRelations($contentId);
+        $this->contentGateway->deleteRelations($contentId);
+        $this->contentGateway->deleteVersions($contentId);
+        $this->contentGateway->deleteNames($contentId);
+        $this->contentGateway->deleteContent($contentId);
     }
 
     /**
-     * Returns the versions for $contentId
+     * Returns the versions for $contentId.
      *
      * @param int $contentId
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
-    public function listVersions( $contentId )
+    public function listVersions($contentId)
     {
         return $this->contentMapper->extractVersionInfoListFromRows(
-            $this->contentGateway->listVersions( $contentId )
+            $this->contentGateway->listVersions($contentId)
         );
     }
 
@@ -135,10 +135,11 @@ class TreeHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function loadLocation( $locationId )
+    public function loadLocation($locationId)
     {
-        $data = $this->locationGateway->getBasicNodeData( $locationId );
-        return $this->locationMapper->createLocationFromRow( $data );
+        $data = $this->locationGateway->getBasicNodeData($locationId);
+
+        return $this->locationMapper->createLocationFromRow($data);
     }
 
     /**
@@ -152,28 +153,23 @@ class TreeHandler
      *
      * @param mixed $locationId
      *
-     * @return boolean
+     * @return bool
      */
-    public function removeSubtree( $locationId )
+    public function removeSubtree($locationId)
     {
-        $locationRow = $this->locationGateway->getBasicNodeData( $locationId );
-        $contentId = $locationRow["contentobject_id"];
-        $mainLocationId = $locationRow["main_node_id"];
+        $locationRow = $this->locationGateway->getBasicNodeData($locationId);
+        $contentId = $locationRow['contentobject_id'];
+        $mainLocationId = $locationRow['main_node_id'];
 
-        $subLocations = $this->locationGateway->getChildren( $locationId );
-        foreach ( $subLocations as $subLocation )
-        {
-            $this->removeSubtree( $subLocation["node_id"] );
+        $subLocations = $this->locationGateway->getChildren($locationId);
+        foreach ($subLocations as $subLocation) {
+            $this->removeSubtree($subLocation['node_id']);
         }
 
-        if ( $locationId == $mainLocationId )
-        {
-            if ( 1 == $this->locationGateway->countLocationsByContentId( $contentId ) )
-            {
-                $this->removeRawContent( $contentId );
-            }
-            else
-            {
+        if ($locationId == $mainLocationId) {
+            if (1 == $this->locationGateway->countLocationsByContentId($contentId)) {
+                $this->removeRawContent($contentId);
+            } else {
                 $newMainLocationRow = $this->locationGateway->getFallbackMainNodeData(
                     $contentId,
                     $locationId
@@ -181,58 +177,54 @@ class TreeHandler
 
                 $this->changeMainLocation(
                     $contentId,
-                    $newMainLocationRow["node_id"],
-                    $newMainLocationRow["contentobject_version"],
-                    $newMainLocationRow["parent_node_id"]
+                    $newMainLocationRow['node_id'],
+                    $newMainLocationRow['contentobject_version'],
+                    $newMainLocationRow['parent_node_id']
                 );
             }
         }
 
-        $this->locationGateway->removeLocation( $locationId );
-        $this->locationGateway->deleteNodeAssignment( $contentId );
+        $this->locationGateway->removeLocation($locationId);
+        $this->locationGateway->deleteNodeAssignment($contentId);
     }
 
     /**
-     * Set section on all content objects in the subtree
+     * Set section on all content objects in the subtree.
      *
      * @param mixed $locationId
      * @param mixed $sectionId
-     *
-     * @return void
      */
-    public function setSectionForSubtree( $locationId, $sectionId )
+    public function setSectionForSubtree($locationId, $sectionId)
     {
-        $nodeData = $this->locationGateway->getBasicNodeData( $locationId );
+        $nodeData = $this->locationGateway->getBasicNodeData($locationId);
 
-        $this->locationGateway->setSectionForSubtree( $nodeData['path_string'], $sectionId );
+        $this->locationGateway->setSectionForSubtree($nodeData['path_string'], $sectionId);
     }
 
     /**
-     * Changes main location of content identified by given $contentId to location identified by given $locationId
+     * Changes main location of content identified by given $contentId to location identified by given $locationId.
      *
      * Updates ezcontentobject_tree and eznode_assignment tables (eznode_assignment for content current version number).
      *
      * @param mixed $contentId
      * @param mixed $locationId
-     *
-     * @return void
      */
-    public function changeMainLocation( $contentId, $locationId )
+    public function changeMainLocation($contentId, $locationId)
     {
-        $parentLocationId = $this->loadLocation( $locationId )->parentId;
+        $parentLocationId = $this->loadLocation($locationId)->parentId;
 
         // Update ezcontentobject_tree and eznode_assignment tables
         $this->locationGateway->changeMainLocation(
             $contentId,
             $locationId,
-            $this->loadContentInfo( $contentId )->currentVersionNo,
+            $this->loadContentInfo($contentId)->currentVersionNo,
             $parentLocationId
         );
 
         // Update subtree section to the one of the new main location parent location content
         $this->setSectionForSubtree(
             $locationId,
-            $this->loadContentInfo( $this->loadLocation( $parentLocationId )->contentId )->sectionId
+            $this->loadContentInfo($this->loadLocation($parentLocationId)->contentId)->sectionId
         );
     }
 }

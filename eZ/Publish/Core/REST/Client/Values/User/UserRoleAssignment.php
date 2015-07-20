@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the UserRoleAssignment class
+ * File containing the UserRoleAssignment class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -35,7 +37,7 @@ class UserRoleAssignment extends APIUserRoleAssignment
     protected $limitation;
 
     /**
-     * Returns the limitation of the role assignment
+     * Returns the limitation of the role assignment.
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
      */
@@ -45,7 +47,8 @@ class UserRoleAssignment extends APIUserRoleAssignment
     }
 
     /**
-     * Returns the role to which the user or user group is assigned to
+     * Returns the role to which the user or user group is assigned to.
+     *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
     public function getRole()
@@ -54,13 +57,12 @@ class UserRoleAssignment extends APIUserRoleAssignment
     }
 
     /**
-     * Returns the user to which the role is assigned to
+     * Returns the user to which the role is assigned to.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    function getUser()
+    public function getUser()
     {
         return $this->user;
     }
-
 }

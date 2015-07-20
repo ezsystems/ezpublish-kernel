@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the PatternTest class
+ * File containing the PatternTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,12 +15,12 @@ use eZ\Publish\Core\REST\Common;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Test for Pattern based url handler
+ * Test for Pattern based url handler.
  */
 class PatternTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Tests parsing unknown URL type
+     * Tests parsing unknown URL type.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage URL '/foo' did not match any route.
@@ -26,11 +28,11 @@ class PatternTest extends PHPUnit_Framework_TestCase
     public function testParseUnknownUrlType()
     {
         $urlHandler = new Common\RequestParser\Pattern();
-        $urlHandler->parse( '/foo' );
+        $urlHandler->parse('/foo');
     }
 
     /**
-     * Tests parsing invalid pattern
+     * Tests parsing invalid pattern.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage Invalid pattern part: '{broken'.
@@ -42,11 +44,11 @@ class PatternTest extends PHPUnit_Framework_TestCase
                 'invalid' => '/foo/{broken',
             )
         );
-        $urlHandler->parse( '/foo' );
+        $urlHandler->parse('/foo');
     }
 
     /**
-     * Tests parsing when pattern does not match
+     * Tests parsing when pattern does not match.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage URL '/bar' did not match any route.
@@ -58,11 +60,11 @@ class PatternTest extends PHPUnit_Framework_TestCase
                 'pattern' => '/foo/{foo}',
             )
         );
-        $urlHandler->parse( '/bar' );
+        $urlHandler->parse('/bar');
     }
 
     /**
-     * Test parsing when pattern does not match the end of the URL
+     * Test parsing when pattern does not match the end of the URL.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage URL '/foo/23/bar' did not match any route.
@@ -74,11 +76,11 @@ class PatternTest extends PHPUnit_Framework_TestCase
                 'pattern' => '/foo/{foo}',
             )
         );
-        $urlHandler->parse( '/foo/23/bar' );
+        $urlHandler->parse('/foo/23/bar');
     }
 
     /**
-     * Data provider
+     * Data provider.
      *
      * @return array
      */
@@ -90,50 +92,50 @@ class PatternTest extends PHPUnit_Framework_TestCase
                 '/content/section/42',
                 array(
                     'section' => '42',
-                )
+                ),
             ),
             array(
                 'objectversion',
                 '/content/object/42/23',
                 array(
-                    'object'  => '42',
+                    'object' => '42',
                     'version' => '23',
-                )
+                ),
             ),
             array(
                 'location',
                 '/content/locations/23/42/100',
                 array(
                     'location' => '23/42/100',
-                )
+                ),
             ),
             array(
                 'locationChildren',
                 '/content/locations/23/42/100/children',
                 array(
                     'location' => '23/42/100',
-                )
-            )
+                ),
+            ),
         );
     }
 
     /**
-     * Test parsing URL
+     * Test parsing URL.
      *
      * @dataProvider getParseValues
      */
-    public function testParseUrl( $type, $url, $values )
+    public function testParseUrl($type, $url, $values)
     {
         $urlHandler = $this->getWorkingUrlHandler();
 
         $this->assertSame(
             $values,
-            $urlHandler->parse( $url )
+            $urlHandler->parse($url)
         );
     }
 
     /**
-     * Test generating unknown URL type
+     * Test generating unknown URL type.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage No URL for type 'unknown' available.
@@ -141,11 +143,11 @@ class PatternTest extends PHPUnit_Framework_TestCase
     public function testGenerateUnknownUrlType()
     {
         $urlHandler = new Common\RequestParser\Pattern();
-        $urlHandler->generate( 'unknown', array() );
+        $urlHandler->generate('unknown', array());
     }
 
     /**
-     * Test generating URL with missing value
+     * Test generating URL with missing value.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage No value provided for 'unknown'.
@@ -157,11 +159,11 @@ class PatternTest extends PHPUnit_Framework_TestCase
                 'pattern' => '/foo/{unknown}',
             )
         );
-        $urlHandler->generate( 'pattern', array() );
+        $urlHandler->generate('pattern', array());
     }
 
     /**
-     * Test generating URL with extra value
+     * Test generating URL with extra value.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage Unused values in values array: 'bar'.
@@ -183,22 +185,22 @@ class PatternTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data provider
+     * Data provider.
      *
      * @dataProvider getParseValues
      */
-    public function testGenerateUrl( $type, $url, $values )
+    public function testGenerateUrl($type, $url, $values)
     {
         $urlHandler = $this->getWorkingUrlHandler();
 
         $this->assertSame(
             $url,
-            $urlHandler->generate( $type, $values )
+            $urlHandler->generate($type, $values)
         );
     }
 
     /**
-     * Returns the URL handler
+     * Returns the URL handler.
      *
      * @return \eZ\Publish\Core\REST\Common\RequestParser\Pattern
      */
@@ -206,10 +208,10 @@ class PatternTest extends PHPUnit_Framework_TestCase
     {
         return new Common\RequestParser\Pattern(
             array(
-                'section'          => '/content/section/{section}',
-                'objectversion'    => '/content/object/{object}/{version}',
+                'section' => '/content/section/{section}',
+                'objectversion' => '/content/object/{object}/{version}',
                 'locationChildren' => '/content/locations/{&location}/children',
-                'location'         => '/content/locations/{&location}',
+                'location' => '/content/locations/{&location}',
             )
         );
     }

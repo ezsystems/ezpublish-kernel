@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Content Search handler class
+ * File containing the Content Search handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,30 +18,30 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
- * Visits the Field criterion
+ * Visits the Field criterion.
  */
 class FieldRange extends Field
 {
     /**
-     * CHeck if visitor is applicable to current criterion
+     * CHeck if visitor is applicable to current criterion.
      *
      * @param Criterion $criterion
      *
-     * @return boolean
+     * @return bool
      */
-    public function canVisit( Criterion $criterion )
+    public function canVisit(Criterion $criterion)
     {
         return
             $criterion instanceof Criterion\Field &&
-            ( $criterion->operator === Operator::LT ||
+            ($criterion->operator === Operator::LT ||
               $criterion->operator === Operator::LTE ||
               $criterion->operator === Operator::GT ||
               $criterion->operator === Operator::GTE ||
-              $criterion->operator === Operator::BETWEEN );
+              $criterion->operator === Operator::BETWEEN);
     }
 
     /**
-     * Map field value to a proper Solr representation
+     * Map field value to a proper Solr representation.
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
@@ -48,23 +50,21 @@ class FieldRange extends Field
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
         $value = (array)$criterion->value;
         $start = $value[0];
-        $end = isset( $value[1] ) ? $value[1] : null;
+        $end = isset($value[1]) ? $value[1] : null;
 
-        if ( ( $criterion->operator === Operator::LT ) ||
-             ( $criterion->operator === Operator::LTE ) )
-        {
+        if (($criterion->operator === Operator::LT) ||
+             ($criterion->operator === Operator::LTE)) {
             $end = $start;
             $start = null;
         }
 
-        $fieldNames = $this->getFieldNames( $criterion, $criterion->target );
+        $fieldNames = $this->getFieldNames($criterion, $criterion->target);
 
-        if ( empty( $fieldNames ) )
-        {
+        if (empty($fieldNames)) {
             throw new InvalidArgumentException(
                 "\$criterion->target",
                 "No searchable fields found for the given criterion target '{$criterion->target}'."
@@ -72,12 +72,10 @@ class FieldRange extends Field
         }
 
         $queries = array();
-        foreach ( $fieldNames as $name )
-        {
-            $queries[] = $name . ':' . $this->getRange( $criterion->operator, $start, $end );
+        foreach ($fieldNames as $name) {
+            $queries[] = $name . ':' . $this->getRange($criterion->operator, $start, $end);
         }
 
-        return '(' . implode( ' OR ', $queries ) . ')';
+        return '(' . implode(' OR ', $queries) . ')';
     }
 }
-

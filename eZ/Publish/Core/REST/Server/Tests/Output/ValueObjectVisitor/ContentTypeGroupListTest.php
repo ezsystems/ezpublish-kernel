@@ -1,38 +1,38 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\ContentTypeGroupList;
 use eZ\Publish\Core\Repository\Values\ContentType;
-use eZ\Publish\Core\REST\Common;
 
 class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the ContentTypeGroupList visitor
+     * Test the ContentTypeGroupList visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
-        $contentTypeGroupList = new ContentTypeGroupList( array() );
+        $contentTypeGroupList = new ContentTypeGroupList(array());
 
-        $this->addRouteExpectation( 'ezpublish_rest_loadContentTypeGroupList', array(), '/content/typegroups' );
+        $this->addRouteExpectation('ezpublish_rest_loadContentTypeGroupList', array(), '/content/typegroups');
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -40,25 +40,25 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
             $contentTypeGroupList
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains ContentTypeGroupList element
+     * Test if result contains ContentTypeGroupList element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsContentTypeGroupListElement( $result )
+    public function testResultContainsContentTypeGroupListElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'ContentTypeGroupList',
+                'tag' => 'ContentTypeGroupList',
             ),
             $result,
             'Invalid <ContentTypeGroupList> element.',
@@ -67,21 +67,21 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains ContentTypeGroupList element attributes
+     * Test if result contains ContentTypeGroupList element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsContentTypeGroupListAttributes( $result )
+    public function testResultContainsContentTypeGroupListAttributes($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'ContentTypeGroupList',
+                'tag' => 'ContentTypeGroupList',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ContentTypeGroupList+xml',
-                    'href'       => '/content/typegroups',
-                )
+                    'href' => '/content/typegroups',
+                ),
             ),
             $result,
             'Invalid <ContentTypeGroupList> attributes.',
@@ -90,14 +90,14 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if ContentTypeGroupList visitor visits the children
+     * Test if ContentTypeGroupList visitor visits the children.
      */
     public function testContentTypeGroupListVisitsChildren()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $contentTypeGroupList = new ContentTypeGroupList(
             array(
@@ -106,9 +106,9 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
             )
         );
 
-        $this->getVisitorMock()->expects( $this->exactly( 2 ) )
-            ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup' ) );
+        $this->getVisitorMock()->expects($this->exactly(2))
+            ->method('visitValueObject')
+            ->with($this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup'));
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -118,12 +118,12 @@ class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the ContentTypeGroupList visitor
+     * Get the ContentTypeGroupList visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ContentTypeGroupList
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\ContentTypeGroupList;
+        return new ValueObjectVisitor\ContentTypeGroupList();
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RichTextEzxmlInputConverterPass class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,35 +17,32 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Compiler pass for the RichText EZXML input Aggregate converter tags.
+ *
  * @see \eZ\Publish\Core\FieldType\RichText\Converter\Aggregate
  */
 class RichTextEzxmlInputConverterPass implements CompilerPassInterface
 {
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
-        if ( !$container->hasDefinition( 'ezpublish.fieldType.ezrichtext.converter.input.ezxml' ) )
-        {
+        if (!$container->hasDefinition('ezpublish.fieldType.ezrichtext.converter.input.ezxml')) {
             return;
         }
 
-        $ezxmlInputConverterDefinition = $container->getDefinition( 'ezpublish.fieldType.ezrichtext.converter.input.ezxml' );
-        $taggedServiceIds = $container->findTaggedServiceIds( 'ezpublish.ezrichtext.converter.input.ezxml' );
+        $ezxmlInputConverterDefinition = $container->getDefinition('ezpublish.fieldType.ezrichtext.converter.input.ezxml');
+        $taggedServiceIds = $container->findTaggedServiceIds('ezpublish.ezrichtext.converter.input.ezxml');
 
         $convertersByPriority = array();
-        foreach ( $taggedServiceIds as $id => $tags )
-        {
-            foreach ( $tags as $tag )
-            {
-                $priority = isset( $tag['priority'] ) ? (int)$tag['priority'] : 0;
-                $convertersByPriority[$priority][] = new Reference( $id );
+        foreach ($taggedServiceIds as $id => $tags) {
+            foreach ($tags as $tag) {
+                $priority = isset($tag['priority']) ? (int)$tag['priority'] : 0;
+                $convertersByPriority[$priority][] = new Reference($id);
             }
         }
 
-        if ( count( $convertersByPriority ) > 0 )
-        {
+        if (count($convertersByPriority) > 0) {
             $ezxmlInputConverterDefinition->setArguments(
                 array(
-                    $this->sortConverters( $convertersByPriority ),
+                    $this->sortConverters($convertersByPriority),
                 )
             );
         }
@@ -57,10 +56,10 @@ class RichTextEzxmlInputConverterPass implements CompilerPassInterface
      *
      * @return \Symfony\Component\DependencyInjection\Reference[]
      */
-    protected function sortConverters( array $convertersByPriority )
+    protected function sortConverters(array $convertersByPriority)
     {
-        ksort( $convertersByPriority );
+        ksort($convertersByPriority);
 
-        return call_user_func_array( 'array_merge', $convertersByPriority );
+        return call_user_func_array('array_merge', $convertersByPriority);
     }
 }

@@ -1,21 +1,18 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentTypeUpdaterTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentTypeUpdaterTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
-use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Type;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use eZ\Publish\API\Repository\Values\Content\Query;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -24,35 +21,35 @@ use PHPUnit_Framework_TestCase;
 class ContentUpdaterTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Content gateway mock
+     * Content gateway mock.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected $contentGatewayMock;
 
     /**
-     * FieldValue converter registry mock
+     * FieldValue converter registry mock.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $converterRegistryMock;
 
     /**
-     * Search handler mock
+     * Search handler mock.
      *
      * @var \eZ\Publish\Core\Search\Legacy\Content\Handler
      */
     protected $searchHandlerMock;
 
     /**
-     * Content StorageHandler mock
+     * Content StorageHandler mock.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected $contentStorageHandlerMock;
 
     /**
-     * Content Updater to test
+     * Content Updater to test.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
      */
@@ -65,8 +62,6 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
-     *
-     * @return void
      */
     public function testCtor()
     {
@@ -85,7 +80,6 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::determineActions
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::hasFieldDefinition
      */
@@ -95,22 +89,20 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
         $toType = $this->getToTypeFixture();
 
         $converterRegMock = $this->getConverterRegistryMock();
-        $converterRegMock->expects( $this->once() )
-            ->method( 'getConverter' )
-            ->with( 'ezstring' )
+        $converterRegMock->expects($this->once())
+            ->method('getConverter')
+            ->with('ezstring')
             ->will(
                 $this->returnValue(
-                    ( $converterMock = $this->getMock(
+                    ($converterMock = $this->getMock(
                         '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
-                    ) )
+                    ))
                 )
             );
 
         $updater = $this->getContentUpdater();
 
-        $actions = $updater->determineActions(
-            $fromType, $toType
-        );
+        $actions = $updater->determineActions($fromType, $toType);
 
         $this->assertEquals(
             array(
@@ -126,7 +118,7 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
                     $converterMock,
                     $this->getContentStorageHandlerMock(),
                     $this->getContentMapperMock()
-                )
+                ),
             ),
             $actions
         );
@@ -142,40 +134,40 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
             '',
             false
         );
-        $actionA->expects( $this->at( 0 ) )
-            ->method( 'apply' )
-            ->with( 11 );
-        $actionA->expects( $this->at( 1 ) )
-            ->method( 'apply' )
-            ->with( 22 );
+        $actionA->expects($this->at(0))
+            ->method('apply')
+            ->with(11);
+        $actionA->expects($this->at(1))
+            ->method('apply')
+            ->with(22);
         $actionB = $this->getMockForAbstractClass(
             '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\ContentUpdater\\Action',
             array(),
             '',
             false
         );
-        $actionB->expects( $this->at( 0 ) )
-            ->method( 'apply' )
-            ->with( 11 );
-        $actionB->expects( $this->at( 1 ) )
-            ->method( 'apply' )
-            ->with( 22 );
+        $actionB->expects($this->at(0))
+            ->method('apply')
+            ->with(11);
+        $actionB->expects($this->at(1))
+            ->method('apply')
+            ->with(22);
 
-        $actions = array( $actionA, $actionB );
+        $actions = array($actionA, $actionB);
 
         $this->getContentGatewayMock()
-            ->expects( $this->once() )
-            ->method( 'getContentIdsByContentTypeId' )
-            ->with( 23 )
+            ->expects($this->once())
+            ->method('getContentIdsByContentTypeId')
+            ->with(23)
             ->will(
-                $this->returnValue( array( 11, 22 ) )
+                $this->returnValue(array(11, 22))
             );
 
-        $updater->applyUpdates( 23, $actions );
+        $updater->applyUpdates(23, $actions);
     }
 
     /**
-     * Returns a fixture for the from Type
+     * Returns a fixture for the from Type.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
@@ -192,14 +184,14 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
         $fieldB->fieldType = 'ezstring';
 
         $type->fieldDefinitions = array(
-            $fieldA, $fieldB
+            $fieldA, $fieldB,
         );
 
         return $type;
     }
 
     /**
-     * Returns a fixture for the to Type
+     * Returns a fixture for the to Type.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
@@ -207,7 +199,7 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
     {
         $type = clone $this->getFromTypeFixture();
 
-        unset( $type->fieldDefinitions[0] );
+        unset($type->fieldDefinitions[0]);
 
         $fieldC = new Type\FieldDefinition();
         $fieldC->id = 3;
@@ -219,48 +211,47 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns a Content Gateway mock
+     * Returns a Content Gateway mock.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected function getContentGatewayMock()
     {
-        if ( !isset( $this->contentGatewayMock ) )
-        {
+        if (!isset($this->contentGatewayMock)) {
             $this->contentGatewayMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Gateway'
             );
         }
+
         return $this->contentGatewayMock;
     }
 
     /**
-     * Returns a FieldValue Converter registry mock
+     * Returns a FieldValue Converter registry mock.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected function getConverterRegistryMock()
     {
-        if ( !isset( $this->converterRegistryMock ) )
-        {
+        if (!isset($this->converterRegistryMock)) {
             $this->converterRegistryMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
                 array(),
-                array( array() )
+                array(array())
             );
         }
+
         return $this->converterRegistryMock;
     }
 
     /**
-     * Returns a Content StorageHandler mock
+     * Returns a Content StorageHandler mock.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected function getContentStorageHandlerMock()
     {
-        if ( !isset( $this->contentStorageHandlerMock ) )
-        {
+        if (!isset($this->contentStorageHandlerMock)) {
             $this->contentStorageHandlerMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageHandler',
                 array(),
@@ -269,18 +260,18 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
                 false
             );
         }
+
         return $this->contentStorageHandlerMock;
     }
 
     /**
-     * Returns a Content mapper mock
+     * Returns a Content mapper mock.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected function getContentMapperMock()
     {
-        if ( !isset( $this->contentMapperMock ) )
-        {
+        if (!isset($this->contentMapperMock)) {
             $this->contentMapperMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
                 array(),
@@ -289,18 +280,18 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
                 false
             );
         }
+
         return $this->contentMapperMock;
     }
 
     /**
-     * Returns the content updater to test
+     * Returns the content updater to test.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
      */
     protected function getContentUpdater()
     {
-        if ( !isset( $this->contentUpdater ) )
-        {
+        if (!isset($this->contentUpdater)) {
             $this->contentUpdater = new ContentUpdater(
                 $this->getContentGatewayMock(),
                 $this->getConverterRegistryMock(),
@@ -308,6 +299,7 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
                 $this->getContentMapperMock()
             );
         }
+
         return $this->contentUpdater;
     }
 }

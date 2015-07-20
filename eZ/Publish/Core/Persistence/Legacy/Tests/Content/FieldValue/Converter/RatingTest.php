@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RatingTest class
+ * File containing the RatingTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,7 +19,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldD
 use PHPUnit_Framework_TestCase;
 
 /**
- * Test case for Rating converter in Legacy storage
+ * Test case for Rating converter in Legacy storage.
  */
 class RatingTest extends PHPUnit_Framework_TestCase
 {
@@ -29,7 +31,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->converter = new RatingConverter;
+        $this->converter = new RatingConverter();
     }
 
     /**
@@ -39,13 +41,13 @@ class RatingTest extends PHPUnit_Framework_TestCase
      */
     public function testToStorageValue()
     {
-        $value = new FieldValue;
+        $value = new FieldValue();
         $value->data = false;
         $value->sortKey = false;
-        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue = new StorageFieldValue();
 
-        $this->converter->toStorageValue( $value, $storageFieldValue );
-        self::assertSame( null, $storageFieldValue->dataInt );
+        $this->converter->toStorageValue($value, $storageFieldValue);
+        self::assertSame(null, $storageFieldValue->dataInt);
     }
 
     /**
@@ -55,13 +57,13 @@ class RatingTest extends PHPUnit_Framework_TestCase
      */
     public function testToStorageValueDisabled()
     {
-        $value = new FieldValue;
+        $value = new FieldValue();
         $value->data = true;
         $value->sortKey = false;
-        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue = new StorageFieldValue();
 
-        $this->converter->toStorageValue( $value, $storageFieldValue );
-        self::assertSame( 1, $storageFieldValue->dataInt );
+        $this->converter->toStorageValue($value, $storageFieldValue);
+        self::assertSame(1, $storageFieldValue->dataInt);
     }
 
     /**
@@ -71,12 +73,12 @@ class RatingTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldValue()
     {
-        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue = new StorageFieldValue();
         $storageFieldValue->dataInt = null;
-        $fieldValue = new FieldValue;
+        $fieldValue = new FieldValue();
 
-        $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertSame( false, $fieldValue->data );
+        $this->converter->toFieldValue($storageFieldValue, $fieldValue);
+        self::assertSame(false, $fieldValue->data);
     }
 
     /**
@@ -86,12 +88,12 @@ class RatingTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldValueDisabled()
     {
-        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue = new StorageFieldValue();
         $storageFieldValue->dataInt = 1;
-        $fieldValue = new FieldValue;
+        $fieldValue = new FieldValue();
 
-        $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertSame( true, $fieldValue->data );
+        $this->converter->toFieldValue($storageFieldValue, $fieldValue);
+        self::assertSame(true, $fieldValue->data);
     }
 
     /**
@@ -101,7 +103,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
      */
     public function testToStorageFieldDefinition()
     {
-        $this->converter->toStorageFieldDefinition( new PersistenceFieldDefinition, new StorageFieldDefinition );
+        $this->converter->toStorageFieldDefinition(new PersistenceFieldDefinition(), new StorageFieldDefinition());
     }
 
     /**
@@ -111,6 +113,6 @@ class RatingTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldDefinition()
     {
-        $this->converter->toFieldDefinition( new StorageFieldDefinition, new PersistenceFieldDefinition );
+        $this->converter->toFieldDefinition(new StorageFieldDefinition(), new PersistenceFieldDefinition());
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the Section identifier matcher class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,20 +23,19 @@ class Section extends MultipleValued
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchLocation( Location $location )
+    public function matchLocation(Location $location)
     {
         $section = $this->repository->sudo(
-            function ( Repository $repository ) use ( $location )
-            {
+            function (Repository $repository) use ($location) {
                 return $repository->getSectionService()->loadSection(
                     $location->getContentInfo()->sectionId
                 );
             }
         );
 
-        return isset( $this->values[$section->identifier] );
+        return isset($this->values[$section->identifier]);
     }
 
     /**
@@ -42,19 +43,18 @@ class Section extends MultipleValued
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchContentInfo( ContentInfo $contentInfo )
+    public function matchContentInfo(ContentInfo $contentInfo)
     {
         $section = $this->repository->sudo(
-            function ( Repository $repository ) use ( $contentInfo )
-            {
+            function (Repository $repository) use ($contentInfo) {
                 return $repository->getSectionService()->loadSection(
                     $contentInfo->sectionId
                 );
             }
         );
 
-        return isset( $this->values[$section->identifier] );
+        return isset($this->values[$section->identifier]);
     }
 }

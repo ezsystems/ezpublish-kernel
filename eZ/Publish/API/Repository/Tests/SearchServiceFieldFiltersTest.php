@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the SearchServiceFieldFiltersTest class
+ * File containing the SearchServiceFieldFiltersTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -29,9 +31,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
     {
         $setupFactory = $this->getSetupFactory();
 
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestIncomplete( "Not implemented for Solr Search Engine" );
+        if ($setupFactory instanceof LegacySolr) {
+            $this->markTestIncomplete('Not implemented for Solr Search Engine');
         }
 
         parent::setUp();
@@ -39,20 +40,18 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
     protected function checkFullTextFilteringSupport()
     {
-        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy' )
-        {
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
             $this->markTestSkipped(
-                "Legacy Search Engine does not support field filters with Fulltext criterion"
+                'Legacy Search Engine does not support field filters with Fulltext criterion'
             );
         }
     }
 
     protected function checkCustomFieldsSupport()
     {
-        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy' )
-        {
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
             $this->markTestSkipped(
-                "Legacy Search Engine does not support custom fields"
+                'Legacy Search Engine does not support custom fields'
             );
         }
     }
@@ -63,22 +62,22 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $contentTypeService = $repository->getContentTypeService();
 
         $contentTypeDraft = $contentTypeService->createContentTypeDraft(
-            $contentTypeService->loadContentTypeByIdentifier( 'folder' )
+            $contentTypeService->loadContentTypeByIdentifier('folder')
         );
 
         $fieldDefinitionCreateStruct = $contentTypeService->newFieldDefinitionCreateStruct(
-            "map_location",
-            "ezgmaplocation"
+            'map_location',
+            'ezgmaplocation'
         );
-        $fieldDefinitionCreateStruct->names = array( "eng-GB" => "Map location field" );
-        $fieldDefinitionCreateStruct->fieldGroup = "main";
+        $fieldDefinitionCreateStruct->names = array('eng-GB' => 'Map location field');
+        $fieldDefinitionCreateStruct->fieldGroup = 'main';
         $fieldDefinitionCreateStruct->position = 1;
         $fieldDefinitionCreateStruct->isTranslatable = true;
         $fieldDefinitionCreateStruct->isSearchable = true;
 
-        $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldDefinitionCreateStruct );
+        $contentTypeService->addFieldDefinition($contentTypeDraft, $fieldDefinitionCreateStruct);
 
-        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
     }
 
     /**
@@ -87,7 +86,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $languageCode2
      * @param string $name2
      * @param string $mainLanguageCode
-     * @param boolean $alwaysAvailable
+     * @param bool $alwaysAvailable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
@@ -98,26 +97,25 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $name2,
         $mainLanguageCode,
         $alwaysAvailable = false
-    )
-    {
+    ) {
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
         $locationService = $repository->getLocationService();
 
         $contentCreateStruct = $contentService->newContentCreateStruct(
-            $contentTypeService->loadContentTypeByIdentifier( 'folder' ),
+            $contentTypeService->loadContentTypeByIdentifier('folder'),
             $mainLanguageCode
         );
         $contentCreateStruct->alwaysAvailable = $alwaysAvailable;
 
-        $contentCreateStruct->setField( "name", $name1, $languageCode1 );
-        $contentCreateStruct->setField( "name", $name2, $languageCode2 );
+        $contentCreateStruct->setField('name', $name1, $languageCode1);
+        $contentCreateStruct->setField('name', $name2, $languageCode2);
 
         $content = $contentService->publishVersion(
             $contentService->createContent(
                 $contentCreateStruct,
-                array( $locationService->newLocationCreateStruct( 2 ) )
+                array($locationService->newLocationCreateStruct(2))
             )->versionInfo
         );
 
@@ -130,7 +128,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $languageCode2
      * @param string $location2
      * @param string $mainLanguageCode
-     * @param boolean $alwaysAvailable
+     * @param bool $alwaysAvailable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
@@ -141,34 +139,33 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $location2,
         $mainLanguageCode,
         $alwaysAvailable = false
-    )
-    {
+    ) {
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
         $locationService = $repository->getLocationService();
 
         $contentCreateStruct = $contentService->newContentCreateStruct(
-            $contentTypeService->loadContentTypeByIdentifier( 'folder' ),
+            $contentTypeService->loadContentTypeByIdentifier('folder'),
             $mainLanguageCode
         );
         $contentCreateStruct->alwaysAvailable = $alwaysAvailable;
 
         $contentCreateStruct->setField(
-            "map_location",
+            'map_location',
             array(
-                "latitude" => $location1[0],
-                "longitude" => $location1[1],
-                "address" => "",
+                'latitude' => $location1[0],
+                'longitude' => $location1[1],
+                'address' => '',
             ),
             $languageCode1
         );
         $contentCreateStruct->setField(
-            "map_location",
+            'map_location',
             array(
-                "latitude" => $location2[0],
-                "longitude" => $location2[1],
-                "address" => "",
+                'latitude' => $location2[0],
+                'longitude' => $location2[1],
+                'address' => '',
             ),
             $languageCode2
         );
@@ -176,7 +173,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $content = $contentService->publishVersion(
             $contentService->createContent(
                 $contentCreateStruct,
-                array( $locationService->newLocationCreateStruct( 2 ) )
+                array($locationService->newLocationCreateStruct(2))
             )->versionInfo
         );
 
@@ -197,7 +194,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         // Content with id=54 exists only in eng-US language!
         $query = new Query(
             array(
-                "filter" => new Criterion\ContentId( 54 ),
+                'filter' => new Criterion\ContentId(54),
             )
         );
 
@@ -206,13 +203,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         // The content will be found, but field filtering in the service will cause the exception.
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
+            'languages' => array(
+                'eng-GB',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchService->findContent( $query, $fieldFilters );
+        $searchService->findContent($query, $fieldFilters);
     }
 
     /**
@@ -222,23 +219,22 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFullTextQueryLanguageAll( $type = null )
+    public function testFullTextQueryLanguageAll($type = null)
     {
         $this->checkFullTextFilteringSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => new Criterion\FullText( "one" ),
+                $type => new Criterion\FullText('one'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
@@ -247,18 +243,18 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
-                "eng-US",
+            'languages' => array(
+                'eng-GB',
+                'eng-US',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -268,21 +264,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFullTextQueryLanguage( $type = null )
+    public function testFullTextQueryLanguage($type = null)
     {
         $this->checkFullTextFilteringSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => new Criterion\FullText( "one" ),
+                $type => new Criterion\FullText('one'),
             )
         );
 
@@ -290,16 +285,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
+            'languages' => array(
+                'eng-GB',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -309,21 +304,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFullTextQueryLanguageComplement( $type = null )
+    public function testFullTextQueryLanguageComplement($type = null)
     {
         $this->checkFullTextFilteringSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => new Criterion\FullText( "one" ),
+                $type => new Criterion\FullText('one'),
             )
         );
 
@@ -331,16 +325,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-US",
+            'languages' => array(
+                'eng-US',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content2->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -350,21 +344,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFullTextQueryLanguageEmpty( $type = null )
+    public function testFullTextQueryLanguageEmpty($type = null)
     {
         $this->checkFullTextFilteringSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => new Criterion\FullText( "one" ),
+                $type => new Criterion\FullText('one'),
             )
         );
 
@@ -372,15 +365,15 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 0, $searchResult->totalCount );
+        $this->assertEquals(0, $searchResult->totalCount);
     }
 
     /**
@@ -390,23 +383,22 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFullTextQueryLanguageAlwaysAvailable( $type = null )
+    public function testFullTextQueryLanguageAlwaysAvailable($type = null)
     {
         $this->checkFullTextFilteringSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", false );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', false);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-US', true);
 
         $query = new Query(
             array(
-                $type => new Criterion\FullText( "one" ),
+                $type => new Criterion\FullText('one'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
@@ -415,16 +407,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
+            'languages' => array(
+                'eng-GB',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -434,23 +426,22 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFullTextQueryLanguageAlwaysAvailableComplement( $type = null )
+    public function testFullTextQueryLanguageAlwaysAvailableComplement($type = null)
     {
         $this->checkFullTextFilteringSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB", false );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB', false);
 
         $query = new Query(
             array(
-                $type => new Criterion\FullText( "one" ),
+                $type => new Criterion\FullText('one'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
@@ -459,16 +450,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-US",
+            'languages' => array(
+                'eng-US',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -478,23 +469,22 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFullTextQueryAlwaysAvailable( $type = null )
+    public function testFullTextQueryAlwaysAvailable($type = null)
     {
         $this->checkFullTextFilteringSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-US', true);
 
         $query = new Query(
             array(
-                $type => new Criterion\FullText( "one" ),
+                $type => new Criterion\FullText('one'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
@@ -503,16 +493,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -522,21 +512,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFullTextQueryAlwaysAvailableComplement( $type = null )
+    public function testFullTextQueryAlwaysAvailableComplement($type = null)
     {
         $this->checkFullTextFilteringSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB', true);
 
         $query = new Query(
             array(
-                $type => new Criterion\FullText( "one" ),
+                $type => new Criterion\FullText('one'),
             )
         );
 
@@ -544,15 +533,15 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -562,21 +551,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFullTextQueryAlwaysAvailableEmpty( $type = null )
+    public function testFullTextQueryAlwaysAvailableEmpty($type = null)
     {
         $this->checkFullTextFilteringSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-US', true);
 
         $query = new Query(
             array(
-                $type => new Criterion\FullText( "two" ),
+                $type => new Criterion\FullText('two'),
             )
         );
 
@@ -584,14 +572,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 0, $searchResult->totalCount );
+        $this->assertEquals(0, $searchResult->totalCount);
     }
 
     /**
@@ -601,7 +589,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextFilterLanguageAll()
     {
-        $this->testFullTextQueryLanguageAll( "filter" );
+        $this->testFullTextQueryLanguageAll('filter');
     }
 
     /**
@@ -611,7 +599,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextFilterLanguage()
     {
-        $this->testFullTextQueryLanguage( "filter" );
+        $this->testFullTextQueryLanguage('filter');
     }
 
     /**
@@ -621,7 +609,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextFilterLanguageComplement()
     {
-        $this->testFullTextQueryLanguageComplement( "filter" );
+        $this->testFullTextQueryLanguageComplement('filter');
     }
 
     /**
@@ -631,7 +619,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextFilterLanguageEmpty()
     {
-        $this->testFullTextQueryLanguageEmpty( "filter" );
+        $this->testFullTextQueryLanguageEmpty('filter');
     }
 
     /**
@@ -641,7 +629,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextFilterLanguageAlwaysAvailable()
     {
-        $this->testFullTextQueryLanguageAlwaysAvailable( "filter" );
+        $this->testFullTextQueryLanguageAlwaysAvailable('filter');
     }
 
     /**
@@ -651,7 +639,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextFilterLanguageAlwaysAvailableComplement()
     {
-        $this->testFullTextQueryLanguageAlwaysAvailableComplement( "filter" );
+        $this->testFullTextQueryLanguageAlwaysAvailableComplement('filter');
     }
 
     /**
@@ -661,7 +649,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextFilterAlwaysAvailable()
     {
-        $this->testFullTextQueryAlwaysAvailable( "filter" );
+        $this->testFullTextQueryAlwaysAvailable('filter');
     }
 
     /**
@@ -671,7 +659,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextFilterAlwaysAvailableComplement()
     {
-        $this->testFullTextQueryAlwaysAvailableComplement( "filter" );
+        $this->testFullTextQueryAlwaysAvailableComplement('filter');
     }
 
     /**
@@ -681,7 +669,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFullTextFilterAlwaysAvailableEmpty()
     {
-        $this->testFullTextQueryAlwaysAvailableEmpty( "filter" );
+        $this->testFullTextQueryAlwaysAvailableEmpty('filter');
     }
 
     /**
@@ -691,21 +679,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldQueryAll( $type = null )
+    public function testFieldQueryAll($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::EQ, "two" ),
+                $type => new Criterion\Field('name', Operator::EQ, 'two'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
@@ -714,18 +701,18 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
-                "eng-US",
+            'languages' => array(
+                'eng-GB',
+                'eng-US',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -735,19 +722,18 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldQuery( $type = null )
+    public function testFieldQuery($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::EQ, "two" ),
+                $type => new Criterion\Field('name', Operator::EQ, 'two'),
             )
         );
 
@@ -755,16 +741,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
+            'languages' => array(
+                'eng-GB',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content2->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -774,19 +760,18 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldQueryComplement( $type = null )
+    public function testFieldQueryComplement($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::EQ, "two" ),
+                $type => new Criterion\Field('name', Operator::EQ, 'two'),
             )
         );
 
@@ -794,16 +779,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-US",
+            'languages' => array(
+                'eng-US',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -813,19 +798,18 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldQueryEmpty( $type = null )
+    public function testFieldQueryEmpty($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::EQ, "two" ),
+                $type => new Criterion\Field('name', Operator::EQ, 'two'),
             )
         );
 
@@ -833,15 +817,15 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 0, $searchResult->totalCount );
+        $this->assertEquals(0, $searchResult->totalCount);
     }
 
     /**
@@ -851,21 +835,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldQueryLanguageAlwaysAvailable( $type = null )
+    public function testFieldQueryLanguageAlwaysAvailable($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", false );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', false);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-US', true);
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::EQ, "one" ),
+                $type => new Criterion\Field('name', Operator::EQ, 'one'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
@@ -874,16 +857,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
+            'languages' => array(
+                'eng-GB',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -893,21 +876,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldQueryLanguageAlwaysAvailableComplement( $type = null )
+    public function testFieldQueryLanguageAlwaysAvailableComplement($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB", false );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB', false);
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::EQ, "one" ),
+                $type => new Criterion\Field('name', Operator::EQ, 'one'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
@@ -916,16 +898,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-US",
+            'languages' => array(
+                'eng-US',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -935,21 +917,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldQueryAlwaysAvailable( $type = null )
+    public function testFieldQueryAlwaysAvailable($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-US', true);
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::EQ, "one" ),
+                $type => new Criterion\Field('name', Operator::EQ, 'one'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
@@ -958,16 +939,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -977,19 +958,18 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldQueryAlwaysAvailableComplement( $type = null )
+    public function testFieldQueryAlwaysAvailableComplement($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB', true);
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::EQ, "one" ),
+                $type => new Criterion\Field('name', Operator::EQ, 'one'),
             )
         );
 
@@ -997,15 +977,15 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -1015,19 +995,18 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldQueryAlwaysAvailableEmpty( $type = null )
+    public function testFieldQueryAlwaysAvailableEmpty($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-US', true);
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::EQ, "two" ),
+                $type => new Criterion\Field('name', Operator::EQ, 'two'),
             )
         );
 
@@ -1035,14 +1014,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 0, $searchResult->totalCount );
+        $this->assertEquals(0, $searchResult->totalCount);
     }
 
     /**
@@ -1052,21 +1031,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldRangeQueryAll( $type = null )
+    public function testFieldRangeQueryAll($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::GTE, "z" ),
+                $type => new Criterion\Field('name', Operator::GTE, 'z'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
@@ -1075,18 +1053,18 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
-                "eng-US",
+            'languages' => array(
+                'eng-GB',
+                'eng-US',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -1096,19 +1074,18 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldRangeQuery( $type = null )
+    public function testFieldRangeQuery($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::GTE, "z" ),
+                $type => new Criterion\Field('name', Operator::GTE, 'z'),
             )
         );
 
@@ -1116,16 +1093,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
+            'languages' => array(
+                'eng-GB',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content2->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -1135,19 +1112,18 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldRangeQueryComplement( $type = null )
+    public function testFieldRangeQueryComplement($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::GTE, "z" ),
+                $type => new Criterion\Field('name', Operator::GTE, 'z'),
             )
         );
 
@@ -1155,16 +1131,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-US",
+            'languages' => array(
+                'eng-US',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -1174,19 +1150,18 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldRangeQueryEmpty( $type = null )
+    public function testFieldRangeQueryEmpty($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::GTE, "z" ),
+                $type => new Criterion\Field('name', Operator::GTE, 'z'),
             )
         );
 
@@ -1194,15 +1169,15 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 0, $searchResult->totalCount );
+        $this->assertEquals(0, $searchResult->totalCount);
     }
 
     /**
@@ -1212,21 +1187,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldRangeQueryLanguageAlwaysAvailable( $type = null )
+    public function testFieldRangeQueryLanguageAlwaysAvailable($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB", false );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB', false);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-US', true);
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::GTE, "z" ),
+                $type => new Criterion\Field('name', Operator::GTE, 'z'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_DESC, 'eng-GB'),
                 ),
             )
         );
@@ -1235,16 +1209,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
+            'languages' => array(
+                'eng-GB',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -1254,21 +1228,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldRangeQueryLanguageAlwaysAvailableComplement( $type = null )
+    public function testFieldRangeQueryLanguageAlwaysAvailableComplement($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB", false );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB', false);
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::GTE, "z" ),
+                $type => new Criterion\Field('name', Operator::GTE, 'z'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_DESC, 'eng-GB'),
                 ),
             )
         );
@@ -1277,16 +1250,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-US",
+            'languages' => array(
+                'eng-US',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -1296,21 +1269,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldRangeQueryAlwaysAvailable( $type = null )
+    public function testFieldRangeQueryAlwaysAvailable($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-US', true);
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::GTE, "z" ),
+                $type => new Criterion\Field('name', Operator::GTE, 'z'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_DESC, 'eng-GB'),
                 ),
             )
         );
@@ -1319,16 +1291,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -1338,19 +1310,18 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldRangeQueryAlwaysAvailableComplement( $type = null )
+    public function testFieldRangeQueryAlwaysAvailableComplement($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB', true);
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::GTE, "z" ),
+                $type => new Criterion\Field('name', Operator::GTE, 'z'),
             )
         );
 
@@ -1358,15 +1329,15 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -1376,19 +1347,18 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFieldRangeQueryAlwaysAvailableEmpty( $type = null )
+    public function testFieldRangeQueryAlwaysAvailableEmpty($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-US', true);
 
         $query = new Query(
             array(
-                $type => new Criterion\Field( "name", Operator::GTE, "z" ),
+                $type => new Criterion\Field('name', Operator::GTE, 'z'),
             )
         );
 
@@ -1396,14 +1366,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 0, $searchResult->totalCount );
+        $this->assertEquals(0, $searchResult->totalCount);
     }
 
     /**
@@ -1413,7 +1383,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldFilterAll()
     {
-        $this->testFieldQueryAll( "filter" );
+        $this->testFieldQueryAll('filter');
     }
 
     /**
@@ -1423,7 +1393,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldFilter()
     {
-        $this->testFieldQuery( "filter" );
+        $this->testFieldQuery('filter');
     }
 
     /**
@@ -1433,7 +1403,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldFilterComplement()
     {
-        $this->testFieldQueryComplement( "filter" );
+        $this->testFieldQueryComplement('filter');
     }
 
     /**
@@ -1443,7 +1413,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldFilterEmpty()
     {
-        $this->testFieldQueryEmpty( "filter" );
+        $this->testFieldQueryEmpty('filter');
     }
 
     /**
@@ -1453,7 +1423,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldFilterLanguageAlwaysAvailable()
     {
-        $this->testFieldQueryLanguageAlwaysAvailable( "filter" );
+        $this->testFieldQueryLanguageAlwaysAvailable('filter');
     }
 
     /**
@@ -1463,7 +1433,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldFilterLanguageAlwaysAvailableComplement()
     {
-        $this->testFieldQueryLanguageAlwaysAvailableComplement( "filter" );
+        $this->testFieldQueryLanguageAlwaysAvailableComplement('filter');
     }
 
     /**
@@ -1473,7 +1443,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldFilterAlwaysAvailable()
     {
-        $this->testFieldQueryAlwaysAvailable( "filter" );
+        $this->testFieldQueryAlwaysAvailable('filter');
     }
 
     /**
@@ -1483,7 +1453,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldFilterAlwaysAvailableComplement()
     {
-        $this->testFieldQueryAlwaysAvailableComplement( "filter" );
+        $this->testFieldQueryAlwaysAvailableComplement('filter');
     }
 
     /**
@@ -1493,7 +1463,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldFilterAlwaysAvailableEmpty()
     {
-        $this->testFieldQueryAlwaysAvailableEmpty( "filter" );
+        $this->testFieldQueryAlwaysAvailableEmpty('filter');
     }
 
     /**
@@ -1503,7 +1473,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldRangeFilterAll()
     {
-        $this->testFieldRangeQueryAll( "filter" );
+        $this->testFieldRangeQueryAll('filter');
     }
 
     /**
@@ -1513,7 +1483,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldRangeFilter()
     {
-        $this->testFieldRangeQuery( "filter" );
+        $this->testFieldRangeQuery('filter');
     }
 
     /**
@@ -1523,7 +1493,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldRangeFilterComplement()
     {
-        $this->testFieldRangeQueryComplement( "filter" );
+        $this->testFieldRangeQueryComplement('filter');
     }
 
     /**
@@ -1533,7 +1503,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldRangeFilterEmpty()
     {
-        $this->testFieldRangeQueryEmpty( "filter" );
+        $this->testFieldRangeQueryEmpty('filter');
     }
 
     /**
@@ -1543,7 +1513,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldRangeFilterLanguageAlwaysAvailable()
     {
-        $this->testFieldRangeQueryLanguageAlwaysAvailable( "filter" );
+        $this->testFieldRangeQueryLanguageAlwaysAvailable('filter');
     }
 
     /**
@@ -1553,7 +1523,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldRangeFilterLanguageAlwaysAvailableComplement()
     {
-        $this->testFieldRangeQueryLanguageAlwaysAvailableComplement( "filter" );
+        $this->testFieldRangeQueryLanguageAlwaysAvailableComplement('filter');
     }
 
     /**
@@ -1563,7 +1533,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldRangeFilterAlwaysAvailable()
     {
-        $this->testFieldRangeQueryAlwaysAvailable( "filter" );
+        $this->testFieldRangeQueryAlwaysAvailable('filter');
     }
 
     /**
@@ -1573,7 +1543,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldRangeFilterAlwaysAvailableComplement()
     {
-        $this->testFieldRangeQueryAlwaysAvailableComplement( "filter" );
+        $this->testFieldRangeQueryAlwaysAvailableComplement('filter');
     }
 
     /**
@@ -1583,7 +1553,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testFieldRangeFilterAlwaysAvailableEmpty()
     {
-        $this->testFieldRangeQueryAlwaysAvailableEmpty( "filter" );
+        $this->testFieldRangeQueryAlwaysAvailableEmpty('filter');
     }
 
     /**
@@ -1593,49 +1563,48 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldQueryAll( $type = null )
+    public function testModifiedFieldQueryAll($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB');
 
         $query = new Query(
             array(
                 $type => $criterion = new Criterion\Field(
-                    "short_description",
+                    'short_description',
                     Operator::EQ,
-                    "two"
+                    'two'
                 ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
-                "eng-US",
+            'languages' => array(
+                'eng-GB',
+                'eng-US',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -1645,44 +1614,43 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldQuery( $type = null )
+    public function testModifiedFieldQuery($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB');
 
         $query = new Query(
             array(
                 $type => $criterion = new Criterion\Field(
-                    "short_description",
+                    'short_description',
                     Operator::EQ,
-                    "two"
+                    'two'
                 ),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
+            'languages' => array(
+                'eng-GB',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content2->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -1692,44 +1660,43 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldQueryComplement( $type = null )
+    public function testModifiedFieldQueryComplement($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB');
 
         $query = new Query(
             array(
                 $type => $criterion = new Criterion\Field(
-                    "short_description",
+                    'short_description',
                     Operator::EQ,
-                    "two"
+                    'two'
                 ),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-US",
+            'languages' => array(
+                'eng-US',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -1739,43 +1706,42 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldQueryEmpty( $type = null )
+    public function testModifiedFieldQueryEmpty($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB');
 
         $query = new Query(
             array(
                 $type => $criterion = new Criterion\Field(
-                    "short_description",
+                    'short_description',
                     Operator::EQ,
-                    "two"
+                    'two'
                 ),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 0, $searchResult->totalCount );
+        $this->assertEquals(0, $searchResult->totalCount);
     }
 
     /**
@@ -1785,43 +1751,42 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldQueryLanguageAlwaysAvailable( $type = null )
+    public function testModifiedFieldQueryLanguageAlwaysAvailable($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", false );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', false);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-US', true);
 
         $query = new Query(
             array(
-                $type => $criterion = new Criterion\Field( "short_description", Operator::EQ, "one" ),
+                $type => $criterion = new Criterion\Field('short_description', Operator::EQ, 'one'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
+            'languages' => array(
+                'eng-GB',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -1831,43 +1796,42 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldQueryLanguageAlwaysAvailableComplement( $type = null )
+    public function testModifiedFieldQueryLanguageAlwaysAvailableComplement($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB", false );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB', false);
 
         $query = new Query(
             array(
-                $type => $criterion = new Criterion\Field( "short_description", Operator::EQ, "one" ),
+                $type => $criterion = new Criterion\Field('short_description', Operator::EQ, 'one'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-US",
+            'languages' => array(
+                'eng-US',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -1877,42 +1841,41 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldQueryAlwaysAvailable( $type = null )
+    public function testModifiedFieldQueryAlwaysAvailable($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-US', true);
 
         $query = new Query(
             array(
-                $type => $criterion = new Criterion\Field( "short_description", Operator::EQ, "one" ),
+                $type => $criterion = new Criterion\Field('short_description', Operator::EQ, 'one'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -1922,39 +1885,38 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldQueryAlwaysAvailableComplement( $type = null )
+    public function testModifiedFieldQueryAlwaysAvailableComplement($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB', true);
 
         $query = new Query(
             array(
-                $type => $criterion = new Criterion\Field( "short_description", Operator::EQ, "one" ),
+                $type => $criterion = new Criterion\Field('short_description', Operator::EQ, 'one'),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -1964,38 +1926,37 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldQueryAlwaysAvailableEmpty( $type = null )
+    public function testModifiedFieldQueryAlwaysAvailableEmpty($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-US', true);
 
         $query = new Query(
             array(
-                $type => $criterion = new Criterion\Field( "short_description", Operator::EQ, "two" ),
+                $type => $criterion = new Criterion\Field('short_description', Operator::EQ, 'two'),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 0, $searchResult->totalCount );
+        $this->assertEquals(0, $searchResult->totalCount);
     }
 
     /**
@@ -2005,45 +1966,44 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldRangeQueryAll( $type = null )
+    public function testModifiedFieldRangeQueryAll($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => $criterion = new Criterion\Field( "short_description", Operator::GTE, "z" ),
+                $type => $criterion = new Criterion\Field('short_description', Operator::GTE, 'z'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
-                "eng-US",
+            'languages' => array(
+                'eng-GB',
+                'eng-US',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -2053,40 +2013,39 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldRangeQuery( $type = null )
+    public function testModifiedFieldRangeQuery($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => $criterion = new Criterion\Field( "short_description", Operator::GTE, "z" ),
+                $type => $criterion = new Criterion\Field('short_description', Operator::GTE, 'z'),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
+            'languages' => array(
+                'eng-GB',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content2->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -2096,40 +2055,39 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldRangeQueryComplement( $type = null )
+    public function testModifiedFieldRangeQueryComplement($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => $criterion = new Criterion\Field( "short_description", Operator::GTE, "z" ),
+                $type => $criterion = new Criterion\Field('short_description', Operator::GTE, 'z'),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-US",
+            'languages' => array(
+                'eng-US',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -2139,39 +2097,38 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldRangeQueryEmpty( $type = null )
+    public function testModifiedFieldRangeQueryEmpty($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => $criterion = new Criterion\Field( "short_description", Operator::GTE, "z" ),
+                $type => $criterion = new Criterion\Field('short_description', Operator::GTE, 'z'),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 0, $searchResult->totalCount );
+        $this->assertEquals(0, $searchResult->totalCount);
     }
 
     /**
@@ -2181,43 +2138,42 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldRangeQueryLanguageAlwaysAvailable( $type = null )
+    public function testModifiedFieldRangeQueryLanguageAlwaysAvailable($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB", false );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB', false);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-US', true);
 
         $query = new Query(
             array(
-                $type => $criterion = new Criterion\Field( "short_description", Operator::GTE, "z" ),
+                $type => $criterion = new Criterion\Field('short_description', Operator::GTE, 'z'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_DESC, 'eng-GB'),
                 ),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
+            'languages' => array(
+                'eng-GB',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -2227,43 +2183,42 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldRangeQueryLanguageAlwaysAvailableComplement( $type = null )
+    public function testModifiedFieldRangeQueryLanguageAlwaysAvailableComplement($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB", false );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB', false);
 
         $query = new Query(
             array(
-                $type => $criterion = new Criterion\Field( "short_description", Operator::GTE, "z" ),
+                $type => $criterion = new Criterion\Field('short_description', Operator::GTE, 'z'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_DESC, 'eng-GB'),
                 ),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-US",
+            'languages' => array(
+                'eng-US',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -2273,43 +2228,42 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldRangeQueryAlwaysAvailable( $type = null )
+    public function testModifiedFieldRangeQueryAlwaysAvailable($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-US', true);
 
         $query = new Query(
             array(
-                $type => $criterion = new Criterion\Field( "short_description", Operator::GTE, "z" ),
+                $type => $criterion = new Criterion\Field('short_description', Operator::GTE, 'z'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_DESC, 'eng-GB'),
                 ),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -2319,39 +2273,38 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldRangeQueryAlwaysAvailableComplement( $type = null )
+    public function testModifiedFieldRangeQueryAlwaysAvailableComplement($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB', true);
 
         $query = new Query(
             array(
-                $type => $criterion = new Criterion\Field( "short_description", Operator::GTE, "z" ),
+                $type => $criterion = new Criterion\Field('short_description', Operator::GTE, 'z'),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -2361,38 +2314,37 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testModifiedFieldRangeQueryAlwaysAvailableEmpty( $type = null )
+    public function testModifiedFieldRangeQueryAlwaysAvailableEmpty($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-US", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-US', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB', true);
 
         $query = new Query(
             array(
-                $type => $criterion = new Criterion\Field( "short_description", Operator::GTE, "z" ),
+                $type => $criterion = new Criterion\Field('short_description', Operator::GTE, 'z'),
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
+        $criterion->setCustomField('folder', 'short_description', 'folder_name_value_s');
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 0, $searchResult->totalCount );
+        $this->assertEquals(0, $searchResult->totalCount);
     }
 
     /**
@@ -2402,7 +2354,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldFilterAll()
     {
-        $this->testModifiedFieldQueryAll( "filter" );
+        $this->testModifiedFieldQueryAll('filter');
     }
 
     /**
@@ -2412,7 +2364,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldFilter()
     {
-        $this->testModifiedFieldQuery( "filter" );
+        $this->testModifiedFieldQuery('filter');
     }
 
     /**
@@ -2422,7 +2374,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldFilterComplement()
     {
-        $this->testModifiedFieldQueryComplement( "filter" );
+        $this->testModifiedFieldQueryComplement('filter');
     }
 
     /**
@@ -2432,7 +2384,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldFilterEmpty()
     {
-        $this->testModifiedFieldQueryEmpty( "filter" );
+        $this->testModifiedFieldQueryEmpty('filter');
     }
 
     /**
@@ -2442,7 +2394,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldFilterLanguageAlwaysAvailable()
     {
-        $this->testModifiedFieldQueryLanguageAlwaysAvailable( "filter" );
+        $this->testModifiedFieldQueryLanguageAlwaysAvailable('filter');
     }
 
     /**
@@ -2452,7 +2404,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldFilterLanguageAlwaysAvailableComplement()
     {
-        $this->testModifiedFieldQueryLanguageAlwaysAvailableComplement( "filter" );
+        $this->testModifiedFieldQueryLanguageAlwaysAvailableComplement('filter');
     }
 
     /**
@@ -2462,7 +2414,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldFilterAlwaysAvailable()
     {
-        $this->testModifiedFieldQueryAlwaysAvailable( "filter" );
+        $this->testModifiedFieldQueryAlwaysAvailable('filter');
     }
 
     /**
@@ -2472,7 +2424,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldFilterAlwaysAvailableComplement()
     {
-        $this->testModifiedFieldQueryAlwaysAvailableComplement( "filter" );
+        $this->testModifiedFieldQueryAlwaysAvailableComplement('filter');
     }
 
     /**
@@ -2482,7 +2434,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldFilterAlwaysAvailableEmpty()
     {
-        $this->testModifiedFieldQueryAlwaysAvailableEmpty( "filter" );
+        $this->testModifiedFieldQueryAlwaysAvailableEmpty('filter');
     }
 
     /**
@@ -2492,7 +2444,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeFilterAll()
     {
-        $this->testModifiedFieldRangeQueryAll( "filter" );
+        $this->testModifiedFieldRangeQueryAll('filter');
     }
 
     /**
@@ -2502,7 +2454,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeFilter()
     {
-        $this->testModifiedFieldRangeQuery( "filter" );
+        $this->testModifiedFieldRangeQuery('filter');
     }
 
     /**
@@ -2512,7 +2464,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeFilterComplement()
     {
-        $this->testModifiedFieldRangeQueryComplement( "filter" );
+        $this->testModifiedFieldRangeQueryComplement('filter');
     }
 
     /**
@@ -2522,7 +2474,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeFilterEmpty()
     {
-        $this->testModifiedFieldRangeQueryEmpty( "filter" );
+        $this->testModifiedFieldRangeQueryEmpty('filter');
     }
 
     /**
@@ -2532,7 +2484,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeFilterLanguageAlwaysAvailable()
     {
-        $this->testModifiedFieldRangeQueryLanguageAlwaysAvailable( "filter" );
+        $this->testModifiedFieldRangeQueryLanguageAlwaysAvailable('filter');
     }
 
     /**
@@ -2542,7 +2494,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeFilterLanguageAlwaysAvailableComplement()
     {
-        $this->testModifiedFieldRangeQueryLanguageAlwaysAvailableComplement( "filter" );
+        $this->testModifiedFieldRangeQueryLanguageAlwaysAvailableComplement('filter');
     }
 
     /**
@@ -2552,7 +2504,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeFilterAlwaysAvailable()
     {
-        $this->testModifiedFieldRangeQueryAlwaysAvailable( "filter" );
+        $this->testModifiedFieldRangeQueryAlwaysAvailable('filter');
     }
 
     /**
@@ -2562,7 +2514,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeFilterAlwaysAvailableComplement()
     {
-        $this->testModifiedFieldRangeQueryAlwaysAvailableComplement( "filter" );
+        $this->testModifiedFieldRangeQueryAlwaysAvailableComplement('filter');
     }
 
     /**
@@ -2572,7 +2524,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testModifiedFieldRangeFilterAlwaysAvailableEmpty()
     {
-        $this->testModifiedFieldRangeQueryAlwaysAvailableEmpty( "filter" );
+        $this->testModifiedFieldRangeQueryAlwaysAvailableEmpty('filter');
     }
 
     /**
@@ -2582,34 +2534,33 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testMapLocationDistanceQueryAll( $type = null )
+    public function testMapLocationDistanceQueryAll($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
         $this->addMapLocationToFolderType();
 
         $content1 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 20, 20 ),
-            "eng-US",
-            array( 30, 30 ),
-            "eng-GB"
+            'eng-GB',
+            array(20, 20),
+            'eng-US',
+            array(30, 30),
+            'eng-GB'
         );
         $content2 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 30, 30 ),
-            "eng-US",
-            array( 20, 20 ),
-            "eng-GB"
+            'eng-GB',
+            array(30, 30),
+            'eng-US',
+            array(20, 20),
+            'eng-GB'
         );
 
         $query = new Query(
             array(
                 $type => new Criterion\MapLocationDistance(
-                    "map_location",
+                    'map_location',
                     Criterion\Operator::LTE,
                     2000,
                     10,
@@ -2617,12 +2568,12 @@ class SearchServiceFieldFiltersTest extends BaseTest
                 ),
                 'sortClauses' => array(
                     new SortClause\MapLocationDistance(
-                        "folder",
-                        "map_location",
+                        'folder',
+                        'map_location',
                         10,
                         10,
                         Query::SORT_ASC,
-                        "eng-GB"
+                        'eng-GB'
                     ),
                 ),
             )
@@ -2632,18 +2583,18 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
-                "eng-US",
+            'languages' => array(
+                'eng-GB',
+                'eng-US',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -2653,34 +2604,33 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testMapLocationDistanceQuery( $type = null )
+    public function testMapLocationDistanceQuery($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
         $this->addMapLocationToFolderType();
 
         $content1 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 20, 20 ),
-            "eng-US",
-            array( 30, 30 ),
-            "eng-GB"
+            'eng-GB',
+            array(20, 20),
+            'eng-US',
+            array(30, 30),
+            'eng-GB'
         );
         $content2 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 30, 30 ),
-            "eng-US",
-            array( 20, 20 ),
-            "eng-GB"
+            'eng-GB',
+            array(30, 30),
+            'eng-US',
+            array(20, 20),
+            'eng-GB'
         );
 
         $query = new Query(
             array(
                 $type => new Criterion\MapLocationDistance(
-                    "map_location",
+                    'map_location',
                     Criterion\Operator::LTE,
                     2000,
                     10,
@@ -2693,16 +2643,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
+            'languages' => array(
+                'eng-GB',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -2712,34 +2662,33 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testMapLocationDistanceQueryComplement( $type = null )
+    public function testMapLocationDistanceQueryComplement($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
         $this->addMapLocationToFolderType();
 
         $content1 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 20, 20 ),
-            "eng-US",
-            array( 30, 30 ),
-            "eng-GB"
+            'eng-GB',
+            array(20, 20),
+            'eng-US',
+            array(30, 30),
+            'eng-GB'
         );
         $content2 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 30, 30 ),
-            "eng-US",
-            array( 20, 20 ),
-            "eng-GB"
+            'eng-GB',
+            array(30, 30),
+            'eng-US',
+            array(20, 20),
+            'eng-GB'
         );
 
         $query = new Query(
             array(
                 $type => new Criterion\MapLocationDistance(
-                    "map_location",
+                    'map_location',
                     Criterion\Operator::LTE,
                     2000,
                     10,
@@ -2752,16 +2701,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-US",
+            'languages' => array(
+                'eng-US',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content2->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -2771,34 +2720,33 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testMapLocationDistanceQueryEmpty( $type = null )
+    public function testMapLocationDistanceQueryEmpty($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
         $this->addMapLocationToFolderType();
 
         $content1 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 20, 20 ),
-            "eng-US",
-            array( 30, 30 ),
-            "eng-GB"
+            'eng-GB',
+            array(20, 20),
+            'eng-US',
+            array(30, 30),
+            'eng-GB'
         );
         $content2 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 30, 30 ),
-            "eng-US",
-            array( 20, 20 ),
-            "eng-GB"
+            'eng-GB',
+            array(30, 30),
+            'eng-US',
+            array(20, 20),
+            'eng-GB'
         );
 
         $query = new Query(
             array(
                 $type => new Criterion\MapLocationDistance(
-                    "map_location",
+                    'map_location',
                     Criterion\Operator::LTE,
                     2000,
                     10,
@@ -2811,15 +2759,15 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 0, $searchResult->totalCount );
+        $this->assertEquals(0, $searchResult->totalCount);
     }
 
     /**
@@ -2829,36 +2777,35 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testMapLocationDistanceQueryLanguageAlwaysAvailable( $type = null )
+    public function testMapLocationDistanceQueryLanguageAlwaysAvailable($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
         $this->addMapLocationToFolderType();
 
         $content1 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 20, 20 ),
-            "eng-US",
-            array( 30, 30 ),
-            "eng-GB",
+            'eng-GB',
+            array(20, 20),
+            'eng-US',
+            array(30, 30),
+            'eng-GB',
             false
         );
         $content2 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 30, 30 ),
-            "eng-US",
-            array( 20, 20 ),
-            "eng-US",
+            'eng-GB',
+            array(30, 30),
+            'eng-US',
+            array(20, 20),
+            'eng-US',
             true
         );
 
         $query = new Query(
             array(
                 $type => new Criterion\MapLocationDistance(
-                    "map_location",
+                    'map_location',
                     Criterion\Operator::LTE,
                     2000,
                     10,
@@ -2866,12 +2813,12 @@ class SearchServiceFieldFiltersTest extends BaseTest
                 ),
                 'sortClauses' => array(
                     new SortClause\MapLocationDistance(
-                        "folder",
-                        "map_location",
+                        'folder',
+                        'map_location',
                         10,
                         10,
                         Query::SORT_ASC,
-                        "eng-GB"
+                        'eng-GB'
                     ),
                 ),
             )
@@ -2881,16 +2828,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
+            'languages' => array(
+                'eng-GB',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -2900,36 +2847,35 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testMapLocationDistanceQueryLanguageAlwaysAvailableComplement( $type = null )
+    public function testMapLocationDistanceQueryLanguageAlwaysAvailableComplement($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
         $this->addMapLocationToFolderType();
 
         $content1 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 20, 20 ),
-            "eng-US",
-            array( 30, 30 ),
-            "eng-GB",
+            'eng-GB',
+            array(20, 20),
+            'eng-US',
+            array(30, 30),
+            'eng-GB',
             true
         );
         $content2 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 30, 30 ),
-            "eng-US",
-            array( 20, 20 ),
-            "eng-GB",
+            'eng-GB',
+            array(30, 30),
+            'eng-US',
+            array(20, 20),
+            'eng-GB',
             false
         );
 
         $query = new Query(
             array(
                 $type => new Criterion\MapLocationDistance(
-                    "map_location",
+                    'map_location',
                     Criterion\Operator::LTE,
                     2000,
                     10,
@@ -2937,12 +2883,12 @@ class SearchServiceFieldFiltersTest extends BaseTest
                 ),
                 'sortClauses' => array(
                     new SortClause\MapLocationDistance(
-                        "folder",
-                        "map_location",
+                        'folder',
+                        'map_location',
                         10,
                         10,
                         Query::SORT_ASC,
-                        "eng-GB"
+                        'eng-GB'
                     ),
                 ),
             )
@@ -2952,16 +2898,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-US",
+            'languages' => array(
+                'eng-US',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -2971,36 +2917,35 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testMapLocationDistanceQueryAlwaysAvailable( $type = null )
+    public function testMapLocationDistanceQueryAlwaysAvailable($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
         $this->addMapLocationToFolderType();
 
         $content1 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 20, 20 ),
-            "eng-US",
-            array( 30, 30 ),
-            "eng-GB",
+            'eng-GB',
+            array(20, 20),
+            'eng-US',
+            array(30, 30),
+            'eng-GB',
             true
         );
         $content2 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 30, 30 ),
-            "eng-US",
-            array( 20, 20 ),
-            "eng-US",
+            'eng-GB',
+            array(30, 30),
+            'eng-US',
+            array(20, 20),
+            'eng-US',
             true
         );
 
         $query = new Query(
             array(
                 $type => new Criterion\MapLocationDistance(
-                    "map_location",
+                    'map_location',
                     Criterion\Operator::LTE,
                     2000,
                     10,
@@ -3008,12 +2953,12 @@ class SearchServiceFieldFiltersTest extends BaseTest
                 ),
                 'sortClauses' => array(
                     new SortClause\MapLocationDistance(
-                        "folder",
-                        "map_location",
+                        'folder',
+                        'map_location',
                         10,
                         10,
                         Query::SORT_ASC,
-                        "eng-GB"
+                        'eng-GB'
                     ),
                 ),
             )
@@ -3023,16 +2968,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -3042,36 +2987,35 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testMapLocationDistanceQueryAlwaysAvailableComplement( $type = null )
+    public function testMapLocationDistanceQueryAlwaysAvailableComplement($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
         $this->addMapLocationToFolderType();
 
         $content1 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 20, 20 ),
-            "eng-US",
-            array( 30, 30 ),
-            "eng-GB",
+            'eng-GB',
+            array(20, 20),
+            'eng-US',
+            array(30, 30),
+            'eng-GB',
             true
         );
         $content2 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 30, 30 ),
-            "eng-US",
-            array( 20, 20 ),
-            "eng-GB",
+            'eng-GB',
+            array(30, 30),
+            'eng-US',
+            array(20, 20),
+            'eng-GB',
             true
         );
 
         $query = new Query(
             array(
                 $type => new Criterion\MapLocationDistance(
-                    "map_location",
+                    'map_location',
                     Criterion\Operator::LTE,
                     2000,
                     10,
@@ -3084,15 +3028,15 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -3102,36 +3046,35 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testMapLocationDistanceQueryAlwaysAvailableEmpty( $type = null )
+    public function testMapLocationDistanceQueryAlwaysAvailableEmpty($type = null)
     {
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
         $this->addMapLocationToFolderType();
 
         $content1 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 20, 20 ),
-            "eng-US",
-            array( 30, 30 ),
-            "eng-US",
+            'eng-GB',
+            array(20, 20),
+            'eng-US',
+            array(30, 30),
+            'eng-US',
             true
         );
         $content2 = $this->createTestFolderWithLocation(
-            "eng-GB",
-            array( 30, 30 ),
-            "eng-US",
-            array( 20, 20 ),
-            "eng-GB",
+            'eng-GB',
+            array(30, 30),
+            'eng-US',
+            array(20, 20),
+            'eng-GB',
             true
         );
 
         $query = new Query(
             array(
                 $type => new Criterion\MapLocationDistance(
-                    "map_location",
+                    'map_location',
                     Criterion\Operator::LTE,
                     2000,
                     10,
@@ -3144,14 +3087,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 0, $searchResult->totalCount );
+        $this->assertEquals(0, $searchResult->totalCount);
     }
 
     /**
@@ -3161,7 +3104,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testMapLocationDistanceFilterAll()
     {
-        $this->testMapLocationDistanceQueryAll( "filter" );
+        $this->testMapLocationDistanceQueryAll('filter');
     }
 
     /**
@@ -3171,7 +3114,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testMapLocationDistanceFilter()
     {
-        $this->testMapLocationDistanceQuery( "filter" );
+        $this->testMapLocationDistanceQuery('filter');
     }
 
     /**
@@ -3181,7 +3124,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testMapLocationDistanceFilterComplement()
     {
-        $this->testMapLocationDistanceQueryComplement( "filter" );
+        $this->testMapLocationDistanceQueryComplement('filter');
     }
 
     /**
@@ -3191,7 +3134,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testMapLocationDistanceFilterEmpty()
     {
-        $this->testMapLocationDistanceQueryEmpty( "filter" );
+        $this->testMapLocationDistanceQueryEmpty('filter');
     }
 
     /**
@@ -3201,7 +3144,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testMapLocationDistanceFilterLanguageAlwaysAvailable()
     {
-        $this->testMapLocationDistanceQueryLanguageAlwaysAvailable( "filter" );
+        $this->testMapLocationDistanceQueryLanguageAlwaysAvailable('filter');
     }
 
     /**
@@ -3211,7 +3154,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testMapLocationDistanceFilterLanguageAlwaysAvailableComplement()
     {
-        $this->testMapLocationDistanceQueryLanguageAlwaysAvailableComplement( "filter" );
+        $this->testMapLocationDistanceQueryLanguageAlwaysAvailableComplement('filter');
     }
 
     /**
@@ -3221,7 +3164,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testMapLocationDistanceFilterAlwaysAvailable()
     {
-        $this->testMapLocationDistanceQueryAlwaysAvailable( "filter" );
+        $this->testMapLocationDistanceQueryAlwaysAvailable('filter');
     }
 
     /**
@@ -3231,7 +3174,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testMapLocationDistanceFilterAlwaysAvailableComplement()
     {
-        $this->testMapLocationDistanceQueryAlwaysAvailableComplement( "filter" );
+        $this->testMapLocationDistanceQueryAlwaysAvailableComplement('filter');
     }
 
     /**
@@ -3241,7 +3184,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testMapLocationDistanceFilterAlwaysAvailableEmpty()
     {
-        $this->testMapLocationDistanceQueryAlwaysAvailableEmpty( "filter" );
+        $this->testMapLocationDistanceQueryAlwaysAvailableEmpty('filter');
     }
 
     /**
@@ -3251,27 +3194,26 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldQueryAll( $type = null )
+    public function testCustomFieldQueryAll($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB');
 
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_s",
+                    'folder_name_value_s',
                     Operator::EQ,
-                    "two"
+                    'two'
                 ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
@@ -3280,18 +3222,18 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
-                "eng-US",
+            'languages' => array(
+                'eng-GB',
+                'eng-US',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -3301,24 +3243,23 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldQuery( $type = null )
+    public function testCustomFieldQuery($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB');
 
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_s",
+                    'folder_name_value_s',
                     Operator::EQ,
-                    "two"
+                    'two'
                 ),
             )
         );
@@ -3327,16 +3268,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
+            'languages' => array(
+                'eng-GB',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content2->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -3346,24 +3287,23 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldQueryComplement( $type = null )
+    public function testCustomFieldQueryComplement($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB');
 
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_s",
+                    'folder_name_value_s',
                     Operator::EQ,
-                    "two"
+                    'two'
                 ),
             )
         );
@@ -3372,16 +3312,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-US",
+            'languages' => array(
+                'eng-US',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -3391,24 +3331,23 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldQueryEmpty( $type = null )
+    public function testCustomFieldQueryEmpty($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB');
 
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_s",
+                    'folder_name_value_s',
                     Operator::EQ,
-                    "two"
+                    'two'
                 ),
             )
         );
@@ -3417,15 +3356,15 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 0, $searchResult->totalCount );
+        $this->assertEquals(0, $searchResult->totalCount);
     }
 
     /**
@@ -3435,27 +3374,26 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldQueryLanguageAlwaysAvailable( $type = null )
+    public function testCustomFieldQueryLanguageAlwaysAvailable($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", false );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', false);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-US', true);
 
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_s",
+                    'folder_name_value_s',
                     Operator::EQ,
-                    "one"
+                    'one'
                 ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
@@ -3464,16 +3402,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
+            'languages' => array(
+                'eng-GB',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -3483,27 +3421,26 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldQueryLanguageAlwaysAvailableComplement( $type = null )
+    public function testCustomFieldQueryLanguageAlwaysAvailableComplement($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB", false );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB', false);
 
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_s",
+                    'folder_name_value_s',
                     Operator::EQ,
-                    "one"
+                    'one'
                 ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
@@ -3512,16 +3449,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-US",
+            'languages' => array(
+                'eng-US',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -3531,27 +3468,26 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldQueryAlwaysAvailable( $type = null )
+    public function testCustomFieldQueryAlwaysAvailable($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-US', true);
 
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_s",
+                    'folder_name_value_s',
                     Operator::EQ,
-                    "one"
+                    'one'
                 ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
@@ -3560,16 +3496,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -3579,24 +3515,23 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldQueryAlwaysAvailableComplement( $type = null )
+    public function testCustomFieldQueryAlwaysAvailableComplement($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB', true);
 
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_s",
+                    'folder_name_value_s',
                     Operator::EQ,
-                    "one"
+                    'one'
                 ),
             )
         );
@@ -3605,15 +3540,15 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -3623,24 +3558,23 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldQueryAlwaysAvailableEmpty( $type = null )
+    public function testCustomFieldQueryAlwaysAvailableEmpty($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-US", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'one', 'eng-US', 'two', 'eng-US', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'two', 'eng-US', 'one', 'eng-GB', true);
 
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_s",
+                    'folder_name_value_s',
                     Operator::EQ,
-                    "one"
+                    'one'
                 ),
             )
         );
@@ -3649,14 +3583,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 0, $searchResult->totalCount );
+        $this->assertEquals(0, $searchResult->totalCount);
     }
 
     /**
@@ -3666,23 +3600,22 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldRangeQueryAll( $type = null )
+    public function testCustomFieldRangeQueryAll($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField('folder_name_value_s', Operator::GTE, 'z'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-GB'),
                 ),
             )
         );
@@ -3691,18 +3624,18 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
-                "eng-US",
+            'languages' => array(
+                'eng-GB',
+                'eng-US',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -3712,21 +3645,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldRangeQuery( $type = null )
+    public function testCustomFieldRangeQuery($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField('folder_name_value_s', Operator::GTE, 'z'),
             )
         );
 
@@ -3734,16 +3666,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
+            'languages' => array(
+                'eng-GB',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content2->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -3753,21 +3685,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldRangeQueryComplement( $type = null )
+    public function testCustomFieldRangeQueryComplement($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField('folder_name_value_s', Operator::GTE, 'z'),
             )
         );
 
@@ -3775,16 +3706,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-US",
+            'languages' => array(
+                'eng-US',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -3794,21 +3725,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldRangeQueryEmpty( $type = null )
+    public function testCustomFieldRangeQueryEmpty($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB" );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB');
+        $content2 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB');
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField('folder_name_value_s', Operator::GTE, 'z'),
             )
         );
 
@@ -3816,15 +3746,15 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
-            "useAlwaysAvailable" => false,
+            'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 0, $searchResult->totalCount );
+        $this->assertEquals(0, $searchResult->totalCount);
     }
 
     /**
@@ -3834,23 +3764,22 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldRangeQueryLanguageAlwaysAvailable( $type = null )
+    public function testCustomFieldRangeQueryLanguageAlwaysAvailable($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB", false );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB', false);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-US', true);
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField('folder_name_value_s', Operator::GTE, 'z'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_DESC, 'eng-GB'),
                 ),
             )
         );
@@ -3859,16 +3788,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
+            'languages' => array(
+                'eng-GB',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -3878,23 +3807,22 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldRangeQueryLanguageAlwaysAvailableComplement( $type = null )
+    public function testCustomFieldRangeQueryLanguageAlwaysAvailableComplement($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB", false );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB', false);
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField('folder_name_value_s', Operator::GTE, 'z'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_DESC, 'eng-GB'),
                 ),
             )
         );
@@ -3903,16 +3831,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "eng-US",
+            'languages' => array(
+                'eng-US',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -3922,23 +3850,22 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldRangeQueryAlwaysAvailable( $type = null )
+    public function testCustomFieldRangeQueryAlwaysAvailable($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-US", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-US', true);
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField('folder_name_value_s', Operator::GTE, 'z'),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\Field('folder', 'name', Query::SORT_DESC, 'eng-GB'),
                 ),
             )
         );
@@ -3947,16 +3874,16 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals(2, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
+        $this->assertEquals($content2->id, $searchResult->searchHits[1]->valueObject->id);
     }
 
     /**
@@ -3966,21 +3893,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldRangeQueryAlwaysAvailableComplement( $type = null )
+    public function testCustomFieldRangeQueryAlwaysAvailableComplement($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-GB", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-GB', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB', true);
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField('folder_name_value_s', Operator::GTE, 'z'),
             )
         );
 
@@ -3988,15 +3914,15 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
     }
 
     /**
@@ -4006,21 +3932,20 @@ class SearchServiceFieldFiltersTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testCustomFieldRangeQueryAlwaysAvailableEmpty( $type = null )
+    public function testCustomFieldRangeQueryAlwaysAvailableEmpty($type = null)
     {
         $this->checkCustomFieldsSupport();
 
-        if ( $type === null )
-        {
-            $type = "query";
+        if ($type === null) {
+            $type = 'query';
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "z", "eng-US", "e", "eng-US", true );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "e", "eng-US", "z", "eng-GB", true );
+        $content1 = $this->createTestFolderWithName('eng-GB', 'z', 'eng-US', 'e', 'eng-US', true);
+        $content2 = $this->createTestFolderWithName('eng-GB', 'e', 'eng-US', 'z', 'eng-GB', true);
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField('folder_name_value_s', Operator::GTE, 'z'),
             )
         );
 
@@ -4028,14 +3953,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         $fieldFilters = array(
-            "languages" => array(
-                "ger-DE",
+            'languages' => array(
+                'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent( $query, $fieldFilters );
+        $searchResult = $searchService->findContent($query, $fieldFilters);
 
-        $this->assertEquals( 0, $searchResult->totalCount );
+        $this->assertEquals(0, $searchResult->totalCount);
     }
 
     /**
@@ -4045,7 +3970,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldFilterAll()
     {
-        $this->testCustomFieldQueryAll( "filter" );
+        $this->testCustomFieldQueryAll('filter');
     }
 
     /**
@@ -4055,7 +3980,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldFilter()
     {
-        $this->testCustomFieldQuery( "filter" );
+        $this->testCustomFieldQuery('filter');
     }
 
     /**
@@ -4065,7 +3990,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldFilterComplement()
     {
-        $this->testCustomFieldQueryComplement( "filter" );
+        $this->testCustomFieldQueryComplement('filter');
     }
 
     /**
@@ -4075,7 +4000,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldFilterEmpty()
     {
-        $this->testCustomFieldQueryEmpty( "filter" );
+        $this->testCustomFieldQueryEmpty('filter');
     }
 
     /**
@@ -4085,7 +4010,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldFilterLanguageAlwaysAvailable()
     {
-        $this->testCustomFieldQueryLanguageAlwaysAvailable( "filter" );
+        $this->testCustomFieldQueryLanguageAlwaysAvailable('filter');
     }
 
     /**
@@ -4095,7 +4020,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldFilterLanguageAlwaysAvailableComplement()
     {
-        $this->testCustomFieldQueryLanguageAlwaysAvailableComplement( "filter" );
+        $this->testCustomFieldQueryLanguageAlwaysAvailableComplement('filter');
     }
 
     /**
@@ -4105,7 +4030,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldFilterAlwaysAvailable()
     {
-        $this->testCustomFieldQueryAlwaysAvailable( "filter" );
+        $this->testCustomFieldQueryAlwaysAvailable('filter');
     }
 
     /**
@@ -4115,7 +4040,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldFilterAlwaysAvailableComplement()
     {
-        $this->testCustomFieldQueryAlwaysAvailableComplement( "filter" );
+        $this->testCustomFieldQueryAlwaysAvailableComplement('filter');
     }
 
     /**
@@ -4125,7 +4050,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldFilterAlwaysAvailableEmpty()
     {
-        $this->testCustomFieldQueryAlwaysAvailableEmpty( "filter" );
+        $this->testCustomFieldQueryAlwaysAvailableEmpty('filter');
     }
 
     /**
@@ -4135,7 +4060,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeFilterAll()
     {
-        $this->testCustomFieldRangeQueryAll( "filter" );
+        $this->testCustomFieldRangeQueryAll('filter');
     }
 
     /**
@@ -4145,7 +4070,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeFilter()
     {
-        $this->testCustomFieldRangeQuery( "filter" );
+        $this->testCustomFieldRangeQuery('filter');
     }
 
     /**
@@ -4155,7 +4080,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeFilterComplement()
     {
-        $this->testCustomFieldRangeQueryComplement( "filter" );
+        $this->testCustomFieldRangeQueryComplement('filter');
     }
 
     /**
@@ -4165,7 +4090,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeFilterEmpty()
     {
-        $this->testCustomFieldRangeQueryEmpty( "filter" );
+        $this->testCustomFieldRangeQueryEmpty('filter');
     }
 
     /**
@@ -4175,7 +4100,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeFilterLanguageAlwaysAvailable()
     {
-        $this->testCustomFieldRangeQueryLanguageAlwaysAvailable( "filter" );
+        $this->testCustomFieldRangeQueryLanguageAlwaysAvailable('filter');
     }
 
     /**
@@ -4185,7 +4110,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeFilterLanguageAlwaysAvailableComplement()
     {
-        $this->testCustomFieldRangeQueryLanguageAlwaysAvailableComplement( "filter" );
+        $this->testCustomFieldRangeQueryLanguageAlwaysAvailableComplement('filter');
     }
 
     /**
@@ -4195,7 +4120,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeFilterAlwaysAvailable()
     {
-        $this->testCustomFieldRangeQueryAlwaysAvailable( "filter" );
+        $this->testCustomFieldRangeQueryAlwaysAvailable('filter');
     }
 
     /**
@@ -4205,7 +4130,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeFilterAlwaysAvailableComplement()
     {
-        $this->testCustomFieldRangeQueryAlwaysAvailableComplement( "filter" );
+        $this->testCustomFieldRangeQueryAlwaysAvailableComplement('filter');
     }
 
     /**
@@ -4215,6 +4140,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      */
     public function testCustomFieldRangeFilterAlwaysAvailableEmpty()
     {
-        $this->testCustomFieldRangeQueryAlwaysAvailableEmpty( "filter" );
+        $this->testCustomFieldRangeQueryAlwaysAvailableEmpty('filter');
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-return array (
+return array(
   0 =>
-  array (
+  array(
     'ezcontentobject_id' => '11',
     'ezcontentobject_contentclass_id' => '3',
     'ezcontentobject_section_id' => '2',
@@ -40,7 +40,7 @@ return array (
     'ezcontentobject_tree_main_node_id' => '12',
   ),
   1 =>
-  array (
+  array(
     'ezcontentobject_id' => '11',
     'ezcontentobject_contentclass_id' => '3',
     'ezcontentobject_section_id' => '2',
@@ -78,7 +78,7 @@ return array (
     'ezcontentobject_tree_main_node_id' => '12',
   ),
   2 =>
-  array (
+  array(
     'ezcontentobject_id' => '11',
     'ezcontentobject_contentclass_id' => '3',
     'ezcontentobject_section_id' => '2',
@@ -116,7 +116,7 @@ return array (
     'ezcontentobject_tree_main_node_id' => '12',
   ),
   3 =>
-  array (
+  array(
     'ezcontentobject_id' => '11',
     'ezcontentobject_contentclass_id' => '3',
     'ezcontentobject_section_id' => '2',

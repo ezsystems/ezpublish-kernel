@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContentMatcherFactory class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -29,16 +31,16 @@ class ContentMatcherFactory extends BaseFactory implements SiteAccessAware, Cont
      */
     private $configResolver;
 
-    public function __construct( ConfigResolverInterface $configResolver, Repository $repository )
+    public function __construct(ConfigResolverInterface $configResolver, Repository $repository)
     {
         $this->configResolver = $configResolver;
         parent::__construct(
             $repository,
-            $this->configResolver->getParameter( 'content_view' )
+            $this->configResolver->getParameter('content_view')
         );
     }
 
-    public function setContainer( ContainerInterface $container = null )
+    public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
     }
@@ -48,12 +50,13 @@ class ContentMatcherFactory extends BaseFactory implements SiteAccessAware, Cont
      *
      * @return \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MatcherInterface
      */
-    protected function getMatcher( $matcherIdentifier )
+    protected function getMatcher($matcherIdentifier)
     {
-        if ( $this->container->has( $matcherIdentifier ) )
-            return $this->container->get( $matcherIdentifier );
+        if ($this->container->has($matcherIdentifier)) {
+            return $this->container->get($matcherIdentifier);
+        }
 
-        return parent::getMatcher( $matcherIdentifier );
+        return parent::getMatcher($matcherIdentifier);
     }
 
     /**
@@ -61,13 +64,12 @@ class ContentMatcherFactory extends BaseFactory implements SiteAccessAware, Cont
      *
      * @param SiteAccess $siteAccess
      */
-    public function setSiteAccess( SiteAccess $siteAccess = null )
+    public function setSiteAccess(SiteAccess $siteAccess = null)
     {
-        if ( $siteAccess === null )
-        {
+        if ($siteAccess === null) {
             return;
         }
 
-        $this->matchConfig = $this->configResolver->getParameter( 'content_view', 'ezsettings', $siteAccess->name );
+        $this->matchConfig = $this->configResolver->getParameter('content_view', 'ezsettings', $siteAccess->name);
     }
 }

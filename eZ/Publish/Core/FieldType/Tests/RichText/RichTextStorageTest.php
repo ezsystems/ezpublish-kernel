@@ -1,22 +1,22 @@
 <?php
+
 /**
- * File containing the RichTextStorageTest
+ * File containing the RichTextStorageTest.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\FieldType\Tests\RichText;
 
-use eZ\Publish\Core\FieldType\RichText\RichTextStorage;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use PHPUnit_Framework_TestCase;
 
 /**
- * @package eZ\Publish\Core\Repository\Tests\FieldType\RichText\Gateway
  */
 class RichTextStorageTest extends PHPUnit_Framework_TestCase
 {
@@ -43,8 +43,8 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
     </para>
 </section>
 ',
-                array( 123, 456 ),
-                array( 123 => "http://www.ez.no" )
+                array(123, 456),
+                array(123 => 'http://www.ez.no'),
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -57,7 +57,7 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
 </section>
 ',
                 array(),
-                array()
+                array(),
             ),
         );
     }
@@ -65,50 +65,45 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider providerForTestGetFieldData
      */
-    public function testGetFieldData( $xmlString, $updatedXmlString, $linkIds, $linkUrls )
+    public function testGetFieldData($xmlString, $updatedXmlString, $linkIds, $linkUrls)
     {
         $gateway = $this->getGatewayMock();
         $gateway
-            ->expects( $this->once() )
-            ->method( "getIdUrlMap" )
-            ->with( $this->equalTo( $linkIds ) )
-            ->will( $this->returnValue( $linkUrls ) );
-        $gateway->expects( $this->never() )->method( "getUrlIdMap" );
-        $gateway->expects( $this->never() )->method( "getContentIds" );
-        $gateway->expects( $this->never() )->method( "insertUrl" );
+            ->expects($this->once())
+            ->method('getIdUrlMap')
+            ->with($this->equalTo($linkIds))
+            ->will($this->returnValue($linkUrls));
+        $gateway->expects($this->never())->method('getUrlIdMap');
+        $gateway->expects($this->never())->method('getContentIds');
+        $gateway->expects($this->never())->method('insertUrl');
 
         $logger = $this->getLoggerMock();
 
-        if ( count( $linkIds ) !== count( $linkUrls ) )
-        {
+        if (count($linkIds) !== count($linkUrls)) {
             $loggerInvocationCount = 0;
 
-            foreach ( $linkIds as $linkId )
-            {
-                if ( !isset( $linkUrls[$linkId] ) )
-                {
+            foreach ($linkIds as $linkId) {
+                if (!isset($linkUrls[$linkId])) {
                     $logger
-                        ->expects( $this->at( $loggerInvocationCount ) )
-                        ->method( "error" )
-                        ->with( "URL with ID {$linkId} not found" );
+                        ->expects($this->at($loggerInvocationCount))
+                        ->method('error')
+                        ->with("URL with ID {$linkId} not found");
                 }
             }
-        }
-        else
-        {
-            $logger->expects( $this->never() )->method( $this->anything() );
+        } else {
+            $logger->expects($this->never())->method($this->anything());
         }
 
         $versionInfo = new VersionInfo();
-        $value = new FieldValue( array( "data" => $xmlString ) );
-        $field = new Field( array( "value" => $value ) );
+        $value = new FieldValue(array('data' => $xmlString));
+        $field = new Field(array('value' => $value));
 
-        $storage = $this->getPartlyMockedStorage( array( "getGateway" ) );
+        $storage = $this->getPartlyMockedStorage(array('getGateway'));
         $storage
-            ->expects( $this->once() )
-            ->method( "getGateway" )
-            ->with( $this->getContext() )
-            ->will( $this->returnValue( $gateway ) );
+            ->expects($this->once())
+            ->method('getGateway')
+            ->with($this->getContext())
+            ->will($this->returnValue($gateway));
         $storage->getFieldData(
             $versionInfo,
             $field,
@@ -162,12 +157,12 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
     </para>
 </section>
 ',
-                array( "http://www.ez.no", "http://share.ez.no" ),
-                array( "http://www.ez.no" => 123 ),
-                array( "http://share.ez.no" => 456 ),
-                array( "abcdef789" ),
-                array( "abcdef789" => 7575 ),
-                true
+                array('http://www.ez.no', 'http://share.ez.no'),
+                array('http://www.ez.no' => 123),
+                array('http://share.ez.no' => 456),
+                array('abcdef789'),
+                array('abcdef789' => 7575),
+                true,
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -184,7 +179,7 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
                 array(),
                 array(),
                 array(),
-                true
+                true,
             ),
         );
     }
@@ -201,58 +196,52 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
         $remoteIds,
         $contentIds,
         $isUpdated
-    )
-    {
+    ) {
         $gatewayCallIndex = 0;
-        $versionInfo = new VersionInfo( array( "versionNo" => 24 ) );
-        $value = new FieldValue( array( "data" => $xmlString ) );
-        $field = new Field( array( "id" => 42, "value" => $value ) );
+        $versionInfo = new VersionInfo(array('versionNo' => 24));
+        $value = new FieldValue(array('data' => $xmlString));
+        $field = new Field(array('id' => 42, 'value' => $value));
         $gateway = $this->getGatewayMock();
 
         $gateway
-            ->expects( $this->at( $gatewayCallIndex++ ) )
-            ->method( "getUrlIdMap" )
-            ->with( $this->equalTo( $linkUrls ) )
-            ->will( $this->returnValue( $linkIds ) );
+            ->expects($this->at($gatewayCallIndex++))
+            ->method('getUrlIdMap')
+            ->with($this->equalTo($linkUrls))
+            ->will($this->returnValue($linkIds));
         $gateway
-            ->expects( $this->at( $gatewayCallIndex++ ) )
-            ->method( "getContentIds" )
-            ->with( $this->equalTo( $remoteIds ) )
-            ->will( $this->returnValue( $contentIds ) );
-        $gateway->expects( $this->never() )->method( "getIdUrlMap" );
-        if ( empty( $insertLinks ) )
-        {
-            $gateway->expects( $this->never() )->method( "insertUrl" );
+            ->expects($this->at($gatewayCallIndex++))
+            ->method('getContentIds')
+            ->with($this->equalTo($remoteIds))
+            ->will($this->returnValue($contentIds));
+        $gateway->expects($this->never())->method('getIdUrlMap');
+        if (empty($insertLinks)) {
+            $gateway->expects($this->never())->method('insertUrl');
         }
 
-        foreach ( $linkUrls as $url )
-        {
-            if ( isset( $insertLinks[$url] ) )
-            {
+        foreach ($linkUrls as $url) {
+            if (isset($insertLinks[$url])) {
                 $id = $insertLinks[$url];
                 $gateway
-                    ->expects( $this->at( $gatewayCallIndex++ ) )
-                    ->method( "insertUrl" )
-                    ->with( $this->equalTo( $url ) )
-                    ->will( $this->returnValue( $id ) );
-            }
-            else
-            {
+                    ->expects($this->at($gatewayCallIndex++))
+                    ->method('insertUrl')
+                    ->with($this->equalTo($url))
+                    ->will($this->returnValue($id));
+            } else {
                 $id = $linkIds[$url];
             }
 
             $gateway
-                ->expects( $this->at( $gatewayCallIndex++ ) )
-                ->method( "linkUrl" )
-                ->with( $id, 42, 24 );
+                ->expects($this->at($gatewayCallIndex++))
+                ->method('linkUrl')
+                ->with($id, 42, 24);
         }
 
-        $storage = $this->getPartlyMockedStorage( array( "getGateway" ) );
+        $storage = $this->getPartlyMockedStorage(array('getGateway'));
         $storage
-            ->expects( $this->once() )
-            ->method( "getGateway" )
-            ->with( $this->getContext() )
-            ->will( $this->returnValue( $gateway ) );
+            ->expects($this->once())
+            ->method('getGateway')
+            ->with($this->getContext())
+            ->will($this->returnValue($gateway));
         $result = $storage->storeFieldData(
             $versionInfo,
             $field,
@@ -283,8 +272,8 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
                 array(),
                 array(),
                 array(),
-                array( "abcdef789" ),
-                array()
+                array('abcdef789'),
+                array(),
             ),
         );
     }
@@ -300,44 +289,41 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
         $insertLinks,
         $remoteIds,
         $contentIds
-    )
-    {
+    ) {
         $gateway = $this->getGatewayMock();
         $gateway
-            ->expects( $this->once() )
-            ->method( "getUrlIdMap" )
-            ->with( $this->equalTo( $linkUrls ) )
-            ->will( $this->returnValue( $linkIds ) );
+            ->expects($this->once())
+            ->method('getUrlIdMap')
+            ->with($this->equalTo($linkUrls))
+            ->will($this->returnValue($linkIds));
         $gateway
-            ->expects( $this->once() )
-            ->method( "getContentIds" )
-            ->with( $this->equalTo( $remoteIds ) )
-            ->will( $this->returnValue( $contentIds ) );
-        $gateway->expects( $this->never() )->method( "getIdUrlMap" );
-        if ( empty( $insertLinks ) )
-        {
-            $gateway->expects( $this->never() )->method( "insertUrl" );
+            ->expects($this->once())
+            ->method('getContentIds')
+            ->with($this->equalTo($remoteIds))
+            ->will($this->returnValue($contentIds));
+        $gateway->expects($this->never())->method('getIdUrlMap');
+        if (empty($insertLinks)) {
+            $gateway->expects($this->never())->method('insertUrl');
         }
 
-        foreach ( $insertLinks as $index => $linkMap )
-        {
+        foreach ($insertLinks as $index => $linkMap) {
             $gateway
-                ->expects( $this->at( $index + 2 ) )
-                ->method( "insertUrl" )
-                ->with( $this->equalTo( $linkMap["url"] ) )
-                ->will( $this->returnValue( $linkMap["id"] ) );
+                ->expects($this->at($index + 2))
+                ->method('insertUrl')
+                ->with($this->equalTo($linkMap['url']))
+                ->will($this->returnValue($linkMap['id']));
         }
 
         $versionInfo = new VersionInfo();
-        $value = new FieldValue( array( "data" => $xmlString ) );
-        $field = new Field( array( "value" => $value ) );
+        $value = new FieldValue(array('data' => $xmlString));
+        $field = new Field(array('value' => $value));
 
-        $storage = $this->getPartlyMockedStorage( array( "getGateway" ) );
+        $storage = $this->getPartlyMockedStorage(array('getGateway'));
         $storage
-            ->expects( $this->once() )
-            ->method( "getGateway" )
-            ->with( $this->getContext() )
-            ->will( $this->returnValue( $gateway ) );
+            ->expects($this->once())
+            ->method('getGateway')
+            ->with($this->getContext())
+            ->will($this->returnValue($gateway));
 
         $storage->storeFieldData(
             $versionInfo,
@@ -348,25 +334,25 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
 
     public function testDeleteFieldData()
     {
-        $versionInfo = new VersionInfo( array( "versionNo" => 42 ) );
-        $fieldIds = array( 12, 23 );
+        $versionInfo = new VersionInfo(array('versionNo' => 42));
+        $fieldIds = array(12, 23);
         $gateway = $this->getGatewayMock();
-        $storage = $this->getPartlyMockedStorage( array( "getGateway" ) );
+        $storage = $this->getPartlyMockedStorage(array('getGateway'));
         $storage
-            ->expects( $this->once() )
-            ->method( "getGateway" )
-            ->with( $this->getContext() )
-            ->will( $this->returnValue( $gateway ) );
+            ->expects($this->once())
+            ->method('getGateway')
+            ->with($this->getContext())
+            ->will($this->returnValue($gateway));
 
         $gateway
-            ->expects( $this->at( 0 ) )
-            ->method( "unlinkUrl" )
-            ->with( 12, 42 );
+            ->expects($this->at(0))
+            ->method('unlinkUrl')
+            ->with(12, 42);
 
         $gateway
-            ->expects( $this->at( 1 ) )
-            ->method( "unlinkUrl" )
-            ->with( 23, 42 );
+            ->expects($this->at(1))
+            ->method('unlinkUrl')
+            ->with(23, 42);
 
         $storage->deleteFieldData(
             $versionInfo,
@@ -380,14 +366,14 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
      *
      * @return \eZ\Publish\Core\FieldType\RichText\RichTextStorage|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getPartlyMockedStorage( array $methods )
+    protected function getPartlyMockedStorage(array $methods)
     {
         return $this->getMock(
-            "eZ\\Publish\\Core\\FieldType\\RichText\\RichTextStorage",
+            'eZ\\Publish\\Core\\FieldType\\RichText\\RichTextStorage',
             $methods,
             array(
                 array(),
-                $this->getLoggerMock()
+                $this->getLoggerMock(),
             )
         );
     }
@@ -397,7 +383,7 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
      */
     protected function getContext()
     {
-        return array( "context" );
+        return array('context');
     }
 
     /**
@@ -410,10 +396,9 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
      */
     protected function getLoggerMock()
     {
-        if ( !isset( $this->loggerMock ) )
-        {
+        if (!isset($this->loggerMock)) {
             $this->loggerMock = $this->getMockForAbstractClass(
-                "Psr\\Log\\LoggerInterface"
+                'Psr\\Log\\LoggerInterface'
             );
         }
 
@@ -430,10 +415,9 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
      */
     protected function getGatewayMock()
     {
-        if ( !isset( $this->gatewayMock ) )
-        {
+        if (!isset($this->gatewayMock)) {
             $this->gatewayMock = $this
-                ->getMockBuilder( "eZ\\Publish\\Core\\FieldType\\RichText\\RichTextStorage\\Gateway" )
+                ->getMockBuilder('eZ\\Publish\\Core\\FieldType\\RichText\\RichTextStorage\\Gateway')
                 ->disableOriginalConstructor()
                 ->getMock();
         }

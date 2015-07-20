@@ -1,6 +1,7 @@
 <?php
+
 /**
- * File generates service container instance
+ * File generates service container instance.
  *
  * Expects global $config to be set by caller
  *
@@ -9,18 +10,17 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
-
 use eZ\Publish\Core\Base\ServiceContainer;
 
-if ( !isset( $config ) )
-{
-    throw new \RuntimeException( '$config not provided to container.php' );
+if (!isset($config)) {
+    throw new \RuntimeException('$config not provided to container.php');
 }
 
 // Setup class loader
-require_once $config['install_dir'] . "/vendor/autoload.php";
+require_once $config['install_dir'] . '/vendor/autoload.php';
 
 return new ServiceContainer(
     $config['container_builder_path'],

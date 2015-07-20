@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the DoctrineDatabase Location Gateway class
+ * File containing the DoctrineDatabase Location Gateway class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -30,165 +32,164 @@ class DoctrineDatabase extends Gateway
 {
     /**
      * 2^30, since PHP_INT_MAX can cause overflows in DB systems, if PHP is run
-     * on 64 bit systems
+     * on 64 bit systems.
      */
     const MAX_LIMIT = 1073741824;
 
     /**
-     * Database handler
+     * Database handler.
      *
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $handler;
 
     /**
-     * Construct from database handler
+     * Construct from database handler.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
      */
-    public function __construct( DatabaseHandler $handler )
+    public function __construct(DatabaseHandler $handler)
     {
         $this->handler = $handler;
     }
 
     /**
-     * Returns an array with basic node data
+     * Returns an array with basic node data.
      *
      * We might want to cache this, since this method is used by about every
      * method in the location handler.
      *
      * @todo optimize
+     *
      * @param mixed $nodeId
      *
      * @return array
      */
-    public function getBasicNodeData( $nodeId )
+    public function getBasicNodeData($nodeId)
     {
         $query = $this->handler->createSelectQuery();
         $query
-            ->select( '*' )
-            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->select('*')
+            ->from($this->handler->quoteTable('ezcontentobject_tree'))
             ->where(
                 $query->expr->eq(
-                    $this->handler->quoteColumn( 'node_id' ),
-                    $query->bindValue( $nodeId )
+                    $this->handler->quoteColumn('node_id'),
+                    $query->bindValue($nodeId)
                 )
             );
         $statement = $query->prepare();
         $statement->execute();
 
-        if ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
-        {
+        if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             return $row;
         }
 
-        throw new NotFound( 'location', $nodeId );
+        throw new NotFound('location', $nodeId);
     }
 
     /**
-     * Returns an array with basic node data
+     * Returns an array with basic node data.
      *
      * @todo optimize
+     *
      * @param mixed $remoteId
      *
      * @return array
      */
-    public function getBasicNodeDataByRemoteId( $remoteId )
+    public function getBasicNodeDataByRemoteId($remoteId)
     {
         $query = $this->handler->createSelectQuery();
         $query
-            ->select( '*' )
-            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->select('*')
+            ->from($this->handler->quoteTable('ezcontentobject_tree'))
             ->where(
                 $query->expr->eq(
-                    $this->handler->quoteColumn( 'remote_id' ),
-                    $query->bindValue( $remoteId )
+                    $this->handler->quoteColumn('remote_id'),
+                    $query->bindValue($remoteId)
                 )
             );
         $statement = $query->prepare();
         $statement->execute();
 
-        if ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
-        {
+        if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             return $row;
         }
 
-        throw new NotFound( 'location', $remoteId );
+        throw new NotFound('location', $remoteId);
     }
 
     /**
      * Loads data for all Locations for $contentId, optionally only in the
-     * subtree starting at $rootLocationId
+     * subtree starting at $rootLocationId.
      *
      * @param int $contentId
      * @param int $rootLocationId
      *
      * @return array
      */
-    public function loadLocationDataByContent( $contentId, $rootLocationId = null )
+    public function loadLocationDataByContent($contentId, $rootLocationId = null)
     {
         $query = $this->handler->createSelectQuery();
         $query
-            ->select( '*' )
-            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->select('*')
+            ->from($this->handler->quoteTable('ezcontentobject_tree'))
             ->where(
                 $query->expr->eq(
-                    $this->handler->quoteColumn( 'contentobject_id' ),
-                    $query->bindValue( $contentId )
+                    $this->handler->quoteColumn('contentobject_id'),
+                    $query->bindValue($contentId)
                 )
             );
 
-        if ( $rootLocationId !== null )
-        {
-            $this->applySubtreeLimitation( $query, $rootLocationId );
+        if ($rootLocationId !== null) {
+            $this->applySubtreeLimitation($query, $rootLocationId);
         }
 
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
      * @see \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway::loadParentLocationsDataForDraftContent
      */
-    public function loadParentLocationsDataForDraftContent( $contentId, $drafts = null )
+    public function loadParentLocationsDataForDraftContent($contentId, $drafts = null)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->handler->createSelectQuery();
         $query->selectDistinct(
-            "ezcontentobject_tree.*"
+            'ezcontentobject_tree.*'
         )->from(
-            $this->handler->quoteTable( "ezcontentobject_tree" )
+            $this->handler->quoteTable('ezcontentobject_tree')
         )->innerJoin(
-            $this->handler->quoteTable( "eznode_assignment" ),
+            $this->handler->quoteTable('eznode_assignment'),
             $query->expr->lAnd(
 
                 $query->expr->eq(
-                    $this->handler->quoteColumn( "node_id", "ezcontentobject_tree" ),
-                    $this->handler->quoteColumn( "parent_node", "eznode_assignment" )
+                    $this->handler->quoteColumn('node_id', 'ezcontentobject_tree'),
+                    $this->handler->quoteColumn('parent_node', 'eznode_assignment')
                 ),
                 $query->expr->eq(
-                    $this->handler->quoteColumn( "contentobject_id", "eznode_assignment" ),
-                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                    $this->handler->quoteColumn('contentobject_id', 'eznode_assignment'),
+                    $query->bindValue($contentId, null, \PDO::PARAM_INT)
                 ),
                 $query->expr->eq(
-                    $this->handler->quoteColumn( "op_code", "eznode_assignment" ),
-                    $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_CREATE, null, \PDO::PARAM_INT )
+                    $this->handler->quoteColumn('op_code', 'eznode_assignment'),
+                    $query->bindValue(self::NODE_ASSIGNMENT_OP_CODE_CREATE, null, \PDO::PARAM_INT)
                 )
             )
         )->innerJoin(
-            $this->handler->quoteTable( "ezcontentobject" ),
+            $this->handler->quoteTable('ezcontentobject'),
             $query->expr->lAnd(
                 $query->expr->lOr(
                     $query->expr->eq(
-                        $this->handler->quoteColumn( "contentobject_id", "eznode_assignment" ),
-                        $this->handler->quoteColumn( "id", "ezcontentobject" )
+                        $this->handler->quoteColumn('contentobject_id', 'eznode_assignment'),
+                        $this->handler->quoteColumn('id', 'ezcontentobject')
                     )
                 ),
                 $query->expr->eq(
-                    $this->handler->quoteColumn( "status", "ezcontentobject" ),
-                    $query->bindValue( ContentInfo::STATUS_DRAFT, null, \PDO::PARAM_INT )
+                    $this->handler->quoteColumn('status', 'ezcontentobject'),
+                    $query->bindValue(ContentInfo::STATUS_DRAFT, null, \PDO::PARAM_INT)
                 )
             )
         );
@@ -196,163 +197,159 @@ class DoctrineDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
-     * Find all content in the given subtree
+     * Find all content in the given subtree.
      *
      * @param mixed $sourceId
      * @param bool $onlyIds
      *
      * @return array
      */
-    public function getSubtreeContent( $sourceId, $onlyIds = false )
+    public function getSubtreeContent($sourceId, $onlyIds = false)
     {
         $query = $this->handler->createSelectQuery();
-        $query->select( $onlyIds ? 'node_id, contentobject_id, depth' : '*' )->from(
-            $this->handler->quoteTable( 'ezcontentobject_tree' )
+        $query->select($onlyIds ? 'node_id, contentobject_id, depth' : '*')->from(
+            $this->handler->quoteTable('ezcontentobject_tree')
         );
-        $this->applySubtreeLimitation( $query, $sourceId );
+        $this->applySubtreeLimitation($query, $sourceId);
         $query->orderBy(
-            $this->handler->quoteColumn( 'depth', 'ezcontentobject_tree' )
+            $this->handler->quoteColumn('depth', 'ezcontentobject_tree')
         )->orderBy(
-            $this->handler->quoteColumn( 'node_id', 'ezcontentobject_tree' )
+            $this->handler->quoteColumn('node_id', 'ezcontentobject_tree')
         );
         $statement = $query->prepare();
         $statement->execute();
 
-        $results = $statement->fetchAll( $onlyIds ? ( PDO::FETCH_COLUMN | PDO::FETCH_GROUP ) : PDO::FETCH_ASSOC );
+        $results = $statement->fetchAll($onlyIds ? (PDO::FETCH_COLUMN | PDO::FETCH_GROUP) : PDO::FETCH_ASSOC);
         // array_map() is used to to map all elements stored as $results[$i][0] to $results[$i]
-        return $onlyIds ? array_map( "reset", $results ) : $results;
+        return $onlyIds ? array_map('reset', $results) : $results;
     }
 
     /**
-     * Limits the given $query to the subtree starting at $rootLocationId
+     * Limits the given $query to the subtree starting at $rootLocationId.
      *
      * @param \eZ\Publish\Core\Persistence\Database\Query $query
      * @param string $rootLocationId
-     *
-     * @return void
      */
-    protected function applySubtreeLimitation( DatabaseQuery $query, $rootLocationId )
+    protected function applySubtreeLimitation(DatabaseQuery $query, $rootLocationId)
     {
         $query->where(
             $query->expr->like(
-                $this->handler->quoteColumn( 'path_string', 'ezcontentobject_tree' ),
-                $query->bindValue( '%/' . $rootLocationId . '/%' )
+                $this->handler->quoteColumn('path_string', 'ezcontentobject_tree'),
+                $query->bindValue('%/' . $rootLocationId . '/%')
             )
         );
     }
 
     /**
-     * Returns data for the first level children of the location identified by given $locationId
+     * Returns data for the first level children of the location identified by given $locationId.
      *
      * @param mixed $locationId
      *
      * @return array
      */
-    public function getChildren( $locationId )
+    public function getChildren($locationId)
     {
         $query = $this->handler->createSelectQuery();
-        $query->select( "*" )->from(
-            $this->handler->quoteTable( "ezcontentobject_tree" )
+        $query->select('*')->from(
+            $this->handler->quoteTable('ezcontentobject_tree')
         )->where(
             $query->expr->eq(
-                $this->handler->quoteColumn( "parent_node_id", "ezcontentobject_tree" ),
-                $query->bindValue( $locationId, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('parent_node_id', 'ezcontentobject_tree'),
+                $query->bindValue($locationId, null, \PDO::PARAM_INT)
             )
         );
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
-     * Update path strings to move nodes in the ezcontentobject_tree table
+     * Update path strings to move nodes in the ezcontentobject_tree table.
      *
      * This query can likely be optimized to use some more advanced string
      * operations, which then depend on the respective database.
      *
      * @todo optimize
+     *
      * @param array $sourceNodeData
      * @param array $destinationNodeData
-     *
-     * @return void
      */
-    public function moveSubtreeNodes( array $sourceNodeData, array $destinationNodeData )
+    public function moveSubtreeNodes(array $sourceNodeData, array $destinationNodeData)
     {
-        $fromPathString = $sourceNodeData["path_string"];
+        $fromPathString = $sourceNodeData['path_string'];
 
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->handler->createSelectQuery();
         $query
             ->select(
-                $this->handler->quoteColumn( 'node_id' ),
-                $this->handler->quoteColumn( 'parent_node_id' ),
-                $this->handler->quoteColumn( 'path_string' ),
-                $this->handler->quoteColumn( 'path_identification_string' )
+                $this->handler->quoteColumn('node_id'),
+                $this->handler->quoteColumn('parent_node_id'),
+                $this->handler->quoteColumn('path_string'),
+                $this->handler->quoteColumn('path_identification_string')
             )
-            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->from($this->handler->quoteTable('ezcontentobject_tree'))
             ->where(
                 $query->expr->like(
-                    $this->handler->quoteColumn( 'path_string' ),
-                    $query->bindValue( $fromPathString . '%' )
+                    $this->handler->quoteColumn('path_string'),
+                    $query->bindValue($fromPathString . '%')
                 )
             );
         $statement = $query->prepare();
         $statement->execute();
 
         $rows = $statement->fetchAll();
-        $oldParentPathString = implode( '/', array_slice( explode( '/', $fromPathString ), 0, -2 ) ) . '/';
+        $oldParentPathString = implode('/', array_slice(explode('/', $fromPathString), 0, -2)) . '/';
         $oldParentPathIdentificationString = implode(
-            '/', array_slice( explode( '/', $sourceNodeData["path_identification_string"] ), 0, -1 )
+            '/',
+            array_slice(explode('/', $sourceNodeData['path_identification_string']), 0, -1)
         );
-        foreach ( $rows as $row )
-        {
+        foreach ($rows as $row) {
             // Prefixing ensures correct replacement when old parent is root node
             $newPathString = str_replace(
-                "prefix" . $oldParentPathString,
-                $destinationNodeData["path_string"],
-                "prefix" . $row['path_string']
+                'prefix' . $oldParentPathString,
+                $destinationNodeData['path_string'],
+                'prefix' . $row['path_string']
             );
             $newPathIdentificationString = str_replace(
-                "prefix" . $oldParentPathIdentificationString,
-                $destinationNodeData["path_identification_string"] . "/",
-                "prefix" . $row['path_identification_string']
+                'prefix' . $oldParentPathIdentificationString,
+                $destinationNodeData['path_identification_string'] . '/',
+                'prefix' . $row['path_identification_string']
             );
 
             $newParentId = $row['parent_node_id'];
-            if ( $row['path_string'] === $fromPathString )
-            {
-                $newParentId = (int)implode( '', array_slice( explode( '/', $newPathString ), -3, 1 ) );
+            if ($row['path_string'] === $fromPathString) {
+                $newParentId = (int)implode('', array_slice(explode('/', $newPathString), -3, 1));
             }
 
             /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
             $query = $this->handler->createUpdateQuery();
             $query
-                ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+                ->update($this->handler->quoteTable('ezcontentobject_tree'))
                 ->set(
-                    $this->handler->quoteColumn( 'path_string' ),
-                    $query->bindValue( $newPathString )
+                    $this->handler->quoteColumn('path_string'),
+                    $query->bindValue($newPathString)
                 )
                 ->set(
-                    $this->handler->quoteColumn( 'path_identification_string' ),
-                    $query->bindValue( $newPathIdentificationString )
+                    $this->handler->quoteColumn('path_identification_string'),
+                    $query->bindValue($newPathIdentificationString)
                 )
                 ->set(
-                    $this->handler->quoteColumn( 'depth' ),
-                    $query->bindValue( substr_count( $newPathString, '/' ) - 2 )
+                    $this->handler->quoteColumn('depth'),
+                    $query->bindValue(substr_count($newPathString, '/') - 2)
                 )
                 ->set(
-                    $this->handler->quoteColumn( 'parent_node_id' ),
-                    $query->bindValue( $newParentId )
+                    $this->handler->quoteColumn('parent_node_id'),
+                    $query->bindValue($newParentId)
                 )
                 ->where(
                     $query->expr->eq(
-                        $this->handler->quoteColumn( 'node_id' ),
-                        $query->bindValue( $row['node_id'] )
+                        $this->handler->quoteColumn('node_id'),
+                        $query->bindValue($row['node_id'])
                     )
                 );
             $query->prepare()->execute();
@@ -360,28 +357,26 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Updated subtree modification time for all nodes on path
+     * Updated subtree modification time for all nodes on path.
      *
      * @param string $pathString
      * @param int|null $timestamp
-     *
-     * @return void
      */
-    public function updateSubtreeModificationTime( $pathString, $timestamp = null )
+    public function updateSubtreeModificationTime($pathString, $timestamp = null)
     {
-        $nodes = array_filter( explode( '/', $pathString ) );
+        $nodes = array_filter(explode('/', $pathString));
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->update($this->handler->quoteTable('ezcontentobject_tree'))
             ->set(
-                $this->handler->quoteColumn( 'modified_subnode' ),
+                $this->handler->quoteColumn('modified_subnode'),
                 $query->bindValue(
                     $timestamp ?: time()
                 )
             )
             ->where(
                 $query->expr->in(
-                    $this->handler->quoteColumn( 'node_id' ),
+                    $this->handler->quoteColumn('node_id'),
                     $nodes
                 )
             );
@@ -393,38 +388,38 @@ class DoctrineDatabase extends Gateway
      *
      * @param string $pathString
      */
-    public function hideSubtree( $pathString )
+    public function hideSubtree($pathString)
     {
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->update($this->handler->quoteTable('ezcontentobject_tree'))
             ->set(
-                $this->handler->quoteColumn( 'is_invisible' ),
-                $query->bindValue( 1 )
+                $this->handler->quoteColumn('is_invisible'),
+                $query->bindValue(1)
             )
             ->set(
-                $this->handler->quoteColumn( 'modified_subnode' ),
-                $query->bindValue( time() )
+                $this->handler->quoteColumn('modified_subnode'),
+                $query->bindValue(time())
             )
             ->where(
                 $query->expr->like(
-                    $this->handler->quoteColumn( 'path_string' ),
-                    $query->bindValue( $pathString . '%' )
+                    $this->handler->quoteColumn('path_string'),
+                    $query->bindValue($pathString . '%')
                 )
             );
         $query->prepare()->execute();
 
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->update($this->handler->quoteTable('ezcontentobject_tree'))
             ->set(
-                $this->handler->quoteColumn( 'is_hidden' ),
-                $query->bindValue( 1 )
+                $this->handler->quoteColumn('is_hidden'),
+                $query->bindValue(1)
             )
             ->where(
                 $query->expr->eq(
-                    $this->handler->quoteColumn( 'path_string' ),
-                    $query->bindValue( $pathString )
+                    $this->handler->quoteColumn('path_string'),
+                    $query->bindValue($pathString)
                 )
             );
         $query->prepare()->execute();
@@ -436,20 +431,20 @@ class DoctrineDatabase extends Gateway
      *
      * @param string $pathString
      */
-    public function unHideSubtree( $pathString )
+    public function unHideSubtree($pathString)
     {
         // Unhide the requested node
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->update($this->handler->quoteTable('ezcontentobject_tree'))
             ->set(
-                $this->handler->quoteColumn( 'is_hidden' ),
-                $query->bindValue( 0 )
+                $this->handler->quoteColumn('is_hidden'),
+                $query->bindValue(0)
             )
             ->where(
                 $query->expr->eq(
-                    $this->handler->quoteColumn( 'path_string' ),
-                    $query->bindValue( $pathString )
+                    $this->handler->quoteColumn('path_string'),
+                    $query->bindValue($pathString)
                 )
             );
         $query->prepare()->execute();
@@ -457,24 +452,23 @@ class DoctrineDatabase extends Gateway
         // Check if any parent nodes are explicitly hidden
         $query = $this->handler->createSelectQuery();
         $query
-            ->select( $this->handler->quoteColumn( 'path_string' ) )
-            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->select($this->handler->quoteColumn('path_string'))
+            ->from($this->handler->quoteTable('ezcontentobject_tree'))
             ->where(
                 $query->expr->lAnd(
                     $query->expr->eq(
-                        $this->handler->quoteColumn( 'is_hidden' ),
-                        $query->bindValue( 1 )
+                        $this->handler->quoteColumn('is_hidden'),
+                        $query->bindValue(1)
                     ),
                     $query->expr->in(
-                        $this->handler->quoteColumn( 'node_id' ),
-                        array_filter( explode( '/', $pathString ) )
+                        $this->handler->quoteColumn('node_id'),
+                        array_filter(explode('/', $pathString))
                     )
                 )
             );
         $statement = $query->prepare();
         $statement->execute();
-        if ( count( $statement->fetchAll( \PDO::FETCH_COLUMN ) ) )
-        {
+        if (count($statement->fetchAll(\PDO::FETCH_COLUMN))) {
             // There are parent nodes set hidden, so that we can skip marking
             // something visible again.
             return;
@@ -484,55 +478,53 @@ class DoctrineDatabase extends Gateway
         // should be unhidden
         $query = $this->handler->createSelectQuery();
         $query
-            ->select( $this->handler->quoteColumn( 'path_string' ) )
-            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->select($this->handler->quoteColumn('path_string'))
+            ->from($this->handler->quoteTable('ezcontentobject_tree'))
             ->where(
                 $query->expr->lAnd(
                     $query->expr->eq(
-                        $this->handler->quoteColumn( 'is_hidden' ),
-                        $query->bindValue( 1 )
+                        $this->handler->quoteColumn('is_hidden'),
+                        $query->bindValue(1)
                     ),
                     $query->expr->like(
-                        $this->handler->quoteColumn( 'path_string' ),
-                        $query->bindValue( $pathString . '%' )
+                        $this->handler->quoteColumn('path_string'),
+                        $query->bindValue($pathString . '%')
                     )
                 )
             );
         $statement = $query->prepare();
         $statement->execute();
-        $hiddenSubtrees = $statement->fetchAll( \PDO::FETCH_COLUMN );
+        $hiddenSubtrees = $statement->fetchAll(\PDO::FETCH_COLUMN);
 
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->update($this->handler->quoteTable('ezcontentobject_tree'))
             ->set(
-                $this->handler->quoteColumn( 'is_invisible' ),
-                $query->bindValue( 0 )
+                $this->handler->quoteColumn('is_invisible'),
+                $query->bindValue(0)
             )
             ->set(
-                $this->handler->quoteColumn( 'modified_subnode' ),
-                $query->bindValue( time() )
+                $this->handler->quoteColumn('modified_subnode'),
+                $query->bindValue(time())
             );
 
         // Build where expression selecting the nodes, which should be made
         // visible again
         $where = $query->expr->like(
-            $this->handler->quoteColumn( 'path_string' ),
-            $query->bindValue( $pathString . '%' )
+            $this->handler->quoteColumn('path_string'),
+            $query->bindValue($pathString . '%')
         );
-        if ( count( $hiddenSubtrees ) )
-        {
+        if (count($hiddenSubtrees)) {
             $handler = $this->handler;
             $where = $query->expr->lAnd(
                 $where,
                 $query->expr->lAnd(
                     array_map(
-                        function ( $pathString ) use ( $query, $handler )
-                        {
+                        function ($pathString) use ($query, $handler) {
                             return $query->expr->not(
                                 $query->expr->like(
-                                    $handler->quoteColumn( 'path_string' ),
-                                    $query->bindValue( $pathString . '%' )
+                                    $handler->quoteColumn('path_string'),
+                                    $query->bindValue($pathString . '%')
                                 )
                             );
                         },
@@ -541,7 +533,7 @@ class DoctrineDatabase extends Gateway
                 )
             );
         }
-        $query->where( $where );
+        $query->where($where);
         $statement = $query->prepare()->execute();
     }
 
@@ -554,153 +546,152 @@ class DoctrineDatabase extends Gateway
      * @param mixed $locationId1
      * @param mixed $locationId2
      *
-     * @return boolean
+     * @return bool
      */
-    public function swap( $locationId1, $locationId2 )
+    public function swap($locationId1, $locationId2)
     {
         $query = $this->handler->createSelectQuery();
         $query
             ->select(
-                $this->handler->quoteColumn( 'node_id' ),
-                $this->handler->quoteColumn( 'contentobject_id' ),
-                $this->handler->quoteColumn( 'contentobject_version' )
+                $this->handler->quoteColumn('node_id'),
+                $this->handler->quoteColumn('contentobject_id'),
+                $this->handler->quoteColumn('contentobject_version')
             )
-            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->from($this->handler->quoteTable('ezcontentobject_tree'))
             ->where(
                 $query->expr->in(
-                    $this->handler->quoteColumn( 'node_id' ),
-                    array( $locationId1, $locationId2 )
+                    $this->handler->quoteColumn('node_id'),
+                    array($locationId1, $locationId2)
                 )
             );
         $statement = $query->prepare();
         $statement->execute();
-        foreach ( $statement->fetchAll() as $row )
-        {
+        foreach ($statement->fetchAll() as $row) {
             $contentObjects[$row['node_id']] = $row;
         }
 
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->update($this->handler->quoteTable('ezcontentobject_tree'))
             ->set(
-                $this->handler->quoteColumn( 'contentobject_id' ),
-                $query->bindValue( $contentObjects[$locationId2]['contentobject_id'] )
+                $this->handler->quoteColumn('contentobject_id'),
+                $query->bindValue($contentObjects[$locationId2]['contentobject_id'])
             )
             ->set(
-                $this->handler->quoteColumn( 'contentobject_version' ),
-                $query->bindValue( $contentObjects[$locationId2]['contentobject_version'] )
+                $this->handler->quoteColumn('contentobject_version'),
+                $query->bindValue($contentObjects[$locationId2]['contentobject_version'])
             )
             ->where(
                 $query->expr->eq(
-                    $this->handler->quoteColumn( 'node_id' ),
-                    $query->bindValue( $locationId1 )
+                    $this->handler->quoteColumn('node_id'),
+                    $query->bindValue($locationId1)
                 )
             );
         $query->prepare()->execute();
 
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->update($this->handler->quoteTable('ezcontentobject_tree'))
             ->set(
-                $this->handler->quoteColumn( 'contentobject_id' ),
-                $query->bindValue( $contentObjects[$locationId1]['contentobject_id'] )
+                $this->handler->quoteColumn('contentobject_id'),
+                $query->bindValue($contentObjects[$locationId1]['contentobject_id'])
             )
             ->set(
-                $this->handler->quoteColumn( 'contentobject_version' ),
-                $query->bindValue( $contentObjects[$locationId1]['contentobject_version'] )
+                $this->handler->quoteColumn('contentobject_version'),
+                $query->bindValue($contentObjects[$locationId1]['contentobject_version'])
             )
             ->where(
                 $query->expr->eq(
-                    $this->handler->quoteColumn( 'node_id' ),
-                    $query->bindValue( $locationId2 )
+                    $this->handler->quoteColumn('node_id'),
+                    $query->bindValue($locationId2)
                 )
             );
         $query->prepare()->execute();
     }
 
     /**
-     * Creates a new location in given $parentNode
+     * Creates a new location in given $parentNode.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param array $parentNode
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function create( CreateStruct $createStruct, array $parentNode )
+    public function create(CreateStruct $createStruct, array $parentNode)
     {
         $location = new Location();
         /** @var $query \eZ\Publish\Core\Persistence\Database\InsertQuery */
         $query = $this->handler->createInsertQuery();
         $query
-            ->insertInto( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->insertInto($this->handler->quoteTable('ezcontentobject_tree'))
             ->set(
-                $this->handler->quoteColumn( 'contentobject_id' ),
-                $query->bindValue( $location->contentId = $createStruct->contentId, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('contentobject_id'),
+                $query->bindValue($location->contentId = $createStruct->contentId, null, \PDO::PARAM_INT)
             )->set(
-                $this->handler->quoteColumn( 'contentobject_is_published' ),
-                $query->bindValue( 1, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('contentobject_is_published'),
+                $query->bindValue(1, null, \PDO::PARAM_INT)
             )->set(
-                $this->handler->quoteColumn( 'contentobject_version' ),
-                $query->bindValue( $createStruct->contentVersion, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('contentobject_version'),
+                $query->bindValue($createStruct->contentVersion, null, \PDO::PARAM_INT)
             )->set(
-                $this->handler->quoteColumn( 'depth' ),
-                $query->bindValue( $location->depth = $parentNode['depth'] + 1, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('depth'),
+                $query->bindValue($location->depth = $parentNode['depth'] + 1, null, \PDO::PARAM_INT)
             )->set(
-                $this->handler->quoteColumn( 'is_hidden' ),
-                $query->bindValue( $location->hidden = $createStruct->hidden, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('is_hidden'),
+                $query->bindValue($location->hidden = $createStruct->hidden, null, \PDO::PARAM_INT)
             )->set(
-                $this->handler->quoteColumn( 'is_invisible' ),
-                $query->bindValue( $location->invisible = $createStruct->invisible, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('is_invisible'),
+                $query->bindValue($location->invisible = $createStruct->invisible, null, \PDO::PARAM_INT)
             )->set(
-                $this->handler->quoteColumn( 'modified_subnode' ),
-                $query->bindValue( time(), null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('modified_subnode'),
+                $query->bindValue(time(), null, \PDO::PARAM_INT)
             )->set(
-                $this->handler->quoteColumn( 'node_id' ),
-                $this->handler->getAutoIncrementValue( 'ezcontentobject_tree', 'node_id' )
+                $this->handler->quoteColumn('node_id'),
+                $this->handler->getAutoIncrementValue('ezcontentobject_tree', 'node_id')
             )->set(
-                $this->handler->quoteColumn( 'parent_node_id' ),
-                $query->bindValue( $location->parentId = $parentNode['node_id'], null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('parent_node_id'),
+                $query->bindValue($location->parentId = $parentNode['node_id'], null, \PDO::PARAM_INT)
             )->set(
-                $this->handler->quoteColumn( 'path_identification_string' ),
-                $query->bindValue( $location->pathIdentificationString = $createStruct->pathIdentificationString, null, \PDO::PARAM_STR )
+                $this->handler->quoteColumn('path_identification_string'),
+                $query->bindValue($location->pathIdentificationString = $createStruct->pathIdentificationString, null, \PDO::PARAM_STR)
             )->set(
-                $this->handler->quoteColumn( 'path_string' ),
-                $query->bindValue( 'dummy' ) // Set later
+                $this->handler->quoteColumn('path_string'),
+                $query->bindValue('dummy') // Set later
             )->set(
-                $this->handler->quoteColumn( 'priority' ),
-                $query->bindValue( $location->priority = $createStruct->priority, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('priority'),
+                $query->bindValue($location->priority = $createStruct->priority, null, \PDO::PARAM_INT)
             )->set(
-                $this->handler->quoteColumn( 'remote_id' ),
-                $query->bindValue( $location->remoteId = $createStruct->remoteId, null, \PDO::PARAM_STR )
+                $this->handler->quoteColumn('remote_id'),
+                $query->bindValue($location->remoteId = $createStruct->remoteId, null, \PDO::PARAM_STR)
             )->set(
-                $this->handler->quoteColumn( 'sort_field' ),
-                $query->bindValue( $location->sortField = $createStruct->sortField, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('sort_field'),
+                $query->bindValue($location->sortField = $createStruct->sortField, null, \PDO::PARAM_INT)
             )->set(
-                $this->handler->quoteColumn( 'sort_order' ),
-                $query->bindValue( $location->sortOrder = $createStruct->sortOrder, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('sort_order'),
+                $query->bindValue($location->sortOrder = $createStruct->sortOrder, null, \PDO::PARAM_INT)
             );
         $query->prepare()->execute();
 
-        $location->id = $this->handler->lastInsertId( $this->handler->getSequenceName( 'ezcontentobject_tree', 'node_id' ) );
+        $location->id = $this->handler->lastInsertId($this->handler->getSequenceName('ezcontentobject_tree', 'node_id'));
 
         $mainLocationId = $createStruct->mainLocationId === true ? $location->id : $createStruct->mainLocationId;
         $location->pathString = $parentNode['path_string'] . $location->id . '/';
         /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->update($this->handler->quoteTable('ezcontentobject_tree'))
             ->set(
-                $this->handler->quoteColumn( 'path_string' ),
-                $query->bindValue( $location->pathString )
+                $this->handler->quoteColumn('path_string'),
+                $query->bindValue($location->pathString)
             )
             ->set(
-                $this->handler->quoteColumn( 'main_node_id' ),
-                $query->bindValue( $mainLocationId, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('main_node_id'),
+                $query->bindValue($mainLocationId, null, \PDO::PARAM_INT)
             )
             ->where(
                 $query->expr->eq(
-                    $this->handler->quoteColumn( 'node_id' ),
-                    $query->bindValue( $location->id, null, \PDO::PARAM_INT )
+                    $this->handler->quoteColumn('node_id'),
+                    $query->bindValue($location->id, null, \PDO::PARAM_INT)
                 )
             );
         $query->prepare()->execute();
@@ -709,95 +700,90 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Create an entry in the node assignment table
+     * Create an entry in the node assignment table.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param mixed $parentNodeId
      * @param int $type
-     *
-     * @return void
      */
-    public function createNodeAssignment( CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP )
+    public function createNodeAssignment(CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP)
     {
-        $isMain = ( $createStruct->mainLocationId === true ? 1 : 0 );
+        $isMain = ($createStruct->mainLocationId === true ? 1 : 0);
 
         $query = $this->handler->createInsertQuery();
         $query
-            ->insertInto( $this->handler->quoteTable( 'eznode_assignment' ) )
+            ->insertInto($this->handler->quoteTable('eznode_assignment'))
             ->set(
-                $this->handler->quoteColumn( 'contentobject_id' ),
-                $query->bindValue( $createStruct->contentId, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('contentobject_id'),
+                $query->bindValue($createStruct->contentId, null, \PDO::PARAM_INT)
             )->set(
-                $this->handler->quoteColumn( 'contentobject_version' ),
-                $query->bindValue( $createStruct->contentVersion, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('contentobject_version'),
+                $query->bindValue($createStruct->contentVersion, null, \PDO::PARAM_INT)
             )->set(
-                $this->handler->quoteColumn( 'from_node_id' ),
-                $query->bindValue( 0, null, \PDO::PARAM_INT ) // unused field
+                $this->handler->quoteColumn('from_node_id'),
+                $query->bindValue(0, null, \PDO::PARAM_INT) // unused field
             )->set(
-                $this->handler->quoteColumn( 'id' ),
-                $this->handler->getAutoIncrementValue( 'eznode_assignment', 'id' )
+                $this->handler->quoteColumn('id'),
+                $this->handler->getAutoIncrementValue('eznode_assignment', 'id')
             )->set(
-                $this->handler->quoteColumn( 'is_main' ),
-                $query->bindValue( $isMain, null, \PDO::PARAM_INT ) // Changed by the business layer, later
+                $this->handler->quoteColumn('is_main'),
+                $query->bindValue($isMain, null, \PDO::PARAM_INT) // Changed by the business layer, later
             )->set(
-                $this->handler->quoteColumn( 'op_code' ),
-                $query->bindValue( $type, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('op_code'),
+                $query->bindValue($type, null, \PDO::PARAM_INT)
             )->set(
-                $this->handler->quoteColumn( 'parent_node' ),
-                $query->bindValue( $parentNodeId, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('parent_node'),
+                $query->bindValue($parentNodeId, null, \PDO::PARAM_INT)
             )->set(
                 // parent_remote_id column should contain the remote id of the corresponding Location
-                $this->handler->quoteColumn( 'parent_remote_id' ),
-                $query->bindValue( $createStruct->remoteId, null, \PDO::PARAM_STR )
+                $this->handler->quoteColumn('parent_remote_id'),
+                $query->bindValue($createStruct->remoteId, null, \PDO::PARAM_STR)
             )->set(
                 // remote_id column should contain the remote id of the node assignment itself,
                 // however this was never implemented completely in Legacy Stack, so we just set
                 // it to default value '0'
-                $this->handler->quoteColumn( 'remote_id' ),
-                $query->bindValue( '0', null, \PDO::PARAM_STR )
+                $this->handler->quoteColumn('remote_id'),
+                $query->bindValue('0', null, \PDO::PARAM_STR)
             )->set(
-                $this->handler->quoteColumn( 'sort_field' ),
-                $query->bindValue( $createStruct->sortField, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('sort_field'),
+                $query->bindValue($createStruct->sortField, null, \PDO::PARAM_INT)
             )->set(
-                $this->handler->quoteColumn( 'sort_order' ),
-                $query->bindValue( $createStruct->sortOrder, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('sort_order'),
+                $query->bindValue($createStruct->sortOrder, null, \PDO::PARAM_INT)
             )->set(
-                $this->handler->quoteColumn( 'priority' ),
-                $query->bindValue( $createStruct->priority, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('priority'),
+                $query->bindValue($createStruct->priority, null, \PDO::PARAM_INT)
             )->set(
-                $this->handler->quoteColumn( 'is_hidden' ),
-                $query->bindValue( $createStruct->hidden, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('is_hidden'),
+                $query->bindValue($createStruct->hidden, null, \PDO::PARAM_INT)
             );
         $query->prepare()->execute();
     }
 
     /**
-     * Deletes node assignment for given $contentId and $versionNo
+     * Deletes node assignment for given $contentId and $versionNo.
      *
      * If $versionNo is not passed all node assignments for given $contentId are deleted
      *
      * @param int $contentId
      * @param int|null $versionNo
-     *
-     * @return void
      */
-    public function deleteNodeAssignment( $contentId, $versionNo = null )
+    public function deleteNodeAssignment($contentId, $versionNo = null)
     {
         $query = $this->handler->createDeleteQuery();
         $query->deleteFrom(
             'eznode_assignment'
         )->where(
             $query->expr->eq(
-                $this->handler->quoteColumn( 'contentobject_id' ),
-                $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('contentobject_id'),
+                $query->bindValue($contentId, null, \PDO::PARAM_INT)
             )
         );
-        if ( isset( $versionNo ) )
-        {
+        if (isset($versionNo)) {
             $query->where(
                 $query->expr->eq(
-                    $this->handler->quoteColumn( 'contentobject_version' ),
-                    $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                    $this->handler->quoteColumn('contentobject_version'),
+                    $query->bindValue($versionNo, null, \PDO::PARAM_INT)
                 )
             );
         }
@@ -805,37 +791,35 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Update node assignment table
+     * Update node assignment table.
      *
      * @param int $contentObjectId
      * @param int $oldParent
      * @param int $newParent
      * @param int $opcode
-     *
-     * @return void
      */
-    public function updateNodeAssignment( $contentObjectId, $oldParent, $newParent, $opcode )
+    public function updateNodeAssignment($contentObjectId, $oldParent, $newParent, $opcode)
     {
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( $this->handler->quoteTable( 'eznode_assignment' ) )
+            ->update($this->handler->quoteTable('eznode_assignment'))
             ->set(
-                $this->handler->quoteColumn( 'parent_node' ),
-                $query->bindValue( $newParent, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('parent_node'),
+                $query->bindValue($newParent, null, \PDO::PARAM_INT)
             )
             ->set(
-                $this->handler->quoteColumn( 'op_code' ),
-                $query->bindValue( $opcode, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('op_code'),
+                $query->bindValue($opcode, null, \PDO::PARAM_INT)
             )
             ->where(
                 $query->expr->lAnd(
                     $query->expr->eq(
-                        $this->handler->quoteColumn( 'contentobject_id' ),
-                        $query->bindValue( $contentObjectId, null, \PDO::PARAM_INT )
+                        $this->handler->quoteColumn('contentobject_id'),
+                        $query->bindValue($contentObjectId, null, \PDO::PARAM_INT)
                     ),
                     $query->expr->eq(
-                        $this->handler->quoteColumn( 'parent_node' ),
-                        $query->bindValue( $oldParent, null, \PDO::PARAM_INT )
+                        $this->handler->quoteColumn('parent_node'),
+                        $query->bindValue($oldParent, null, \PDO::PARAM_INT)
                     )
                 )
             );
@@ -843,55 +827,49 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Create locations from node assignments
+     * Create locations from node assignments.
      *
      * Convert existing node assignments into real locations.
      *
      * @param mixed $contentId
      * @param mixed $versionNo
-     *
-     * @return void
      */
-    public function createLocationsFromNodeAssignments( $contentId, $versionNo )
+    public function createLocationsFromNodeAssignments($contentId, $versionNo)
     {
         // select all node assignments with OP_CODE_CREATE (3) for this content
         $query = $this->handler->createSelectQuery();
         $query
-            ->select( '*' )
-            ->from( $this->handler->quoteTable( 'eznode_assignment' ) )
+            ->select('*')
+            ->from($this->handler->quoteTable('eznode_assignment'))
             ->where(
                 $query->expr->lAnd(
                     $query->expr->eq(
-                        $this->handler->quoteColumn( 'contentobject_id' ),
-                        $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                        $this->handler->quoteColumn('contentobject_id'),
+                        $query->bindValue($contentId, null, \PDO::PARAM_INT)
                     ),
                     $query->expr->eq(
-                        $this->handler->quoteColumn( 'contentobject_version' ),
-                        $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                        $this->handler->quoteColumn('contentobject_version'),
+                        $query->bindValue($versionNo, null, \PDO::PARAM_INT)
                     ),
                     $query->expr->eq(
-                        $this->handler->quoteColumn( 'op_code' ),
-                        $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_CREATE, null, \PDO::PARAM_INT )
+                        $this->handler->quoteColumn('op_code'),
+                        $query->bindValue(self::NODE_ASSIGNMENT_OP_CODE_CREATE, null, \PDO::PARAM_INT)
                     )
                 )
-            )->orderBy( 'id' );
+            )->orderBy('id');
         $statement = $query->prepare();
         $statement->execute();
 
         // convert all these assignments to nodes
 
-        while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
-        {
-            if ( (bool)$row['is_main'] === true )
-            {
+        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            if ((bool)$row['is_main'] === true) {
                 $mainLocationId = true;
-            }
-            else
-            {
-                $mainLocationId = $this->getMainNodeId( $contentId );
+            } else {
+                $mainLocationId = $this->getMainNodeId($contentId);
             }
 
-            $parentLocationData = $this->getBasicNodeData( $row['parent_node'] );
+            $parentLocationData = $this->getBasicNodeData($row['parent_node']);
             $isInvisible = $row['is_hidden'] || $parentLocationData['is_hidden'] || $parentLocationData['is_invisible'];
             $this->create(
                 new CreateStruct(
@@ -920,24 +898,22 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Updates all Locations of content identified with $contentId with $versionNo
+     * Updates all Locations of content identified with $contentId with $versionNo.
      *
      * @param mixed $contentId
      * @param mixed $versionNo
-     *
-     * @return void
      */
-    public function updateLocationsContentVersionNo( $contentId, $versionNo )
+    public function updateLocationsContentVersionNo($contentId, $versionNo)
     {
         $query = $this->handler->createUpdateQuery();
         $query->update(
-            $this->handler->quoteTable( "ezcontentobject_tree" )
+            $this->handler->quoteTable('ezcontentobject_tree')
         )->set(
-            $this->handler->quoteColumn( "contentobject_version" ),
-            $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
+            $this->handler->quoteColumn('contentobject_version'),
+            $query->bindValue($versionNo, null, \PDO::PARAM_INT)
         )->where(
             $query->expr->eq(
-                $this->handler->quoteColumn( "contentobject_id" ),
+                $this->handler->quoteColumn('contentobject_id'),
                 $contentId
             )
         );
@@ -945,40 +921,37 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Searches for the main nodeId of $contentId in $versionId
+     * Searches for the main nodeId of $contentId in $versionId.
      *
      * @param int $contentId
      *
      * @return int|bool
      */
-    private function getMainNodeId( $contentId )
+    private function getMainNodeId($contentId)
     {
         $query = $this->handler->createSelectQuery();
         $query
-            ->select( 'node_id' )
-            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->select('node_id')
+            ->from($this->handler->quoteTable('ezcontentobject_tree'))
             ->where(
                 $query->expr->lAnd(
                     $query->expr->eq(
-                        $this->handler->quoteColumn( 'contentobject_id' ),
-                        $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                        $this->handler->quoteColumn('contentobject_id'),
+                        $query->bindValue($contentId, null, \PDO::PARAM_INT)
                     ),
                     $query->expr->eq(
-                        $this->handler->quoteColumn( 'node_id' ),
-                        $this->handler->quoteColumn( 'main_node_id' )
+                        $this->handler->quoteColumn('node_id'),
+                        $this->handler->quoteColumn('main_node_id')
                     )
                 )
             );
         $statement = $query->prepare();
         $statement->execute();
 
-        $result = $statement->fetchAll( \PDO::FETCH_ASSOC );
-        if ( count( $result ) === 1 )
-        {
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        if (count($result) === 1) {
             return (int)$result[0]['node_id'];
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -990,34 +963,32 @@ class DoctrineDatabase extends Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
-     *
-     * @return void
      */
-    public function update( UpdateStruct $location, $locationId )
+    public function update(UpdateStruct $location, $locationId)
     {
         $query = $this->handler->createUpdateQuery();
 
         $query
-            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->update($this->handler->quoteTable('ezcontentobject_tree'))
             ->set(
-                $this->handler->quoteColumn( 'priority' ),
-                $query->bindValue( $location->priority )
+                $this->handler->quoteColumn('priority'),
+                $query->bindValue($location->priority)
             )
             ->set(
-                $this->handler->quoteColumn( 'remote_id' ),
-                $query->bindValue( $location->remoteId )
+                $this->handler->quoteColumn('remote_id'),
+                $query->bindValue($location->remoteId)
             )
             ->set(
-                $this->handler->quoteColumn( 'sort_order' ),
-                $query->bindValue( $location->sortOrder )
+                $this->handler->quoteColumn('sort_order'),
+                $query->bindValue($location->sortOrder)
             )
             ->set(
-                $this->handler->quoteColumn( 'sort_field' ),
-                $query->bindValue( $location->sortField )
+                $this->handler->quoteColumn('sort_field'),
+                $query->bindValue($location->sortField)
             )
             ->where(
                 $query->expr->eq(
-                    $this->handler->quoteColumn( 'node_id' ),
+                    $this->handler->quoteColumn('node_id'),
                     $locationId
                 )
             );
@@ -1038,54 +1009,52 @@ class DoctrineDatabase extends Gateway
      * @param mixed $locationId
      * @param mixed $parentLocationId
      * @param string $text
-     *
-     * @return void
      */
-    public function updatePathIdentificationString( $locationId, $parentLocationId, $text )
+    public function updatePathIdentificationString($locationId, $parentLocationId, $text)
     {
-        $parentData = $this->getBasicNodeData( $parentLocationId );
+        $parentData = $this->getBasicNodeData($parentLocationId);
 
-        $newPathIdentificationString = empty( $parentData["path_identification_string"] ) ?
+        $newPathIdentificationString = empty($parentData['path_identification_string']) ?
             $text :
-            $parentData["path_identification_string"] . "/" . $text;
+            $parentData['path_identification_string'] . '/' . $text;
 
         /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->handler->createUpdateQuery();
         $query->update(
-            "ezcontentobject_tree"
+            'ezcontentobject_tree'
         )->set(
-            $this->handler->quoteColumn( "path_identification_string" ),
-            $query->bindValue( $newPathIdentificationString, null, \PDO::PARAM_STR )
+            $this->handler->quoteColumn('path_identification_string'),
+            $query->bindValue($newPathIdentificationString, null, \PDO::PARAM_STR)
         )->where(
             $query->expr->eq(
-                $this->handler->quoteColumn( "node_id" ),
-                $query->bindValue( $locationId, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('node_id'),
+                $query->bindValue($locationId, null, \PDO::PARAM_INT)
             )
         );
         $query->prepare()->execute();
     }
 
     /**
-     * Deletes ezcontentobject_tree row for given $locationId (node_id)
+     * Deletes ezcontentobject_tree row for given $locationId (node_id).
      *
      * @param mixed $locationId
      */
-    public function removeLocation( $locationId )
+    public function removeLocation($locationId)
     {
         $query = $this->handler->createDeleteQuery();
         $query->deleteFrom(
-            "ezcontentobject_tree"
+            'ezcontentobject_tree'
         )->where(
             $query->expr->eq(
-                $this->handler->quoteColumn( "node_id" ),
-                $query->bindValue( $locationId, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('node_id'),
+                $query->bindValue($locationId, null, \PDO::PARAM_INT)
             )
         );
         $query->prepare()->execute();
     }
 
     /**
-     * Returns id of the next in line node to be set as a new main node
+     * Returns id of the next in line node to be set as a new main node.
      *
      * This returns lowest node id for content identified by $contentId, and not of
      * the node identified by given $locationId (current main node).
@@ -1096,31 +1065,31 @@ class DoctrineDatabase extends Gateway
      *
      * @return array
      */
-    public function getFallbackMainNodeData( $contentId, $locationId )
+    public function getFallbackMainNodeData($contentId, $locationId)
     {
         $query = $this->handler->createSelectQuery();
         $query->select(
-            $this->handler->quoteColumn( "node_id" ),
-            $this->handler->quoteColumn( "contentobject_version" ),
-            $this->handler->quoteColumn( "parent_node_id" )
+            $this->handler->quoteColumn('node_id'),
+            $this->handler->quoteColumn('contentobject_version'),
+            $this->handler->quoteColumn('parent_node_id')
         )->from(
-            $this->handler->quoteTable( "ezcontentobject_tree" )
+            $this->handler->quoteTable('ezcontentobject_tree')
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
-                    $this->handler->quoteColumn( "contentobject_id" ),
-                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                    $this->handler->quoteColumn('contentobject_id'),
+                    $query->bindValue($contentId, null, \PDO::PARAM_INT)
                 ),
                 $query->expr->neq(
-                    $this->handler->quoteColumn( "node_id" ),
-                    $query->bindValue( $locationId, null, \PDO::PARAM_INT )
+                    $this->handler->quoteColumn('node_id'),
+                    $query->bindValue($locationId, null, \PDO::PARAM_INT)
                 )
             )
-        )->orderBy( "node_id", SelectQuery::ASC )->limit( 1 );
+        )->orderBy('node_id', SelectQuery::ASC)->limit(1);
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetch( \PDO::FETCH_ASSOC );
+        return $statement->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -1130,26 +1099,25 @@ class DoctrineDatabase extends Gateway
      *
      * @param mixed $locationId
      *
-     * @return boolean
+     * @return bool
      */
-    public function trashLocation( $locationId )
+    public function trashLocation($locationId)
     {
-        $locationRow = $this->getBasicNodeData( $locationId );
+        $locationRow = $this->getBasicNodeData($locationId);
 
         /** @var $query \eZ\Publish\Core\Persistence\Database\InsertQuery */
         $query = $this->handler->createInsertQuery();
-        $query->insertInto( $this->handler->quoteTable( "ezcontentobject_trash" ) );
+        $query->insertInto($this->handler->quoteTable('ezcontentobject_trash'));
 
-        unset( $locationRow["contentobject_is_published"] );
-        foreach ( $locationRow as $key => $value )
-        {
-            $query->set( $key, $query->bindValue( $value ) );
+        unset($locationRow['contentobject_is_published']);
+        foreach ($locationRow as $key => $value) {
+            $query->set($key, $query->bindValue($value));
         }
 
         $query->prepare()->execute();
 
-        $this->removeLocation( $locationRow["node_id"] );
-        $this->setContentStatus( $locationRow["contentobject_id"], ContentInfo::STATUS_ARCHIVED );
+        $this->removeLocation($locationRow['node_id']);
+        $this->setContentStatus($locationRow['contentobject_id'], ContentInfo::STATUS_ARCHIVED);
     }
 
     /**
@@ -1165,9 +1133,9 @@ class DoctrineDatabase extends Gateway
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function untrashLocation( $locationId, $newParentId = null )
+    public function untrashLocation($locationId, $newParentId = null)
     {
-        $row = $this->loadTrashByLocation( $locationId );
+        $row = $this->loadTrashByLocation($locationId);
 
         $newLocation = $this->create(
             new CreateStruct(
@@ -1178,16 +1146,16 @@ class DoctrineDatabase extends Gateway
                     'remoteId' => $row['remote_id'],
                     'contentId' => $row['contentobject_id'],
                     'contentVersion' => $row['contentobject_version'],
-                    'mainLocationId' => true,// Restored location is always main location
+                    'mainLocationId' => true, // Restored location is always main location
                     'sortField' => $row['sort_field'],
                     'sortOrder' => $row['sort_order'],
                 )
             ),
-            $this->getBasicNodeData( $newParentId ?: $row['parent_node_id'] )
+            $this->getBasicNodeData($newParentId ?: $row['parent_node_id'])
         );
 
-        $this->removeElementFromTrash( $locationId );
-        $this->setContentStatus( $row['contentobject_id'], ContentInfo::STATUS_PUBLISHED );
+        $this->removeElementFromTrash($locationId);
+        $this->setContentStatus($row['contentobject_id'], ContentInfo::STATUS_PUBLISHED);
 
         return $newLocation;
     }
@@ -1196,56 +1164,55 @@ class DoctrineDatabase extends Gateway
      * @param mixed $contentId
      * @param int $status
      */
-    protected function setContentStatus( $contentId, $status )
+    protected function setContentStatus($contentId, $status)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->handler->createUpdateQuery();
         $query->update(
-            "ezcontentobject"
+            'ezcontentobject'
         )->set(
-            $this->handler->quoteColumn( "status" ),
-            $query->bindValue( $status, null, \PDO::PARAM_INT )
+            $this->handler->quoteColumn('status'),
+            $query->bindValue($status, null, \PDO::PARAM_INT)
         )->where(
             $query->expr->eq(
-                $this->handler->quoteColumn( "id" ),
-                $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('id'),
+                $query->bindValue($contentId, null, \PDO::PARAM_INT)
             )
         );
         $query->prepare()->execute();
     }
 
     /**
-     * Loads trash data specified by location ID
+     * Loads trash data specified by location ID.
      *
      * @param mixed $locationId
      *
      * @return array
      */
-    public function loadTrashByLocation( $locationId )
+    public function loadTrashByLocation($locationId)
     {
         $query = $this->handler->createSelectQuery();
         $query
-            ->select( '*' )
-            ->from( $this->handler->quoteTable( 'ezcontentobject_trash' ) )
+            ->select('*')
+            ->from($this->handler->quoteTable('ezcontentobject_trash'))
             ->where(
                 $query->expr->eq(
-                    $this->handler->quoteColumn( 'node_id' ),
-                    $query->bindValue( $locationId )
+                    $this->handler->quoteColumn('node_id'),
+                    $query->bindValue($locationId)
                 )
             );
         $statement = $query->prepare();
         $statement->execute();
 
-        if ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
-        {
+        if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             return $row;
         }
 
-        throw new NotFound( 'trash', $locationId );
+        throw new NotFound('trash', $locationId);
     }
 
     /**
-     * List trashed items
+     * List trashed items.
      *
      * @param int $offset
      * @param int $limit
@@ -1253,29 +1220,27 @@ class DoctrineDatabase extends Gateway
      *
      * @return array
      */
-    public function listTrashed( $offset, $limit, array $sort = null )
+    public function listTrashed($offset, $limit, array $sort = null)
     {
         $query = $this->handler->createSelectQuery();
         $query
-            ->select( '*' )
-            ->from( $this->handler->quoteTable( 'ezcontentobject_trash' ) );
+            ->select('*')
+            ->from($this->handler->quoteTable('ezcontentobject_trash'));
 
         $sort = $sort ?: array();
-        foreach ( $sort as $condition )
-        {
+        foreach ($sort as $condition) {
             $sortDirection = $condition->direction === Query::SORT_ASC ? SelectQuery::ASC : SelectQuery::DESC;
-            switch ( true )
-            {
+            switch (true) {
                 case $condition instanceof SortClause\LocationDepth:
-                    $query->orderBy( 'depth', $sortDirection );
+                    $query->orderBy('depth', $sortDirection);
                     break;
 
                 case $condition instanceof SortClause\LocationPathString:
-                    $query->orderBy( 'path_string', $sortDirection );
+                    $query->orderBy('path_string', $sortDirection);
                     break;
 
                 case $condition instanceof SortClause\LocationPriority:
-                    $query->orderBy( 'priority', $sortDirection );
+                    $query->orderBy('priority', $sortDirection);
                     break;
 
                 default:
@@ -1283,21 +1248,19 @@ class DoctrineDatabase extends Gateway
                     // require data aggregation which is not sensible here.
                     // Since also criteria are yet ignored, because they are
                     // simply not used yet in eZ Publish, we skip that for now.
-                    throw new RuntimeException( 'Unhandled sort clause: ' . get_class( $condition ) );
+                    throw new RuntimeException('Unhandled sort clause: ' . get_class($condition));
             }
         }
 
-        if ( $limit !== null )
-        {
-            $query->limit( $limit, $offset );
+        if ($limit !== null) {
+            $query->limit($limit, $offset);
         }
 
         $statement = $query->prepare();
         $statement->execute();
 
         $rows = array();
-        while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
-        {
+        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $rows[] = $row;
         }
 
@@ -1309,13 +1272,11 @@ class DoctrineDatabase extends Gateway
      * Will NOT remove associated content objects nor attributes.
      *
      * Basically truncates ezcontentobject_trash table.
-     *
-     * @return void
      */
     public function cleanupTrash()
     {
         $query = $this->handler->createDeleteQuery();
-        $query->deleteFrom( 'ezcontentobject_trash' );
+        $query->deleteFrom('ezcontentobject_trash');
         $query->prepare()->execute();
     }
 
@@ -1324,55 +1285,53 @@ class DoctrineDatabase extends Gateway
      * Will NOT remove associated content object nor attributes.
      *
      * @param int $id The trashed location Id
-     *
-     * @return void
      */
-    public function removeElementFromTrash( $id )
+    public function removeElementFromTrash($id)
     {
         $query = $this->handler->createDeleteQuery();
         $query
-            ->deleteFrom( 'ezcontentobject_trash' )
+            ->deleteFrom('ezcontentobject_trash')
             ->where(
                 $query->expr->eq(
-                    $this->handler->quoteColumn( 'node_id' ),
-                    $query->bindValue( $id, null, \PDO::PARAM_INT )
+                    $this->handler->quoteColumn('node_id'),
+                    $query->bindValue($id, null, \PDO::PARAM_INT)
                 )
             );
         $query->prepare()->execute();
     }
 
     /**
-     * Set section on all content objects in the subtree
+     * Set section on all content objects in the subtree.
      *
      * @param mixed $pathString
      * @param mixed $sectionId
      *
-     * @return boolean
+     * @return bool
      */
-    public function setSectionForSubtree( $pathString, $sectionId )
+    public function setSectionForSubtree($pathString, $sectionId)
     {
         $query = $this->handler->createUpdateQuery();
 
         $subSelect = $query->subSelect();
         $subSelect
-            ->select( $this->handler->quoteColumn( 'contentobject_id' ) )
-            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->select($this->handler->quoteColumn('contentobject_id'))
+            ->from($this->handler->quoteTable('ezcontentobject_tree'))
             ->where(
                 $subSelect->expr->like(
-                    $this->handler->quoteColumn( 'path_string' ),
-                    $subSelect->bindValue( $pathString . '%' )
+                    $this->handler->quoteColumn('path_string'),
+                    $subSelect->bindValue($pathString . '%')
                 )
             );
 
         $query
-            ->update( $this->handler->quoteTable( 'ezcontentobject' ) )
+            ->update($this->handler->quoteTable('ezcontentobject'))
             ->set(
-                $this->handler->quoteColumn( 'section_id' ),
-                $query->bindValue( $sectionId )
+                $this->handler->quoteColumn('section_id'),
+                $query->bindValue($sectionId)
             )
             ->where(
                 $query->expr->in(
-                    $this->handler->quoteColumn( 'id' ),
+                    $this->handler->quoteColumn('id'),
                     $subSelect
                 )
             );
@@ -1380,34 +1339,35 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Returns how many locations given content object identified by $contentId has
+     * Returns how many locations given content object identified by $contentId has.
      *
      * @param int $contentId
      *
      * @return int
      */
-    public function countLocationsByContentId( $contentId )
+    public function countLocationsByContentId($contentId)
     {
         $q = $this->handler->createSelectQuery();
         $q
             ->select(
-                $q->alias( $q->expr->count( '*' ), 'count' )
+                $q->alias($q->expr->count('*'), 'count')
             )
-            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->from($this->handler->quoteTable('ezcontentobject_tree'))
             ->where(
                 $q->expr->eq(
-                    $this->handler->quoteColumn( 'contentobject_id' ),
-                    $q->bindValue( $contentId, null, \PDO::PARAM_INT )
+                    $this->handler->quoteColumn('contentobject_id'),
+                    $q->bindValue($contentId, null, \PDO::PARAM_INT)
                 )
             );
         $stmt = $q->prepare();
         $stmt->execute();
-        $res = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+        $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
         return (int)$res[0]['count'];
     }
 
     /**
-     * Changes main location of content identified by given $contentId to location identified by given $locationId
+     * Changes main location of content identified by given $contentId to location identified by given $locationId.
      *
      * Updates ezcontentobject_tree table for the given $contentId and eznode_assignment table for the given
      * $contentId, $parentLocationId and $versionNo
@@ -1417,22 +1377,20 @@ class DoctrineDatabase extends Gateway
      * @param mixed $versionNo version number, needed to update eznode_assignment table
      * @param mixed $parentLocationId parent location of location identified by $locationId, needed to update
      *        eznode_assignment table
-     *
-     * @return void
      */
-    public function changeMainLocation( $contentId, $locationId, $versionNo, $parentLocationId )
+    public function changeMainLocation($contentId, $locationId, $versionNo, $parentLocationId)
     {
         // Update ezcontentobject_tree table
         $q = $this->handler->createUpdateQuery();
         $q->update(
-            $this->handler->quoteTable( "ezcontentobject_tree" )
+            $this->handler->quoteTable('ezcontentobject_tree')
         )->set(
-            $this->handler->quoteColumn( "main_node_id" ),
-            $q->bindValue( $locationId, null, \PDO::PARAM_INT )
+            $this->handler->quoteColumn('main_node_id'),
+            $q->bindValue($locationId, null, \PDO::PARAM_INT)
         )->where(
             $q->expr->eq(
-                $this->handler->quoteColumn( "contentobject_id" ),
-                $q->bindValue( $contentId, null, \PDO::PARAM_INT )
+                $this->handler->quoteColumn('contentobject_id'),
+                $q->bindValue($contentId, null, \PDO::PARAM_INT)
             )
         );
         $q->prepare()->execute();
@@ -1440,23 +1398,23 @@ class DoctrineDatabase extends Gateway
         // Erase is_main in eznode_assignment table
         $q = $this->handler->createUpdateQuery();
         $q->update(
-            $this->handler->quoteTable( "eznode_assignment" )
+            $this->handler->quoteTable('eznode_assignment')
         )->set(
-            $this->handler->quoteColumn( "is_main" ),
-            $q->bindValue( 0, null, \PDO::PARAM_INT )
+            $this->handler->quoteColumn('is_main'),
+            $q->bindValue(0, null, \PDO::PARAM_INT)
         )->where(
             $q->expr->lAnd(
                 $q->expr->eq(
-                    $this->handler->quoteColumn( "contentobject_id" ),
-                    $q->bindValue( $contentId, null, \PDO::PARAM_INT )
+                    $this->handler->quoteColumn('contentobject_id'),
+                    $q->bindValue($contentId, null, \PDO::PARAM_INT)
                 ),
                 $q->expr->eq(
-                    $this->handler->quoteColumn( "contentobject_version" ),
-                    $q->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                    $this->handler->quoteColumn('contentobject_version'),
+                    $q->bindValue($versionNo, null, \PDO::PARAM_INT)
                 ),
                 $q->expr->neq(
-                    $this->handler->quoteColumn( "parent_node" ),
-                    $q->bindValue( $parentLocationId, null, \PDO::PARAM_INT )
+                    $this->handler->quoteColumn('parent_node'),
+                    $q->bindValue($parentLocationId, null, \PDO::PARAM_INT)
                 )
             )
         );
@@ -1465,23 +1423,23 @@ class DoctrineDatabase extends Gateway
         // Set new is_main in eznode_assignment table
         $q = $this->handler->createUpdateQuery();
         $q->update(
-            $this->handler->quoteTable( "eznode_assignment" )
+            $this->handler->quoteTable('eznode_assignment')
         )->set(
-            $this->handler->quoteColumn( "is_main" ),
-            $q->bindValue( 1, null, \PDO::PARAM_INT )
+            $this->handler->quoteColumn('is_main'),
+            $q->bindValue(1, null, \PDO::PARAM_INT)
         )->where(
             $q->expr->lAnd(
                 $q->expr->eq(
-                    $this->handler->quoteColumn( "contentobject_id" ),
-                    $q->bindValue( $contentId, null, \PDO::PARAM_INT )
+                    $this->handler->quoteColumn('contentobject_id'),
+                    $q->bindValue($contentId, null, \PDO::PARAM_INT)
                 ),
                 $q->expr->eq(
-                    $this->handler->quoteColumn( "contentobject_version" ),
-                    $q->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                    $this->handler->quoteColumn('contentobject_version'),
+                    $q->bindValue($versionNo, null, \PDO::PARAM_INT)
                 ),
                 $q->expr->eq(
-                    $this->handler->quoteColumn( "parent_node" ),
-                    $q->bindValue( $parentLocationId, null, \PDO::PARAM_INT )
+                    $this->handler->quoteColumn('parent_node'),
+                    $q->bindValue($parentLocationId, null, \PDO::PARAM_INT)
                 )
             )
         );

@@ -1,36 +1,36 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\URLAliasList;
 use eZ\Publish\API\Repository\Values\Content;
-use eZ\Publish\Core\REST\Common;
 
 class URLAliasListTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the URLAliasList visitor
+     * Test the URLAliasList visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
-        $urlAliasList = new URLAliasList( array(), '/content/urlaliases' );
+        $urlAliasList = new URLAliasList(array(), '/content/urlaliases');
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -38,25 +38,25 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
             $urlAliasList
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains UrlAliasList element
+     * Test if result contains UrlAliasList element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsUrlAliasListElement( $result )
+    public function testResultContainsUrlAliasListElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'UrlAliasList',
+                'tag' => 'UrlAliasList',
             ),
             $result,
             'Invalid <UrlAliasList> element.',
@@ -65,21 +65,21 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains UrlAliasList element attributes
+     * Test if result contains UrlAliasList element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsUrlAliasListAttributes( $result )
+    public function testResultContainsUrlAliasListAttributes($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'UrlAliasList',
+                'tag' => 'UrlAliasList',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.UrlAliasList+xml',
-                    'href'       => '/content/urlaliases',
-                )
+                    'href' => '/content/urlaliases',
+                ),
             ),
             $result,
             'Invalid <UrlAliasList> attributes.',
@@ -88,14 +88,14 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if URLAliasList visitor visits the children
+     * Test if URLAliasList visitor visits the children.
      */
     public function testURLAliasListVisitsChildren()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $urlAliasList = new URLAliasList(
             array(
@@ -105,9 +105,9 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
             '/content/urlaliases'
         );
 
-        $this->getVisitorMock()->expects( $this->exactly( 2 ) )
-            ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias' ) );
+        $this->getVisitorMock()->expects($this->exactly(2))
+            ->method('visitValueObject')
+            ->with($this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias'));
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -117,12 +117,12 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the URLAliasList visitor
+     * Get the URLAliasList visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\URLAliasList
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\URLAliasList;
+        return new ValueObjectVisitor\URLAliasList();
     }
 }

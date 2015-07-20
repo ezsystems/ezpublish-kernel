@@ -11,8 +11,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                        'title' => 'Users',
                    ),
                'score' => 1,
-               'index' => NULL,
-               'highlight' => NULL,
+               'index' => null,
+               'highlight' => null,
             )
         ),
         1 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -22,8 +22,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                        'title' => 'Administrator users',
                    ),
                'score' => 1,
-               'index' => NULL,
-               'highlight' => NULL,
+               'index' => null,
+               'highlight' => null,
             )
         ),
         2 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -33,8 +33,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                        'title' => 'Editors',
                    ),
                'score' => 1,
-               'index' => NULL,
-               'highlight' => NULL,
+               'index' => null,
+               'highlight' => null,
             )
         ),
         3 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -44,8 +44,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                        'title' => 'Anonymous Users',
                    ),
                'score' => 1,
-               'index' => NULL,
-               'highlight' => NULL,
+               'index' => null,
+               'highlight' => null,
             )
         ),
         4 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -55,8 +55,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                        'title' => 'Anonymous User',
                    ),
                'score' => 1,
-               'index' => NULL,
-               'highlight' => NULL,
+               'index' => null,
+               'highlight' => null,
             )
         ),
         5 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -66,8 +66,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'title' => 'Administrator User',
                    ),
                'score' => 1,
-               'index' => NULL,
-               'highlight' => NULL,
+               'index' => null,
+               'highlight' => null,
             )
         ),
         6 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -77,8 +77,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                        'title' => 'Partners',
                    ),
                'score' => 1,
-               'index' => NULL,
-               'highlight' => NULL,
+               'index' => null,
+               'highlight' => null,
             )
         ),
         7 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -88,14 +88,14 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'title' => 'Members',
                     ),
                'score' => 1,
-               'index' => NULL,
-               'highlight' => NULL,
+               'index' => null,
+               'highlight' => null,
             )
         ),
       ),
-       'spellSuggestion' => NULL,
+       'spellSuggestion' => null,
        'time' => 1,
-       'timedOut' => NULL,
+       'timedOut' => null,
        'maxScore' => 1,
        'totalCount' => 8,
     )

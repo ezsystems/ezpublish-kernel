@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the LegacyStorageTest for RichText FieldType
+ * File containing the LegacyStorageTest for RichText FieldType.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,8 +16,7 @@ use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlStorage
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 
 /**
- * Tests the RichText LegacyStorage
- * @package eZ\Publish\Core\Repository\Tests\FieldType\RichText\Gateway
+ * Tests the RichText LegacyStorage.
  */
 class LegacyStorageTest extends TestCase
 {
@@ -23,7 +24,7 @@ class LegacyStorageTest extends TestCase
     {
         $gateway = $this->getStorageGateway();
 
-        $gateway->setConnection( $this->getMock( "eZ\\Publish\\Core\\Persistence\\Database\\DatabaseHandler" ) );
+        $gateway->setConnection($this->getMock('eZ\\Publish\\Core\\Persistence\\Database\\DatabaseHandler'));
     }
 
     /**
@@ -33,25 +34,25 @@ class LegacyStorageTest extends TestCase
     {
         $gateway = $this->getStorageGateway();
 
-        $gateway->setConnection( new \DateTime() );
+        $gateway->setConnection(new \DateTime());
     }
 
     public function testGetContentIds()
     {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/contentobjects.php" );
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/contentobjects.php');
 
         $gateway = $this->getStorageGateway();
 
         $this->assertEquals(
             array(
-                "f5c88a2209584891056f987fd965b0ba" => 4,
-                "faaeb9be3bd98ed09f606fc16d144eca" => 10
+                'f5c88a2209584891056f987fd965b0ba' => 4,
+                'faaeb9be3bd98ed09f606fc16d144eca' => 10,
             ),
             $gateway->getContentIds(
                 array(
-                    "f5c88a2209584891056f987fd965b0ba",
-                    "faaeb9be3bd98ed09f606fc16d144eca",
-                    "fake"
+                    'f5c88a2209584891056f987fd965b0ba',
+                    'faaeb9be3bd98ed09f606fc16d144eca',
+                    'fake',
                 )
             )
         );
@@ -63,19 +64,19 @@ class LegacyStorageTest extends TestCase
     protected $storageGateway;
 
     /**
-     * Returns a ready to test LegacyStorage gateway
+     * Returns a ready to test LegacyStorage gateway.
      *
      * @return \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\LegacyStorage
      */
     protected function getStorageGateway()
     {
-        if ( !isset( $this->storageGateway ) )
-        {
+        if (!isset($this->storageGateway)) {
             $this->storageGateway = new LegacyStorage(
                 new UrlStorage()
             );
-            $this->storageGateway->setConnection( $this->getDatabaseHandler() );
+            $this->storageGateway->setConnection($this->getDatabaseHandler());
         }
+
         return $this->storageGateway;
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the FieldTypeParserTest class
+ * File containing the FieldTypeParserTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use PHPUnit_Framework_TestCase;
 
 /**
- * FieldTypeParser test class
+ * FieldTypeParser test class.
  */
 class FieldTypeParserTest extends PHPUnit_Framework_TestCase
 {
@@ -90,72 +92,70 @@ class FieldTypeParserTest extends PHPUnit_Framework_TestCase
     {
         $fieldTypeParser = $this->getFieldTypeParser();
 
-        $this->contentServiceMock->expects( $this->once() )
-            ->method( 'loadContentInfo' )
-            ->with( '23' )
+        $this->contentServiceMock->expects($this->once())
+            ->method('loadContentInfo')
+            ->with('23')
             ->will(
                 $this->returnValue(
-                    new ContentInfo( array( 'contentTypeId' => '42' ) )
+                    new ContentInfo(array('contentTypeId' => '42'))
                 )
             );
 
         $contentTypeMock = $this->contentTypeMock;
-        $this->contentTypeServiceMock->expects( $this->once() )
-            ->method( 'loadContentType' )
-            ->with( '42' )
+        $this->contentTypeServiceMock->expects($this->once())
+            ->method('loadContentType')
+            ->with('42')
             ->will(
                 $this->returnCallback(
                     // Avoid PHPUnit cloning
-                    function () use ( $contentTypeMock )
-                    {
+                    function () use ($contentTypeMock) {
                         return $contentTypeMock;
                     }
                 )
             );
 
-        $contentTypeMock->expects( $this->once() )
-            ->method( 'getFieldDefinition' )
-            ->with( $this->equalTo( 'my-field-definition' ) )
+        $contentTypeMock->expects($this->once())
+            ->method('getFieldDefinition')
+            ->with($this->equalTo('my-field-definition'))
             ->will(
                 $this->returnValue(
                     new FieldDefinition(
                         array(
-                            'fieldTypeIdentifier' => 'some-fancy-field-type'
+                            'fieldTypeIdentifier' => 'some-fancy-field-type',
                         )
                     )
                 )
             );
 
-        $this->fieldTypeProcessorRegistryMock->expects( $this->once() )
-            ->method( 'hasProcessor' )
-            ->with( $this->equalTo( 'some-fancy-field-type' ) )
-            ->will( $this->returnValue( false ) );
+        $this->fieldTypeProcessorRegistryMock->expects($this->once())
+            ->method('hasProcessor')
+            ->with($this->equalTo('some-fancy-field-type'))
+            ->will($this->returnValue(false));
 
         $fieldTypeMock = $this->fieldTypeMock;
-        $this->fieldTypeServiceMock->expects( $this->once() )
-            ->method( 'getFieldType' )
-            ->with( $this->equalTo( 'some-fancy-field-type' ) )
+        $this->fieldTypeServiceMock->expects($this->once())
+            ->method('getFieldType')
+            ->with($this->equalTo('some-fancy-field-type'))
             ->will(
                 $this->returnCallback(
                     // Avoid PHPUnit cloning
-                    function () use ( $fieldTypeMock )
-                    {
+                    function () use ($fieldTypeMock) {
                         return $fieldTypeMock;
                     }
                 )
             );
 
-        $fieldTypeMock->expects( $this->once() )
-            ->method( 'fromHash' )
-            ->with( $this->equalTo( array( 1, 2, 3 ) ) )
-            ->will( $this->returnValue( array( 'foo', 'bar' ) ) );
+        $fieldTypeMock->expects($this->once())
+            ->method('fromHash')
+            ->with($this->equalTo(array(1, 2, 3)))
+            ->will($this->returnValue(array('foo', 'bar')));
 
         $this->assertEquals(
-            array( 'foo', 'bar' ),
+            array('foo', 'bar'),
             $fieldTypeParser->parseFieldValue(
                 '23',
                 'my-field-definition',
-                array( 1, 2, 3 )
+                array(1, 2, 3)
             )
         );
     }
@@ -164,35 +164,34 @@ class FieldTypeParserTest extends PHPUnit_Framework_TestCase
     {
         $fieldTypeParser = $this->getFieldTypeParser();
 
-        $this->fieldTypeProcessorRegistryMock->expects( $this->once() )
-            ->method( 'hasProcessor' )
-            ->with( $this->equalTo( 'some-fancy-field-type' ) )
-            ->will( $this->returnValue( false ) );
+        $this->fieldTypeProcessorRegistryMock->expects($this->once())
+            ->method('hasProcessor')
+            ->with($this->equalTo('some-fancy-field-type'))
+            ->will($this->returnValue(false));
 
         $fieldTypeMock = $this->fieldTypeMock;
-        $this->fieldTypeServiceMock->expects( $this->once() )
-            ->method( 'getFieldType' )
-            ->with( $this->equalTo( 'some-fancy-field-type' ) )
+        $this->fieldTypeServiceMock->expects($this->once())
+            ->method('getFieldType')
+            ->with($this->equalTo('some-fancy-field-type'))
             ->will(
                 $this->returnCallback(
                     // Avoid PHPUnit cloning
-                    function () use ( $fieldTypeMock )
-                    {
+                    function () use ($fieldTypeMock) {
                         return $fieldTypeMock;
                     }
                 )
             );
 
-        $fieldTypeMock->expects( $this->once() )
-            ->method( 'fromHash' )
-            ->with( $this->equalTo( array( 1, 2, 3 ) ) )
-            ->will( $this->returnValue( array( 'foo', 'bar' ) ) );
+        $fieldTypeMock->expects($this->once())
+            ->method('fromHash')
+            ->with($this->equalTo(array(1, 2, 3)))
+            ->will($this->returnValue(array('foo', 'bar')));
 
         $this->assertEquals(
-            array( 'foo', 'bar' ),
+            array('foo', 'bar'),
             $fieldTypeParser->parseValue(
                 'some-fancy-field-type',
-                array( 1, 2, 3 )
+                array(1, 2, 3)
             )
         );
     }
@@ -201,53 +200,51 @@ class FieldTypeParserTest extends PHPUnit_Framework_TestCase
     {
         $fieldTypeParser = $this->getFieldTypeParser();
 
-        $this->fieldTypeProcessorRegistryMock->expects( $this->once() )
-            ->method( 'hasProcessor' )
-            ->with( $this->equalTo( 'some-fancy-field-type' ) )
-            ->will( $this->returnValue( true ) );
+        $this->fieldTypeProcessorRegistryMock->expects($this->once())
+            ->method('hasProcessor')
+            ->with($this->equalTo('some-fancy-field-type'))
+            ->will($this->returnValue(true));
 
         $processor = $this->fieldTypeProcessorMock;
-        $this->fieldTypeProcessorRegistryMock->expects( $this->once() )
-            ->method( 'getProcessor' )
-            ->with( $this->equalTo( 'some-fancy-field-type' ) )
+        $this->fieldTypeProcessorRegistryMock->expects($this->once())
+            ->method('getProcessor')
+            ->with($this->equalTo('some-fancy-field-type'))
             ->will(
                 $this->returnCallback(
-                    function () use ( $processor )
-                    {
+                    function () use ($processor) {
                         return $processor;
                     }
                 )
             );
 
-        $processor->expects( $this->once() )
-            ->method( 'preProcessValueHash' )
-            ->with( array( 1, 2, 3 ) )
-            ->will( $this->returnValue( array( 4, 5, 6 ) ) );
+        $processor->expects($this->once())
+            ->method('preProcessValueHash')
+            ->with(array(1, 2, 3))
+            ->will($this->returnValue(array(4, 5, 6)));
 
         $fieldTypeMock = $this->fieldTypeMock;
-        $this->fieldTypeServiceMock->expects( $this->once() )
-            ->method( 'getFieldType' )
-            ->with( $this->equalTo( 'some-fancy-field-type' ) )
+        $this->fieldTypeServiceMock->expects($this->once())
+            ->method('getFieldType')
+            ->with($this->equalTo('some-fancy-field-type'))
             ->will(
                 $this->returnCallback(
                     // Avoid PHPUnit cloning
-                    function () use ( $fieldTypeMock )
-                    {
+                    function () use ($fieldTypeMock) {
                         return $fieldTypeMock;
                     }
                 )
             );
 
-        $fieldTypeMock->expects( $this->once() )
-            ->method( 'fromHash' )
-            ->with( $this->equalTo( array( 4, 5, 6 ) ) )
-            ->will( $this->returnValue( array( 'foo', 'bar' ) ) );
+        $fieldTypeMock->expects($this->once())
+            ->method('fromHash')
+            ->with($this->equalTo(array(4, 5, 6)))
+            ->will($this->returnValue(array('foo', 'bar')));
 
         $this->assertEquals(
-            array( 'foo', 'bar' ),
+            array('foo', 'bar'),
             $fieldTypeParser->parseValue(
                 'some-fancy-field-type',
-                array( 1, 2, 3 )
+                array(1, 2, 3)
             )
         );
     }
@@ -257,29 +254,28 @@ class FieldTypeParserTest extends PHPUnit_Framework_TestCase
         $fieldTypeParser = $this->getFieldTypeParser();
 
         $fieldTypeMock = $this->fieldTypeMock;
-        $this->fieldTypeServiceMock->expects( $this->once() )
-            ->method( 'getFieldType' )
-            ->with( $this->equalTo( 'some-fancy-field-type' ) )
+        $this->fieldTypeServiceMock->expects($this->once())
+            ->method('getFieldType')
+            ->with($this->equalTo('some-fancy-field-type'))
             ->will(
                 $this->returnCallback(
                     // Avoid PHPUnit cloning
-                    function () use ( $fieldTypeMock )
-                    {
+                    function () use ($fieldTypeMock) {
                         return $fieldTypeMock;
                     }
                 )
             );
 
-        $fieldTypeMock->expects( $this->once() )
-            ->method( 'fieldSettingsFromHash' )
-            ->with( $this->equalTo( array( 1, 2, 3 ) ) )
-            ->will( $this->returnValue( array( 'foo', 'bar' ) ) );
+        $fieldTypeMock->expects($this->once())
+            ->method('fieldSettingsFromHash')
+            ->with($this->equalTo(array(1, 2, 3)))
+            ->will($this->returnValue(array('foo', 'bar')));
 
         $this->assertEquals(
-            array( 'foo', 'bar' ),
+            array('foo', 'bar'),
             $fieldTypeParser->parseFieldSettings(
                 'some-fancy-field-type',
-                array( 1, 2, 3 )
+                array(1, 2, 3)
             )
         );
     }
@@ -288,53 +284,51 @@ class FieldTypeParserTest extends PHPUnit_Framework_TestCase
     {
         $fieldTypeParser = $this->getFieldTypeParser();
 
-        $this->fieldTypeProcessorRegistryMock->expects( $this->once() )
-            ->method( 'hasProcessor' )
-            ->with( $this->equalTo( 'some-fancy-field-type' ) )
-            ->will( $this->returnValue( true ) );
+        $this->fieldTypeProcessorRegistryMock->expects($this->once())
+            ->method('hasProcessor')
+            ->with($this->equalTo('some-fancy-field-type'))
+            ->will($this->returnValue(true));
 
         $processor = $this->fieldTypeProcessorMock;
-        $this->fieldTypeProcessorRegistryMock->expects( $this->once() )
-            ->method( 'getProcessor' )
-            ->with( $this->equalTo( 'some-fancy-field-type' ) )
+        $this->fieldTypeProcessorRegistryMock->expects($this->once())
+            ->method('getProcessor')
+            ->with($this->equalTo('some-fancy-field-type'))
             ->will(
                 $this->returnCallback(
-                    function () use ( $processor )
-                    {
+                    function () use ($processor) {
                         return $processor;
                     }
                 )
             );
 
-        $processor->expects( $this->once() )
-            ->method( 'preProcessFieldSettingsHash' )
-            ->with( array( 1, 2, 3 ) )
-            ->will( $this->returnValue( array( 4, 5, 6 ) ) );
+        $processor->expects($this->once())
+            ->method('preProcessFieldSettingsHash')
+            ->with(array(1, 2, 3))
+            ->will($this->returnValue(array(4, 5, 6)));
 
         $fieldTypeMock = $this->fieldTypeMock;
-        $this->fieldTypeServiceMock->expects( $this->once() )
-            ->method( 'getFieldType' )
-            ->with( $this->equalTo( 'some-fancy-field-type' ) )
+        $this->fieldTypeServiceMock->expects($this->once())
+            ->method('getFieldType')
+            ->with($this->equalTo('some-fancy-field-type'))
             ->will(
                 $this->returnCallback(
                     // Avoid PHPUnit cloning
-                    function () use ( $fieldTypeMock )
-                    {
+                    function () use ($fieldTypeMock) {
                         return $fieldTypeMock;
                     }
                 )
             );
 
-        $fieldTypeMock->expects( $this->once() )
-            ->method( 'fieldSettingsFromHash' )
-            ->with( $this->equalTo( array( 4, 5, 6 ) ) )
-            ->will( $this->returnValue( array( 'foo', 'bar' ) ) );
+        $fieldTypeMock->expects($this->once())
+            ->method('fieldSettingsFromHash')
+            ->with($this->equalTo(array(4, 5, 6)))
+            ->will($this->returnValue(array('foo', 'bar')));
 
         $this->assertEquals(
-            array( 'foo', 'bar' ),
+            array('foo', 'bar'),
             $fieldTypeParser->parseFieldSettings(
                 'some-fancy-field-type',
-                array( 1, 2, 3 )
+                array(1, 2, 3)
             )
         );
     }
@@ -344,29 +338,28 @@ class FieldTypeParserTest extends PHPUnit_Framework_TestCase
         $fieldTypeParser = $this->getFieldTypeParser();
 
         $fieldTypeMock = $this->fieldTypeMock;
-        $this->fieldTypeServiceMock->expects( $this->once() )
-            ->method( 'getFieldType' )
-            ->with( $this->equalTo( 'some-fancy-field-type' ) )
+        $this->fieldTypeServiceMock->expects($this->once())
+            ->method('getFieldType')
+            ->with($this->equalTo('some-fancy-field-type'))
             ->will(
                 $this->returnCallback(
                     // Avoid PHPUnit cloning
-                    function () use ( $fieldTypeMock )
-                    {
+                    function () use ($fieldTypeMock) {
                         return $fieldTypeMock;
                     }
                 )
             );
 
-        $fieldTypeMock->expects( $this->once() )
-            ->method( 'validatorConfigurationFromHash' )
-            ->with( $this->equalTo( array( 1, 2, 3 ) ) )
-            ->will( $this->returnValue( array( 'foo', 'bar' ) ) );
+        $fieldTypeMock->expects($this->once())
+            ->method('validatorConfigurationFromHash')
+            ->with($this->equalTo(array(1, 2, 3)))
+            ->will($this->returnValue(array('foo', 'bar')));
 
         $this->assertEquals(
-            array( 'foo', 'bar' ),
+            array('foo', 'bar'),
             $fieldTypeParser->parseValidatorConfiguration(
                 'some-fancy-field-type',
-                array( 1, 2, 3 )
+                array(1, 2, 3)
             )
         );
     }
@@ -375,53 +368,51 @@ class FieldTypeParserTest extends PHPUnit_Framework_TestCase
     {
         $fieldTypeParser = $this->getFieldTypeParser();
 
-        $this->fieldTypeProcessorRegistryMock->expects( $this->once() )
-            ->method( 'hasProcessor' )
-            ->with( $this->equalTo( 'some-fancy-field-type' ) )
-            ->will( $this->returnValue( true ) );
+        $this->fieldTypeProcessorRegistryMock->expects($this->once())
+            ->method('hasProcessor')
+            ->with($this->equalTo('some-fancy-field-type'))
+            ->will($this->returnValue(true));
 
         $processor = $this->fieldTypeProcessorMock;
-        $this->fieldTypeProcessorRegistryMock->expects( $this->once() )
-            ->method( 'getProcessor' )
-            ->with( $this->equalTo( 'some-fancy-field-type' ) )
+        $this->fieldTypeProcessorRegistryMock->expects($this->once())
+            ->method('getProcessor')
+            ->with($this->equalTo('some-fancy-field-type'))
             ->will(
                 $this->returnCallback(
-                    function () use ( $processor )
-                    {
+                    function () use ($processor) {
                         return $processor;
                     }
                 )
             );
 
-        $processor->expects( $this->once() )
-            ->method( 'preProcessValidatorConfigurationHash' )
-            ->with( array( 1, 2, 3 ) )
-            ->will( $this->returnValue( array( 4, 5, 6 ) ) );
+        $processor->expects($this->once())
+            ->method('preProcessValidatorConfigurationHash')
+            ->with(array(1, 2, 3))
+            ->will($this->returnValue(array(4, 5, 6)));
 
         $fieldTypeMock = $this->fieldTypeMock;
-        $this->fieldTypeServiceMock->expects( $this->once() )
-            ->method( 'getFieldType' )
-            ->with( $this->equalTo( 'some-fancy-field-type' ) )
+        $this->fieldTypeServiceMock->expects($this->once())
+            ->method('getFieldType')
+            ->with($this->equalTo('some-fancy-field-type'))
             ->will(
                 $this->returnCallback(
                     // Avoid PHPUnit cloning
-                    function () use ( $fieldTypeMock )
-                    {
+                    function () use ($fieldTypeMock) {
                         return $fieldTypeMock;
                     }
                 )
             );
 
-        $fieldTypeMock->expects( $this->once() )
-            ->method( 'validatorConfigurationFromHash' )
-            ->with( $this->equalTo( array( 4, 5, 6 ) ) )
-            ->will( $this->returnValue( array( 'foo', 'bar' ) ) );
+        $fieldTypeMock->expects($this->once())
+            ->method('validatorConfigurationFromHash')
+            ->with($this->equalTo(array(4, 5, 6)))
+            ->will($this->returnValue(array('foo', 'bar')));
 
         $this->assertEquals(
-            array( 'foo', 'bar' ),
+            array('foo', 'bar'),
             $fieldTypeParser->parseValidatorConfiguration(
                 'some-fancy-field-type',
-                array( 1, 2, 3 )
+                array(1, 2, 3)
             )
         );
     }

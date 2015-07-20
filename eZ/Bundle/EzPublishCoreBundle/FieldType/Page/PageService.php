@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the PageService class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,12 +23,11 @@ class PageService extends BasePageService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo[]
      */
-    public function getValidBlockItemsAsContentInfo( Block $block )
+    public function getValidBlockItemsAsContentInfo(Block $block)
     {
         $contentInfoObjects = array();
-        foreach ( $this->getValidBlockItems( $block ) as $item )
-        {
-            $contentInfoObjects[] = $this->contentService->loadContentInfo( $item->contentId );
+        foreach ($this->getValidBlockItems($block) as $item) {
+            $contentInfoObjects[] = $this->contentService->loadContentInfo($item->contentId);
         }
 
         return $contentInfoObjects;

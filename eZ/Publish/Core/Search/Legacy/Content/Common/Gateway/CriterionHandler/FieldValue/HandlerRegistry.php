@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Criterion ValueHandlerRegistry class
+ * File containing the Criterion ValueHandlerRegistry class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -30,11 +32,10 @@ class HandlerRegistry
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler[] $map
      *        Map of Criterion field value handlers where key is field type identifier and value field value handler
      */
-    public function __construct( array $map = array() )
+    public function __construct(array $map = array())
     {
-        foreach ( $map as $fieldTypeIdentifier => $handler )
-        {
-            $this->register( $fieldTypeIdentifier, $handler );
+        foreach ($map as $fieldTypeIdentifier => $handler) {
+            $this->register($fieldTypeIdentifier, $handler);
         }
     }
 
@@ -44,7 +45,7 @@ class HandlerRegistry
      * @param string $fieldTypeIdentifier
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler $handler
      */
-    public function register( $fieldTypeIdentifier, $handler )
+    public function register($fieldTypeIdentifier, $handler)
     {
         $this->map[$fieldTypeIdentifier] = $handler;
     }
@@ -58,11 +59,10 @@ class HandlerRegistry
      *
      * @return \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler
      */
-    public function get( $fieldTypeIdentifier )
+    public function get($fieldTypeIdentifier)
     {
-        if ( !isset( $this->map[$fieldTypeIdentifier] ) )
-        {
-            throw new OutOfBoundsException( "No handler registered for field type '{$fieldTypeIdentifier}'." );
+        if (!isset($this->map[$fieldTypeIdentifier])) {
+            throw new OutOfBoundsException("No handler registered for field type '{$fieldTypeIdentifier}'.");
         }
 
         return $this->map[$fieldTypeIdentifier];
@@ -73,10 +73,10 @@ class HandlerRegistry
      *
      * @param string $fieldTypeIdentifier
      *
-     * @return boolean
+     * @return bool
      */
-    public function has( $fieldTypeIdentifier )
+    public function has($fieldTypeIdentifier)
     {
-        return isset( $this->map[$fieldTypeIdentifier] );
+        return isset($this->map[$fieldTypeIdentifier]);
     }
 }

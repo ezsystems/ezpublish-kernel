@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the LazyRepositoryFactory class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,7 +23,7 @@ class LazyRepositoryFactory
      */
     protected $repository;
 
-    public function __construct( Repository $repository )
+    public function __construct(Repository $repository)
     {
         $this->repository = $repository;
     }
@@ -36,8 +38,8 @@ class LazyRepositoryFactory
     public function buildRepository()
     {
         $repository = $this->repository;
-        return function () use ( $repository )
-        {
+
+        return function () use ($repository) {
             return $repository;
         };
     }

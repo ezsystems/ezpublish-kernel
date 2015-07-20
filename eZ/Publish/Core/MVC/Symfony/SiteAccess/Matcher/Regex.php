@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Regex class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -51,7 +53,7 @@ abstract class Regex implements Matcher
      * @param string $regex Regular Expression to use.
      * @param int $itemNumber Item number to pick in regex.
      */
-    public function __construct( $regex, $itemNumber )
+    public function __construct($regex, $itemNumber)
     {
         $this->regex = $regex;
         $this->itemNumber = $itemNumber;
@@ -59,7 +61,7 @@ abstract class Regex implements Matcher
 
     public function __sleep()
     {
-        return array( 'regex', 'itemNumber', 'matchedSiteAccess' );
+        return array('regex', 'itemNumber', 'matchedSiteAccess');
     }
 
     public function match()
@@ -74,8 +76,7 @@ abstract class Regex implements Matcher
      */
     protected function getMatchedSiteAccess()
     {
-        if ( isset( $this->matchedSiteAccess ) )
-        {
+        if (isset($this->matchedSiteAccess)) {
             return $this->matchedSiteAccess;
         }
 
@@ -85,7 +86,8 @@ abstract class Regex implements Matcher
             $match
         );
 
-        $this->matchedSiteAccess = isset( $match[$this->itemNumber] ) ? $match[$this->itemNumber] : false;
+        $this->matchedSiteAccess = isset($match[$this->itemNumber]) ? $match[$this->itemNumber] : false;
+
         return $this->matchedSiteAccess;
     }
 
@@ -94,17 +96,17 @@ abstract class Regex implements Matcher
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
      */
-    public function setRequest( SimplifiedRequest $request )
+    public function setRequest(SimplifiedRequest $request)
     {
         $this->request = $request;
     }
 
     /**
-     * Injects element to match against with the regexp
+     * Injects element to match against with the regexp.
      *
      * @param string $element
      */
-    public function setMatchElement( $element )
+    public function setMatchElement($element)
     {
         $this->element = $element;
     }

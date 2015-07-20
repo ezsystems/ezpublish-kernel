@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the BinaryLoaderTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -36,9 +38,9 @@ class BinaryLoaderTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->ioService = $this->getMock( 'eZ\Publish\Core\IO\IOServiceInterface' );
-        $this->extensionGuesser = $this->getMock( 'Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface' );
-        $this->binaryLoader = new BinaryLoader( $this->ioService, $this->extensionGuesser );
+        $this->ioService = $this->getMock('eZ\Publish\Core\IO\IOServiceInterface');
+        $this->extensionGuesser = $this->getMock('Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
+        $this->binaryLoader = new BinaryLoader($this->ioService, $this->extensionGuesser);
     }
 
     /**
@@ -48,12 +50,12 @@ class BinaryLoaderTest extends PHPUnit_Framework_TestCase
     {
         $path = 'something.jpg';
         $this->ioService
-            ->expects( $this->once() )
-            ->method( 'loadBinaryFile' )
-            ->with( $path )
-            ->will( $this->throwException( new NotFoundException( 'foo', 'bar' ) ) );
+            ->expects($this->once())
+            ->method('loadBinaryFile')
+            ->with($path)
+            ->will($this->throwException(new NotFoundException('foo', 'bar')));
 
-        $this->binaryLoader->find( $path );
+        $this->binaryLoader->find($path);
     }
 
     /**
@@ -63,12 +65,12 @@ class BinaryLoaderTest extends PHPUnit_Framework_TestCase
     {
         $path = 'something.jpg';
         $this->ioService
-            ->expects( $this->once() )
-            ->method( 'loadBinaryFile' )
-            ->with( $path )
-            ->will( $this->returnValue( new MissingBinaryFile() ) );
+            ->expects($this->once())
+            ->method('loadBinaryFile')
+            ->with($path)
+            ->will($this->returnValue(new MissingBinaryFile()));
 
-        $this->binaryLoader->find( $path );
+        $this->binaryLoader->find($path);
     }
 
     public function testFind()
@@ -76,33 +78,33 @@ class BinaryLoaderTest extends PHPUnit_Framework_TestCase
         $path = 'something.jpg';
         $mimeType = 'foo/mime-type';
         $content = 'some content';
-        $binaryFile = new BinaryFile( array( 'id' => $path ) );
+        $binaryFile = new BinaryFile(array('id' => $path));
         $this->ioService
-            ->expects( $this->once() )
-            ->method( 'loadBinaryFile' )
-            ->with( $path )
-            ->will( $this->returnValue( $binaryFile ) );
+            ->expects($this->once())
+            ->method('loadBinaryFile')
+            ->with($path)
+            ->will($this->returnValue($binaryFile));
 
         $format = 'jpg';
         $this->extensionGuesser
-            ->expects( $this->once() )
-            ->method( 'guess' )
-            ->with( $mimeType )
-            ->will( $this->returnValue( $format ) );
+            ->expects($this->once())
+            ->method('guess')
+            ->with($mimeType)
+            ->will($this->returnValue($format));
 
         $this->ioService
-            ->expects( $this->once() )
-            ->method( 'getFileContents' )
-            ->with( $binaryFile )
-            ->will( $this->returnValue( $content ) );
+            ->expects($this->once())
+            ->method('getFileContents')
+            ->with($binaryFile)
+            ->will($this->returnValue($content));
 
         $this->ioService
-            ->expects( $this->once() )
-            ->method( 'getMimeType' )
-            ->with( $binaryFile->id )
-            ->will( $this->returnValue( $mimeType ) );
+            ->expects($this->once())
+            ->method('getMimeType')
+            ->with($binaryFile->id)
+            ->will($this->returnValue($mimeType));
 
-        $expected = new Binary( $content, $mimeType, $format );
-        $this->assertEquals( $expected, $this->binaryLoader->find( $path ) );
+        $expected = new Binary($content, $mimeType, $format);
+        $this->assertEquals($expected, $this->binaryLoader->find($path));
     }
 }

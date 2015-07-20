@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the HashConverter class
+ * File containing the HashConverter class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -27,30 +29,25 @@ class HashConverter
      *
      * @return array
      */
-    public function convertFromValue( Value $value )
+    public function convertFromValue(Value $value)
     {
         $hash = array();
 
-        foreach ( $value->page->getState() as $propName => $propValue )
-        {
-            switch ( $propName )
-            {
+        foreach ($value->page->getState() as $propName => $propValue) {
+            switch ($propName) {
                 case 'layout':
-                    if ( $propValue !== null )
-                    {
+                    if ($propValue !== null) {
                         $hash['layout'] = $propValue;
                     }
                     break;
                 case 'attributes':
-                    if ( $propValue !== null && $propValue !== array() )
-                    {
+                    if ($propValue !== null && $propValue !== array()) {
                         $hash['attributes'] = $propValue;
                     }
                     break;
                 case 'zones':
-                    foreach ( $propValue as $zone )
-                    {
-                        $hash["zones"][] = $this->convertZoneToHash( $zone );
+                    foreach ($propValue as $zone) {
+                        $hash['zones'][] = $this->convertZoneToHash($zone);
                     }
                     break;
             }
@@ -66,32 +63,27 @@ class HashConverter
      *
      * @return array
      */
-    protected function convertZoneToHash( Zone $zone )
+    protected function convertZoneToHash(Zone $zone)
     {
         $hash = array();
 
-        foreach ( $zone->getState() as $propName => $propValue )
-        {
-            switch ( $propName )
-            {
+        foreach ($zone->getState() as $propName => $propValue) {
+            switch ($propName) {
                 case 'id':
                 case 'identifier':
                 case 'action':
-                    if ( $propValue !== null )
-                    {
+                    if ($propValue !== null) {
                         $hash[$propName] = $propValue;
                     }
                     break;
                 case 'attributes':
-                    if ( $propValue !== null && $propValue !== array() )
-                    {
+                    if ($propValue !== null && $propValue !== array()) {
                         $hash['attributes'] = $propValue;
                     }
                     break;
                 case 'blocks':
-                    foreach ( $propValue as $block )
-                    {
-                        $hash["blocks"][] = $this->convertBlockToHash( $block );
+                    foreach ($propValue as $block) {
+                        $hash['blocks'][] = $this->convertBlockToHash($block);
                     }
                     break;
             }
@@ -107,14 +99,12 @@ class HashConverter
      *
      * @return array
      */
-    protected function convertBlockToHash( Block $block )
+    protected function convertBlockToHash(Block $block)
     {
         $hash = array();
 
-        foreach ( $block->getState() as $propName => $propValue )
-        {
-            switch ( $propName )
-            {
+        foreach ($block->getState() as $propName => $propValue) {
+            switch ($propName) {
                 case 'id':
                 case 'name':
                 case 'type':
@@ -124,21 +114,18 @@ class HashConverter
                 case 'action':
                 case 'rotation':
                 case 'zoneId':
-                    if ( $propValue !== null )
-                    {
+                    if ($propValue !== null) {
                         $hash[$propName] = $propValue;
                     }
                     break;
                 case 'attributes':
-                    if ( $propValue !== null && $propValue !== array() )
-                    {
+                    if ($propValue !== null && $propValue !== array()) {
                         $hash['attributes'] = $propValue;
                     }
                     break;
                 case 'items':
-                    foreach ( $propValue as $item )
-                    {
-                        $hash["items"][] = $this->convertItemToHash( $item );
+                    foreach ($propValue as $item) {
+                        $hash['items'][] = $this->convertItemToHash($item);
                     }
                     break;
             }
@@ -154,28 +141,24 @@ class HashConverter
      *
      * @return array
      */
-    protected function convertItemToHash( Item $item )
+    protected function convertItemToHash(Item $item)
     {
         $hash = array();
 
-        foreach ( $item->getState() as $propName => $propValue )
-        {
-            switch ( $propName )
-            {
+        foreach ($item->getState() as $propName => $propValue) {
+            switch ($propName) {
                 case 'blockId':
                 case 'contentId':
                 case 'locationId':
                 case 'priority':
                 case 'movedTo':
                 case 'action':
-                    if ( $propValue !== null )
-                    {
+                    if ($propValue !== null) {
                         $hash[$propName] = $propValue;
                     }
                     break;
                 case 'attributes':
-                    if ( $propValue !== null && $propValue !== array() )
-                    {
+                    if ($propValue !== null && $propValue !== array()) {
                         $hash['attributes'] = $propValue;
                     }
                     break;
@@ -183,10 +166,9 @@ class HashConverter
                 case 'visibilityDate':
                 case 'hiddenDate':
                 case 'rotationUntilDate':
-                    if ( $propValue !== null )
-                    {
-                        /** @var $propValue \DateTime */
-                        $hash[$propName] = $propValue->format( \DateTime::RFC850 );
+                    if ($propValue !== null) {
+                        /* @var $propValue \DateTime */
+                        $hash[$propName] = $propValue->format(\DateTime::RFC850);
                     }
                     break;
             }
@@ -202,21 +184,19 @@ class HashConverter
      *
      * @return \eZ\Publish\Core\FieldType\Page\Value
      */
-    public function convertToValue( $hash )
+    public function convertToValue($hash)
     {
-        if ( isset( $hash["zones"] ) )
-        {
+        if (isset($hash['zones'])) {
             $zones = array();
 
-            foreach ( $hash["zones"] as $zone )
-            {
-                $zones[] = $this->convertZoneFromHash( $zone );
+            foreach ($hash['zones'] as $zone) {
+                $zones[] = $this->convertZoneFromHash($zone);
             }
 
-            $hash["zones"] = $zones;
+            $hash['zones'] = $zones;
         }
 
-        return new Value( new Page( $hash ) );
+        return new Value(new Page($hash));
     }
 
     /**
@@ -226,21 +206,19 @@ class HashConverter
      *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Zone
      */
-    protected function convertZoneFromHash( $hash )
+    protected function convertZoneFromHash($hash)
     {
-        if ( isset( $hash["blocks"] ) )
-        {
+        if (isset($hash['blocks'])) {
             $blocks = array();
 
-            foreach ( $hash["blocks"] as $block )
-            {
-                $blocks[] = $this->convertBlockFromHash( $block );
+            foreach ($hash['blocks'] as $block) {
+                $blocks[] = $this->convertBlockFromHash($block);
             }
 
-            $hash["blocks"] = $blocks;
+            $hash['blocks'] = $blocks;
         }
 
-        return new Zone( $hash );
+        return new Zone($hash);
     }
 
     /**
@@ -250,21 +228,19 @@ class HashConverter
      *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Block
      */
-    protected function convertBlockFromHash( $hash )
+    protected function convertBlockFromHash($hash)
     {
-        if ( isset( $hash["items"] ) )
-        {
+        if (isset($hash['items'])) {
             $items = array();
 
-            foreach ( $hash["items"] as $item )
-            {
-                $items[] = $this->convertItemFromHash( $item );
+            foreach ($hash['items'] as $item) {
+                $items[] = $this->convertItemFromHash($item);
             }
 
-            $hash["items"] = $items;
+            $hash['items'] = $items;
         }
 
-        return new Block( $hash );
+        return new Block($hash);
     }
 
     /**
@@ -274,22 +250,20 @@ class HashConverter
      *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Item
      */
-    protected function convertItemFromHash( $hash )
+    protected function convertItemFromHash($hash)
     {
-        foreach ( $hash as $key => &$item )
-        {
-            switch ( $key )
-            {
+        foreach ($hash as $key => &$item) {
+            switch ($key) {
                 case 'publicationDate':
                 case 'visibilityDate':
                 case 'hiddenDate':
                 case 'rotationUntilDate':
                     // $item is expected to be a date string in RFC850 format
-                    $item = new \DateTime( $item );
+                    $item = new \DateTime($item);
                     break;
             }
         }
 
-        return new Item( $hash );
+        return new Item($hash);
     }
 }

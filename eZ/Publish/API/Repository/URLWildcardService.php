@@ -1,11 +1,12 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\URLWildcardService class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
- * @package eZ\Publish\API\Repository
  */
 
 namespace eZ\Publish\API\Repository;
@@ -13,16 +14,14 @@ namespace eZ\Publish\API\Repository;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 
 /**
- * URLAlias service
+ * URLAlias service.
  *
  * @example Examples/urlalias.php
- *
- * @package eZ\Publish\API\Repository
  */
 interface URLWildcardService
 {
     /**
-     * Creates a new url wildcard
+     * Creates a new url wildcard.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the $sourceUrl pattern already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create url wildcards
@@ -32,23 +31,23 @@ interface URLWildcardService
      *
      * @param string $sourceUrl
      * @param string $destinationUrl
-     * @param boolean $forward
+     * @param bool $forward
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
-    public function create( $sourceUrl, $destinationUrl, $forward = false );
+    public function create($sourceUrl, $destinationUrl, $forward = false);
 
     /**
-     * Removes an url wildcard
+     * Removes an url wildcard.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to remove url wildcards
      *
      * @param \eZ\Publish\API\Repository\Values\Content\UrlWildcard $urlWildcard the url wildcard to remove
      */
-    public function remove( URLWildcard $urlWildcard );
+    public function remove(URLWildcard $urlWildcard);
 
     /**
-     * Loads a url wild card
+     * Loads a url wild card.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
      *
@@ -56,17 +55,17 @@ interface URLWildcardService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
-    public function load( $id );
+    public function load($id);
 
     /**
-     * Loads all url wild card (paged)
+     * Loads all url wild card (paged).
      *
      * @param int $offset
      * @param int $limit
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard[]
      */
-    public function loadAll( $offset = 0, $limit = -1 );
+    public function loadAll($offset = 0, $limit = -1);
 
     /**
      * Translates an url to an existing uri resource based on the
@@ -78,6 +77,5 @@ interface URLWildcardService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult
      */
-    public function translate( $url );
-
+    public function translate($url);
 }

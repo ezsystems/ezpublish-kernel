@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,53 +19,48 @@ use eZ\Publish\SPI\FieldType\Indexable;
 class FieldRegistry
 {
     /**
-     * Registered field types
+     * Registered field types.
      *
      * @var array(string => Indexable)
      */
     protected $types = array();
 
     /**
-     * Construct from optional Indexable type array
+     * Construct from optional Indexable type array.
      *
      * @param \eZ\Publish\SPI\FieldType\Indexable[] $types
      */
-    public function __construct( array $types = array() )
+    public function __construct(array $types = array())
     {
-        foreach ( $types as $name => $type )
-        {
-            $this->registerType( $name, $type );
+        foreach ($types as $name => $type) {
+            $this->registerType($name, $type);
         }
     }
 
     /**
-     * Register another indexable type
+     * Register another indexable type.
      *
      * @param string $name
      * @param \eZ\Publish\SPI\FieldType\Indexable $type
-     *
-     * @return void
      */
-    public function registerType( $name, Indexable $type )
+    public function registerType($name, Indexable $type)
     {
         $this->types[$name] = $type;
     }
 
     /**
-     * Get Indexable type
+     * Get Indexable type.
      *
      * @param string $name
      *
      * @return \eZ\Publish\SPI\FieldType\Indexable
      */
-    public function getType( $name )
+    public function getType($name)
     {
-        if ( !isset( $this->types[$name] ) )
-        {
-            throw new \OutOfBoundsException( "No type registered for $name." );
+        if (!isset($this->types[$name])) {
+            throw new \OutOfBoundsException("No type registered for $name.");
         }
 
         return $this->types[$name];
     }
 }
-

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,7 @@ namespace eZ\Publish\Core\Repository\Values\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
 
 /**
- * This class represents a field definition
+ * This class represents a field definition.
  *
  * @property-read string[] $names calls getNames() or on access getName($language)
  * @property-read string[] $descriptions calls getDescriptions() or on access getDescription($language)
@@ -32,28 +34,28 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefi
 class FieldDefinition extends APIFieldDefinition
 {
     /**
-     * Holds the collection of names with languageCode keys
+     * Holds the collection of names with languageCode keys.
      *
      * @var string[]
      */
     protected $names;
 
     /**
-     * Holds the collection of descriptions with languageCode keys
+     * Holds the collection of descriptions with languageCode keys.
      *
      * @var string[]
      */
     protected $descriptions;
 
     /**
-     * Holds collection of settings for the field definition supported by the field type
+     * Holds collection of settings for the field definition supported by the field type.
      *
      * @var array
      */
     protected $fieldSettings;
 
     /**
-     * Holds validator configuration of this field definition supported by the field type
+     * Holds validator configuration of this field definition supported by the field type.
      *
      * @var mixed
      */
@@ -61,7 +63,7 @@ class FieldDefinition extends APIFieldDefinition
 
     /**
      * This method returns the human readable name of this field in all provided languages
-     * of the content type
+     * of the content type.
      *
      * The structure of the return value is:
      * <code>
@@ -76,16 +78,15 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     * This method returns the name of the field in the given language
+     * This method returns the name of the field in the given language.
      *
      * @param string $languageCode
      *
      * @return string the name for the given language or null if none exists.
      */
-    public function getName( $languageCode )
+    public function getName($languageCode)
     {
-        if ( array_key_exists( $languageCode, $this->names ) )
-        {
+        if (array_key_exists($languageCode, $this->names)) {
             return $this->names[$languageCode];
         }
 
@@ -93,7 +94,7 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     * This method returns the human readable description of the field
+     * This method returns the human readable description of the field.
      *
      * The structure of this field is:
      * <code>
@@ -108,16 +109,15 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     * This method returns the name of the field in the given language
+     * This method returns the name of the field in the given language.
      *
      * @param string $languageCode
      *
      * @return string the description for the given language or null if none exists.
      */
-    public function getDescription( $languageCode )
+    public function getDescription($languageCode)
     {
-        if ( array_key_exists( $languageCode, $this->descriptions ) )
-        {
+        if (array_key_exists($languageCode, $this->descriptions)) {
             return $this->descriptions[$languageCode];
         }
 
@@ -125,7 +125,7 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     * This method returns the validator configuration of this field definition supported by the field type
+     * This method returns the validator configuration of this field definition supported by the field type.
      *
      * @return mixed
      */
@@ -135,7 +135,7 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     * This method returns settings for the field definition supported by the field type
+     * This method returns settings for the field definition supported by the field type.
      *
      * @return array
      */

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContentExtension class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -53,8 +55,7 @@ class ContentExtension extends Twig_Extension
         TranslationHelper $translationHelper,
         FieldHelper $fieldHelper,
         LoggerInterface $logger = null
-    )
-    {
+    ) {
         $this->repository = $repository;
         $this->translationHelper = $translationHelper;
         $this->fieldHelper = $fieldHelper;
@@ -71,27 +72,27 @@ class ContentExtension extends Twig_Extension
         return array(
             new Twig_SimpleFunction(
                 'ez_content_name',
-                array( $this, 'getTranslatedContentName' )
+                array($this, 'getTranslatedContentName')
             ),
             new Twig_SimpleFunction(
                 'ez_field_value',
-                array( $this, 'getTranslatedFieldValue' )
+                array($this, 'getTranslatedFieldValue')
             ),
             new Twig_SimpleFunction(
                 'ez_is_field_empty',
-                array( $this, 'isFieldEmpty' )
+                array($this, 'isFieldEmpty')
             ),
             new Twig_SimpleFunction(
                 'ez_field_name',
-                array( $this, 'getTranslatedFieldDefinitionName' )
+                array($this, 'getTranslatedFieldDefinitionName')
             ),
             new Twig_SimpleFunction(
                 'ez_field_description',
-                array( $this, 'getTranslatedFieldDefinitionDescription' )
+                array($this, 'getTranslatedFieldDefinitionDescription')
             ),
             new Twig_SimpleFunction(
                 'ez_trans_prop',
-                array( $this, 'getTranslatedProperty' )
+                array($this, 'getTranslatedProperty')
             ),
         );
     }
@@ -114,18 +115,15 @@ class ContentExtension extends Twig_Extension
      *
      * @return string
      */
-    public function getTranslatedContentName( ValueObject $content, $forcedLanguage = null )
+    public function getTranslatedContentName(ValueObject $content, $forcedLanguage = null)
     {
-        if ( $content instanceof Content )
-        {
-            return $this->translationHelper->getTranslatedContentName( $content, $forcedLanguage );
-        }
-        else if ( $content instanceof ContentInfo )
-        {
-            return $this->translationHelper->getTranslatedContentNameByContentInfo( $content, $forcedLanguage );
+        if ($content instanceof Content) {
+            return $this->translationHelper->getTranslatedContentName($content, $forcedLanguage);
+        } elseif ($content instanceof ContentInfo) {
+            return $this->translationHelper->getTranslatedContentNameByContentInfo($content, $forcedLanguage);
         }
 
-        throw new InvalidArgumentType( '$content', 'eZ\Publish\API\Repository\Values\Content\Content or eZ\Publish\API\Repository\Values\Content\ContentInfo', $content );
+        throw new InvalidArgumentType('$content', 'eZ\Publish\API\Repository\Values\Content\Content or eZ\Publish\API\Repository\Values\Content\ContentInfo', $content);
     }
 
     /**
@@ -135,13 +133,13 @@ class ContentExtension extends Twig_Extension
      *
      * @return mixed A primitive type or a field type Value object depending on the field type.
      */
-    public function getTranslatedFieldValue( Content $content, $fieldDefIdentifier, $forcedLanguage = null )
+    public function getTranslatedFieldValue(Content $content, $fieldDefIdentifier, $forcedLanguage = null)
     {
-        return $this->translationHelper->getTranslatedField( $content, $fieldDefIdentifier, $forcedLanguage )->value;
+        return $this->translationHelper->getTranslatedField($content, $fieldDefIdentifier, $forcedLanguage)->value;
     }
 
     /**
-     * Gets name of a FieldDefinition name by loading ContentType based on Content/ContentInfo object
+     * Gets name of a FieldDefinition name by loading ContentType based on Content/ContentInfo object.
      *
      * @param \eZ\Publish\API\Repository\Values\ValueObject $content Must be Content or ContentInfo object
      * @param string $fieldDefIdentifier Identifier for the field we want to get the name from
@@ -151,10 +149,9 @@ class ContentExtension extends Twig_Extension
      *
      * @return string|null
      */
-    public function getTranslatedFieldDefinitionName( ValueObject $content, $fieldDefIdentifier, $forcedLanguage = null )
+    public function getTranslatedFieldDefinitionName(ValueObject $content, $fieldDefIdentifier, $forcedLanguage = null)
     {
-        if ( $contentType = $this->getContentType( $content ) )
-        {
+        if ($contentType = $this->getContentType($content)) {
             return $this->translationHelper->getTranslatedFieldDefinitionProperty(
                 $contentType,
                 $fieldDefIdentifier,
@@ -163,11 +160,11 @@ class ContentExtension extends Twig_Extension
             );
         }
 
-        throw new InvalidArgumentType( '$content', 'Content|ContentInfo', $content );
+        throw new InvalidArgumentType('$content', 'Content|ContentInfo', $content);
     }
 
     /**
-     * Gets name of a FieldDefinition description by loading ContentType based on Content/ContentInfo object
+     * Gets name of a FieldDefinition description by loading ContentType based on Content/ContentInfo object.
      *
      * @param \eZ\Publish\API\Repository\Values\ValueObject $content Must be Content or ContentInfo object
      * @param string $fieldDefIdentifier Identifier for the field we want to get the name from
@@ -177,10 +174,9 @@ class ContentExtension extends Twig_Extension
      *
      * @return string|null
      */
-    public function getTranslatedFieldDefinitionDescription( ValueObject $content, $fieldDefIdentifier, $forcedLanguage = null )
+    public function getTranslatedFieldDefinitionDescription(ValueObject $content, $fieldDefIdentifier, $forcedLanguage = null)
     {
-        if ( $contentType = $this->getContentType( $content ) )
-        {
+        if ($contentType = $this->getContentType($content)) {
             return $this->translationHelper->getTranslatedFieldDefinitionProperty(
                 $contentType,
                 $fieldDefIdentifier,
@@ -189,11 +185,11 @@ class ContentExtension extends Twig_Extension
             );
         }
 
-        throw new InvalidArgumentType( '$content', 'Content|ContentInfo', $content );
+        throw new InvalidArgumentType('$content', 'Content|ContentInfo', $content);
     }
 
     /**
-     * Gets translated property generic helper
+     * Gets translated property generic helper.
      *
      * For generic use, expects property in singular form. For instance if 'name' is provided it will first look for
      * getName( $lang ) method, then property called ->names[$lang], in either case look for correct translation.
@@ -210,19 +206,16 @@ class ContentExtension extends Twig_Extension
      *
      * @return string|null
      */
-    public function getTranslatedProperty( ValueObject $object, $property, $forcedLanguage = null )
+    public function getTranslatedProperty(ValueObject $object, $property, $forcedLanguage = null)
     {
         $pluralProperty = $property . 's';
-        if ( method_exists( $object, 'get' . $property ) )
-        {
+        if (method_exists($object, 'get' . $property)) {
             return $this->translationHelper->getTranslatedByMethod(
                 $object,
                 'get' . $property,
                 $forcedLanguage
             );
-        }
-        else if ( property_exists( $object, $pluralProperty ) && is_array( $object->$pluralProperty ) )
-        {
+        } elseif (property_exists($object, $pluralProperty) && is_array($object->$pluralProperty)) {
             return $this->translationHelper->getTranslatedByProperty(
                 $object,
                 $pluralProperty,
@@ -230,7 +223,7 @@ class ContentExtension extends Twig_Extension
             );
         }
 
-        throw new InvalidArgumentValue( '$property', $property, get_class( $object ) );
+        throw new InvalidArgumentValue('$property', $property, get_class($object));
     }
 
     /**
@@ -245,33 +238,30 @@ class ContentExtension extends Twig_Extension
      *
      * @return bool
      */
-    public function isFieldEmpty( Content $content, $fieldDefIdentifier, $forcedLanguage = null )
+    public function isFieldEmpty(Content $content, $fieldDefIdentifier, $forcedLanguage = null)
     {
-        if ( $fieldDefIdentifier instanceof Field )
-        {
+        if ($fieldDefIdentifier instanceof Field) {
             $fieldDefIdentifier = $fieldDefIdentifier->fieldDefIdentifier;
         }
 
-        return $this->fieldHelper->isFieldEmpty( $content, $fieldDefIdentifier, $forcedLanguage );
+        return $this->fieldHelper->isFieldEmpty($content, $fieldDefIdentifier, $forcedLanguage);
     }
 
     /**
-     * Get ContentType by Content/ContentInfo
+     * Get ContentType by Content/ContentInfo.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content|\eZ\Publish\API\Repository\Values\Content\ContentInfo $content
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType|null
      */
-    private function getContentType( ValueObject $content )
+    private function getContentType(ValueObject $content)
     {
-        if ( $content instanceof Content )
-        {
+        if ($content instanceof Content) {
             return $this->repository->getContentTypeService()->loadContentType(
                 $content->getVersionInfo()->getContentInfo()->contentTypeId
             );
-        }
-        else if ( $content instanceof ContentInfo )
-        {
-            return $this->repository->getContentTypeService()->loadContentType( $content->contentTypeId );
+        } elseif ($content instanceof ContentInfo) {
+            return $this->repository->getContentTypeService()->loadContentType($content->contentTypeId);
         }
     }
 }

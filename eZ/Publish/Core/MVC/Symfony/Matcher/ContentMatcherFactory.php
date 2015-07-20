@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContentMatcherFactory class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,11 +27,12 @@ class ContentMatcherFactory extends ContentBasedMatcherFactory
      *
      * @return bool
      */
-    protected function doMatch( MatcherInterface $matcher, ValueObject $valueObject )
+    protected function doMatch(MatcherInterface $matcher, ValueObject $valueObject)
     {
-        if ( !$valueObject instanceof ContentInfo )
-            throw new InvalidArgumentException( 'Value object must be a valid ContentInfo instance' );
+        if (!$valueObject instanceof ContentInfo) {
+            throw new InvalidArgumentException('Value object must be a valid ContentInfo instance');
+        }
 
-        return $matcher->matchContentInfo( $valueObject );
+        return $matcher->matchContentInfo($valueObject);
     }
 }

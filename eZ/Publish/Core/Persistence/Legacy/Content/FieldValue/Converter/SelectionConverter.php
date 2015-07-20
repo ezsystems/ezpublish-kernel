@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Selection converter
+ * File containing the Selection converter.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,7 +22,7 @@ use DOMDocument;
 class SelectionConverter implements Converter
 {
     /**
-     * Factory for current class
+     * Factory for current class.
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
@@ -28,110 +30,104 @@ class SelectionConverter implements Converter
      */
     public static function create()
     {
-        return new self;
+        return new self();
     }
 
     /**
-     * Converts data from $value to $storageFieldValue
+     * Converts data from $value to $storageFieldValue.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
      */
-    public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
+    public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
     {
         $storageFieldValue->sortKeyString = $storageFieldValue->dataText = $value->sortKey;
     }
 
     /**
-     * Converts data from $value to $fieldValue
+     * Converts data from $value to $fieldValue.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      */
-    public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
+    public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
     {
-        if ( $value->dataText !== '' )
-        {
+        if ($value->dataText !== '') {
             $fieldValue->data = array_map(
                 'intval',
-                explode( '-', $value->dataText )
+                explode('-', $value->dataText)
             );
-        }
-        else
-        {
+        } else {
             $fieldValue->data = array();
         }
         $fieldValue->sortKey = $value->sortKeyString;
     }
 
     /**
-     * Converts field definition data in $fieldDef into $storageFieldDef
+     * Converts field definition data in $fieldDef into $storageFieldDef.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      */
-    public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
+    public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
         $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
 
-        if ( isset( $fieldSettings["isMultiple"] ) )
-            $storageDef->dataInt1 = (int)$fieldSettings["isMultiple"];
+        if (isset($fieldSettings['isMultiple'])) {
+            $storageDef->dataInt1 = (int)$fieldSettings['isMultiple'];
+        }
 
-        if ( !empty( $fieldSettings["options"] ) )
-        {
-            $xml = new DOMDocument( "1.0", "utf-8" );
+        if (!empty($fieldSettings['options'])) {
+            $xml = new DOMDocument('1.0', 'utf-8');
             $xml->appendChild(
-                $selection = $xml->createElement( "ezselection" )
+                $selection = $xml->createElement('ezselection')
             );
             $selection->appendChild(
-                $options = $xml->createElement( "options" )
+                $options = $xml->createElement('options')
             );
-            foreach ( $fieldSettings["options"] as $id => $name )
-            {
+            foreach ($fieldSettings['options'] as $id => $name) {
                 $options->appendChild(
-                    $option = $xml->createElement( "option" )
+                    $option = $xml->createElement('option')
                 );
-                $option->setAttribute( "id", $id );
-                $option->setAttribute( "name", $name );
+                $option->setAttribute('id', $id);
+                $option->setAttribute('name', $name);
             }
             $storageDef->dataText5 = $xml->saveXML();
         }
     }
 
     /**
-     * Converts field definition data in $storageDef into $fieldDef
+     * Converts field definition data in $storageDef into $fieldDef.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      */
-    public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
+    public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         $options = array();
-        $simpleXml = simplexml_load_string( $storageDef->dataText5 );
+        $simpleXml = simplexml_load_string($storageDef->dataText5);
 
-        if ( $simpleXml !== false )
-        {
-            foreach ( $simpleXml->options->option as $option )
-            {
-                $options[(int)$option["id"]] = (string)$option["name"];
+        if ($simpleXml !== false) {
+            foreach ($simpleXml->options->option as $option) {
+                $options[(int)$option['id']] = (string)$option['name'];
             }
         }
 
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false,
-                "options" => $options,
+                'isMultiple' => !empty($storageDef->dataInt1) ? (bool)$storageDef->dataInt1 : false,
+                'options' => $options,
             )
         );
 
         // @todo: Can Selection store a default value in the DB?
         $fieldDef->defaultValue = new FieldValue();
         $fieldDef->defaultValue->data = array();
-        $fieldDef->defaultValue->sortKey = "";
+        $fieldDef->defaultValue->sortKey = '';
     }
 
     /**
-     * Returns the name of the index column in the attribute table
+     * Returns the name of the index column in the attribute table.
      *
      * Returns the name of the index column the datatype uses, which is either
      * "sort_key_int" or "sort_key_string". This column is then used for
@@ -141,7 +137,6 @@ class SelectionConverter implements Converter
      */
     public function getIndexColumn()
     {
-        return "sort_key_string";
+        return 'sort_key_string';
     }
-
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the FieldTypeProcessorPassTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,7 +21,7 @@ class FieldTypeProcessorPassTest extends PHPUnit_Framework_TestCase
     public function testProcess()
     {
         $processorDefinition = new Definition();
-        $processorDefinition->addTag( 'ezpublish_rest.field_type_processor', array( 'alias' => 'test' ) );
+        $processorDefinition->addTag('ezpublish_rest.field_type_processor', array('alias' => 'test'));
 
         $containerBuilder = new ContainerBuilder();
         $containerBuilder->addDefinitions(
@@ -30,12 +32,12 @@ class FieldTypeProcessorPassTest extends PHPUnit_Framework_TestCase
         );
 
         $compilerPass = new FieldTypeProcessorPass();
-        $compilerPass->process( $containerBuilder );
+        $compilerPass->process($containerBuilder);
 
-        $dispatcherMethodCalls = $containerBuilder->getDefinition( 'ezpublish_rest.field_type_processor_registry' )->getMethodCalls();
-        self::assertTrue( isset( $dispatcherMethodCalls[0][0] ), "Failed asserting that dispatcher has a method call" );
-        self::assertEquals( 'registerProcessor', $dispatcherMethodCalls[0][0], "Failed asserting that called method is 'addVisitor'" );
-        self::assertInstanceOf( 'Symfony\\Component\\DependencyInjection\\Reference', $dispatcherMethodCalls[0][1][1], "Failed asserting that method call is to a Reference object" );
-        self::assertEquals( 'ezpublish_rest.field_type_processor.test', $dispatcherMethodCalls[0][1][1]->__toString(), "Failed asserting that Referenced service is 'ezpublish_rest.output.value_object_visitor.test'" );
+        $dispatcherMethodCalls = $containerBuilder->getDefinition('ezpublish_rest.field_type_processor_registry')->getMethodCalls();
+        self::assertTrue(isset($dispatcherMethodCalls[0][0]), 'Failed asserting that dispatcher has a method call');
+        self::assertEquals('registerProcessor', $dispatcherMethodCalls[0][0], "Failed asserting that called method is 'addVisitor'");
+        self::assertInstanceOf('Symfony\\Component\\DependencyInjection\\Reference', $dispatcherMethodCalls[0][1][1], 'Failed asserting that method call is to a Reference object');
+        self::assertEquals('ezpublish_rest.field_type_processor.test', $dispatcherMethodCalls[0][1][1]->__toString(), "Failed asserting that Referenced service is 'ezpublish_rest.output.value_object_visitor.test'");
     }
 }

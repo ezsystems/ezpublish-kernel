@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentTypeGroup ValueObjectVisitor class
+ * File containing the ContentTypeGroup ValueObjectVisitor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,71 +16,71 @@ use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
- * ContentTypeGroup value object visitor
+ * ContentTypeGroup value object visitor.
  */
 class ContentTypeGroup extends ValueObjectVisitor
 {
     /**
-     * Visit struct returned by controllers
+     * Visit struct returned by controllers.
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $data
      */
-    public function visit( Visitor $visitor, Generator $generator, $data )
+    public function visit(Visitor $visitor, Generator $generator, $data)
     {
-        $generator->startObjectElement( 'ContentTypeGroup' );
-        $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'ContentTypeGroup' ) );
-        $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'ContentTypeGroupInput' ) );
+        $generator->startObjectElement('ContentTypeGroup');
+        $visitor->setHeader('Content-Type', $generator->getMediaType('ContentTypeGroup'));
+        $visitor->setHeader('Accept-Patch', $generator->getMediaType('ContentTypeGroupInput'));
 
         $generator->startAttribute(
             'href',
             $this->router->generate(
                 'ezpublish_rest_loadContentTypeGroup',
-                array( 'contentTypeGroupId' => $data->id )
+                array('contentTypeGroupId' => $data->id)
             )
         );
-        $generator->endAttribute( 'href' );
+        $generator->endAttribute('href');
 
-        $generator->startValueElement( 'id', $data->id );
-        $generator->endValueElement( 'id' );
+        $generator->startValueElement('id', $data->id);
+        $generator->endValueElement('id');
 
-        $generator->startValueElement( 'identifier', $data->identifier );
-        $generator->endValueElement( 'identifier' );
+        $generator->startValueElement('identifier', $data->identifier);
+        $generator->endValueElement('identifier');
 
-        $generator->startValueElement( 'created', $data->creationDate->format( 'c' ) );
-        $generator->endValueElement( 'created' );
+        $generator->startValueElement('created', $data->creationDate->format('c'));
+        $generator->endValueElement('created');
 
-        $generator->startValueElement( 'modified', $data->modificationDate->format( 'c' ) );
-        $generator->endValueElement( 'modified' );
+        $generator->startValueElement('modified', $data->modificationDate->format('c'));
+        $generator->endValueElement('modified');
 
-        $generator->startObjectElement( 'Creator', 'User' );
+        $generator->startObjectElement('Creator', 'User');
         $generator->startAttribute(
             'href',
-            $this->router->generate( 'ezpublish_rest_loadUser', array( 'userId' => $data->creatorId ) )
+            $this->router->generate('ezpublish_rest_loadUser', array('userId' => $data->creatorId))
         );
-        $generator->endAttribute( 'href' );
-        $generator->endObjectElement( 'Creator' );
+        $generator->endAttribute('href');
+        $generator->endObjectElement('Creator');
 
-        $generator->startObjectElement( 'Modifier', 'User' );
+        $generator->startObjectElement('Modifier', 'User');
         $generator->startAttribute(
             'href',
-            $this->router->generate( 'ezpublish_rest_loadUser', array( 'userId' => $data->modifierId ) )
+            $this->router->generate('ezpublish_rest_loadUser', array('userId' => $data->modifierId))
         );
-        $generator->endAttribute( 'href' );
-        $generator->endObjectElement( 'Modifier' );
+        $generator->endAttribute('href');
+        $generator->endObjectElement('Modifier');
 
-        $generator->startObjectElement( 'ContentTypes', 'ContentTypeInfoList' );
+        $generator->startObjectElement('ContentTypes', 'ContentTypeInfoList');
         $generator->startAttribute(
             'href',
             $this->router->generate(
                 'ezpublish_rest_listContentTypesForGroup',
-                array( 'contentTypeGroupId' => $data->id )
+                array('contentTypeGroupId' => $data->id)
             )
         );
-        $generator->endAttribute( 'href' );
-        $generator->endObjectElement( 'ContentTypes' );
+        $generator->endAttribute('href');
+        $generator->endObjectElement('ContentTypes');
 
-        $generator->endObjectElement( 'ContentTypeGroup' );
+        $generator->endObjectElement('ContentTypeGroup');
     }
 }

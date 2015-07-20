@@ -1,35 +1,35 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\RestTrashItem;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\REST\Common;
 
 class RestTrashItemTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the TrashItem visitor
+     * Test the TrashItem visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $trashItem = new RestTrashItem(
             new TrashItem(
@@ -44,11 +44,11 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
                     'depth' => 3,
                     'contentInfo' => new ContentInfo(
                         array(
-                            'id' => 84
+                            'id' => 84,
                         )
                     ),
                     'sortField' => TrashItem::SORT_FIELD_NAME,
-                    'sortOrder' => TrashItem::SORT_ORDER_DESC
+                    'sortOrder' => TrashItem::SORT_ORDER_DESC,
                 )
             ),
             // Dummy value for ChildCount
@@ -57,17 +57,17 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadTrashItem',
-            array( 'trashItemId' => $trashItem->trashItem->id ),
+            array('trashItemId' => $trashItem->trashItem->id),
             "/content/trash/{$trashItem->trashItem->id}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocation',
-            array( 'locationPath' => '1/2/21' ),
-            "/content/locations/1/2/21"
+            array('locationPath' => '1/2/21'),
+            '/content/locations/1/2/21'
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadContent',
-            array( 'contentId' => $trashItem->trashItem->contentInfo->id ),
+            array('contentId' => $trashItem->trashItem->contentInfo->id),
             "/content/objects/{$trashItem->trashItem->contentInfo->id}"
         );
 
@@ -77,28 +77,28 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
             $trashItem
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains TrashItem element
+     * Test if result contains TrashItem element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsTrashItemElement( $result )
+    public function testResultContainsTrashItemElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'TrashItem',
+                'tag' => 'TrashItem',
                 'children' => array(
-                    'count' => 12
-                )
+                    'count' => 12,
+                ),
             ),
             $result,
             'Invalid <TrashItem> element.',
@@ -107,21 +107,21 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains TrashItem element attributes
+     * Test if result contains TrashItem element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsTrashItemAttributes( $result )
+    public function testResultContainsTrashItemAttributes($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'TrashItem',
+                'tag' => 'TrashItem',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.TrashItem+xml',
-                    'href'       => '/content/trash/42',
-                )
+                    'href' => '/content/trash/42',
+                ),
             ),
             $result,
             'Invalid <TrashItem> attributes.',
@@ -130,18 +130,18 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains id value element
+     * Test if result contains id value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsIdValueElement( $result )
+    public function testResultContainsIdValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'id',
-                'content'  => '42'
+                'tag' => 'id',
+                'content' => '42',
             ),
             $result,
             'Invalid or non-existing <TrashItem> id value element.',
@@ -150,18 +150,18 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains priority value element
+     * Test if result contains priority value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsPriorityValueElement( $result )
+    public function testResultContainsPriorityValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'priority',
-                'content'  => '0'
+                'tag' => 'priority',
+                'content' => '0',
             ),
             $result,
             'Invalid or non-existing <TrashItem> priority value element.',
@@ -170,18 +170,18 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains hidden value element
+     * Test if result contains hidden value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsHiddenValueElement( $result )
+    public function testResultContainsHiddenValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'hidden',
-                'content'  => 'false'
+                'tag' => 'hidden',
+                'content' => 'false',
             ),
             $result,
             'Invalid or non-existing <TrashItem> hidden value element.',
@@ -190,18 +190,18 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains invisible value element
+     * Test if result contains invisible value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsInvisibleValueElement( $result )
+    public function testResultContainsInvisibleValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'invisible',
-                'content'  => 'true'
+                'tag' => 'invisible',
+                'content' => 'true',
             ),
             $result,
             'Invalid or non-existing <TrashItem> invisible value element.',
@@ -210,18 +210,18 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains remoteId value element
+     * Test if result contains remoteId value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsRemoteIdValueElement( $result )
+    public function testResultContainsRemoteIdValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'remoteId',
-                'content'  => 'remote-id'
+                'tag' => 'remoteId',
+                'content' => 'remote-id',
             ),
             $result,
             'Invalid or non-existing <TrashItem> remoteId value element.',
@@ -230,17 +230,17 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains ParentLocation element
+     * Test if result contains ParentLocation element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsParentLocationElement( $result )
+    public function testResultContainsParentLocationElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'ParentLocation'
+                'tag' => 'ParentLocation',
             ),
             $result,
             'Invalid <ParentLocation> element.',
@@ -249,21 +249,21 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains ParentLocation element attributes
+     * Test if result contains ParentLocation element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsParentLocationAttributes( $result )
+    public function testResultContainsParentLocationAttributes($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'ParentLocation',
+                'tag' => 'ParentLocation',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Location+xml',
-                    'href'       => '/content/locations/1/2/21',
-                )
+                    'href' => '/content/locations/1/2/21',
+                ),
             ),
             $result,
             'Invalid <ParentLocation> attributes.',
@@ -272,18 +272,18 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains pathString value element
+     * Test if result contains pathString value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsPathStringValueElement( $result )
+    public function testResultContainsPathStringValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'pathString',
-                'content'  => '/1/2/21/42/'
+                'tag' => 'pathString',
+                'content' => '/1/2/21/42/',
             ),
             $result,
             'Invalid or non-existing <TrashItem> pathString value element.',
@@ -292,18 +292,18 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains depth value element
+     * Test if result contains depth value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsDepthValueElement( $result )
+    public function testResultContainsDepthValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'depth',
-                'content'  => '3'
+                'tag' => 'depth',
+                'content' => '3',
             ),
             $result,
             'Invalid or non-existing <TrashItem> depth value element.',
@@ -312,18 +312,18 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains childCount value element
+     * Test if result contains childCount value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsChildCountValueElement( $result )
+    public function testResultContainsChildCountValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'childCount',
-                'content'  => '0'
+                'tag' => 'childCount',
+                'content' => '0',
             ),
             $result,
             'Invalid or non-existing <TrashItem> childCount value element.',
@@ -332,17 +332,17 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains Content element
+     * Test if result contains Content element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsContentElement( $result )
+    public function testResultContainsContentElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'Content'
+                'tag' => 'Content',
             ),
             $result,
             'Invalid <Content> element.',
@@ -351,21 +351,21 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains Content element attributes
+     * Test if result contains Content element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsContentAttributes( $result )
+    public function testResultContainsContentAttributes($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'Content',
+                'tag' => 'Content',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Content+xml',
-                    'href'       => '/content/objects/84',
-                )
+                    'href' => '/content/objects/84',
+                ),
             ),
             $result,
             'Invalid <Content> attributes.',
@@ -374,18 +374,18 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains sortField value element
+     * Test if result contains sortField value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsSortFieldValueElement( $result )
+    public function testResultContainsSortFieldValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'sortField',
-                'content'  => 'NAME'
+                'tag' => 'sortField',
+                'content' => 'NAME',
             ),
             $result,
             'Invalid or non-existing <TrashItem> sortField value element.',
@@ -394,18 +394,18 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains sortOrder value element
+     * Test if result contains sortOrder value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsSortOrderValueElement( $result )
+    public function testResultContainsSortOrderValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'sortOrder',
-                'content'  => 'DESC'
+                'tag' => 'sortOrder',
+                'content' => 'DESC',
             ),
             $result,
             'Invalid or non-existing <TrashItem> sortOrder value element.',
@@ -414,12 +414,12 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the TrashItem visitor
+     * Get the TrashItem visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestTrashItem
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\RestTrashItem;
+        return new ValueObjectVisitor\RestTrashItem();
     }
 }

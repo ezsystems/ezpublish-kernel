@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the AnonymousAuthenticationProvider class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,24 +28,25 @@ class AnonymousAuthenticationProvider extends BaseAnonymousProvider
      */
     private $configResolver;
 
-    public function setRepository( Repository $repository )
+    public function setRepository(Repository $repository)
     {
         $this->repository = $repository;
     }
 
-    public function setConfigResolver( ConfigResolverInterface $configResolver )
+    public function setConfigResolver(ConfigResolverInterface $configResolver)
     {
         $this->configResolver = $configResolver;
     }
 
-    public function authenticate( TokenInterface $token )
+    public function authenticate(TokenInterface $token)
     {
-        $token = parent::authenticate( $token );
+        $token = parent::authenticate($token);
         $this->repository->setCurrentUser(
             $this->repository->getUserService()->loadUser(
-                $this->configResolver->getParameter( 'anonymous_user_id' )
+                $this->configResolver->getParameter('anonymous_user_id')
             )
         );
+
         return $token;
     }
 }

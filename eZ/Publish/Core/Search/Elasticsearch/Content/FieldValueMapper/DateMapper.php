@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the DateMapper document field value mapper class
+ * File containing the DateMapper document field value mapper class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,42 +24,36 @@ use Exception;
 class DateMapper extends FieldValueMapper
 {
     /**
-     * Check if field can be mapped
+     * Check if field can be mapped.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
      * @return mixed
      */
-    public function canMap( Field $field )
+    public function canMap(Field $field)
     {
         return $field->type instanceof DateField;
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation
+     * Map field value to a proper Elasticsearch representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
      * @return mixed
      */
-    public function map( Field $field )
+    public function map(Field $field)
     {
-        if ( is_numeric( $field->value ) )
-        {
-            $date = new DateTime( "@{$field->value}" );
-        }
-        else
-        {
-            try
-            {
-                $date = new DateTime( $field->value );
-            }
-            catch ( Exception $e )
-            {
-                throw new InvalidArgumentException( "Invalid date provided: " . $field->value );
+        if (is_numeric($field->value)) {
+            $date = new DateTime("@{$field->value}");
+        } else {
+            try {
+                $date = new DateTime($field->value);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException('Invalid date provided: ' . $field->value);
             }
         }
 
-        return $date->format( "Y-m-d\\TH:i:s\\Z" );
+        return $date->format('Y-m-d\\TH:i:s\\Z');
     }
 }

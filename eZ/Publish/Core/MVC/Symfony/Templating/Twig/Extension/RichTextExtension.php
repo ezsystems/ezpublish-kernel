@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,7 +27,7 @@ class RichTextExtension extends Twig_Extension
      */
     private $richTextEditConverter;
 
-    public function __construct( RichTextConverterInterface $richTextConverter, RichTextConverterInterface $richTextEditConverter )
+    public function __construct(RichTextConverterInterface $richTextConverter, RichTextConverterInterface $richTextEditConverter)
     {
         $this->richTextConverter = $richTextConverter;
         $this->richTextEditConverter = $richTextEditConverter;
@@ -41,38 +43,38 @@ class RichTextExtension extends Twig_Extension
         return array(
             new Twig_SimpleFilter(
                 'richtext_to_html5',
-                array( $this, 'richTextToHtml5' ),
-                array( 'is_safe' => array( 'html' ) )
+                array($this, 'richTextToHtml5'),
+                array('is_safe' => array('html'))
             ),
             new Twig_SimpleFilter(
                 'richtext_to_html5_edit',
-                array( $this, 'richTextToHtml5Edit' ),
-                array( 'is_safe' => array( 'html' ) )
-            )
+                array($this, 'richTextToHtml5Edit'),
+                array('is_safe' => array('html'))
+            ),
         );
     }
 
     /**
-     * Implements the "richtext_to_html5" filter
+     * Implements the "richtext_to_html5" filter.
      *
      * @param \DOMDocument $xmlData
      *
      * @return string
      */
-    public function richTextToHtml5( $xmlData )
+    public function richTextToHtml5($xmlData)
     {
-        return $this->richTextConverter->convert( $xmlData )->saveHTML();
+        return $this->richTextConverter->convert($xmlData)->saveHTML();
     }
 
     /**
-     * Implements the "richtext_to_html5_edit" filter
+     * Implements the "richtext_to_html5_edit" filter.
      *
      * @param \DOMDocument $xmlData
      *
      * @return string
      */
-    public function richTextToHtml5Edit( $xmlData )
+    public function richTextToHtml5Edit($xmlData)
     {
-        return $this->richTextEditConverter->convert( $xmlData )->saveHTML();
+        return $this->richTextEditConverter->convert($xmlData)->saveHTML();
     }
 }

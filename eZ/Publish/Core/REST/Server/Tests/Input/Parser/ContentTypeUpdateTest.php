@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,14 +18,14 @@ use eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeUpdate;
 class ContentTypeUpdateTest extends BaseTest
 {
     /**
-     * Tests the ContentTypeUpdate parser
+     * Tests the ContentTypeUpdate parser.
      */
     public function testParse()
     {
         $inputArray = $this->getInputArray();
 
         $contentTypeUpdate = $this->getParser();
-        $result = $contentTypeUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $contentTypeUpdate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeUpdateStruct',
@@ -86,19 +88,19 @@ class ContentTypeUpdateTest extends BaseTest
         );
 
         $this->assertEquals(
-            array( 'eng-US' => 'Updated content type' ),
+            array('eng-US' => 'Updated content type'),
             $result->names,
             'names not created correctly'
         );
 
         $this->assertEquals(
-            array( 'eng-US' => 'Updated content type description' ),
+            array('eng-US' => 'Updated content type description'),
             $result->descriptions,
             'descriptions not created correctly'
         );
 
         $this->assertEquals(
-            new \DateTime( '2012-12-31T12:30:00' ),
+            new \DateTime('2012-12-31T12:30:00'),
             $result->modificationDate,
             'creationDate not created correctly'
         );
@@ -111,7 +113,7 @@ class ContentTypeUpdateTest extends BaseTest
     }
 
     /**
-     * Test ContentTypeUpdate parser throwing exception on invalid names
+     * Test ContentTypeUpdate parser throwing exception on invalid names.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'names' element for ContentTypeUpdate.
@@ -119,14 +121,14 @@ class ContentTypeUpdateTest extends BaseTest
     public function testParseExceptionOnInvalidNames()
     {
         $inputArray = $this->getInputArray();
-        unset( $inputArray['names']['value'] );
+        unset($inputArray['names']['value']);
 
         $contentTypeUpdate = $this->getParser();
-        $contentTypeUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentTypeUpdate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentTypeUpdate parser throwing exception on invalid descriptions
+     * Test ContentTypeUpdate parser throwing exception on invalid descriptions.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'descriptions' element for ContentTypeUpdate.
@@ -134,14 +136,14 @@ class ContentTypeUpdateTest extends BaseTest
     public function testParseExceptionOnInvalidDescriptions()
     {
         $inputArray = $this->getInputArray();
-        unset( $inputArray['descriptions']['value'] );
+        unset($inputArray['descriptions']['value']);
 
         $contentTypeUpdate = $this->getParser();
-        $contentTypeUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentTypeUpdate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentTypeUpdate parser throwing exception on invalid User
+     * Test ContentTypeUpdate parser throwing exception on invalid User.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for User element in ContentTypeUpdate.
@@ -149,14 +151,14 @@ class ContentTypeUpdateTest extends BaseTest
     public function testParseExceptionOnInvalidUser()
     {
         $inputArray = $this->getInputArray();
-        unset( $inputArray['User']['_href'] );
+        unset($inputArray['User']['_href']);
 
         $contentTypeUpdate = $this->getParser();
-        $contentTypeUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentTypeUpdate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Returns the ContentTypeUpdate parser
+     * Returns the ContentTypeUpdate parser.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeUpdate
      */
@@ -169,7 +171,7 @@ class ContentTypeUpdateTest extends BaseTest
     }
 
     /**
-     * Get the content type service mock object
+     * Get the content type service mock object.
      *
      * @return \eZ\Publish\API\Repository\ContentTypeService
      */
@@ -183,15 +185,15 @@ class ContentTypeUpdateTest extends BaseTest
             false
         );
 
-        $contentTypeServiceMock->expects( $this->any() )
-            ->method( 'newContentTypeUpdateStruct' )
-            ->will( $this->returnValue( new ContentTypeUpdateStruct() ) );
+        $contentTypeServiceMock->expects($this->any())
+            ->method('newContentTypeUpdateStruct')
+            ->will($this->returnValue(new ContentTypeUpdateStruct()));
 
         return $contentTypeServiceMock;
     }
 
     /**
-     * Returns the array under test
+     * Returns the array under test.
      *
      * @return array
      */
@@ -211,29 +213,29 @@ class ContentTypeUpdateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-US',
-                        '#text' => 'Updated content type'
-                    )
-                )
+                        '#text' => 'Updated content type',
+                    ),
+                ),
             ),
             'descriptions' => array(
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-US',
-                        '#text' => 'Updated content type description'
-                    )
-                )
+                        '#text' => 'Updated content type description',
+                    ),
+                ),
             ),
             'modificationDate' => '2012-12-31T12:30:00',
             'User' => array(
-                '_href' => '/user/users/14'
-            )
+                '_href' => '/user/users/14',
+            ),
         );
     }
 
     public function getParseHrefExpectationsMap()
     {
         return array(
-            array( '/user/users/14', 'userId', 14 )
+            array('/user/users/14', 'userId', 14),
         );
     }
 }

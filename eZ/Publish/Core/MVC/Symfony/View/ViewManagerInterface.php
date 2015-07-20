@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ViewManagerInterface interface.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -27,11 +29,12 @@ interface ViewManagerInterface
      * @param array $parameters Parameters to pass to the template called to
      *        render the view. By default, it's empty. 'content' entry is
      *        reserved for the Content that is rendered.
+     *
      * @throws \RuntimeException
      *
      * @return string
      */
-    public function renderContent( Content $content, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array() );
+    public function renderContent(Content $content, $viewType = self::VIEW_TYPE_FULL, $parameters = array());
 
     /**
      * Renders $location by selecting the right template for $viewType.
@@ -43,11 +46,12 @@ interface ViewManagerInterface
      *        render the view. By default, it's empty. 'location' and 'content'
      *        entries are reserved for the Location (and its Content) that is
      *        viewed.
+     *
      * @throws \RuntimeException
      *
      * @return string
      */
-    public function renderLocation( Location $location, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array() );
+    public function renderLocation(Location $location, $viewType = self::VIEW_TYPE_FULL, $parameters = array());
 
     /**
      * Renders $block by selecting the right template.
@@ -57,11 +61,12 @@ interface ViewManagerInterface
      * @param array $parameters Parameters to pass to the template called to
      *        render the view. By default, it's empty.
      *        'block' entry is reserved for the Block that is viewed.
+     *
      * @throws \RuntimeException
      *
      * @return string
      */
-    public function renderBlock( Block $block, $parameters = array() );
+    public function renderBlock(Block $block, $parameters = array());
 
     /**
      * Renders passed ContentView object via the template engine.
@@ -72,5 +77,5 @@ interface ViewManagerInterface
      *
      * @return string
      */
-    public function renderContentView( ContentViewInterface $view, array $defaultParams = array() );
+    public function renderContentView(ContentViewInterface $view, array $defaultParams = array());
 }

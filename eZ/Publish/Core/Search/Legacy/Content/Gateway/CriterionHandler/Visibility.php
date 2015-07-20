@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the DoctrineDatabase visibility criterion handler class
+ * File containing the DoctrineDatabase visibility criterion handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
- * Visibility criterion handler
+ * Visibility criterion handler.
  */
 class Visibility extends CriterionHandler
 {
@@ -24,15 +26,15 @@ class Visibility extends CriterionHandler
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return boolean
+     * @return bool
      */
-    public function accept( Criterion $criterion )
+    public function accept(Criterion $criterion)
     {
         return $criterion instanceof Criterion\Visibility;
     }
 
     /**
-     * Generate query expression for a Criterion this handler accepts
+     * Generate query expression for a Criterion this handler accepts.
      *
      * accept() must be called before calling this method.
      *
@@ -53,32 +55,28 @@ class Visibility extends CriterionHandler
         SelectQuery $query,
         Criterion $criterion,
         array $fieldFilters
-    )
-    {
+    ) {
         $subSelect = $query->subSelect();
 
-        if ( $criterion->value[0] === Criterion\Visibility::VISIBLE )
-        {
+        if ($criterion->value[0] === Criterion\Visibility::VISIBLE) {
             $expression = $query->expr->lAnd(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'is_hidden', 'ezcontentobject_tree' ),
+                    $this->dbHandler->quoteColumn('is_hidden', 'ezcontentobject_tree'),
                     0
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'is_invisible', 'ezcontentobject_tree' ),
+                    $this->dbHandler->quoteColumn('is_invisible', 'ezcontentobject_tree'),
                     0
                 )
             );
-        }
-        else
-        {
+        } else {
             $expression = $query->expr->lOr(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'is_hidden', 'ezcontentobject_tree' ),
+                    $this->dbHandler->quoteColumn('is_hidden', 'ezcontentobject_tree'),
                     1
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'is_invisible', 'ezcontentobject_tree' ),
+                    $this->dbHandler->quoteColumn('is_invisible', 'ezcontentobject_tree'),
                     1
                 )
             );
@@ -86,15 +84,14 @@ class Visibility extends CriterionHandler
 
         $subSelect
             ->select(
-                $this->dbHandler->quoteColumn( 'contentobject_id' )
+                $this->dbHandler->quoteColumn('contentobject_id')
             )->from(
-                $this->dbHandler->quoteTable( 'ezcontentobject_tree' )
-            )->where( $expression );
+                $this->dbHandler->quoteTable('ezcontentobject_tree')
+            )->where($expression);
 
         return $query->expr->in(
-            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
+            $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
             $subSelect
         );
     }
 }
-

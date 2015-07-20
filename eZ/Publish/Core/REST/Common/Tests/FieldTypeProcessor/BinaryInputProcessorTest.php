@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the BinaryInputProcessorTest class
+ * File containing the BinaryInputProcessorTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -29,24 +31,23 @@ abstract class BinaryInputProcessorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns a temp directory path and creates it, if necessary
+     * Returns a temp directory path and creates it, if necessary.
      *
      * @return string The directory path
      */
     protected function getTempDir()
     {
-        if ( !isset( $this->tempDir ) )
-        {
+        if (!isset($this->tempDir)) {
             $tempFile = tempnam(
                 sys_get_temp_dir(),
                 'eZ_REST_BinaryInput'
             );
 
-            unlink( $tempFile );
+            unlink($tempFile);
 
             $this->tempDir = $tempFile;
 
-            mkdir( $this->tempDir );
+            mkdir($this->tempDir);
         }
 
         return $this->tempDir;
@@ -59,11 +60,11 @@ abstract class BinaryInputProcessorTest extends PHPUnit_Framework_TestCase
     {
         $processor = $this->getProcessor();
 
-        $inputHash = array( 'foo' => 'bar' );
+        $inputHash = array('foo' => 'bar');
 
-        $outputHash = $processor->preProcessValueHash( $inputHash );
+        $outputHash = $processor->preProcessValueHash($inputHash);
 
-        $this->assertEquals( $inputHash, $outputHash );
+        $this->assertEquals($inputHash, $outputHash);
     }
 
     /**
@@ -75,25 +76,25 @@ abstract class BinaryInputProcessorTest extends PHPUnit_Framework_TestCase
 
         $fileContent = '42';
 
-        $inputHash = array( 'data' => base64_encode( $fileContent ) );
+        $inputHash = array('data' => base64_encode($fileContent));
 
-        $outputHash = $processor->preProcessValueHash( $inputHash );
+        $outputHash = $processor->preProcessValueHash($inputHash);
 
-        $this->assertFalse( isset( $outputHash['data'] ), "No data in output hash" );
-        $this->assertTrue( isset( $outputHash['path'] ), "No path in output hash" );
+        $this->assertFalse(isset($outputHash['data']), 'No data in output hash');
+        $this->assertTrue(isset($outputHash['path']), 'No path in output hash');
 
         $this->assertTrue(
-            file_exists( $outputHash['path'] )
+            file_exists($outputHash['path'])
         );
 
         $this->assertEquals(
             $fileContent,
-            file_get_contents( $outputHash['path'] )
+            file_get_contents($outputHash['path'])
         );
     }
 
     /**
-     * Returns the processor under test
+     * Returns the processor under test.
      *
      * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryInputProcessor
      */

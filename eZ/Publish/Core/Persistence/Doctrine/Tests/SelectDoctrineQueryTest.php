@@ -8,23 +8,26 @@ class SelectDoctrineQueryTest extends TestCase
     {
         $query = $this->handler->createSelectQuery();
         $query->select(
-            'val1', 'val2'
+            'val1',
+            'val2'
         )->from(
             'query_test'
         );
 
-        $this->assertEquals( 'SELECT val1, val2 FROM query_test', $query->getQuery() );
+        $this->assertEquals('SELECT val1, val2 FROM query_test', $query->getQuery());
     }
 
     public function testSelectWithWhereClause()
     {
         $query = $this->handler->createSelectQuery();
         $query->select(
-            'val1', 'val2'
+            'val1',
+            'val2'
         )->from(
             'query_test'
         )->where(
-            'foo = bar', 'bar = baz'
+            'foo = bar',
+            'bar = baz'
         );
 
         $this->assertEquals(
@@ -41,11 +44,15 @@ class SelectDoctrineQueryTest extends TestCase
         )->from(
             'query_test'
         )->innerJoin(
-            'query_inner', 'qtid', 'qiid'
+            'query_inner',
+            'qtid',
+            'qiid'
         )->from(
             'second_from'
         )->leftJoin(
-            'second_inner', 'sfid', 'siid'
+            'second_inner',
+            'sfid',
+            'siid'
         );
 
         $this->assertEquals(
@@ -57,13 +64,9 @@ class SelectDoctrineQueryTest extends TestCase
     public function testSelectDistinct()
     {
         $query = $this->handler->createSelectQuery();
-        $query->selectDistinct(
-            'val1', 'val2'
-        )->from(
-            'query_test'
-        );
+        $query->selectDistinct('val1', 'val2')->from('query_test');
 
-        $this->assertEquals( 'SELECT DISTINCT val1, val2 FROM query_test', $query->getQuery() );
+        $this->assertEquals('SELECT DISTINCT val1, val2 FROM query_test', $query->getQuery());
     }
 
     public function testSelectGroupByHaving()
@@ -79,7 +82,7 @@ class SelectDoctrineQueryTest extends TestCase
             'foo = bar'
         );
 
-        $this->assertEquals( 'SELECT * FROM query_test GROUP BY id HAVING foo = bar', $query->getQuery() );
+        $this->assertEquals('SELECT * FROM query_test GROUP BY id HAVING foo = bar', $query->getQuery());
     }
 
     public function testLimitGeneration()
@@ -92,11 +95,11 @@ class SelectDoctrineQueryTest extends TestCase
         );
 
         $sql = (string)$query;
-        $query->limit( 10, 10 );
+        $query->limit(10, 10);
 
-        $limitSql = $this->connection->getDatabasePlatform()->modifyLimitQuery( $sql, 10, 10 );
+        $limitSql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 10, 10);
 
-        $this->assertEquals( $limitSql, (string)$query );
+        $this->assertEquals($limitSql, (string)$query);
     }
 
     public function testSubselect()
@@ -116,6 +119,6 @@ class SelectDoctrineQueryTest extends TestCase
             $subselect
         );
 
-        $this->assertEquals( 'SELECT * FROM ( SELECT * FROM query_test )', (string)$query );
+        $this->assertEquals('SELECT * FROM ( SELECT * FROM query_test )', (string)$query);
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Checkbox class
+ * File containing the Checkbox class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,13 +24,13 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 class Type extends FieldType
 {
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
     public function getFieldTypeIdentifier()
     {
-        return "ezboolean";
+        return 'ezboolean';
     }
 
     /**
@@ -41,7 +43,7 @@ class Type extends FieldType
      *
      * @return string
      */
-    public function getName( SPIValue $value )
+    public function getName(SPIValue $value)
     {
         return $value->bool ? '1' : '0';
     }
@@ -54,21 +56,20 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value( false );
+        return new Value(false);
     }
 
     /**
      * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
-     * @param boolean|\eZ\Publish\Core\FieldType\Checkbox\Value $inputValue
+     * @param bool|\eZ\Publish\Core\FieldType\Checkbox\Value $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\Checkbox\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
-        if ( is_bool( $inputValue ) )
-        {
-            $inputValue = new Value( $inputValue );
+        if (is_bool($inputValue)) {
+            $inputValue = new Value($inputValue);
         }
 
         return $inputValue;
@@ -80,13 +81,10 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\Checkbox\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
-        if ( !$value instanceof Value )
-        {
+        if (!$value instanceof Value) {
             throw new InvalidArgumentType(
                 '$value',
                 'eZ\\Publish\\Core\\FieldType\\Checkbox\\Value',
@@ -94,8 +92,7 @@ class Type extends FieldType
             );
         }
 
-        if ( !is_bool( $value->bool ) )
-        {
+        if (!is_bool($value->bool)) {
             throw new InvalidArgumentType(
                 '$value->bool',
                 'boolean',
@@ -111,39 +108,39 @@ class Type extends FieldType
      *
      * @return int
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo(BaseValue $value)
     {
         return (int)$value->bool;
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * @param mixed $hash
      *
      * @return \eZ\Publish\Core\FieldType\Checkbox\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        return new Value( $hash );
+        return new Value($hash);
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\Checkbox\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
         return $value->bool;
     }
 
     /**
-     * Returns whether the field type is searchable
+     * Returns whether the field type is searchable.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSearchable()
     {

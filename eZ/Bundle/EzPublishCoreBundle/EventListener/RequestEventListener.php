@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RequestEventListener class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -43,7 +45,7 @@ class RequestEventListener implements EventSubscriberInterface
      */
     private $router;
 
-    public function __construct( ConfigResolverInterface $configResolver, RouterInterface $router, $defaultSiteAccess, LoggerInterface $logger = null )
+    public function __construct(ConfigResolverInterface $configResolver, RouterInterface $router, $defaultSiteAccess, LoggerInterface $logger = null)
     {
         $this->configResolver = $configResolver;
         $this->defaultSiteAccess = $defaultSiteAccess;
@@ -55,24 +57,22 @@ class RequestEventListener implements EventSubscriberInterface
     {
         return array(
             KernelEvents::REQUEST => array(
-                array( 'onKernelRequestForward', 10 ),
-                array( 'onKernelRequestRedirect', 0 ),
-            )
+                array('onKernelRequestForward', 10),
+                array('onKernelRequestRedirect', 0),
+            ),
         );
     }
 
     /**
      * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
      */
-    public function onKernelRequestForward( GetResponseEvent $event )
+    public function onKernelRequestForward(GetResponseEvent $event)
     {
-        if ( $event->getRequestType() === HttpKernelInterface::MASTER_REQUEST )
-        {
+        if ($event->getRequestType() === HttpKernelInterface::MASTER_REQUEST) {
             $request = $event->getRequest();
-            if ( $request->attributes->get( 'needsForward' ) && $request->attributes->has( 'semanticPathinfo' ) )
-            {
-                $semanticPathinfo = $request->attributes->get( 'semanticPathinfo' );
-                $request->attributes->remove( 'needsForward' );
+            if ($request->attributes->get('needsForward') && $request->attributes->has('semanticPathinfo')) {
+                $semanticPathinfo = $request->attributes->get('semanticPathinfo');
+                $request->attributes->remove('needsForward');
                 $forwardRequest = Request::create(
                     $semanticPathinfo,
                     $request->getMethod(),
@@ -82,17 +82,18 @@ class RequestEventListener implements EventSubscriberInterface
                     $request->server->all(),
                     $request->getContent()
                 );
-                $forwardRequest->attributes->add( $request->attributes->all() );
+                $forwardRequest->attributes->add($request->attributes->all());
                 // Not forcing HttpKernelInterface::SUB_REQUEST on purpose since we're very early here
                 // and we need to bootstrap essential stuff like sessions.
-                $event->setResponse( $event->getKernel()->handle( $forwardRequest ) );
+                $event->setResponse($event->getKernel()->handle($forwardRequest));
                 $event->stopPropagation();
 
-                if ( isset( $this->logger ) )
+                if (isset($this->logger)) {
                     $this->logger->info(
                         "URLAlias made request to be forwarded to $semanticPathinfo",
-                        array( 'pathinfo' => $request->getPathInfo() )
+                        array('pathinfo' => $request->getPathInfo())
                     );
+                }
             }
         }
     }
@@ -107,38 +108,36 @@ class RequestEventListener implements EventSubscriberInterface
      *
      * @see \eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter
      */
-    public function onKernelRequestRedirect( GetResponseEvent $event )
+    public function onKernelRequestRedirect(GetResponseEvent $event)
     {
-        if ( $event->getRequestType() == HttpKernelInterface::MASTER_REQUEST )
-        {
+        if ($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) {
             $request = $event->getRequest();
-            if ( $request->attributes->get( 'needsRedirect' ) && $request->attributes->has( 'semanticPathinfo' ) )
-            {
-                $siteaccess = $request->attributes->get( 'siteaccess' );
-                $semanticPathinfo = $request->attributes->get( 'semanticPathinfo' );
+            if ($request->attributes->get('needsRedirect') && $request->attributes->has('semanticPathinfo')) {
+                $siteaccess = $request->attributes->get('siteaccess');
+                $semanticPathinfo = $request->attributes->get('semanticPathinfo');
                 $queryString = $request->getQueryString();
                 if (
-                    $request->attributes->get( 'prependSiteaccessOnRedirect', true )
+                    $request->attributes->get('prependSiteaccessOnRedirect', true)
                     && $siteaccess instanceof SiteAccess
                     && $siteaccess->matcher instanceof URILexer
-                )
-                {
-                    $semanticPathinfo = $siteaccess->matcher->analyseLink( $semanticPathinfo );
+                ) {
+                    $semanticPathinfo = $siteaccess->matcher->analyseLink($semanticPathinfo);
                 }
 
                 $event->setResponse(
                     new RedirectResponse(
-                        $semanticPathinfo . ( $queryString ? "?$queryString" : '' ),
+                        $semanticPathinfo . ($queryString ? "?$queryString" : ''),
                         301
                     )
                 );
                 $event->stopPropagation();
 
-                if ( isset( $this->logger ) )
+                if (isset($this->logger)) {
                     $this->logger->info(
                         "URLAlias made request to be redirected to $semanticPathinfo",
-                        array( 'pathinfo' => $request->getPathInfo() )
+                        array('pathinfo' => $request->getPathInfo())
                     );
+                }
             }
         }
     }

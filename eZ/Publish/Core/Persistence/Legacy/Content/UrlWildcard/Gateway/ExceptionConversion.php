@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Section Gateway class
+ * File containing the Section Gateway class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,70 +17,58 @@ use Doctrine\DBAL\DBALException;
 use PDOException;
 
 /**
- * UrlAlias Handler
+ * UrlAlias Handler.
  */
 class ExceptionConversion extends Gateway
 {
     /**
-     * The wrapped gateway
+     * The wrapped gateway.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway
      */
     protected $innerGateway;
 
     /**
-     * Creates a new exception conversion gateway around $innerGateway
+     * Creates a new exception conversion gateway around $innerGateway.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway $innerGateway
      */
-    public function __construct( Gateway $innerGateway )
+    public function __construct(Gateway $innerGateway)
     {
         $this->innerGateway = $innerGateway;
     }
 
     /**
-     * Inserts the given UrlWildcard
+     * Inserts the given UrlWildcard.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard $urlWildcard
      *
      * @return mixed
      */
-    public function insertUrlWildcard( UrlWildcard $urlWildcard )
+    public function insertUrlWildcard(UrlWildcard $urlWildcard)
     {
-        try
-        {
-            return $this->innerGateway->insertUrlWildcard( $urlWildcard );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->insertUrlWildcard($urlWildcard);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Deletes the UrlWildcard with given $id
+     * Deletes the UrlWildcard with given $id.
      *
      * @param mixed $id
-     *
-     * @return void
      */
-    public function deleteUrlWildcard( $id )
+    public function deleteUrlWildcard($id)
     {
-        try
-        {
-            return $this->innerGateway->deleteUrlWildcard( $id );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->deleteUrlWildcard($id);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -87,43 +77,33 @@ class ExceptionConversion extends Gateway
      *
      * @return array
      */
-    public function loadUrlWildcardData( $parentId )
+    public function loadUrlWildcardData($parentId)
     {
-        try
-        {
-            return $this->innerGateway->loadUrlWildcardData( $parentId );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->loadUrlWildcardData($parentId);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Loads an array with data about UrlWildcards (paged)
+     * Loads an array with data about UrlWildcards (paged).
      *
      * @param mixed $offset
      * @param mixed $limit
      *
      * @return array
      */
-    public function loadUrlWildcardsData( $offset = 0, $limit = -1 )
+    public function loadUrlWildcardsData($offset = 0, $limit = -1)
     {
-        try
-        {
-            return $this->innerGateway->loadUrlWildcardsData( $offset, $limit );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->loadUrlWildcardsData($offset, $limit);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 }

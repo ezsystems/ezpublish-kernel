@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the PathGenerator base class
+ * File containing the PathGenerator base class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,7 @@ namespace eZ\Publish\Core\FieldType\Image;
 abstract class PathGenerator
 {
     /**
-     * Generates the storage path for the field identified by parameters
+     * Generates the storage path for the field identified by parameters.
      *
      * Returns a relative storage path.
      *
@@ -22,5 +24,5 @@ abstract class PathGenerator
      *
      * @return string
      */
-    abstract public function getStoragePathForField( $fieldId, $versionNo, $languageCode );
+    abstract public function getStoragePathForField($fieldId, $versionNo, $languageCode);
 }

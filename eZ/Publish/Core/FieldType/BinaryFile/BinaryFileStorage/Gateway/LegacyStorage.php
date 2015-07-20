@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the BinaryFileStorage Gateway
+ * File containing the BinaryFileStorage Gateway.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -39,11 +41,12 @@ class LegacyStorage extends BaseLegacyStorage
             'name' => 'downloadCount',
             'cast' => 'intval',
         );
+
         return $propertyMap;
     }
 
     /**
-     * Set columns to be fetched from the database
+     * Set columns to be fetched from the database.
      *
      * This method is intended to be overwritten by derived classes in order to
      * add additional columns to be fetched from the database. Please do not
@@ -52,16 +55,14 @@ class LegacyStorage extends BaseLegacyStorage
      * @param eZ\Publish\Core\Persistence\Database\SelectQuery $selectQuery
      * @param int $fieldId
      * @param int $versionNo
-     *
-     * @return void
      */
-    protected function setFetchColumns( SelectQuery $selectQuery, $fieldId, $versionNo )
+    protected function setFetchColumns(SelectQuery $selectQuery, $fieldId, $versionNo)
     {
         $connection = $this->getConnection();
 
-        parent::setFetchColumns( $selectQuery, $fieldId, $versionNo );
+        parent::setFetchColumns($selectQuery, $fieldId, $versionNo);
         $selectQuery->select(
-            $connection->quoteColumn( 'download_count' )
+            $connection->quoteColumn('download_count')
         );
     }
 
@@ -75,18 +76,15 @@ class LegacyStorage extends BaseLegacyStorage
      * @param \ezcQueryInsert $insertQuery
      * @param VersionInfo $versionInfo
      * @param Field $field
-     *
-     * @return void
      */
-    protected function setInsertColumns( InsertQuery $insertQuery, VersionInfo $versionInfo, Field $field )
+    protected function setInsertColumns(InsertQuery $insertQuery, VersionInfo $versionInfo, Field $field)
     {
         $connection = $this->getConnection();
 
-        parent::setInsertColumns( $insertQuery, $versionInfo, $field );
+        parent::setInsertColumns($insertQuery, $versionInfo, $field);
         $insertQuery->set(
-            $connection->quoteColumn( 'download_count' ),
-            $insertQuery->bindValue( $field->value->externalData['downloadCount'], null, \PDO::PARAM_INT )
+            $connection->quoteColumn('download_count'),
+            $insertQuery->bindValue($field->value->externalData['downloadCount'], null, \PDO::PARAM_INT)
         );
     }
 }
-

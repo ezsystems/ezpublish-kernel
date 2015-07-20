@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the Image class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 
 class Page extends AbstractParser
@@ -22,87 +23,83 @@ class Page extends AbstractParser
      *
      * @param \Symfony\Component\Config\Definition\Builder\NodeBuilder $nodeBuilder Node just under ezpublish.system.<siteaccess>
      */
-    public function addSemanticConfig( NodeBuilder $nodeBuilder )
+    public function addSemanticConfig(NodeBuilder $nodeBuilder)
     {
         $nodeBuilder
-            ->arrayNode( 'ezpage' )
+            ->arrayNode('ezpage')
                 ->children()
-                    ->arrayNode( 'enabledLayouts' )
-                        ->prototype( 'scalar' )
+                    ->arrayNode('enabledLayouts')
+                        ->prototype('scalar')
                         ->end()
-                        ->info( 'List of enabled layout identifiers' )
+                        ->info('List of enabled layout identifiers')
                     ->end()
-                    ->arrayNode( 'enabledBlocks' )
-                        ->prototype( 'scalar' )
+                    ->arrayNode('enabledBlocks')
+                        ->prototype('scalar')
                         ->end()
-                        ->info( 'List of enabled block identifiers' )
+                        ->info('List of enabled block identifiers')
                     ->end()
-                    ->arrayNode( 'layouts' )
-                        ->info( 'List of registered layouts, the key is the identifier of the layout' )
-                        ->useAttributeAsKey( 'key' )
-                        ->normalizeKeys( false )
-                        ->prototype( 'array' )
+                    ->arrayNode('layouts')
+                        ->info('List of registered layouts, the key is the identifier of the layout')
+                        ->useAttributeAsKey('key')
+                        ->normalizeKeys(false)
+                        ->prototype('array')
                             ->children()
-                                ->scalarNode( 'name' )->isRequired()->info( 'Name of the zone type' )->end()
-                                ->scalarNode( 'template' )->isRequired()->info( 'Template to use to render this layout' )->end()
+                                ->scalarNode('name')->isRequired()->info('Name of the zone type')->end()
+                                ->scalarNode('template')->isRequired()->info('Template to use to render this layout')->end()
                             ->end()
                         ->end()
                     ->end()
-                    ->arrayNode( 'blocks' )
-                        ->info( 'List of available blocks, the key is the identifier of the block' )
-                        ->useAttributeAsKey( 'key' )
-                        ->normalizeKeys( false )
-                        ->prototype( 'array' )
+                    ->arrayNode('blocks')
+                        ->info('List of available blocks, the key is the identifier of the block')
+                        ->useAttributeAsKey('key')
+                        ->normalizeKeys(false)
+                        ->prototype('array')
                             ->children()
-                                ->scalarNode( 'name' )->isRequired()->info( 'Name of the block' )->end()
+                                ->scalarNode('name')->isRequired()->info('Name of the block')->end()
                             ->end()
                         ->end()
                     ->end()
                 ->end()
             ->end();
-
     }
 
-    public function preMap( array $config, ContextualizerInterface $contextualizer )
+    public function preMap(array $config, ContextualizerInterface $contextualizer)
     {
         $container = $contextualizer->getContainer();
         $defaultConfig = array(
-            'layouts' => $container->getParameter( 'ezpublish.ezpage.layouts' ),
-            'blocks' => $container->getParameter( 'ezpublish.ezpage.blocks' ),
-            'enabledLayouts' => $container->getParameter( 'ezpublish.ezpage.enabledLayouts' ),
-            'enabledBlocks' => $container->getParameter( 'ezpublish.ezpage.enabledBlocks' ),
+            'layouts' => $container->getParameter('ezpublish.ezpage.layouts'),
+            'blocks' => $container->getParameter('ezpublish.ezpage.blocks'),
+            'enabledLayouts' => $container->getParameter('ezpublish.ezpage.enabledLayouts'),
+            'enabledBlocks' => $container->getParameter('ezpublish.ezpage.enabledBlocks'),
         );
         $container->setParameter(
             'ezsettings.' . ConfigResolver::SCOPE_DEFAULT . '.ezpage',
             $defaultConfig
         );
 
-        $contextualizer->mapConfigArray( 'ezpage', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL );
+        $contextualizer->mapConfigArray('ezpage', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL);
 
         // filters blocks and layouts for each siteaccess to keep only
         // the enabled ones for this sa
-        foreach ( $config['siteaccess']['list'] as $sa )
-        {
-            $ezpageSettings = $container->getParameter( "ezsettings.$sa.ezpage" );
-            foreach ( array( 'layouts', 'blocks' ) as $type )
-            {
-                $enabledKey = 'enabled' . ucfirst( $type );
-                if ( empty( $ezpageSettings[$enabledKey] ) )
-                {
+        foreach ($config['siteaccess']['list'] as $sa) {
+            $ezpageSettings = $container->getParameter("ezsettings.$sa.ezpage");
+            foreach (array('layouts', 'blocks') as $type) {
+                $enabledKey = 'enabled' . ucfirst($type);
+                if (empty($ezpageSettings[$enabledKey])) {
                     $ezpageSettings[$type] = array();
                     continue;
                 }
                 $ezpageSettings[$type] = array_intersect_key(
                     $ezpageSettings[$type],
-                    array_flip( $ezpageSettings[$enabledKey] )
+                    array_flip($ezpageSettings[$enabledKey])
                 );
-                $ezpageSettings[$enabledKey] = array_unique( $ezpageSettings[$enabledKey] );
+                $ezpageSettings[$enabledKey] = array_unique($ezpageSettings[$enabledKey]);
             }
-            $container->setParameter( "ezsettings.$sa.ezpage", $ezpageSettings );
+            $container->setParameter("ezsettings.$sa.ezpage", $ezpageSettings);
         }
     }
 
-    public function mapConfig( array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizer )
+    public function mapConfig(array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizer)
     {
         // Nothing to do here.
     }

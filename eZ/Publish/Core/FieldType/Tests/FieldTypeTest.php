@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the eZ\Publish\Core\FieldType\Tests\FieldTypeTest class
+ * File containing the eZ\Publish\Core\FieldType\Tests\FieldTypeTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -28,13 +30,13 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     protected function getTransformationProcessorMock()
     {
         return $this->getMockForAbstractClass(
-            "eZ\\Publish\\Core\\Persistence\\TransformationProcessor",
+            'eZ\\Publish\\Core\\Persistence\\TransformationProcessor',
             array(),
             '',
             false,
             true,
             true,
-            array( 'transform', 'transformByGroup' )
+            array('transform', 'transformByGroup')
         );
     }
 
@@ -136,7 +138,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     abstract public function provideValidInputForAcceptValue();
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -173,7 +175,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     abstract public function provideInputForToHash();
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -245,7 +247,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                array()
+                array(),
             ),
         );
     }
@@ -280,7 +282,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                array( 'nonempty' )
+                array('nonempty'),
             ),
         );
     }
@@ -320,7 +322,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                array()
+                array(),
             ),
         );
     }
@@ -377,7 +379,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
                 array(
                     'NonExistentValidator' => array(),
                 ),
-            )
+            ),
         );
     }
 
@@ -431,8 +433,8 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 array(),
-                $this->getMock( "eZ\\Publish\\SPI\\FieldType\\Value" ),
-            )
+                $this->getMock('eZ\\Publish\\SPI\\FieldType\\Value'),
+            ),
         );
     }
 
@@ -505,9 +507,9 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 array(),
-                $this->getMock( "eZ\\Publish\\SPI\\FieldType\\Value" ),
+                $this->getMock('eZ\\Publish\\SPI\\FieldType\\Value'),
                 array(),
-            )
+            ),
         );
     }
 
@@ -521,10 +523,10 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
      */
     protected function getFieldTypeUnderTest()
     {
-        if ( !isset( $this->fieldTypeUnderTest ) )
-        {
+        if (!isset($this->fieldTypeUnderTest)) {
             $this->fieldTypeUnderTest = $this->createFieldTypeUnderTest();
         }
+
         return $this->fieldTypeUnderTest;
     }
 
@@ -542,11 +544,11 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
      * @param SPIValue $spiValue
      * @param string $expected
      */
-    public function testGetName( SPIValue $value, $expected )
+    public function testGetName(SPIValue $value, $expected)
     {
         self::assertSame(
             $expected,
-            $this->getFieldTypeUnderTest()->getName( $value )
+            $this->getFieldTypeUnderTest()->getName($value)
         );
     }
 
@@ -588,11 +590,11 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider provideValidInputForAcceptValue
      */
-    public function testAcceptValue( $inputValue, $expectedOutputValue )
+    public function testAcceptValue($inputValue, $expectedOutputValue)
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        $outputValue = $fieldType->acceptValue( $inputValue );
+        $outputValue = $fieldType->acceptValue($inputValue);
 
         $this->assertEquals(
             $expectedOutputValue,
@@ -609,7 +611,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
         $fieldType = $this->getFieldTypeUnderTest();
         $emptyValue = $fieldType->getEmptyValue();
 
-        $acceptedEmptyValue = $fieldType->acceptValue( $emptyValue );
+        $acceptedEmptyValue = $fieldType->acceptValue($emptyValue);
 
         $this->assertEquals(
             $emptyValue,
@@ -624,26 +626,22 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider provideInvalidInputForAcceptValue
      */
-    public function testAcceptValueFailsOnInvalidValues( $inputValue, $expectedException )
+    public function testAcceptValueFailsOnInvalidValues($inputValue, $expectedException)
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        try
-        {
-            $fieldType->acceptValue( $inputValue );
+        try {
+            $fieldType->acceptValue($inputValue);
             $this->fail(
                 sprintf(
                     'Expected exception of type "%s" not thrown on incorrect input to acceptValue().',
                     $expectedException
                 )
             );
-        }
-        catch ( Exception $e )
-        {
-            if ( $e instanceof \PHPUnit_Framework_Exception
+        } catch (Exception $e) {
+            if ($e instanceof \PHPUnit_Framework_Exception
                  || $e instanceof \PHPUnit_Framework_Error
-                 || $e instanceof \PHPUnit_Framework_AssertionFailedError )
-            {
+                 || $e instanceof \PHPUnit_Framework_AssertionFailedError) {
                 throw $e;
             }
 
@@ -660,13 +658,13 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider provideInputForToHash
      */
-    public function testToHash( $inputValue, $expectedResult )
+    public function testToHash($inputValue, $expectedResult)
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        $actualResult = $fieldType->toHash( $inputValue );
+        $actualResult = $fieldType->toHash($inputValue);
 
-        $this->assertIsValidHashValue( $actualResult );
+        $this->assertIsValidHashValue($actualResult);
 
         $this->assertEquals(
             $expectedResult,
@@ -681,13 +679,13 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider provideInputForFromHash
      */
-    public function testFromHash( $inputHash, $expectedResult )
+    public function testFromHash($inputHash, $expectedResult)
     {
-        $this->assertIsValidHashValue( $inputHash );
+        $this->assertIsValidHashValue($inputHash);
 
         $fieldType = $this->getFieldTypeUnderTest();
 
-        $actualResult = $fieldType->fromHash( $inputHash );
+        $actualResult = $fieldType->fromHash($inputHash);
 
         $this->assertEquals(
             $expectedResult,
@@ -701,7 +699,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
         $fieldType = $this->getFieldTypeUnderTest();
 
         $this->assertTrue(
-            $fieldType->isEmptyValue( $fieldType->getEmptyValue() )
+            $fieldType->isEmptyValue($fieldType->getEmptyValue())
         );
     }
 
@@ -709,14 +707,12 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
      * @param mixed $inputSettings
      *
      * @dataProvider provideValidFieldSettings
-     *
-     * @return void
      */
-    public function testValidateFieldSettingsValid( $inputSettings )
+    public function testValidateFieldSettingsValid($inputSettings)
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        $validationResult = $fieldType->validateFieldSettings( $inputSettings );
+        $validationResult = $fieldType->validateFieldSettings($inputSettings);
 
         $this->assertInternalType(
             'array',
@@ -734,14 +730,12 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
      * @param mixed $inputSettings
      *
      * @dataProvider provideInvalidFieldSettings
-     *
-     * @return void
      */
-    public function testValidateFieldSettingsInvalid( $inputSettings )
+    public function testValidateFieldSettingsInvalid($inputSettings)
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        $validationResult = $fieldType->validateFieldSettings( $inputSettings );
+        $validationResult = $fieldType->validateFieldSettings($inputSettings);
 
         $this->assertInternalType(
             'array',
@@ -755,8 +749,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
             'validateFieldSettings() did consider the input settings valid, which should be invalid.'
         );
 
-        foreach ( $validationResult as $actualResultElement )
-        {
+        foreach ($validationResult as $actualResultElement) {
             $this->assertInstanceOf(
                 'eZ\\Publish\\SPI\\FieldType\\ValidationError',
                 $actualResultElement,
@@ -769,14 +762,12 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
      * @param mixed $inputConfiguration
      *
      * @dataProvider provideValidValidatorConfiguration
-     *
-     * @return void
      */
-    public function testValidateValidatorConfigurationValid( $inputConfiguration )
+    public function testValidateValidatorConfigurationValid($inputConfiguration)
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        $validationResult = $fieldType->validateValidatorConfiguration( $inputConfiguration );
+        $validationResult = $fieldType->validateValidatorConfiguration($inputConfiguration);
 
         $this->assertInternalType(
             'array',
@@ -794,14 +785,12 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
      * @param mixed $inputConfiguration
      *
      * @dataProvider provideInvalidValidatorConfiguration
-     *
-     * @return void
      */
-    public function testValidateValidatorConfigurationInvalid( $inputConfiguration )
+    public function testValidateValidatorConfigurationInvalid($inputConfiguration)
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        $validationResult = $fieldType->validateValidatorConfiguration( $inputConfiguration );
+        $validationResult = $fieldType->validateValidatorConfiguration($inputConfiguration);
 
         $this->assertInternalType(
             'array',
@@ -815,8 +804,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
             'validateValidatorConfiguration() did consider the input settings valid, which should be invalid.'
         );
 
-        foreach ( $validationResult as $actualResultElement )
-        {
+        foreach ($validationResult as $actualResultElement) {
             $this->assertInstanceOf(
                 'eZ\\Publish\\SPI\\FieldType\\ValidationError',
                 $actualResultElement,
@@ -829,80 +817,69 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
      * @param mixed $inputConfiguration
      *
      * @dataProvider provideValidFieldSettings
-     *
-     * @return void
      */
-    public function testFieldSettingsToHash( $inputSettings )
+    public function testFieldSettingsToHash($inputSettings)
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        $hash = $fieldType->fieldSettingsToHash( $inputSettings );
+        $hash = $fieldType->fieldSettingsToHash($inputSettings);
 
-        $this->assertIsValidHashValue( $hash );
+        $this->assertIsValidHashValue($hash);
     }
 
     /**
      * @param mixed $inputConfiguration
      *
      * @dataProvider provideValidValidatorConfiguration
-     *
-     * @return void
      */
-    public function testValidatorConfigurationToHash( $inputConfiguration )
+    public function testValidatorConfigurationToHash($inputConfiguration)
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        $hash = $fieldType->validatorConfigurationToHash( $inputConfiguration );
+        $hash = $fieldType->validatorConfigurationToHash($inputConfiguration);
 
-        $this->assertIsValidHashValue( $hash );
+        $this->assertIsValidHashValue($hash);
     }
 
     /**
      * @param mixed $inputConfiguration
      *
      * @dataProvider provideValidFieldSettings
-     *
-     * @return void
      */
-    public function testFieldSettingsFromHash( $inputSettings )
+    public function testFieldSettingsFromHash($inputSettings)
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        $hash = $fieldType->fieldSettingsToHash( $inputSettings );
-        $restoredSettings = $fieldType->fieldSettingsFromHash( $hash );
+        $hash = $fieldType->fieldSettingsToHash($inputSettings);
+        $restoredSettings = $fieldType->fieldSettingsFromHash($hash);
 
-        $this->assertEquals( $inputSettings, $restoredSettings );
+        $this->assertEquals($inputSettings, $restoredSettings);
     }
 
     /**
      * @param mixed $inputConfiguration
      *
      * @dataProvider provideValidValidatorConfiguration
-     *
-     * @return void
      */
-    public function testValidatorConfigurationFromHash( $inputConfiguration )
+    public function testValidatorConfigurationFromHash($inputConfiguration)
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        $hash = $fieldType->validatorConfigurationToHash( $inputConfiguration );
-        $restoredConfiguration = $fieldType->validatorConfigurationFromHash( $hash );
+        $hash = $fieldType->validatorConfigurationToHash($inputConfiguration);
+        $restoredConfiguration = $fieldType->validatorConfigurationFromHash($hash);
 
-        $this->assertEquals( $inputConfiguration, $restoredConfiguration );
+        $this->assertEquals($inputConfiguration, $restoredConfiguration);
     }
 
     /**
-     * Asserts that the given $actualHash complies to the rules for hashes
+     * Asserts that the given $actualHash complies to the rules for hashes.
      *
      * @param mixed $actualHash
      * @param array $keyChain
-     *
-     * @return void
      */
-    protected function assertIsValidHashValue( $actualHash, $keyChain = array() )
+    protected function assertIsValidHashValue($actualHash, $keyChain = array())
     {
-        switch ( $actualHashType = gettype( $actualHash ) )
-        {
+        switch ($actualHashType = gettype($actualHash)) {
             case 'boolean':
             case 'integer':
             case 'double':
@@ -912,13 +889,13 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
                 return;
 
             case 'array':
-                foreach ( $actualHash as $key => $childHash )
-                {
+                foreach ($actualHash as $key => $childHash) {
                     $this->assertIsValidHashValue(
                         $childHash,
-                        array_merge( $keyChain, array( $key ) )
+                        array_merge($keyChain, array($key))
                     );
                 }
+
                 return;
 
             case 'resource':
@@ -926,7 +903,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
                 $this->fail(
                     sprintf(
                         'Value for $hash[%s] is of invalid type "%s".',
-                        implode( '][', $keyChain ),
+                        implode('][', $keyChain),
                         $actualHashType
                     )
                 );
@@ -936,54 +913,51 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideValidDataForValidate
      */
-    public function testValidateValid( $fieldDefinitionData, $value )
+    public function testValidateValid($fieldDefinitionData, $value)
     {
-        $validationErrors = $this->doValidate( $fieldDefinitionData, $value );
+        $validationErrors = $this->doValidate($fieldDefinitionData, $value);
 
-        $this->assertInternalType( "array", $validationErrors );
-        $this->assertEmpty( $validationErrors, "Got value:\n" . var_export( $validationErrors, true ) );
+        $this->assertInternalType('array', $validationErrors);
+        $this->assertEmpty($validationErrors, "Got value:\n" . var_export($validationErrors, true));
     }
 
     /**
      * @dataProvider provideInvalidDataForValidate
      */
-    public function testValidateInvalid( $fieldDefinitionData, $value, $errors )
+    public function testValidateInvalid($fieldDefinitionData, $value, $errors)
     {
-        $validationErrors = $this->doValidate( $fieldDefinitionData, $value );
+        $validationErrors = $this->doValidate($fieldDefinitionData, $value);
 
-        $this->assertInternalType( "array", $validationErrors );
-        $this->assertEquals( $errors, $validationErrors );
+        $this->assertInternalType('array', $validationErrors);
+        $this->assertEquals($errors, $validationErrors);
     }
 
-    protected function doValidate( $fieldDefinitionData, $value )
+    protected function doValidate($fieldDefinitionData, $value)
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
         /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|\PHPUnit_Framework_MockObject_MockObject $fieldDefinitionMock */
         $fieldDefinitionMock = $this->getMock(
-            "eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition"
+            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition'
         );
 
-        foreach ( $fieldDefinitionData as $method => $data )
-        {
-            if ( $method === "validatorConfiguration" )
-            {
+        foreach ($fieldDefinitionData as $method => $data) {
+            if ($method === 'validatorConfiguration') {
                 $fieldDefinitionMock
-                    ->expects( $this->any() )
-                    ->method( "getValidatorConfiguration" )
-                    ->will( $this->returnValue( $data ) );
+                    ->expects($this->any())
+                    ->method('getValidatorConfiguration')
+                    ->will($this->returnValue($data));
             }
 
-            if ( $method === "fieldSettings" )
-            {
+            if ($method === 'fieldSettings') {
                 $fieldDefinitionMock
-                    ->expects( $this->any() )
-                    ->method( "getFieldSettings" )
-                    ->will( $this->returnValue( $data ) );
+                    ->expects($this->any())
+                    ->method('getFieldSettings')
+                    ->will($this->returnValue($data));
             }
         }
 
-        $validationErrors = $fieldType->validate( $fieldDefinitionMock, $value );
+        $validationErrors = $fieldType->validate($fieldDefinitionMock, $value);
 
         return $validationErrors;
     }

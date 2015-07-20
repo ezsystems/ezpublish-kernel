@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing an interface for the Doctrine database abstractions
+ * File containing an interface for the Doctrine database abstractions.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -32,6 +34,7 @@ abstract class AbstractDoctrineQuery
      * Stores the list of parameters that will be bound with doBind().
      *
      * Format: array( ':name' => &mixed )
+     *
      * @var array(string=>&mixed)
      */
     private $boundParameters = array();
@@ -47,6 +50,7 @@ abstract class AbstractDoctrineQuery
      * Stores the list of values that will be bound with doBind().
      *
      * Format: array( ':name' => mixed )
+     *
      * @var array(string=>mixed)
      */
     private $boundValues = array();
@@ -63,10 +67,10 @@ abstract class AbstractDoctrineQuery
      */
     public $expr;
 
-    public function __construct( Connection $connection )
+    public function __construct(Connection $connection)
     {
         $this->connection = $connection;
-        $this->expr = new DoctrineExpression( $connection );
+        $this->expr = new DoctrineExpression($connection);
     }
 
     /**
@@ -76,7 +80,7 @@ abstract class AbstractDoctrineQuery
      */
     public function subSelect()
     {
-        return new SubselectDoctrineQuery( $this );
+        return new SubselectDoctrineQuery($this);
     }
 
     /**
@@ -84,9 +88,9 @@ abstract class AbstractDoctrineQuery
      */
     public function prepare()
     {
-        $stmt = $this->connection->prepare( $this->getQuery() );
+        $stmt = $this->connection->prepare($this->getQuery());
 
-        $this->doBind( $stmt );
+        $this->doBind($stmt);
 
         return $stmt;
     }
@@ -98,17 +102,14 @@ abstract class AbstractDoctrineQuery
      * in your query and you build the method yourself using build.
      *
      * @param \Doctrine\DBAL\Statement $stmt
-     * @return void
      */
-    private function doBind( Statement $stmt )
+    private function doBind(Statement $stmt)
     {
-        foreach ( $this->boundValues as $key => $value )
-        {
-            $stmt->bindValue( $key, $value, $this->boundValuesType[$key] );
+        foreach ($this->boundValues as $key => $value) {
+            $stmt->bindValue($key, $value, $this->boundValuesType[$key]);
         }
-        foreach ( $this->boundParameters as $key => &$value )
-        {
-            $stmt->bindParam( $key, $value, $this->boundParametersType[$key] );
+        foreach ($this->boundParameters as $key => &$value) {
+            $stmt->bindParam($key, $value, $this->boundParametersType[$key]);
         }
     }
 
@@ -136,13 +137,13 @@ abstract class AbstractDoctrineQuery
      *
      * @param mixed $value
      * @param string $placeHolder the name to bind with. The string must start with a colon ':'.
+     *
      * @return string the placeholder name used.
      */
-    public function bindValue( $value, $placeHolder = null, $type = PDO::PARAM_STR )
+    public function bindValue($value, $placeHolder = null, $type = PDO::PARAM_STR)
     {
-        if ( $placeHolder === null )
-        {
-            $this->boundCounter++;
+        if ($placeHolder === null) {
+            ++$this->boundCounter;
             $placeHolder = ":placeholder{$this->boundCounter}";
         }
 
@@ -175,19 +176,20 @@ abstract class AbstractDoctrineQuery
      * </code>
      *
      * @see doBind()
+     *
      * @param &mixed $param
      * @param string $placeHolder the name to bind with. The string must start with a colon ':'.
+     *
      * @return string the placeholder name used.
      */
-    public function bindParam( &$param, $placeHolder = null, $type = PDO::PARAM_STR )
+    public function bindParam(&$param, $placeHolder = null, $type = PDO::PARAM_STR)
     {
-        if ( $placeHolder === null )
-        {
-            $this->boundCounter++;
+        if ($placeHolder === null) {
+            ++$this->boundCounter;
             $placeHolder = ":placeholder{$this->boundCounter}";
         }
 
-        $this->boundParameters[$placeHolder] =& $param;
+        $this->boundParameters[$placeHolder] = &$param;
         $this->boundParametersType[$placeHolder] = $type;
 
         return $placeHolder;
@@ -207,21 +209,19 @@ abstract class AbstractDoctrineQuery
      * Parse the arguments and validate for existance of values.
      *
      * @param array $args
+     *
      * @return array
      */
-    protected function parseArguments( array $args )
+    protected function parseArguments(array $args)
     {
-        if ( count( $args ) === 1 && is_array( $args[0] ) )
-        {
+        if (count($args) === 1 && is_array($args[0])) {
             $args = $args[0];
         }
 
-        if ( count( $args ) === 0 )
-        {
-            throw new QueryException( 'No arguments given' );
+        if (count($args) === 0) {
+            throw new QueryException('No arguments given');
         }
 
         return $args;
     }
-
 }

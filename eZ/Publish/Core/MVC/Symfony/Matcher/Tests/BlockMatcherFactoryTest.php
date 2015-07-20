@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the BlockMatcherFactoryTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,24 +17,24 @@ class BlockMatcherFactoryTest extends AbstractMatcherFactoryTest
 
     /**
      * Returns a valid ValueObject (supported by current MatcherFactory), that will match the test rules.
-     * i.e. Should return eZ\Publish\API\Repository\Values\Content\Location for LocationMatcherFactory
+     * i.e. Should return eZ\Publish\API\Repository\Values\Content\Location for LocationMatcherFactory.
      *
      * @return \eZ\Publish\API\Repository\Values\ValueObject
      */
     protected function getMatchableValueObject()
     {
-        return $this->getBlockMock( array( 'id' => 456 ) );
+        return $this->getBlockMock(array('id' => 456));
     }
 
     /**
      * Returns a valid ValueObject (supported by current MatcherFactory), that won't match the test rules.
-     * i.e. Should return eZ\Publish\API\Repository\Values\Content\Location for LocationMatcherFactory
+     * i.e. Should return eZ\Publish\API\Repository\Values\Content\Location for LocationMatcherFactory.
      *
      * @return \eZ\Publish\API\Repository\Values\ValueObject
      */
     protected function getNonMatchableValueObject()
     {
-        return $this->getBlockMock( array( 'id' => 123456789 ) );
+        return $this->getBlockMock(array('id' => 123456789));
     }
 
     /**
@@ -52,19 +54,19 @@ class BlockMatcherFactoryTest extends AbstractMatcherFactoryTest
                     'test' => array(
                         'template' => 'foo.html.twig',
                         'match' => array(
-                            '\\eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\ContentBased\\Id\\Location' => true
-                        )
-                    )
-                )
+                            '\\eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\ContentBased\\Id\\Location' => true,
+                        ),
+                    ),
+                ),
             )
         );
-        $matcherFactory->match( $this->getMatchableValueObject(), 'full' );
+        $matcherFactory->match($this->getMatchableValueObject(), 'full');
     }
 
     /**
      * Returns the matcher class to use in test configuration.
      * Must be relative to the matcher's ::MATCHER_RELATIVE_NAMESPACE constant.
-     * i.e.: Id\\Location
+     * i.e.: Id\\Location.
      *
      * @return string
      */

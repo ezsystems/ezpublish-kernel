@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -31,8 +33,8 @@ class ParentLocationsListenerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->locationService = $this->getMock( '\eZ\Publish\API\Repository\LocationService' );
-        $this->listener = new ParentLocationsListener( $this->locationService );
+        $this->locationService = $this->getMock('\eZ\Publish\API\Repository\LocationService');
+        $this->listener = new ParentLocationsListener($this->locationService);
     }
 
     public function testGetSubscribedEvents()
@@ -46,33 +48,33 @@ class ParentLocationsListenerTest extends PHPUnit_Framework_TestCase
     public function testOnContentCacheClear()
     {
         $contentId = 123;
-        $contentInfo = new ContentInfo( ['id' => $contentId] );
-        $event = new ContentCacheClearEvent( $contentInfo );
+        $contentInfo = new ContentInfo(['id' => $contentId]);
+        $event = new ContentCacheClearEvent($contentInfo);
 
         $parentLocationId1 = 456;
         $parentLocationId2 = 789;
         $parentLocationId3 = 234;
         $parentLocationId4 = 567;
         $locations = [
-            new Location( ['parentLocationId' => $parentLocationId1] ),
-            new Location( ['parentLocationId' => $parentLocationId2] ),
-            new Location( ['parentLocationId' => $parentLocationId3] ),
-            new Location( ['parentLocationId' => $parentLocationId4] ),
+            new Location(['parentLocationId' => $parentLocationId1]),
+            new Location(['parentLocationId' => $parentLocationId2]),
+            new Location(['parentLocationId' => $parentLocationId3]),
+            new Location(['parentLocationId' => $parentLocationId4]),
         ];
         $this->locationService
-            ->expects( $this->once() )
-            ->method( 'loadLocations' )
-            ->with( $contentInfo )
-            ->will( $this->returnValue( $locations ) );
+            ->expects($this->once())
+            ->method('loadLocations')
+            ->with($contentInfo)
+            ->will($this->returnValue($locations));
 
-        $parentLocation1 = new Location( ['id' => $parentLocationId1] );
-        $parentLocation2 = new Location( ['id' => $parentLocationId2] );
-        $parentLocation3 = new Location( ['id' => $parentLocationId3] );
-        $parentLocation4 = new Location( ['id' => $parentLocationId4] );
+        $parentLocation1 = new Location(['id' => $parentLocationId1]);
+        $parentLocation2 = new Location(['id' => $parentLocationId2]);
+        $parentLocation3 = new Location(['id' => $parentLocationId3]);
+        $parentLocation4 = new Location(['id' => $parentLocationId4]);
         $parentLocations = [$parentLocation1, $parentLocation2, $parentLocation3, $parentLocation4];
         $this->locationService
-            ->expects( $this->exactly( count( $parentLocations ) ) )
-            ->method( 'loadLocation' )
+            ->expects($this->exactly(count($parentLocations)))
+            ->method('loadLocation')
             ->will(
                 $this->returnValueMap(
                     [
@@ -84,7 +86,7 @@ class ParentLocationsListenerTest extends PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->listener->onContentCacheClear( $event );
-        $this->assertSame( $parentLocations, $event->getLocationsToClear() );
+        $this->listener->onContentCacheClear($event);
+        $this->assertSame($parentLocations, $event->getLocationsToClear());
     }
 }

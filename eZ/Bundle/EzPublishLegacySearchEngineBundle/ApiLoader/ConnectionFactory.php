@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,13 +22,13 @@ class ConnectionFactory extends ContainerAware
      */
     protected $repositoryConfigurationProvider;
 
-    public function __construct( RepositoryConfigurationProvider $repositoryConfigurationProvider )
+    public function __construct(RepositoryConfigurationProvider $repositoryConfigurationProvider)
     {
         $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
     }
 
     /**
-     * Returns database connection used by database handler
+     * Returns database connection used by database handler.
      *
      * @throws \InvalidArgumentException
      *
@@ -38,24 +40,20 @@ class ConnectionFactory extends ContainerAware
         // Taking provided connection name if any.
         // Otherwise, just fallback to the default connection.
 
-        if ( isset( $repositoryConfig['search']['connection'] ) )
-        {
-            $doctrineConnectionId = sprintf( 'doctrine.dbal.%s_connection', $repositoryConfig['search']['connection'] );
-        }
-        else
-        {
+        if (isset($repositoryConfig['search']['connection'])) {
+            $doctrineConnectionId = sprintf('doctrine.dbal.%s_connection', $repositoryConfig['search']['connection']);
+        } else {
             // "database_connection" is an alias to the default connection, set up by DoctrineBundle.
             $doctrineConnectionId = 'database_connection';
         }
 
-        if ( !$this->container->has( $doctrineConnectionId ) )
-        {
+        if (!$this->container->has($doctrineConnectionId)) {
             throw new InvalidArgumentException(
                 "Invalid Doctrine connection '{$repositoryConfig['search']['connection']}' for repository '{$repositoryConfig['alias']}'." .
-                "Valid connections are " . implode( ', ', array_keys( $this->container->getParameter( 'doctrine.connections' ) ) )
+                'Valid connections are ' . implode(', ', array_keys($this->container->getParameter('doctrine.connections')))
             );
         }
 
-        return $this->container->get( $doctrineConnectionId );
+        return $this->container->get($doctrineConnectionId);
     }
 }

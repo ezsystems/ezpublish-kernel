@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the BinaryFileTest class
+ * File containing the BinaryFileTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -32,14 +34,14 @@ class BinaryFileTest extends BinaryBaseTest
     protected function createFieldTypeUnderTest()
     {
         $fieldType = new BinaryFileType();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
     }
 
     protected function getEmptyValueExpectation()
     {
-        return new BinaryFileValue;
+        return new BinaryFileValue();
     }
 
     public function provideInvalidInputForAcceptValue()
@@ -47,11 +49,12 @@ class BinaryFileTest extends BinaryBaseTest
         $baseInput = parent::provideInvalidInputForAcceptValue();
         $binaryFileInput = array(
             array(
-                new BinaryFileValue( array( 'id' => '/foo/bar' ) ),
+                new BinaryFileValue(array('id' => '/foo/bar')),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
             ),
         );
-        return array_merge( $baseInput, $binaryFileInput );
+
+        return array_merge($baseInput, $binaryFileInput);
     }
 
     public function provideValidInputForAcceptValue()
@@ -59,43 +62,43 @@ class BinaryFileTest extends BinaryBaseTest
         return array(
             array(
                 null,
-                new BinaryFileValue
+                new BinaryFileValue(),
             ),
             array(
                 new BinaryFileValue(),
-                new BinaryFileValue()
+                new BinaryFileValue(),
             ),
             array(
                 array(),
-                new BinaryFileValue()
+                new BinaryFileValue(),
             ),
             array(
                 __FILE__,
                 new BinaryFileValue(
                     array(
                         'inputUri' => __FILE__,
-                        'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
+                        'fileName' => basename(__FILE__),
+                        'fileSize' => filesize(__FILE__),
                         'downloadCount' => 0,
                         'mimeType' => null,
                     )
                 ),
-                array( /* 'getFileSize' => filesize( __FILE__ ) */ ),
-                array( /* 'getMimeType' => 'text/plain' */ )
+                array(/* 'getFileSize' => filesize( __FILE__ ) */),
+                array(/* 'getMimeType' => 'text/plain' */),
             ),
             array(
-                array( 'inputUri' => __FILE__ ),
+                array('inputUri' => __FILE__),
                 new BinaryFileValue(
                     array(
                         'inputUri' => __FILE__,
-                        'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
+                        'fileName' => basename(__FILE__),
+                        'fileSize' => filesize(__FILE__),
                         'downloadCount' => 0,
                         'mimeType' => null,
                     )
                 ),
-                array( /*'getFileSize' => filesize( __FILE__ ) */ ),
-                array( /* 'getMimeType' => 'text/plain' */ )
+                array(/*'getFileSize' => filesize( __FILE__ ) */),
+                array(/* 'getMimeType' => 'text/plain' */),
             ),
             array(
                 array(
@@ -105,14 +108,14 @@ class BinaryFileTest extends BinaryBaseTest
                 new BinaryFileValue(
                     array(
                         'inputUri' => __FILE__,
-                        'fileName' => basename( __FILE__ ),
+                        'fileName' => basename(__FILE__),
                         'fileSize' => 23,
                         'downloadCount' => 0,
                         'mimeType' => null,
                     )
                 ),
                 array(),
-                array( /* 'getMimeType' => 'text/plain' */ )
+                array(/* 'getMimeType' => 'text/plain' */),
             ),
             array(
                 array(
@@ -122,14 +125,14 @@ class BinaryFileTest extends BinaryBaseTest
                 new BinaryFileValue(
                     array(
                         'inputUri' => __FILE__,
-                        'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
+                        'fileName' => basename(__FILE__),
+                        'fileSize' => filesize(__FILE__),
                         'downloadCount' => 42,
                         'mimeType' => null,
                     )
                 ),
-                array( /* 'getFileSize' => filesize( __FILE__ ) */ ),
-                array( /* 'getMimeType' => 'text/plain' */ )
+                array(/* 'getFileSize' => filesize( __FILE__ ) */),
+                array(/* 'getMimeType' => 'text/plain' */),
             ),
             array(
                 array(
@@ -139,22 +142,22 @@ class BinaryFileTest extends BinaryBaseTest
                 new BinaryFileValue(
                     array(
                         'inputUri' => __FILE__,
-                        'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
+                        'fileName' => basename(__FILE__),
+                        'fileSize' => filesize(__FILE__),
                         'downloadCount' => 0,
                         'mimeType' => 'application/text+php',
                     )
                 ),
-                array( /* 'getFileSize' => filesize( __FILE__ ) */ )
+                array(/* 'getFileSize' => filesize( __FILE__ ) */),
             ),
             // BC with 5.2 (EZP-22808). Id can be used as input instead of inputUri.
             array(
-                array( 'id' => __FILE__ ),
+                array('id' => __FILE__),
                 new BinaryFileValue(
                     array(
                         'inputUri' => __FILE__,
-                        'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
+                        'fileName' => basename(__FILE__),
+                        'fileSize' => filesize(__FILE__),
                         'downloadCount' => 0,
                         'mimeType' => null,
                     )
@@ -164,7 +167,7 @@ class BinaryFileTest extends BinaryBaseTest
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -202,8 +205,8 @@ class BinaryFileTest extends BinaryBaseTest
     {
         return array(
             array(
-                new BinaryFileValue,
-                null
+                new BinaryFileValue(),
+                null,
             ),
             array(
                 new BinaryFileValue(
@@ -225,7 +228,7 @@ class BinaryFileTest extends BinaryBaseTest
                     'downloadCount' => 0,
                     'mimeType' => 'image/jpeg',
                     'uri' => 'http://some/file/here',
-                )
+                ),
             ),
             array(
                 new BinaryFileValue(
@@ -248,7 +251,7 @@ class BinaryFileTest extends BinaryBaseTest
                     'downloadCount' => 0,
                     'mimeType' => 'image/jpeg',
                     'uri' => 'http://some/file/here',
-                )
+                ),
             ),
             // BC with 5.0 (EZP-20948). Path can be used as input instead of inputUri.
             array(
@@ -271,7 +274,7 @@ class BinaryFileTest extends BinaryBaseTest
                     'downloadCount' => 0,
                     'mimeType' => 'image/jpeg',
                     'uri' => 'http://some/file/here',
-                )
+                ),
             ),
             // BC with 5.0 (EZP-20948). Path can be used as input instead of inputUri.
             array(
@@ -294,7 +297,7 @@ class BinaryFileTest extends BinaryBaseTest
                     'downloadCount' => 0,
                     'mimeType' => 'image/jpeg',
                     'uri' => 'http://some/file/here',
-                )
+                ),
             ),
             // BC with 5.2 (EZP-22808). Id can be used as input instead of inputUri.
             array(
@@ -317,13 +320,13 @@ class BinaryFileTest extends BinaryBaseTest
                     'downloadCount' => 0,
                     'mimeType' => 'image/jpeg',
                     'uri' => 'http://some/file/here',
-                )
+                ),
             ),
             // BC with 5.2 (EZP-22808). Id is recognized as such if not pointing to existing file.
             array(
                 new BinaryFileValue(
                     array(
-                        'id' => "application/asdf1234.pdf",
+                        'id' => 'application/asdf1234.pdf',
                         'fileName' => 'asdf1234.pdf',
                         'fileSize' => 2342,
                         'downloadCount' => 0,
@@ -332,21 +335,21 @@ class BinaryFileTest extends BinaryBaseTest
                     )
                 ),
                 array(
-                    'id' => "application/asdf1234.pdf",
+                    'id' => 'application/asdf1234.pdf',
                     'inputUri' => null,
                     'path' => null,
                     'fileName' => 'asdf1234.pdf',
                     'fileSize' => 2342,
                     'downloadCount' => 0,
                     'mimeType' => 'application/pdf',
-                    'uri' => 'http://some/file/here'
-                )
+                    'uri' => 'http://some/file/here',
+                ),
             ),
         );
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -385,7 +388,7 @@ class BinaryFileTest extends BinaryBaseTest
         return array(
             array(
                 null,
-                new BinaryFileValue
+                new BinaryFileValue(),
             ),
             array(
                 array(
@@ -403,7 +406,7 @@ class BinaryFileTest extends BinaryBaseTest
                         'downloadCount' => 0,
                         'mimeType' => 'image/jpeg',
                     )
-                )
+                ),
             ),
             // BC with 5.0 (EZP-20948). Path can be used as input instead of inputUri.
             array(
@@ -422,7 +425,7 @@ class BinaryFileTest extends BinaryBaseTest
                         'downloadCount' => 0,
                         'mimeType' => 'image/jpeg',
                     )
-                )
+                ),
             ),
             // BC with 5.2 (EZP-22808). Id can be used as input instead of inputUri.
             array(
@@ -443,7 +446,7 @@ class BinaryFileTest extends BinaryBaseTest
                         'downloadCount' => 0,
                         'mimeType' => 'image/jpeg',
                     )
-                )
+                ),
             ),
             // @todo: Provide upload struct (via REST)!
         );
@@ -459,12 +462,12 @@ class BinaryFileTest extends BinaryBaseTest
         return array(
             array(
                 new BinaryFileValue(),
-                ''
+                '',
             ),
             array(
-                new BinaryFileValue( array( 'fileName' => 'sindelfingen.jpg' ) ),
-                'sindelfingen.jpg'
-            )
+                new BinaryFileValue(array('fileName' => 'sindelfingen.jpg')),
+                'sindelfingen.jpg',
+            ),
         );
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the MultipleValued matcher class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,28 +25,26 @@ abstract class MultipleValued extends RepositoryAware implements MatcherInterfac
 
     /**
      * Registers the matching configuration for the matcher.
-     * $matchingConfig can have single (string|int...) or multiple values (array)
+     * $matchingConfig can have single (string|int...) or multiple values (array).
      *
      * @param mixed $matchingConfig
      *
      * @throws \InvalidArgumentException Should be thrown if $matchingConfig is not valid.
-     *
-     * @return void
      */
-    public function setMatchingConfig( $matchingConfig )
+    public function setMatchingConfig($matchingConfig)
     {
-        $matchingConfig = !is_array( $matchingConfig ) ? array( $matchingConfig ) : $matchingConfig;
-        $this->values = array_fill_keys( $matchingConfig, true );
+        $matchingConfig = !is_array($matchingConfig) ? array($matchingConfig) : $matchingConfig;
+        $this->values = array_fill_keys($matchingConfig, true);
     }
 
     /**
-     * Returns matcher's values
+     * Returns matcher's values.
      *
      * @return array
      */
     public function getValues()
     {
-        return array_keys( $this->values );
+        return array_keys($this->values);
     }
 
     /**

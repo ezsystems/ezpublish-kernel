@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ObjectStateList parser class
+ * File containing the ObjectStateList parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,12 +15,12 @@ use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
 /**
- * Parser for ObjectStateList
+ * Parser for ObjectStateList.
  */
 class ObjectStateList extends BaseParser
 {
     /**
-     * Parse input structure
+     * Parse input structure.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -27,16 +29,16 @@ class ObjectStateList extends BaseParser
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState[]
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
         $states = array();
-        foreach ( $data['ObjectState'] as $rawStateData )
-        {
+        foreach ($data['ObjectState'] as $rawStateData) {
             $states[] = $parsingDispatcher->parse(
                 $rawStateData,
                 $rawStateData['_media-type']
             );
         }
+
         return $states;
     }
 }

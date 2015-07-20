@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Location class
+ * File containing the Location class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -42,7 +44,7 @@ class Location extends ValueObject
     public $id;
 
     /**
-     * Location priority
+     * Location priority.
      *
      * Position of the Location among its siblings when sorted using priority
      * sort order.
@@ -54,7 +56,7 @@ class Location extends ValueObject
     /**
      * Indicates that the Location entity has been explicitly marked as hidden.
      *
-     * @var boolean
+     * @var bool
      */
     public $hidden;
 
@@ -62,7 +64,7 @@ class Location extends ValueObject
      * Indicates that the Location is implicitly marked as hidden by a parent
      * location.
      *
-     * @var boolean
+     * @var bool
      */
     public $invisible;
 
@@ -95,12 +97,13 @@ class Location extends ValueObject
      * This field might be removed in a later version.
      *
      * @deprecated Since 5.4, planned to be removed in 6.0
+     *
      * @var string
      */
     public $pathIdentificationString;
 
     /**
-     * The materialized path of the location entry, eg: /1/2/
+     * The materialized path of the location entry, eg: /1/2/.
      *
      * @var string
      */

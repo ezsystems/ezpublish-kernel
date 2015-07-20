@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\API\Repository\Tests\FieldType\DateAndTimeIntegrationTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\DateAndTimeIntegrationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\Core\FieldType\Date\Type;
 use DateTime;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
@@ -23,44 +25,44 @@ use DateTime;
 class DateIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
     public function getTypeName()
     {
-        return "ezdate";
+        return 'ezdate';
     }
 
     /**
-     * Get expected settings schema
+     * Get expected settings schema.
      *
      * @return array
      */
     public function getSettingsSchema()
     {
         return array(
-            "defaultType" => array(
-                "type"    => "choice",
-                "default" => Type::DEFAULT_EMPTY,
-            )
+            'defaultType' => array(
+                'type' => 'choice',
+                'default' => Type::DEFAULT_EMPTY,
+            ),
         );
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get a valid $fieldSettings value.
      *
      * @return mixed
      */
     public function getValidFieldSettings()
     {
         return array(
-            "defaultType"  => Type::DEFAULT_EMPTY,
+            'defaultType' => Type::DEFAULT_EMPTY,
         );
     }
 
     /**
-     * Get $fieldSettings value not accepted by the field type
+     * Get $fieldSettings value not accepted by the field type.
      *
      * @return mixed
      */
@@ -72,7 +74,7 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get expected validator schema
+     * Get expected validator schema.
      *
      * @return array
      */
@@ -82,7 +84,7 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $validatorConfiguration.
      *
      * @return mixed
      */
@@ -92,25 +94,25 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get $validatorConfiguration not accepted by the field type
+     * Get $validatorConfiguration not accepted by the field type.
      *
      * @return mixed
      */
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            'unknown' => array( 'value' => 42 ),
+            'unknown' => array('value' => 42),
         );
     }
 
     /**
-     * Get initial field data for valid object creation
+     * Get initial field data for valid object creation.
      *
      * @return mixed
      */
     public function getValidCreationFieldData()
     {
-        return DateValue::fromString( "Wed, 21 Jul 2013 16:59:50" );
+        return DateValue::fromString('Wed, 21 Jul 2013 16:59:50');
     }
 
     /**
@@ -120,20 +122,18 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field )
+    public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
-            "eZ\\Publish\\Core\\FieldType\\Date\\Value",
+            'eZ\\Publish\\Core\\FieldType\\Date\\Value',
             $field->value
         );
 
-        $dateTime = new DateTime( "Wed, 21 Jul 2013 16:59:50" );
-        $dateTime->setTime( 0, 0, 0 );
+        $dateTime = new DateTime('Wed, 21 Jul 2013 16:59:50');
+        $dateTime->setTime(0, 0, 0);
         $expectedData = array(
-            "date" => $dateTime,
+            'date' => $dateTime,
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -142,7 +142,7 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during creation
+     * Get field data which will result in errors during creation.
      *
      * This is a PHPUnit data provider.
      *
@@ -166,20 +166,20 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
     {
         return array(
             array(
-                "Some unknown date format",
-                "eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException"
+                'Some unknown date format',
+                'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
             ),
         );
     }
 
     /**
-     * Get valid field data for updating content
+     * Get valid field data for updating content.
      *
      * @return mixed
      */
     public function getValidUpdateFieldData()
     {
-        return DateValue::fromString( "Wed, 21 Jul 2013 17:59:50" );
+        return DateValue::fromString('Wed, 21 Jul 2013 17:59:50');
     }
 
     /**
@@ -190,17 +190,17 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
      *
      * @param Field $field
      */
-    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
-            "eZ\\Publish\\Core\\FieldType\\Date\\Value",
+            'eZ\\Publish\\Core\\FieldType\\Date\\Value',
             $field->value
         );
 
-        $dateTime = new DateTime( "Wed, 21 Jul 2013 17:59:50" );
-        $dateTime->setTime( 0, 0, 0 );
+        $dateTime = new DateTime('Wed, 21 Jul 2013 17:59:50');
+        $dateTime->setTime(0, 0, 0);
         $expectedData = array(
-            "date" => $dateTime,
+            'date' => $dateTime,
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -209,7 +209,7 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during update
+     * Get field data which will result in errors during update.
      *
      * This is a PHPUnit data provider.
      *
@@ -242,13 +242,13 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
      *
      * @param Field $field
      */
-    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
-        $this->assertFieldDataLoadedCorrect( $field );
+        $this->assertFieldDataLoadedCorrect($field);
     }
 
     /**
-     * Get data to test to hash method
+     * Get data to test to hash method.
      *
      * This is a PHPUnit data provider
      *
@@ -273,17 +273,17 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
 
         return array(
             array(
-                DateValue::fromTimestamp( $timestamp = 186401 ),
+                DateValue::fromTimestamp($timestamp = 186401),
                 array(
-                    "timestamp" => $dateTime->setTimestamp( $timestamp )->setTime( 0, 0, 0 )->getTimestamp(),
-                    "rfc850" => $dateTime->format( DateTime::RFC850 )
-                )
+                    'timestamp' => $dateTime->setTimestamp($timestamp)->setTime(0, 0, 0)->getTimestamp(),
+                    'rfc850' => $dateTime->format(DateTime::RFC850),
+                ),
             ),
         );
     }
 
     /**
-     * Get hashes and their respective converted values
+     * Get hashes and their respective converted values.
      *
      * This is a PHPUnit data provider
      *
@@ -309,17 +309,17 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
         return array(
             array(
                 array(
-                    "timestamp" => $dateTime->setTimestamp( 123456 )->setTime( 0, 0, 0 )->getTimestamp(),
-                    "rfc850" => ( $rfc850 = $dateTime->format( DateTime::RFC850 ) )
+                    'timestamp' => $dateTime->setTimestamp(123456)->setTime(0, 0, 0)->getTimestamp(),
+                    'rfc850' => ($rfc850 = $dateTime->format(DateTime::RFC850)),
                 ),
-                DateValue::fromString( $rfc850 )
+                DateValue::fromString($rfc850),
             ),
             array(
                 array(
-                    "timestamp" => $dateTime->setTimestamp( $timestamp = 123456 )->setTime( 0, 0, 0 )->getTimestamp(),
-                    "rfc850" => null
+                    'timestamp' => $dateTime->setTimestamp($timestamp = 123456)->setTime(0, 0, 0)->getTimestamp(),
+                    'rfc850' => null,
                 ),
-                DateValue::fromTimestamp( $timestamp )
+                DateValue::fromTimestamp($timestamp),
             ),
         );
     }
@@ -327,7 +327,7 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new DateValue() ),
+            array(new DateValue()),
         );
     }
 
@@ -335,42 +335,42 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
     {
         return array(
             array(
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
             ),
         );
     }
 
     protected function getValidSearchValueOne()
     {
-        $date = new DateTime( "1970-01-02" );
+        $date = new DateTime('1970-01-02');
+
         return $date->getTimestamp();
     }
 
     protected function getValidSearchValueTwo()
     {
-        $date = new DateTime( "1970-01-03" );
+        $date = new DateTime('1970-01-03');
+
         return $date->getTimestamp();
     }
 
     protected function getSearchTargetValueOne()
     {
         // Handling Legacy Search Engine, which stores Date value as timestamp
-        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
-        {
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
             return $this->getValidSearchValueOne();
         }
 
-        return "1970-01-02T00:00:00Z";
+        return '1970-01-02T00:00:00Z';
     }
 
     protected function getSearchTargetValueTwo()
     {
         // Handling Legacy Search Engine, which stores Date value as timestamp
-        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
-        {
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
             return $this->getValidSearchValueTwo();
         }
 
-        return "1970-01-03T00:00:00Z";
+        return '1970-01-03T00:00:00Z';
     }
 }

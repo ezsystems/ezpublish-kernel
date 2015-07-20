@@ -1,8 +1,8 @@
 <?php
 
-return array (
-    'ezurlalias_ml' => array (
-        0 => array (
+return array(
+    'ezurlalias_ml' => array(
+        0 => array(
             'action' => 'eznode:2',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -15,7 +15,7 @@ return array (
             'text' => '',
             'text_md5' => 'd41d8cd98f00b204e9800998ecf8427e',
         ),
-        1 => array (
+        1 => array(
             'action' => 'module:ezinfo/isalive',
             'action_type' => 'module',
             'alias_redirects' => '1',
@@ -28,7 +28,7 @@ return array (
             'text' => 'is-alive',
             'text_md5' => 'd003895fa282a14c8ec3eddf23ca4ca2',
         ),
-        2 => array (
+        2 => array(
             'action' => 'nop:',
             'action_type' => 'nop',
             'alias_redirects' => '1',
@@ -41,7 +41,7 @@ return array (
             'text' => 'then',
             'text_md5' => '0e5243d9965540f62aac19a985f3f33e',
         ),
-        3 => array (
+        3 => array(
             'action' => 'module:content/search',
             'action_type' => 'module',
             'alias_redirects' => '0',
@@ -54,7 +54,7 @@ return array (
             'text' => 'search',
             'text_md5' => '06a943c59f33a34bb5924aaf72cd2995',
         ),
-        4 => array (
+        4 => array(
             'action' => 'nop:',
             'action_type' => 'nop',
             'alias_redirects' => '1',
@@ -67,7 +67,7 @@ return array (
             'text' => 'nop-element',
             'text_md5' => 'de55c2fff721217cc4cb67b58dc35f85',
         ),
-        5 => array (
+        5 => array(
             'action' => 'module:content/search',
             'action_type' => 'module',
             'alias_redirects' => '0',
@@ -101,7 +101,7 @@ return array (
             'remote_id' => '',
         ),
     ),
-    'ezcontent_language' => array (
+    'ezcontent_language' => array(
         0 => array(
             'disabled' => 0,
             'id' => 2,
@@ -115,23 +115,23 @@ return array (
             'name' => 'English (United Kingdom)'
         ),
     ),
-    'ezurlalias_ml_incr' => array (
-        0 => array (
+    'ezurlalias_ml_incr' => array(
+        0 => array(
             'id' => '1',
         ),
-        1 => array (
+        1 => array(
             'id' => '2',
         ),
-        2 => array (
+        2 => array(
             'id' => '3',
         ),
-        3 => array (
+        3 => array(
             'id' => '4',
         ),
-        4 => array (
+        4 => array(
             'id' => '5',
         ),
-        5 => array (
+        5 => array(
             'id' => '6',
         ),
     ),

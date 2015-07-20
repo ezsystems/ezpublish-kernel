@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the LocalePassTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,28 +21,28 @@ class LocalePassTest extends AbstractCompilerPassTestCase
 {
     /**
      * Register the compiler pass under test, just like you would do inside a bundle's load()
-     * method:
+     * method:.
      *
      *   $container->addCompilerPass(new MyCompilerPass());
      */
-    protected function registerCompilerPass( ContainerBuilder $container )
+    protected function registerCompilerPass(ContainerBuilder $container)
     {
-        $container->addCompilerPass( new LocalePass() );
+        $container->addCompilerPass(new LocalePass());
     }
 
     public function testLocaleListener()
     {
-        $this->setDefinition( 'locale_listener', new Definition() );
+        $this->setDefinition('locale_listener', new Definition());
         $this->compile();
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'locale_listener',
             'setConfigResolver',
-            array( new Reference( 'ezpublish.config.resolver' ) )
+            array(new Reference('ezpublish.config.resolver'))
         );
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'locale_listener',
             'setLocaleConverter',
-            array( new Reference( 'ezpublish.locale.converter' ) )
+            array(new Reference('ezpublish.locale.converter'))
         );
     }
 }

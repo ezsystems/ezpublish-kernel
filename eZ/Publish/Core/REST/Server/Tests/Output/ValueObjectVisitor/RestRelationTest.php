@@ -1,35 +1,35 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\Content;
-use eZ\Publish\Core\REST\Common;
 use eZ\Publish\Core\REST\Server\Values\RestRelation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class RestRelationTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the RestRelation visitor
+     * Test the RestRelation visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $relation = new RestRelation(
             new Content\Relation(
@@ -46,7 +46,7 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
                         )
                     ),
                     'type' => Content\Relation::FIELD,
-                    'sourceFieldDefinitionIdentifier' => 'relation_field'
+                    'sourceFieldDefinitionIdentifier' => 'relation_field',
                 )
             ),
             1,
@@ -58,18 +58,18 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
             array(
                 'contentId' => $relation->contentId,
                 'versionNumber' => $relation->versionNo,
-                'relationId' => $relation->relation->id
+                'relationId' => $relation->relation->id,
             ),
             "/content/objects/{$relation->contentId}/versions/{$relation->versionNo}/relations/{$relation->relation->id}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadContent',
-            array( 'contentId' => $relation->contentId ),
+            array('contentId' => $relation->contentId),
             "/content/objects/{$relation->contentId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadContent',
-            array( 'contentId' => $relation->relation->getDestinationContentInfo()->id ),
+            array('contentId' => $relation->relation->getDestinationContentInfo()->id),
             "/content/objects/{$relation->relation->getDestinationContentInfo()->id}"
         );
 
@@ -79,29 +79,29 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
             $relation
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains Relation element
+     * Test if result contains Relation element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsRelationElement( $result )
+    public function testResultContainsRelationElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'Relation',
+                'tag' => 'Relation',
                 'children' => array(
-                    'less_than'    => 5,
+                    'less_than' => 5,
                     'greater_than' => 3,
-                )
+                ),
             ),
             $result,
             'Invalid <Relation> element.',
@@ -110,21 +110,21 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains Relation element attributes
+     * Test if result contains Relation element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsRelationAttributes( $result )
+    public function testResultContainsRelationAttributes($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'Relation',
+                'tag' => 'Relation',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Relation+xml',
-                    'href'       => '/content/objects/1/versions/1/relations/42',
-                )
+                    'href' => '/content/objects/1/versions/1/relations/42',
+                ),
             ),
             $result,
             'Invalid <Relation> attributes.',
@@ -137,15 +137,15 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisit
      */
-    public function testResultContainsSourceContentElement( $result )
+    public function testResultContainsSourceContentElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'SourceContent',
+                'tag' => 'SourceContent',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ContentInfo+xml',
-                    'href'       => '/content/objects/1',
-                )
+                    'href' => '/content/objects/1',
+                ),
             ),
             $result,
             'Invalid or non-existing <Relation> SourceContent element.',
@@ -158,15 +158,15 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisit
      */
-    public function testResultContainsDestinationContentElement( $result )
+    public function testResultContainsDestinationContentElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'DestinationContent',
+                'tag' => 'DestinationContent',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ContentInfo+xml',
-                    'href'       => '/content/objects/2',
-                )
+                    'href' => '/content/objects/2',
+                ),
             ),
             $result,
             'Invalid or non-existing <Relation> DestinationContent element.',
@@ -179,12 +179,12 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisit
      */
-    public function testResultContainsSourceFieldDefinitionIdentifierElement( $result )
+    public function testResultContainsSourceFieldDefinitionIdentifierElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'SourceFieldDefinitionIdentifier',
-                'content'  => 'relation_field',
+                'tag' => 'SourceFieldDefinitionIdentifier',
+                'content' => 'relation_field',
             ),
             $result,
             'Invalid or non-existing <Relation> SourceFieldDefinitionIdentifier value element.',
@@ -197,12 +197,12 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisit
      */
-    public function testResultContainsRelationTypeElement( $result )
+    public function testResultContainsRelationTypeElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'RelationType',
-                'content'  => 'ATTRIBUTE',
+                'tag' => 'RelationType',
+                'content' => 'ATTRIBUTE',
             ),
             $result,
             'Invalid or non-existing <Relation> RelationType value element.',
@@ -211,12 +211,12 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the Relation visitor
+     * Get the Relation visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestRelation
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\RestRelation;
+        return new ValueObjectVisitor\RestRelation();
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
- * Integration test for legacy storage field types
+ * Integration test for legacy storage field types.
  *
  * This abstract base test case is supposed to be the base for field type
  * integration tests. It basically calls all involved methods in the field type
@@ -37,7 +39,7 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 class RelationIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -47,14 +49,14 @@ class RelationIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get handler with required custom field types registered
+     * Get handler with required custom field types registered.
      *
      * @return Handler
      */
     public function getCustomHandler()
     {
         $fieldType = new FieldType\Relation\Type();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
         return $this->getHandler(
             'ezobjectrelation',
@@ -76,14 +78,14 @@ class RelationIntegrationTest extends BaseIntegrationTest
             array(
                 'fieldSettings' => array(
                     'selectionMethod' => 0,
-                    'selectionRoot' => ''
-                )
+                    'selectionRoot' => '',
+                ),
             )
         );
     }
 
     /**
-     * Get field definition data values
+     * Get field definition data values.
      *
      * This is a PHPUnit data provider
      *
@@ -93,17 +95,17 @@ class RelationIntegrationTest extends BaseIntegrationTest
     {
         $fieldSettings = array(
             'selectionMethod' => 0,
-            'selectionRoot' => ''
+            'selectionRoot' => '',
         );
 
         return array(
-            array( 'fieldType', 'ezobjectrelation' ),
-            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints( array( 'fieldSettings' => $fieldSettings ) ) ),
+            array('fieldType', 'ezobjectrelation'),
+            array('fieldTypeConstraints', new Content\FieldTypeConstraints(array('fieldSettings' => $fieldSettings))),
         );
     }
 
     /**
-     * Get initial field value
+     * Get initial field value.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -111,15 +113,15 @@ class RelationIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => array( 'destinationContentId' => 1 ),
+                'data' => array('destinationContentId' => 1),
                 'externalData' => null,
-                'sortKey'      => null,
+                'sortKey' => null,
             )
         );
     }
 
     /**
-     * Asserts that the loaded field data is correct
+     * Asserts that the loaded field data is correct.
      *
      * Performs assertions on the loaded field, mainly checking that the
      * $field->value->externalData is loaded correctly. If the loading of
@@ -127,7 +129,7 @@ class RelationIntegrationTest extends BaseIntegrationTest
      * also needs to be asserted. Make sure you implement this method agnostic
      * to the used SPI\Persistence implementation!
      */
-    public function assertLoadedFieldDataCorrect( Field $field )
+    public function assertLoadedFieldDataCorrect(Field $field)
     {
         $expected = $this->getInitialValue();
         $this->assertEquals(
@@ -155,15 +157,15 @@ class RelationIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => array( 'destinationContentId' => 2 ),
+                'data' => array('destinationContentId' => 2),
                 'externalData' => null,
-                'sortKey'      => null,
+                'sortKey' => null,
             )
         );
     }
 
     /**
-     * Asserts that the updated field data is loaded correct
+     * Asserts that the updated field data is loaded correct.
      *
      * Performs assertions on the loaded field after it has been updated,
      * mainly checking that the $field->value->externalData is loaded
@@ -171,10 +173,8 @@ class RelationIntegrationTest extends BaseIntegrationTest
      * $field, their correctness also needs to be asserted. Make sure you
      * implement this method agnostic to the used SPI\Persistence
      * implementation!
-     *
-     * @return void
      */
-    public function assertUpdatedFieldDataCorrect( Field $field )
+    public function assertUpdatedFieldDataCorrect(Field $field)
     {
         $expected = $this->getUpdatedValue();
         $this->assertEquals(

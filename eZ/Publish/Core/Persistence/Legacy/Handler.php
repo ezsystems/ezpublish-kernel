@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Legacy Storage Handler
+ * File containing the Legacy Storage Handler.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,7 +25,7 @@ use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
 use eZ\Publish\SPI\Persistence\TransactionHandler as SPITransactionHandler;
 
 /**
- * The main handler for Legacy Storage Engine
+ * The main handler for Legacy Storage Engine.
  */
 class Handler implements HandlerInterface
 {
@@ -94,8 +96,7 @@ class Handler implements HandlerInterface
         UrlAliasHandler $urlAliasHandler,
         UrlWildcardHandler $urlWildcardHandler,
         UserHandler $userHandler
-    )
-    {
+    ) {
         $this->contentHandler = $contentHandler;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->languageHandler = $languageHandler;
@@ -107,7 +108,6 @@ class Handler implements HandlerInterface
         $this->urlAliasHandler = $urlAliasHandler;
         $this->urlWildcardHandler = $urlWildcardHandler;
         $this->userHandler = $userHandler;
-
     }
 
     public function contentHandler()
@@ -169,7 +169,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * Begin transaction
+     * Begin transaction.
      *
      * @deprecated Since 5.3 {@use transactionHandler()->beginTransaction()}
      */
@@ -179,7 +179,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * Commit transaction
+     * Commit transaction.
      *
      * Commit transaction, or throw exceptions if no transactions has been started.
      *
@@ -193,7 +193,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * Rollback transaction
+     * Rollback transaction.
      *
      * Rollback transaction, or throw exceptions if no transactions has been started.
      *

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContentTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,40 +20,39 @@ class ContentTest extends AbstractParserTestCase
     protected function getContainerExtensions()
     {
         return array(
-            new EzPublishCoreExtension( array( new ContentConfigParser ) )
+            new EzPublishCoreExtension(array(new ContentConfigParser())),
         );
     }
 
     protected function getMinimalConfiguration()
     {
-        return Yaml::parse( file_get_contents( __DIR__ . '/../../Fixtures/ezpublish_minimal.yml' ) );
+        return Yaml::parse(file_get_contents(__DIR__ . '/../../Fixtures/ezpublish_minimal.yml'));
     }
 
     public function testDefaultContentSettings()
     {
         $this->load();
 
-        $this->assertConfigResolverParameterValue( 'content.view_cache', true, 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'content.ttl_cache', true, 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'content.default_ttl', 60, 'ezdemo_site' );
+        $this->assertConfigResolverParameterValue('content.view_cache', true, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('content.ttl_cache', true, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('content.default_ttl', 60, 'ezdemo_site');
     }
 
     /**
      * @dataProvider contentSettingsProvider
      */
-    public function testContentSettings( array $config, array $expected )
+    public function testContentSettings(array $config, array $expected)
     {
         $this->load(
             array(
                 'system' => array(
-                    'ezdemo_site' => $config
-                )
+                    'ezdemo_site' => $config,
+                ),
             )
         );
 
-        foreach ( $expected as $key => $val )
-        {
-            $this->assertConfigResolverParameterValue( $key, $val, 'ezdemo_site' );
+        foreach ($expected as $key => $val) {
+            $this->assertConfigResolverParameterValue($key, $val, 'ezdemo_site');
         }
     }
 
@@ -64,13 +65,13 @@ class ContentTest extends AbstractParserTestCase
                         'view_cache' => true,
                         'ttl_cache' => true,
                         'default_ttl' => 100,
-                    )
+                    ),
                 ),
                 array(
                     'content.view_cache' => true,
                     'content.ttl_cache' => true,
                     'content.default_ttl' => 100,
-                )
+                ),
             ),
             array(
                 array(
@@ -78,55 +79,55 @@ class ContentTest extends AbstractParserTestCase
                         'view_cache' => false,
                         'ttl_cache' => false,
                         'default_ttl' => 123,
-                    )
+                    ),
                 ),
                 array(
                     'content.view_cache' => false,
                     'content.ttl_cache' => false,
                     'content.default_ttl' => 123,
-                )
+                ),
             ),
             array(
                 array(
                     'content' => array(
                         'view_cache' => false,
-                    )
+                    ),
                 ),
                 array(
                     'content.view_cache' => false,
                     'content.ttl_cache' => true,
                     'content.default_ttl' => 60,
-                )
+                ),
             ),
             array(
                 array(
                     'content' => array(
-                        'tree_root' => array( 'location_id' => 123 ),
-                    )
+                        'tree_root' => array('location_id' => 123),
+                    ),
                 ),
                 array(
                     'content.view_cache' => true,
                     'content.ttl_cache' => true,
                     'content.default_ttl' => 60,
                     'content.tree_root.location_id' => 123,
-                )
+                ),
             ),
             array(
                 array(
                     'content' => array(
                         'tree_root' => array(
                             'location_id' => 456,
-                            'excluded_uri_prefixes' => array( '/media/images', '/products' )
+                            'excluded_uri_prefixes' => array('/media/images', '/products'),
                         ),
-                    )
+                    ),
                 ),
                 array(
                     'content.view_cache' => true,
                     'content.ttl_cache' => true,
                     'content.default_ttl' => 60,
                     'content.tree_root.location_id' => 456,
-                    'content.tree_root.excluded_uri_prefixes' => array( '/media/images', '/products' ),
-                )
+                    'content.tree_root.excluded_uri_prefixes' => array('/media/images', '/products'),
+                ),
             ),
         );
     }

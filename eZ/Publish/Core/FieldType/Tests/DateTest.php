@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the TimeTest class
+ * File containing the TimeTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -34,7 +36,7 @@ class DateTest extends FieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         $fieldType = new Date();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
     }
@@ -57,21 +59,19 @@ class DateTest extends FieldTypeTest
     protected function getSettingsSchemaExpectation()
     {
         return array(
-            "defaultType" => array(
-                "type" => "choice",
-                "default" => Date::DEFAULT_EMPTY
-            )
+            'defaultType' => array(
+                'type' => 'choice',
+                'default' => Date::DEFAULT_EMPTY,
+            ),
         );
     }
 
     /**
      * Returns the empty value expected from the field type.
-     *
-     * @return void
      */
     protected function getEmptyValueExpectation()
     {
-        return new DateValue;
+        return new DateValue();
     }
 
     /**
@@ -146,28 +146,28 @@ class DateTest extends FieldTypeTest
                 new DateValue(),
             ),
             array(
-                ( $dateString = '2012-08-28 12:20 EST' ),
-                new DateValue( new DateTime( $dateString ) ),
+                ($dateString = '2012-08-28 12:20 EST'),
+                new DateValue(new DateTime($dateString)),
             ),
             array(
-                ( $timestamp = 1346149200 ),
+                ($timestamp = 1346149200),
                 new DateValue(
-                    clone $dateTime->setTimestamp( $timestamp )
+                    clone $dateTime->setTimestamp($timestamp)
                 ),
             ),
             array(
-                DateValue::fromTimestamp( 1372895999 ),
-                new DateValue( $dateTime->setTimestamp( 1372895999 )->setTime( 0, 0, 0 ) ),
+                DateValue::fromTimestamp(1372895999),
+                new DateValue($dateTime->setTimestamp(1372895999)->setTime(0, 0, 0)),
             ),
             array(
-                ( $dateTime = new DateTime() ),
-                new DateValue( $dateTime ),
+                ($dateTime = new DateTime()),
+                new DateValue($dateTime),
             ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -209,17 +209,17 @@ class DateTest extends FieldTypeTest
                 null,
             ),
             array(
-                new DateValue( $dateTime = new DateTime() ),
+                new DateValue($dateTime = new DateTime()),
                 array(
-                    "timestamp" => $dateTime->setTime( 0, 0, 0 )->getTimestamp(),
-                    "rfc850" => $dateTime->format( DateTime::RFC850 )
+                    'timestamp' => $dateTime->setTime(0, 0, 0)->getTimestamp(),
+                    'rfc850' => $dateTime->format(DateTime::RFC850),
                 ),
             ),
         );
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -264,20 +264,20 @@ class DateTest extends FieldTypeTest
             ),
             array(
                 array(
-                    "timestamp" => ( $timestamp = 1362614400 )
+                    'timestamp' => ($timestamp = 1362614400),
                 ),
-                new DateValue( clone $dateTime->setTimestamp( $timestamp ) ),
+                new DateValue(clone $dateTime->setTimestamp($timestamp)),
             ),
             array(
                 array(
                     // Timezone is not abbreviated because PHP converts it to non-abbreviated local name,
                     // but this is sufficient to test conversion
-                    "rfc850" => "Thursday, 04-Jul-13 23:59:59 Europe/Zagreb"
+                    'rfc850' => 'Thursday, 04-Jul-13 23:59:59 Europe/Zagreb',
                 ),
                 new DateValue(
                     $dateTime
-                        ->setTimeZone( new DateTimeZone( "Europe/Zagreb" ) )
-                        ->setTimestamp( 1372896000 )
+                        ->setTimeZone(new DateTimeZone('Europe/Zagreb'))
+                        ->setTimestamp(1372896000)
                 ),
             ),
         );
@@ -309,17 +309,17 @@ class DateTest extends FieldTypeTest
     {
         return array(
             array(
-                array()
+                array(),
             ),
             array(
                 array(
                     'defaultType' => Date::DEFAULT_EMPTY,
-                )
+                ),
             ),
             array(
                 array(
                     'defaultType' => Date::DEFAULT_CURRENT_DATE,
-                )
+                ),
             ),
         );
     }
@@ -354,13 +354,13 @@ class DateTest extends FieldTypeTest
                 array(
                     // non-existent setting
                     'useSeconds' => 23,
-                )
+                ),
             ),
             array(
                 array(
                     // defaultType must be constant
                     'defaultType' => 42,
-                )
+                ),
             ),
         );
     }
@@ -375,12 +375,12 @@ class DateTest extends FieldTypeTest
         return array(
             array(
                 $this->getEmptyValueExpectation(),
-                ''
+                '',
             ),
             array(
-                new DateValue( new DateTime( '11/24/1983' ) ),
-                'Thursday 24 November 1983'
-            )
+                new DateValue(new DateTime('11/24/1983')),
+                'Thursday 24 November 1983',
+            ),
         );
     }
 }

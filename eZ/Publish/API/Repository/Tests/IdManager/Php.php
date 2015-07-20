@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the IdManager class
+ * File containing the IdManager class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,7 @@ namespace eZ\Publish\API\Repository\Tests\IdManager;
 use eZ\Publish\API\Repository\Tests\IdManager;
 
 /**
- * ID manager for the basic PHP usage of the Public API
+ * ID manager for the basic PHP usage of the Public API.
  */
 class Php extends IdManager
 {
@@ -27,7 +29,7 @@ class Php extends IdManager
      *
      * @return mixed
      */
-    public function generateId( $type, $rawId )
+    public function generateId($type, $rawId)
     {
         return $rawId;
     }
@@ -43,7 +45,7 @@ class Php extends IdManager
      *
      * @return mixed
      */
-    public function parseId( $type, $id )
+    public function parseId($type, $id)
     {
         return $id;
     }

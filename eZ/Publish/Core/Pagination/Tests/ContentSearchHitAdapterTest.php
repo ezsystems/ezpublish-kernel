@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContentSearchHitAdapterTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,7 +28,7 @@ class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->searchService = $this->getMock( 'eZ\Publish\API\Repository\SearchService' );
+        $this->searchService = $this->getMock('eZ\Publish\API\Repository\SearchService');
     }
 
     /**
@@ -37,18 +39,18 @@ class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
      *
      * @return ContentSearchHitAdapter
      */
-    protected function getAdapter( Query $query, SearchService $searchService )
+    protected function getAdapter(Query $query, SearchService $searchService)
     {
-        return new ContentSearchHitAdapter( $query, $searchService );
+        return new ContentSearchHitAdapter($query, $searchService);
     }
 
     public function testGetNbResults()
     {
         $nbResults = 123;
         $query = new Query();
-        $query->criterion = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface' );
+        $query->criterion = $this->getMock('eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface');
         $query->sortClauses = $this
-            ->getMockBuilder( 'eZ\Publish\API\Repository\Values\Content\Query\SortClause' )
+            ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\Query\SortClause')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -56,17 +58,17 @@ class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
         $countQuery = clone $query;
         $countQuery->limit = 0;
 
-        $searchResult = new SearchResult( array( 'totalCount' => $nbResults ) );
+        $searchResult = new SearchResult(array('totalCount' => $nbResults));
         $this->searchService
-            ->expects( $this->once() )
-            ->method( 'findContent' )
-            ->with( $this->equalTo( $countQuery ) )
-            ->will( $this->returnValue( $searchResult ) );
+            ->expects($this->once())
+            ->method('findContent')
+            ->with($this->equalTo($countQuery))
+            ->will($this->returnValue($searchResult));
 
-        $adapter = $this->getAdapter( $query, $this->searchService );
-        $this->assertSame( $nbResults, $adapter->getNbResults() );
+        $adapter = $this->getAdapter($query, $this->searchService);
+        $this->assertSame($nbResults, $adapter->getNbResults());
         // Running a 2nd time to ensure SearchService::findContent() is called only once.
-        $this->assertSame( $nbResults, $adapter->getNbResults() );
+        $this->assertSame($nbResults, $adapter->getNbResults());
     }
 
     public function testGetSlice()
@@ -76,9 +78,9 @@ class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
         $nbResults = 123;
 
         $query = new Query();
-        $query->criterion = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface' );
+        $query->criterion = $this->getMock('eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface');
         $query->sortClauses = $this
-            ->getMockBuilder( 'eZ\Publish\API\Repository\Values\Content\Query\SortClause' )
+            ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\Query\SortClause')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -90,23 +92,22 @@ class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
         $searchQuery->performCount = false;
 
         $hits = array();
-        for ( $i = 0; $i < $limit; ++$i )
-        {
-            $content = $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\Content\Content' );
-            $hits[] = new SearchHit( array( 'valueObject' => $content ) );
+        for ($i = 0; $i < $limit; ++$i) {
+            $content = $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\Content\Content');
+            $hits[] = new SearchHit(array('valueObject' => $content));
         }
-        $finalResult = $this->getExpectedFinalResultFromHits( $hits );
-        $searchResult = new SearchResult( array( 'searchHits' => $hits, 'totalCount' => $nbResults ) );
+        $finalResult = $this->getExpectedFinalResultFromHits($hits);
+        $searchResult = new SearchResult(array('searchHits' => $hits, 'totalCount' => $nbResults));
         $this
             ->searchService
-            ->expects( $this->once() )
-            ->method( 'findContent' )
-            ->with( $this->equalTo( $searchQuery ) )
-            ->will( $this->returnValue( $searchResult ) );
+            ->expects($this->once())
+            ->method('findContent')
+            ->with($this->equalTo($searchQuery))
+            ->will($this->returnValue($searchResult));
 
-        $adapter = $this->getAdapter( $query, $this->searchService );
-        $this->assertSame( $finalResult, $adapter->getSlice( $offset, $limit ) );
-        $this->assertSame( $nbResults, $adapter->getNbResults() );
+        $adapter = $this->getAdapter($query, $this->searchService);
+        $this->assertSame($finalResult, $adapter->getSlice($offset, $limit));
+        $this->assertSame($nbResults, $adapter->getNbResults());
     }
 
     /**
@@ -116,7 +117,7 @@ class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
      *
      * @return mixed
      */
-    protected function getExpectedFinalResultFromHits( $hits )
+    protected function getExpectedFinalResultFromHits($hits)
     {
         return $hits;
     }

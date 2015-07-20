@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the PcreCompiler class
+ * File containing the PcreCompiler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,24 +22,24 @@ use RuntimeException;
 class PcreCompiler
 {
     /**
-     * Class for converting UTF-8 characters
+     * Class for converting UTF-8 characters.
      *
      * @var \eZ\Publish\Core\Persistence\Utf8Converter
      */
     protected $converter;
 
     /**
-     * Construct from UTF8Converter
+     * Construct from UTF8Converter.
      *
      * @param \eZ\Publish\Core\Persistence\Utf8Converter $converter
      */
-    public function __construct( Utf8Converter $converter )
+    public function __construct(Utf8Converter $converter)
     {
         $this->converter = $converter;
     }
 
     /**
-     * Compile AST into a set of regular expressions
+     * Compile AST into a set of regular expressions.
      *
      * The returned array contains a set of regular expressions and their
      * replacement callbacks. The regular expressions can then be applied to
@@ -47,15 +49,13 @@ class PcreCompiler
      *
      * @return array
      */
-    public function compile( array $ast )
+    public function compile(array $ast)
     {
         $transformations = array();
 
-        foreach ( $ast as $section => $rules )
-        {
-            foreach ( $rules as $rule )
-            {
-                $transformations[$section][] = $this->compileRule( $rule );
+        foreach ($ast as $section => $rules) {
+            foreach ($rules as $rule) {
+                $transformations[$section][] = $this->compileRule($rule);
             }
         }
 
@@ -63,112 +63,108 @@ class PcreCompiler
     }
 
     /**
-     * Compiles a single rule
+     * Compiles a single rule.
      *
      * @param array $rule
      *
      * @return array
      */
-    protected function compileRule( array $rule )
+    protected function compileRule(array $rule)
     {
-        switch ( $rule['type'] )
-        {
+        switch ($rule['type']) {
             case TransformationProcessor::T_MAP:
-                return $this->compileMap( $rule );
+                return $this->compileMap($rule);
 
             case TransformationProcessor::T_REPLACE:
-                return $this->compileReplace( $rule );
+                return $this->compileReplace($rule);
 
             case TransformationProcessor::T_TRANSPOSE:
-                return $this->compileTranspose( $rule );
+                return $this->compileTranspose($rule);
 
             case TransformationProcessor::T_TRANSPOSE_MODULO:
-                return $this->compileTransposeModulo( $rule );
+                return $this->compileTransposeModulo($rule);
 
             default:
-                throw new RuntimeException( "Unknown rule type: " . $rule['type'] );
+                throw new RuntimeException('Unknown rule type: ' . $rule['type']);
         }
     }
 
     /**
-     * Compile map rule
+     * Compile map rule.
      *
      * @param array $rule
      *
      * @return array
      */
-    protected function compileMap( array $rule )
+    protected function compileMap(array $rule)
     {
         return array(
-            'regexp' => '(' . preg_quote( $this->compileCharacter( $rule['data']['src'] ) ) . ')us',
-            'callback' => $this->compileTargetCharacter( $rule['data']['dest'] ),
+            'regexp' => '(' . preg_quote($this->compileCharacter($rule['data']['src'])) . ')us',
+            'callback' => $this->compileTargetCharacter($rule['data']['dest']),
         );
     }
 
     /**
-     * Compile replace rule
+     * Compile replace rule.
      *
      * @param array $rule
      *
      * @return array
      */
-    protected function compileReplace( array $rule )
+    protected function compileReplace(array $rule)
     {
         return array(
-            'regexp' =>
-                '([' .
-                preg_quote( $this->compileCharacter( $rule['data']['srcStart'] ) ) . '-' .
-                preg_quote( $this->compileCharacter( $rule['data']['srcEnd'] ) ) .
+            'regexp' => '([' .
+                preg_quote($this->compileCharacter($rule['data']['srcStart'])) . '-' .
+                preg_quote($this->compileCharacter($rule['data']['srcEnd'])) .
                 '])us',
-            'callback' => $this->compileTargetCharacter( $rule['data']['dest'] ),
+            'callback' => $this->compileTargetCharacter($rule['data']['dest']),
         );
     }
 
     /**
-     * Compile transpose rule
+     * Compile transpose rule.
      *
      * @param array $rule
      *
      * @return array
      */
-    protected function compileTranspose( array $rule )
+    protected function compileTranspose(array $rule)
     {
         return array(
-            'regexp' =>
-                '([' .
-                preg_quote( $this->compileCharacter( $rule['data']['srcStart'] ) ) . '-' .
-                preg_quote( $this->compileCharacter( $rule['data']['srcEnd'] ) ) .
+            'regexp' => '([' .
+                preg_quote($this->compileCharacter($rule['data']['srcStart'])) . '-' .
+                preg_quote($this->compileCharacter($rule['data']['srcEnd'])) .
                 '])us',
-            'callback' => $this->getTransposeClosure( $rule['data']['op'], $rule['data']['dest'] ),
+            'callback' => $this->getTransposeClosure($rule['data']['op'], $rule['data']['dest']),
         );
     }
 
     /**
-     * Compile transpose modulo rule
+     * Compile transpose modulo rule.
      *
      * @param array $rule
      *
      * @return array
      */
-    protected function compileTransposeModulo( array $rule )
+    protected function compileTransposeModulo(array $rule)
     {
         return array(
-            'regexp' =>
-                '([' .
+            'regexp' => '([' .
                 preg_quote(
                     $this->getModuloCharRange(
-                        $this->compileCharacter( $rule['data']['srcStart'] ),
-                        $this->compileCharacter( $rule['data']['srcEnd'] ),
+                        $this->compileCharacter($rule['data']['srcStart']),
+                        $this->compileCharacter($rule['data']['srcEnd']),
                         $rule['data']['modulo']
                     )
                 ) .
                 '])us',
-            'callback' => $this->getTransposeClosure( $rule['data']['op'], $rule['data']['dest'] ),
+            'callback' => $this->getTransposeClosure($rule['data']['op'], $rule['data']['dest']),
         );
     }
 
     /**
-     * Get string with all characters defined by parameters
+     * Get string with all characters defined by parameters.
      *
      * Returns a string containing all UTF-8 characters starting with the
      * specified $start character up to the $end character with the step size
@@ -180,16 +176,15 @@ class PcreCompiler
      *
      * @return string
      */
-    protected function getModuloCharRange( $start, $end, $modulo )
+    protected function getModuloCharRange($start, $end, $modulo)
     {
-        $start = $this->converter->toUnicodeCodepoint( $start );
-        $end = $this->converter->toUnicodeCodepoint( $end );
-        $modulo = hexdec( $modulo );
+        $start = $this->converter->toUnicodeCodepoint($start);
+        $end = $this->converter->toUnicodeCodepoint($end);
+        $modulo = hexdec($modulo);
 
         $chars = '';
-        for ( $start; $start <= $end; $start += $modulo )
-        {
-            $chars .= $this->converter->toUTF8Character( $start );
+        for ($start; $start <= $end; $start += $modulo) {
+            $chars .= $this->converter->toUTF8Character($start);
         }
 
         return $chars;
@@ -197,72 +192,68 @@ class PcreCompiler
 
     /**
      * Returns a closure which modifies the provided character by the given
-     * value
+     * value.
      *
      * @param string $operator
      * @param string $value
      *
      * @return callback
      */
-    protected function getTransposeClosure( $operator, $value )
+    protected function getTransposeClosure($operator, $value)
     {
-        $value = hexdec( $value ) * ( $operator === '-' ? -1 : 1 );
+        $value = hexdec($value) * ($operator === '-' ? -1 : 1);
         $converter = $this->converter;
-        return function ( $matches ) use ( $value, $converter )
-        {
+
+        return function ($matches) use ($value, $converter) {
             return $converter->toUTF8Character(
-                $converter->toUnicodeCodepoint( $matches[0] ) + $value
+                $converter->toUnicodeCodepoint($matches[0]) + $value
             );
         };
     }
 
     /**
      * Compile target into a closure, which can be used by
-     * preg_replace_callback
+     * preg_replace_callback.
      *
      * @param string $char
      *
      * @return callback
      */
-    protected function compileTargetCharacter( $char )
+    protected function compileTargetCharacter($char)
     {
-        switch ( true )
-        {
-            case ( $char === 'remove' ):
-                return function ( $matches )
-                {
+        switch (true) {
+            case ($char === 'remove'):
+                return function ($matches) {
                     return '';
                 };
 
-            case ( $char === 'keep' ):
-                return function ( $matches )
-                {
+            case ($char === 'keep'):
+                return function ($matches) {
                     return $matches[0];
                 };
 
-            case preg_match( '("(?:[^\\\\"]+|\\\\\\\\|\\\\\'|\\\\")*?")', $char );
+            case preg_match('("(?:[^\\\\"]+|\\\\\\\\|\\\\\'|\\\\")*?")', $char):
                 $string = str_replace(
-                    array( '\\\\', '\\"', "\\'" ),
-                    array( '\\', '"', "'" ),
-                    substr( $char, 1, -1 )
+                    array('\\\\', '\\"', "\\'"),
+                    array('\\', '"', "'"),
+                    substr($char, 1, -1)
                 );
 
-                return function ( $matches ) use ( $string )
-                {
+                return function ($matches) use ($string) {
                     return $string;
                 };
 
             default:
-                $char = $this->compileCharacter( $char );
-                return function ( $matches ) use ( $char )
-                {
+                $char = $this->compileCharacter($char);
+
+                return function ($matches) use ($char) {
                     return $char;
                 };
         }
     }
 
     /**
-     * Compile a single source character definition into a plain UTF-8 character
+     * Compile a single source character definition into a plain UTF-8 character.
      *
      * Handles the two formats from the possible character definitions:
      *  - U+xxxx : Unicode value in hexadecimal
@@ -272,19 +263,17 @@ class PcreCompiler
      *
      * @return string
      */
-    protected function compileCharacter( $char )
+    protected function compileCharacter($char)
     {
-        switch ( true )
-        {
-            case preg_match( '(^U\\+[0-9a-fA-F]{4}$)', $char ):
-                return $this->converter->toUTF8Character( hexdec( substr( $char, 2 ) ) );
+        switch (true) {
+            case preg_match('(^U\\+[0-9a-fA-F]{4}$)', $char):
+                return $this->converter->toUTF8Character(hexdec(substr($char, 2)));
 
-            case preg_match( '(^[0-9a-fA-F]{2}$)', $char ):
-                return chr( hexdec( $char ) );
+            case preg_match('(^[0-9a-fA-F]{2}$)', $char):
+                return chr(hexdec($char));
 
             default:
-                throw new RuntimeException( "Invalid character definition: $char" );
+                throw new RuntimeException("Invalid character definition: $char");
         }
     }
 }
-

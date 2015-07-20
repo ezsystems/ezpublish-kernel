@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the SectionServiceTest class
+ * File containing the SectionServiceTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,16 +27,13 @@ class SectionServiceTest extends BaseTest
     /**
      * Tests that the required <b>ContentService::loadContentInfoByRemoteId()</b>
      * at least returns an object, because this method is utilized in several
-     * tests,
-     *
-     * @return void
+     * tests,.
      */
     protected function setUp()
     {
         parent::setUp();
 
-        try
-        {
+        try {
             // RemoteId of the "Media" page of an eZ Publish demo installation
             $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
 
@@ -46,17 +45,14 @@ class SectionServiceTest extends BaseTest
                 $mediaRemoteId
             );
 
-            if ( false === is_object( $contentInfo ) )
-            {
+            if (false === is_object($contentInfo)) {
                 $this->markTestSkipped(
                     'This test cannot be executed, because the utilized ' .
                     'ContentService::loadContentInfoByRemoteId() does not ' .
                     'return an object.'
                 );
             }
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             $this->markTestSkipped(
                 'This test cannot be executed, because the utilized ' .
                 'ContentService::loadContentInfoByRemoteId() failed with ' .
@@ -64,13 +60,11 @@ class SectionServiceTest extends BaseTest
                 $e
             );
         }
-
     }
 
     /**
      * Test for the newSectionCreateStruct() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::newSectionCreateStruct()
      */
     public function testNewSectionCreateStruct()
@@ -83,13 +77,12 @@ class SectionServiceTest extends BaseTest
         $sectionCreate = $sectionService->newSectionCreateStruct();
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct', $sectionCreate );
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct', $sectionCreate);
     }
 
     /**
      * Test for the createSection() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::createSection()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testNewSectionCreateStruct
      */
@@ -104,16 +97,15 @@ class SectionServiceTest extends BaseTest
         $sectionCreate->name = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
-        $section = $sectionService->createSection( $sectionCreate );
+        $section = $sectionService->createSection($sectionCreate);
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section', $section );
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section', $section);
     }
 
     /**
      * Test for the createSection() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::createSection()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
@@ -129,21 +121,20 @@ class SectionServiceTest extends BaseTest
         $sectionCreateOne->name = 'Test section one';
         $sectionCreateOne->identifier = 'uniqueKey';
 
-        $sectionService->createSection( $sectionCreateOne );
+        $sectionService->createSection($sectionCreateOne);
 
         $sectionCreateTwo = $sectionService->newSectionCreateStruct();
         $sectionCreateTwo->name = 'Test section two';
         $sectionCreateTwo->identifier = 'uniqueKey';
 
         // This will fail, because identifier uniqueKey already exists.
-        $sectionService->createSection( $sectionCreateTwo );
+        $sectionService->createSection($sectionCreateTwo);
         /* END: Use Case */
     }
 
     /**
      * Test for the loadSection() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::loadSection()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      */
@@ -151,22 +142,21 @@ class SectionServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $sectionId = $this->generateId( 'section', 2 );
+        $sectionId = $this->generateId('section', 2);
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
 
         // Loads user section
         // $sectionId contains the corresponding ID
-        $section = $sectionService->loadSection( $sectionId );
+        $section = $sectionService->loadSection($sectionId);
         /* END: Use Case */
 
-        $this->assertEquals( 'users', $section->identifier );
+        $this->assertEquals('users', $section->identifier);
     }
 
     /**
      * Test for the loadSection() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::loadSection()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
@@ -174,20 +164,19 @@ class SectionServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $nonExistentSectionId = $this->generateId( 'section', self::DB_INT_MAX );
+        $nonExistentSectionId = $this->generateId('section', self::DB_INT_MAX);
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
 
         // This call should fail with a NotFoundException
         // $nonExistentSectionId contains a section ID that is not known
-        $sectionService->loadSection( $nonExistentSectionId );
+        $sectionService->loadSection($nonExistentSectionId);
         /* END: Use Case */
     }
 
     /**
      * Test for the newSectionUpdateStruct() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::newSectionUpdateStruct()
      */
     public function testNewSectionUpdateStruct()
@@ -200,13 +189,12 @@ class SectionServiceTest extends BaseTest
         $sectionUpdate = $sectionService->newSectionUpdateStruct();
         /* END: Use Case */
 
-        $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct', $sectionUpdate );
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct', $sectionUpdate);
     }
 
     /**
      * Test for the updateSection() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::updateSection()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSection
@@ -216,35 +204,34 @@ class SectionServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $standardSectionId = $this->generateId( 'section', 1 );
+        $standardSectionId = $this->generateId('section', 1);
         /* BEGIN: Use Case */
         // $standardSectionId contains the ID of the "Standard" section in a eZ
         // Publish demo installation.
 
         $sectionService = $repository->getSectionService();
 
-        $section = $sectionService->loadSection( $standardSectionId );
+        $section = $sectionService->loadSection($standardSectionId);
 
         $sectionUpdate = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->name = 'New section name';
         $sectionUpdate->identifier = 'newUniqueKey';
 
-        $updatedSection = $sectionService->updateSection( $section, $sectionUpdate );
+        $updatedSection = $sectionService->updateSection($section, $sectionUpdate);
         /* END: Use Case */
 
         // Verify that service returns an instance of Section
-        $this->assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section', $updatedSection );
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section', $updatedSection);
 
         // Verify that the service also persists the changes
-        $updatedSection = $sectionService->loadSection( $standardSectionId );
+        $updatedSection = $sectionService->loadSection($standardSectionId);
 
-        $this->assertEquals( 'New section name', $updatedSection->name );
+        $this->assertEquals('New section name', $updatedSection->name);
     }
 
     /**
      * Test for the updateSection() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::updateSection()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
      */
@@ -252,27 +239,26 @@ class SectionServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $standardSectionId = $this->generateId( 'section', 1 );
+        $standardSectionId = $this->generateId('section', 1);
         /* BEGIN: Use Case */
         // $standardSectionId contains the ID of the "Standard" section in a eZ
         // Publish demo installation.
 
         $sectionService = $repository->getSectionService();
 
-        $section = $sectionService->loadSection( $standardSectionId );
+        $section = $sectionService->loadSection($standardSectionId);
         $sectionUpdate = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->name = 'New section name';
 
-        $updatedSection = $sectionService->updateSection( $section, $sectionUpdate );
+        $updatedSection = $sectionService->updateSection($section, $sectionUpdate);
         /* END: Use Case */
 
-        $this->assertEquals( 'standard', $updatedSection->identifier );
+        $this->assertEquals('standard', $updatedSection->identifier);
     }
 
     /**
      * Test for the updateSection() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::updateSection()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
      */
@@ -280,30 +266,29 @@ class SectionServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $standardSectionId = $this->generateId( 'section', 1 );
+        $standardSectionId = $this->generateId('section', 1);
         /* BEGIN: Use Case */
         // $standardSectionId contains the ID of the "Standard" section in a eZ
         // Publish demo installation.
 
         $sectionService = $repository->getSectionService();
 
-        $section = $sectionService->loadSection( $standardSectionId );
+        $section = $sectionService->loadSection($standardSectionId);
         $sectionUpdate = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->name = 'New section name';
 
         // section identifier remains the same
         $sectionUpdate->identifier = $section->identifier;
 
-        $updatedSection = $sectionService->updateSection( $section, $sectionUpdate );
+        $updatedSection = $sectionService->updateSection($section, $sectionUpdate);
         /* END: Use Case */
 
-        $this->assertEquals( 'standard', $updatedSection->identifier );
+        $this->assertEquals('standard', $updatedSection->identifier);
     }
 
     /**
      * Test for the updateSection() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::updateSection()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
      */
@@ -311,28 +296,27 @@ class SectionServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $standardSectionId = $this->generateId( 'section', 1 );
+        $standardSectionId = $this->generateId('section', 1);
         /* BEGIN: Use Case */
         // $standardSectionId contains the ID of the "Standard" section in a eZ
         // Publish demo installation.
 
         $sectionService = $repository->getSectionService();
 
-        $section = $sectionService->loadSection( $standardSectionId );
+        $section = $sectionService->loadSection($standardSectionId);
 
         $sectionUpdate = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->identifier = 'newUniqueKey';
 
-        $updatedSection = $sectionService->updateSection( $section, $sectionUpdate );
+        $updatedSection = $sectionService->updateSection($section, $sectionUpdate);
         /* END: Use Case */
 
-        $this->assertEquals( 'Standard', $updatedSection->name );
+        $this->assertEquals('Standard', $updatedSection->name);
     }
 
     /**
      * Test for the updateSection() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::updateSection()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
@@ -341,7 +325,7 @@ class SectionServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $standardSectionId = $this->generateId( 'section', 1 );
+        $standardSectionId = $this->generateId('section', 1);
         /* BEGIN: Use Case */
         // $standardSectionId contains the ID of the "Standard" section in a eZ
         // Publish demo installation.
@@ -353,23 +337,22 @@ class SectionServiceTest extends BaseTest
         $sectionCreate->name = 'Conflict section';
         $sectionCreate->identifier = 'conflictKey';
 
-        $sectionService->createSection( $sectionCreate );
+        $sectionService->createSection($sectionCreate);
 
         // Load an existing section and update to an existing identifier
-        $section = $sectionService->loadSection( $standardSectionId );
+        $section = $sectionService->loadSection($standardSectionId);
 
         $sectionUpdate = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->identifier = 'conflictKey';
 
         // This call should fail with an InvalidArgumentException
-        $sectionService->updateSection( $section, $sectionUpdate );
+        $sectionService->updateSection($section, $sectionUpdate);
         /* END: Use Case */
     }
 
     /**
      * Test for the loadSections() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::loadSections()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      */
@@ -381,19 +364,17 @@ class SectionServiceTest extends BaseTest
         $sectionService = $repository->getSectionService();
 
         $sections = $sectionService->loadSections();
-        foreach ( $sections as $section )
-        {
+        foreach ($sections as $section) {
             // Operate on all sections.
         }
         /* END: Use Case */
 
-        $this->assertEquals( 6, count( $sections ) );
+        $this->assertEquals(6, count($sections));
     }
 
     /**
      * Test for the loadSections() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::loadSections()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      */
@@ -407,44 +388,44 @@ class SectionServiceTest extends BaseTest
             array(
                 new Section(
                     array(
-                        'id' => $this->generateId( 'section', 1 ),
+                        'id' => $this->generateId('section', 1),
                         'name' => 'Standard',
-                        'identifier' => 'standard'
+                        'identifier' => 'standard',
                     )
                 ),
                 new Section(
                     array(
-                        'id' => $this->generateId( 'section', 2 ),
+                        'id' => $this->generateId('section', 2),
                         'name' => 'Users',
-                        'identifier' => 'users'
+                        'identifier' => 'users',
                     )
                 ),
                 new Section(
                     array(
-                        'id' => $this->generateId( 'section', 3 ),
+                        'id' => $this->generateId('section', 3),
                         'name' => 'Media',
-                        'identifier' => 'media'
+                        'identifier' => 'media',
                     )
                 ),
                 new Section(
                     array(
-                        'id' => $this->generateId( 'section', 4 ),
+                        'id' => $this->generateId('section', 4),
                         'name' => 'Setup',
-                        'identifier' => 'setup'
+                        'identifier' => 'setup',
                     )
                 ),
                 new Section(
                     array(
-                        'id' => $this->generateId( 'section', 5 ),
+                        'id' => $this->generateId('section', 5),
                         'name' => 'Design',
-                        'identifier' => 'design'
+                        'identifier' => 'design',
                     )
                 ),
                 new Section(
                     array(
-                        'id' => $this->generateId( 'section', 6 ),
+                        'id' => $this->generateId('section', 6),
                         'name' => 'Restricted',
-                        'identifier' => ''
+                        'identifier' => '',
                     )
                 ),
             ),
@@ -455,7 +436,6 @@ class SectionServiceTest extends BaseTest
     /**
      * Test for the loadSectionByIdentifier() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::loadSectionByIdentifier()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      */
@@ -470,18 +450,17 @@ class SectionServiceTest extends BaseTest
         $sectionCreate->name = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
-        $sectionId = $sectionService->createSection( $sectionCreate )->id;
+        $sectionId = $sectionService->createSection($sectionCreate)->id;
 
-        $section = $sectionService->loadSectionByIdentifier( 'uniqueKey' );
+        $section = $sectionService->loadSectionByIdentifier('uniqueKey');
         /* END: Use Case */
 
-        $this->assertEquals( $sectionId, $section->id );
+        $this->assertEquals($sectionId, $section->id);
     }
 
     /**
      * Test for the loadSectionByIdentifier() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::loadSectionByIdentifier()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
@@ -493,7 +472,7 @@ class SectionServiceTest extends BaseTest
         $sectionService = $repository->getSectionService();
 
         // This call should fail with a NotFoundException
-        $sectionService->loadSectionByIdentifier( 'someUnknownSectionIdentifier' );
+        $sectionService->loadSectionByIdentifier('someUnknownSectionIdentifier');
         /* END: Use Case */
     }
 
@@ -501,8 +480,6 @@ class SectionServiceTest extends BaseTest
      * Test for the countAssignedContents() method.
      *
      * @see \eZ\Publish\API\Repository\SectionService::countAssignedContents()
-     *
-     * @return void
      */
     public function testCountAssignedContents()
     {
@@ -510,12 +487,12 @@ class SectionServiceTest extends BaseTest
 
         $sectionService = $repository->getSectionService();
 
-        $standardSectionId = $this->generateId( 'section', 1 );
+        $standardSectionId = $this->generateId('section', 1);
         /* BEGIN: Use Case */
         // $standardSectionId contains the ID of the "Standard" section in a eZ
         // Publish demo installation.
 
-        $standardSection = $sectionService->loadSection( $standardSectionId );
+        $standardSection = $sectionService->loadSection($standardSectionId);
 
         $numberOfAssignedContent = $sectionService->countAssignedContents(
             $standardSection
@@ -531,7 +508,6 @@ class SectionServiceTest extends BaseTest
     /**
      * Test for the assignSection() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::assignSection()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCountAssignedContents
      */
@@ -540,14 +516,14 @@ class SectionServiceTest extends BaseTest
         $repository = $this->getRepository();
         $sectionService = $repository->getSectionService();
 
-        $standardSectionId = $this->generateId( 'section', 1 );
-        $mediaSectionId = $this->generateId( 'section', 3 );
+        $standardSectionId = $this->generateId('section', 1);
+        $mediaSectionId = $this->generateId('section', 3);
 
         $beforeStandardCount = $sectionService->countAssignedContents(
-            $sectionService->loadSection( $standardSectionId )
+            $sectionService->loadSection($standardSectionId)
         );
         $beforeMediaCount = $sectionService->countAssignedContents(
-            $sectionService->loadSection( $mediaSectionId )
+            $sectionService->loadSection($mediaSectionId)
         );
 
         /* BEGIN: Use Case */
@@ -566,22 +542,22 @@ class SectionServiceTest extends BaseTest
         );
 
         // Load the "Standard" section
-        $section = $sectionService->loadSection( $standardSectionId );
+        $section = $sectionService->loadSection($standardSectionId);
 
         // Assign Section to ContentInfo
-        $sectionService->assignSection( $contentInfo, $section );
+        $sectionService->assignSection($contentInfo, $section);
         /* END: Use Case */
 
         $this->assertEquals(
             $beforeStandardCount + 1,
             $sectionService->countAssignedContents(
-                $sectionService->loadSection( $standardSectionId )
+                $sectionService->loadSection($standardSectionId)
             )
         );
         $this->assertEquals(
             $beforeMediaCount - 1,
             $sectionService->countAssignedContents(
-                $sectionService->loadSection( $mediaSectionId )
+                $sectionService->loadSection($mediaSectionId)
             )
         );
     }
@@ -589,7 +565,6 @@ class SectionServiceTest extends BaseTest
     /**
      * Test for the countAssignedContents() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::countAssignedContents()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      */
@@ -604,19 +579,18 @@ class SectionServiceTest extends BaseTest
         $sectionCreate->name = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
-        $section = $sectionService->createSection( $sectionCreate );
+        $section = $sectionService->createSection($sectionCreate);
 
         // The number of assigned contents should be zero
-        $assignedContents = $sectionService->countAssignedContents( $section );
+        $assignedContents = $sectionService->countAssignedContents($section);
         /* END: Use Case */
 
-        $this->assertSame( 0, $assignedContents );
+        $this->assertSame(0, $assignedContents);
     }
 
     /**
      * Test for the deleteSection() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::deleteSection()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSections
      */
@@ -631,19 +605,18 @@ class SectionServiceTest extends BaseTest
         $sectionCreate->name = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
-        $section = $sectionService->createSection( $sectionCreate );
+        $section = $sectionService->createSection($sectionCreate);
 
         // Delete the newly created section
-        $sectionService->deleteSection( $section );
+        $sectionService->deleteSection($section);
         /* END: Use Case */
 
-        $this->assertEquals( 6, count( $sectionService->loadSections() ) );
+        $this->assertEquals(6, count($sectionService->loadSections()));
     }
 
     /**
      * Test for the deleteSection() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::deleteSection()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testDeleteSection
@@ -659,20 +632,19 @@ class SectionServiceTest extends BaseTest
         $sectionCreate->name = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
-        $section = $sectionService->createSection( $sectionCreate );
+        $section = $sectionService->createSection($sectionCreate);
 
         // Delete the newly created section
-        $sectionService->deleteSection( $section );
+        $sectionService->deleteSection($section);
 
         // This call should fail with a NotFoundException
-        $sectionService->deleteSection( $section );
+        $sectionService->deleteSection($section);
         /* END: Use Case */
     }
 
     /**
      * Test for the deleteSection() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::deleteSection()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testAssignSection
@@ -681,7 +653,7 @@ class SectionServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $standardSectionId = $this->generateId( 'section', 1 );
+        $standardSectionId = $this->generateId('section', 1);
         /* BEGIN: Use Case */
         // $standardSectionId contains the ID of the "Standard" section in a eZ
         // Publish demo installation.
@@ -693,23 +665,22 @@ class SectionServiceTest extends BaseTest
         $sectionService = $repository->getSectionService();
 
         // Load the "Media" ContentInfo
-        $contentInfo = $contentService->loadContentInfoByRemoteId( $mediaRemoteId );
+        $contentInfo = $contentService->loadContentInfoByRemoteId($mediaRemoteId);
 
         // Load the "Standard" section
-        $section = $sectionService->loadSection( $standardSectionId );
+        $section = $sectionService->loadSection($standardSectionId);
 
         // Assign "Media" to "Standard" section
-        $sectionService->assignSection( $contentInfo, $section );
+        $sectionService->assignSection($contentInfo, $section);
 
         // This call should fail with a BadStateException, because there are assigned contents
-        $sectionService->deleteSection( $section );
+        $sectionService->deleteSection($section);
         /* END: Use Case */
     }
 
     /**
      * Test for the createSection() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::createSection()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSectionByIdentifier
@@ -724,18 +695,15 @@ class SectionServiceTest extends BaseTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        try
-        {
+        try {
             // Get a create struct and set some properties
             $sectionCreate = $sectionService->newSectionCreateStruct();
             $sectionCreate->name = 'Test Section';
             $sectionCreate->identifier = 'uniqueKey';
 
             // Create a new section
-            $sectionService->createSection( $sectionCreate );
-        }
-        catch ( Exception $e )
-        {
+            $sectionService->createSection($sectionCreate);
+        } catch (Exception $e) {
             // Cleanup hanging transaction on error
             $repository->rollback();
             throw $e;
@@ -744,24 +712,20 @@ class SectionServiceTest extends BaseTest
         // Rollback all changes
         $repository->rollback();
 
-        try
-        {
+        try {
             // This call will fail with a not found exception
-            $sectionService->loadSectionByIdentifier( 'uniqueKey' );
-        }
-        catch ( NotFoundException $e )
-        {
+            $sectionService->loadSectionByIdentifier('uniqueKey');
+        } catch (NotFoundException $e) {
             // Expected execution path
         }
         /* END: Use Case */
 
-        $this->assertTrue( isset( $e ), 'Can still load section after rollback.' );
+        $this->assertTrue(isset($e), 'Can still load section after rollback.');
     }
 
     /**
      * Test for the createSection() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::createSection()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSectionByIdentifier
@@ -776,37 +740,33 @@ class SectionServiceTest extends BaseTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        try
-        {
+        try {
             // Get a create struct and set some properties
             $sectionCreate = $sectionService->newSectionCreateStruct();
             $sectionCreate->name = 'Test Section';
             $sectionCreate->identifier = 'uniqueKey';
 
             // Create a new section
-            $sectionService->createSection( $sectionCreate );
+            $sectionService->createSection($sectionCreate);
 
             // Commit all changes
             $repository->commit();
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             // Cleanup hanging transaction on error
             $repository->rollback();
             throw $e;
         }
 
         // Load new section
-        $section = $sectionService->loadSectionByIdentifier( 'uniqueKey' );
+        $section = $sectionService->loadSectionByIdentifier('uniqueKey');
         /* END: Use Case */
 
-        $this->assertEquals( 'uniqueKey', $section->identifier );
+        $this->assertEquals('uniqueKey', $section->identifier);
     }
 
     /**
      * Test for the createSection() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::createSection()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSectionByIdentifier
@@ -821,20 +781,17 @@ class SectionServiceTest extends BaseTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        try
-        {
+        try {
             // Load standard section
-            $section = $sectionService->loadSectionByIdentifier( 'standard' );
+            $section = $sectionService->loadSectionByIdentifier('standard');
 
             // Get an update struct and change section name
             $sectionUpdate = $sectionService->newSectionUpdateStruct();
             $sectionUpdate->name = 'My Standard';
 
             // Update section
-            $sectionService->updateSection( $section, $sectionUpdate );
-        }
-        catch ( Exception $e )
-        {
+            $sectionService->updateSection($section, $sectionUpdate);
+        } catch (Exception $e) {
             // Cleanup hanging transaction on error
             $repository->rollback();
             throw $e;
@@ -844,16 +801,15 @@ class SectionServiceTest extends BaseTest
         $repository->rollback();
 
         // Load updated section, name will still be "Standard"
-        $updatedStandard = $sectionService->loadSectionByIdentifier( 'standard' );
+        $updatedStandard = $sectionService->loadSectionByIdentifier('standard');
         /* END: Use Case */
 
-        $this->assertEquals( 'Standard', $updatedStandard->name );
+        $this->assertEquals('Standard', $updatedStandard->name);
     }
 
     /**
      * Test for the createSection() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SectionService::createSection()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSectionByIdentifier
@@ -868,32 +824,29 @@ class SectionServiceTest extends BaseTest
         // Start a new transaction
         $repository->beginTransaction();
 
-        try
-        {
+        try {
             // Load standard section
-            $section = $sectionService->loadSectionByIdentifier( 'standard' );
+            $section = $sectionService->loadSectionByIdentifier('standard');
 
             // Get an update struct and change section name
             $sectionUpdate = $sectionService->newSectionUpdateStruct();
             $sectionUpdate->name = 'My Standard';
 
             // Update section
-            $sectionService->updateSection( $section, $sectionUpdate );
+            $sectionService->updateSection($section, $sectionUpdate);
 
             // Commit all changes
             $repository->commit();
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             // Cleanup hanging transaction on error
             $repository->rollback();
             throw $e;
         }
 
         // Load updated section, name will now be "My Standard"
-        $updatedStandard = $sectionService->loadSectionByIdentifier( 'standard' );
+        $updatedStandard = $sectionService->loadSectionByIdentifier('standard');
         /* END: Use Case */
 
-        $this->assertEquals( 'My Standard', $updatedStandard->name );
+        $this->assertEquals('My Standard', $updatedStandard->name);
     }
 }

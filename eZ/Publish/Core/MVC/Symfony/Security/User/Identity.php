@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the user Identity class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -39,7 +41,7 @@ class Identity implements IdentityInterface
      *
      * @param array $information Hash where key is the information type and value is a scalar.
      */
-    public function addInformation( array $information )
+    public function addInformation(array $information)
     {
         $this->identityInfo += $information;
         $this->resetHash();
@@ -51,7 +53,7 @@ class Identity implements IdentityInterface
      * @param string $informationName
      * @param scalar $informationValue
      */
-    public function setInformation( $informationName, $informationValue )
+    public function setInformation($informationName, $informationValue)
     {
         $this->identityInfo[$informationName] = $informationValue;
         $this->resetHash();
@@ -62,7 +64,7 @@ class Identity implements IdentityInterface
      *
      * @param array $information Hash where key is the information type and value is a scalar.
      */
-    public function replaceInformation( array $information )
+    public function replaceInformation(array $information)
     {
         $this->identityInfo = $information;
         $this->resetHash();
@@ -87,21 +89,19 @@ class Identity implements IdentityInterface
     }
 
     /**
-     * Returns the hash of the current identity (e.g. md5, sha1...)
+     * Returns the hash of the current identity (e.g. md5, sha1...).
      *
      * @return string
      */
     public function getHash()
     {
-        if ( !isset( $this->hash ) )
-        {
+        if (!isset($this->hash)) {
             $hashArray = array();
-            foreach ( $this->identityInfo as $infoType => $infoValue )
-            {
+            foreach ($this->identityInfo as $infoType => $infoValue) {
                 $hashArray[] = "$infoType=$infoValue";
             }
 
-            $this->hash = sha1( implode( '-', $hashArray ) );
+            $this->hash = sha1(implode('-', $hashArray));
         }
 
         return $this->hash;

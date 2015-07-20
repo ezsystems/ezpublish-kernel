@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the DoctrineDatabase permission subtree criterion handler class
+ * File containing the DoctrineDatabase permission subtree criterion handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,7 +18,7 @@ use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Repository\Values\Content\Query\Criterion\PermissionSubtree as PermissionSubtreeCriterion;
 
 /**
- * PermissionSubtree criterion handler
+ * PermissionSubtree criterion handler.
  */
 class PermissionSubtree extends CriterionHandler
 {
@@ -25,15 +27,15 @@ class PermissionSubtree extends CriterionHandler
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return boolean
+     * @return bool
      */
-    public function accept( Criterion $criterion )
+    public function accept(Criterion $criterion)
     {
         return $criterion instanceof PermissionSubtreeCriterion;
     }
 
     /**
-     * Generate query expression for a Criterion this handler accepts
+     * Generate query expression for a Criterion this handler accepts.
      *
      * accept() must be called before calling this method.
      *
@@ -49,33 +51,30 @@ class PermissionSubtree extends CriterionHandler
         SelectQuery $query,
         Criterion $criterion,
         array $fieldFilters
-    )
-    {
-        $table = "permission_subtree";
+    ) {
+        $table = 'permission_subtree';
 
         $statements = array();
-        foreach ( $criterion->value as $pattern )
-        {
+        foreach ($criterion->value as $pattern) {
             $statements[] = $query->expr->like(
-                $this->dbHandler->quoteColumn( 'path_string', $table ),
-                $query->bindValue( $pattern . '%' )
+                $this->dbHandler->quoteColumn('path_string', $table),
+                $query->bindValue($pattern . '%')
             );
         }
 
         // Check if ezcontentobject_tree was already joined, if it was there is no need to join
         // with it again - first join will be reused by all other PermissionSubtree criteria
         /** @var $query \eZ\Publish\Core\Persistence\Doctrine\SelectDoctrineQuery */
-        if ( !$query->permissionSubtreeJoinAdded )
-        {
+        if (!$query->permissionSubtreeJoinAdded) {
             $query
                 ->leftJoin(
                     $query->alias(
-                        $this->dbHandler->quoteTable( 'ezcontentobject_tree' ),
-                        $this->dbHandler->quoteIdentifier( $table )
+                        $this->dbHandler->quoteTable('ezcontentobject_tree'),
+                        $this->dbHandler->quoteIdentifier($table)
                     ),
                     $query->expr->eq(
-                        $this->dbHandler->quoteColumn( 'contentobject_id', $table ),
-                        $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' )
+                        $this->dbHandler->quoteColumn('contentobject_id', $table),
+                        $this->dbHandler->quoteColumn('id', 'ezcontentobject')
                     )
                 );
 
@@ -88,4 +87,3 @@ class PermissionSubtree extends CriterionHandler
         );
     }
 }
-

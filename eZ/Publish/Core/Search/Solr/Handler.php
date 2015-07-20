@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\SPI\Search\Content\Handler as ContentSearchHandler;
 use eZ\Publish\SPI\Search\Content\Location\Handler as LocationSearchHandler;
 
 /**
- * The main handler for the Solr Search Engine
+ * The main handler for the Solr Search Engine.
  */
 class Handler implements HandlerInterface
 {
@@ -31,8 +33,7 @@ class Handler implements HandlerInterface
     public function __construct(
         ContentSearchHandler $contentSearchHandler,
         LocationSearchHandler $locationSearchHandler
-    )
-    {
+    ) {
         $this->contentSearchHandler = $contentSearchHandler;
         $this->locationSearchHandler = $locationSearchHandler;
     }

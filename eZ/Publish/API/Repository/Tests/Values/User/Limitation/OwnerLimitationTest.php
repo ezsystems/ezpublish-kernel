@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the OwnerLimitationTest class
+ * File containing the OwnerLimitationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,10 +25,10 @@ use eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation;
 class OwnerLimitationTest extends BaseLimitationTest
 {
     /**
-     * Test for the OwnerLimitation
+     * Test for the OwnerLimitation.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation
+     *
      * @throws \ErrorException
      */
     public function testOwnerLimitationAllow()
@@ -40,34 +42,31 @@ class OwnerLimitationTest extends BaseLimitationTest
 
         $roleService = $repository->getRoleService();
 
-        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+        $role = $roleService->loadRoleByIdentifier('Editor');
 
         $removePolicy = null;
-        foreach ( $role->getPolicies() as $policy )
-        {
-            if ( 'content' != $policy->module || 'remove' != $policy->function )
-            {
+        foreach ($role->getPolicies() as $policy) {
+            if ('content' != $policy->module || 'remove' != $policy->function) {
                 continue;
             }
             $removePolicy = $policy;
             break;
         }
 
-        if ( null === $removePolicy )
-        {
-            throw new \ErrorException( 'No content:remove policy found.' );
+        if (null === $removePolicy) {
+            throw new \ErrorException('No content:remove policy found.');
         }
 
         // Only allow remove for the user's own content
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new OwnerLimitation(
-                array( 'limitationValues' => array( 1 ) )
+                array('limitationValues' => array(1))
             )
         );
-        $roleService->updatePolicy( $removePolicy, $policyUpdate );
+        $roleService->updatePolicy($removePolicy, $policyUpdate);
 
-        $roleService->assignRoleToUser( $role, $user );
+        $roleService->assignRoleToUser($role, $user);
 
         $content = $this->createWikiPage();
 
@@ -79,24 +78,24 @@ class OwnerLimitationTest extends BaseLimitationTest
             $metadataUpdate
         );
 
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $contentService->deleteContent(
-            $contentService->loadContentInfo( $content->id )
+            $contentService->loadContentInfo($content->id)
         );
         /* END: Use Case */
 
         $this->setExpectedException(
             '\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException'
         );
-        $contentService->loadContent( $content->id );
+        $contentService->loadContent($content->id);
     }
 
     /**
-     * Test for the OwnerLimitation
+     * Test for the OwnerLimitation.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation
+     *
      * @throws \ErrorException
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
@@ -111,43 +110,40 @@ class OwnerLimitationTest extends BaseLimitationTest
 
         $roleService = $repository->getRoleService();
 
-        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+        $role = $roleService->loadRoleByIdentifier('Editor');
 
         $removePolicy = null;
-        foreach ( $role->getPolicies() as $policy )
-        {
-            if ( 'content' != $policy->module || 'remove' != $policy->function )
-            {
+        foreach ($role->getPolicies() as $policy) {
+            if ('content' != $policy->module || 'remove' != $policy->function) {
                 continue;
             }
             $removePolicy = $policy;
             break;
         }
 
-        if ( null === $removePolicy )
-        {
-            throw new \ErrorException( 'No content:remove policy found.' );
+        if (null === $removePolicy) {
+            throw new \ErrorException('No content:remove policy found.');
         }
 
         // Only allow remove for the user's own content
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new OwnerLimitation(
-                array( 'limitationValues' => array( 1 ) )
+                array('limitationValues' => array(1))
             )
         );
-        $roleService->updatePolicy( $removePolicy, $policyUpdate );
+        $roleService->updatePolicy($removePolicy, $policyUpdate);
 
-        $roleService->assignRoleToUser( $role, $user );
+        $roleService->assignRoleToUser($role, $user);
 
         $content = $this->createWikiPage();
 
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         // This call fails with an UnauthorizedException, because the current
         // user is not the content owner
         $contentService->deleteContent(
-            $contentService->loadContentInfo( $content->id )
+            $contentService->loadContentInfo($content->id)
         );
         /* END: Use Case */
     }

@@ -1,22 +1,23 @@
 <?php
+
 /**
- * File containing the XmlTest class
+ * File containing the XmlTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Common\Tests\Output\Generator;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\GeneratorTest;
-
 use eZ\Publish\Core\REST\Common;
 
 require_once __DIR__ . '/../GeneratorTest.php';
 
 /**
- * Xml generator test class
+ * Xml generator test class.
  */
 class XmlTest extends GeneratorTest
 {
@@ -24,11 +25,11 @@ class XmlTest extends GeneratorTest
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
+        $generator->startDocument('test');
 
         $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $generator->endDocument( 'test' )
+            file_get_contents(__DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml'),
+            $generator->endDocument('test')
         );
     }
 
@@ -36,14 +37,14 @@ class XmlTest extends GeneratorTest
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
+        $generator->startDocument('test');
 
-        $generator->startObjectElement( 'element' );
-        $generator->endObjectElement( 'element' );
+        $generator->startObjectElement('element');
+        $generator->endObjectElement('element');
 
         $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $generator->endDocument( 'test' )
+            file_get_contents(__DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml'),
+            $generator->endDocument('test')
         );
     }
 
@@ -51,14 +52,14 @@ class XmlTest extends GeneratorTest
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
+        $generator->startDocument('test');
 
-        $generator->startObjectElement( 'element', 'User' );
-        $generator->endObjectElement( 'element' );
+        $generator->startObjectElement('element', 'User');
+        $generator->endObjectElement('element');
 
         $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $generator->endDocument( 'test' )
+            file_get_contents(__DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml'),
+            $generator->endDocument('test')
         );
     }
 
@@ -66,18 +67,18 @@ class XmlTest extends GeneratorTest
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
+        $generator->startDocument('test');
 
-        $generator->startObjectElement( 'element' );
+        $generator->startObjectElement('element');
 
-        $generator->startObjectElement( 'stacked' );
-        $generator->endObjectElement( 'stacked' );
+        $generator->startObjectElement('stacked');
+        $generator->endObjectElement('stacked');
 
-        $generator->endObjectElement( 'element' );
+        $generator->endObjectElement('element');
 
         $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $generator->endDocument( 'test' )
+            file_get_contents(__DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml'),
+            $generator->endDocument('test')
         );
     }
 
@@ -85,18 +86,18 @@ class XmlTest extends GeneratorTest
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
+        $generator->startDocument('test');
 
-        $generator->startObjectElement( 'element' );
+        $generator->startObjectElement('element');
 
-        $generator->startAttribute( 'attribute', 'value' );
-        $generator->endAttribute( 'attribute' );
+        $generator->startAttribute('attribute', 'value');
+        $generator->endAttribute('attribute');
 
-        $generator->endObjectElement( 'element' );
+        $generator->endObjectElement('element');
 
         $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $generator->endDocument( 'test' )
+            file_get_contents(__DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml'),
+            $generator->endDocument('test')
         );
     }
 
@@ -104,21 +105,21 @@ class XmlTest extends GeneratorTest
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
+        $generator->startDocument('test');
 
-        $generator->startObjectElement( 'element' );
+        $generator->startObjectElement('element');
 
-        $generator->startAttribute( 'attribute1', 'value' );
-        $generator->endAttribute( 'attribute1' );
+        $generator->startAttribute('attribute1', 'value');
+        $generator->endAttribute('attribute1');
 
-        $generator->startAttribute( 'attribute2', 'value' );
-        $generator->endAttribute( 'attribute2' );
+        $generator->startAttribute('attribute2', 'value');
+        $generator->endAttribute('attribute2');
 
-        $generator->endObjectElement( 'element' );
+        $generator->endObjectElement('element');
 
         $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $generator->endDocument( 'test' )
+            file_get_contents(__DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml'),
+            $generator->endDocument('test')
         );
     }
 
@@ -126,18 +127,18 @@ class XmlTest extends GeneratorTest
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
+        $generator->startDocument('test');
 
-        $generator->startObjectElement( 'element' );
+        $generator->startObjectElement('element');
 
-        $generator->startValueElement( 'value', '42' );
-        $generator->endValueElement( 'value' );
+        $generator->startValueElement('value', '42');
+        $generator->endValueElement('value');
 
-        $generator->endObjectElement( 'element' );
+        $generator->endObjectElement('element');
 
         $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $generator->endDocument( 'test' )
+            file_get_contents(__DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml'),
+            $generator->endDocument('test')
         );
     }
 
@@ -145,25 +146,25 @@ class XmlTest extends GeneratorTest
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
+        $generator->startDocument('test');
 
-        $generator->startObjectElement( 'elementList' );
+        $generator->startObjectElement('elementList');
 
-        $generator->startList( 'elements' );
+        $generator->startList('elements');
 
-        $generator->startObjectElement( 'element' );
-        $generator->endObjectElement( 'element' );
+        $generator->startObjectElement('element');
+        $generator->endObjectElement('element');
 
-        $generator->startObjectElement( 'element' );
-        $generator->endObjectElement( 'element' );
+        $generator->startObjectElement('element');
+        $generator->endObjectElement('element');
 
-        $generator->endList( 'elements' );
+        $generator->endList('elements');
 
-        $generator->endObjectElement( 'elementList' );
+        $generator->endObjectElement('elementList');
 
         $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $generator->endDocument( 'test' )
+            file_get_contents(__DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml'),
+            $generator->endDocument('test')
         );
     }
 
@@ -171,21 +172,21 @@ class XmlTest extends GeneratorTest
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
+        $generator->startDocument('test');
 
-        $generator->startHashElement( 'elements' );
+        $generator->startHashElement('elements');
 
-        $generator->startValueElement( 'element', 'element value 1', array( 'attribute' => 'attribute value 1' ) );
-        $generator->endValueElement( 'element' );
+        $generator->startValueElement('element', 'element value 1', array('attribute' => 'attribute value 1'));
+        $generator->endValueElement('element');
 
-        $generator->startValueElement( 'element', 'element value 2', array( 'attribute' => 'attribute value 2' ) );
-        $generator->endValueElement( 'element' );
+        $generator->startValueElement('element', 'element value 2', array('attribute' => 'attribute value 2'));
+        $generator->endValueElement('element');
 
-        $generator->endHashElement( 'elements' );
+        $generator->endHashElement('elements');
 
         $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $generator->endDocument( 'test' )
+            file_get_contents(__DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml'),
+            $generator->endDocument('test')
         );
     }
 
@@ -193,21 +194,21 @@ class XmlTest extends GeneratorTest
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
-        $generator->startObjectElement( 'element' );
-        $generator->startList( 'simpleValue' );
+        $generator->startDocument('test');
+        $generator->startObjectElement('element');
+        $generator->startList('simpleValue');
 
-        $generator->startValueElement( 'simpleValue', 'value1' );
-        $generator->endValueElement( 'simpleValue' );
-        $generator->startValueElement( 'simpleValue', 'value2' );
-        $generator->endValueElement( 'simpleValue' );
+        $generator->startValueElement('simpleValue', 'value1');
+        $generator->endValueElement('simpleValue');
+        $generator->startValueElement('simpleValue', 'value2');
+        $generator->endValueElement('simpleValue');
 
-        $generator->endList( 'simpleValue' );
-        $generator->endObjectElement( 'element' );
+        $generator->endList('simpleValue');
+        $generator->endObjectElement('element');
 
         $this->assertSame(
-            file_get_contents( __DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml' ),
-            $generator->endDocument( 'test' )
+            file_get_contents(__DIR__ . '/_fixtures/' . __FUNCTION__ . '.xml'),
+            $generator->endDocument('test')
         );
     }
 
@@ -217,7 +218,7 @@ class XmlTest extends GeneratorTest
 
         $this->assertEquals(
             'application/vnd.ez.api.Section+xml',
-            $generator->getMediaType( 'Section' )
+            $generator->getMediaType('Section')
         );
     }
 
@@ -225,15 +226,14 @@ class XmlTest extends GeneratorTest
     {
         $generator = $this->getGenerator();
 
-        $this->assertTrue( $generator->serializeBool( true ) === 'true' );
-        $this->assertTrue( $generator->serializeBool( false ) === 'false' );
-        $this->assertTrue( $generator->serializeBool( 'notbooleanbuttrue' ) === 'true' );
+        $this->assertTrue($generator->serializeBool(true) === 'true');
+        $this->assertTrue($generator->serializeBool(false) === 'false');
+        $this->assertTrue($generator->serializeBool('notbooleanbuttrue') === 'true');
     }
 
     protected function getGenerator()
     {
-        if ( !isset( $this->generator ) )
-        {
+        if (!isset($this->generator)) {
             $this->generator = new Common\Output\Generator\Xml(
                 $this->getMock(
                     'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator\\Xml\\FieldTypeHashGenerator',
@@ -244,7 +244,8 @@ class XmlTest extends GeneratorTest
                 )
             );
         }
-        $this->generator->setFormatOutput( true );
+        $this->generator->setFormatOutput(true);
+
         return $this->generator;
     }
 }

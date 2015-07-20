@@ -1,10 +1,12 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributd with this source code.
  */
+
 namespace eZ\Publish\Core\Helper;
 
 use eZ\Publish\API\Repository\ContentService;
@@ -35,15 +37,14 @@ class PreviewLocationProvider
         LocationService $locationService,
         ContentService $contentService,
         PersistenceLocationHandler $locationHandler
-    )
-    {
+    ) {
         $this->locationService = $locationService;
         $this->contentService = $contentService;
         $this->locationHandler = $locationHandler;
     }
 
     /**
-     * Loads the main location for $contentId
+     * Loads the main location for $contentId.
      *
      * If the content does not have a location (yet), but has a Location draft, it is returned instead.
      * Location drafts do not have an id (it is set to null), and can be tested using the isDraft() method.
@@ -54,23 +55,19 @@ class PreviewLocationProvider
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location|null
      */
-    public function loadMainLocation( $contentId )
+    public function loadMainLocation($contentId)
     {
         $location = null;
-        $contentInfo = $this->contentService->loadContentInfo( $contentId );
+        $contentInfo = $this->contentService->loadContentInfo($contentId);
 
         // mainLocationId already exists, content has been published at least once.
-        if ( $contentInfo->mainLocationId )
-        {
-            $location = $this->locationService->loadLocation( $contentInfo->mainLocationId );
-        }
-        // New Content, never published, create a virtual location object.
-        else if ( !$contentInfo->published )
-        {
+        if ($contentInfo->mainLocationId) {
+            $location = $this->locationService->loadLocation($contentInfo->mainLocationId);
+        } elseif (!$contentInfo->published) {
+            // New Content, never published, create a virtual location object.
             // In cases content is missing locations this will return empty array
-            $parentLocations = $this->locationHandler->loadParentLocationsForDraftContent( $contentInfo->id );
-            if ( empty( $parentLocations ) )
-            {
+            $parentLocations = $this->locationHandler->loadParentLocationsForDraftContent($contentInfo->id);
+            if (empty($parentLocations)) {
                 return null;
             }
 
@@ -80,7 +77,7 @@ class PreviewLocationProvider
                     'status' => Location::STATUS_DRAFT,
                     'parentLocationId' => $parentLocations[0]->id,
                     'depth' => $parentLocations[0]->depth + 1,
-                    'pathString' => $parentLocations[0]->pathString . '/x'
+                    'pathString' => $parentLocations[0]->pathString . '/x',
                 )
             );
         }

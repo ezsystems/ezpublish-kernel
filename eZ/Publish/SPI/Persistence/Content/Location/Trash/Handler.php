@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Trash Handler interface
+ * File containing the Trash Handler interface.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,7 +20,7 @@ interface Handler
 {
     /**
      * Loads the data for the trashed location identified by $id.
-     * $id is the same as original location (which has been previously trashed)
+     * $id is the same as original location (which has been previously trashed).
      *
      * @param int $id
      *
@@ -26,7 +28,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
      */
-    public function loadTrashItem( $id );
+    public function loadTrashItem($id);
 
     /**
      * Sends a subtree starting to $locationId to the trash
@@ -39,7 +41,7 @@ interface Handler
      *
      * @return null|\eZ\Publish\SPI\Persistence\Content\Location\Trashed null if location was deleted, otherwise Trashed object
      */
-    public function trashSubtree( $locationId );
+    public function trashSubtree($locationId);
 
     /**
      * Returns a trashed location to normal state.
@@ -57,12 +59,12 @@ interface Handler
      *
      * @return int Newly restored location id
      */
-    public function recover( $trashedId, $newParentId );
+    public function recover($trashedId, $newParentId);
 
     /**
      * Returns an array of all trashed locations satisfying the $criterion (if provided),
      * sorted with SortClause objects contained in $sort (if any).
-     * If no criterion is provided (null), no filter is applied
+     * If no criterion is provided (null), no filter is applied.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param int $offset Offset to start listing from, 0 by default
@@ -71,23 +73,19 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed[]
      */
-    public function findTrashItems( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null );
+    public function findTrashItems(Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null);
 
     /**
      * Empties the trash
-     * Everything contained in the trash must be removed
-     *
-     * @return void
+     * Everything contained in the trash must be removed.
      */
     public function emptyTrash();
 
     /**
      * Removes a trashed location identified by $trashedLocationId from trash
-     * Associated content has to be deleted
+     * Associated content has to be deleted.
      *
      * @param int $trashedId
-     *
-     * @return void
      */
-    public function deleteTrashItem( $trashedId );
+    public function deleteTrashItem($trashedId);
 }

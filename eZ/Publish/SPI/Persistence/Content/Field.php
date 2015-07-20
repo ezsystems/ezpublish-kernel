@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the (content) Field class
+ * File containing the (content) Field class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,14 +18,14 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class Field extends ValueObject
 {
     /**
-     * Field ID
+     * Field ID.
      *
      * @var mixed
      */
     public $id;
 
     /**
-     * Corresponding field definition
+     * Corresponding field definition.
      *
      * @var mixed
      */
@@ -37,14 +39,14 @@ class Field extends ValueObject
     public $type;
 
     /**
-     * Value of the field
+     * Value of the field.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
     public $value;
 
     /**
-     * Language code of this Field
+     * Language code of this Field.
      *
      * @var string
      */
@@ -52,6 +54,7 @@ class Field extends ValueObject
 
     /**
      * @var int|null Null if not created yet
+     *
      * @todo Normally we would use a create struct here
      */
     public $versionNo;

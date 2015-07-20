@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\API\Repository\Tests\FieldType\UserIntegrationTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\UserIntegrationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,7 @@ use eZ\Publish\Core\FieldType\User\Value as UserValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
@@ -21,14 +23,14 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class UserIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Identifier of the custom field
+     * Identifier of the custom field.
      *
      * @var string
      */
-    protected $customFieldIdentifier = "user_account";
+    protected $customFieldIdentifier = 'user_account';
 
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -38,7 +40,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expected settings schema
+     * Get expected settings schema.
      *
      * @return array
      */
@@ -48,7 +50,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get a valid $fieldSettings value.
      *
      * @return mixed
      */
@@ -58,7 +60,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get $fieldSettings value not accepted by the field type
+     * Get $fieldSettings value not accepted by the field type.
      *
      * @return mixed
      */
@@ -70,7 +72,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expected validator schema
+     * Get expected validator schema.
      *
      * @return array
      */
@@ -80,7 +82,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $validatorConfiguration.
      *
      * @return mixed
      */
@@ -90,25 +92,25 @@ class UserIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get $validatorConfiguration not accepted by the field type
+     * Get $validatorConfiguration not accepted by the field type.
      *
      * @return mixed
      */
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            'unknown' => array( 'value' => 23 )
+            'unknown' => array('value' => 23),
         );
     }
 
     /**
-     * Get initial field externals data
+     * Get initial field externals data.
      *
      * @return array
      */
     public function getValidCreationFieldData()
     {
-        return new UserValue( array( "login" => "hans" ) );
+        return new UserValue(array('login' => 'hans'));
     }
 
     /**
@@ -118,10 +120,8 @@ class UserIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field )
+    public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\User\\Value',
@@ -142,11 +142,11 @@ class UserIntegrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        $this->assertNotNull( $field->value->contentId );
+        $this->assertNotNull($field->value->contentId);
     }
 
     /**
-     * Get field data which will result in errors during creation
+     * Get field data which will result in errors during creation.
      *
      * This is a PHPUnit data provider.
      *
@@ -171,13 +171,13 @@ class UserIntegrationTest extends BaseIntegrationTest
         return array();
     }
 
-    public function testCreateContentFails( $failingValue = null, $expectedException = null )
+    public function testCreateContentFails($failingValue = null, $expectedException = null)
     {
-        $this->markTestSkipped( "Values are ignored on creation." );
+        $this->markTestSkipped('Values are ignored on creation.');
     }
 
     /**
-     * Get update field externals data
+     * Get update field externals data.
      *
      * @return array
      */
@@ -185,30 +185,30 @@ class UserIntegrationTest extends BaseIntegrationTest
     {
         return new UserValue(
             array(
-                'login'            => 'change', // Change is intended to not get through
-                'email'            => 'change', // Change is intended to not get through
-                'passwordHash'     => 'change', // Change is intended to not get through
+                'login' => 'change', // Change is intended to not get through
+                'email' => 'change', // Change is intended to not get through
+                'passwordHash' => 'change', // Change is intended to not get through
                 'passwordHashType' => 'change', // Change is intended to not get through
-                'enabled'        => 'change', // Change is intended to not get through
+                'enabled' => 'change', // Change is intended to not get through
             )
         );
     }
 
     /**
-     * Get externals updated field data values
+     * Get externals updated field data values.
      *
      * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         // No update possible through field type
-        $this->assertFieldDataLoadedCorrect( $field );
+        $this->assertFieldDataLoadedCorrect($field);
     }
 
     /**
-     * Get field data which will result in errors during update
+     * Get field data which will result in errors during update.
      *
      * This is a PHPUnit data provider.
      *
@@ -233,7 +233,7 @@ class UserIntegrationTest extends BaseIntegrationTest
         return array(
             array(
                 null,
-                'eZ\\Publish\\Core\\Base\\Exceptions\\ContentValidationException'
+                'eZ\\Publish\\Core\\Base\\Exceptions\\ContentValidationException',
             ),
             // @todo: Define more failure cases ...
         );
@@ -247,7 +247,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      *
      * @param Field $field
      */
-    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\User\\Value',
@@ -272,7 +272,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get data to test to hash method
+     * Get data to test to hash method.
      *
      * This is a PHPUnit data provider
      *
@@ -295,9 +295,9 @@ class UserIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new UserValue( array( 'login' => 'hans' ) ),
+                new UserValue(array('login' => 'hans')),
                 array(
-                    'login'      => 'hans',
+                    'login' => 'hans',
                     'hasStoredLogin' => null,
                     'contentId' => null,
                     'email' => null,
@@ -311,7 +311,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get hashes and their respective converted values
+     * Get hashes and their respective converted values.
      *
      * This is a PHPUnit data provider
      *
@@ -334,22 +334,20 @@ class UserIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                array( 'login' => 'hans' ),
-                new UserValue( array( 'login' => 'hans' ) ),
+                array('login' => 'hans'),
+                new UserValue(array('login' => 'hans')),
             ),
         );
     }
 
     /**
-     * Overwrite normal content creation
+     * Overwrite normal content creation.
      *
      * @param mixed $fieldData
-     *
-     * @return void
      */
-    protected function createContent( $fieldData, $contentType = null )
+    protected function createContent($fieldData, $contentType = null)
     {
-        $repository  = $this->getRepository();
+        $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
         // Instantiate a create struct with mandatory properties
@@ -359,33 +357,34 @@ class UserIntegrationTest extends BaseIntegrationTest
             'password',
             'eng-US'
         );
-        $userCreate->enabled  = true;
+        $userCreate->enabled = true;
 
         // Set some fields required by the user ContentType
-        $userCreate->setField( 'first_name', 'Example' );
-        $userCreate->setField( 'last_name', 'User' );
+        $userCreate->setField('first_name', 'Example');
+        $userCreate->setField('last_name', 'User');
 
         // ID of the "Editors" user group in an eZ Publish demo installation
-        $group = $userService->loadUserGroup( 13 );
+        $group = $userService->loadUserGroup(13);
 
         // Create a new user instance.
-        $user = $userService->createUser( $userCreate, array( $group ) );
+        $user = $userService->createUser($userCreate, array($group));
 
         // Create draft from user content object
         $contentService = $repository->getContentService();
-        return $contentService->createContentDraft( $user->content->contentInfo, $user->content->versionInfo );
+
+        return $contentService->createContentDraft($user->content->contentInfo, $user->content->versionInfo);
     }
 
     public function testCreateContentWithEmptyFieldValue()
     {
-        $this->markTestSkipped( "User field will never be created empty" );
+        $this->markTestSkipped('User field will never be created empty');
     }
 
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new UserValue ),
-            array( new UserValue( array() ) ),
+            array(new UserValue()),
+            array(new UserValue(array())),
         );
     }
 
@@ -393,7 +392,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
             ),
         );
     }
@@ -404,39 +403,36 @@ class UserIntegrationTest extends BaseIntegrationTest
         $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
         $content = $this->testPublishContent();
-        $countBeforeRemoval = count( $content->getFields() );
+        $countBeforeRemoval = count($content->getFields());
 
-        $contentType = $contentTypeService->loadContentType( $content->contentInfo->contentTypeId );
-        $contentTypeDraft = $contentTypeService->createContentTypeDraft( $contentType );
+        $contentType = $contentTypeService->loadContentType($content->contentInfo->contentTypeId);
+        $contentTypeDraft = $contentTypeService->createContentTypeDraft($contentType);
 
         $userFieldDefinition = null;
-        foreach ( $contentTypeDraft->getFieldDefinitions() as $fieldDefinition )
-        {
-            if ( $fieldDefinition->fieldTypeIdentifier === "ezuser" )
-            {
+        foreach ($contentTypeDraft->getFieldDefinitions() as $fieldDefinition) {
+            if ($fieldDefinition->fieldTypeIdentifier === 'ezuser') {
                 $userFieldDefinition = $fieldDefinition;
                 break;
             }
         }
 
-        if ( $userFieldDefinition === null )
-        {
-            $this->fail( "'ezuser' field definition was not found" );
+        if ($userFieldDefinition === null) {
+            $this->fail("'ezuser' field definition was not found");
         }
 
-        $contentTypeService->removeFieldDefinition( $contentTypeDraft, $userFieldDefinition );
-        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+        $contentTypeService->removeFieldDefinition($contentTypeDraft, $userFieldDefinition);
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
 
-        $content = $contentService->loadContent( $content->id );
+        $content = $contentService->loadContent($content->id);
 
-        $this->assertCount( $countBeforeRemoval - 1, $content->getFields() );
-        $this->assertNull( $content->getFieldValue( $userFieldDefinition->identifier ) );
+        $this->assertCount($countBeforeRemoval - 1, $content->getFields());
+        $this->assertNull($content->getFieldValue($userFieldDefinition->identifier));
     }
 
     public function testAddFieldDefinition()
     {
         $this->markTestIncomplete(
-            "Currently cannot be tested since user can be properly created only through UserService"
+            'Currently cannot be tested since user can be properly created only through UserService'
         );
     }
 }

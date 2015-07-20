@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\ContentType\ContentType class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,7 @@ namespace eZ\Publish\API\Repository\Values\ContentType;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * this class represents a content type value
+ * this class represents a content type value.
  *
  * @property-read \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups calls getContentTypeGroups
  * @property-read \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] $fieldDefinitions calls getFieldDefinitions() or on access getFieldDefinition($fieldDefIdentifier)
@@ -29,6 +31,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read boolean $isContainer This flag hints to UIs if type may have children or not.
  * @property-read string $mainLanguageCode the main language of the content type names and description used for fallback.
  * @property-read boolean $defaultAlwaysAvailable if an instance of a content type is created the always available flag is set by default this this value.
+ *
  * @property-read int $defaultSortField Specifies which property the child locations should be sorted on by default when created. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $defaultSortOrder Specifies whether the sort order should be ascending or descending by default when created. Valid values are {@link Location::SORT_ORDER_*}
  */
@@ -50,7 +53,7 @@ abstract class ContentType extends ValueObject
     const STATUS_MODIFIED = 2;
 
     /**
-     * Content type ID
+     * Content type ID.
      *
      * @var mixed
      */
@@ -58,13 +61,14 @@ abstract class ContentType extends ValueObject
 
     /**
      * The status of the content type.
+     *
      * @var int One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      */
     protected $status;
 
     /**
      * This method returns the human readable name in all provided languages
-     * of the content type
+     * of the content type.
      *
      * The structure of the return value is:
      * <code>
@@ -76,16 +80,16 @@ abstract class ContentType extends ValueObject
     abstract public function getNames();
 
     /**
-     * This method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language.
      *
      * @param string $languageCode
      *
      * @return string the name for the given language or null if none exists.
      */
-    abstract public function getName( $languageCode );
+    abstract public function getName($languageCode);
 
     /**
-     * This method returns the human readable description of the content type
+     * This method returns the human readable description of the content type.
      *
      * The structure of this field is:
      * <code>
@@ -97,52 +101,51 @@ abstract class ContentType extends ValueObject
     abstract public function getDescriptions();
 
     /**
-     * This method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language.
      *
      * @param string $languageCode
      *
      * @return string the description for the given language or null if none exists.
      */
-    abstract public function getDescription( $languageCode );
+    abstract public function getDescription($languageCode);
 
     /**
-     * String identifier of a content type
+     * String identifier of a content type.
      *
      * @var string
      */
     protected $identifier;
 
     /**
-     * Creation date of the content type
+     * Creation date of the content type.
      *
      * @var \DateTime
      */
     protected $creationDate;
 
     /**
-     * Modification date of the content type
+     * Modification date of the content type.
      *
      * @var \DateTime
      */
     protected $modificationDate;
 
     /**
-     * Creator user id of the content type
+     * Creator user id of the content type.
      *
      * @var mixed
      */
     protected $creatorId;
 
     /**
-     * Modifier user id of the content type
+     * Modifier user id of the content type.
      *
      * @var mixed
-     *
      */
     protected $modifierId;
 
     /**
-     * Unique remote ID of the content type
+     * Unique remote ID of the content type.
      *
      * @var string
      */
@@ -174,12 +177,12 @@ abstract class ContentType extends ValueObject
      * A flag used to hint if content of this type may have children or not. It is highly recommended to respect this flag and not create/move content below non-containers.
      * But this flag is not considered as part of the content model and the API will not in any way enforce this flag to be respected.
      *
-     * @var boolean
+     * @var bool
      */
     protected $isContainer;
 
     /**
-     * Main language
+     * Main language.
      *
      * @var string
      */
@@ -189,12 +192,12 @@ abstract class ContentType extends ValueObject
      * If an instance of a content type is created the always available flag is set
      * by default to this value.
      *
-     * @var boolean
+     * @var bool
      */
     protected $defaultAlwaysAvailable = true;
 
     /**
-     * Specifies which property the child locations should be sorted on by default when created
+     * Specifies which property the child locations should be sorted on by default when created.
      *
      * Valid values are found at {@link Location::SORT_FIELD_*}
      *
@@ -203,7 +206,7 @@ abstract class ContentType extends ValueObject
     protected $defaultSortField;
 
     /**
-     * Specifies whether the sort order should be ascending or descending by default when created
+     * Specifies whether the sort order should be ascending or descending by default when created.
      *
      * Valid values are {@link Location::SORT_ORDER_*}
      *
@@ -212,25 +215,25 @@ abstract class ContentType extends ValueObject
     protected $defaultSortOrder;
 
     /**
-     * This method returns the content type groups this content type is assigned to
+     * This method returns the content type groups this content type is assigned to.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
     abstract public function getContentTypeGroups();
 
     /**
-     * This method returns the content type field definitions from this type
+     * This method returns the content type field definitions from this type.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
     abstract public function getFieldDefinitions();
 
     /**
-     * This method returns the field definition for the given identifier
+     * This method returns the field definition for the given identifier.
      *
      * @param string $fieldDefinitionIdentifier
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
-    abstract public function getFieldDefinition( $fieldDefinitionIdentifier );
+    abstract public function getFieldDefinition($fieldDefinitionIdentifier);
 }

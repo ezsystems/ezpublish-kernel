@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the FieldHelper class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -31,7 +33,7 @@ class FieldHelper
      */
     private $translationHelper;
 
-    public function __construct( TranslationHelper $translationHelper, ContentTypeService $contentTypeService, FieldTypeService $fieldTypeService )
+    public function __construct(TranslationHelper $translationHelper, ContentTypeService $contentTypeService, FieldTypeService $fieldTypeService)
     {
         $this->fieldTypeService = $fieldTypeService;
         $this->contentTypeService = $contentTypeService;
@@ -47,15 +49,15 @@ class FieldHelper
      *
      * @return bool
      */
-    public function isFieldEmpty( Content $content, $fieldDefIdentifier, $forcedLanguage = null )
+    public function isFieldEmpty(Content $content, $fieldDefIdentifier, $forcedLanguage = null)
     {
-        $field = $this->translationHelper->getTranslatedField( $content, $fieldDefIdentifier, $forcedLanguage );
-        $fieldDefinition = $this->getFieldDefinition( $content->contentInfo, $fieldDefIdentifier );
+        $field = $this->translationHelper->getTranslatedField($content, $fieldDefIdentifier, $forcedLanguage);
+        $fieldDefinition = $this->getFieldDefinition($content->contentInfo, $fieldDefIdentifier);
 
         return $this
             ->fieldTypeService
-            ->getFieldType( $fieldDefinition->fieldTypeIdentifier )
-            ->isEmptyValue( $field->value );
+            ->getFieldType($fieldDefinition->fieldTypeIdentifier)
+            ->isEmptyValue($field->value);
     }
 
     /**
@@ -66,11 +68,11 @@ class FieldHelper
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
-    public function getFieldDefinition( ContentInfo $contentInfo, $fieldDefIdentifier )
+    public function getFieldDefinition(ContentInfo $contentInfo, $fieldDefIdentifier)
     {
         return $this
             ->contentTypeService
-            ->loadContentType( $contentInfo->contentTypeId )
-            ->getFieldDefinition( $fieldDefIdentifier );
+            ->loadContentType($contentInfo->contentTypeId)
+            ->getFieldDefinition($fieldDefIdentifier);
     }
 }

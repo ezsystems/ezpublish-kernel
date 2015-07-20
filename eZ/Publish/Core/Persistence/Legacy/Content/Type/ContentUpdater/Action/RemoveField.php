@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the content updater remove field action class
+ * File containing the content updater remove field action class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,19 +18,19 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 /**
- * Action to remove a field from content objects
+ * Action to remove a field from content objects.
  */
 class RemoveField extends Action
 {
     /**
-     * Field definition of the field to remove
+     * Field definition of the field to remove.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      */
     protected $fieldDefinition;
 
     /**
-     * Storage handler
+     * Storage handler.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
@@ -40,7 +42,7 @@ class RemoveField extends Action
     protected $contentMapper;
 
     /**
-     * Creates a new action
+     * Creates a new action.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
@@ -52,8 +54,7 @@ class RemoveField extends Action
         FieldDefinition $fieldDef,
         StorageHandler $storageHandler,
         ContentMapper $contentMapper
-    )
-    {
+    ) {
         $this->contentGateway = $contentGateway;
         $this->fieldDefinition = $fieldDef;
         $this->storageHandler = $storageHandler;
@@ -61,26 +62,23 @@ class RemoveField extends Action
     }
 
     /**
-     * Applies the action to the given $content
+     * Applies the action to the given $content.
      *
      * @param int $contentId
      */
-    public function apply( $contentId )
+    public function apply($contentId)
     {
-        $versionNumbers = $this->contentGateway->listVersionNumbers( $contentId );
+        $versionNumbers = $this->contentGateway->listVersionNumbers($contentId);
         $fieldIdSet = array();
 
-        foreach ( $versionNumbers as $versionNo )
-        {
-            $contentRows = $this->contentGateway->load( $contentId, $versionNo );
-            $contentList = $this->contentMapper->extractContentFromRows( $contentRows );
+        foreach ($versionNumbers as $versionNo) {
+            $contentRows = $this->contentGateway->load($contentId, $versionNo);
+            $contentList = $this->contentMapper->extractContentFromRows($contentRows);
             $content = $contentList[0];
             $versionFieldIdSet = array();
 
-            foreach ( $content->fields as $field )
-            {
-                if ( $field->fieldDefinitionId == $this->fieldDefinition->id )
-                {
+            foreach ($content->fields as $field) {
+                if ($field->fieldDefinitionId == $this->fieldDefinition->id) {
                     $fieldIdSet[$field->id] = true;
                     $versionFieldIdSet[$field->id] = true;
                 }
@@ -90,14 +88,13 @@ class RemoveField extends Action
             $this->storageHandler->deleteFieldData(
                 $this->fieldDefinition->fieldType,
                 $content->versionInfo,
-                array_keys( $versionFieldIdSet )
+                array_keys($versionFieldIdSet)
             );
         }
 
         // Delete from internal storage -- field is always deleted from _all_ versions
-        foreach ( array_keys( $fieldIdSet ) as $fieldId )
-        {
-            $this->contentGateway->deleteField( $fieldId );
+        foreach (array_keys($fieldIdSet) as $fieldId) {
+            $this->contentGateway->deleteField($fieldId);
         }
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the CreatedPolicy ValueObjectVisitor class
+ * File containing the CreatedPolicy ValueObjectVisitor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,16 +16,16 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
- * Options value object visitor
+ * Options value object visitor.
  *
  * @todo coverage add unit test
  */
 class Options extends ValueObjectVisitor
 {
-    public function visit( Visitor $visitor, Generator $generator, $data )
+    public function visit(Visitor $visitor, Generator $generator, $data)
     {
-        $visitor->setHeader( 'Allow', implode( ',', $data->allowedMethods ) );
-        $visitor->setHeader( 'Content-Length', 0 );
-        $visitor->setStatus( 200 );
+        $visitor->setHeader('Allow', implode(',', $data->allowedMethods));
+        $visitor->setHeader('Content-Length', 0);
+        $visitor->setStatus(200);
     }
 }

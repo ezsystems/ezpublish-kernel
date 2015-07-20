@@ -10,9 +10,9 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'id' => 50,
                         'title' => 'Files',
                     ),
-                    'score' => NULL,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'score' => null,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
             1 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -21,9 +21,9 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'id' => 51,
                         'title' => 'Multimedia',
                     ),
-                    'score' => NULL,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'score' => null,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
             2 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -32,9 +32,9 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'id' => 52,
                         'title' => 'Common INI settings',
                     ),
-                    'score' => NULL,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'score' => null,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
             3 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -43,9 +43,9 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'id' => 54,
                         'title' => 'eZ Publish Demo Design (without demo content)',
                     ),
-                    'score' => NULL,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'score' => null,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
             4 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -54,9 +54,9 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'id' => 56,
                         'title' => 'Design',
                     ),
-                    'score' => NULL,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'score' => null,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
             5 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -65,9 +65,9 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'id' => 57,
                         'title' => 'Home',
                     ),
-                    'score' => NULL,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'score' => null,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
             6 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -76,9 +76,9 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'id' => 58,
                         'title' => 'Contact Us',
                     ),
-                    'score' => NULL,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'score' => null,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
             7 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -87,16 +87,16 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'id' => 59,
                         'title' => 'Partners',
                     ),
-                    'score' => NULL,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'score' => null,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
         ),
-        'spellSuggestion' => NULL,
+        'spellSuggestion' => null,
         'time' => 1,
-        'timedOut' => NULL,
-        'maxScore' => NULL,
+        'timedOut' => null,
+        'maxScore' => null,
         'totalCount' => 18,
     )
 );

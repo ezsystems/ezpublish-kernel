@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the LanguageCode Criterion parser class
+ * File containing the LanguageCode Criterion parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,12 +17,12 @@ use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode as LanguageCodeCriterion;
 
 /**
- * Parser for LanguageCode Criterion
+ * Parser for LanguageCode Criterion.
  */
 class LanguageCode extends BaseParser
 {
     /**
-     * Parses input structure to a LanguageCode Criterion object
+     * Parses input structure to a LanguageCode Criterion object.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -29,13 +31,12 @@ class LanguageCode extends BaseParser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        if ( !array_key_exists( "LanguageCodeCriterion", $data ) )
-        {
-            throw new Exceptions\Parser( "Invalid <LanguageCodeCriterion> format" );
+        if (!array_key_exists('LanguageCodeCriterion', $data)) {
+            throw new Exceptions\Parser('Invalid <LanguageCodeCriterion> format');
         }
 
-        return new LanguageCodeCriterion( explode( ',', $data['LanguageCodeCriterion'] ) );
+        return new LanguageCodeCriterion(explode(',', $data['LanguageCodeCriterion']));
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ForbiddenException class
+ * File containing the ForbiddenException class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,7 @@ namespace eZ\Publish\Core\REST\Common\Exceptions;
 use InvalidArgumentException;
 
 /**
- * Exception thrown if the request is forbidden
+ * Exception thrown if the request is forbidden.
  */
 class ForbiddenException extends InvalidArgumentException
 {

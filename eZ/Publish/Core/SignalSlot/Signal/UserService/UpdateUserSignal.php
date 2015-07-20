@@ -1,9 +1,11 @@
 <?php
+
 /**
- * UpdateUserSignal class
+ * UpdateUserSignal class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,13 +14,12 @@ namespace eZ\Publish\Core\SignalSlot\Signal\UserService;
 use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
- * UpdateUserSignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\UserService
+ * UpdateUserSignal class.
  */
 class UpdateUserSignal extends Signal
 {
     /**
-     * UserId
+     * UserId.
      *
      * @var mixed
      */

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RoutingExtensionTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,7 +22,7 @@ class RoutingExtensionTest extends Twig_Test_IntegrationTestCase
     protected function getExtensions()
     {
         return array(
-            new RoutingExtension( $this->getRouteReferenceGenerator() )
+            new RoutingExtension($this->getRouteReferenceGenerator()),
         );
     }
 
@@ -32,12 +34,12 @@ class RoutingExtensionTest extends Twig_Test_IntegrationTestCase
     protected function getRouteReferenceGenerator()
     {
         $generator = new RouteReferenceGenerator(
-            $this->getMock( 'Symfony\Component\EventDispatcher\EventDispatcherInterface' )
+            $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface')
         );
         $request = new Request();
         $requestStack = new RequestStack();
-        $requestStack->push( $request );
-        $generator->setRequestStack( $requestStack );
+        $requestStack->push($request);
+        $generator->setRequestStack($requestStack);
 
         return $generator;
     }

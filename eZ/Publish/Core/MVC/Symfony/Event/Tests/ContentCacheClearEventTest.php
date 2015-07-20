@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,32 +21,32 @@ class ContentCacheClearEventTest extends PHPUnit_Framework_TestCase
     public function testConstruct()
     {
         $contentInfo = new ContentInfo();
-        $event = new ContentCacheClearEvent( $contentInfo );
-        $this->assertSame( $contentInfo, $event->getContentInfo() );
+        $event = new ContentCacheClearEvent($contentInfo);
+        $this->assertSame($contentInfo, $event->getContentInfo());
     }
 
     public function testAddLocationsToClear()
     {
         $contentInfo = new ContentInfo();
-        $event = new ContentCacheClearEvent( $contentInfo );
+        $event = new ContentCacheClearEvent($contentInfo);
         $locations = [new Location(), new Location()];
-        $event->addLocationToClear( $locations[0] );
-        $event->addLocationToClear( $locations[1] );
+        $event->addLocationToClear($locations[0]);
+        $event->addLocationToClear($locations[1]);
 
-        $this->assertSame( $locations, $event->getLocationsToClear() );
+        $this->assertSame($locations, $event->getLocationsToClear());
     }
 
     public function setLocationsToClear()
     {
         $contentInfo = new ContentInfo();
-        $event = new ContentCacheClearEvent( $contentInfo );
+        $event = new ContentCacheClearEvent($contentInfo);
         $initialLocations = [new Location(), new Location()];
-        $event->addLocationToClear( $initialLocations[0] );
-        $event->addLocationToClear( $initialLocations[1] );
-        $this->assertSame( $initialLocations, $event->getLocationsToClear() );
+        $event->addLocationToClear($initialLocations[0]);
+        $event->addLocationToClear($initialLocations[1]);
+        $this->assertSame($initialLocations, $event->getLocationsToClear());
 
         $otherLocations = [new Location(), new Location()];
-        $event->setLocationsToClear( $otherLocations );
-        $this->assertSame( $otherLocations, $event->getLocationsToClear() );
+        $event->setLocationsToClear($otherLocations);
+        $this->assertSame($otherLocations, $event->getLocationsToClear());
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a DoctrineDatabase sort clause handler class
+ * File containing a DoctrineDatabase sort clause handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,15 +25,15 @@ class SectionName extends SortClauseHandler
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
-     * @return boolean
+     * @return bool
      */
-    public function accept( SortClause $sortClause )
+    public function accept(SortClause $sortClause)
     {
         return $sortClause instanceof SortClause\SectionName;
     }
 
     /**
-     * Apply selects to the query
+     * Apply selects to the query.
      *
      * Returns the name of the (aliased) column, which information should be
      * used for sorting.
@@ -42,16 +44,16 @@ class SectionName extends SortClauseHandler
      *
      * @return string
      */
-    public function applySelect( SelectQuery $query, SortClause $sortClause, $number )
+    public function applySelect(SelectQuery $query, SortClause $sortClause, $number)
     {
         $query
             ->select(
                 $query->alias(
                     $this->dbHandler->quoteColumn(
-                        "name",
-                        $this->getSortTableName( $number )
+                        'name',
+                        $this->getSortTableName($number)
                     ),
-                    $column = $this->getSortColumnName( $number )
+                    $column = $this->getSortColumnName($number)
                 )
             );
 
@@ -59,26 +61,24 @@ class SectionName extends SortClauseHandler
     }
 
     /**
-     * Applies joins to the query, required to fetch sort data
+     * Applies joins to the query, required to fetch sort data.
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
-     *
-     * @return void
      */
-    public function applyJoin( SelectQuery $query, SortClause $sortClause, $number )
+    public function applyJoin(SelectQuery $query, SortClause $sortClause, $number)
     {
-        $table = $this->getSortTableName( $number );
+        $table = $this->getSortTableName($number);
         $query
             ->leftJoin(
                 $query->alias(
-                    $this->dbHandler->quoteTable( 'ezsection' ),
-                    $this->dbHandler->quoteIdentifier( $table )
+                    $this->dbHandler->quoteTable('ezsection'),
+                    $this->dbHandler->quoteIdentifier($table)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'id', $table ),
-                    $this->dbHandler->quoteColumn( 'section_id', 'ezcontentobject' )
+                    $this->dbHandler->quoteColumn('id', $table),
+                    $this->dbHandler->quoteColumn('section_id', 'ezcontentobject')
                 )
             );
     }

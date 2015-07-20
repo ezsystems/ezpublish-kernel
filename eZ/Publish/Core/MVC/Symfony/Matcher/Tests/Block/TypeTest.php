@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the TypeTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,7 +25,7 @@ class TypeTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->matcher = new BlockTypeMatcher;
+        $this->matcher = new BlockTypeMatcher();
     }
 
     /**
@@ -33,10 +35,10 @@ class TypeTest extends PHPUnit_Framework_TestCase
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Block $block
      * @param $expectedResult
      */
-    public function testMatchBlock( $matchingConfig, Block $block, $expectedResult )
+    public function testMatchBlock($matchingConfig, Block $block, $expectedResult)
     {
-        $this->matcher->setMatchingConfig( $matchingConfig );
-        $this->assertSame( $expectedResult, $this->matcher->matchBlock( $block ) );
+        $this->matcher->setMatchingConfig($matchingConfig);
+        $this->assertSame($expectedResult, $this->matcher->matchBlock($block));
     }
 
     public function matchBlockProvider()
@@ -45,26 +47,26 @@ class TypeTest extends PHPUnit_Framework_TestCase
 
         $data[] = array(
             'foo',
-            $this->generateBlockForType( 'foo' ),
-            true
+            $this->generateBlockForType('foo'),
+            true,
         );
 
         $data[] = array(
             'foo',
-            $this->generateBlockForType( 'bar' ),
-            false
+            $this->generateBlockForType('bar'),
+            false,
         );
 
         $data[] = array(
-            array( 'foo', 'baz' ),
-            $this->generateBlockForType( 'bar' ),
-            false
+            array('foo', 'baz'),
+            $this->generateBlockForType('bar'),
+            false,
         );
 
         $data[] = array(
-            array( 'foo', 'baz' ),
-            $this->generateBlockForType( 'baz' ),
-            true
+            array('foo', 'baz'),
+            $this->generateBlockForType('baz'),
+            true,
         );
 
         return $data;
@@ -72,12 +74,13 @@ class TypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @param $type
+     *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Block
      */
-    private function generateBlockForType( $type )
+    private function generateBlockForType($type)
     {
         return new Block(
-            array( 'type' => $type )
+            array('type' => $type)
         );
     }
 }

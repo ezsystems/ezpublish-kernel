@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the GeneratorTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -34,102 +36,100 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->siteAccessRouter = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface' );
-        $this->logger = $this->getMock( 'Psr\\Log\\LoggerInterface' );
-        $this->generator = $this->getMockForAbstractClass( 'eZ\Publish\Core\MVC\Symfony\Routing\Generator' );
-        $this->generator->setSiteAccessRouter( $this->siteAccessRouter );
-        $this->generator->setLogger( $this->logger );
+        $this->siteAccessRouter = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface');
+        $this->logger = $this->getMock('Psr\\Log\\LoggerInterface');
+        $this->generator = $this->getMockForAbstractClass('eZ\Publish\Core\MVC\Symfony\Routing\Generator');
+        $this->generator->setSiteAccessRouter($this->siteAccessRouter);
+        $this->generator->setLogger($this->logger);
     }
 
     public function generateProvider()
     {
         return array(
-            array( 'foo_bar', array(), false ),
-            array( 'foo_bar', array(), true ),
-            array( 'foo_bar', array( 'some' => 'thing' ), true ),
-            array( new Location(), array(), false ),
-            array( new Location(), array(), true ),
-            array( new Location(), array( 'some' => 'thing' ), true ),
-            array( new \stdClass(), array(), false ),
-            array( new \stdClass(), array(), true ),
-            array( new \stdClass(), array( 'some' => 'thing' ), true ),
+            array('foo_bar', array(), false),
+            array('foo_bar', array(), true),
+            array('foo_bar', array('some' => 'thing'), true),
+            array(new Location(), array(), false),
+            array(new Location(), array(), true),
+            array(new Location(), array('some' => 'thing'), true),
+            array(new \stdClass(), array(), false),
+            array(new \stdClass(), array(), true),
+            array(new \stdClass(), array('some' => 'thing'), true),
         );
     }
 
     /**
      * @dataProvider generateProvider
      */
-    public function testSimpleGenerate( $urlResource, array $parameters, $absolute )
+    public function testSimpleGenerate($urlResource, array $parameters, $absolute)
     {
-        $matcher = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer' );
-        $this->generator->setSiteAccess( new SiteAccess( 'test', 'fake', $matcher ) );
+        $matcher = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer');
+        $this->generator->setSiteAccess(new SiteAccess('test', 'fake', $matcher));
 
         $baseUrl = '/base/url';
-        $requestContext = new RequestContext( $baseUrl );
-        $this->generator->setRequestContext( $requestContext );
+        $requestContext = new RequestContext($baseUrl);
+        $this->generator->setRequestContext($requestContext);
 
         $uri = '/some/thing';
         $this->generator
-            ->expects( $this->once() )
-            ->method( 'doGenerate' )
-            ->with( $urlResource, $parameters )
-            ->will( $this->returnValue( $uri ) );
+            ->expects($this->once())
+            ->method('doGenerate')
+            ->with($urlResource, $parameters)
+            ->will($this->returnValue($uri));
 
         $fullUri = $baseUrl . $uri;
         $matcher
-            ->expects( $this->once() )
-            ->method( 'analyseLink' )
-            ->with( $uri )
-            ->will( $this->returnValue( $uri ) );
+            ->expects($this->once())
+            ->method('analyseLink')
+            ->with($uri)
+            ->will($this->returnValue($uri));
 
-        if ( $absolute )
-        {
+        if ($absolute) {
             $fullUri = $requestContext->getScheme() . '://' . $requestContext->getHost() . $baseUrl . $uri;
         }
 
-        $this->assertSame( $fullUri, $this->generator->generate( $urlResource, $parameters, $absolute ) );
+        $this->assertSame($fullUri, $this->generator->generate($urlResource, $parameters, $absolute));
     }
 
     /**
      * @dataProvider generateProvider
      */
-    public function testGenerateWithSiteAccessNoReverseMatch( $urlResource, array $parameters, $absolute )
+    public function testGenerateWithSiteAccessNoReverseMatch($urlResource, array $parameters, $absolute)
     {
-        $matcher = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer' );
-        $this->generator->setSiteAccess( new SiteAccess( 'test', 'test', $matcher ) );
+        $matcher = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer');
+        $this->generator->setSiteAccess(new SiteAccess('test', 'test', $matcher));
 
         $baseUrl = '/base/url';
-        $requestContext = new RequestContext( $baseUrl );
-        $this->generator->setRequestContext( $requestContext );
+        $requestContext = new RequestContext($baseUrl);
+        $this->generator->setRequestContext($requestContext);
 
         $uri = '/some/thing';
         $this->generator
-            ->expects( $this->once() )
-            ->method( 'doGenerate' )
-            ->with( $urlResource, $parameters )
-            ->will( $this->returnValue( $uri ) );
+            ->expects($this->once())
+            ->method('doGenerate')
+            ->with($urlResource, $parameters)
+            ->will($this->returnValue($uri));
 
         $fullUri = $baseUrl . $uri;
         $matcher
-            ->expects( $this->once() )
-            ->method( 'analyseLink' )
-            ->with( $uri )
-            ->will( $this->returnValue( $uri ) );
+            ->expects($this->once())
+            ->method('analyseLink')
+            ->with($uri)
+            ->will($this->returnValue($uri));
 
-        if ( $absolute )
-        {
+        if ($absolute) {
             $fullUri = $requestContext->getScheme() . '://' . $requestContext->getHost() . $baseUrl . $uri;
         }
 
         $siteAccessName = 'fake';
         $this->siteAccessRouter
-            ->expects( $this->once() )
-            ->method( 'matchByName' )
-            ->with( $siteAccessName )
-            ->will( $this->returnValue( null ) );
+            ->expects($this->once())
+            ->method('matchByName')
+            ->with($siteAccessName)
+            ->will($this->returnValue(null));
         $this->logger
-            ->expects( $this->once() )
-            ->method( 'notice' );
-        $this->assertSame( $fullUri, $this->generator->generate( $urlResource, $parameters + array( 'siteaccess' => $siteAccessName ), $absolute ) );
+            ->expects($this->once())
+            ->method('notice');
+        $this->assertSame($fullUri, $this->generator->generate($urlResource, $parameters + array('siteaccess' => $siteAccessName), $absolute));
     }
 }

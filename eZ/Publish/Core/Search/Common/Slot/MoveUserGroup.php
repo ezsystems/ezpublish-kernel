@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,19 +20,20 @@ use eZ\Publish\Core\Search\Common\Slot;
 class MoveUserGroup extends MoveSubtree
 {
     /**
-     * Receive the given $signal and react on it
+     * Receive the given $signal and react on it.
      *
      * @param \eZ\Publish\Core\SignalSlot\Signal $signal
      */
-    public function receive( Signal $signal )
+    public function receive(Signal $signal)
     {
-        if ( !$signal instanceof Signal\UserService\MoveUserGroupSignal )
+        if (!$signal instanceof Signal\UserService\MoveUserGroupSignal) {
             return;
+        }
 
-        $userGroupContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $signal->userGroupId );
+        $userGroupContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($signal->userGroupId);
 
         // Moving UserGroup moves its main Location, so we only need to
         // (re)index main Location's subtree
-        $this->indexSubtree( $userGroupContentInfo->mainLocationId );
+        $this->indexSubtree($userGroupContentInfo->mainLocationId);
     }
 }

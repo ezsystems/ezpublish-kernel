@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\CacheTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\CacheTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,12 +16,12 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache;
 use eZ\Publish\SPI\Persistence\Content\Language;
 
 /**
- * Test case for caching Language Handler
+ * Test case for caching Language Handler.
  */
-class CachingTest extends TestCase
+class CacheTest extends TestCase
 {
     /**
-     * Language cache
+     * Language cache.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
      */
@@ -27,8 +29,6 @@ class CachingTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::store
-     *
-     * @return void
      */
     public function testStore()
     {
@@ -36,7 +36,7 @@ class CachingTest extends TestCase
 
         $languageFixture = $this->getLanguageFixture();
 
-        $cache->store( $languageFixture );
+        $cache->store($languageFixture);
 
         $this->assertAttributeEquals(
             array(
@@ -56,8 +56,6 @@ class CachingTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::remove
-     *
-     * @return void
      */
     public function testRemove()
     {
@@ -65,8 +63,8 @@ class CachingTest extends TestCase
 
         $languageFixture = $this->getLanguageFixture();
 
-        $cache->store( $languageFixture );
-        $cache->remove( $languageFixture->id );
+        $cache->store($languageFixture);
+        $cache->remove($languageFixture->id);
 
         $this->assertAttributeEquals(
             array(),
@@ -82,8 +80,6 @@ class CachingTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getById
-     *
-     * @return void
      */
     public function testGetById()
     {
@@ -91,16 +87,15 @@ class CachingTest extends TestCase
 
         $languageFixture = $this->getLanguageFixture();
 
-        $cache->store( $languageFixture );
+        $cache->store($languageFixture);
 
         $this->assertSame(
             $languageFixture,
-            $cache->getById( $languageFixture->id )
+            $cache->getById($languageFixture->id)
         );
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getById
      * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
@@ -111,13 +106,11 @@ class CachingTest extends TestCase
         $languageFixture = $this->getLanguageFixture();
 
         // $cache->store( $languageFixture );
-        $cache->getById( $languageFixture->id );
+        $cache->getById($languageFixture->id);
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getByLocale
-     *
-     * @return void
      */
     public function testGetByLocale()
     {
@@ -125,16 +118,15 @@ class CachingTest extends TestCase
 
         $languageFixture = $this->getLanguageFixture();
 
-        $cache->store( $languageFixture );
+        $cache->store($languageFixture);
 
         $this->assertSame(
             $languageFixture,
-            $cache->getByLocale( $languageFixture->languageCode )
+            $cache->getByLocale($languageFixture->languageCode)
         );
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getByLocale
      * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
@@ -145,13 +137,11 @@ class CachingTest extends TestCase
         $languageFixture = $this->getLanguageFixture();
 
         // $cache->store( $languageFixture );
-        $cache->getByLocale( $languageFixture->languageCode );
+        $cache->getByLocale($languageFixture->languageCode);
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getAll
-     *
-     * @return void
      */
     public function testGetAll()
     {
@@ -159,30 +149,30 @@ class CachingTest extends TestCase
 
         $languageFixture = $this->getLanguageFixture();
 
-        $cache->store( $languageFixture );
+        $cache->store($languageFixture);
 
         $this->assertSame(
-            array( $languageFixture->languageCode => $languageFixture ),
+            array($languageFixture->languageCode => $languageFixture),
             $cache->getAll()
         );
     }
 
     /**
-     * Returns the language cache to test
+     * Returns the language cache to test.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
      */
     protected function getCache()
     {
-        if ( !isset( $this->cache ) )
-        {
+        if (!isset($this->cache)) {
             $this->cache = new Cache();
         }
+
         return $this->cache;
     }
 
     /**
-     * Returns language fixture
+     * Returns language fixture.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */

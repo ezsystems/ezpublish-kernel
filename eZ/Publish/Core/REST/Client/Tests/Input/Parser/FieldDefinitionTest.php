@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a ContentTest class
+ * File containing a ContentTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,7 +13,6 @@ namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
-use eZ\Publish\API\Repository\Values;
 
 class FieldDefinitionTest extends BaseTest
 {
@@ -30,7 +31,7 @@ class FieldDefinitionTest extends BaseTest
     }
 
     /**
-     * Tests the section parser
+     * Tests the section parser.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
@@ -49,9 +50,9 @@ class FieldDefinitionTest extends BaseTest
             'isTranslatable' => 'true',
             'isRequired' => 'false',
             'isInfoCollector' => 'false',
-            'defaultValue' => array( 'ValueMock' ),
-            'fieldSettings' => array( 'SettingsMock' ),
-            'validatorConfiguration' => array( 'ValidatorMock' ),
+            'defaultValue' => array('ValueMock'),
+            'fieldSettings' => array('SettingsMock'),
+            'validatorConfiguration' => array('ValidatorMock'),
             'isSearchable' => 'false',
             'names' => array(
                 'value' => array(
@@ -68,34 +69,34 @@ class FieldDefinitionTest extends BaseTest
                         '#text' => 'Sindelfingen',
                     ),
                 ),
-            )
+            ),
         );
 
-        $this->fieldTypeParserMock->expects( $this->once() )
-            ->method( 'parseValue' )
+        $this->fieldTypeParserMock->expects($this->once())
+            ->method('parseValue')
             ->with(
-                $this->equalTo( 'ezkeyword' ),
-                $this->equalTo( array( 'ValueMock' ) )
+                $this->equalTo('ezkeyword'),
+                $this->equalTo(array('ValueMock'))
             )
-            ->will( $this->returnValue( 'ParsedValueMock' ) );
+            ->will($this->returnValue('ParsedValueMock'));
 
-        $this->fieldTypeParserMock->expects( $this->once() )
-            ->method( 'parseFieldSettings' )
+        $this->fieldTypeParserMock->expects($this->once())
+            ->method('parseFieldSettings')
             ->with(
-                $this->equalTo( 'ezkeyword' ),
-                $this->equalTo( array( 'SettingsMock' ) )
-            )->will( $this->returnValue( 'ParsedSettingsMock' ) );
+                $this->equalTo('ezkeyword'),
+                $this->equalTo(array('SettingsMock'))
+            )->will($this->returnValue('ParsedSettingsMock'));
 
-        $this->fieldTypeParserMock->expects( $this->once() )
-            ->method( 'parseValidatorConfiguration' )
+        $this->fieldTypeParserMock->expects($this->once())
+            ->method('parseValidatorConfiguration')
             ->with(
-                $this->equalTo( 'ezkeyword' ),
-                $this->equalTo( array( 'ValidatorMock' ) )
-            )->will( $this->returnValue( 'ParsedValidatorMock' ) );
+                $this->equalTo('ezkeyword'),
+                $this->equalTo(array('ValidatorMock'))
+            )->will($this->returnValue('ParsedValidatorMock'));
 
-        $result = $fieldDefinitionParser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $fieldDefinitionParser->parse($inputArray, $this->getParsingDispatcherMock());
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
@@ -104,7 +105,7 @@ class FieldDefinitionTest extends BaseTest
      * @dataProvider provideExpectedFieldDefinitionProperties
      * @depends testParse
      */
-    public function testParsedProperties( $propertyName, $expectedValue, $parsedFieldDefinition )
+    public function testParsedProperties($propertyName, $expectedValue, $parsedFieldDefinition)
     {
         $this->assertEquals(
             $expectedValue,
@@ -158,17 +159,17 @@ class FieldDefinitionTest extends BaseTest
             ),
             array(
                 'names',
-                array( 'eng-US' => 'Tags' ),
+                array('eng-US' => 'Tags'),
             ),
             array(
                 'descriptions',
-                array( 'eng-US' => 'Sindelfingen' ),
-            )
+                array('eng-US' => 'Sindelfingen'),
+            ),
         );
     }
 
     /**
-     * Gets the section parser
+     * Gets the section parser.
      *
      * @return \eZ\Publish\Core\REST\Client\Input\Parser\FieldDefinition
      */

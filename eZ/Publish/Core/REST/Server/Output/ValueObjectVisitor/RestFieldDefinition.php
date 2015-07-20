@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RestFieldDefinition ValueObjectVisitor class
+ * File containing the RestFieldDefinition ValueObjectVisitor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,11 +14,10 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer;
-
 use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
 
 /**
- * RestFieldDefinition value object visitor
+ * RestFieldDefinition value object visitor.
  *
  * @todo $fieldSettings & $validatorConfiguration (missing from spec)
  */
@@ -30,32 +31,31 @@ class RestFieldDefinition extends RestContentTypeBase
     /**
      * @param \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer $fieldTypeSerializer
      */
-    public function __construct( FieldTypeSerializer $fieldTypeSerializer )
+    public function __construct(FieldTypeSerializer $fieldTypeSerializer)
     {
         $this->fieldTypeSerializer = $fieldTypeSerializer;
     }
 
     /**
-     * Visit struct returned by controllers
+     * Visit struct returned by controllers.
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param \eZ\Publish\Core\REST\Server\Values\RestFieldDefinition $data
      */
-    public function visit( Visitor $visitor, Generator $generator, $data )
+    public function visit(Visitor $visitor, Generator $generator, $data)
     {
         $restFieldDefinition = $data;
         $fieldDefinition = $restFieldDefinition->fieldDefinition;
         $contentType = $restFieldDefinition->contentType;
 
-        $urlTypeSuffix = $this->getUrlTypeSuffix( $contentType->status );
+        $urlTypeSuffix = $this->getUrlTypeSuffix($contentType->status);
 
-        $generator->startObjectElement( 'FieldDefinition' );
-        $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'FieldDefinition' ) );
+        $generator->startObjectElement('FieldDefinition');
+        $visitor->setHeader('Content-Type', $generator->getMediaType('FieldDefinition'));
 
-        if ( $contentType->status === APIContentType::STATUS_DRAFT )
-        {
-            $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'FieldDefinitionUpdate' ) );
+        if ($contentType->status === APIContentType::STATUS_DRAFT) {
+            $visitor->setHeader('Accept-Patch', $generator->getMediaType('FieldDefinitionUpdate'));
         }
 
         $generator->startAttribute(
@@ -68,40 +68,40 @@ class RestFieldDefinition extends RestContentTypeBase
                 )
             )
         );
-        $generator->endAttribute( 'href' );
+        $generator->endAttribute('href');
 
-        $generator->startValueElement( 'id', $fieldDefinition->id );
-        $generator->endValueElement( 'id' );
+        $generator->startValueElement('id', $fieldDefinition->id);
+        $generator->endValueElement('id');
 
-        $generator->startValueElement( 'identifier', $fieldDefinition->identifier );
-        $generator->endValueElement( 'identifier' );
+        $generator->startValueElement('identifier', $fieldDefinition->identifier);
+        $generator->endValueElement('identifier');
 
-        $generator->startValueElement( 'fieldType', $fieldDefinition->fieldTypeIdentifier );
-        $generator->endValueElement( 'fieldType' );
+        $generator->startValueElement('fieldType', $fieldDefinition->fieldTypeIdentifier);
+        $generator->endValueElement('fieldType');
 
-        $generator->startValueElement( 'fieldGroup', $fieldDefinition->fieldGroup );
-        $generator->endValueElement( 'fieldGroup' );
+        $generator->startValueElement('fieldGroup', $fieldDefinition->fieldGroup);
+        $generator->endValueElement('fieldGroup');
 
-        $generator->startValueElement( 'position', $fieldDefinition->position );
-        $generator->endValueElement( 'position' );
+        $generator->startValueElement('position', $fieldDefinition->position);
+        $generator->endValueElement('position');
 
         $generator->startValueElement(
             'isTranslatable',
-            $this->serializeBool( $generator, $fieldDefinition->isTranslatable )
+            $this->serializeBool($generator, $fieldDefinition->isTranslatable)
         );
-        $generator->endValueElement( 'isTranslatable' );
+        $generator->endValueElement('isTranslatable');
 
         $generator->startValueElement(
             'isRequired',
-            $this->serializeBool( $generator, $fieldDefinition->isRequired )
+            $this->serializeBool($generator, $fieldDefinition->isRequired)
         );
-        $generator->endValueElement( 'isRequired' );
+        $generator->endValueElement('isRequired');
 
         $generator->startValueElement(
             'isInfoCollector',
-            $this->serializeBool( $generator, $fieldDefinition->isInfoCollector )
+            $this->serializeBool($generator, $fieldDefinition->isInfoCollector)
         );
-        $generator->endValueElement( 'isInfoCollector' );
+        $generator->endValueElement('isInfoCollector');
 
         $this->fieldTypeSerializer->serializeFieldDefaultValue(
             $generator,
@@ -111,16 +111,15 @@ class RestFieldDefinition extends RestContentTypeBase
 
         $generator->startValueElement(
             'isSearchable',
-            $this->serializeBool( $generator, $fieldDefinition->isSearchable )
+            $this->serializeBool($generator, $fieldDefinition->isSearchable)
         );
-        $generator->endValueElement( 'isSearchable' );
+        $generator->endValueElement('isSearchable');
 
-        $this->visitNamesList( $generator, $fieldDefinition->getNames() );
+        $this->visitNamesList($generator, $fieldDefinition->getNames());
 
         $descriptions = $fieldDefinition->getDescriptions();
-        if ( is_array( $descriptions ) )
-        {
-            $this->visitDescriptionsList( $generator, $descriptions );
+        if (is_array($descriptions)) {
+            $this->visitDescriptionsList($generator, $descriptions);
         }
 
         $this->fieldTypeSerializer->serializeFieldSettings(
@@ -135,6 +134,6 @@ class RestFieldDefinition extends RestContentTypeBase
             $fieldDefinition->getValidatorConfiguration()
         );
 
-        $generator->endObjectElement( 'FieldDefinition' );
+        $generator->endObjectElement('FieldDefinition');
     }
 }

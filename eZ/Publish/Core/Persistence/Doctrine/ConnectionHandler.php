@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing an interface for the Doctrine database abstractions
+ * File containing an interface for the Doctrine database abstractions.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -27,74 +29,65 @@ class ConnectionHandler implements DatabaseHandler
      *
      * @return \Doctrine\DBAL\Driver\Connection
      */
-    public static function createConnectionFromDSN( $dsn )
+    public static function createConnectionFromDSN($dsn)
     {
-        if ( is_string( $dsn ) )
-        {
-            $parsed = self::parseDSN( $dsn );
-        }
-        else
-        {
+        if (is_string($dsn)) {
+            $parsed = self::parseDSN($dsn);
+        } else {
             $parsed = $dsn;
         }
 
-        return DriverManager::getConnection( $parsed );
+        return DriverManager::getConnection($parsed);
     }
 
     /**
-     * Create a Connection Handler from given Doctrine $connection
+     * Create a Connection Handler from given Doctrine $connection.
      *
      * @param \Doctrine\DBAL\Connection $connection
      *
      * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
      */
-    public static function createFromConnection( Connection $connection )
+    public static function createFromConnection(Connection $connection)
     {
         $driver = $connection->getDriver()->getName();
 
-        if ( $driver === 'pdo_sqlite' )
-        {
-            return new ConnectionHandler\SqliteConnectionHandler( $connection );
+        if ($driver === 'pdo_sqlite') {
+            return new ConnectionHandler\SqliteConnectionHandler($connection);
         }
 
-        if ( $driver === 'pdo_pgsql' )
-        {
-            return new ConnectionHandler\PostgresConnectionHandler( $connection );
+        if ($driver === 'pdo_pgsql') {
+            return new ConnectionHandler\PostgresConnectionHandler($connection);
         }
 
-        return new self( $connection );
+        return new self($connection);
     }
 
     /**
      * Create a Connection Handler with corresponding Doctrine connection from DSN.
      *
      * @param string|array $dsn
+     *
      * @return ConnectionHandler
      */
-    public static function createFromDSN( $dsn )
+    public static function createFromDSN($dsn)
     {
-        if ( is_string( $dsn ) )
-        {
-            $parsed = self::parseDSN( $dsn );
-        }
-        else
-        {
+        if (is_string($dsn)) {
+            $parsed = self::parseDSN($dsn);
+        } else {
             $parsed = $dsn;
         }
 
-        $connection = DriverManager::getConnection( $parsed );
+        $connection = DriverManager::getConnection($parsed);
 
-        if ( $parsed['driver'] === 'pdo_sqlite' )
-        {
-            return new ConnectionHandler\SqliteConnectionHandler( $connection );
+        if ($parsed['driver'] === 'pdo_sqlite') {
+            return new ConnectionHandler\SqliteConnectionHandler($connection);
         }
 
-        if ( $parsed['driver'] === 'pdo_pgsql' )
-        {
-            return new ConnectionHandler\PostgresConnectionHandler( $connection );
+        if ($parsed['driver'] === 'pdo_pgsql') {
+            return new ConnectionHandler\PostgresConnectionHandler($connection);
         }
 
-        return new self( $connection );
+        return new self($connection);
     }
 
     /**
@@ -122,6 +115,7 @@ class ConnectionHandler implements DatabaseHandler
      * This function is 'borrowed' from PEAR /DB.php .
      *
      * @license Apache2 from Zeta Components Database project
+     *
      * @param string $dsn Data Source Name to be parsed
      *
      * @return array an associative array with the following keys:
@@ -131,156 +125,119 @@ class ConnectionHandler implements DatabaseHandler
      *  + username: User name for login
      *  + password: Password for login
      */
-    public static function parseDSN( $dsn )
+    public static function parseDSN($dsn)
     {
         $parsed = array(
-            'driver'      => false,
-            'user'        => false,
-            'password'    => false,
-            'host'        => false,
-            'port'        => false,
+            'driver' => false,
+            'user' => false,
+            'password' => false,
+            'host' => false,
+            'port' => false,
             'unix_socket' => false,
-            'dbname'      => false,
-            'memory'      => false,
-            'path'        => false,
+            'dbname' => false,
+            'memory' => false,
+            'path' => false,
         );
 
         // Find driver and dbsyntax
-        if ( ( $pos = strpos( $dsn, '://' ) ) !== false )
-        {
-            $str = substr( $dsn, 0, $pos );
-            $dsn = substr( $dsn, $pos + 3 );
-        }
-        else
-        {
+        if (($pos = strpos($dsn, '://')) !== false) {
+            $str = substr($dsn, 0, $pos);
+            $dsn = substr($dsn, $pos + 3);
+        } else {
             $str = $dsn;
             $dsn = null;
         }
 
         // Get driver and dbsyntax
         // $str => driver(dbsyntax)
-        if ( preg_match( '|^(.+?)\((.*?)\)$|', $str, $arr ) )
-        {
-            $parsed['driver']  = $arr[1];
-        }
-        else
-        {
-            $parsed['driver']  = $str;
+        if (preg_match('|^(.+?)\((.*?)\)$|', $str, $arr)) {
+            $parsed['driver'] = $arr[1];
+        } else {
+            $parsed['driver'] = $str;
         }
 
-        if ( !count( $dsn ) )
-        {
+        if (!count($dsn)) {
             return $parsed;
         }
 
         // Get (if found): username and password
         // $dsn => username:password@protocol+host/database
-        if ( ( $at = strrpos( (string)$dsn, '@' ) ) !== false )
-        {
-            $str = substr( $dsn, 0, $at );
-            $dsn = substr( $dsn, $at + 1 );
-            if ( ( $pos = strpos( $str, ':' ) ) !== false )
-            {
-                $parsed['user'] = rawurldecode( substr( $str, 0, $pos ) );
-                $parsed['password'] = rawurldecode( substr( $str, $pos + 1 ) );
-            }
-            else
-            {
-                $parsed['user'] = rawurldecode( $str );
+        if (($at = strrpos((string)$dsn, '@')) !== false) {
+            $str = substr($dsn, 0, $at);
+            $dsn = substr($dsn, $at + 1);
+            if (($pos = strpos($str, ':')) !== false) {
+                $parsed['user'] = rawurldecode(substr($str, 0, $pos));
+                $parsed['password'] = rawurldecode(substr($str, $pos + 1));
+            } else {
+                $parsed['user'] = rawurldecode($str);
             }
         }
 
         // Find protocol and host
 
-        if ( preg_match( '|^([^(]+)\((.*?)\)/?(.*?)$|', $dsn, $match ) )
-        {
+        if (preg_match('|^([^(]+)\((.*?)\)/?(.*?)$|', $dsn, $match)) {
             // $dsn => proto(proto_opts)/database
-            $proto       = $match[1];
-            $proto_opts  = $match[2] ? $match[2] : false;
-            $dsn         = $match[3];
-        }
-        else
-        {
+            $proto = $match[1];
+            $proto_opts = $match[2] ? $match[2] : false;
+            $dsn = $match[3];
+        } else {
             // $dsn => protocol+host/database (old format)
-            if ( strpos( $dsn, '+' ) !== false )
-            {
-                list( $proto, $dsn ) = explode( '+', $dsn, 2 );
+            if (strpos($dsn, '+') !== false) {
+                list($proto, $dsn) = explode('+', $dsn, 2);
             }
-            if ( strpos( $dsn, '/' ) !== false )
-            {
-                list( $proto_opts, $dsn ) = explode( '/', $dsn, 2 );
-            }
-            else
-            {
+            if (strpos($dsn, '/') !== false) {
+                list($proto_opts, $dsn) = explode('/', $dsn, 2);
+            } else {
                 $proto_opts = $dsn;
                 $dsn = null;
             }
         }
 
         // process the different protocol options
-        $protocol = ( !empty( $proto ) ) ? $proto : 'tcp';
-        $proto_opts = rawurldecode( $proto_opts );
-        if ( $protocol === 'tcp' )
-        {
-            if ( strpos( $proto_opts, ':' ) !== false )
-            {
-                list( $parsed['host'], $parsed['port'] ) = explode( ':', $proto_opts );
-            }
-            else
-            {
+        $protocol = (!empty($proto)) ? $proto : 'tcp';
+        $proto_opts = rawurldecode($proto_opts);
+        if ($protocol === 'tcp') {
+            if (strpos($proto_opts, ':') !== false) {
+                list($parsed['host'], $parsed['port']) = explode(':', $proto_opts);
+            } else {
                 $parsed['host'] = $proto_opts;
             }
-        }
-        else if ( $protocol === 'unix' )
-        {
+        } elseif ($protocol === 'unix') {
             $parsed['unix_socket'] = $proto_opts;
         }
 
         // Get dabase if any
         // $dsn => database
-        if ( $dsn )
-        {
-            if ( ( $pos = strpos( $dsn, '?' ) ) === false )
-            {
+        if ($dsn) {
+            if (($pos = strpos($dsn, '?')) === false) {
                 // /database
-                $parsed['dbname'] = rawurldecode( $dsn );
-            }
-            else
-            {
+                $parsed['dbname'] = rawurldecode($dsn);
+            } else {
                 // /database?param1=value1&param2=value2
-                $parsed['dbname'] = rawurldecode( substr( $dsn, 0, $pos ) );
-                $dsn = substr( $dsn, $pos + 1 );
-                if ( strpos( $dsn, '&' ) !== false )
-                {
-                    $opts = explode( '&', $dsn );
-                }
-                else
-                {
-                    $opts = array( $dsn );
+                $parsed['dbname'] = rawurldecode(substr($dsn, 0, $pos));
+                $dsn = substr($dsn, $pos + 1);
+                if (strpos($dsn, '&') !== false) {
+                    $opts = explode('&', $dsn);
+                } else {
+                    $opts = array($dsn);
                 }
 
-                foreach ( $opts as $opt )
-                {
-                    list( $key, $value ) = explode( '=', $opt );
-                    if ( !isset( $parsed[$key] ) )
-                    {
+                foreach ($opts as $opt) {
+                    list($key, $value) = explode('=', $opt);
+                    if (!isset($parsed[$key])) {
                         // don't allow params overwrite
-                        $parsed[$key] = rawurldecode( $value );
+                        $parsed[$key] = rawurldecode($value);
                     }
                 }
             }
         }
 
-        if ( $parsed['driver'] === 'sqlite' )
-        {
-            if ( isset( $parsed['port'] ) && $parsed['port'] === 'memory' )
-            {
+        if ($parsed['driver'] === 'sqlite') {
+            if (isset($parsed['port']) && $parsed['port'] === 'memory') {
                 $parsed['memory'] = true;
                 unset($parsed['port']);
                 unset($parsed['host']);
-            }
-            else if ( isset( $parsed['dbname'] ) )
-            {
+            } elseif (isset($parsed['dbname'])) {
                 $parsed['path'] = $parsed['dbname'];
                 unset($parsed['dbname']);
                 unset($parsed['host']);
@@ -290,18 +247,16 @@ class ConnectionHandler implements DatabaseHandler
         $driverMap = array(
             'mysql' => 'pdo_mysql',
             'pgsql' => 'pdo_pgsql',
-            'sqlite' => 'pdo_sqlite'
+            'sqlite' => 'pdo_sqlite',
         );
 
-        if ( isset( $driverMap[$parsed['driver']] ) )
-        {
+        if (isset($driverMap[$parsed['driver']])) {
             $parsed['driver'] = $driverMap[$parsed['driver']];
         }
 
         return array_filter(
             $parsed,
-            function ($element)
-            {
+            function ($element) {
                 return $element !== false;
             }
         );
@@ -310,7 +265,7 @@ class ConnectionHandler implements DatabaseHandler
     /**
      * @param \Doctrine\DBAL\Connection $connection
      */
-    public function __construct( Connection $connection )
+    public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
@@ -333,69 +288,55 @@ class ConnectionHandler implements DatabaseHandler
 
     /**
      * Begin a transaction.
-     *
-     * @return void
      */
     public function beginTransaction()
     {
-        try
-        {
+        try {
             $this->connection->beginTransaction();
-        }
-        catch ( DBALException $e )
-        {
-            throw new QueryException( $e->getMessage(), $e->getCode(), $e );
+        } catch (DBALException $e) {
+            throw new QueryException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
     /**
      * Commit a transaction.
-     *
-     * @return void
      */
     public function commit()
     {
-        try
-        {
+        try {
             $this->connection->commit();
-        }
-        catch ( DBALException $e )
-        {
-            throw new QueryException( $e->getMessage(), $e->getCode(), $e );
+        } catch (DBALException $e) {
+            throw new QueryException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
     /**
      * Rollback a transaction.
-     *
-     * @return void
      */
     public function rollBack()
     {
-        try
-        {
+        try {
             $this->connection->rollBack();
-        }
-        catch ( DBALException $e )
-        {
-            throw new QueryException( $e->getMessage(), $e->getCode(), $e );
+        } catch (DBALException $e) {
+            throw new QueryException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
-    public function prepare( $query )
+    public function prepare($query)
     {
-        return $this->connection->prepare( $query );
+        return $this->connection->prepare($query);
     }
 
     /**
-     * Retrieve the last auto incremet or sequence id
+     * Retrieve the last auto incremet or sequence id.
      *
      * @param string $sequenceName
+     *
      * @return string
      */
-    public function lastInsertId( $sequenceName = null )
+    public function lastInsertId($sequenceName = null)
     {
-        return $this->connection->lastInsertId( $sequenceName );
+        return $this->connection->lastInsertId($sequenceName);
     }
 
     /**
@@ -407,19 +348,16 @@ class ConnectionHandler implements DatabaseHandler
     }
 
     /**
-     * Execute a query against the database
+     * Execute a query against the database.
      *
      * @param string $query
      */
-    public function exec( $query )
+    public function exec($query)
     {
-        try
-        {
-            $this->connection->exec( $query );
-        }
-        catch ( DBALException $e )
-        {
-            throw new QueryException( $e->getMessage(), $e->getCode(), $e );
+        try {
+            $this->connection->exec($query);
+        } catch (DBALException $e) {
+            throw new QueryException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -430,7 +368,7 @@ class ConnectionHandler implements DatabaseHandler
      */
     public function createSelectQuery()
     {
-        return new SelectDoctrineQuery( $this->connection );
+        return new SelectDoctrineQuery($this->connection);
     }
 
     /**
@@ -440,7 +378,7 @@ class ConnectionHandler implements DatabaseHandler
      */
     public function createInsertQuery()
     {
-        return new InsertDoctrineQuery( $this->connection );
+        return new InsertDoctrineQuery($this->connection);
     }
 
     /**
@@ -450,7 +388,7 @@ class ConnectionHandler implements DatabaseHandler
      */
     public function createUpdateQuery()
     {
-        return new UpdateDoctrineQuery( $this->connection );
+        return new UpdateDoctrineQuery($this->connection);
     }
 
     /**
@@ -460,7 +398,7 @@ class ConnectionHandler implements DatabaseHandler
      */
     public function createDeleteQuery()
     {
-        return new DeleteDoctrineQuery( $this->connection );
+        return new DeleteDoctrineQuery($this->connection);
     }
 
     /**
@@ -472,12 +410,12 @@ class ConnectionHandler implements DatabaseHandler
      *
      * @return string
      */
-    public function aliasedColumn( $query, $columnName, $tableName = null )
+    public function aliasedColumn($query, $columnName, $tableName = null)
     {
         return $this->alias(
-            $this->quoteColumn( $columnName, $tableName ),
+            $this->quoteColumn($columnName, $tableName),
             $this->quoteIdentifier(
-                ( $tableName ? $tableName . '_' : '' ) .
+                ($tableName ? $tableName . '_' : '') .
                 $columnName
             )
         );
@@ -491,11 +429,11 @@ class ConnectionHandler implements DatabaseHandler
      *
      * @return string
      */
-    public function quoteColumn( $columnName, $tableName = null )
+    public function quoteColumn($columnName, $tableName = null)
     {
         return
-            ( $tableName ? $this->quoteTable( $tableName ) . '.' : '' ) .
-            $this->quoteIdentifier( $columnName );
+            ($tableName ? $this->quoteTable($tableName) . '.' : '') .
+            $this->quoteIdentifier($columnName);
     }
 
     /**
@@ -505,13 +443,13 @@ class ConnectionHandler implements DatabaseHandler
      *
      * @return string
      */
-    public function quoteTable( $tableName )
+    public function quoteTable($tableName)
     {
-        return $this->quoteIdentifier( $tableName );
+        return $this->quoteIdentifier($tableName);
     }
 
     /**
-     * Custom alias method
+     * Custom alias method.
      *
      * Ignores some properties of identifier quoting, but since we use somehow
      * sane table and column names, ourselves, this is fine.
@@ -519,15 +457,16 @@ class ConnectionHandler implements DatabaseHandler
      * This is an optimization and works around the ezcDB implementation.
      *
      * @param string $identifier
+     *
      * @return string
      */
-    public function alias( $name, $alias )
+    public function alias($name, $alias)
     {
         return $name . ' ' . $alias;
     }
 
     /**
-     * Custom quote identifier method
+     * Custom quote identifier method.
      *
      * Ignores some properties of identifier quoting, but since we use somehow
      * sane table and column names, ourselves, this is fine.
@@ -535,15 +474,16 @@ class ConnectionHandler implements DatabaseHandler
      * This is an optimization and works around the ezcDB implementation.
      *
      * @param string $identifier
+     *
      * @return string
      */
-    public function quoteIdentifier( $identifier )
+    public function quoteIdentifier($identifier)
     {
         return '`' . $identifier . '`';
     }
 
     /**
-     * Get auto increment value
+     * Get auto increment value.
      *
      * Returns the value used for autoincrement tables. Usually this will just
      * be null. In case for sequence based RDBMS this method can return a
@@ -554,20 +494,20 @@ class ConnectionHandler implements DatabaseHandler
      *
      * @return mixed
      */
-    public function getAutoIncrementValue( $table, $column )
+    public function getAutoIncrementValue($table, $column)
     {
-        return "null";
+        return 'null';
     }
 
     /**
-     * Returns the name of the affected sequence
+     * Returns the name of the affected sequence.
      *
      * @param string $table
      * @param string $column
      *
      * @return string
      */
-    public function getSequenceName( $table, $column )
+    public function getSequenceName($table, $column)
     {
         return null;
     }

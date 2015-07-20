@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\FieldType\XmlText\Type class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,6 @@ namespace eZ\Publish\Core\FieldType\XmlText;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\Core\FieldType\XmlText\Input;
 use eZ\Publish\Core\FieldType\XmlText\Input\EzXml;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -27,41 +28,41 @@ use RuntimeException;
 class Type extends FieldType
 {
     /**
-     * Default preset of tags available in online editor
+     * Default preset of tags available in online editor.
      */
     const TAG_PRESET_DEFAULT = 0;
 
     /**
-     * Preset of tags for online editor intended for simple formatting options
+     * Preset of tags for online editor intended for simple formatting options.
      */
     const TAG_PRESET_SIMPLE_FORMATTING = 1;
 
     /**
-     * List of settings available for this FieldType
+     * List of settings available for this FieldType.
      *
      * The key is the setting name, and the value is the default value for this setting
      *
      * @var array
      */
     protected $settingsSchema = array(
-        "numRows" => array(
-            "type" => "int",
-            "default" => 10
+        'numRows' => array(
+            'type' => 'int',
+            'default' => 10,
         ),
-        "tagPreset" => array(
-            "type" => "choice",
-            "default" => self::TAG_PRESET_DEFAULT
-        )
+        'tagPreset' => array(
+            'type' => 'choice',
+            'default' => self::TAG_PRESET_DEFAULT,
+        ),
     );
 
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
     public function getFieldTypeIdentifier()
     {
-        return "ezxmltext";
+        return 'ezxmltext';
     }
 
     /**
@@ -74,27 +75,24 @@ class Type extends FieldType
      *
      * @return string
      */
-    public function getName( SPIValue $value )
+    public function getName(SPIValue $value)
     {
         $result = null;
-        if ( $section = $value->xml->documentElement->firstChild )
-        {
+        if ($section = $value->xml->documentElement->firstChild) {
             $textDom = $section->firstChild;
 
-            if ( $textDom && $textDom->hasChildNodes() )
-            {
+            if ($textDom && $textDom->hasChildNodes()) {
                 $result = $textDom->firstChild->textContent;
-            }
-            else if ( $textDom )
-            {
+            } elseif ($textDom) {
                 $result = $textDom->textContent;
             }
         }
 
-        if ( $result === null )
+        if ($result === null) {
             $result = $value->xml->documentElement->textContent;
+        }
 
-        return trim( $result );
+        return trim($result);
     }
 
     /**
@@ -105,20 +103,19 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value;
+        return new Value();
     }
 
     /**
-     * Returns if the given $value is considered empty by the field type
+     * Returns if the given $value is considered empty by the field type.
      *
      * @param \eZ\Publish\Core\FieldType\XmlText\Value $value
      *
-     * @return boolean
+     * @return bool
      */
-    public function isEmptyValue( SPIValue $value )
+    public function isEmptyValue(SPIValue $value)
     {
-        if ( $value->xml === null )
-        {
+        if ($value->xml === null) {
             return true;
         }
 
@@ -132,20 +129,19 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\XmlText\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
-        if ( is_string( $inputValue ) )
-        {
-            if ( empty( $inputValue ) )
+        if (is_string($inputValue)) {
+            if (empty($inputValue)) {
                 $inputValue = Value::EMPTY_VALUE;
-            $inputValue = new EzXml( $inputValue );
+            }
+            $inputValue = new EzXml($inputValue);
         }
 
-        if ( $inputValue instanceof Input )
-        {
-            $doc = new DOMDocument;
-            $doc->loadXML( $inputValue->getInternalRepresentation() );
-            $inputValue = new Value( $doc );
+        if ($inputValue instanceof Input) {
+            $doc = new DOMDocument();
+            $doc->loadXML($inputValue->getInternalRepresentation());
+            $inputValue = new Value($doc);
         }
 
         return $inputValue;
@@ -157,13 +153,10 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\XmlText\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
-        if ( !$value->xml instanceof DOMDocument )
-        {
+        if (!$value->xml instanceof DOMDocument) {
             throw new InvalidArgumentType(
                 '$value->xml',
                 'DOMDocument',
@@ -173,7 +166,7 @@ class Type extends FieldType
     }
 
     /**
-     * Returns sortKey information
+     * Returns sortKey information.
      *
      * @see \eZ\Publish\Core\FieldType
      *
@@ -181,7 +174,7 @@ class Type extends FieldType
      *
      * @return array|bool
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo(BaseValue $value)
     {
         return false;
     }
@@ -189,34 +182,34 @@ class Type extends FieldType
     /**
      * Converts an $hash to the Value defined by the field type.
      * $hash accepts the following keys:
-     *  - xml (XML string which complies internal format)
+     *  - xml (XML string which complies internal format).
      *
      * @param mixed $hash
      *
      * @return \eZ\Publish\Core\FieldType\XmlText\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        if ( !isset( $hash["xml"] ) )
-        {
-            throw new RuntimeException( "'xml' index is missing in hash." );
+        if (!isset($hash['xml'])) {
+            throw new RuntimeException("'xml' index is missing in hash.");
         }
 
-        $doc = new DOMDocument;
-        $doc->loadXML( $hash['xml'] );
-        return new Value( $doc );
+        $doc = new DOMDocument();
+        $doc->loadXML($hash['xml']);
+
+        return new Value($doc);
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\XmlText\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
-        return array( 'xml' => (string)$value );
+        return array('xml' => (string)$value);
     }
 
     /**
@@ -227,9 +220,9 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\XmlText\Value
      */
-    public function fromPersistenceValue( FieldValue $fieldValue )
+    public function fromPersistenceValue(FieldValue $fieldValue)
     {
-        return new Value( $fieldValue->data );
+        return new Value($fieldValue->data);
     }
 
     /**
@@ -237,21 +230,21 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function toPersistenceValue( SPIValue $value )
+    public function toPersistenceValue(SPIValue $value)
     {
         return new FieldValue(
             array(
-                'data'         => $value->xml,
+                'data' => $value->xml,
                 'externalData' => null,
-                'sortKey'      => $this->getSortInfo( $value )
+                'sortKey' => $this->getSortInfo($value),
             )
         );
     }
 
     /**
-     * Returns whether the field type is searchable
+     * Returns whether the field type is searchable.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSearchable()
     {
@@ -259,61 +252,54 @@ class Type extends FieldType
     }
 
     /**
-     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
      * @param mixed $fieldSettings
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateFieldSettings( $fieldSettings )
+    public function validateFieldSettings($fieldSettings)
     {
         $validationErrors = array();
 
-        foreach ( $fieldSettings as $name => $value )
-        {
-            if ( isset( $this->settingsSchema[$name] ) )
-            {
-                switch ( $name )
-                {
-                    case "numRows":
-                        if ( !is_integer( $value ) )
-                        {
+        foreach ($fieldSettings as $name => $value) {
+            if (isset($this->settingsSchema[$name])) {
+                switch ($name) {
+                    case 'numRows':
+                        if (!is_integer($value)) {
                             $validationErrors[] = new ValidationError(
                                 "Setting '%setting%' value must be of integer type",
                                 null,
                                 array(
-                                    "setting" => $name
+                                    'setting' => $name,
                                 ),
                                 "[$name]"
                             );
                         }
                         break;
-                    case "tagPreset":
+                    case 'tagPreset':
                         $definedTagPresets = array(
                             self::TAG_PRESET_DEFAULT,
-                            self::TAG_PRESET_SIMPLE_FORMATTING
+                            self::TAG_PRESET_SIMPLE_FORMATTING,
                         );
-                        if ( !in_array( $value, $definedTagPresets, true ) )
-                        {
+                        if (!in_array($value, $definedTagPresets, true)) {
                             $validationErrors[] = new ValidationError(
                                 "Setting '%setting%' is of unknown tag preset",
                                 null,
                                 array(
-                                    "setting" => $name
+                                    'setting' => $name,
                                 ),
                                 "[$name]"
                             );
                         }
                         break;
                 }
-            }
-            else
-            {
+            } else {
                 $validationErrors[] = new ValidationError(
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        "setting" => $name
+                        'setting' => $name,
                     ),
                     "[$name]"
                 );
@@ -348,58 +334,50 @@ class Type extends FieldType
      *  )
      * </code>
      */
-    public function getRelations( SPIValue $value )
+    public function getRelations(SPIValue $value)
     {
         $relations = array();
 
         /** @var \eZ\Publish\Core\FieldType\XmlText\Value $value */
-        if ( $value->xml instanceof DOMDocument )
-        {
+        if ($value->xml instanceof DOMDocument) {
             $relations = array(
-                Relation::LINK => $this->getRelatedObjectIds( $value, Relation::LINK ),
-                Relation::EMBED => $this->getRelatedObjectIds( $value, Relation::EMBED )
+                Relation::LINK => $this->getRelatedObjectIds($value, Relation::LINK),
+                Relation::EMBED => $this->getRelatedObjectIds($value, Relation::EMBED),
             );
         }
 
         return $relations;
     }
 
-    protected function getRelatedObjectIds( Value $fieldValue, $relationType )
+    protected function getRelatedObjectIds(Value $fieldValue, $relationType)
     {
-        if ( $relationType === Relation::EMBED )
-        {
-            $tagName = "embed";
-        }
-        else
-        {
-            $tagName = "link";
+        if ($relationType === Relation::EMBED) {
+            $tagName = 'embed';
+        } else {
+            $tagName = 'link';
         }
 
         $locationIds = array();
         $contentIds = array();
-        $linkTags = $fieldValue->xml->getElementsByTagName( $tagName );
-        if ( $linkTags->length > 0 )
-        {
+        $linkTags = $fieldValue->xml->getElementsByTagName($tagName);
+        if ($linkTags->length > 0) {
             /** @var $link \DOMElement */
-            foreach ( $linkTags as $link )
-            {
-                $contentId = $link->getAttribute( 'object_id' );
-                if ( !empty( $contentId ) )
-                {
+            foreach ($linkTags as $link) {
+                $contentId = $link->getAttribute('object_id');
+                if (!empty($contentId)) {
                     $contentIds[] = $contentId;
                     continue;
                 }
-                $locationId = $link->getAttribute( 'node_id' );
-                if ( !empty( $locationId ) )
-                {
+                $locationId = $link->getAttribute('node_id');
+                if (!empty($locationId)) {
                     $locationIds[] = $locationId;
                 }
             }
         }
 
         return array(
-            "locationIds" => array_unique( $locationIds ),
-            "contentIds" => array_unique( $contentIds )
+            'locationIds' => array_unique($locationIds),
+            'contentIds' => array_unique($contentIds),
         );
     }
 }

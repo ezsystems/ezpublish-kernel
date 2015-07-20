@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the NullStorage class
+ * File containing the NullStorage class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,14 +16,14 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
- * Description of NullStorage
+ * Description of NullStorage.
  */
 class NullStorage implements FieldStorage
 {
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()
      */
-    public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
+    public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
         return false;
     }
@@ -29,7 +31,7 @@ class NullStorage implements FieldStorage
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage::getFieldData()
      */
-    public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
+    public function getFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
         return;
     }
@@ -37,7 +39,7 @@ class NullStorage implements FieldStorage
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage::deleteFieldData()
      */
-    public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
+    public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds, array $context)
     {
         return true;
     }
@@ -45,7 +47,7 @@ class NullStorage implements FieldStorage
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage::hasFieldData()
      *
-     * @return boolean
+     * @return bool
      */
     public function hasFieldData()
     {
@@ -55,7 +57,7 @@ class NullStorage implements FieldStorage
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage::getIndexData()
      */
-    public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
+    public function getIndexData(VersionInfo $versionInfo, Field $field, array $context)
     {
         return false;
     }
@@ -72,9 +74,9 @@ class NullStorage implements FieldStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field $originalField
      * @param array $context
      *
-     * @return null|boolean Same as {@link \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()}.
+     * @return null|bool Same as {@link \eZ\Publish\SPI\FieldType\FieldStorage::storeFieldData()}.
      */
-    public function copyLegacyField( VersionInfo $versionInfo, Field $field, Field $originalField, array $context )
+    public function copyLegacyField(VersionInfo $versionInfo, Field $field, Field $originalField, array $context)
     {
         return;
     }

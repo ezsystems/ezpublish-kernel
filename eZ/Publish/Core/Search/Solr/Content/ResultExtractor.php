@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,7 +13,6 @@ namespace eZ\Publish\Core\Search\Solr\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor;
 
 /**
  * Abstract implementation of Search Extractor, which extracts search result
@@ -20,13 +21,13 @@ use eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor;
 abstract class ResultExtractor
 {
     /**
-     * Facet builder visitor
+     * Facet builder visitor.
      *
      * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor
      */
     protected $facetBuilderVisitor;
 
-    public function __construct( FacetBuilderVisitor $facetBuilderVisitor )
+    public function __construct(FacetBuilderVisitor $facetBuilderVisitor)
     {
         $this->facetBuilderVisitor = $facetBuilderVisitor;
     }
@@ -38,20 +39,18 @@ abstract class ResultExtractor
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function extract( $data )
+    public function extract($data)
     {
         $result = new SearchResult(
             array(
-                "time" => $data->responseHeader->QTime / 1000,
-                "maxScore" => $data->response->maxScore,
-                "totalCount" => $data->response->numFound,
+                'time' => $data->responseHeader->QTime / 1000,
+                'maxScore' => $data->response->maxScore,
+                'totalCount' => $data->response->numFound,
             )
         );
 
-        if ( isset( $data->facet_counts ) )
-        {
-            foreach ( $data->facet_counts->facet_fields as $field => $facet )
-            {
+        if (isset($data->facet_counts)) {
+            foreach ($data->facet_counts->facet_fields as $field => $facet) {
                 $result->facets[] = $this->facetBuilderVisitor->map(
                     $field,
                     $facet
@@ -59,14 +58,13 @@ abstract class ResultExtractor
             }
         }
 
-        foreach ( $data->response->docs as $doc )
-        {
+        foreach ($data->response->docs as $doc) {
             $searchHit = new SearchHit(
                 array(
-                    "score" => $doc->score,
-                    "index" => $this->getIndexIdentifier( $doc ),
-                    "contentTranslation" => $this->getMatchedLanguageCode( $doc ),
-                    "valueObject" => $this->extractHit( $doc ),
+                    'score' => $doc->score,
+                    'index' => $this->getIndexIdentifier($doc),
+                    'contentTranslation' => $this->getMatchedLanguageCode($doc),
+                    'valueObject' => $this->extractHit($doc),
                 )
             );
             $result->searchHits[] = $searchHit;
@@ -80,7 +78,7 @@ abstract class ResultExtractor
      *
      * @param $hit
      */
-    protected function getMatchedLanguageCode( $hit )
+    protected function getMatchedLanguageCode($hit)
     {
         return $hit->meta_indexed_language_code_s;
     }
@@ -92,9 +90,9 @@ abstract class ResultExtractor
      *
      * @return string
      */
-    protected function getIndexIdentifier( $hit )
+    protected function getIndexIdentifier($hit)
     {
-        return $hit->{"[shard]"};
+        return $hit->{'[shard]'};
     }
 
     /**
@@ -106,5 +104,5 @@ abstract class ResultExtractor
      *
      * @return \eZ\Publish\API\Repository\Values\ValueObject
      */
-    abstract public function extractHit( $hit );
+    abstract public function extractHit($hit);
 }

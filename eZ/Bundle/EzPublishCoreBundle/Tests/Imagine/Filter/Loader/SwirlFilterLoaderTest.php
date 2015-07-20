@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the SwirlFilterLoaderTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -27,53 +29,53 @@ class SwirlFilterLoaderTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->filter = $this->getMock( '\eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterInterface' );
-        $this->loader = new SwirlFilterLoader( $this->filter );
+        $this->filter = $this->getMock('\eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterInterface');
+        $this->loader = new SwirlFilterLoader($this->filter);
     }
 
     public function testLoadNoOption()
     {
-        $image = $this->getMock( '\Imagine\Image\ImageInterface' );
+        $image = $this->getMock('\Imagine\Image\ImageInterface');
         $this->filter
-            ->expects( $this->never() )
-            ->method( 'setOption' );
+            ->expects($this->never())
+            ->method('setOption');
 
         $this->filter
-            ->expects( $this->once() )
-            ->method( 'apply' )
-            ->with( $image )
-            ->will( $this->returnValue( $image ) );
+            ->expects($this->once())
+            ->method('apply')
+            ->with($image)
+            ->will($this->returnValue($image));
 
-        $this->assertSame( $image, $this->loader->load( $image ) );
+        $this->assertSame($image, $this->loader->load($image));
     }
 
     /**
      * @dataProvider loadWithOptionProvider
      */
-    public function testLoadWithOption( $degrees )
+    public function testLoadWithOption($degrees)
     {
-        $image = $this->getMock( '\Imagine\Image\ImageInterface' );
+        $image = $this->getMock('\Imagine\Image\ImageInterface');
         $this->filter
-            ->expects( $this->once() )
-            ->method( 'setOption' )
-            ->with( 'degrees', $degrees );
+            ->expects($this->once())
+            ->method('setOption')
+            ->with('degrees', $degrees);
 
         $this->filter
-            ->expects( $this->once() )
-            ->method( 'apply' )
-            ->with( $image )
-            ->will( $this->returnValue( $image ) );
+            ->expects($this->once())
+            ->method('apply')
+            ->with($image)
+            ->will($this->returnValue($image));
 
-        $this->assertSame( $image, $this->loader->load( $image, array( $degrees ) ) );
+        $this->assertSame($image, $this->loader->load($image, array($degrees)));
     }
 
     public function loadWithOptionProvider()
     {
         return array(
-            array( 10 ),
-            array( 60 ),
-            array( 60.34 ),
-            array( 180.123 ),
+            array(10),
+            array(60),
+            array(60.34),
+            array(180.123),
         );
     }
 }

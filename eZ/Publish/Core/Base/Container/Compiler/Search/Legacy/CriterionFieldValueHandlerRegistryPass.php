@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the CriterionFieldValueHandlerRegistryPass class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,19 +24,17 @@ class CriterionFieldValueHandlerRegistryPass implements CompilerPassInterface
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
-        if ( !$container->hasDefinition( 'ezpublish.search.legacy.gateway.criterion_field_value_handler.registry' ) )
+        if (!$container->hasDefinition('ezpublish.search.legacy.gateway.criterion_field_value_handler.registry')) {
             return;
+        }
 
-        $registry = $container->getDefinition( 'ezpublish.search.legacy.gateway.criterion_field_value_handler.registry' );
+        $registry = $container->getDefinition('ezpublish.search.legacy.gateway.criterion_field_value_handler.registry');
 
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.search.legacy.gateway.criterion_field_value_handler' ) as $id => $attributes )
-        {
-            foreach ( $attributes as $attribute )
-            {
-                if ( !isset( $attribute['alias'] ) )
-                {
+        foreach ($container->findTaggedServiceIds('ezpublish.search.legacy.gateway.criterion_field_value_handler') as $id => $attributes) {
+            foreach ($attributes as $attribute) {
+                if (!isset($attribute['alias'])) {
                     throw new LogicException(
                         'ezpublish.storageEngine.legacy.converter service tag needs an "alias" attribute to identify the field type. None given.'
                     );
@@ -44,7 +44,7 @@ class CriterionFieldValueHandlerRegistryPass implements CompilerPassInterface
                     'register',
                     array(
                         $attribute['alias'],
-                        new Reference( $id )
+                        new Reference($id),
                     )
                 );
             }

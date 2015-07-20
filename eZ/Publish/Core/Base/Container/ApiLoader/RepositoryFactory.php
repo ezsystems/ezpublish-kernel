@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RepositoryFactory class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,7 +26,7 @@ class RepositoryFactory extends ContainerAware
     private $repositoryClass;
 
     /**
-     * Collection of fieldTypes, lazy loaded via a closure
+     * Collection of fieldTypes, lazy loaded via a closure.
      *
      * @var \eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory
      */
@@ -37,14 +39,14 @@ class RepositoryFactory extends ContainerAware
      */
     protected $roleLimitations = array();
 
-    public function __construct( $repositoryClass, FieldTypeCollectionFactory $fieldTypeCollectionFactory )
+    public function __construct($repositoryClass, FieldTypeCollectionFactory $fieldTypeCollectionFactory)
     {
         $this->repositoryClass = $repositoryClass;
         $this->fieldTypeCollectionFactory = $fieldTypeCollectionFactory;
     }
 
     /**
-     * Builds the main repository, heart of eZ Publish API
+     * Builds the main repository, heart of eZ Publish API.
      *
      * This always returns the true inner Repository, please depend on ezpublish.api.repository and not this method
      * directly to make sure you get an instance wrapped inside Signal / Cache / * functionality.
@@ -54,7 +56,7 @@ class RepositoryFactory extends ContainerAware
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
-    public function buildRepository( PersistenceHandler $persistenceHandler, SearchHandler $searchHandler )
+    public function buildRepository(PersistenceHandler $persistenceHandler, SearchHandler $searchHandler)
     {
         $repository = new $this->repositoryClass(
             $persistenceHandler,
@@ -62,17 +64,17 @@ class RepositoryFactory extends ContainerAware
             array(
                 'fieldType' => $this->fieldTypeCollectionFactory->getFieldTypes(),
                 'role' => array(
-                    'limitationTypes' => $this->roleLimitations
+                    'limitationTypes' => $this->roleLimitations,
                 ),
-                'languages' => $this->container->getParameter( "languages" )
+                'languages' => $this->container->getParameter('languages'),
             )
         );
 
-        /** @var \eZ\Publish\API\Repository\Repository $repository */
+        /* @var \eZ\Publish\API\Repository\Repository $repository */
         $anonymousUser = $repository->getUserService()->loadUser(
-            $this->container->getParameter( "anonymous_user_id" )
+            $this->container->getParameter('anonymous_user_id')
         );
-        $repository->setCurrentUser( $anonymousUser );
+        $repository->setCurrentUser($anonymousUser);
 
         return $repository;
     }
@@ -83,13 +85,13 @@ class RepositoryFactory extends ContainerAware
      * @param string $limitationName
      * @param \eZ\Publish\SPI\Limitation\Type $limitationType
      */
-    public function registerLimitationType( $limitationName, SPILimitationType $limitationType )
+    public function registerLimitationType($limitationName, SPILimitationType $limitationType)
     {
         $this->roleLimitations[$limitationName] = $limitationType;
     }
 
     /**
-     * Returns a service based on a name string (content => contentService, etc)
+     * Returns a service based on a name string (content => contentService, etc).
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param string $serviceName
@@ -98,13 +100,13 @@ class RepositoryFactory extends ContainerAware
      *
      * @return mixed
      */
-    public function buildService( Repository $repository, $serviceName )
+    public function buildService(Repository $repository, $serviceName)
     {
         $methodName = 'get' . $serviceName . 'Service';
-        if ( !method_exists( $repository, $methodName ) )
-        {
-            throw new InvalidArgumentException( $serviceName, "No such service" );
+        if (!method_exists($repository, $methodName)) {
+            throw new InvalidArgumentException($serviceName, 'No such service');
         }
+
         return $repository->$methodName();
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,28 +28,28 @@ abstract class RelationSearchBaseIntegrationTest extends SearchBaseIntegrationTe
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
-    abstract public function getCreateExpectedRelations( Content $content );
+    abstract public function getCreateExpectedRelations(Content $content);
 
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
-    abstract public function getUpdateExpectedRelations( Content $content );
+    abstract public function getUpdateExpectedRelations(Content $content);
 
     /**
      * Tests relation processing on field create.
      */
     public function testCreateContentRelationsProcessedCorrect()
     {
-        $content = $this->createContent( $this->getValidCreationFieldData() );
+        $content = $this->createContent($this->getValidCreationFieldData());
 
         $this->assertEquals(
             $this->normalizeRelations(
-                $this->getCreateExpectedRelations( $content )
+                $this->getCreateExpectedRelations($content)
             ),
             $this->normalizeRelations(
-                $this->getRepository()->getContentService()->loadRelations( $content->versionInfo )
+                $this->getRepository()->getContentService()->loadRelations($content->versionInfo)
             )
         );
     }
@@ -57,14 +59,14 @@ abstract class RelationSearchBaseIntegrationTest extends SearchBaseIntegrationTe
      */
     public function testUpdateContentRelationsProcessedCorrect()
     {
-        $content = $this->updateContent( $this->getValidUpdateFieldData() );
+        $content = $this->updateContent($this->getValidUpdateFieldData());
 
         $this->assertEquals(
             $this->normalizeRelations(
-                $this->getUpdateExpectedRelations( $content )
+                $this->getUpdateExpectedRelations($content)
             ),
             $this->normalizeRelations(
-                $this->getRepository()->getContentService()->loadRelations( $content->versionInfo )
+                $this->getRepository()->getContentService()->loadRelations($content->versionInfo)
             )
         );
     }
@@ -76,31 +78,30 @@ abstract class RelationSearchBaseIntegrationTest extends SearchBaseIntegrationTe
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\Relation[]
      */
-    protected function normalizeRelations( array $relations )
+    protected function normalizeRelations(array $relations)
     {
         usort(
             $relations,
-            function ( Relation $a, Relation $b )
-            {
-                if ( $a->type == $b->type )
-                {
+            function (Relation $a, Relation $b) {
+                if ($a->type == $b->type) {
                     return $a->destinationContentInfo->id < $b->destinationContentInfo->id ? 1 : -1;
                 }
+
                 return $a->type < $b->type ? 1 : -1;
             }
         );
         $normalized = array_map(
-            function ( Relation $relation )
-            {
+            function (Relation $relation) {
                 $newRelation = new Relation(
                     array(
-                        "id" => null,
-                        "sourceFieldDefinitionIdentifier" => $relation->sourceFieldDefinitionIdentifier,
-                        "type" => $relation->type,
-                        "sourceContentInfo" => $relation->sourceContentInfo,
-                        "destinationContentInfo" => $relation->destinationContentInfo
+                        'id' => null,
+                        'sourceFieldDefinitionIdentifier' => $relation->sourceFieldDefinitionIdentifier,
+                        'type' => $relation->type,
+                        'sourceContentInfo' => $relation->sourceContentInfo,
+                        'destinationContentInfo' => $relation->destinationContentInfo,
                     )
                 );
+
                 return $newRelation;
             },
             $relations

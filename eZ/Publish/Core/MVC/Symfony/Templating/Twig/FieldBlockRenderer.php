@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -34,7 +36,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     /**
      * Array of Twig template resources for field view.
      * Either the path to each template and its priority in a hash or its
-     * \Twig_Template (compiled) counterpart
+     * \Twig_Template (compiled) counterpart.
      *
      * @var Twig_Template[]|array
      */
@@ -43,7 +45,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     /**
      * Array of Twig template resources for field edit.
      * Either the path to each template and its priority in a hash or its
-     * \Twig_Template (compiled) counterpart
+     * \Twig_Template (compiled) counterpart.
      *
      * @var Twig_Template[]|array
      */
@@ -52,7 +54,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     /**
      * Array of Twig template resources for field definition view.
      * Either the path to each template and its priority in a hash or its
-     * \Twig_Template (compiled) counterpart
+     * \Twig_Template (compiled) counterpart.
      *
      * @var Twig_Template[]|array
      */
@@ -61,7 +63,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     /**
      * Array of Twig template resources for field definition edit.
      * Either the path to each template and its priority in a hash or its
-     * \Twig_Template (compiled) counterpart
+     * \Twig_Template (compiled) counterpart.
      *
      * @var Twig_Template[]|array
      */
@@ -75,7 +77,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     private $baseTemplate;
 
     /**
-     * Template blocks
+     * Template blocks.
      *
      * @var array
      */
@@ -84,7 +86,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     /**
      * @param Twig_Environment $twig
      */
-    public function setTwig( Twig_Environment $twig )
+    public function setTwig(Twig_Environment $twig)
     {
         $this->twig = $twig;
     }
@@ -92,7 +94,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     /**
      * @param string|Twig_Template $baseTemplate
      */
-    public function setBaseTemplate( $baseTemplate )
+    public function setBaseTemplate($baseTemplate)
     {
         $this->baseTemplate = $baseTemplate;
     }
@@ -100,52 +102,52 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     /**
      * @param array $fieldViewResources
      */
-    public function setFieldViewResources( array $fieldViewResources = null )
+    public function setFieldViewResources(array $fieldViewResources = null)
     {
         $this->fieldViewResources = (array)$fieldViewResources;
-        usort( $this->fieldViewResources, [$this, 'sortResourcesCallback'] );
+        usort($this->fieldViewResources, [$this, 'sortResourcesCallback']);
     }
 
     /**
      * @param array $fieldEditResources
      */
-    public function setFieldEditResources( array $fieldEditResources = null )
+    public function setFieldEditResources(array $fieldEditResources = null)
     {
         $this->fieldEditResources = (array)$fieldEditResources;
-        usort( $this->fieldEditResources, [$this, 'sortResourcesCallback'] );
+        usort($this->fieldEditResources, [$this, 'sortResourcesCallback']);
     }
 
     /**
      * @param array $fieldDefinitionViewResources
      */
-    public function setFieldDefinitionViewResources( array $fieldDefinitionViewResources = null )
+    public function setFieldDefinitionViewResources(array $fieldDefinitionViewResources = null)
     {
         $this->fieldDefinitionViewResources = (array)$fieldDefinitionViewResources;
-        usort( $this->fieldDefinitionViewResources, [$this, 'sortResourcesCallback'] );
+        usort($this->fieldDefinitionViewResources, [$this, 'sortResourcesCallback']);
     }
 
     /**
      * @param array $fieldDefinitionEditResources
      */
-    public function setFieldDefinitionEditResources( array $fieldDefinitionEditResources = null )
+    public function setFieldDefinitionEditResources(array $fieldDefinitionEditResources = null)
     {
         $this->fieldDefinitionEditResources = (array)$fieldDefinitionEditResources;
-        usort( $this->fieldDefinitionEditResources, [$this, 'sortResourcesCallback'] );
+        usort($this->fieldDefinitionEditResources, [$this, 'sortResourcesCallback']);
     }
 
-    public function sortResourcesCallback( array $a, array $b )
+    public function sortResourcesCallback(array $a, array $b)
     {
         return $b['priority'] - $a['priority'];
     }
 
-    public function renderContentFieldView( Field $field, $fieldTypeIdentifier, array $params = [] )
+    public function renderContentFieldView(Field $field, $fieldTypeIdentifier, array $params = [])
     {
-        return $this->renderContentField( $field, $fieldTypeIdentifier, $params, self::VIEW );
+        return $this->renderContentField($field, $fieldTypeIdentifier, $params, self::VIEW);
     }
 
-    public function renderContentFieldEdit( Field $field, $fieldTypeIdentifier, array $params = [] )
+    public function renderContentFieldEdit(Field $field, $fieldTypeIdentifier, array $params = [])
     {
-        return $this->renderContentField( $field, $fieldTypeIdentifier, $params, self::EDIT );
+        return $this->renderContentField($field, $fieldTypeIdentifier, $params, self::EDIT);
     }
 
     /**
@@ -156,40 +158,38 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @return string
      */
-    private function renderContentField( Field $field, $fieldTypeIdentifier, array $params, $type )
+    private function renderContentField(Field $field, $fieldTypeIdentifier, array $params, $type)
     {
         $localTemplate = null;
-        if ( isset( $params['template'] ) )
-        {
+        if (isset($params['template'])) {
             // local override of the template
             // this template is put on the top the templates stack
             $localTemplate = $params['template'];
-            unset( $params['template'] );
+            unset($params['template']);
         }
 
         $params += ['field' => $field];
 
         // Getting instance of Twig_Template that will be used to render blocks
-        if ( is_string( $this->baseTemplate ) )
-        {
-            $this->baseTemplate = $this->twig->loadTemplate( $this->baseTemplate );
+        if (is_string($this->baseTemplate)) {
+            $this->baseTemplate = $this->twig->loadTemplate($this->baseTemplate);
         }
 
         return $this->baseTemplate->renderBlock(
-            $this->getRenderFieldBlockName( $fieldTypeIdentifier, $type ),
+            $this->getRenderFieldBlockName($fieldTypeIdentifier, $type),
             $params,
-            $this->getBlocksByField( $fieldTypeIdentifier, $type, $localTemplate )
+            $this->getBlocksByField($fieldTypeIdentifier, $type, $localTemplate)
         );
     }
 
-    public function renderFieldDefinitionView( FieldDefinition $fieldDefinition, array $params = [] )
+    public function renderFieldDefinitionView(FieldDefinition $fieldDefinition, array $params = [])
     {
-        return $this->renderFieldDefinition( $fieldDefinition, $params, self::VIEW );
+        return $this->renderFieldDefinition($fieldDefinition, $params, self::VIEW);
     }
 
-    public function renderFieldDefinitionEdit( FieldDefinition $fieldDefinition, array $params = [] )
+    public function renderFieldDefinitionEdit(FieldDefinition $fieldDefinition, array $params = [])
     {
-        return $this->renderFieldDefinition( $fieldDefinition, $params, self::EDIT );
+        return $this->renderFieldDefinition($fieldDefinition, $params, self::EDIT);
     }
 
     /**
@@ -199,11 +199,10 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @return string
      */
-    private function renderFieldDefinition( FieldDefinition $fieldDefinition, array $params, $type )
+    private function renderFieldDefinition(FieldDefinition $fieldDefinition, array $params, $type)
     {
-        if ( is_string( $this->baseTemplate ) )
-        {
-            $this->baseTemplate = $this->twig->loadTemplate( $this->baseTemplate );
+        if (is_string($this->baseTemplate)) {
+            $this->baseTemplate = $this->twig->loadTemplate($this->baseTemplate);
         }
 
         $params += [
@@ -212,9 +211,9 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
         ];
 
         return $this->baseTemplate->renderBlock(
-            $this->getRenderFieldDefinitionBlockName( $fieldDefinition->fieldTypeIdentifier, $type ),
+            $this->getRenderFieldDefinitionBlockName($fieldDefinition->fieldTypeIdentifier, $type),
             $params,
-            $this->getBlocksByFieldDefinition( $fieldDefinition, $type )
+            $this->getBlocksByFieldDefinition($fieldDefinition, $type)
         );
     }
 
@@ -227,21 +226,17 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @return array|null
      */
-    private function searchBlock( $blockName, Twig_Template $tpl )
+    private function searchBlock($blockName, Twig_Template $tpl)
     {
         // Current template might have parents, so we need to loop against
         // them to find a matching block
-        do
-        {
-            foreach ( $tpl->getBlocks() as $name => $block )
-            {
-                if ( $name === $blockName )
-                {
+        do {
+            foreach ($tpl->getBlocks() as $name => $block) {
+                if ($name === $blockName) {
                     return $block;
                 }
             }
-        }
-        while ( ( $tpl = $tpl->getParent( [] ) ) instanceof Twig_Template );
+        } while (($tpl = $tpl->getParent([])) instanceof Twig_Template);
 
         return null;
     }
@@ -249,7 +244,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     /**
      * Returns template blocks for $fieldTypeIdentifier. First check in the $localTemplate if it's provided.
      * Template block convention name is <fieldTypeIdentifier>_field
-     * Example: 'ezstring_field' will be relevant for a full view of ezstring field type
+     * Example: 'ezstring_field' will be relevant for a full view of ezstring field type.
      *
      * @param string $fieldTypeIdentifier
      * @param int $type Either self::VIEW or self::EDIT
@@ -257,24 +252,22 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @return array
      */
-    private function getBlocksByField( $fieldTypeIdentifier, $type, $localTemplate = null )
+    private function getBlocksByField($fieldTypeIdentifier, $type, $localTemplate = null)
     {
-        $fieldBlockName = $this->getRenderFieldBlockName( $fieldTypeIdentifier, $type );
-        if ( $localTemplate !== null )
-        {
+        $fieldBlockName = $this->getRenderFieldBlockName($fieldTypeIdentifier, $type);
+        if ($localTemplate !== null) {
             // $localTemplate might be a Twig_Template instance already (e.g. using _self Twig keyword)
-            if ( !$localTemplate instanceof Twig_Template )
-            {
-                $localTemplate = $this->twig->loadTemplate( $localTemplate );
+            if (!$localTemplate instanceof Twig_Template) {
+                $localTemplate = $this->twig->loadTemplate($localTemplate);
             }
 
-            $block = $this->searchBlock( $fieldBlockName, $localTemplate );
-            if ( $block !== null )
-            {
+            $block = $this->searchBlock($fieldBlockName, $localTemplate);
+            if ($block !== null) {
                 return [$fieldBlockName => $block];
             }
         }
-        return $this->getBlockByName( $fieldBlockName, $type === self::EDIT ? 'fieldEditResources' : 'fieldViewResources' );
+
+        return $this->getBlockByName($fieldBlockName, $type === self::EDIT ? 'fieldEditResources' : 'fieldViewResources');
     }
 
     /**
@@ -285,17 +278,17 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @return array
      */
-    private function getBlocksByFieldDefinition( FieldDefinition $definition, $type )
+    private function getBlocksByFieldDefinition(FieldDefinition $definition, $type)
     {
         return $this->getBlockByName(
-            $this->getRenderFieldDefinitionBlockName( $definition->fieldTypeIdentifier, $type ),
+            $this->getRenderFieldDefinitionBlockName($definition->fieldTypeIdentifier, $type),
             $type === self::EDIT ? 'fieldDefinitionEditResources' : 'fieldDefinitionViewResources'
         );
     }
 
     /**
      * Returns the template block of the given $name available in the resources
-     * which name is $resourcesName
+     * which name is $resourcesName.
      *
      * @param string $name
      * @param string $resourcesName
@@ -304,29 +297,28 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @return array
      */
-    private function getBlockByName( $name, $resourcesName )
+    private function getBlockByName($name, $resourcesName)
     {
-        if ( isset( $this->blocks[$name] ) )
-        {
+        if (isset($this->blocks[$name])) {
             return [$name => $this->blocks[$name]];
         }
 
-        foreach ( $this->{$resourcesName} as &$template )
-        {
-            if ( !$template instanceof Twig_Template )
-                $template = $this->twig->loadTemplate( $template['template'] );
+        foreach ($this->{$resourcesName} as &$template) {
+            if (!$template instanceof Twig_Template) {
+                $template = $this->twig->loadTemplate($template['template']);
+            }
 
             $tpl = $template;
 
-            $block = $this->searchBlock( $name, $tpl );
-            if ( $block !== null )
-            {
+            $block = $this->searchBlock($name, $tpl);
+            if ($block !== null) {
                 $this->blocks[$name] = $block;
+
                 return [$name => $block];
             }
         }
 
-        throw new MissingFieldBlockException( "Cannot find '$name' template block." );
+        throw new MissingFieldBlockException("Cannot find '$name' template block.");
     }
 
     /**
@@ -337,24 +329,26 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @return string
      */
-    private function getRenderFieldBlockName( $fieldTypeIdentifier, $type )
+    private function getRenderFieldBlockName($fieldTypeIdentifier, $type)
     {
         $suffix = $type === self::EDIT ? self::FIELD_EDIT_SUFFIX : self::FIELD_VIEW_SUFFIX;
+
         return $fieldTypeIdentifier . $suffix;
     }
 
     /**
      * Returns the name of the block to render the settings of the field
-     * definition $definition
+     * definition $definition.
      *
      * @param string $fieldTypeIdentifier
      * @param int $type Either self::VIEW or self::EDIT
      *
      * @return string
      */
-    private function getRenderFieldDefinitionBlockName( $fieldTypeIdentifier, $type )
+    private function getRenderFieldDefinitionBlockName($fieldTypeIdentifier, $type)
     {
         $suffix = $type === self::EDIT ? self::FIELD_DEFINITION_EDIT_SUFFIX : self::FIELD_DEFINITION_VIEW_SUFFIX;
+
         return $fieldTypeIdentifier . $suffix;
     }
 }

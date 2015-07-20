@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the DefaultRouterTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -36,8 +38,8 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->container = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
-        $this->configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
+        $this->container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $this->configResolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
         $this->requestContext = new RequestContext();
     }
 
@@ -51,15 +53,16 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|DefaultRouter
      */
-    protected function generateRouter( array $mockedMethods = array() )
+    protected function generateRouter(array $mockedMethods = array())
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultRouter $router */
         $router = $this
-            ->getMockBuilder( $this->getRouterClass() )
-            ->setConstructorArgs( array( $this->container, 'foo', array(), $this->requestContext ) )
-            ->setMethods( array_merge( $mockedMethods ) )
+            ->getMockBuilder($this->getRouterClass())
+            ->setConstructorArgs(array($this->container, 'foo', array(), $this->requestContext))
+            ->setMethods(array_merge($mockedMethods))
             ->getMock();
-        $router->setConfigResolver( $this->configResolver );
+        $router->setConfigResolver($this->configResolver);
+
         return $router;
     }
 
@@ -67,69 +70,69 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
     {
         $pathinfo = '/siteaccess/foo/bar';
         $semanticPathinfo = '/foo/bar';
-        $request = Request::create( $pathinfo );
-        $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
+        $request = Request::create($pathinfo);
+        $request->attributes->set('semanticPathinfo', $semanticPathinfo);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultRouter $router */
-        $router = $this->generateRouter( array( 'match' ) );
+        $router = $this->generateRouter(array('match'));
 
-        $matchedParameters = array( '_controller' => 'AcmeBundle:myAction' );
+        $matchedParameters = array('_controller' => 'AcmeBundle:myAction');
         $router
-            ->expects( $this->once() )
-            ->method( 'match' )
-            ->with( $semanticPathinfo )
-            ->will( $this->returnValue( $matchedParameters ) );
-        $this->assertSame( $matchedParameters, $router->matchRequest( $request ) );
+            ->expects($this->once())
+            ->method('match')
+            ->with($semanticPathinfo)
+            ->will($this->returnValue($matchedParameters));
+        $this->assertSame($matchedParameters, $router->matchRequest($request));
     }
 
     public function testMatchRequestRegularPathinfo()
     {
-        $matchedParameters = array( '_controller' => 'AcmeBundle:myAction' );
+        $matchedParameters = array('_controller' => 'AcmeBundle:myAction');
         $pathinfo = '/siteaccess/foo/bar';
 
-        $request = Request::create( $pathinfo );
+        $request = Request::create($pathinfo);
 
-        $this->configResolver->expects( $this->never() )->method( 'getParameter' );
+        $this->configResolver->expects($this->never())->method('getParameter');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultRouter $router */
-        $router = $this->generateRouter( array( 'match' ) );
+        $router = $this->generateRouter(array('match'));
         $router
-            ->expects( $this->once() )
-            ->method( 'match' )
-            ->with( $pathinfo )
-            ->will( $this->returnValue( $matchedParameters ) );
-        $this->assertSame( $matchedParameters, $router->matchRequest( $request ) );
+            ->expects($this->once())
+            ->method('match')
+            ->with($pathinfo)
+            ->will($this->returnValue($matchedParameters));
+        $this->assertSame($matchedParameters, $router->matchRequest($request));
     }
 
     /**
      * @dataProvider providerGenerateNoSiteAccess
      */
-    public function testGenerateNoSiteAccess( $url )
+    public function testGenerateNoSiteAccess($url)
     {
-        $generator = $this->getMock( 'Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface' );
+        $generator = $this->getMock('Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface');
         $generator
-            ->expects( $this->once() )
-            ->method( 'generate' )
-            ->with( __METHOD__ )
-            ->will( $this->returnValue( $url ) );
+            ->expects($this->once())
+            ->method('generate')
+            ->with(__METHOD__)
+            ->will($this->returnValue($url));
 
         /** @var DefaultRouter|\PHPUnit_Framework_MockObject_MockObject $router */
-        $router = $this->generateRouter( array( 'getGenerator' ) );
+        $router = $this->generateRouter(array('getGenerator'));
         $router
-            ->expects( $this->any() )
-            ->method( 'getGenerator' )
-            ->will( $this->returnValue( $generator ) );
+            ->expects($this->any())
+            ->method('getGenerator')
+            ->will($this->returnValue($generator));
 
-        $this->assertSame( $url, $router->generate( __METHOD__ ) );
+        $this->assertSame($url, $router->generate(__METHOD__));
     }
 
     public function providerGenerateNoSiteAccess()
     {
         return array(
-            array( '/foo/bar' ),
-            array( '/foo/bar/baz?truc=muche&tata=toto' ),
-            array( 'http://ez.no/Products/eZ-Publish-CMS' ),
-            array( 'http://www.metalfrance.net/decouvertes/edge-caress-inverse-ep' ),
+            array('/foo/bar'),
+            array('/foo/bar/baz?truc=muche&tata=toto'),
+            array('http://ez.no/Products/eZ-Publish-CMS'),
+            array('http://www.metalfrance.net/decouvertes/edge-caress-inverse-ep'),
         );
     }
 
@@ -144,88 +147,82 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
      * @param bool $absolute True if generated link needs to be absolute
      * @param string $routeName
      */
-    public function testGenerateWithSiteAccess( $urlGenerated, $relevantUri, $expectedUrl, $saName, $isMatcherLexer, $absolute, $routeName )
+    public function testGenerateWithSiteAccess($urlGenerated, $relevantUri, $expectedUrl, $saName, $isMatcherLexer, $absolute, $routeName)
     {
         $routeName = $routeName ?: __METHOD__;
-        $nonSiteAccessAwareRoutes = array( '_dontwantsiteaccess' );
-        $generator = $this->getMock( 'Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface' );
+        $nonSiteAccessAwareRoutes = array('_dontwantsiteaccess');
+        $generator = $this->getMock('Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface');
         $generator
-            ->expects( $this->once() )
-            ->method( 'generate' )
-            ->with( $routeName )
-            ->will( $this->returnValue( $urlGenerated ) );
+            ->expects($this->once())
+            ->method('generate')
+            ->with($routeName)
+            ->will($this->returnValue($urlGenerated));
 
         /** @var DefaultRouter|\PHPUnit_Framework_MockObject_MockObject $router */
-        $router = $this->generateRouter( array( 'getGenerator' ) );
+        $router = $this->generateRouter(array('getGenerator'));
         $router
-            ->expects( $this->any() )
-            ->method( 'getGenerator' )
-            ->will( $this->returnValue( $generator ) );
+            ->expects($this->any())
+            ->method('getGenerator')
+            ->will($this->returnValue($generator));
 
         // If matcher is URILexer, we make it act as it's supposed to, prepending the siteaccess.
-        if ( $isMatcherLexer )
-        {
-            $matcher = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer' );
+        if ($isMatcherLexer) {
+            $matcher = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer');
             // Route is siteaccess aware, we're expecting analyseLink() to be called
-            if ( !in_array( $routeName, $nonSiteAccessAwareRoutes ) )
-            {
+            if (!in_array($routeName, $nonSiteAccessAwareRoutes)) {
                 $matcher
-                    ->expects( $this->once() )
-                    ->method( 'analyseLink' )
-                    ->with( $relevantUri )
-                    ->will( $this->returnValue( "/$saName$relevantUri" ) );
-            }
-            // Non-siteaccess aware route, it's not supposed to be analysed
-            else
-            {
+                    ->expects($this->once())
+                    ->method('analyseLink')
+                    ->with($relevantUri)
+                    ->will($this->returnValue("/$saName$relevantUri"));
+            } else {
+                // Non-siteaccess aware route, it's not supposed to be analysed
                 $matcher
-                    ->expects( $this->never() )
-                    ->method( 'analyseLink' );
+                    ->expects($this->never())
+                    ->method('analyseLink');
             }
-        }
-        else
-        {
-            $matcher = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\Matcher' );
+        } else {
+            $matcher = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\Matcher');
         }
 
-        $sa = new SiteAccess( $saName, 'test', $matcher );
-        $router->setSiteAccess( $sa );
+        $sa = new SiteAccess($saName, 'test', $matcher);
+        $router->setSiteAccess($sa);
 
         $requestContext = new RequestContext();
-        $urlComponents = parse_url( $urlGenerated );
-        if ( isset( $urlComponents['host'] ) )
-        {
-            $requestContext->setHost( $urlComponents['host'] );
-            $requestContext->setScheme( $urlComponents['scheme'] );
-            if ( isset( $urlComponents['port'] ) && $urlComponents['scheme'] === 'http' )
-                $requestContext->setHttpPort( $urlComponents['port'] );
-            else if ( isset( $urlComponents['port'] ) && $urlComponents['scheme'] === 'https' )
-                $requestContext->setHttpsPort( $urlComponents['port'] );
+        $urlComponents = parse_url($urlGenerated);
+        if (isset($urlComponents['host'])) {
+            $requestContext->setHost($urlComponents['host']);
+            $requestContext->setScheme($urlComponents['scheme']);
+            if (isset($urlComponents['port']) && $urlComponents['scheme'] === 'http') {
+                $requestContext->setHttpPort($urlComponents['port']);
+            } elseif (isset($urlComponents['port']) && $urlComponents['scheme'] === 'https') {
+                $requestContext->setHttpsPort($urlComponents['port']);
+            }
         }
         $requestContext->setBaseUrl(
-            substr( $urlComponents['path'], 0, strpos( $urlComponents['path'], $relevantUri ) )
+            substr($urlComponents['path'], 0, strpos($urlComponents['path'], $relevantUri))
         );
-        $router->setContext( $requestContext );
-        $router->setNonSiteAccessAwareRoutes( $nonSiteAccessAwareRoutes );
+        $router->setContext($requestContext);
+        $router->setNonSiteAccessAwareRoutes($nonSiteAccessAwareRoutes);
 
-        $this->assertSame( $expectedUrl, $router->generate( $routeName, array(), $absolute ) );
+        $this->assertSame($expectedUrl, $router->generate($routeName, array(), $absolute));
     }
 
     public function providerGenerateWithSiteAccess()
     {
         return array(
-            array( '/foo/bar', '/foo/bar', '/foo/bar', 'test_siteaccess', false, false, null ),
-            array( 'http://ezpublish.dev/foo/bar', '/foo/bar', 'http://ezpublish.dev/foo/bar', 'test_siteaccess', false, true, null ),
-            array( 'http://ezpublish.dev/foo/bar', '/foo/bar', 'http://ezpublish.dev/test_siteaccess/foo/bar', 'test_siteaccess', true, true, null ),
-            array( 'http://ezpublish.dev/foo/bar', '/foo/bar', 'http://ezpublish.dev/foo/bar', 'test_siteaccess', true, true, '_dontwantsiteaccess' ),
-            array( 'http://ezpublish.dev:8080/foo/bar', '/foo/bar', 'http://ezpublish.dev:8080/test_siteaccess/foo/bar', 'test_siteaccess', true, true, null ),
-            array( 'http://ezpublish.dev:8080/foo/bar', '/foo/bar', 'http://ezpublish.dev:8080/foo/bar', 'test_siteaccess', true, true, '_dontwantsiteaccess' ),
-            array( 'https://ezpublish.dev/secured', '/secured', 'https://ezpublish.dev/test_siteaccess/secured', 'test_siteaccess', true, true, null ),
-            array( 'https://ezpublish.dev:445/secured', '/secured', 'https://ezpublish.dev:445/test_siteaccess/secured', 'test_siteaccess', true, true, null ),
-            array( 'http://ezpublish.dev:8080/foo/root_folder/bar/baz', '/bar/baz', 'http://ezpublish.dev:8080/foo/root_folder/test_siteaccess/bar/baz', 'test_siteaccess', true, true, null ),
-            array( '/foo/bar/baz', '/foo/bar/baz', '/test_siteaccess/foo/bar/baz', 'test_siteaccess', true, false, null ),
-            array( '/foo/root_folder/bar/baz', '/bar/baz', '/foo/root_folder/test_siteaccess/bar/baz', 'test_siteaccess', true, false, null ),
-            array( '/foo/bar/baz', '/foo/bar/baz', '/foo/bar/baz', 'test_siteaccess', true, false, '_dontwantsiteaccess' ),
+            array('/foo/bar', '/foo/bar', '/foo/bar', 'test_siteaccess', false, false, null),
+            array('http://ezpublish.dev/foo/bar', '/foo/bar', 'http://ezpublish.dev/foo/bar', 'test_siteaccess', false, true, null),
+            array('http://ezpublish.dev/foo/bar', '/foo/bar', 'http://ezpublish.dev/test_siteaccess/foo/bar', 'test_siteaccess', true, true, null),
+            array('http://ezpublish.dev/foo/bar', '/foo/bar', 'http://ezpublish.dev/foo/bar', 'test_siteaccess', true, true, '_dontwantsiteaccess'),
+            array('http://ezpublish.dev:8080/foo/bar', '/foo/bar', 'http://ezpublish.dev:8080/test_siteaccess/foo/bar', 'test_siteaccess', true, true, null),
+            array('http://ezpublish.dev:8080/foo/bar', '/foo/bar', 'http://ezpublish.dev:8080/foo/bar', 'test_siteaccess', true, true, '_dontwantsiteaccess'),
+            array('https://ezpublish.dev/secured', '/secured', 'https://ezpublish.dev/test_siteaccess/secured', 'test_siteaccess', true, true, null),
+            array('https://ezpublish.dev:445/secured', '/secured', 'https://ezpublish.dev:445/test_siteaccess/secured', 'test_siteaccess', true, true, null),
+            array('http://ezpublish.dev:8080/foo/root_folder/bar/baz', '/bar/baz', 'http://ezpublish.dev:8080/foo/root_folder/test_siteaccess/bar/baz', 'test_siteaccess', true, true, null),
+            array('/foo/bar/baz', '/foo/bar/baz', '/test_siteaccess/foo/bar/baz', 'test_siteaccess', true, false, null),
+            array('/foo/root_folder/bar/baz', '/bar/baz', '/foo/root_folder/test_siteaccess/bar/baz', 'test_siteaccess', true, false, null),
+            array('/foo/bar/baz', '/foo/bar/baz', '/foo/bar/baz', 'test_siteaccess', true, false, '_dontwantsiteaccess'),
         );
     }
 
@@ -235,51 +232,51 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
         $urlGenerated = 'http://phoenix-rises.fm/foo/bar';
 
         $siteAccessName = 'foo_test';
-        $siteAccessRouter = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface' );
-        $versatileMatcher = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher' );
+        $siteAccessRouter = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface');
+        $versatileMatcher = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher');
         $simplifiedRequest = new SimplifiedRequest(
             array(
                 'host' => 'phoenix-rises.fm',
-                'scheme' => 'http'
+                'scheme' => 'http',
             )
         );
         $versatileMatcher
-            ->expects( $this->once() )
-            ->method( 'getRequest' )
-            ->will( $this->returnValue( $simplifiedRequest ) );
+            ->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($simplifiedRequest));
         $siteAccessRouter
-            ->expects( $this->once() )
-            ->method( 'matchByName' )
-            ->with( $siteAccessName )
-            ->will( $this->returnValue( new SiteAccess( $siteAccessName, 'foo', $versatileMatcher ) ) );
+            ->expects($this->once())
+            ->method('matchByName')
+            ->with($siteAccessName)
+            ->will($this->returnValue(new SiteAccess($siteAccessName, 'foo', $versatileMatcher)));
 
-        $generator = $this->getMock( 'Symfony\Component\Routing\Generator\UrlGeneratorInterface' );
+        $generator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
         $generator
-            ->expects( $this->at( 0 ) )
-            ->method( 'setContext' )
-            ->with( $this->isInstanceOf( 'Symfony\Component\Routing\RequestContext' ) );
+            ->expects($this->at(0))
+            ->method('setContext')
+            ->with($this->isInstanceOf('Symfony\Component\Routing\RequestContext'));
         $generator
-            ->expects( $this->at( 1 ) )
-            ->method( 'generate' )
-            ->with( $routeName )
-            ->will( $this->returnValue( $urlGenerated ) );
+            ->expects($this->at(1))
+            ->method('generate')
+            ->with($routeName)
+            ->will($this->returnValue($urlGenerated));
         $generator
-            ->expects( $this->at( 2 ) )
-            ->method( 'setContext' )
-            ->with( $this->requestContext );
+            ->expects($this->at(2))
+            ->method('setContext')
+            ->with($this->requestContext);
 
-        $router = new DefaultRouter( $this->container, 'foo', array(), $this->requestContext );
-        $router->setConfigResolver( $this->configResolver );
-        $router->setSiteAccess( new SiteAccess( 'test', 'test', $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher' ) ) );
-        $router->setSiteAccessRouter( $siteAccessRouter );
-        $refRouter = new ReflectionObject( $router );
-        $refGenerator = $refRouter->getProperty( 'generator' );
-        $refGenerator->setAccessible( true );
-        $refGenerator->setValue( $router, $generator );
+        $router = new DefaultRouter($this->container, 'foo', array(), $this->requestContext);
+        $router->setConfigResolver($this->configResolver);
+        $router->setSiteAccess(new SiteAccess('test', 'test', $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher')));
+        $router->setSiteAccessRouter($siteAccessRouter);
+        $refRouter = new ReflectionObject($router);
+        $refGenerator = $refRouter->getProperty('generator');
+        $refGenerator->setAccessible(true);
+        $refGenerator->setValue($router, $generator);
 
         $this->assertSame(
             $urlGenerated,
-            $router->generate( $routeName, array( 'siteaccess' => $siteAccessName ), DefaultRouter::ABSOLUTE_PATH )
+            $router->generate($routeName, array('siteaccess' => $siteAccessName), DefaultRouter::ABSOLUTE_PATH)
         );
     }
 }

@@ -210,4 +210,3 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
         'totalCount' => 18,
     )
 );
-

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the FieldRegistryPass class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,21 +26,17 @@ class FieldRegistryPass implements CompilerPassInterface
      *
      * @throws \LogicException
      */
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
-        if ( !$container->hasDefinition( 'ezpublish.search.common.field_registry' ) )
-        {
+        if (!$container->hasDefinition('ezpublish.search.common.field_registry')) {
             return;
         }
 
-        $fieldRegistryDefinition = $container->getDefinition( 'ezpublish.search.common.field_registry' );
+        $fieldRegistryDefinition = $container->getDefinition('ezpublish.search.common.field_registry');
 
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.fieldType.indexable' ) as $id => $attributes )
-        {
-            foreach ( $attributes as $attribute )
-            {
-                if ( !isset( $attribute['alias'] ) )
-                {
+        foreach ($container->findTaggedServiceIds('ezpublish.fieldType.indexable') as $id => $attributes) {
+            foreach ($attributes as $attribute) {
+                if (!isset($attribute['alias'])) {
                     throw new LogicException(
                         'ezpublish.fieldType.indexable service tag needs an "alias" attribute to ' .
                         'identify the indexable field type. None given.'
@@ -49,7 +47,7 @@ class FieldRegistryPass implements CompilerPassInterface
                     'registerType',
                     array(
                         $attribute['alias'],
-                        new Reference( $id ),
+                        new Reference($id),
                     )
                 );
             }

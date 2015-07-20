@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the LanguageSwitchListenerTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,7 +28,7 @@ class LanguageSwitchListenerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->translationHelper = $this->getMockBuilder( 'eZ\Publish\Core\Helper\TranslationHelper' )
+        $this->translationHelper = $this->getMockBuilder('eZ\Publish\Core\Helper\TranslationHelper')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -34,7 +36,7 @@ class LanguageSwitchListenerTest extends PHPUnit_Framework_TestCase
     public function testGetSubscribedEvents()
     {
         $this->assertSame(
-            array( MVCEvents::ROUTE_REFERENCE_GENERATION => 'onRouteReferenceGeneration' ),
+            array(MVCEvents::ROUTE_REFERENCE_GENERATION => 'onRouteReferenceGeneration'),
             LanguageSwitchListener::getSubscribedEvents()
         );
     }
@@ -42,47 +44,47 @@ class LanguageSwitchListenerTest extends PHPUnit_Framework_TestCase
     public function testOnRouteReferenceGenerationNoLanguage()
     {
         $this->translationHelper
-            ->expects( $this->never() )
-            ->method( 'getTranslationSiteAccess' );
+            ->expects($this->never())
+            ->method('getTranslationSiteAccess');
 
-        $event = new RouteReferenceGenerationEvent( new RouteReference( 'foo' ), new Request() );
-        $listener = new LanguageSwitchListener( $this->translationHelper );
-        $listener->onRouteReferenceGeneration( $event );
+        $event = new RouteReferenceGenerationEvent(new RouteReference('foo'), new Request());
+        $listener = new LanguageSwitchListener($this->translationHelper);
+        $listener->onRouteReferenceGeneration($event);
     }
 
     public function testOnRouteReferenceGeneration()
     {
         $language = 'fre-FR';
-        $routeReference = new RouteReference( 'foo', array( 'language' => $language ) );
-        $event = new RouteReferenceGenerationEvent( $routeReference, new Request() );
+        $routeReference = new RouteReference('foo', array('language' => $language));
+        $event = new RouteReferenceGenerationEvent($routeReference, new Request());
         $expectedSiteAccess = 'phoenix_rises';
         $this->translationHelper
-            ->expects( $this->once() )
-            ->method( 'getTranslationSiteAccess' )
-            ->with( $language )
-            ->will( $this->returnValue( $expectedSiteAccess ) );
+            ->expects($this->once())
+            ->method('getTranslationSiteAccess')
+            ->with($language)
+            ->will($this->returnValue($expectedSiteAccess));
 
-        $listener = new LanguageSwitchListener( $this->translationHelper );
-        $listener->onRouteReferenceGeneration( $event );
-        $this->assertFalse( $routeReference->has( 'language' ) );
-        $this->assertTrue( $routeReference->has( 'siteaccess' ) );
-        $this->assertSame( $expectedSiteAccess, $routeReference->get( 'siteaccess' ) );
+        $listener = new LanguageSwitchListener($this->translationHelper);
+        $listener->onRouteReferenceGeneration($event);
+        $this->assertFalse($routeReference->has('language'));
+        $this->assertTrue($routeReference->has('siteaccess'));
+        $this->assertSame($expectedSiteAccess, $routeReference->get('siteaccess'));
     }
 
     public function testOnRouteReferenceGenerationNoTranslationSiteAccess()
     {
         $language = 'fre-FR';
-        $routeReference = new RouteReference( 'foo', array( 'language' => $language ) );
-        $event = new RouteReferenceGenerationEvent( $routeReference, new Request() );
+        $routeReference = new RouteReference('foo', array('language' => $language));
+        $event = new RouteReferenceGenerationEvent($routeReference, new Request());
         $this->translationHelper
-            ->expects( $this->once() )
-            ->method( 'getTranslationSiteAccess' )
-            ->with( $language )
-            ->will( $this->returnValue( null ) );
+            ->expects($this->once())
+            ->method('getTranslationSiteAccess')
+            ->with($language)
+            ->will($this->returnValue(null));
 
-        $listener = new LanguageSwitchListener( $this->translationHelper );
-        $listener->onRouteReferenceGeneration( $event );
-        $this->assertFalse( $routeReference->has( 'language' ) );
-        $this->assertFalse( $routeReference->has( 'siteaccess' ) );
+        $listener = new LanguageSwitchListener($this->translationHelper);
+        $listener->onRouteReferenceGeneration($event);
+        $this->assertFalse($routeReference->has('language'));
+        $this->assertFalse($routeReference->has('siteaccess'));
     }
 }

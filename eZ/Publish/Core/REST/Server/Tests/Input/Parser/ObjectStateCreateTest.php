@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
 class ObjectStateCreateTest extends BaseTest
 {
     /**
-     * Tests the ObjectStateCreate parser
+     * Tests the ObjectStateCreate parser.
      */
     public function testParse()
     {
@@ -27,22 +29,22 @@ class ObjectStateCreateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test state'
-                    )
-                )
+                        '#text' => 'Test state',
+                    ),
+                ),
             ),
             'descriptions' => array(
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test description'
-                    )
-                )
-            )
+                        '#text' => 'Test description',
+                    ),
+                ),
+            ),
         );
 
         $objectStateCreate = $this->getParser();
-        $result = $objectStateCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $objectStateCreate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateCreateStruct',
@@ -69,20 +71,20 @@ class ObjectStateCreateTest extends BaseTest
         );
 
         $this->assertEquals(
-            array( 'eng-GB' => 'Test state' ),
+            array('eng-GB' => 'Test state'),
             $result->names,
             'ObjectStateCreateStruct names property not created correctly.'
         );
 
         $this->assertEquals(
-            array( 'eng-GB' => 'Test description' ),
+            array('eng-GB' => 'Test description'),
             $result->descriptions,
             'ObjectStateCreateStruct descriptions property not created correctly.'
         );
     }
 
     /**
-     * Test ObjectStateCreate parser throwing exception on missing identifier
+     * Test ObjectStateCreate parser throwing exception on missing identifier.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'identifier' attribute for ObjectStateCreate.
@@ -96,26 +98,26 @@ class ObjectStateCreateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test state'
-                    )
-                )
+                        '#text' => 'Test state',
+                    ),
+                ),
             ),
             'descriptions' => array(
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test description'
-                    )
-                )
-            )
+                        '#text' => 'Test description',
+                    ),
+                ),
+            ),
         );
 
         $objectStateCreate = $this->getParser();
-        $objectStateCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $objectStateCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ObjectStateCreate parser throwing exception on missing priority
+     * Test ObjectStateCreate parser throwing exception on missing priority.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'priority' attribute for ObjectStateCreate.
@@ -129,26 +131,26 @@ class ObjectStateCreateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test state'
-                    )
-                )
+                        '#text' => 'Test state',
+                    ),
+                ),
             ),
             'descriptions' => array(
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test description'
-                    )
-                )
-            )
+                        '#text' => 'Test description',
+                    ),
+                ),
+            ),
         );
 
         $objectStateCreate = $this->getParser();
-        $objectStateCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $objectStateCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ObjectStateCreate parser throwing exception on missing defaultLanguageCode
+     * Test ObjectStateCreate parser throwing exception on missing defaultLanguageCode.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'defaultLanguageCode' attribute for ObjectStateCreate.
@@ -162,26 +164,26 @@ class ObjectStateCreateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test state'
-                    )
-                )
+                        '#text' => 'Test state',
+                    ),
+                ),
             ),
             'descriptions' => array(
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test description'
-                    )
-                )
-            )
+                        '#text' => 'Test description',
+                    ),
+                ),
+            ),
         );
 
         $objectStateCreate = $this->getParser();
-        $objectStateCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $objectStateCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ObjectStateCreate parser throwing exception on missing names
+     * Test ObjectStateCreate parser throwing exception on missing names.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'names' element for ObjectStateCreate.
@@ -196,18 +198,18 @@ class ObjectStateCreateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test description'
-                    )
-                )
-            )
+                        '#text' => 'Test description',
+                    ),
+                ),
+            ),
         );
 
         $objectStateCreate = $this->getParser();
-        $objectStateCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $objectStateCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ObjectStateCreate parser throwing exception on invalid names structure
+     * Test ObjectStateCreate parser throwing exception on invalid names structure.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'names' element for ObjectStateCreate.
@@ -223,18 +225,18 @@ class ObjectStateCreateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test description'
-                    )
-                )
-            )
+                        '#text' => 'Test description',
+                    ),
+                ),
+            ),
         );
 
         $objectStateCreate = $this->getParser();
-        $objectStateCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $objectStateCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Returns the ObjectStateCreate parser
+     * Returns the ObjectStateCreate parser.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateCreate
      */
@@ -247,7 +249,7 @@ class ObjectStateCreateTest extends BaseTest
     }
 
     /**
-     * Get the object state service mock object
+     * Get the object state service mock object.
      *
      * @return \eZ\Publish\API\Repository\ObjectStateService
      */
@@ -261,11 +263,11 @@ class ObjectStateCreateTest extends BaseTest
             false
         );
 
-        $objectStateServiceMock->expects( $this->any() )
-            ->method( 'newObjectStateCreateStruct' )
-            ->with( $this->equalTo( 'test-state' ) )
+        $objectStateServiceMock->expects($this->any())
+            ->method('newObjectStateCreateStruct')
+            ->with($this->equalTo('test-state'))
             ->will(
-                $this->returnValue( new ObjectStateCreateStruct( array( 'identifier' => 'test-state' ) ) )
+                $this->returnValue(new ObjectStateCreateStruct(array('identifier' => 'test-state')))
             );
 
         return $objectStateServiceMock;

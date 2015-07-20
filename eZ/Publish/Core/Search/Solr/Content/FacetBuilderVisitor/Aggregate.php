@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Content Search handler class
+ * File containing the Content Search handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,107 +16,97 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
- * Visits the facet builder tree into a Solr query
+ * Visits the facet builder tree into a Solr query.
  */
 class Aggregate extends FacetBuilderVisitor
 {
     /**
-     * Array of available visitors
+     * Array of available visitors.
      *
      * @var array
      */
     protected $visitors = array();
 
     /**
-     * COnstruct from optional visitor array
+     * COnstruct from optional visitor array.
      *
      * @param array $visitors
-     *
-     * @return void
      */
-    public function __construct( array $visitors = array() )
+    public function __construct(array $visitors = array())
     {
-        foreach ( $visitors as $visitor )
-        {
-            $this->addVisitor( $visitor );
+        foreach ($visitors as $visitor) {
+            $this->addVisitor($visitor);
         }
     }
 
     /**
-     * Adds visitor
+     * Adds visitor.
      *
      * @param FieldValueVisitor $visitor
-     *
-     * @return void
      */
-    public function addVisitor( FacetBuilderVisitor $visitor )
+    public function addVisitor(FacetBuilderVisitor $visitor)
     {
         $this->visitors[] = $visitor;
     }
 
     /**
-     * CHeck if visitor is applicable to current facet result
+     * CHeck if visitor is applicable to current facet result.
      *
      * @param string $field
      *
-     * @return boolean
+     * @return bool
      */
-    public function canMap( $field )
+    public function canMap($field)
     {
         return true;
     }
 
     /**
-     * Map Solr facet result back to facet objects
+     * Map Solr facet result back to facet objects.
      *
      * @param string $field
      * @param array $data
      *
      * @return Facet
      */
-    public function map( $field, array $data )
+    public function map($field, array $data)
     {
-        foreach ( $this->visitors as $visitor )
-        {
-            if ( $visitor->canMap( $field ) )
-            {
-                return $visitor->map( $field, $data );
+        foreach ($this->visitors as $visitor) {
+            if ($visitor->canMap($field)) {
+                return $visitor->map($field, $data);
             }
         }
 
-        throw new \OutOfRangeException( "No visitor available for: " . $field );
+        throw new \OutOfRangeException('No visitor available for: ' . $field);
     }
 
     /**
-     * CHeck if visitor is applicable to current facet builder
+     * CHeck if visitor is applicable to current facet builder.
      *
      * @param FacetBuilder $facetBuilder
      *
-     * @return boolean
+     * @return bool
      */
-    public function canVisit( FacetBuilder $facetBuilder )
+    public function canVisit(FacetBuilder $facetBuilder)
     {
         return true;
     }
 
     /**
-     * Map field value to a proper Solr representation
+     * Map field value to a proper Solr representation.
      *
      * @param FacetBuilder $facetBuilder
      *
      * @return string
      */
-    public function visit( FacetBuilder $facetBuilder )
+    public function visit(FacetBuilder $facetBuilder)
     {
-        foreach ( $this->visitors as $visitor )
-        {
-            if ( $visitor->canVisit( $facetBuilder ) )
-            {
-                return $visitor->visit( $facetBuilder );
+        foreach ($this->visitors as $visitor) {
+            if ($visitor->canVisit($facetBuilder)) {
+                return $visitor->visit($facetBuilder);
             }
         }
 
-        throw new NotImplementedException( "No visitor available for: " . get_class( $facetBuilder ) );
+        throw new NotImplementedException('No visitor available for: ' . get_class($facetBuilder));
     }
 }
-

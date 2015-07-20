@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing an interface for the Doctrine database abstractions
+ * File containing an interface for the Doctrine database abstractions.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -28,11 +30,11 @@ class SubselectDoctrineQuery extends SelectDoctrineQuery
      *
      * @param \eZ\Publish\Core\Persistence\Doctrine\AbstractDoctrineQuery $outer
      */
-    public function __construct( AbstractDoctrineQuery $outer )
+    public function __construct(AbstractDoctrineQuery $outer)
     {
         $this->outerQuery = $outer;
 
-        parent::__construct( $outer->connection );
+        parent::__construct($outer->connection);
     }
 
     /**
@@ -73,11 +75,12 @@ class SubselectDoctrineQuery extends SelectDoctrineQuery
      *
      * @param &mixed $param
      * @param string $placeHolder the name to bind with. The string must start with a colon ':'.
+     *
      * @return string the placeholder name used.
      */
-    public function bindParam( &$param, $placeHolder = null, $type = PDO::PARAM_STR )
+    public function bindParam(&$param, $placeHolder = null, $type = PDO::PARAM_STR)
     {
-        return $this->outerQuery->bindParam( $param, $placeHolder, $type );
+        return $this->outerQuery->bindParam($param, $placeHolder, $type);
     }
 
     /**
@@ -118,11 +121,12 @@ class SubselectDoctrineQuery extends SelectDoctrineQuery
      *
      * @param mixed $value
      * @param string $placeHolder the name to bind with. The string must start with a colon ':'.
+     *
      * @return string the placeholder name used.
      */
-    public function bindValue( $value, $placeHolder = null, $type = PDO::PARAM_STR )
+    public function bindValue($value, $placeHolder = null, $type = PDO::PARAM_STR)
     {
-        return $this->outerQuery->bindValue( $value, $placeHolder, $type );
+        return $this->outerQuery->bindValue($value, $placeHolder, $type);
     }
 
     /**
@@ -179,6 +183,6 @@ class SubselectDoctrineQuery extends SelectDoctrineQuery
      */
     public function subSelect()
     {
-        return new SubselectDoctrineQuery( $this->outerQuery );
+        return new self($this->outerQuery);
     }
 }

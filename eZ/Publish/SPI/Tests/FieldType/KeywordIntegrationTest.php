@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\SPI\Tests\FieldType\KeywordIntegrationTest class
+ * File contains: eZ\Publish\SPI\Tests\FieldType\KeywordIntegrationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
- * Integration test for legacy storage field types
+ * Integration test for legacy storage field types.
  *
  * This abstract base test case is supposed to be the base for field type
  * integration tests. It basically calls all involved methods in the field type
@@ -37,7 +39,7 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 class KeywordIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -47,14 +49,14 @@ class KeywordIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get handler with required custom field types registered
+     * Get handler with required custom field types registered.
      *
      * @return \eZ\Publish\SPI\Persistence\Handler
      */
     public function getCustomHandler()
     {
         $fieldType = new FieldType\Keyword\Type();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
         return $this->getHandler(
             'ezkeyword',
@@ -80,7 +82,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field definition data values
+     * Get field definition data values.
      *
      * This is a PHPUnit data provider
      *
@@ -91,13 +93,13 @@ class KeywordIntegrationTest extends BaseIntegrationTest
         return array(
             // The ezkeyword field type does not have any special field definition
             // properties
-            array( 'fieldType', 'ezkeyword' ),
-            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints() ),
+            array('fieldType', 'ezkeyword'),
+            array('fieldTypeConstraints', new Content\FieldTypeConstraints()),
         );
     }
 
     /**
-     * Get initial field value
+     * Get initial field value.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -105,15 +107,15 @@ class KeywordIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => array(),
-                'externalData' => array( 'foo', 'bar', 'sindelfingen' ),
-                'sortKey'      => false,
+                'data' => array(),
+                'externalData' => array('foo', 'bar', 'sindelfingen'),
+                'sortKey' => false,
             )
         );
     }
 
     /**
-     * Asserts that the loaded field data is correct
+     * Asserts that the loaded field data is correct.
      *
      * Performs assertions on the loaded field, mainly checking that the
      * $field->value->externalData is loaded correctly. If the loading of
@@ -121,32 +123,28 @@ class KeywordIntegrationTest extends BaseIntegrationTest
      * also needs to be asserted. Make sure you implement this method agnostic
      * to the used SPI\Persistence implementation!
      */
-    public function assertLoadedFieldDataCorrect( Field $field )
+    public function assertLoadedFieldDataCorrect(Field $field)
     {
         $this->assertKeywordSetsEqual(
             $this->getInitialValue()->externalData,
             $field->value->externalData
         );
 
-        $this->assertEquals( array(), $field->value->data );
-        $this->assertNull( $field->value->sortKey );
+        $this->assertEquals(array(), $field->value->data);
+        $this->assertNull($field->value->sortKey);
     }
 
     /**
-     * Asserts that 2 keyword sets equal
+     * Asserts that 2 keyword sets equal.
      *
      * @param array $expectedKeywords
      * @param array $actualKeywords
-     *
-     * @return void
      */
-    protected function assertKeywordSetsEqual( $expectedKeywords, $actualKeywords )
+    protected function assertKeywordSetsEqual($expectedKeywords, $actualKeywords)
     {
         // Assert all expected keywords are loaded
-        foreach ( $expectedKeywords as $keyword )
-        {
-            if ( ( $index = array_search( $keyword, $actualKeywords ) ) === false )
-            {
+        foreach ($expectedKeywords as $keyword) {
+            if (($index = array_search($keyword, $actualKeywords)) === false) {
                 $this->fail(
                     sprintf(
                         'Keyword "%s" not loaded.',
@@ -154,16 +152,15 @@ class KeywordIntegrationTest extends BaseIntegrationTest
                     )
                 );
             }
-            unset( $actualKeywords[$index] );
+            unset($actualKeywords[$index]);
         }
 
         // Assert no additional keywords have been loaded
-        if ( !empty( $actualKeywords ) )
-        {
+        if (!empty($actualKeywords)) {
             $this->fail(
                 sprintf(
                     'Loaded unexpected keywords: "%s"',
-                    implode( '", "', $actualKeywords )
+                    implode('", "', $actualKeywords)
                 )
             );
         }
@@ -180,15 +177,15 @@ class KeywordIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => array(),
-                'externalData' => array( 'sindelfingen', 'baz' ),
-                'sortKey'      => false,
+                'data' => array(),
+                'externalData' => array('sindelfingen', 'baz'),
+                'sortKey' => false,
             )
         );
     }
 
     /**
-     * Asserts that the updated field data is loaded correct
+     * Asserts that the updated field data is loaded correct.
      *
      * Performs assertions on the loaded field after it has been updated,
      * mainly checking that the $field->value->externalData is loaded
@@ -196,18 +193,15 @@ class KeywordIntegrationTest extends BaseIntegrationTest
      * $field, their correctness also needs to be asserted. Make sure you
      * implement this method agnostic to the used SPI\Persistence
      * implementation!
-     *
-     * @return void
      */
-    public function assertUpdatedFieldDataCorrect( Field $field )
+    public function assertUpdatedFieldDataCorrect(Field $field)
     {
         $this->assertKeywordSetsEqual(
             $this->getUpdatedValue()->externalData,
             $field->value->externalData
         );
 
-        $this->assertEquals( array(), $field->value->data );
-        $this->assertNull( $field->value->sortKey );
+        $this->assertEquals(array(), $field->value->data);
+        $this->assertNull($field->value->sortKey);
     }
 }
-

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Functional\TrashTest class
+ * File containing the Functional\TrashTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,7 +20,7 @@ class TrashTest extends RESTFunctionalTestCase
      */
     public function testCreateTrashItem()
     {
-        return $this->createTrashItem( 'testCreateTrashItem' );
+        return $this->createTrashItem('testCreateTrashItem');
     }
 
     /**
@@ -27,53 +29,53 @@ class TrashTest extends RESTFunctionalTestCase
     public function testLoadTrashItems()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "/api/ezp/v2/content/trash" )
+            $this->createHttpRequest('GET', '/api/ezp/v2/content/trash')
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @depends testCreateTrashItem
      * @covers GET /content/trash/{trashItemId}
      */
-    public function testLoadTrashItem( $trashItemHref )
+    public function testLoadTrashItem($trashItemHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", $trashItemHref )
+            $this->createHttpRequest('GET', $trashItemHref)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @covers DELETE /content/trash/{trashItemId}
      * @depends testCreateTrashItem
      */
-    public function testDeleteTrashItem( $trashItemId )
+    public function testDeleteTrashItem($trashItemId)
     {
         // we create a new one, since restore also needs the feature
-        $trashItemHref = $this->createTrashItem( $trashItemId );
+        $trashItemHref = $this->createTrashItem($trashItemId);
 
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "DELETE", $trashItemHref )
+            $this->createHttpRequest('DELETE', $trashItemHref)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 204 );
+        self::assertHttpResponseCodeEquals($response, 204);
     }
 
     /**
      * @covers MOVE /content/trash/{trashItemId}
      * @depends testCreateTrashItem
      */
-    public function testRestoreTrashItem( $trashItemId )
+    public function testRestoreTrashItem($trashItemId)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "MOVE", $trashItemId )
+            $this->createHttpRequest('MOVE', $trashItemId)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 201 );
-        self::assertHttpResponseHasHeader( $response, 'Location' );
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
     }
 
     /**
@@ -81,15 +83,15 @@ class TrashTest extends RESTFunctionalTestCase
      */
     public function testRestoreTrashItemWithDestination()
     {
-        $trashItemHref = $this->createTrashItem( __FUNCTION__ );
+        $trashItemHref = $this->createTrashItem(__FUNCTION__);
 
-        $request = $this->createHttpRequest( "MOVE", $trashItemHref );
-        $request->addHeader( 'Destination: /api/ezp/v2/content/locations/1/2' );
+        $request = $this->createHttpRequest('MOVE', $trashItemHref);
+        $request->addHeader('Destination: /api/ezp/v2/content/locations/1/2');
 
-        $response = $this->sendHttpRequest( $request );
+        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals( $response, 201 );
-        self::assertHttpResponseHasHeader( $response, 'Location' );
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
     }
 
     /**
@@ -98,43 +100,45 @@ class TrashTest extends RESTFunctionalTestCase
     public function testEmptyTrash()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "DELETE", "/api/ezp/v2/content/trash" )
+            $this->createHttpRequest('DELETE', '/api/ezp/v2/content/trash')
         );
 
-        self::assertHttpResponseCodeEquals( $response, 204 );
+        self::assertHttpResponseCodeEquals($response, 204);
     }
 
     /**
-     * Tests that deleting a trashed item will fail
+     * Tests that deleting a trashed item will fail.
      */
     public function testDeleteTrashedItemFailsWith404()
     {
-        self::markTestSkipped( "Makes the DB inconsistent" );
+        self::markTestSkipped('Makes the DB inconsistent');
 
         // create a folder
-        $folderArray = $this->createFolder( __FUNCTION__, '/api/ezp/v2/content/locations/1/2' );
+        $folderArray = $this->createFolder(__FUNCTION__, '/api/ezp/v2/content/locations/1/2');
 
         // send its main location to trash
-        $folderLocations = $this->getContentLocations( $folderArray['_href'] );
-        $this->sendLocationToTrash( $folderLocations['LocationList']['Location'][0]['_href'] );
+        $folderLocations = $this->getContentLocations($folderArray['_href']);
+        $this->sendLocationToTrash($folderLocations['LocationList']['Location'][0]['_href']);
 
         // delete the content we created above
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "DELETE", $folderArray['_href'] )
+            $this->createHttpRequest('DELETE', $folderArray['_href'])
         );
 
-        self::assertHttpResponseCodeEquals( $response, 404 );
+        self::assertHttpResponseCodeEquals($response, 404);
     }
 
     /**
-     * Creates a folder, and sends it to trash
+     * Creates a folder, and sends it to trash.
+     *
      * @return string the trashed item href
      */
-    private function createTrashItem( $id )
+    private function createTrashItem($id)
     {
-        $folder = $this->createFolder( $id, '/api/ezp/v2/content/locations/1/2' );
-        $folderLocations = $this->getContentLocations( $folder['_href'] );
-        return $this->sendLocationToTrash( $folderLocations['LocationList']['Location'][0]['_href'] );
+        $folder = $this->createFolder($id, '/api/ezp/v2/content/locations/1/2');
+        $folderLocations = $this->getContentLocations($folder['_href']);
+
+        return $this->sendLocationToTrash($folderLocations['LocationList']['Location'][0]['_href']);
     }
 
     /**
@@ -142,16 +146,16 @@ class TrashTest extends RESTFunctionalTestCase
      *
      * @return array|null|string
      */
-    private function sendLocationToTrash( $contentHref )
+    private function sendLocationToTrash($contentHref)
     {
-        $trashRequest = $this->createHttpRequest( "MOVE", $contentHref );
-        $trashRequest->addHeader( 'Destination: /api/ezp/v2/content/trash' );
+        $trashRequest = $this->createHttpRequest('MOVE', $contentHref);
+        $trashRequest->addHeader('Destination: /api/ezp/v2/content/trash');
 
-        $response = $this->sendHttpRequest( $trashRequest );
+        $response = $this->sendHttpRequest($trashRequest);
 
-        self::assertHttpResponseCodeEquals( $response, 201 );
+        self::assertHttpResponseCodeEquals($response, 201);
 
-        $trashHref = $response->getHeader( 'Location' );
+        $trashHref = $response->getHeader('Location');
 
         return $trashHref;
     }

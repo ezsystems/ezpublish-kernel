@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing an interface for the database abstractions
+ * File containing an interface for the database abstractions.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,18 +22,20 @@ interface UpdateQuery extends Query
      * update() returns a pointer to $this.
      *
      * @param string $table
+     *
      * @return \eZ\Publish\Core\Persistence\Database\UpdateQuery
      */
-    public function update( $table );
+    public function update($table);
 
     /**
      * The update query will set the column $column to the value $expression.
      *
      * @param string $column
      * @param string $expression
+     *
      * @return \eZ\Publish\Core\Persistence\Database\UpdateQuery
      */
-    public function set( $column, $expression );
+    public function set($column, $expression);
 
     /**
      * Adds a where clause with logical expressions to the query.
@@ -50,8 +54,10 @@ interface UpdateQuery extends Query
      * </code>
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
+     *
      * @param string|array(string) $... Either a string with a logical expression name
      * or an array with logical expressions.
+     *
      * @return \eZ\Publish\Core\Persistence\Database\UpdateQuery
      */
     public function where();

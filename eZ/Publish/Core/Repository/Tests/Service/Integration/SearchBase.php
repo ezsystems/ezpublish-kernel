@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\SearchBase class
+ * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\SearchBase class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,11 +14,10 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
 use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\SPI\Persistence\Content as SPIContent;
 use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
 
 /**
- * Test case for Content service
+ * Test case for Content service.
  */
 abstract class SearchBase extends BaseServiceTest
 {
@@ -31,8 +32,8 @@ abstract class SearchBase extends BaseServiceTest
         $searchService = $this->repository->getSearchService();
         $query = new Query(
             array(
-                "filter" => new Criterion\ContentId( array( 4 ) ),
-                "offset" => 0
+                'filter' => new Criterion\ContentId(array(4)),
+                'offset' => 0,
             )
         );
 
@@ -44,15 +45,15 @@ abstract class SearchBase extends BaseServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            "eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchResult",
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchResult',
             $searchResult
         );
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertCount( $searchResult->totalCount, $searchResult->searchHits );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertCount($searchResult->totalCount, $searchResult->searchHits);
         $this->assertInstanceOf(
-            "eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchHit",
-            reset( $searchResult->searchHits )
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchHit',
+            reset($searchResult->searchHits)
         );
     }
 
@@ -67,28 +68,28 @@ abstract class SearchBase extends BaseServiceTest
         $searchService = $this->repository->getSearchService();
         $query = new Query(
             array(
-                "filter" => new Criterion\ContentId( array( 4 ) ),
-                "offset" => 0
+                'filter' => new Criterion\ContentId(array(4)),
+                'offset' => 0,
             )
         );
 
         $searchResult = $searchService->findContent(
             $query,
-            array( "languages" => array( "eng-US" ) ),
+            array('languages' => array('eng-US')),
             false
         );
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            "eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchResult",
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchResult',
             $searchResult
         );
 
-        $this->assertEquals( 1, $searchResult->totalCount );
-        $this->assertCount( $searchResult->totalCount, $searchResult->searchHits );
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertCount($searchResult->totalCount, $searchResult->searchHits);
         $this->assertInstanceOf(
-            "eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchHit",
-            reset( $searchResult->searchHits )
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\Search\\SearchHit',
+            reset($searchResult->searchHits)
         );
     }
 
@@ -105,8 +106,8 @@ abstract class SearchBase extends BaseServiceTest
 
         // Throws an exception because content with given id does not exist
         $searchResult = $searchService->findSingle(
-            new Criterion\ContentId( array( APIBaseTest::DB_INT_MAX ) ),
-            array( "languages" => array( "eng-US" ) ),
+            new Criterion\ContentId(array(APIBaseTest::DB_INT_MAX)),
+            array('languages' => array('eng-US')),
             false
         );
         /* END: Use Case */
@@ -125,8 +126,8 @@ abstract class SearchBase extends BaseServiceTest
 
         // Throws an exception because more than one result was returned for the given query
         $searchResult = $searchService->findSingle(
-            new Criterion\ContentId( array( 4, 10 ) ),
-            array( "languages" => array( "eng-US" ) )
+            new Criterion\ContentId(array(4, 10)),
+            array('languages' => array('eng-US'))
         );
         /* END: Use Case */
     }

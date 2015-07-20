@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the abstract Url Gateway class
+ * File containing the abstract Url Gateway class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,7 +28,7 @@ abstract class Gateway extends StorageGateway
      *
      * @return array An array of URLs, with ids as keys
      */
-    abstract public function getIdUrlMap( array $ids );
+    abstract public function getIdUrlMap(array $ids);
 
     /**
      * Returns a list of URL ids for a list of URLs.
@@ -37,7 +39,7 @@ abstract class Gateway extends StorageGateway
      *
      * @return array An array of URL ids, with URLs as keys
      */
-    abstract public function getUrlIdMap( array $urls );
+    abstract public function getUrlIdMap(array $urls);
 
     /**
      * Inserts a new $url and returns its id.
@@ -46,7 +48,7 @@ abstract class Gateway extends StorageGateway
      *
      * @return int|string
      */
-    abstract public function insertUrl( $url );
+    abstract public function insertUrl($url);
 
     /**
      * Creates link to URL with $urlId for field with $fieldId in $versionNo.
@@ -55,7 +57,7 @@ abstract class Gateway extends StorageGateway
      * @param int|string $fieldId
      * @param int $versionNo
      */
-    abstract public function linkUrl( $urlId, $fieldId, $versionNo );
+    abstract public function linkUrl($urlId, $fieldId, $versionNo);
 
     /**
      * Removes link to URL for $fieldId in $versionNo and cleans up possibly orphaned URLs.
@@ -63,5 +65,5 @@ abstract class Gateway extends StorageGateway
      * @param int|string $fieldId
      * @param int $versionNo
      */
-    abstract public function unlinkUrl( $fieldId, $versionNo );
+    abstract public function unlinkUrl($fieldId, $versionNo);
 }

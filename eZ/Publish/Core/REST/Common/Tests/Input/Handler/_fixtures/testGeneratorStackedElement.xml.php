@@ -1,13 +1,12 @@
 <?php
 
-return array (
-  'element' => 
-  array (
+return array(
+  'element' =>
+  array(
     '_media-type' => 'application/vnd.ez.api.element+xml',
-    'stacked' => 
-    array (
+    'stacked' =>
+    array(
       '_media-type' => 'application/vnd.ez.api.stacked+xml',
     ),
   ),
 );
-

@@ -1,10 +1,12 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler;
 
 use ArrayObject;
@@ -31,8 +33,7 @@ class IOConfigurationPass implements CompilerPassInterface
     public function __construct(
         ArrayObject $metadataHandlerFactories = null,
         ArrayObject $binarydataHandlerFactories = null
-    )
-    {
+    ) {
         $this->metadataHandlerFactories = $metadataHandlerFactories;
         $this->binarydataHandlerFactories = $binarydataHandlerFactories;
     }
@@ -41,25 +42,25 @@ class IOConfigurationPass implements CompilerPassInterface
      *
      * @throws \LogicException
      */
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
-        $ioMetadataHandlers = $container->hasParameter( 'ez_io.metadata_handlers' ) ?
-            $container->getParameter( 'ez_io.metadata_handlers' ) :
+        $ioMetadataHandlers = $container->hasParameter('ez_io.metadata_handlers') ?
+            $container->getParameter('ez_io.metadata_handlers') :
             array();
         $this->processHandlers(
             $container,
-            $container->getDefinition( 'ezpublish.core.io.metadata_handler.factory' ),
+            $container->getDefinition('ezpublish.core.io.metadata_handler.factory'),
             $ioMetadataHandlers,
             $this->metadataHandlerFactories,
             'ezpublish.core.io.metadata_handler.flysystem.default'
         );
 
-        $ioBinarydataHandlers = $container->hasParameter( 'ez_io.binarydata_handlers' ) ?
-            $container->getParameter( 'ez_io.binarydata_handlers' ) :
+        $ioBinarydataHandlers = $container->hasParameter('ez_io.binarydata_handlers') ?
+            $container->getParameter('ez_io.binarydata_handlers') :
             array();
         $this->processHandlers(
             $container,
-            $container->getDefinition( 'ezpublish.core.io.binarydata_handler.factory' ),
+            $container->getDefinition('ezpublish.core.io.binarydata_handler.factory'),
             $ioBinarydataHandlers,
             $this->binarydataHandlerFactories,
             'ezpublish.core.io.binarydata_handler.flysystem.default'
@@ -83,46 +84,42 @@ class IOConfigurationPass implements CompilerPassInterface
         array $configuredHandlers,
         ArrayObject $factories,
         $defaultHandler
-    )
-    {
-        $handlers = array( 'default' => $defaultHandler );
+    ) {
+        $handlers = array('default' => $defaultHandler);
 
-        foreach ( $configuredHandlers as $name => $config )
-        {
-            $configurationFactory = $this->getFactory( $factories, $config["type"], $container );
+        foreach ($configuredHandlers as $name => $config) {
+            $configurationFactory = $this->getFactory($factories, $config['type'], $container);
 
             $parentHandlerId = $configurationFactory->getParentServiceId();
-            $handlerId = sprintf( '%s.%s', $parentHandlerId, $name );
-            $definition = $container->setDefinition( $handlerId, new DefinitionDecorator( $parentHandlerId ) );
+            $handlerId = sprintf('%s.%s', $parentHandlerId, $name);
+            $definition = $container->setDefinition($handlerId, new DefinitionDecorator($parentHandlerId));
 
-            $configurationFactory->configureHandler( $definition, $config );
+            $configurationFactory->configureHandler($definition, $config);
 
             $handlers[$name] = $handlerId;
         }
 
-        $factory->addMethodCall( 'setHandlersMap', array( $handlers ) );
+        $factory->addMethodCall('setHandlersMap', array($handlers));
     }
 
     /**
-     * Returns from $factories the factory for handler $type
+     * Returns from $factories the factory for handler $type.
      *
      * @param ContainerBuilder $container
      * @param \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory[]|ArrayObject|ContainerAware[] $factories
      * @param string $type
      *
      * @return \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory
-     *
      */
-    protected function getFactory( ArrayObject $factories, $type, ContainerBuilder $container )
+    protected function getFactory(ArrayObject $factories, $type, ContainerBuilder $container)
     {
-        if ( !isset( $factories[$type] ) )
-        {
-            throw new InvalidConfigurationException( "Unknown handler type $type" );
+        if (!isset($factories[$type])) {
+            throw new InvalidConfigurationException("Unknown handler type $type");
         }
-        if ( $factories[$type] instanceof ContainerAwareInterface )
-        {
-            $factories[$type]->setContainer( $container );
+        if ($factories[$type] instanceof ContainerAwareInterface) {
+            $factories[$type]->setContainer($container);
         }
+
         return $factories[$type];
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the BinaryBase Type class
+ * File containing the BinaryBase Type class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,7 +20,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
- * Base FileType class for Binary field types (i.e. BinaryBase & Media)
+ * Base FileType class for Binary field types (i.e. BinaryBase & Media).
  */
 abstract class Type extends FieldType
 {
@@ -26,22 +28,22 @@ abstract class Type extends FieldType
      * @see eZ\Publish\Core\FieldType::$validatorConfigurationSchema
      */
     protected $validatorConfigurationSchema = array(
-        "FileSizeValidator" => array(
+        'FileSizeValidator' => array(
             'maxFileSize' => array(
                 'type' => 'int',
                 'default' => null,
-            )
-        )
+            ),
+        ),
     );
 
     /**
-     * Creates a specific value of the derived class from $inputValue
+     * Creates a specific value of the derived class from $inputValue.
      *
      * @param array $inputValue
      *
      * @return Value
      */
-    abstract protected function createValue( array $inputValue );
+    abstract protected function createValue(array $inputValue);
 
     /**
      * Returns the name of the given field value.
@@ -53,7 +55,7 @@ abstract class Type extends FieldType
      *
      * @return string
      */
-    public function getName( SPIValue $value )
+    public function getName(SPIValue $value)
     {
         return (string)$value->fileName;
     }
@@ -65,21 +67,19 @@ abstract class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\BinaryBase\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
         // construction only from path
-        if ( is_string( $inputValue ) )
-        {
-            $inputValue = array( 'inputUri' => $inputValue );
+        if (is_string($inputValue)) {
+            $inputValue = array('inputUri' => $inputValue);
         }
 
         // default construction from array
-        if ( is_array( $inputValue ) )
-        {
-            $inputValue = $this->createValue( $inputValue );
+        if (is_array($inputValue)) {
+            $inputValue = $this->createValue($inputValue);
         }
 
-        $this->completeValue( $inputValue );
+        $this->completeValue($inputValue);
 
         return $inputValue;
     }
@@ -90,116 +90,102 @@ abstract class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\BinaryBase\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
         // Input file URI, if set needs to point to existing file
-        if ( isset( $value->inputUri ) )
-        {
-            if ( !file_exists( $value->inputUri ) )
-            {
+        if (isset($value->inputUri)) {
+            if (!file_exists($value->inputUri)) {
                 throw new InvalidArgumentValue(
                     '$value->inputUri',
                     $value->inputUri,
-                    get_class( $this )
+                    get_class($this)
                 );
             }
-        }
-        else if ( !isset( $value->id ) )
-        {
+        } elseif (!isset($value->id)) {
             throw new InvalidArgumentValue(
                 '$value->id',
                 $value->id,
-                get_class( $this )
+                get_class($this)
             );
         }
 
         // Required parameter $fileName
-        if ( !isset( $value->fileName ) || !is_string( $value->fileName ) )
-        {
+        if (!isset($value->fileName) || !is_string($value->fileName)) {
             throw new InvalidArgumentValue(
                 '$value->fileName',
                 $value->fileName,
-                get_class( $this )
+                get_class($this)
             );
         }
 
         // Optional parameter $fileSize
-        if ( isset( $value->fileSize ) && !is_int( $value->fileSize ) )
-        {
+        if (isset($value->fileSize) && !is_int($value->fileSize)) {
             throw new InvalidArgumentValue(
                 '$value->fileSize',
                 $value->fileSize,
-                get_class( $this )
+                get_class($this)
             );
         }
     }
 
     /**
-     * Attempts to complete the data in $value
+     * Attempts to complete the data in $value.
      *
      * @param \eZ\Publish\Core\FieldType\BinaryBase\Value|\eZ\Publish\Core\FieldType\Value $value
-     *
-     * @return void
      */
-    protected function completeValue( BaseValue $value )
+    protected function completeValue(BaseValue $value)
     {
-        if ( !isset( $value->inputUri ) || !file_exists( $value->inputUri ) )
-        {
+        if (!isset($value->inputUri) || !file_exists($value->inputUri)) {
             return;
         }
 
-        if ( !isset( $value->fileName ) )
-        {
+        if (!isset($value->fileName)) {
             // @todo this may not always work...
-            $value->fileName = basename( $value->inputUri );
+            $value->fileName = basename($value->inputUri);
         }
 
-        if ( !isset( $value->fileSize ) )
-        {
-            $value->fileSize = filesize( $value->inputUri );
+        if (!isset($value->fileSize)) {
+            $value->fileSize = filesize($value->inputUri);
         }
     }
 
     /**
-     * BinaryBase does not support sorting
+     * BinaryBase does not support sorting.
      *
      * @param \eZ\Publish\Core\FieldType\BinaryBase\Value $value
      *
-     * @return boolean
+     * @return bool
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo(BaseValue $value)
     {
         return false;
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * @param mixed $hash
      *
      * @return \eZ\Publish\Core\FieldType\BinaryBase\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        if ( $hash === null )
-        {
+        if ($hash === null) {
             return $this->getEmptyValue();
         }
 
-        return $this->createValue( $hash );
+        return $this->createValue($hash);
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\BinaryBase\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
         return array(
             'id' => $value->id,
@@ -235,20 +221,20 @@ abstract class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue the value processed by the storage engine
      */
-    public function toPersistenceValue( SPIValue $value )
+    public function toPersistenceValue(SPIValue $value)
     {
         // Store original data as external (to indicate they need to be stored)
         return new PersistenceValue(
             array(
-                "data" => null,
-                "externalData" => $this->toHash( $value ),
-                "sortKey" => $this->getSortInfo( $value ),
+                'data' => null,
+                'externalData' => $this->toHash($value),
+                'sortKey' => $this->getSortInfo($value),
             )
         );
     }
 
     /**
-     * Converts a persistence $fieldValue to a Value
+     * Converts a persistence $fieldValue to a Value.
      *
      * This method builds a field type value from the $data and $externalData properties.
      *
@@ -256,34 +242,35 @@ abstract class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\BinaryBase\Value
      */
-    public function fromPersistenceValue( PersistenceValue $fieldValue )
+    public function fromPersistenceValue(PersistenceValue $fieldValue)
     {
         // Restored data comes in $data, since it has already been processed
         // there might be more data in the persistence value than needed here
         $result = $this->fromHash(
             array(
-                'id' => ( isset( $fieldValue->externalData['id'] )
+                'id' => (isset($fieldValue->externalData['id'])
                     ? $fieldValue->externalData['id']
-                    : null ),
-                'fileName' => ( isset( $fieldValue->externalData['fileName'] )
+                    : null),
+                'fileName' => (isset($fieldValue->externalData['fileName'])
                     ? $fieldValue->externalData['fileName']
-                    : null ),
-                'fileSize' => ( isset( $fieldValue->externalData['fileSize'] )
+                    : null),
+                'fileSize' => (isset($fieldValue->externalData['fileSize'])
                     ? $fieldValue->externalData['fileSize']
-                    : null ),
-                'mimeType' => ( isset( $fieldValue->externalData['mimeType'] )
+                    : null),
+                'mimeType' => (isset($fieldValue->externalData['mimeType'])
                     ? $fieldValue->externalData['mimeType']
-                    : null ),
-                'uri' => ( isset( $fieldValue->externalData['uri'] )
+                    : null),
+                'uri' => (isset($fieldValue->externalData['uri'])
                     ? $fieldValue->externalData['uri']
-                    : null ),
+                    : null),
             )
         );
+
         return $result;
     }
 
     /**
-     * Validates a field based on the validators in the field definition
+     * Validates a field based on the validators in the field definition.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
@@ -292,35 +279,30 @@ abstract class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( FieldDefinition $fieldDefinition, SPIValue $fieldValue )
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
     {
         $errors = array();
 
-        if ( $this->isEmptyValue( $fieldValue ) )
-        {
+        if ($this->isEmptyValue($fieldValue)) {
             return $errors;
         }
 
-        foreach ( (array)$fieldDefinition->getValidatorConfiguration() as $validatorIdentifier => $parameters )
-        {
-            switch ( $validatorIdentifier )
-            {
+        foreach ((array)$fieldDefinition->getValidatorConfiguration() as $validatorIdentifier => $parameters) {
+            switch ($validatorIdentifier) {
                 // @todo There is a risk if we rely on a user built Value, since the FileSize
                 // property can be set manually, making this validation pointless
                 case 'FileSizeValidator':
-                    if ( empty( $parameters['maxFileSize'] ) )
-                    {
+                    if (empty($parameters['maxFileSize'])) {
                         // No file size limit
                         break;
                     }
                     // Database stores maxFileSize in MB
-                    if ( ( $parameters['maxFileSize'] * 1024 * 1024 ) < $fieldValue->fileSize )
-                    {
+                    if (($parameters['maxFileSize'] * 1024 * 1024) < $fieldValue->fileSize) {
                         $errors[] = new ValidationError(
-                            "The file size cannot exceed %size% byte.",
-                            "The file size cannot exceed %size% bytes.",
+                            'The file size cannot exceed %size% byte.',
+                            'The file size cannot exceed %size% bytes.',
                             array(
-                                "size" => $parameters['maxFileSize'],
+                                'size' => $parameters['maxFileSize'],
                             ),
                             'fileSize'
                         );
@@ -328,48 +310,45 @@ abstract class Type extends FieldType
                     break;
             }
         }
+
         return $errors;
     }
 
     /**
-     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
      * @param mixed $validatorConfiguration
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateValidatorConfiguration( $validatorConfiguration )
+    public function validateValidatorConfiguration($validatorConfiguration)
     {
         $validationErrors = array();
 
-        foreach ( $validatorConfiguration as $validatorIdentifier => $parameters )
-        {
-            switch ( $validatorIdentifier )
-            {
+        foreach ($validatorConfiguration as $validatorIdentifier => $parameters) {
+            switch ($validatorIdentifier) {
                 case 'FileSizeValidator':
-                    if ( !array_key_exists( 'maxFileSize', $parameters ) )
-                    {
+                    if (!array_key_exists('maxFileSize', $parameters)) {
                         $validationErrors[] = new ValidationError(
-                            "Validator %validator% expects parameter %parameter% to be set.",
+                            'Validator %validator% expects parameter %parameter% to be set.',
                             null,
                             array(
-                                "validator" => $validatorIdentifier,
-                                "parameter" => 'maxFileSize',
+                                'validator' => $validatorIdentifier,
+                                'parameter' => 'maxFileSize',
                             ),
                             "[$validatorIdentifier][maxFileSize]"
                         );
                         break;
                     }
-                    if ( !is_int( $parameters['maxFileSize'] ) && $parameters['maxFileSize'] !== null )
-                    {
+                    if (!is_int($parameters['maxFileSize']) && $parameters['maxFileSize'] !== null) {
                         $validationErrors[] = new ValidationError(
-                            "Validator %validator% expects parameter %parameter% to be of %type%.",
+                            'Validator %validator% expects parameter %parameter% to be of %type%.',
                             null,
                             array(
-                                "validator" => $validatorIdentifier,
-                                "parameter" => 'maxFileSize',
-                                "type" => 'integer',
-                                "[$validatorIdentifier][maxFileSize]"
+                                'validator' => $validatorIdentifier,
+                                'parameter' => 'maxFileSize',
+                                'type' => 'integer',
+                                "[$validatorIdentifier][maxFileSize]",
                             )
                         );
                     }
@@ -379,7 +358,7 @@ abstract class Type extends FieldType
                         "Validator '%validator%' is unknown",
                         null,
                         array(
-                            "validator" => $validatorIdentifier
+                            'validator' => $validatorIdentifier,
                         ),
                         "[$validatorIdentifier]"
                     );
@@ -390,9 +369,9 @@ abstract class Type extends FieldType
     }
 
     /**
-     * Returns whether the field type is searchable
+     * Returns whether the field type is searchable.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSearchable()
     {

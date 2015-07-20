@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the SelectionTest class
+ * File containing the SelectionTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -34,7 +36,7 @@ class SelectionTest extends FieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         $fieldType = new Selection();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
     }
@@ -152,22 +154,22 @@ class SelectionTest extends FieldTypeTest
                 new SelectionValue(),
             ),
             array(
-                array( 23 ),
-                new SelectionValue( array( 23 )  ),
+                array(23),
+                new SelectionValue(array(23)),
             ),
             array(
-                array( 23, 42 ),
-                new SelectionValue( array( 23, 42 ) ),
+                array(23, 42),
+                new SelectionValue(array(23, 42)),
             ),
             array(
-                new SelectionValue( array( 23, 42 ) ),
-                new SelectionValue( array( 23, 42 ) ),
+                new SelectionValue(array(23, 42)),
+                new SelectionValue(array(23, 42)),
             ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -209,14 +211,14 @@ class SelectionTest extends FieldTypeTest
                 array(),
             ),
             array(
-                new SelectionValue( array( 23, 42 ) ),
-                array( 23, 42 ),
+                new SelectionValue(array(23, 42)),
+                array(23, 42),
             ),
         );
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -258,8 +260,8 @@ class SelectionTest extends FieldTypeTest
                 new SelectionValue(),
             ),
             array(
-                array( 23, 42 ),
-                new SelectionValue( array( 23, 42 ) ),
+                array(23, 42),
+                new SelectionValue(array(23, 42)),
             ),
         );
     }
@@ -290,19 +292,19 @@ class SelectionTest extends FieldTypeTest
     {
         return array(
             array(
-                array()
+                array(),
             ),
             array(
                 array(
                     'isMultiple' => true,
-                    'options' => array( 'foo', 'bar' ),
-                )
+                    'options' => array('foo', 'bar'),
+                ),
             ),
             array(
                 array(
                     'isMultiple' => false,
-                    'options' => array( 23, 42 ),
-                )
+                    'options' => array(23, 42),
+                ),
             ),
         );
     }
@@ -337,13 +339,13 @@ class SelectionTest extends FieldTypeTest
                 array(
                     // isMultiple must be bool
                     'isMultiple' => 23,
-                )
+                ),
             ),
             array(
                 array(
                     // options must be array
                     'options' => 23,
-                )
+                ),
             ),
         );
     }
@@ -357,15 +359,15 @@ class SelectionTest extends FieldTypeTest
      * @dataProvider provideDataForGetName
      * @expectedException \RuntimeException
      */
-    public function testGetName( SPIValue $value, $expected )
+    public function testGetName(SPIValue $value, $expected)
     {
-        $this->getFieldTypeUnderTest()->getName( $value );
+        $this->getFieldTypeUnderTest()->getName($value);
     }
 
     public function provideDataForGetName()
     {
         return array(
-            array( $this->getEmptyValueExpectation(), '' )
+            array($this->getEmptyValueExpectation(), ''),
         );
     }
 
@@ -419,27 +421,27 @@ class SelectionTest extends FieldTypeTest
         return array(
             array(
                 array(
-                    "fieldSettings" => array(
+                    'fieldSettings' => array(
                         'isMultiple' => true,
-                        'options' => array( 0 => 1, 1 => 2 ),
+                        'options' => array(0 => 1, 1 => 2),
                     ),
                 ),
-                new SelectionValue( array( 0, 1 ) ),
+                new SelectionValue(array(0, 1)),
             ),
             array(
                 array(
-                    "fieldSettings" => array(
+                    'fieldSettings' => array(
                         'isMultiple' => false,
-                        'options' => array( 0 => 1, 1 => 2 ),
+                        'options' => array(0 => 1, 1 => 2),
                     ),
                 ),
-                new SelectionValue( array( 1 ) ),
+                new SelectionValue(array(1)),
             ),
             array(
                 array(
-                    "fieldSettings" => array(
+                    'fieldSettings' => array(
                         'isMultiple' => false,
-                        'options' => array( 0 => 1, 1 => 2 ),
+                        'options' => array(0 => 1, 1 => 2),
                     ),
                 ),
                 new SelectionValue(),
@@ -516,33 +518,35 @@ class SelectionTest extends FieldTypeTest
         return array(
             array(
                 array(
-                    "fieldSettings" => array(
+                    'fieldSettings' => array(
                         'isMultiple' => false,
-                        'options' => array( 0 => 1, 1 => 2 ),
+                        'options' => array(0 => 1, 1 => 2),
                     ),
                 ),
-                new SelectionValue( array( 0, 1 ) ),
+                new SelectionValue(array(0, 1)),
                 array(
                     new ValidationError(
-                        "Field definition does not allow multiple options to be selected.",
-                        null, array(), 'selection'
+                        'Field definition does not allow multiple options to be selected.',
+                        null,
+                        array(),
+                        'selection'
                     ),
                 ),
             ),
             array(
                 array(
-                    "fieldSettings" => array(
+                    'fieldSettings' => array(
                         'isMultiple' => false,
-                        'options' => array( 0 => 1, 1 => 2 ),
+                        'options' => array(0 => 1, 1 => 2),
                     ),
                 ),
-                new SelectionValue( array( 3 ) ),
+                new SelectionValue(array(3)),
                 array(
                     new ValidationError(
-                        "Option with index %index% does not exist in the field definition.",
+                        'Option with index %index% does not exist in the field definition.',
                         null,
                         array(
-                            "index" => 3
+                            'index' => 3,
                         ),
                         'selection'
                     ),

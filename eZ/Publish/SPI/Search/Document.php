@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the eZ\Publish\SPI\Persistence\Content\Search\Document class
+ * File containing the eZ\Publish\SPI\Persistence\Content\Search\Document class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,14 +19,14 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class Document extends ValueObject
 {
     /**
-     * Id of the document
+     * Id of the document.
      *
      * @var string
      */
     public $id;
 
     /**
-     * Translation language code that the documents represents
+     * Translation language code that the documents represents.
      *
      * @var string
      */
@@ -32,28 +34,28 @@ class Document extends ValueObject
 
     /**
      * Denotes that document's translation is the main translation and it is
-     * always available
+     * always available.
      *
-     * @var boolean
+     * @var bool
      */
     public $alwaysAvailable;
 
     /**
-     * Denotes that document's translation is a main translation of the Content
+     * Denotes that document's translation is a main translation of the Content.
      *
-     * @var boolean
+     * @var bool
      */
     public $isMainTranslation;
 
     /**
-     * An array of fields
+     * An array of fields.
      *
      * @var \eZ\Publish\SPI\Search\Field[]
      */
     public $fields = array();
 
     /**
-     * An array of sub-documents
+     * An array of sub-documents.
      *
      * @var \eZ\Publish\SPI\Search\Document[]
      */

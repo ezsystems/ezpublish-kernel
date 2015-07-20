@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,14 +24,14 @@ use RuntimeException;
 class LoadingResultExtractor extends ResultExtractor
 {
     /**
-     * Content handler
+     * Content handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Handler
      */
     protected $contentHandler;
 
     /**
-     * Location handler
+     * Location handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
@@ -39,12 +41,11 @@ class LoadingResultExtractor extends ResultExtractor
         ContentHandler $contentHandler,
         LocationHandler $locationHandler,
         FacetBuilderVisitor $facetBuilderVisitor
-    )
-    {
+    ) {
         $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
 
-        parent::__construct( $facetBuilderVisitor );
+        parent::__construct($facetBuilderVisitor);
     }
 
     /**
@@ -56,16 +57,14 @@ class LoadingResultExtractor extends ResultExtractor
      *
      * @return \eZ\Publish\API\Repository\Values\ValueObject
      */
-    public function extractHit( $hit )
+    public function extractHit($hit)
     {
-        if ( $hit->document_type_id === "content" )
-        {
-            return $this->contentHandler->loadContentInfo( $hit->content_id );
+        if ($hit->document_type_id === 'content') {
+            return $this->contentHandler->loadContentInfo($hit->content_id);
         }
 
-        if ( $hit->document_type_id === "location" )
-        {
-            return $this->locationHandler->load( $hit->location_id );
+        if ($hit->document_type_id === 'location') {
+            return $this->locationHandler->load($hit->location_id);
         }
 
         throw new RuntimeException(

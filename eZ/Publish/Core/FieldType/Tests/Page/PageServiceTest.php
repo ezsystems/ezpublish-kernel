@@ -1,15 +1,16 @@
 <?php
+
 /**
  * File containing the PageServiceTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\FieldType\Tests\Page;
 
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
@@ -17,7 +18,6 @@ use eZ\Publish\Core\FieldType\Page\Parts\Page;
 use eZ\Publish\Core\FieldType\Page\Parts\Zone;
 use eZ\Publish\Core\FieldType\Page\Value;
 use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\Location;
 use PHPUnit_Framework_TestCase;
 
 class PageServiceTest extends PHPUnit_Framework_TestCase
@@ -58,8 +58,8 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
         $this->zoneDefinition = $this->getZoneDefinition();
         $this->blockDefinition = $this->getBlockDefinition();
 
-        $this->storageGateway = $this->getMockForAbstractClass( 'eZ\\Publish\\Core\\FieldType\\Page\\PageStorage\\Gateway' );
-        $this->contentService = $this->getMock( "eZ\\Publish\\API\\Repository\\ContentService" );
+        $this->storageGateway = $this->getMockForAbstractClass('eZ\\Publish\\Core\\FieldType\\Page\\PageStorage\\Gateway');
+        $this->contentService = $this->getMock('eZ\\Publish\\API\\Repository\\ContentService');
         $pageServiceClass = static::PAGESERVICE_CLASS;
         $this->pageService = new $pageServiceClass(
             $this->contentService,
@@ -69,62 +69,62 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns zone definition to test with
+     * Returns zone definition to test with.
      *
      * @return array
      */
     protected function getZoneDefinition()
     {
         return array(
-            'globalZoneLayout'      => array(
-                'zoneTypeName'          => 'Global zone layout',
-                'zones'                 => array(
-                    'main'  => array( 'name' => 'Global zone' )
+            'globalZoneLayout' => array(
+                'zoneTypeName' => 'Global zone layout',
+                'zones' => array(
+                    'main' => array('name' => 'Global zone'),
                 ),
-                'zoneThumbnail'         => 'globalzone_layout.gif',
-                'template'              => '::globalzonelayout.html.twig',
-                'availableForClasses'   => array( 'global_layout' )
+                'zoneThumbnail' => 'globalzone_layout.gif',
+                'template' => '::globalzonelayout.html.twig',
+                'availableForClasses' => array('global_layout'),
             ),
-            '2zonesLayout1'      => array(
-                'zoneTypeName'          => '2 zones (layout 1)',
-                'zones'                 => array(
-                    'left'  => array( 'name' => 'Left zone' ),
-                    'right' => array( 'name' => 'Right zone' ),
+            '2zonesLayout1' => array(
+                'zoneTypeName' => '2 zones (layout 1)',
+                'zones' => array(
+                    'left' => array('name' => 'Left zone'),
+                    'right' => array('name' => 'Right zone'),
                 ),
-                'zoneThumbnail'         => '2zones_layout1.gif',
-                'template'              => '::2zoneslayout1.html.twig',
-                'availableForClasses'   => array( 'frontpage' )
-            )
+                'zoneThumbnail' => '2zones_layout1.gif',
+                'template' => '::2zoneslayout1.html.twig',
+                'availableForClasses' => array('frontpage'),
+            ),
         );
     }
 
     /**
-     * Returns block definition to test with
+     * Returns block definition to test with.
      *
      * @return array
      */
     protected function getBlockDefinition()
     {
         return array(
-            'campaign'      => array(
-                'name'                  => 'Campaign',
-                'numberOfValidItems'    => 5,
+            'campaign' => array(
+                'name' => 'Campaign',
+                'numberOfValidItems' => 5,
                 'numberOfArchivedItems' => 5,
-                'manualAddingOfItems'   => 'enabled',
-                'views'                 => array(
-                    'default'   => array( 'name' => 'Default' )
-                )
+                'manualAddingOfItems' => 'enabled',
+                'views' => array(
+                    'default' => array('name' => 'Default'),
+                ),
             ),
-            'mainStory'      => array(
-                'name'                  => 'Main story',
-                'numberOfValidItems'    => 1,
+            'mainStory' => array(
+                'name' => 'Main story',
+                'numberOfValidItems' => 1,
                 'numberOfArchivedItems' => 5,
-                'manualAddingOfItems'   => 'enabled',
-                'views'                 => array(
-                    'default'       => array( 'name' => 'Default' ),
-                    'highlighted'   => array( 'name' => 'Highlighted' ),
-                )
-            )
+                'manualAddingOfItems' => 'enabled',
+                'views' => array(
+                    'default' => array('name' => 'Default'),
+                    'highlighted' => array('name' => 'Highlighted'),
+                ),
+            ),
         );
     }
 
@@ -133,7 +133,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testGetZoneDefinition()
     {
-        $this->assertSame( $this->zoneDefinition, $this->pageService->getZoneDefinition() );
+        $this->assertSame($this->zoneDefinition, $this->pageService->getZoneDefinition());
     }
 
     /**
@@ -141,7 +141,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testGetZoneDefinitionByLayout()
     {
-        $this->assertSame( $this->zoneDefinition['globalZoneLayout'], $this->pageService->getZoneDefinitionByLayout( 'globalZoneLayout' ) );
+        $this->assertSame($this->zoneDefinition['globalZoneLayout'], $this->pageService->getZoneDefinitionByLayout('globalZoneLayout'));
     }
 
     /**
@@ -151,14 +151,14 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testGetZoneDefinitionByLayoutInvalidLayout()
     {
-        $this->pageService->getZoneDefinitionByLayout( 'invalid_layout' );
+        $this->pageService->getZoneDefinitionByLayout('invalid_layout');
     }
 
     public function getLayoutTemplateProvider()
     {
         return array(
-            array( 'globalZoneLayout', '::globalzonelayout.html.twig' ),
-            array( '2zonesLayout1', '::2zoneslayout1.html.twig' ),
+            array('globalZoneLayout', '::globalzonelayout.html.twig'),
+            array('2zonesLayout1', '::2zoneslayout1.html.twig'),
         );
     }
 
@@ -166,9 +166,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
      * @dataProvider getLayoutTemplateProvider
      * @covers eZ\Publish\Core\FieldType\Page\PageService::getLayoutTemplate
      */
-    public function testGetLayoutTemplate( $zoneLayout, $expectedTemplate )
+    public function testGetLayoutTemplate($zoneLayout, $expectedTemplate)
     {
-        $this->assertSame( $expectedTemplate, $this->pageService->getLayoutTemplate( $zoneLayout ) );
+        $this->assertSame($expectedTemplate, $this->pageService->getLayoutTemplate($zoneLayout));
     }
 
     /**
@@ -178,16 +178,16 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testGetLayoutTemplateInvalidLayout()
     {
-        $this->pageService->getLayoutTemplate( 'invalid_layout' );
+        $this->pageService->getLayoutTemplate('invalid_layout');
     }
 
     public function hasZoneLayoutProvider()
     {
         return array(
-            array( 'globalZoneLayout', true ),
-            array( '2zonesLayout1', true ),
-            array( '2zonesLayout2', false ),
-            array( 'invalid_layout', false ),
+            array('globalZoneLayout', true),
+            array('2zonesLayout1', true),
+            array('2zonesLayout2', false),
+            array('invalid_layout', false),
         );
     }
 
@@ -198,9 +198,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
      * @param string $layout
      * @param bool $expectedResult
      */
-    public function testHasZoneLayout( $layout, $expectedResult )
+    public function testHasZoneLayout($layout, $expectedResult)
     {
-        $this->assertSame( $expectedResult, $this->pageService->hasZoneLayout( $layout ) );
+        $this->assertSame($expectedResult, $this->pageService->hasZoneLayout($layout));
     }
 
     /**
@@ -208,7 +208,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAvailableZoneLayouts()
     {
-        $this->assertSame( array_keys( $this->zoneDefinition ), $this->pageService->getAvailableZoneLayouts() );
+        $this->assertSame(array_keys($this->zoneDefinition), $this->pageService->getAvailableZoneLayouts());
     }
 
     /**
@@ -216,7 +216,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBlockDefinition()
     {
-        $this->assertSame( $this->blockDefinition, $this->pageService->getBlockDefinition() );
+        $this->assertSame($this->blockDefinition, $this->pageService->getBlockDefinition());
     }
 
     /**
@@ -224,7 +224,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBlockDefinitionByIdentifier()
     {
-        $this->assertSame( $this->blockDefinition['mainStory'], $this->pageService->getBlockDefinitionByIdentifier( 'mainStory' ) );
+        $this->assertSame($this->blockDefinition['mainStory'], $this->pageService->getBlockDefinitionByIdentifier('mainStory'));
     }
 
     /**
@@ -234,16 +234,16 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBlockDefinitionByIdentifierInvalidBlock()
     {
-        $this->pageService->getBlockDefinitionByIdentifier( 'invalid_block_identifier' );
+        $this->pageService->getBlockDefinitionByIdentifier('invalid_block_identifier');
     }
 
     public function hasBlockDefinitionProvider()
     {
         return array(
-            array( 'campaign', true ),
-            array( 'mainStory', true ),
-            array( 'invalid_block_identifier', false ),
-            array( 'foobar', false ),
+            array('campaign', true),
+            array('mainStory', true),
+            array('invalid_block_identifier', false),
+            array('foobar', false),
         );
     }
 
@@ -254,9 +254,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
      * @param string $blockIdentifier
      * @param bool $expectedResult
      */
-    public function testHasBlockDefinition( $blockIdentifier, $expectedResult )
+    public function testHasBlockDefinition($blockIdentifier, $expectedResult)
     {
-        $this->assertSame( $expectedResult, $this->pageService->hasBlockDefinition( $blockIdentifier ) );
+        $this->assertSame($expectedResult, $this->pageService->hasBlockDefinition($blockIdentifier));
     }
 
     /**
@@ -265,7 +265,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     protected function buildBlock()
     {
         return new Block(
-            array( 'id' => md5( mt_rand() . microtime() ) )
+            array('id' => md5(mt_rand() . microtime()))
         );
     }
 
@@ -275,9 +275,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testGetStorageGateway()
     {
-        $this->assertFalse( $this->pageService->hasStorageGateway() );
-        $this->pageService->setStorageGateway( $this->storageGateway );
-        $this->assertTrue( $this->pageService->hasStorageGateway() );
+        $this->assertFalse($this->pageService->hasStorageGateway());
+        $this->pageService->setStorageGateway($this->storageGateway);
+        $this->assertTrue($this->pageService->hasStorageGateway());
     }
 
     /**
@@ -289,7 +289,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testGetValidBlockItemsNoGateway()
     {
-        $this->pageService->getValidBlockItems( $this->buildBlock() );
+        $this->pageService->getValidBlockItems($this->buildBlock());
     }
 
     /**
@@ -301,19 +301,19 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     {
         $block = $this->buildBlock();
         $items = array(
-            new Item,
-            new Item
+            new Item(),
+            new Item(),
         );
 
         $this->storageGateway
-            ->expects( $this->once() )
-            ->method( 'getValidBlockItems' )
-            ->with( $block )
-            ->will( $this->returnValue( $items ) );
-        $this->pageService->setStorageGateway( $this->storageGateway );
+            ->expects($this->once())
+            ->method('getValidBlockItems')
+            ->with($block)
+            ->will($this->returnValue($items));
+        $this->pageService->setStorageGateway($this->storageGateway);
         // Calling assertion twice to test cache (comes along with storage gateway's getValidBlockItems() that should be called only once. See above)
-        $this->assertSame( $items, $this->pageService->getValidBlockItems( $block ) );
-        $this->assertSame( $items, $this->pageService->getValidBlockItems( $block ) );
+        $this->assertSame($items, $this->pageService->getValidBlockItems($block));
+        $this->assertSame($items, $this->pageService->getValidBlockItems($block));
     }
 
     /**
@@ -324,17 +324,17 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     public function testGetLastValidBlockItem()
     {
         $block = $this->buildBlock();
-        $lastValidItem = new Item;
+        $lastValidItem = new Item();
 
         $this->storageGateway
-            ->expects( $this->once() )
-            ->method( 'getLastValidBlockItem' )
-            ->with( $block )
-            ->will( $this->returnValue( $lastValidItem ) );
-        $this->pageService->setStorageGateway( $this->storageGateway );
+            ->expects($this->once())
+            ->method('getLastValidBlockItem')
+            ->with($block)
+            ->will($this->returnValue($lastValidItem));
+        $this->pageService->setStorageGateway($this->storageGateway);
         // Calling assertion twice to test cache (comes along with storage gateway's getLastValidBlockItem() that should be called only once. See above)
-        $this->assertSame( $lastValidItem, $this->pageService->getLastValidBlockItem( $block ) );
-        $this->assertSame( $lastValidItem, $this->pageService->getLastValidBlockItem( $block ) );
+        $this->assertSame($lastValidItem, $this->pageService->getLastValidBlockItem($block));
+        $this->assertSame($lastValidItem, $this->pageService->getLastValidBlockItem($block));
     }
 
     /**
@@ -346,19 +346,19 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     {
         $block = $this->buildBlock();
         $items = array(
-            new Item,
-            new Item
+            new Item(),
+            new Item(),
         );
 
         $this->storageGateway
-            ->expects( $this->once() )
-            ->method( 'getWaitingBlockItems' )
-            ->with( $block )
-            ->will( $this->returnValue( $items ) );
-        $this->pageService->setStorageGateway( $this->storageGateway );
+            ->expects($this->once())
+            ->method('getWaitingBlockItems')
+            ->with($block)
+            ->will($this->returnValue($items));
+        $this->pageService->setStorageGateway($this->storageGateway);
         // Calling assertion twice to test cache (comes along with storage gateway's getWaitingBlockItems() that should be called only once. See above)
-        $this->assertSame( $items, $this->pageService->getWaitingBlockItems( $block ) );
-        $this->assertSame( $items, $this->pageService->getWaitingBlockItems( $block ) );
+        $this->assertSame($items, $this->pageService->getWaitingBlockItems($block));
+        $this->assertSame($items, $this->pageService->getWaitingBlockItems($block));
     }
 
     /**
@@ -370,49 +370,48 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     {
         $block = $this->buildBlock();
         $items = array(
-            new Item,
-            new Item
+            new Item(),
+            new Item(),
         );
 
         $this->storageGateway
-            ->expects( $this->once() )
-            ->method( 'getArchivedBlockItems' )
-            ->with( $block )
-            ->will( $this->returnValue( $items ) );
-        $this->pageService->setStorageGateway( $this->storageGateway );
+            ->expects($this->once())
+            ->method('getArchivedBlockItems')
+            ->with($block)
+            ->will($this->returnValue($items));
+        $this->pageService->setStorageGateway($this->storageGateway);
         // Calling assertion twice to test cache (comes along with storage gateway's getArchivedBlockItems() that should be called only once. See above)
-        $this->assertSame( $items, $this->pageService->getArchivedBlockItems( $block ) );
-        $this->assertSame( $items, $this->pageService->getArchivedBlockItems( $block ) );
+        $this->assertSame($items, $this->pageService->getArchivedBlockItems($block));
+        $this->assertSame($items, $this->pageService->getArchivedBlockItems($block));
     }
 
     public function testLoadBlock()
     {
         $contentId = 12;
-        $blockId = "abc0123";
-        $block = new Block( array( "id" => $blockId ) );
-        $zone = new Zone( array( "blocks" => array( $block ) ) );
-        $page = new Page( array( "zones" => array( $zone ) ) );
-        $value = new Value( $page );
-        $field = new Field( array( "value" => $value ) );
-        $content = new Content( array( "internalFields" => array( $field ) ) );
+        $blockId = 'abc0123';
+        $block = new Block(array('id' => $blockId));
+        $zone = new Zone(array('blocks' => array($block)));
+        $page = new Page(array('zones' => array($zone)));
+        $value = new Value($page);
+        $field = new Field(array('value' => $value));
+        $content = new Content(array('internalFields' => array($field)));
 
-        $this->pageService->setStorageGateway( $this->storageGateway );
+        $this->pageService->setStorageGateway($this->storageGateway);
         $this->storageGateway
-            ->expects( $this->once() )
-            ->method( 'getContentIdByBlockId' )
-            ->with( $blockId )
-            ->will( $this->returnValue( $contentId ) );
+            ->expects($this->once())
+            ->method('getContentIdByBlockId')
+            ->with($blockId)
+            ->will($this->returnValue($contentId));
 
         $this->contentService
-            ->expects( $this->once() )
-            ->method( "loadContent" )
-            ->with( $contentId )
-            ->will( $this->returnValue( $content ) );
+            ->expects($this->once())
+            ->method('loadContent')
+            ->with($contentId)
+            ->will($this->returnValue($content));
 
         // Calling assertion twice to test cache (comes along with storage gateway's
         // getLocationIdByBlockId() that should be called only once. See above)
-        $this->assertSame( $block, $this->pageService->loadBlock( $blockId ) );
-        $this->assertSame( $block, $this->pageService->loadBlock( $blockId ) );
-
+        $this->assertSame($block, $this->pageService->loadBlock($blockId));
+        $this->assertSame($block, $this->pageService->loadBlock($blockId));
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing ValueObjectVisitorBaseTest class
+ * File containing ValueObjectVisitorBaseTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,23 +13,22 @@ namespace eZ\Publish\Core\REST\Common\Tests\Output;
 
 use eZ\Publish\Core\REST\Common\Tests\AssertXmlTagTrait;
 use eZ\Publish\Core\REST\Server\Tests;
-
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\RequestParser as RequestParser;
 
 abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
 {
-     use AssertXmlTagTrait;
+    use AssertXmlTagTrait;
 
     /**
-     * Visitor mock
+     * Visitor mock.
      *
      * @var \eZ\Publish\Core\REST\Common\Output\Visitor
      */
     protected $visitorMock;
 
     /**
-     * Output generator
+     * Output generator.
      *
      * @var \eZ\Publish\Core\REST\Common\Output\Generator\Xml
      */
@@ -55,14 +56,13 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     private $templatedRouterCallIndex = 0;
 
     /**
-     * Gets the visitor mock
+     * Gets the visitor mock.
      *
      * @return \eZ\Publish\Core\REST\Common\Output\Visitor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getVisitorMock()
     {
-        if ( !isset( $this->visitorMock ) )
-        {
+        if (!isset($this->visitorMock)) {
             $this->visitorMock = $this->getMock(
                 '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
                 array(),
@@ -72,10 +72,11 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
             );
 
             $this->visitorMock
-                ->expects( $this->any() )
-                ->method( 'getResponse' )
-                ->will( $this->returnValue( $this->getResponseMock() ) );
+                ->expects($this->any())
+                ->method('getResponse')
+                ->will($this->returnValue($this->getResponseMock()));
         }
+
         return $this->visitorMock;
     }
 
@@ -84,26 +85,26 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
      */
     protected function getResponseMock()
     {
-        if ( !isset( $this->responseMock ) )
-        {
-            $this->responseMock = $this->getMock( 'Symfony\Component\HttpFoundation\Response' );
+        if (!isset($this->responseMock)) {
+            $this->responseMock = $this->getMock('Symfony\Component\HttpFoundation\Response');
         }
+
         return $this->responseMock;
     }
 
     /**
-     * Gets the output generator
+     * Gets the output generator.
      *
      * @return \eZ\Publish\Core\REST\Common\Output\Generator\Xml
      */
     protected function getGenerator()
     {
-        if ( !isset( $this->generator ) )
-        {
+        if (!isset($this->generator)) {
             $this->generator = new Generator\Xml(
                 new Generator\Xml\FieldTypeHashGenerator()
             );
         }
+
         return $this->generator;
     }
 
@@ -118,16 +119,16 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
      * @param \DOMNode $domNode
      * @param string $xpathExpression
      */
-    protected function assertXPath( \DOMNode $domNode, $xpathExpression )
+    protected function assertXPath(\DOMNode $domNode, $xpathExpression)
     {
-        $ownerDocument = ( $domNode instanceof \DOMDOcument
+        $ownerDocument = ($domNode instanceof \DOMDOcument
             ? $domNode
-            : $domNode->ownerDocument );
+            : $domNode->ownerDocument);
 
-        $xpath = new \DOMXPath( $ownerDocument );
+        $xpath = new \DOMXPath($ownerDocument);
 
         $this->assertTrue(
-            $xpath->evaluate( "boolean({$xpathExpression})", $domNode ),
+            $xpath->evaluate("boolean({$xpathExpression})", $domNode),
             "XPath expression '{$xpathExpression}' resulted in an empty node set."
         );
     }
@@ -135,9 +136,10 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     protected function getVisitor()
     {
         $visitor = $this->internalGetVisitor();
-        $visitor->setRequestParser( $this->getRequestParser() );
-        $visitor->setRouter( $this->getRouterMock() );
-        $visitor->setTemplateRouter( $this->getTemplatedRouterMock() );
+        $visitor->setRequestParser($this->getRequestParser());
+        $visitor->setRouter($this->getRouterMock());
+        $visitor->setTemplateRouter($this->getTemplatedRouterMock());
+
         return $visitor;
     }
 
@@ -146,10 +148,10 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
      */
     protected function getRequestParser()
     {
-        if ( !isset( $this->requestParser ) )
-        {
-            $this->requestParser = $this->getMock( 'eZ\\Publish\\Core\\REST\\Common\\RequestParser' );
+        if (!isset($this->requestParser)) {
+            $this->requestParser = $this->getMock('eZ\\Publish\\Core\\REST\\Common\\RequestParser');
         }
+
         return $this->requestParser;
     }
 
@@ -158,16 +160,15 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
      */
     protected function getRouterMock()
     {
-        if ( !isset( $this->routerMock ) )
-        {
-            $this->routerMock = $this->getMock( 'Symfony\\Component\\Routing\\RouterInterface' );
+        if (!isset($this->routerMock)) {
+            $this->routerMock = $this->getMock('Symfony\\Component\\Routing\\RouterInterface');
         }
 
         return $this->routerMock;
     }
 
     /**
-     * Resets the router mock and its expected calls index & list
+     * Resets the router mock and its expected calls index & list.
      */
     protected function resetRouterMock()
     {
@@ -182,16 +183,16 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
      * @param array $arguments
      * @param string $returnValue
      */
-    protected function addRouteExpectation( $routeName, $arguments, $returnValue )
+    protected function addRouteExpectation($routeName, $arguments, $returnValue)
     {
         $this->getRouterMock()
-            ->expects( $this->at( $this->routerCallIndex++ ) )
-            ->method( 'generate' )
+            ->expects($this->at($this->routerCallIndex++))
+            ->method('generate')
             ->with(
-                $this->equalTo( $routeName ),
-                $this->equalTo( $arguments )
+                $this->equalTo($routeName),
+                $this->equalTo($arguments)
             )
-            ->will( $this->returnValue( $returnValue ) );
+            ->will($this->returnValue($returnValue));
     }
 
     /**
@@ -199,9 +200,8 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
      */
     protected function getTemplatedRouterMock()
     {
-        if ( !isset( $this->templatedRouterMock ) )
-        {
-            $this->templatedRouterMock = $this->getMock( 'Symfony\\Component\\Routing\\RouterInterface' );
+        if (!isset($this->templatedRouterMock)) {
+            $this->templatedRouterMock = $this->getMock('Symfony\\Component\\Routing\\RouterInterface');
         }
 
         return $this->templatedRouterMock;
@@ -214,20 +214,20 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
      * @param array $arguments
      * @param string $returnValue
      */
-    protected function addTemplatedRouteExpectation( $routeName, $arguments, $returnValue )
+    protected function addTemplatedRouteExpectation($routeName, $arguments, $returnValue)
     {
         $this->getTemplatedRouterMock()
-            ->expects( $this->at( $this->templatedRouterCallIndex++ ) )
-            ->method( 'generate' )
+            ->expects($this->at($this->templatedRouterCallIndex++))
+            ->method('generate')
             ->with(
-                $this->equalTo( $routeName ),
-                $this->equalTo( $arguments )
+                $this->equalTo($routeName),
+                $this->equalTo($arguments)
             )
-            ->will( $this->returnValue( $returnValue ) );
+            ->will($this->returnValue($returnValue));
     }
 
     /**
-     * Must return an instance of the tested visitor object
+     * Must return an instance of the tested visitor object.
      *
      * @return \eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor
      */

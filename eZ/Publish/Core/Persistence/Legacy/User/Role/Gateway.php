@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentTypeGateway class
+ * File containing the ContentTypeGateway class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,127 +21,119 @@ use eZ\Publish\SPI\Persistence\User\Role;
 abstract class Gateway
 {
     /**
-     * Create new role
+     * Create new role.
      *
      * @param Role $role
      *
      * @return Role
      */
-    abstract public function createRole( Role $role );
+    abstract public function createRole(Role $role);
 
     /**
-     * Loads a specified role by $roleId
+     * Loads a specified role by $roleId.
      *
      * @param mixed $roleId
      *
      * @return array
      */
-    abstract public function loadRole( $roleId );
+    abstract public function loadRole($roleId);
 
     /**
-     * Loads a specified role by $identifier
+     * Loads a specified role by $identifier.
      *
      * @param string $identifier
      *
      * @return array
      */
-    abstract public function loadRoleByIdentifier( $identifier );
+    abstract public function loadRoleByIdentifier($identifier);
 
     /**
-     * Loads all roles
+     * Loads all roles.
      *
      * @return array
      */
     abstract public function loadRoles();
 
     /**
-     * Loads all roles associated with the given content objects
+     * Loads all roles associated with the given content objects.
      *
      * @param array $contentIds
      *
      * @return array
      */
-    abstract public function loadRolesForContentObjects( $contentIds );
+    abstract public function loadRolesForContentObjects($contentIds);
 
     /**
-     * Loads role assignments for specified content ID
+     * Loads role assignments for specified content ID.
      *
      * @param mixed $groupId
-     * @param boolean $inherited
+     * @param bool $inherited
      *
      * @return array
      */
-    abstract public function loadRoleAssignmentsByGroupId( $groupId, $inherited = false );
+    abstract public function loadRoleAssignmentsByGroupId($groupId, $inherited = false);
 
     /**
-     * Loads role assignments for given role ID
+     * Loads role assignments for given role ID.
      *
      * @param mixed $roleId
      *
      * @return array
      */
-    abstract public function loadRoleAssignmentsByRoleId( $roleId );
+    abstract public function loadRoleAssignmentsByRoleId($roleId);
 
     /**
-     * Returns the user policies associated with the user
+     * Returns the user policies associated with the user.
      *
      * @param mixed $userId
      *
      * @return UserPolicy[]
      */
-    abstract public function loadPoliciesByUserId( $userId );
+    abstract public function loadPoliciesByUserId($userId);
 
     /**
-     * Update role
+     * Update role.
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      *
      * @param RoleUpdateStruct $role
      */
-    abstract public function updateRole( RoleUpdateStruct $role );
+    abstract public function updateRole(RoleUpdateStruct $role);
 
     /**
-     * Delete the specified role including all of its assignments
+     * Delete the specified role including all of its assignments.
      *
      * @param mixed $roleId
      */
-    abstract public function deleteRole( $roleId );
+    abstract public function deleteRole($roleId);
 
     /**
-     * Adds a policy to a role
+     * Adds a policy to a role.
      *
      * @param mixed $roleId
      * @param Policy $policy
-     *
-     * @return void
      */
-    abstract public function addPolicy( $roleId, Policy $policy );
+    abstract public function addPolicy($roleId, Policy $policy);
 
     /**
-     * Adds limitations to an existing policy
+     * Adds limitations to an existing policy.
      *
      * @param int $policyId
      * @param array $limitations
-     *
-     * @return void
      */
-    abstract public function addPolicyLimitations( $policyId, array $limitations );
+    abstract public function addPolicyLimitations($policyId, array $limitations);
 
     /**
-     * Removes a policy from a role
+     * Removes a policy from a role.
      *
      * @param mixed $policyId
-     *
-     * @return void
      */
-    abstract public function removePolicy( $policyId );
+    abstract public function removePolicy($policyId);
 
     /**
-     * Removes a policy from a role
+     * Removes a policy from a role.
      *
      * @param mixed $policyId
-     *
-     * @return void
      */
-    abstract public function removePolicyLimitations( $policyId );
+    abstract public function removePolicyLimitations($policyId);
 }

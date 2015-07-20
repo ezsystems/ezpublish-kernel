@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the EMailAddress class
+ * File containing the EMailAddress class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,43 +27,41 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 class Type extends FieldType
 {
     protected $validatorConfigurationSchema = array(
-        'EmailAddressValidator' => array()
+        'EmailAddressValidator' => array(),
     );
 
     /**
-     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
      * @param mixed $validatorConfiguration
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateValidatorConfiguration( $validatorConfiguration )
+    public function validateValidatorConfiguration($validatorConfiguration)
     {
         $validationErrors = array();
         $validator = new EmailAddressValidator();
 
-        foreach ( $validatorConfiguration as $validatorIdentifier => $constraints )
-        {
-            if ( $validatorIdentifier !== 'EmailAddressValidator' )
-            {
+        foreach ($validatorConfiguration as $validatorIdentifier => $constraints) {
+            if ($validatorIdentifier !== 'EmailAddressValidator') {
                 $validationErrors[] = new ValidationError(
                     "Validator '%validator%' is unknown",
                     null,
                     array(
-                        "validator" => $validatorIdentifier
+                        'validator' => $validatorIdentifier,
                     ),
                     "[$validatorIdentifier]"
                 );
                 continue;
             }
-            $validationErrors += $validator->validateConstraints( $constraints );
+            $validationErrors += $validator->validateConstraints($constraints);
         }
 
         return $validationErrors;
     }
 
     /**
-     * Validates a field based on the validators in the field definition
+     * Validates a field based on the validators in the field definition.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
@@ -70,36 +70,36 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( FieldDefinition $fieldDefinition, SPIValue $fieldValue )
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
     {
         $errors = array();
 
-        if ( $this->isEmptyValue( $fieldValue ) )
-        {
+        if ($this->isEmptyValue($fieldValue)) {
             return $errors;
         }
 
         $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
-        $constraints = isset( $validatorConfiguration['EmailAddressValidator'] ) ?
+        $constraints = isset($validatorConfiguration['EmailAddressValidator']) ?
             $validatorConfiguration['EmailAddressValidator'] :
             array();
         $validator = new EmailAddressValidator();
-        $validator->initializeWithConstraints( $constraints );
+        $validator->initializeWithConstraints($constraints);
 
-        if ( !$validator->validate( $fieldValue ) )
+        if (!$validator->validate($fieldValue)) {
             return $validator->getMessage();
+        }
 
         return array();
     }
 
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
     public function getFieldTypeIdentifier()
     {
-        return "ezemail";
+        return 'ezemail';
     }
 
     /**
@@ -112,9 +112,9 @@ class Type extends FieldType
      *
      * @return string
      */
-    public function getName( SPIValue $value )
+    public function getName(SPIValue $value)
     {
-        return $this->transformationProcessor->transformByGroup( (string)$value, "lowercase" );
+        return $this->transformationProcessor->transformByGroup((string)$value, 'lowercase');
     }
 
     /**
@@ -125,7 +125,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value;
+        return new Value();
     }
 
     /**
@@ -135,11 +135,10 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\EmailAddress\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
-        if ( is_string( $inputValue ) )
-        {
-            $inputValue = new Value( $inputValue );
+        if (is_string($inputValue)) {
+            $inputValue = new Value($inputValue);
         }
 
         return $inputValue;
@@ -151,13 +150,10 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\EmailAddress\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
-        if ( !is_string( $value->email ) )
-        {
+        if (!is_string($value->email)) {
             throw new InvalidArgumentType(
                 '$value->email',
                 'string',
@@ -175,47 +171,47 @@ class Type extends FieldType
      *
      * @return array
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo(BaseValue $value)
     {
         return $value->email;
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * @param mixed $hash
      *
      * @return \eZ\Publish\Core\FieldType\EmailAddress\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        if ( $hash === null )
-        {
+        if ($hash === null) {
             return $this->getEmptyValue();
         }
-        return new Value( $hash );
+
+        return new Value($hash);
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\EmailAddress\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
-        if ( $this->isEmptyValue( $value ) )
-        {
+        if ($this->isEmptyValue($value)) {
             return null;
         }
+
         return $value->email;
     }
 
     /**
-     * Returns whether the field type is searchable
+     * Returns whether the field type is searchable.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSearchable()
     {

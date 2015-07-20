@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,12 +26,12 @@ class PersistenceCacheCollector extends DataCollector
      */
     private $logger;
 
-    public function __construct( PersistenceLogger $logger )
+    public function __construct(PersistenceLogger $logger)
     {
         $this->logger = $logger;
     }
 
-    public function collect( Request $request, Response $response, \Exception $exception = null )
+    public function collect(Request $request, Response $response, \Exception $exception = null)
     {
         $this->data = [
             'count' => $this->logger->getCount(),
@@ -45,7 +47,7 @@ class PersistenceCacheCollector extends DataCollector
     }
 
     /**
-     * Returns call count
+     * Returns call count.
      *
      * @return int
      */
@@ -55,7 +57,7 @@ class PersistenceCacheCollector extends DataCollector
     }
 
     /**
-     * Returns flag to indicate if logging of calls is enabled or not
+     * Returns flag to indicate if logging of calls is enabled or not.
      *
      * Typically not enabled in prod.
      *
@@ -67,54 +69,54 @@ class PersistenceCacheCollector extends DataCollector
     }
 
     /**
-     * Returns calls
+     * Returns calls.
      *
      * @return array
      */
     public function getCalls()
     {
         $calls = [];
-        foreach ( $this->data['calls'] as $call )
-        {
-            list( $class, $method ) = explode( '::', $call['method'] );
-            $namespace = explode( '\\', $class );
-            $class = array_pop( $namespace );
+        foreach ($this->data['calls'] as $call) {
+            list($class, $method) = explode('::', $call['method']);
+            $namespace = explode('\\', $class);
+            $class = array_pop($namespace);
             $calls[] = array(
                 'namespace' => $namespace,
                 'class' => $class,
                 'method' => $method,
-                'arguments' => empty( $call['arguments'] ) ?
+                'arguments' => empty($call['arguments']) ?
                     '' :
-                    preg_replace( array( '/^array\s\(\s/', '/,\s\)$/' ), '', var_export( $call['arguments'], true ) )
+                    preg_replace(array('/^array\s\(\s/', '/,\s\)$/'), '', var_export($call['arguments'], true)),
             );
         }
+
         return $calls;
     }
 
     /**
-     * Returns un cached handlers being loaded
+     * Returns un cached handlers being loaded.
      *
      * @return array
      */
     public function getHandlers()
     {
         $handlers = [];
-        foreach ( $this->data['handlers'] as $handler => $count )
-        {
-            list( $class, $method ) = explode( '::', $handler );
-            unset( $class );
+        foreach ($this->data['handlers'] as $handler => $count) {
+            list($class, $method) = explode('::', $handler);
+            unset($class);
             $handlers[$method] = $method . '(' . $count . ')';
         }
+
         return $handlers;
     }
 
     /**
-     * Returns un cached handlers being loaded
+     * Returns un cached handlers being loaded.
      *
      * @return array
      */
     public function getHandlersCount()
     {
-        return array_sum( $this->data['handlers'] );
+        return array_sum($this->data['handlers']);
     }
 }

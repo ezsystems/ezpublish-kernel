@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the SiteAccessRouterInterface class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,7 +24,7 @@ interface SiteAccessRouterInterface
      *
      * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess
      */
-    public function match( SimplifiedRequest $request );
+    public function match(SimplifiedRequest $request);
 
     /**
      * Matches a SiteAccess by name.
@@ -35,5 +37,5 @@ interface SiteAccessRouterInterface
      *
      * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess
      */
-    public function matchByName( $siteAccessName );
+    public function matchByName($siteAccessName);
 }

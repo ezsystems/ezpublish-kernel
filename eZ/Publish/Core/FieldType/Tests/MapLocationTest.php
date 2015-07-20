@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the eZ\Publish\Core\FieldType\Tests\FieldTypeTest class
+ * File containing the eZ\Publish\Core\FieldType\Tests\FieldTypeTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,6 @@ use eZ\Publish\Core\FieldType\MapLocation;
 
 class MapLocationTest extends FieldTypeTest
 {
-
     /**
      * Returns the field type under test.
      *
@@ -28,7 +29,7 @@ class MapLocationTest extends FieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         $fieldType = new MapLocation\Type();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
     }
@@ -55,12 +56,10 @@ class MapLocationTest extends FieldTypeTest
 
     /**
      * Returns the empty value expected from the field type.
-     *
-     * @return void
      */
     protected function getEmptyValueExpectation()
     {
-        return new MapLocation\Value;
+        return new MapLocation\Value();
     }
 
     /**
@@ -157,15 +156,15 @@ class MapLocationTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new MapLocation\Value
+                new MapLocation\Value(),
             ),
             array(
                 array(),
-                new MapLocation\Value
+                new MapLocation\Value(),
             ),
             array(
-                new MapLocation\Value,
-                new MapLocation\Value
+                new MapLocation\Value(),
+                new MapLocation\Value(),
             ),
             array(
                 array(
@@ -210,12 +209,12 @@ class MapLocationTest extends FieldTypeTest
                         'address' => 'Nowhere',
                     )
                 ),
-            )
+            ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -253,7 +252,7 @@ class MapLocationTest extends FieldTypeTest
     {
         return array(
             array(
-                new MapLocation\Value,
+                new MapLocation\Value(),
                 null,
             ),
             array(
@@ -274,7 +273,7 @@ class MapLocationTest extends FieldTypeTest
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -315,7 +314,7 @@ class MapLocationTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new MapLocation\Value
+                new MapLocation\Value(),
             ),
             array(
                 array(
@@ -342,8 +341,8 @@ class MapLocationTest extends FieldTypeTest
     public function provideDataForGetName()
     {
         return array(
-            array( $this->getEmptyValueExpectation(), "" ),
-            array( new MapLocation\Value( array( 'address' => 'Bag End, The Shire' ) ), "Bag End, The Shire" )
+            array($this->getEmptyValueExpectation(), ''),
+            array(new MapLocation\Value(array('address' => 'Bag End, The Shire')), 'Bag End, The Shire'),
         );
     }
 }

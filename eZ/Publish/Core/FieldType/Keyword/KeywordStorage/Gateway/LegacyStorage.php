@@ -9,37 +9,35 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 class LegacyStorage extends Gateway
 {
     /**
-     * Connection
+     * Connection.
      *
      * @var mixed
      */
     protected $dbHandler;
 
     /**
-     * Set database handler for this gateway
+     * Set database handler for this gateway.
      *
      * @param mixed $dbHandler
      *
-     * @return void
      * @throws \RuntimeException if $dbHandler is not an instance of
      *         {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler}
      */
-    public function setConnection( $dbHandler )
+    public function setConnection($dbHandler)
     {
         // This obviously violates the Liskov substitution Principle, but with
         // the given class design there is no sane other option. Actually the
         // dbHandler *should* be passed to the constructor, and there should
         // not be the need to post-inject it.
-        if ( !$dbHandler instanceof DatabaseHandler )
-        {
-            throw new \RuntimeException( "Invalid dbHandler passed" );
+        if (!$dbHandler instanceof DatabaseHandler) {
+            throw new \RuntimeException('Invalid dbHandler passed');
         }
 
         $this->dbHandler = $dbHandler;
     }
 
     /**
-     * Returns the active connection
+     * Returns the active connection.
      *
      * @throws \RuntimeException if no connection has been set, yet.
      *
@@ -47,30 +45,30 @@ class LegacyStorage extends Gateway
      */
     protected function getConnection()
     {
-        if ( $this->dbHandler === null )
-        {
-            throw new \RuntimeException( "Missing database connection." );
+        if ($this->dbHandler === null) {
+            throw new \RuntimeException('Missing database connection.');
         }
+
         return $this->dbHandler;
     }
 
     /**
-     * Stores the keyword list from $field->value->externalData
+     * Stores the keyword list from $field->value->externalData.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field
      * @param mixed $contentTypeId
      */
-    public function storeFieldData( Field $field, $contentTypeId )
+    public function storeFieldData(Field $field, $contentTypeId)
     {
-        $existingKeywordMap = $this->getExistingKeywords( $field->value->externalData, $contentTypeId );
+        $existingKeywordMap = $this->getExistingKeywords($field->value->externalData, $contentTypeId);
 
-        $this->deleteOldKeywordAssignments( $field->id );
+        $this->deleteOldKeywordAssignments($field->id);
 
         $this->assignKeywords(
             $field->id,
             $this->insertKeywords(
                 array_diff_key(
-                    array_fill_keys( $field->value->externalData, true ),
+                    array_fill_keys($field->value->externalData, true),
                     $existingKeywordMap
                 ),
                 $contentTypeId
@@ -81,64 +79,62 @@ class LegacyStorage extends Gateway
     }
 
     /**
-     * Sets the list of assigned keywords into $field->value->externalData
+     * Sets the list of assigned keywords into $field->value->externalData.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function getFieldData( Field $field )
+    public function getFieldData(Field $field)
     {
-        $field->value->externalData = $this->getAssignedKeywords( $field->id );
+        $field->value->externalData = $this->getAssignedKeywords($field->id);
     }
 
     /**
-     * Retrieve the ContentType ID for the given $field
+     * Retrieve the ContentType ID for the given $field.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      *
      * @return mixed
      */
-    public function getContentTypeId( Field $field )
+    public function getContentTypeId(Field $field)
     {
-        return $this->loadContentTypeId( $field->fieldDefinitionId );
+        return $this->loadContentTypeId($field->fieldDefinitionId);
     }
 
     /**
-     * Stores the keyword list from $field->value->externalData
+     * Stores the keyword list from $field->value->externalData.
      *
      * @param mixed $fieldId
      */
-    public function deleteFieldData( $fieldId )
+    public function deleteFieldData($fieldId)
     {
-        $this->deleteOldKeywordAssignments( $fieldId );
+        $this->deleteOldKeywordAssignments($fieldId);
         $this->deleteOrphanedKeywords();
     }
 
     /**
-     * Returns a list of keywords assigned to $fieldId
+     * Returns a list of keywords assigned to $fieldId.
      *
      * @param mixed $fieldId
      *
      * @return string[]
      */
-    protected function getAssignedKeywords( $fieldId )
+    protected function getAssignedKeywords($fieldId)
     {
         $dbHandler = $this->getConnection();
 
         $query = $dbHandler->createSelectQuery();
-        $query->select( "keyword" )
-            ->from( $dbHandler->quoteTable( "ezkeyword" ) )
+        $query->select('keyword')
+            ->from($dbHandler->quoteTable('ezkeyword'))
             ->innerJoin(
-                $dbHandler->quoteTable( "ezkeyword_attribute_link" ),
+                $dbHandler->quoteTable('ezkeyword_attribute_link'),
                 $query->expr->eq(
-                    $dbHandler->quoteColumn( "id", "ezkeyword" ),
-                    $dbHandler->quoteColumn( "keyword_id", "ezkeyword_attribute_link" )
+                    $dbHandler->quoteColumn('id', 'ezkeyword'),
+                    $dbHandler->quoteColumn('keyword_id', 'ezkeyword_attribute_link')
                 )
             )
             ->where(
                 $query->expr->eq(
-                    $dbHandler->quoteColumn( "objectattribute_id", "ezkeyword_attribute_link" ),
+                    $dbHandler->quoteColumn('objectattribute_id', 'ezkeyword_attribute_link'),
                     $fieldId
                 )
             );
@@ -146,45 +142,46 @@ class LegacyStorage extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetchAll( \PDO::FETCH_COLUMN, 0 );
+        return $statement->fetchAll(\PDO::FETCH_COLUMN, 0);
     }
 
     /**
-     * Retrieves the content type ID for the given $fieldDefinitionId
+     * Retrieves the content type ID for the given $fieldDefinitionId.
      *
      * @param mixed $fieldDefinitionId
      *
      * @return mixed
      */
-    protected function loadContentTypeId( $fieldDefinitionId )
+    protected function loadContentTypeId($fieldDefinitionId)
     {
         $dbHandler = $this->getConnection();
 
         $query = $dbHandler->createSelectQuery();
-        $query->select( 'contentclass_id' )
-            ->from( $dbHandler->quoteTable( 'ezcontentclass_attribute' ) )
+        $query->select('contentclass_id')
+            ->from($dbHandler->quoteTable('ezcontentclass_attribute'))
             ->where(
-                $query->expr->eq( 'id', $fieldDefinitionId )
+                $query->expr->eq('id', $fieldDefinitionId)
             );
 
         $statement = $query->prepare();
         $statement->execute();
 
-        $row = $statement->fetch( \PDO::FETCH_ASSOC );
+        $row = $statement->fetch(\PDO::FETCH_ASSOC);
 
-        if ( $row === false )
+        if ($row === false) {
             throw new \RuntimeException(
                 sprintf(
                     'Content Type ID cannot be retrieved based on the field definition ID "%s"',
                     $fieldDefinitionId
                 )
             );
+        }
 
         return $row['contentclass_id'];
     }
 
     /**
-     * Returns already existing keywords from $keywordList as a map
+     * Returns already existing keywords from $keywordList as a map.
      *
      * The map has the following format:
      * <code>
@@ -199,21 +196,21 @@ class LegacyStorage extends Gateway
      *
      * @return mixed[]
      */
-    protected function getExistingKeywords( $keywordList, $contentTypeId )
+    protected function getExistingKeywords($keywordList, $contentTypeId)
     {
         $dbHandler = $this->getConnection();
 
         // Retrieving potentially existing keywords
         $q = $dbHandler->createSelectQuery();
-        $q->select( "id", "keyword" )
-            ->from( $dbHandler->quoteTable( "ezkeyword" ) )
+        $q->select('id', 'keyword')
+            ->from($dbHandler->quoteTable('ezkeyword'))
             ->where(
                 $q->expr->lAnd(
                     $q->expr->in(
-                        "keyword",
+                        'keyword',
                         $keywordList
                     ),
-                    $q->expr->eq( "class_id", $contentTypeId )
+                    $q->expr->eq('class_id', $contentTypeId)
                 )
             );
         $statement = $q->prepare();
@@ -221,9 +218,8 @@ class LegacyStorage extends Gateway
 
         $existingKeywordMap = array();
 
-        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
-        {
-            $existingKeywordMap[$row["keyword"]] = $row["id"];
+        foreach ($statement->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+            $existingKeywordMap[$row['keyword']] = $row['id'];
         }
 
         return $existingKeywordMap;
@@ -231,7 +227,7 @@ class LegacyStorage extends Gateway
 
     /**
      * Inserts $keywordsToInsert for $fieldDefinitionId and returns a map of
-     * these keywords to their ID
+     * these keywords to their ID.
      *
      * The returned array has the following format:
      * <code>
@@ -246,52 +242,50 @@ class LegacyStorage extends Gateway
      *
      * @return mixed[]
      */
-    protected function insertKeywords( array $keywordsToInsert, $contentTypeId )
+    protected function insertKeywords(array $keywordsToInsert, $contentTypeId)
     {
         $dbHandler = $this->getConnection();
 
         $keywordIdMap = array();
 
         // Inserting keywords not yet registered
-        if ( !empty( $keywordsToInsert ) )
-        {
+        if (!empty($keywordsToInsert)) {
             $insertQuery = $dbHandler->createInsertQuery();
             $insertQuery->insertInto(
-                $dbHandler->quoteTable( "ezkeyword" )
+                $dbHandler->quoteTable('ezkeyword')
             )->set(
-                $dbHandler->quoteColumn( "class_id" ),
-                $insertQuery->bindValue( $contentTypeId, null, \PDO::PARAM_INT )
+                $dbHandler->quoteColumn('class_id'),
+                $insertQuery->bindValue($contentTypeId, null, \PDO::PARAM_INT)
             )->set(
-                $dbHandler->quoteColumn( "keyword" ),
-                $insertQuery->bindParam( $keyword )
+                $dbHandler->quoteColumn('keyword'),
+                $insertQuery->bindParam($keyword)
             );
 
             $statement = $insertQuery->prepare();
 
-            foreach ( array_keys( $keywordsToInsert ) as $keyword )
-            {
+            foreach (array_keys($keywordsToInsert) as $keyword) {
                 $statement->execute();
                 $keywordIdMap[$keyword] = $dbHandler->lastInsertId(
-                    $dbHandler->getSequenceName( 'ezkeyword', 'id' )
+                    $dbHandler->getSequenceName('ezkeyword', 'id')
                 );
             }
-            unset( $keyword );
+            unset($keyword);
         }
 
         return $keywordIdMap;
     }
 
-    protected function deleteOldKeywordAssignments( $fieldId )
+    protected function deleteOldKeywordAssignments($fieldId)
     {
         $dbHandler = $this->getConnection();
 
         $deleteQuery = $dbHandler->createDeleteQuery();
         $deleteQuery->deleteFrom(
-            $dbHandler->quoteTable( "ezkeyword_attribute_link" )
+            $dbHandler->quoteTable('ezkeyword_attribute_link')
         )->where(
             $deleteQuery->expr->eq(
-                $dbHandler->quoteColumn( "objectattribute_id", "ezkeyword_attribute_link" ),
-                $deleteQuery->bindValue( $fieldId, null, \PDO::PARAM_INT )
+                $dbHandler->quoteColumn('objectattribute_id', 'ezkeyword_attribute_link'),
+                $deleteQuery->bindValue($fieldId, null, \PDO::PARAM_INT)
             )
         );
 
@@ -300,7 +294,7 @@ class LegacyStorage extends Gateway
     }
 
     /**
-     * Assigns keywords from $keywordMap to the field with $fieldId
+     * Assigns keywords from $keywordMap to the field with $fieldId.
      *
      * $keywordMap has the format:
      * <code>
@@ -312,10 +306,8 @@ class LegacyStorage extends Gateway
      *
      * @param mixed $fieldId
      * @param mixed[] $keywordMap
-     *
-     * @return void
      */
-    protected function assignKeywords( $fieldId, $keywordMap )
+    protected function assignKeywords($fieldId, $keywordMap)
     {
         $dbHandler = $this->getConnection();
 
@@ -323,19 +315,18 @@ class LegacyStorage extends Gateway
 
         $insertQuery = $dbHandler->createInsertQuery();
         $insertQuery->insertInto(
-            $dbHandler->quoteTable( "ezkeyword_attribute_link" )
+            $dbHandler->quoteTable('ezkeyword_attribute_link')
         )->set(
-            $dbHandler->quoteColumn( "keyword_id" ),
-            $insertQuery->bindParam( $keywordId )
+            $dbHandler->quoteColumn('keyword_id'),
+            $insertQuery->bindParam($keywordId)
         )->set(
-            $dbHandler->quoteColumn( "objectattribute_id" ),
-            $insertQuery->bindValue( $fieldId )
+            $dbHandler->quoteColumn('objectattribute_id'),
+            $insertQuery->bindValue($fieldId)
         );
 
         $statement = $insertQuery->prepare();
 
-        foreach ( $keywordMap as $keyword => $keywordId )
-        {
+        foreach ($keywordMap as $keyword => $keywordId) {
             $keywordId = $keywordMap[$keyword];
             $statement->execute();
         }
@@ -348,8 +339,6 @@ class LegacyStorage extends Gateway
      * That could be avoided if the feature is implemented there.
      *
      * Keyword is orphaned if it is not linked to a content attribute through ezkeyword_attribute_link table.
-     *
-     * @return void
      */
     protected function deleteOrphanedKeywords()
     {
@@ -358,34 +347,33 @@ class LegacyStorage extends Gateway
         /** @var $query \\eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $dbHandler->createSelectQuery();
         $query->select(
-            "ezkeyword.id"
+            'ezkeyword.id'
         )->from(
-            $dbHandler->quoteTable( "ezkeyword" )
+            $dbHandler->quoteTable('ezkeyword')
         )->leftJoin(
-            $dbHandler->quoteTable( "ezkeyword_attribute_link" ),
+            $dbHandler->quoteTable('ezkeyword_attribute_link'),
             $query->expr->eq(
-                $dbHandler->quoteColumn( 'keyword_id', 'ezkeyword_attribute_link' ),
-                $dbHandler->quoteColumn( 'id', 'ezkeyword' )
+                $dbHandler->quoteColumn('keyword_id', 'ezkeyword_attribute_link'),
+                $dbHandler->quoteColumn('id', 'ezkeyword')
             )
         )->where(
-            $query->expr->isNull( "ezkeyword_attribute_link.id" )
+            $query->expr->isNull('ezkeyword_attribute_link.id')
         );
 
         $statement = $query->prepare();
         $statement->execute();
-        $ids = $statement->fetchAll( \PDO::FETCH_COLUMN );
+        $ids = $statement->fetchAll(\PDO::FETCH_COLUMN);
 
-        if ( empty( $ids ) )
-        {
+        if (empty($ids)) {
             return;
         }
 
         /** @var $deleteQuery \ezcQueryDelete */
         $deleteQuery = $dbHandler->createDeleteQuery();
         $deleteQuery->deleteFrom(
-            $dbHandler->quoteTable( "ezkeyword" )
+            $dbHandler->quoteTable('ezkeyword')
         )->where(
-            $deleteQuery->expr->in( $dbHandler->quoteColumn( 'id' ), $ids )
+            $deleteQuery->expr->in($dbHandler->quoteColumn('id'), $ids)
         );
 
         $deleteQuery->prepare()->execute();

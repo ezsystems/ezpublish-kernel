@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the XML generator class
+ * File containing the XML generator class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,60 +14,60 @@ namespace eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 
 /**
- * Xml generator
+ * Xml generator.
  */
 class Xml extends Generator
 {
     /**
-     * XMLWriter
+     * XMLWriter.
      *
      * @var \XMLWriter
      */
     protected $xmlWriter;
 
     /**
-     * Generator for field type hash values
+     * Generator for field type hash values.
      *
      * @var \eZ\Publish\Core\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator
      */
     protected $hashGenerator;
 
     /**
-     * Keeps track if the document received some content
+     * Keeps track if the document received some content.
      *
-     * @var boolean
+     * @var bool
      */
     protected $isEmpty = true;
 
     /**
      * @param \eZ\Publish\Core\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator $hashGenerator
      */
-    public function __construct( Xml\FieldTypeHashGenerator $hashGenerator )
+    public function __construct(Xml\FieldTypeHashGenerator $hashGenerator)
     {
         $this->hashGenerator = $hashGenerator;
     }
 
     /**
-     * Start document
+     * Start document.
      *
      * @param mixed $data
      */
-    public function startDocument( $data )
+    public function startDocument($data)
     {
-        $this->checkStartDocument( $data );
+        $this->checkStartDocument($data);
 
         $this->isEmpty = true;
 
         $this->xmlWriter = new \XMLWriter();
         $this->xmlWriter->openMemory();
-        $this->xmlWriter->setIndent( $this->formatOutput );
-        $this->xmlWriter->startDocument( '1.0', 'UTF-8' );
+        $this->xmlWriter->setIndent($this->formatOutput);
+        $this->xmlWriter->startDocument('1.0', 'UTF-8');
     }
 
     /**
-     * Returns if the document is empty or already contains data
+     * Returns if the document is empty or already contains data.
      *
-     * @return boolean
+     * @return bool
      */
     public function isEmpty()
     {
@@ -73,7 +75,7 @@ class Xml extends Generator
     }
 
     /**
-     * End document
+     * End document.
      *
      * Returns the generated document as a string.
      *
@@ -81,186 +83,187 @@ class Xml extends Generator
      *
      * @return string
      */
-    public function endDocument( $data )
+    public function endDocument($data)
     {
-        $this->checkEndDocument( $data );
+        $this->checkEndDocument($data);
 
         $this->xmlWriter->endDocument();
+
         return $this->xmlWriter->outputMemory();
     }
 
     /**
-     * Start object element
+     * Start object element.
      *
      * @param string $name
      * @param string $mediaTypeName
      */
-    public function startObjectElement( $name, $mediaTypeName = null )
+    public function startObjectElement($name, $mediaTypeName = null)
     {
-        $this->checkStartObjectElement( $name );
+        $this->checkStartObjectElement($name);
 
         $this->isEmpty = false;
 
         $mediaTypeName = $mediaTypeName ?: $name;
 
-        $this->xmlWriter->startElement( $name );
+        $this->xmlWriter->startElement($name);
 
-        $this->startAttribute( "media-type", $this->getMediaType( $mediaTypeName ) );
-        $this->endAttribute( "media-type" );
+        $this->startAttribute('media-type', $this->getMediaType($mediaTypeName));
+        $this->endAttribute('media-type');
     }
 
     /**
-     * End object element
+     * End object element.
      *
      * @param string $name
      */
-    public function endObjectElement( $name )
+    public function endObjectElement($name)
     {
-        $this->checkEndObjectElement( $name );
+        $this->checkEndObjectElement($name);
 
         $this->xmlWriter->endElement();
     }
 
     /**
-     * Start hash element
+     * Start hash element.
      *
      * @param string $name
      */
-    public function startHashElement( $name )
+    public function startHashElement($name)
     {
-        $this->checkStartHashElement( $name );
+        $this->checkStartHashElement($name);
 
         $this->isEmpty = false;
 
-        $this->xmlWriter->startElement( $name );
+        $this->xmlWriter->startElement($name);
     }
 
     /**
-     * End hash element
+     * End hash element.
      *
      * @param string $name
      */
-    public function endHashElement( $name )
+    public function endHashElement($name)
     {
-        $this->checkEndHashElement( $name );
+        $this->checkEndHashElement($name);
 
         $this->xmlWriter->endElement();
     }
 
     /**
-     * Start value element
+     * Start value element.
      *
      * @param string $name
      * @param string $value
      * @param array $attributes
      */
-    public function startValueElement( $name, $value, $attributes = array() )
+    public function startValueElement($name, $value, $attributes = array())
     {
-        $this->checkStartValueElement( $name );
+        $this->checkStartValueElement($name);
 
-        $this->xmlWriter->startElement( $name );
+        $this->xmlWriter->startElement($name);
 
-        foreach ( $attributes as $attributeName => $attributeValue )
-        {
-            $this->xmlWriter->startAttribute( $attributeName );
-            $this->xmlWriter->text( $attributeValue );
+        foreach ($attributes as $attributeName => $attributeValue) {
+            $this->xmlWriter->startAttribute($attributeName);
+            $this->xmlWriter->text($attributeValue);
             $this->xmlWriter->endAttribute();
         }
 
-        $this->xmlWriter->text( $value );
+        $this->xmlWriter->text($value);
     }
 
     /**
-     * End value element
+     * End value element.
      *
      * @param string $name
      */
-    public function endValueElement( $name )
+    public function endValueElement($name)
     {
-        $this->checkEndValueElement( $name );
+        $this->checkEndValueElement($name);
 
         $this->xmlWriter->endElement();
     }
 
     /**
-     * Start list
+     * Start list.
      *
      * @param string $name
      */
-    public function startList( $name )
+    public function startList($name)
     {
-        $this->checkStartList( $name );
+        $this->checkStartList($name);
     }
 
     /**
-     * End list
+     * End list.
      *
      * @param string $name
      */
-    public function endList( $name )
+    public function endList($name)
     {
-        $this->checkEndList( $name );
+        $this->checkEndList($name);
     }
 
     /**
-     * Start attribute
+     * Start attribute.
      *
      * @param string $name
      * @param string $value
      */
-    public function startAttribute( $name, $value )
+    public function startAttribute($name, $value)
     {
-        $this->checkStartAttribute( $name );
+        $this->checkStartAttribute($name);
 
-        $this->xmlWriter->startAttribute( $name );
-        $this->xmlWriter->text( $value );
+        $this->xmlWriter->startAttribute($name);
+        $this->xmlWriter->text($value);
     }
 
     /**
-     * End attribute
+     * End attribute.
      *
      * @param string $name
      */
-    public function endAttribute( $name )
+    public function endAttribute($name)
     {
-        $this->checkEndAttribute( $name );
+        $this->checkEndAttribute($name);
 
         $this->xmlWriter->endAttribute();
     }
 
     /**
-     * Get media type
+     * Get media type.
      *
      * @param string $name
      *
      * @return string
      */
-    public function getMediaType( $name )
+    public function getMediaType($name)
     {
-        return $this->generateMediaType( $name, 'xml' );
+        return $this->generateMediaType($name, 'xml');
     }
 
     /**
      * Generates a generic representation of the scalar, hash or list given in
      * $hashValue into the document, using an element of $hashElementName as
-     * its parent
+     * its parent.
      *
      * @param string $hashElementName
      * @param mixed $hashValue
      */
-    public function generateFieldTypeHash( $hashElementName, $hashValue )
+    public function generateFieldTypeHash($hashElementName, $hashValue)
     {
-        $this->hashGenerator->generateHashValue( $this->xmlWriter, $hashElementName, $hashValue );
+        $this->hashGenerator->generateHashValue($this->xmlWriter, $hashElementName, $hashValue);
     }
 
     /**
-     * Serializes a boolean value
+     * Serializes a boolean value.
      *
-     * @param boolean $boolValue
+     * @param bool $boolValue
+     *
      * @return string
      */
-    public function serializeBool( $boolValue )
+    public function serializeBool($boolValue)
     {
-        return ( $boolValue ? 'true' : 'false' );
+        return ($boolValue ? 'true' : 'false');
     }
 }

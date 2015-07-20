@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Section Gateway class
+ * File containing the Section Gateway class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,23 +16,23 @@ use Doctrine\DBAL\DBALException;
 use PDOException;
 
 /**
- * UrlAlias Handler
+ * UrlAlias Handler.
  */
 class ExceptionConversion extends Gateway
 {
     /**
-     * The wrapped gateway
+     * The wrapped gateway.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway
      */
     protected $innerGateway;
 
     /**
-     * Creates a new exception conversion gateway around $innerGateway
+     * Creates a new exception conversion gateway around $innerGateway.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $innerGateway
      */
-    public function __construct( Gateway $innerGateway )
+    public function __construct(Gateway $innerGateway)
     {
         $this->innerGateway = $innerGateway;
     }
@@ -39,24 +41,19 @@ class ExceptionConversion extends Gateway
      * Loads list of aliases by given $locationId.
      *
      * @param mixed $locationId
-     * @param boolean $custom
+     * @param bool $custom
      * @param mixed $languageId
      *
      * @return array
      */
-    public function loadLocationEntries( $locationId, $custom = false, $languageId = false )
+    public function loadLocationEntries($locationId, $custom = false, $languageId = false)
     {
-        try
-        {
-            return $this->innerGateway->loadLocationEntries( $locationId, $custom );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->loadLocationEntries($locationId, $custom);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -68,21 +65,16 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $id
      *
-     * @return boolean
+     * @return bool
      */
-    public function isRootEntry( $id )
+    public function isRootEntry($id)
     {
-        try
-        {
-            return $this->innerGateway->isRootEntry( $id );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->isRootEntry($id);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -98,22 +90,15 @@ class ExceptionConversion extends Gateway
      * @param mixed $newId
      * @param mixed $parentId
      * @param string $textMD5
-     *
-     * @return void
      */
-    public function cleanupAfterPublish( $action, $languageId, $newId, $parentId, $textMD5 )
+    public function cleanupAfterPublish($action, $languageId, $newId, $parentId, $textMD5)
     {
-        try
-        {
-            $this->innerGateway->cleanupAfterPublish( $action, $languageId, $newId, $parentId, $textMD5 );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            $this->innerGateway->cleanupAfterPublish($action, $languageId, $newId, $parentId, $textMD5);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -126,22 +111,15 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $id
      * @param mixed $link
-     *
-     * @return void
      */
-    public function historizeId( $id, $link )
+    public function historizeId($id, $link)
     {
-        try
-        {
-            $this->innerGateway->historizeId( $id, $link );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            $this->innerGateway->historizeId($id, $link);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -152,49 +130,35 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $oldParentId
      * @param mixed $newParentId
-     *
-     * @return void
      */
-    public function reparent( $oldParentId, $newParentId )
+    public function reparent($oldParentId, $newParentId)
     {
-        try
-        {
-            $this->innerGateway->reparent( $oldParentId, $newParentId );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            $this->innerGateway->reparent($oldParentId, $newParentId);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Updates single row data matched by composite primary key
+     * Updates single row data matched by composite primary key.
      *
      * Use optional parameter $languageMaskMatch to additionally limit the query match with languages
      *
      * @param mixed $parentId
      * @param string $textMD5
      * @param array $values associative array with column names as keys and column values as values
-     *
-     * @return void
      */
-    public function updateRow( $parentId, $textMD5, array $values )
+    public function updateRow($parentId, $textMD5, array $values)
     {
-        try
-        {
-            $this->innerGateway->updateRow( $parentId, $textMD5, $values );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            $this->innerGateway->updateRow($parentId, $textMD5, $values);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -205,43 +169,33 @@ class ExceptionConversion extends Gateway
      *
      * @return mixed
      */
-    public function insertRow( array $values )
+    public function insertRow(array $values)
     {
-        try
-        {
-            return $this->innerGateway->insertRow( $values );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->insertRow($values);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Loads single row data matched by composite primary key
+     * Loads single row data matched by composite primary key.
      *
      * @param mixed $parentId
      * @param string $textMD5
      *
      * @return array
      */
-    public function loadRow( $parentId, $textMD5 )
+    public function loadRow($parentId, $textMD5)
     {
-        try
-        {
-            return $this->innerGateway->loadRow( $parentId, $textMD5 );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->loadRow($parentId, $textMD5);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -253,19 +207,14 @@ class ExceptionConversion extends Gateway
      *
      * @return array
      */
-    public function loadAutogeneratedEntry( $action, $parentId = null )
+    public function loadAutogeneratedEntry($action, $parentId = null)
     {
-        try
-        {
-            return $this->innerGateway->loadAutogeneratedEntry( $action, $parentId );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->loadAutogeneratedEntry($action, $parentId);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -276,22 +225,15 @@ class ExceptionConversion extends Gateway
      *
      * @param string $action
      * @param mixed|null $id
-     *
-     * @return void
      */
-    public function remove( $action, $id = null )
+    public function remove($action, $id = null)
     {
-        try
-        {
-            $this->innerGateway->remove( $action, $id );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            $this->innerGateway->remove($action, $id);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -304,19 +246,14 @@ class ExceptionConversion extends Gateway
      *
      * @return array
      */
-    public function listGlobalEntries( $languageCode = null, $offset = 0, $limit = -1 )
+    public function listGlobalEntries($languageCode = null, $offset = 0, $limit = -1)
     {
-        try
-        {
-            return $this->innerGateway->listGlobalEntries( $languageCode, $offset, $limit );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->listGlobalEntries($languageCode, $offset, $limit);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -328,21 +265,16 @@ class ExceptionConversion extends Gateway
      * @param mixed $parentId
      * @param string $textMD5
      *
-     * @return boolean
+     * @return bool
      */
-    public function removeCustomAlias( $parentId, $textMD5 )
+    public function removeCustomAlias($parentId, $textMD5)
     {
-        try
-        {
-            return $this->innerGateway->removeCustomAlias( $parentId, $textMD5 );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->removeCustomAlias($parentId, $textMD5);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -353,19 +285,14 @@ class ExceptionConversion extends Gateway
      *
      * @return array
      */
-    public function loadUrlAliasData( array $urlHashes )
+    public function loadUrlAliasData(array $urlHashes)
     {
-        try
-        {
-            return $this->innerGateway->loadUrlAliasData( $urlHashes );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->loadUrlAliasData($urlHashes);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -376,19 +303,14 @@ class ExceptionConversion extends Gateway
      *
      * @return array
      */
-    public function loadPathData( $id )
+    public function loadPathData($id)
     {
-        try
-        {
-            return $this->innerGateway->loadPathData( $id );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->loadPathData($id);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -404,19 +326,14 @@ class ExceptionConversion extends Gateway
      *
      * @return array
      */
-    public function loadPathDataByHierarchy( array $hierarchyData )
+    public function loadPathDataByHierarchy(array $hierarchyData)
     {
-        try
-        {
-            return $this->innerGateway->loadPathDataByHierarchy( $hierarchyData );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->loadPathDataByHierarchy($hierarchyData);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -424,23 +341,18 @@ class ExceptionConversion extends Gateway
      * Loads all autogenerated entries with given $parentId with optionally included history entries.
      *
      * @param mixed $parentId
-     * @param boolean $includeHistory
+     * @param bool $includeHistory
      *
      * @return array
      */
-    public function loadAutogeneratedEntries( $parentId, $includeHistory = false )
+    public function loadAutogeneratedEntries($parentId, $includeHistory = false)
     {
-        try
-        {
-            return $this->innerGateway->loadAutogeneratedEntries( $parentId, $includeHistory );
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->loadAutogeneratedEntries($parentId, $includeHistory);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -451,17 +363,12 @@ class ExceptionConversion extends Gateway
      */
     public function getNextId()
     {
-        try
-        {
+        try {
             return $this->innerGateway->getNextId();
-        }
-        catch ( DBALException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new \RuntimeException( 'Database error', 0, $e );
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
         }
     }
 }

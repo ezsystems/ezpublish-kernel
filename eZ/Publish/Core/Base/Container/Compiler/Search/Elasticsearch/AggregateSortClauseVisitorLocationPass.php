@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the AggregateSortClauseVisitorLocationPass class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,10 +23,9 @@ class AggregateSortClauseVisitorLocationPass implements CompilerPassInterface
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
-        if ( !$container->hasDefinition( 'ezpublish.search.elasticsearch.location.sort_clause_visitor.aggregate' ) )
-        {
+        if (!$container->hasDefinition('ezpublish.search.elasticsearch.location.sort_clause_visitor.aggregate')) {
             return;
         }
 
@@ -32,12 +33,11 @@ class AggregateSortClauseVisitorLocationPass implements CompilerPassInterface
             'ezpublish.search.elasticsearch.location.sort_clause_visitor.aggregate'
         );
 
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.search.elasticsearch.location.sort_clause_visitor' ) as $id => $attributes )
-        {
+        foreach ($container->findTaggedServiceIds('ezpublish.search.elasticsearch.location.sort_clause_visitor') as $id => $attributes) {
             $aggregateSortClauseVisitorDefinition->addMethodCall(
                 'addVisitor',
                 array(
-                    new Reference( $id ),
+                    new Reference($id),
                 )
             );
         }

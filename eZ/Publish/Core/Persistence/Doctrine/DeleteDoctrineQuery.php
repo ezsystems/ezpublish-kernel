@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing an interface for the Doctrine database abstractions
+ * File containing an interface for the Doctrine database abstractions.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -30,9 +32,10 @@ class DeleteDoctrineQuery extends AbstractDoctrineQuery implements DeleteQuery
      * deleteFrom() returns a pointer to $this.
      *
      * @param string $table
+     *
      * @return \eZ\Publish\Core\Persistence\Database\DeleteQuery
      */
-    public function deleteFrom( $table )
+    public function deleteFrom($table)
     {
         $this->table = $table;
 
@@ -55,16 +58,17 @@ class DeleteDoctrineQuery extends AbstractDoctrineQuery implements DeleteQuery
      * </code>
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
+     *
      * @param string|array(string) $... Either a string with a logical expression name
      * or an array with logical expressions.
+     *
      * @return \eZ\Publish\Core\Persistence\Database\DeleteQuery
      */
     public function where()
     {
-        $args = $this->parseArguments( func_get_args() );
+        $args = $this->parseArguments(func_get_args());
 
-        foreach ( $args as $whereExpression )
-        {
+        foreach ($args as $whereExpression) {
             $this->where[] = $whereExpression;
         }
 
@@ -76,13 +80,12 @@ class DeleteDoctrineQuery extends AbstractDoctrineQuery implements DeleteQuery
      */
     public function getQuery()
     {
-        if ( strlen( $this->table ) === 0 )
-        {
-            throw new QueryException( 'Missing table name' );
+        if (strlen($this->table) === 0) {
+            throw new QueryException('Missing table name');
         }
 
-        $where = count( $this->where )
-            ? ' WHERE ' .  implode( ' AND ', $this->where )
+        $where = count($this->where)
+            ? ' WHERE ' .  implode(' AND ', $this->where)
             : '';
 
         return 'DELETE FROM ' . $this->table . $where;

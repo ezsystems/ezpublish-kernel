@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Content Search handler class
+ * File containing the Content Search handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,28 +18,28 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
- * Visits the Field criterion
+ * Visits the Field criterion.
  */
 class FieldIn extends Field
 {
     /**
-     * CHeck if visitor is applicable to current criterion
+     * CHeck if visitor is applicable to current criterion.
      *
      * @param Criterion $criterion
      *
-     * @return boolean
+     * @return bool
      */
-    public function canVisit( Criterion $criterion )
+    public function canVisit(Criterion $criterion)
     {
         return
             $criterion instanceof Criterion\Field &&
-            ( ( $criterion->operator ?: Operator::IN ) === Operator::IN ||
+            (($criterion->operator ?: Operator::IN) === Operator::IN ||
                 $criterion->operator === Operator::EQ ||
-                $criterion->operator === Operator::CONTAINS );
+                $criterion->operator === Operator::CONTAINS);
     }
 
     /**
-     * Map field value to a proper Solr representation
+     * Map field value to a proper Solr representation.
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
@@ -46,12 +48,11 @@ class FieldIn extends Field
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
-        $fieldNames = $this->getFieldNames( $criterion, $criterion->target );
+        $fieldNames = $this->getFieldNames($criterion, $criterion->target);
 
-        if ( empty( $fieldNames ) )
-        {
+        if (empty($fieldNames)) {
             throw new InvalidArgumentException(
                 "\$criterion->target",
                 "No searchable fields found for the given criterion target '{$criterion->target}'."
@@ -61,17 +62,14 @@ class FieldIn extends Field
         $criterion->value = (array)$criterion->value;
 
         $queries = array();
-        foreach ( $criterion->value as $value )
-        {
-            $preparedValue = $this->prepareValue( $value );
+        foreach ($criterion->value as $value) {
+            $preparedValue = $this->prepareValue($value);
 
-            foreach ( $fieldNames as $name )
-            {
+            foreach ($fieldNames as $name) {
                 $queries[] = $name . ':' . $preparedValue;
             }
         }
 
-        return '(' . implode( ' OR ', $queries ) . ')';
+        return '(' . implode(' OR ', $queries) . ')';
     }
 }
-

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the InstantCachePurger class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,7 +21,7 @@ class InstantCachePurger extends BasePurger implements CacheClearerInterface
      *
      * @param string $cacheDir The cache directory.
      */
-    public function clear( $cacheDir )
+    public function clear($cacheDir)
     {
         $this->purgeAll();
     }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Language CreateStruct class
+ * File containing the Language CreateStruct class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,23 +19,23 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class CreateStruct extends ValueObject
 {
     /**
-     * Language Code (eg: eng-GB)
+     * Language Code (eg: eng-GB).
      *
      * @var string
      */
     public $languageCode;
 
     /**
-     * Human readable language name
+     * Human readable language name.
      *
      * @var string
      */
     public $name;
 
     /**
-     * Indicates if language is enabled or not
+     * Indicates if language is enabled or not.
      *
-     * @var boolean
+     * @var bool
      */
     public $isEnabled = true;
 }

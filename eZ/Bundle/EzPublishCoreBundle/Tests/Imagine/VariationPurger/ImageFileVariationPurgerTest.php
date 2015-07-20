@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -22,8 +23,8 @@ class ImageFileVariationPurgerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->ioServiceMock = $this->getMock( 'eZ\Publish\Core\IO\IOServiceInterface' );
-        $this->pathGeneratorMock = $this->getMock( 'eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator' );
+        $this->ioServiceMock = $this->getMock('eZ\Publish\Core\IO\IOServiceInterface');
+        $this->pathGeneratorMock = $this->getMock('eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator');
     }
 
     public function testIteratesOverItems()
@@ -36,76 +37,76 @@ class ImageFileVariationPurgerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->pathGeneratorMock
-            ->expects( $this->exactly( 4 ) )
-            ->method( 'getVariationPath' )
+            ->expects($this->exactly(4))
+            ->method('getVariationPath')
             ->withConsecutive(
-                array( 'path/to/1st/image.jpg', 'large' ),
-                array( 'path/to/1st/image.jpg', 'gallery' ),
-                array( 'path/to/2nd/image.png', 'large' ),
-                array( 'path/to/2nd/image.png', 'gallery' )
+                array('path/to/1st/image.jpg', 'large'),
+                array('path/to/1st/image.jpg', 'gallery'),
+                array('path/to/2nd/image.png', 'large'),
+                array('path/to/2nd/image.png', 'gallery')
             );
 
-        $purger->purge( array( 'large', 'gallery' ) );
+        $purger->purge(array('large', 'gallery'));
     }
 
     public function testPurgesExistingItem()
     {
         $purger = $this->createPurger(
-            array( 'path/to/file.png' )
+            array('path/to/file.png')
         );
 
         $this->pathGeneratorMock
-            ->expects( $this->once() )
-            ->method( 'getVariationPath' )
-            ->will( $this->returnValue( 'path/to/file_large.png' ) );
+            ->expects($this->once())
+            ->method('getVariationPath')
+            ->will($this->returnValue('path/to/file_large.png'));
 
         $this->ioServiceMock
-            ->expects( $this->once() )
-            ->method( 'exists' )
-            ->will( $this->returnValue( true ) );
+            ->expects($this->once())
+            ->method('exists')
+            ->will($this->returnValue(true));
 
         $this->ioServiceMock
-            ->expects( $this->once() )
-            ->method( 'loadBinaryFile' )
-            ->will( $this->returnValue( new BinaryFile() ) );
+            ->expects($this->once())
+            ->method('loadBinaryFile')
+            ->will($this->returnValue(new BinaryFile()));
 
         $this->ioServiceMock
-            ->expects( $this->once() )
-            ->method( 'deleteBinaryFile' )
-            ->with( $this->isInstanceOf( 'eZ\Publish\Core\IO\Values\BinaryFile' ) );
+            ->expects($this->once())
+            ->method('deleteBinaryFile')
+            ->with($this->isInstanceOf('eZ\Publish\Core\IO\Values\BinaryFile'));
 
-        $purger->purge( array( 'large' ) );
+        $purger->purge(array('large'));
     }
 
     public function testDoesNotPurgeNotExistingItem()
     {
         $purger = $this->createPurger(
-            array( 'path/to/file.png' )
+            array('path/to/file.png')
         );
 
         $this->pathGeneratorMock
-            ->expects( $this->once() )
-            ->method( 'getVariationPath' )
-            ->will( $this->returnValue( 'path/to/file_large.png' ) );
+            ->expects($this->once())
+            ->method('getVariationPath')
+            ->will($this->returnValue('path/to/file_large.png'));
 
         $this->ioServiceMock
-            ->expects( $this->once() )
-            ->method( 'exists' )
-            ->will( $this->returnValue( false ) );
+            ->expects($this->once())
+            ->method('exists')
+            ->will($this->returnValue(false));
 
         $this->ioServiceMock
-            ->expects( $this->never() )
-            ->method( 'loadBinaryFile' );
+            ->expects($this->never())
+            ->method('loadBinaryFile');
 
         $this->ioServiceMock
-            ->expects( $this->never() )
-            ->method( 'deleteBinaryFile' );
+            ->expects($this->never())
+            ->method('deleteBinaryFile');
 
-        $purger->purge( array( 'large' ) );
+        $purger->purge(array('large'));
     }
 
-    private function createPurger( array $fileList )
+    private function createPurger(array $fileList)
     {
-        return new ImageFileVariationPurger( new ArrayIterator( $fileList ), $this->ioServiceMock, $this->pathGeneratorMock );
+        return new ImageFileVariationPurger(new ArrayIterator($fileList), $this->ioServiceMock, $this->pathGeneratorMock);
     }
 }

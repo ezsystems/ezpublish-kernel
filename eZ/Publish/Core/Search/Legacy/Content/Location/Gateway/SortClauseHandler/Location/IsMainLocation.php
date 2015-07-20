@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a DoctrineDatabase Location main status sort clause handler class
+ * File containing a DoctrineDatabase Location main status sort clause handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,15 +25,15 @@ class IsMainLocation extends SortClauseHandler
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
-     * @return boolean
+     * @return bool
      */
-    public function accept( SortClause $sortClause )
+    public function accept(SortClause $sortClause)
     {
         return $sortClause instanceof SortClause\Location\IsMainLocation;
     }
 
     /**
-     * Apply selects to the query
+     * Apply selects to the query.
      *
      * Returns the name of the (aliased) column, which information should be
      * used for sorting.
@@ -42,16 +44,16 @@ class IsMainLocation extends SortClauseHandler
      *
      * @return string
      */
-    public function applySelect( SelectQuery $query, SortClause $sortClause, $number )
+    public function applySelect(SelectQuery $query, SortClause $sortClause, $number)
     {
         $query
             ->select(
                 $query->alias(
                     $query->expr->eq(
-                        $this->dbHandler->quoteColumn( 'node_id', 'ezcontentobject_tree' ),
-                        $this->dbHandler->quoteColumn( 'main_node_id', 'ezcontentobject_tree' )
+                        $this->dbHandler->quoteColumn('node_id', 'ezcontentobject_tree'),
+                        $this->dbHandler->quoteColumn('main_node_id', 'ezcontentobject_tree')
                     ),
-                    $column = $this->getSortColumnName( $number )
+                    $column = $this->getSortColumnName($number)
                 )
             );
 

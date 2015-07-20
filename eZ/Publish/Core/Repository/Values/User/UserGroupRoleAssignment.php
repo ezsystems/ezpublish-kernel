@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,33 +14,33 @@ namespace eZ\Publish\Core\Repository\Values\User;
 use eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment as APIUserGroupRoleAssignment;
 
 /**
- * This class represents a user group to role assignment
+ * This class represents a user group to role assignment.
  */
 class UserGroupRoleAssignment extends APIUserGroupRoleAssignment
 {
     /**
-     * the limitation of this role assignment
+     * the limitation of this role assignment.
      *
      * @var \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation|null
      */
     protected $limitation;
 
     /**
-     * the role which is assigned to the user group
+     * the role which is assigned to the user group.
      *
      * @var \eZ\Publish\API\Repository\Values\User\Role
      */
     protected $role;
 
     /**
-     * user group to which the role is assigned to
+     * user group to which the role is assigned to.
      *
      * @var \eZ\Publish\API\Repository\Values\User\UserGroup
      */
     protected $userGroup;
 
     /**
-     * Returns the limitation of the role assignment
+     * Returns the limitation of the role assignment.
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation|null
      */
@@ -48,7 +50,7 @@ class UserGroupRoleAssignment extends APIUserGroupRoleAssignment
     }
 
     /**
-     * Returns the role to which the user group is assigned to
+     * Returns the role to which the user group is assigned to.
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
@@ -58,7 +60,7 @@ class UserGroupRoleAssignment extends APIUserGroupRoleAssignment
     }
 
     /**
-     * Returns the user group to which the role is assigned to
+     * Returns the user group to which the role is assigned to.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      */

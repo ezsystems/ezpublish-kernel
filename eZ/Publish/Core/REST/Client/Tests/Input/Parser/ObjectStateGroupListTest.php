@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a ObjectStateGroupListTest class
+ * File containing a ObjectStateGroupListTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,38 +16,38 @@ use eZ\Publish\Core\REST\Client\Input\Parser;
 class ObjectStateGroupListTest extends BaseTest
 {
     /**
-     * Tests the parsing of ObjectStateGroupList
+     * Tests the parsing of ObjectStateGroupList.
      */
     public function testParse()
     {
         $groupListParser = $this->getParser();
 
         $inputArray = array(
-            'ObjectStateGroup'  => array(
-                array( '_media-type' => 'application/vnd.ez.api.ObjectStateGroup+xml' ),
-                array( '_media-type' => 'application/vnd.ez.api.ObjectStateGroup+xml' ),
+            'ObjectStateGroup' => array(
+                array('_media-type' => 'application/vnd.ez.api.ObjectStateGroup+xml'),
+                array('_media-type' => 'application/vnd.ez.api.ObjectStateGroup+xml'),
             ),
         );
 
         $this->getParsingDispatcherMock()
-            ->expects( $this->exactly( 2 ) )
-            ->method( 'parse' )
+            ->expects($this->exactly(2))
+            ->method('parse')
             ->with(
-                array( '_media-type' => 'application/vnd.ez.api.ObjectStateGroup+xml' ),
+                array('_media-type' => 'application/vnd.ez.api.ObjectStateGroup+xml'),
                 'application/vnd.ez.api.ObjectStateGroup+xml'
             )
-            ->will( $this->returnValue( 'foo' ) );
+            ->will($this->returnValue('foo'));
 
-        $result = $groupListParser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $groupListParser->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertEquals(
-            array( 'foo', 'foo' ),
+            array('foo', 'foo'),
             $result
         );
     }
 
     /**
-     * Gets the ObjectStateGroupList parser
+     * Gets the ObjectStateGroupList parser.
      *
      * @return \eZ\Publish\Core\REST\Client\Input\Parser\ObjectStateGroupList;
      */

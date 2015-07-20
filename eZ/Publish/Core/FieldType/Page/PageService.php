@@ -1,16 +1,17 @@
 <?php
+
 /**
- * File containing the PageService class
+ * File containing the PageService class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\FieldType\Page;
 
 use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\FieldType\Page\PageStorage\Gateway;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
@@ -21,14 +22,14 @@ use SplObjectStorage;
 class PageService
 {
     /**
-     * Zone definition set in YAML config
+     * Zone definition set in YAML config.
      *
      * @var array
      */
     protected $zoneDefinition;
 
     /**
-     * Block definition set in YAML config
+     * Block definition set in YAML config.
      *
      * @var array
      */
@@ -47,7 +48,7 @@ class PageService
     protected $validBlockItems;
 
     /**
-     * Cached last valid items, by block (one per block)
+     * Cached last valid items, by block (one per block).
      *
      * @var \SplObjectStorage
      */
@@ -80,7 +81,7 @@ class PageService
     protected $contentService;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param array $zoneDefinition
      * @param array $blockDefinition
@@ -91,8 +92,7 @@ class PageService
         ContentService $contentService,
         array $zoneDefinition = array(),
         array $blockDefinition = array()
-    )
-    {
+    ) {
         $this->contentService = $contentService;
         $this->zoneDefinition = $zoneDefinition;
         $this->blockDefinition = $blockDefinition;
@@ -104,7 +104,7 @@ class PageService
     }
 
     /**
-     * Returns zone definition as an array
+     * Returns zone definition as an array.
      *
      * @return array
      */
@@ -123,10 +123,11 @@ class PageService
      *
      * @throws \OutOfBoundsException If $layoutIdentifier is invalid
      */
-    public function getZoneDefinitionByLayout( $layoutIdentifier )
+    public function getZoneDefinitionByLayout($layoutIdentifier)
     {
-        if ( !isset( $this->zoneDefinition[$layoutIdentifier] ) )
-            throw new OutOfBoundsException( "Could not find an ezpage zone definition block for given layout '$layoutIdentifier'" );
+        if (!isset($this->zoneDefinition[$layoutIdentifier])) {
+            throw new OutOfBoundsException("Could not find an ezpage zone definition block for given layout '$layoutIdentifier'");
+        }
 
         return $this->zoneDefinition[$layoutIdentifier];
     }
@@ -135,11 +136,13 @@ class PageService
      * Returns the template to use for given layout.
      *
      * @param string $layoutIdentifier
+     *
      * @return string
      */
-    public function getLayoutTemplate( $layoutIdentifier )
+    public function getLayoutTemplate($layoutIdentifier)
     {
-        $def = $this->getZoneDefinitionByLayout( $layoutIdentifier );
+        $def = $this->getZoneDefinitionByLayout($layoutIdentifier);
+
         return $def['template'];
     }
 
@@ -150,23 +153,23 @@ class PageService
      *
      * @return bool
      */
-    public function hasZoneLayout( $layoutIdentifier )
+    public function hasZoneLayout($layoutIdentifier)
     {
-        return isset( $this->zoneDefinition[$layoutIdentifier] );
+        return isset($this->zoneDefinition[$layoutIdentifier]);
     }
 
     /**
-     * Returns list of available zone layouts
+     * Returns list of available zone layouts.
      *
      * @return array
      */
     public function getAvailableZoneLayouts()
     {
-        return array_keys( $this->zoneDefinition );
+        return array_keys($this->zoneDefinition);
     }
 
     /**
-     * Returns block definition as an array
+     * Returns block definition as an array.
      *
      * @return array
      */
@@ -184,10 +187,11 @@ class PageService
      *
      * @throws \OutOfBoundsException If $blockIdentifier is invalid.
      */
-    public function getBlockDefinitionByIdentifier( $blockIdentifier )
+    public function getBlockDefinitionByIdentifier($blockIdentifier)
     {
-        if ( !isset( $this->blockDefinition[$blockIdentifier] ) )
-            throw new OutOfBoundsException( "Could not find an ezpage block definition for given identifier '$blockIdentifier'" );
+        if (!isset($this->blockDefinition[$blockIdentifier])) {
+            throw new OutOfBoundsException("Could not find an ezpage block definition for given identifier '$blockIdentifier'");
+        }
 
         return $this->blockDefinition[$blockIdentifier];
     }
@@ -199,9 +203,9 @@ class PageService
      *
      * @return bool
      */
-    public function hasBlockDefinition( $blockIdentifier )
+    public function hasBlockDefinition($blockIdentifier)
     {
-        return isset( $this->blockDefinition[$blockIdentifier] );
+        return isset($this->blockDefinition[$blockIdentifier]);
     }
 
     /**
@@ -209,7 +213,7 @@ class PageService
      *
      * @param \eZ\Publish\Core\FieldType\Page\PageStorage\Gateway $storageGateway
      */
-    public function setStorageGateway( Gateway $storageGateway )
+    public function setStorageGateway(Gateway $storageGateway)
     {
         $this->storageGateway = $storageGateway;
     }
@@ -221,7 +225,7 @@ class PageService
      */
     public function hasStorageGateway()
     {
-        return isset( $this->storageGateway );
+        return isset($this->storageGateway);
     }
 
     /**
@@ -231,8 +235,9 @@ class PageService
      */
     protected function getStorageGateway()
     {
-        if ( !$this->hasStorageGateway() )
-            throw new RuntimeException( 'Missing storage gateway for Page field type.' );
+        if (!$this->hasStorageGateway()) {
+            throw new RuntimeException('Missing storage gateway for Page field type.');
+        }
 
         return $this->storageGateway;
     }
@@ -244,12 +249,13 @@ class PageService
      *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Item[]
      */
-    public function getValidBlockItems( Block $block )
+    public function getValidBlockItems(Block $block)
     {
-        if ( isset( $this->validBlockItems[$block] ) )
+        if (isset($this->validBlockItems[$block])) {
             return $this->validBlockItems[$block];
+        }
 
-        return $this->validBlockItems[$block] = $this->getStorageGateway()->getValidBlockItems( $block );
+        return $this->validBlockItems[$block] = $this->getStorageGateway()->getValidBlockItems($block);
     }
 
     /**
@@ -259,12 +265,13 @@ class PageService
      *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Item|null
      */
-    public function getLastValidBlockItem( Block $block )
+    public function getLastValidBlockItem(Block $block)
     {
-        if ( isset( $this->lastValidItems[$block] ) )
+        if (isset($this->lastValidItems[$block])) {
             return $this->lastValidItems[$block];
+        }
 
-        return $this->lastValidItems[$block] = $this->getStorageGateway()->getLastValidBlockItem( $block );
+        return $this->lastValidItems[$block] = $this->getStorageGateway()->getLastValidBlockItem($block);
     }
 
     /**
@@ -274,12 +281,13 @@ class PageService
      *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Item[]
      */
-    public function getWaitingBlockItems( Block $block )
+    public function getWaitingBlockItems(Block $block)
     {
-        if ( isset( $this->waitingBlockItems[$block] ) )
+        if (isset($this->waitingBlockItems[$block])) {
             return $this->waitingBlockItems[$block];
+        }
 
-        return $this->waitingBlockItems[$block] = $this->getStorageGateway()->getWaitingBlockItems( $block );
+        return $this->waitingBlockItems[$block] = $this->getStorageGateway()->getWaitingBlockItems($block);
     }
 
     /**
@@ -289,12 +297,13 @@ class PageService
      *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Item[]
      */
-    public function getArchivedBlockItems( Block $block )
+    public function getArchivedBlockItems(Block $block)
     {
-        if ( isset( $this->archivedBlockItems[$block] ) )
+        if (isset($this->archivedBlockItems[$block])) {
             return $this->archivedBlockItems[$block];
+        }
 
-        return $this->archivedBlockItems[$block] = $this->getStorageGateway()->getArchivedBlockItems( $block );
+        return $this->archivedBlockItems[$block] = $this->getStorageGateway()->getArchivedBlockItems($block);
     }
 
     /**
@@ -306,35 +315,29 @@ class PageService
      *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Block
      */
-    public function loadBlock( $id )
+    public function loadBlock($id)
     {
-        if ( isset( $this->blocksById[$id] ) )
-        {
+        if (isset($this->blocksById[$id])) {
             return $this->blocksById[$id];
         }
 
-        $contentId = $this->getStorageGateway()->getContentIdByBlockId( $id );
-        $content = $this->contentService->loadContent( $contentId );
+        $contentId = $this->getStorageGateway()->getContentIdByBlockId($id);
+        $content = $this->contentService->loadContent($contentId);
 
-        foreach ( $content->getFields() as $field )
-        {
-            if ( !$field->value instanceof Value )
-            {
+        foreach ($content->getFields() as $field) {
+            if (!$field->value instanceof Value) {
                 continue;
             }
 
-            foreach ( $field->value->page->zones as $zone )
-            {
-                foreach ( $zone->blocks as $block )
-                {
-                    if ( $block->id === $id )
-                    {
+            foreach ($field->value->page->zones as $zone) {
+                foreach ($zone->blocks as $block) {
+                    if ($block->id === $id) {
                         return $this->blocksById[$id] = $block;
                     }
                 }
             }
         }
 
-        throw new NotFoundException( "Block", $id );
+        throw new NotFoundException('Block', $id);
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the CheckboxTest class
+ * File containing the CheckboxTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,7 +19,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldD
 use PHPUnit_Framework_TestCase;
 
 /**
- * Test case for Checkbox converter in Legacy storage
+ * Test case for Checkbox converter in Legacy storage.
  */
 class CheckboxTest extends PHPUnit_Framework_TestCase
 {
@@ -29,7 +31,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->converter = new CheckboxConverter;
+        $this->converter = new CheckboxConverter();
     }
 
     /**
@@ -39,15 +41,15 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
      */
     public function testToStorageValue()
     {
-        $value = new FieldValue;
+        $value = new FieldValue();
         $value->data = true;
         $value->sortKey = 1;
-        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue = new StorageFieldValue();
 
-        $this->converter->toStorageValue( $value, $storageFieldValue );
-        self::assertSame( (int)$value->data, $storageFieldValue->dataInt );
-        self::assertSame( $value->sortKey, $storageFieldValue->sortKeyInt );
-        self::assertSame( '', $storageFieldValue->sortKeyString );
+        $this->converter->toStorageValue($value, $storageFieldValue);
+        self::assertSame((int)$value->data, $storageFieldValue->dataInt);
+        self::assertSame($value->sortKey, $storageFieldValue->sortKeyInt);
+        self::assertSame('', $storageFieldValue->sortKeyString);
     }
 
     /**
@@ -57,15 +59,15 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldValue()
     {
-        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue = new StorageFieldValue();
         $storageFieldValue->dataInt = 1;
         $storageFieldValue->sortKeyInt = 1;
         $storageFieldValue->sortKeyString = '';
-        $fieldValue = new FieldValue;
+        $fieldValue = new FieldValue();
 
-        $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertSame( (bool)$storageFieldValue->dataInt, $fieldValue->data );
-        self::assertSame( $storageFieldValue->sortKeyInt, $fieldValue->sortKey );
+        $this->converter->toFieldValue($storageFieldValue, $fieldValue);
+        self::assertSame((bool)$storageFieldValue->dataInt, $fieldValue->data);
+        self::assertSame($storageFieldValue->sortKeyInt, $fieldValue->sortKey);
     }
 
     /**
@@ -76,16 +78,16 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     public function testToStorageFieldDefinition()
     {
         $defaultBool = false;
-        $storageFieldDef = new StorageFieldDefinition;
-        $defaultValue = new FieldValue;
+        $storageFieldDef = new StorageFieldDefinition();
+        $defaultValue = new FieldValue();
         $defaultValue->data = $defaultBool;
         $fieldDef = new PersistenceFieldDefinition(
             array(
-                'defaultValue' => $defaultValue
+                'defaultValue' => $defaultValue,
             )
         );
 
-        $this->converter->toStorageFieldDefinition( $fieldDef, $storageFieldDef );
+        $this->converter->toStorageFieldDefinition($fieldDef, $storageFieldDef);
         self::assertSame(
             (int)$fieldDef->defaultValue->data,
             $storageFieldDef->dataInt3
@@ -100,15 +102,15 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     public function testToFieldDefinition()
     {
         $defaultBool = true;
-        $fieldDef = new PersistenceFieldDefinition;
+        $fieldDef = new PersistenceFieldDefinition();
         $storageDef = new StorageFieldDefinition(
             array(
                 'dataInt3' => 1,
             )
         );
 
-        $this->converter->toFieldDefinition( $storageDef, $fieldDef );
-        self::assertSame( $defaultBool, $fieldDef->defaultValue->data );
-        self::assertNull( $fieldDef->fieldTypeConstraints->fieldSettings );
+        $this->converter->toFieldDefinition($storageDef, $fieldDef);
+        self::assertSame($defaultBool, $fieldDef->defaultValue->data);
+        self::assertNull($fieldDef->fieldTypeConstraints->fieldSettings);
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -28,36 +30,36 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
         $configResolver = $this->getConfigResolverMock();
 
         $fieldBlockRenderer = new FieldBlockRenderer();
-        $fieldBlockRenderer->setBaseTemplate( $this->getTemplatePath( 'base.html.twig' ) );
+        $fieldBlockRenderer->setBaseTemplate($this->getTemplatePath('base.html.twig'));
         $fieldBlockRenderer->setFieldViewResources(
             array(
                 array(
-                    'template' => $this->getTemplatePath( 'fields_override1.html.twig' ),
-                    'priority' => 10
+                    'template' => $this->getTemplatePath('fields_override1.html.twig'),
+                    'priority' => 10,
                 ),
                 array(
-                    'template' => $this->getTemplatePath( 'fields_default.html.twig' ),
-                    'priority' => 0
+                    'template' => $this->getTemplatePath('fields_default.html.twig'),
+                    'priority' => 0,
                 ),
                 array(
-                    'template' => $this->getTemplatePath( 'fields_override2.html.twig' ),
-                    'priority' => 20
+                    'template' => $this->getTemplatePath('fields_override2.html.twig'),
+                    'priority' => 20,
                 ),
             )
         );
         $fieldBlockRenderer->setFieldDefinitionViewResources(
             array(
                 array(
-                    'template' => $this->getTemplatePath( 'settings_override1.html.twig' ),
-                    'priority' => 10
+                    'template' => $this->getTemplatePath('settings_override1.html.twig'),
+                    'priority' => 10,
                 ),
                 array(
-                    'template' => $this->getTemplatePath( 'settings_default.html.twig' ),
-                    'priority' => 0
+                    'template' => $this->getTemplatePath('settings_default.html.twig'),
+                    'priority' => 0,
                 ),
                 array(
-                    'template' => $this->getTemplatePath( 'settings_override2.html.twig' ),
-                    'priority' => 20
+                    'template' => $this->getTemplatePath('settings_override2.html.twig'),
+                    'priority' => 20,
                 ),
             )
         );
@@ -66,35 +68,35 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
             new FieldRenderingExtension(
                 $fieldBlockRenderer,
                 $this->getContentTypeServiceMock(),
-                $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\FieldType\\View\\ParameterProviderRegistryInterface' ),
+                $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\FieldType\\View\\ParameterProviderRegistryInterface'),
                 new TranslationHelper(
                     $configResolver,
-                    $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' ),
+                    $this->getMock('eZ\\Publish\\API\\Repository\\ContentService'),
                     array(),
-                    $this->getMock( 'Psr\Log\LoggerInterface' )
+                    $this->getMock('Psr\Log\LoggerInterface')
                 )
-            )
+            ),
         );
     }
 
     public function getFixturesDir()
     {
-        return dirname( __FILE__ ) . '/_fixtures/field_rendering_functions/';
+        return dirname(__FILE__) . '/_fixtures/field_rendering_functions/';
     }
 
-    public function getFieldDefinition( $typeIdentifier, $id = null, $settings = array() )
+    public function getFieldDefinition($typeIdentifier, $id = null, $settings = array())
     {
         return new FieldDefinition(
             array(
                 'id' => $id,
                 'fieldSettings' => $settings,
-                'fieldTypeIdentifier' => $typeIdentifier
+                'fieldTypeIdentifier' => $typeIdentifier,
             )
         );
     }
 
     /**
-     * Creates content with initial/main language being fre-FR
+     * Creates content with initial/main language being fre-FR.
      *
      * @param string $contentTypeIdentifier
      * @param array $fieldsData
@@ -102,26 +104,24 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
      *
      * @return Content
      */
-    protected function getContent( $contentTypeIdentifier, array $fieldsData, array $namesData = array() )
+    protected function getContent($contentTypeIdentifier, array $fieldsData, array $namesData = array())
     {
         $fields = array();
-        foreach ( $fieldsData as $fieldTypeIdentifier => $fieldsArray )
-        {
-            $fieldsArray = isset( $fieldsArray['id'] ) ? array( $fieldsArray ) : $fieldsArray;
-            foreach ( $fieldsArray as $fieldInfo )
-            {
+        foreach ($fieldsData as $fieldTypeIdentifier => $fieldsArray) {
+            $fieldsArray = isset($fieldsArray['id']) ? array($fieldsArray) : $fieldsArray;
+            foreach ($fieldsArray as $fieldInfo) {
                 // Save field definitions in property for mocking purposes
                 $this->fieldDefinitions[$contentTypeIdentifier][$fieldInfo['fieldDefIdentifier']] = new FieldDefinition(
                     array(
                         'identifier' => $fieldInfo['fieldDefIdentifier'],
                         'id' => $fieldInfo['id'],
                         'fieldTypeIdentifier' => $fieldTypeIdentifier,
-                        'names' => isset( $fieldInfo['fieldDefNames'] ) ? $fieldInfo['fieldDefNames'] : array(),
-                        'descriptions' => isset( $fieldInfo['fieldDefDescriptions'] ) ? $fieldInfo['fieldDefDescriptions'] : array()
+                        'names' => isset($fieldInfo['fieldDefNames']) ? $fieldInfo['fieldDefNames'] : array(),
+                        'descriptions' => isset($fieldInfo['fieldDefDescriptions']) ? $fieldInfo['fieldDefDescriptions'] : array(),
                     )
                 );
-                unset( $fieldInfo['fieldDefNames'], $fieldInfo['fieldDefDescriptions'] );
-                $fields[] = new Field( $fieldInfo );
+                unset($fieldInfo['fieldDefNames'], $fieldInfo['fieldDefDescriptions']);
+                $fields[] = new Field($fieldInfo);
             }
         }
         $content = new Content(
@@ -137,19 +137,18 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
                                 'id' => 42,
                                 'mainLanguageCode' => 'fre-FR',
                                 // Using as id as we don't really care to test the service here
-                                'contentTypeId' => $contentTypeIdentifier
+                                'contentTypeId' => $contentTypeIdentifier,
                             )
-                        )
+                        ),
                     )
-                )
+                ),
             )
         );
 
         return $content;
-
     }
 
-    private function getTemplatePath( $tpl )
+    private function getTemplatePath($tpl)
     {
         return 'templates/' . $tpl;
     }
@@ -160,8 +159,8 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
             'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface'
         );
         // Signature: ConfigResolverInterface->getParameter( $paramName, $namespace = null, $scope = null )
-        $mock->expects( $this->any() )
-            ->method( 'getParameter' )
+        $mock->expects($this->any())
+            ->method('getParameter')
             ->will(
                 $this->returnValueMap(
                     array(
@@ -169,11 +168,12 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
                             'languages',
                             null,
                             null,
-                            array( 'fre-FR', 'eng-US' )
+                            array('fre-FR', 'eng-US'),
                         ),
                     )
                 )
             );
+
         return $mock;
     }
 
@@ -182,19 +182,18 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
      */
     protected function getContentTypeServiceMock()
     {
-        $mock = $this->getMock( "eZ\\Publish\\API\\Repository\\ContentTypeService" );
+        $mock = $this->getMock('eZ\\Publish\\API\\Repository\\ContentTypeService');
 
-        $mock->expects( $this->any() )
-            ->method( "loadContentType" )
+        $mock->expects($this->any())
+            ->method('loadContentType')
             ->will(
                 $this->returnCallback(
-                    function ( $contentTypeId )
-                    {
+                    function ($contentTypeId) {
                         return new ContentType(
                             array(
                                 'identifier' => $contentTypeId,
                                 'mainLanguageCode' => 'fre-FR',
-                                'fieldDefinitions' => $this->fieldDefinitions[$contentTypeId]
+                                'fieldDefinitions' => $this->fieldDefinitions[$contentTypeId],
                             )
                         );
                     }

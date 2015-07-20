@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,55 +17,55 @@ use eZ\Publish\SPI\FieldType\Indexable;
 use eZ\Publish\SPI\Search;
 
 /**
- * Indexable definition for TextLine field type
+ * Indexable definition for TextLine field type.
  */
 class SearchField implements Indexable
 {
     /**
-     * Get index data for field for search backend
+     * Get index data for field for search backend.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      *
      * @return \eZ\Publish\SPI\Search\Field[]
      */
-    public function getIndexData( Field $field, FieldDefinition $fieldDefinition )
+    public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
         return array(
             new Search\Field(
-                "filename",
-                $field->value->data["fileName"],
+                'filename',
+                $field->value->data['fileName'],
                 new Search\FieldType\StringField()
             ),
             new Search\Field(
-                "alternative_text",
-                $field->value->data["alternativeText"],
+                'alternative_text',
+                $field->value->data['alternativeText'],
                 new Search\FieldType\StringField()
             ),
             new Search\Field(
-                "file_size",
-                $field->value->data["fileSize"],
+                'file_size',
+                $field->value->data['fileSize'],
                 new Search\FieldType\IntegerField()
             ),
             new Search\Field(
                 'mime_type',
-                $field->value->data["mime"],
+                $field->value->data['mime'],
                 new Search\FieldType\StringField()
             ),
         );
     }
 
     /**
-     * Get index field types for search backend
+     * Get index field types for search backend.
      *
      * @return \eZ\Publish\SPI\Search\FieldType[]
      */
     public function getIndexDefinition()
     {
         return array(
-            "filename" => new Search\FieldType\StringField(),
-            "alternative_text" => new Search\FieldType\StringField(),
-            "file_size" => new Search\FieldType\IntegerField(),
+            'filename' => new Search\FieldType\StringField(),
+            'alternative_text' => new Search\FieldType\StringField(),
+            'file_size' => new Search\FieldType\IntegerField(),
             'mime_type' => new Search\FieldType\StringField(),
         );
     }
@@ -79,7 +81,7 @@ class SearchField implements Indexable
      */
     public function getDefaultMatchField()
     {
-        return "filename";
+        return 'filename';
     }
 
     /**

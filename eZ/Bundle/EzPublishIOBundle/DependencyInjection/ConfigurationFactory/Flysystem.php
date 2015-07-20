@@ -1,10 +1,12 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
 
 use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
@@ -23,7 +25,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 abstract class Flysystem extends ContainerAware implements ConfigurationFactory
 {
-    public function addConfiguration( ArrayNodeDefinition $node )
+    public function addConfiguration(ArrayNodeDefinition $node)
     {
         $node
             ->info(
@@ -31,25 +33,25 @@ abstract class Flysystem extends ContainerAware implements ConfigurationFactory
                 'Yes, the metadata handler and binarydata handler look the same; it is NOT a mistake :)'
             )
             ->children()
-                ->scalarNode( 'adapter' )
+                ->scalarNode('adapter')
                     ->info(
-                        "Flysystem adapter identifier. Should be configured using oneup flysystem bundle. " .
-                        "Yes, the same adapter can be used for a binarydata and metadata handler"
+                        'Flysystem adapter identifier. Should be configured using oneup flysystem bundle. ' .
+                        'Yes, the same adapter can be used for a binarydata and metadata handler'
                     )
                     ->isRequired()
-                    ->example( 'nfs' )
+                    ->example('nfs')
                 ->end()
             ->end();
     }
 
-    public function configureHandler( ServiceDefinition $definition, array $config )
+    public function configureHandler(ServiceDefinition $definition, array $config)
     {
-        $filesystemId = $this->createFilesystem( $this->container, $config['name'], $config['adapter'] );
-        $definition->replaceArgument( 0, new Reference( $filesystemId ) );
+        $filesystemId = $this->createFilesystem($this->container, $config['name'], $config['adapter']);
+        $definition->replaceArgument(0, new Reference($filesystemId));
     }
 
     /**
-     * Creates a flysystem filesystem $name service
+     * Creates a flysystem filesystem $name service.
      *
      * @param ContainerBuilder $container
      * @param string $name filesystem name (nfs, local...)
@@ -57,20 +59,19 @@ abstract class Flysystem extends ContainerAware implements ConfigurationFactory
      *
      * @return string
      */
-    private function createFilesystem( ContainerBuilder $container, $name, $adapter )
+    private function createFilesystem(ContainerBuilder $container, $name, $adapter)
     {
-        $adapterId = sprintf( 'oneup_flysystem.%s_adapter', $adapter );
-        if ( !$container->hasDefinition( $adapterId ) )
-        {
-            throw new InvalidConfigurationException( "Unknown flysystem adapter $adapter" );
+        $adapterId = sprintf('oneup_flysystem.%s_adapter', $adapter);
+        if (!$container->hasDefinition($adapterId)) {
+            throw new InvalidConfigurationException("Unknown flysystem adapter $adapter");
         }
 
-        $filesystemId = sprintf( 'ezpublish.core.io.flysystem.%s_filesystem', $name );
+        $filesystemId = sprintf('ezpublish.core.io.flysystem.%s_filesystem', $name);
         $definition = $container->setDefinition(
             $filesystemId,
-            new DefinitionDecorator( 'ezpublish.core.io.flysystem.base_filesystem' )
+            new DefinitionDecorator('ezpublish.core.io.flysystem.base_filesystem')
         );
-        $definition->setArguments( array( new Reference( $adapterId ) ) );
+        $definition->setArguments(array(new Reference($adapterId)));
 
         return $filesystemId;
     }

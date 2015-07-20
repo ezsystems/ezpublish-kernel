@@ -1,17 +1,20 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
+
 namespace eZ\Publish\SPI\Search\FieldType;
 
 use eZ\Publish\SPI\Search\FieldType;
 
 /**
- * Multiple integer document field
+ * Multiple integer document field.
  */
 class MultipleIntegerField extends FieldType
 {
@@ -22,4 +25,3 @@ class MultipleIntegerField extends FieldType
      */
     protected $type = 'ez_minteger';
 }
-
