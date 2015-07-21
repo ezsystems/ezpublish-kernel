@@ -9,7 +9,10 @@ return Symfony\CS\Config\Config::create()
         '-concat_without_spaces',
         '-empty_return',
         '-phpdoc_params',
+        '-phpdoc_separation',
+        '-phpdoc_to_comment',
         '-spaces_cast',
+        '-blankline_after_open_tag',
     ])
     ->finder(
         Symfony\CS\Finder\DefaultFinder::create()
