@@ -143,7 +143,9 @@ class AliasGenerator implements VariationHandler
                 'fileName'     => $aliasInfo->getFilename(),
                 'dirPath'      => $aliasInfo->getPath(),
                 'uri'          => $aliasInfo->getPathname(),
-                'imageId'      => $imageValue->imageId
+                'imageId'      => $imageValue->imageId,
+                'width'        => $imageValue->width,
+                'height'       => $imageValue->height
             )
         );
     }
