@@ -175,3 +175,6 @@ services:
         arguments: [@translator]
         tags:
             - { name: kernel.event_subscriber }
+
+    ezpublish.query_type.registry:
+        class: eZ\Publish\Core\QueryType\ArrayQueryTypeRegistry
