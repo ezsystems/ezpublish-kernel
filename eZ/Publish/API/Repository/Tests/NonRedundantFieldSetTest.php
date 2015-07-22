@@ -1,15 +1,18 @@
 <?php
+
 /**
- * File containing the NonRedundantFieldSetTest class
+ * File containing the NonRedundantFieldSetTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
  * Test case for create and update Content operations in the ContentService with regard to
@@ -35,15 +38,15 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      */
     public function testCreateContentDefaultValues()
     {
-        $mainLanguageCode = "eng-US";
+        $mainLanguageCode = 'eng-US';
         $fieldValues = array(
-            "field1" => array( "eng-US" => "new value 1" ),
-            "field3" => array( "eng-US" => "new value 3" )
+            'field1' => array('eng-US' => 'new value 1'),
+            'field3' => array('eng-US' => 'new value 3'),
         );
 
-        $content = $this->createTestContent( $mainLanguageCode, $fieldValues );
+        $content = $this->createTestContent($mainLanguageCode, $fieldValues);
 
-        $this->assertInstanceOf( "\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content", $content );
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
 
         return $content;
     }
@@ -56,17 +59,17 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      */
-    public function testCreateContentDefaultValuesFields( Content $content )
+    public function testCreateContentDefaultValuesFields(Content $content)
     {
-        $this->assertCount( 1, $content->versionInfo->languageCodes );
-        $this->assertContains( "eng-US", $content->versionInfo->languageCodes );
-        $this->assertCount( 4, $content->getFields() );
+        $this->assertCount(1, $content->versionInfo->languageCodes);
+        $this->assertContains('eng-US', $content->versionInfo->languageCodes);
+        $this->assertCount(4, $content->getFields());
 
         // eng-US
-        $this->assertEquals( "new value 1", $content->getFieldValue( "field1", "eng-US" ) );
-        $this->assertEquals( "default value 2", $content->getFieldValue( "field2", "eng-US" ) );
-        $this->assertEquals( "new value 3", $content->getFieldValue( "field3", "eng-US" ) );
-        $this->assertEquals( "default value 4", $content->getFieldValue( "field4", "eng-US" ) );
+        $this->assertEquals('new value 1', $content->getFieldValue('field1', 'eng-US'));
+        $this->assertEquals('default value 2', $content->getFieldValue('field2', 'eng-US'));
+        $this->assertEquals('new value 3', $content->getFieldValue('field3', 'eng-US'));
+        $this->assertEquals('default value 4', $content->getFieldValue('field4', 'eng-US'));
     }
 
     /**
@@ -82,15 +85,15 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      */
     public function testCreateContentEmptyValues()
     {
-        $mainLanguageCode = "eng-US";
+        $mainLanguageCode = 'eng-US';
         $fieldValues = array(
-            "field2" => array( "eng-US" => null ),
-            "field4" => array( "eng-US" => null )
+            'field2' => array('eng-US' => null),
+            'field4' => array('eng-US' => null),
         );
 
-        $content = $this->createTestContent( $mainLanguageCode, $fieldValues );
+        $content = $this->createTestContent($mainLanguageCode, $fieldValues);
 
-        $this->assertInstanceOf( "\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content", $content );
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
 
         return $content;
     }
@@ -103,20 +106,20 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      */
-    public function testCreateContentEmptyValuesFields( Content $content )
+    public function testCreateContentEmptyValuesFields(Content $content)
     {
-        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType( "ezstring" )->getEmptyValue();
+        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType('ezstring')->getEmptyValue();
 
-        $this->assertCount( 1, $content->versionInfo->languageCodes );
-        $this->assertContains( "eng-US", $content->versionInfo->languageCodes );
-        $this->assertCount( 4, $content->getFields() );
+        $this->assertCount(1, $content->versionInfo->languageCodes);
+        $this->assertContains('eng-US', $content->versionInfo->languageCodes);
+        $this->assertCount(4, $content->getFields());
 
         // eng-US
-        $this->assertContains( "eng-US", $content->versionInfo->languageCodes );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field1", "eng-US" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field2", "eng-US" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field3", "eng-US" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field4", "eng-US" ) );
+        $this->assertContains('eng-US', $content->versionInfo->languageCodes);
+        $this->assertEquals($emptyValue, $content->getFieldValue('field1', 'eng-US'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field2', 'eng-US'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field3', 'eng-US'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field4', 'eng-US'));
     }
 
     /**
@@ -133,15 +136,15 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      */
     public function testCreateContentEmptyValuesTranslationNotStored()
     {
-        $mainLanguageCode = "eng-US";
+        $mainLanguageCode = 'eng-US';
         $fieldValues = array(
-            "field2" => array( "eng-US" => null ),
-            "field4" => array( "eng-US" => null, "ger-DE" => null )
+            'field2' => array('eng-US' => null),
+            'field4' => array('eng-US' => null, 'ger-DE' => null),
         );
 
-        $content = $this->createTestContent( $mainLanguageCode, $fieldValues );
+        $content = $this->createTestContent($mainLanguageCode, $fieldValues);
 
-        $this->assertInstanceOf( "\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content", $content );
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
 
         return $content;
     }
@@ -154,23 +157,23 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      */
-    public function testCreateContentEmptyValuesTranslationNotStoredFields( Content $content )
+    public function testCreateContentEmptyValuesTranslationNotStoredFields(Content $content)
     {
-        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType( "ezstring" )->getEmptyValue();
+        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType('ezstring')->getEmptyValue();
 
-        $this->assertCount( 1, $content->versionInfo->languageCodes );
-        $this->assertContains( "eng-US", $content->versionInfo->languageCodes );
-        $this->assertCount( 4, $content->getFields() );
+        $this->assertCount(1, $content->versionInfo->languageCodes);
+        $this->assertContains('eng-US', $content->versionInfo->languageCodes);
+        $this->assertCount(4, $content->getFields());
 
         // eng-US
-        $this->assertContains( "eng-US", $content->versionInfo->languageCodes );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field1", "eng-US" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field2", "eng-US" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field3", "eng-US" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field4", "eng-US" ) );
+        $this->assertContains('eng-US', $content->versionInfo->languageCodes);
+        $this->assertEquals($emptyValue, $content->getFieldValue('field1', 'eng-US'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field2', 'eng-US'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field3', 'eng-US'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field4', 'eng-US'));
 
         // ger-DE is not stored!
-        $this->assertNotContains( "ger-DE", $content->versionInfo->languageCodes );
+        $this->assertNotContains('ger-DE', $content->versionInfo->languageCodes);
     }
 
     /**
@@ -186,15 +189,15 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      */
     public function testCreateContentTwoLanguagesMainTranslationStored()
     {
-        $mainLanguageCode = "eng-US";
+        $mainLanguageCode = 'eng-US';
         $fieldValues = array(
-            "field2" => array( "eng-US" => null ),
-            "field4" => array( "eng-US" => null, "ger-DE" => "new ger-DE value 4" )
+            'field2' => array('eng-US' => null),
+            'field4' => array('eng-US' => null, 'ger-DE' => 'new ger-DE value 4'),
         );
 
-        $content = $this->createTestContent( $mainLanguageCode, $fieldValues );
+        $content = $this->createTestContent($mainLanguageCode, $fieldValues);
 
-        $this->assertInstanceOf( "\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content", $content );
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
 
         return $content;
     }
@@ -207,27 +210,27 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      */
-    public function testCreateContentTwoLanguagesMainTranslationStoredFields( Content $content )
+    public function testCreateContentTwoLanguagesMainTranslationStoredFields(Content $content)
     {
-        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType( "ezstring" )->getEmptyValue();
+        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType('ezstring')->getEmptyValue();
 
-        $this->assertCount( 2, $content->versionInfo->languageCodes );
-        $this->assertContains( "ger-DE", $content->versionInfo->languageCodes );
-        $this->assertContains( "eng-US", $content->versionInfo->languageCodes );
-        $this->assertCount( 8, $content->getFields() );
+        $this->assertCount(2, $content->versionInfo->languageCodes);
+        $this->assertContains('ger-DE', $content->versionInfo->languageCodes);
+        $this->assertContains('eng-US', $content->versionInfo->languageCodes);
+        $this->assertCount(8, $content->getFields());
 
         // eng-US
-        $this->assertContains( "eng-US", $content->versionInfo->languageCodes );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field1", "eng-US" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field2", "eng-US" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field3", "eng-US" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field4", "eng-US" ) );
+        $this->assertContains('eng-US', $content->versionInfo->languageCodes);
+        $this->assertEquals($emptyValue, $content->getFieldValue('field1', 'eng-US'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field2', 'eng-US'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field3', 'eng-US'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field4', 'eng-US'));
 
         // ger-DE
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field1", "ger-DE" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field2", "ger-DE" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field3", "ger-DE" ) );
-        $this->assertEquals( "new ger-DE value 4", $content->getFieldValue( "field4", "ger-DE" ) );
+        $this->assertEquals($emptyValue, $content->getFieldValue('field1', 'ger-DE'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field2', 'ger-DE'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field3', 'ger-DE'));
+        $this->assertEquals('new ger-DE value 4', $content->getFieldValue('field4', 'ger-DE'));
     }
 
     /**
@@ -244,14 +247,14 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      */
     public function testCreateContentTwoLanguagesSecondTranslationNotStored()
     {
-        $mainLanguageCode = "eng-US";
+        $mainLanguageCode = 'eng-US';
         $fieldValues = array(
-            "field4" => array( "ger-DE" => null )
+            'field4' => array('ger-DE' => null),
         );
 
-        $content = $this->createTestContent( $mainLanguageCode, $fieldValues );
+        $content = $this->createTestContent($mainLanguageCode, $fieldValues);
 
-        $this->assertInstanceOf( "\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content", $content );
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
 
         return $content;
     }
@@ -264,22 +267,22 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      */
-    public function testCreateContentTwoLanguagesSecondTranslationNotStoredFields( Content $content )
+    public function testCreateContentTwoLanguagesSecondTranslationNotStoredFields(Content $content)
     {
-        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType( "ezstring" )->getEmptyValue();
+        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType('ezstring')->getEmptyValue();
 
-        $this->assertCount( 1, $content->versionInfo->languageCodes );
-        $this->assertContains( "eng-US", $content->versionInfo->languageCodes );
-        $this->assertCount( 4, $content->getFields() );
+        $this->assertCount(1, $content->versionInfo->languageCodes);
+        $this->assertContains('eng-US', $content->versionInfo->languageCodes);
+        $this->assertCount(4, $content->getFields());
 
         // eng-US
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field1", "eng-US" ) );
-        $this->assertEquals( "default value 2", $content->getFieldValue( "field2", "eng-US" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field3", "eng-US" ) );
-        $this->assertEquals( "default value 4", $content->getFieldValue( "field4", "eng-US" ) );
+        $this->assertEquals($emptyValue, $content->getFieldValue('field1', 'eng-US'));
+        $this->assertEquals('default value 2', $content->getFieldValue('field2', 'eng-US'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field3', 'eng-US'));
+        $this->assertEquals('default value 4', $content->getFieldValue('field4', 'eng-US'));
 
         // ger-DE is not stored!
-        $this->assertNotContains( "ger-DE", $content->versionInfo->languageCodes );
+        $this->assertNotContains('ger-DE', $content->versionInfo->languageCodes);
     }
 
     /**
@@ -295,12 +298,12 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      */
     public function testCreateContentDefaultValuesNoStructFields()
     {
-        $mainLanguageCode = "eng-US";
+        $mainLanguageCode = 'eng-US';
         $fieldValues = array();
 
-        $content = $this->createTestContent( $mainLanguageCode, $fieldValues );
+        $content = $this->createTestContent($mainLanguageCode, $fieldValues);
 
-        $this->assertInstanceOf( "\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content", $content );
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
 
         return $content;
     }
@@ -313,19 +316,19 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      */
-    public function testCreateContentDefaultValuesNoStructFieldsFields( Content $content )
+    public function testCreateContentDefaultValuesNoStructFieldsFields(Content $content)
     {
-        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType( "ezstring" )->getEmptyValue();
+        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType('ezstring')->getEmptyValue();
 
-        $this->assertCount( 1, $content->versionInfo->languageCodes );
-        $this->assertContains( "eng-US", $content->versionInfo->languageCodes );
-        $this->assertCount( 4, $content->getFields() );
+        $this->assertCount(1, $content->versionInfo->languageCodes);
+        $this->assertContains('eng-US', $content->versionInfo->languageCodes);
+        $this->assertCount(4, $content->getFields());
 
         // eng-US
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field1", "eng-US" ) );
-        $this->assertEquals( "default value 2", $content->getFieldValue( "field2", "eng-US" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field3", "eng-US" ) );
-        $this->assertEquals( "default value 4", $content->getFieldValue( "field4", "eng-US" ) );
+        $this->assertEquals($emptyValue, $content->getFieldValue('field1', 'eng-US'));
+        $this->assertEquals('default value 2', $content->getFieldValue('field2', 'eng-US'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field3', 'eng-US'));
+        $this->assertEquals('default value 4', $content->getFieldValue('field4', 'eng-US'));
     }
 
     /**
@@ -341,14 +344,14 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      */
     public function testCreateContentTwoLanguagesNoValuesForMainLanguage()
     {
-        $mainLanguageCode = "eng-US";
+        $mainLanguageCode = 'eng-US';
         $fieldValues = array(
-            "field4" => array( "ger-DE" => "new value 4" )
+            'field4' => array('ger-DE' => 'new value 4'),
         );
 
-        $content = $this->createTestContent( $mainLanguageCode, $fieldValues );
+        $content = $this->createTestContent($mainLanguageCode, $fieldValues);
 
-        $this->assertInstanceOf( "\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content", $content );
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
 
         return $content;
     }
@@ -361,26 +364,92 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      */
-    public function testCreateContentTwoLanguagesNoValuesForMainLanguageFields( Content $content )
+    public function testCreateContentTwoLanguagesNoValuesForMainLanguageFields(Content $content)
     {
-        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType( "ezstring" )->getEmptyValue();
+        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType('ezstring')->getEmptyValue();
 
-        $this->assertCount( 2, $content->versionInfo->languageCodes );
-        $this->assertContains( "ger-DE", $content->versionInfo->languageCodes );
-        $this->assertContains( "eng-US", $content->versionInfo->languageCodes );
-        $this->assertCount( 8, $content->getFields() );
+        $this->assertCount(2, $content->versionInfo->languageCodes);
+        $this->assertContains('ger-DE', $content->versionInfo->languageCodes);
+        $this->assertContains('eng-US', $content->versionInfo->languageCodes);
+        $this->assertCount(8, $content->getFields());
 
         // eng-US
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field1", "eng-US" ) );
-        $this->assertEquals( "default value 2", $content->getFieldValue( "field2", "eng-US" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field3", "eng-US" ) );
-        $this->assertEquals( "default value 4", $content->getFieldValue( "field4", "eng-US" ) );
+        $this->assertEquals($emptyValue, $content->getFieldValue('field1', 'eng-US'));
+        $this->assertEquals('default value 2', $content->getFieldValue('field2', 'eng-US'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field3', 'eng-US'));
+        $this->assertEquals('default value 4', $content->getFieldValue('field4', 'eng-US'));
 
         // ger-DE
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field1", "ger-DE" ) );
-        $this->assertEquals( "default value 2", $content->getFieldValue( "field2", "ger-DE" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field3", "ger-DE" ) );
-        $this->assertEquals( "new value 4", $content->getFieldValue( "field4", "ger-DE" ) );
+        $this->assertEquals($emptyValue, $content->getFieldValue('field1', 'ger-DE'));
+        $this->assertEquals('default value 2', $content->getFieldValue('field2', 'ger-DE'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field3', 'ger-DE'));
+        $this->assertEquals('new value 4', $content->getFieldValue('field4', 'ger-DE'));
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\NonRedundantFieldSetTest::testCreateContentTwoLanguagesMainTranslationStoredFields
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
+     */
+    public function testCreateContentDraft()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $draft = $this->createMultilingualTestContent();
+        $published = $contentService->publishVersion($draft->versionInfo);
+        $newDraft = $contentService->createContentDraft($published->contentInfo);
+
+        $newDraft = $contentService->loadContent($newDraft->id, null, $newDraft->versionInfo->versionNo);
+
+        return array($published, $newDraft);
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\NonRedundantFieldSetTest::testCreateContentDraft
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content[] $data
+     */
+    public function testCreateContentDraftFields(array $data)
+    {
+        $content = $data[1];
+
+        $this->assertEquals(VersionInfo::STATUS_DRAFT, $content->versionInfo->status);
+        $this->assertEquals(2, $content->versionInfo->versionNo);
+        $this->assertCount(2, $content->versionInfo->languageCodes);
+        $this->assertContains('eng-US', $content->versionInfo->languageCodes);
+        $this->assertContains('eng-GB', $content->versionInfo->languageCodes);
+        $this->assertCount(8, $content->getFields());
+
+        // eng-US
+        $this->assertEquals('value 1', $content->getFieldValue('field1', 'eng-US'));
+        $this->assertEquals('value 2', $content->getFieldValue('field2', 'eng-US'));
+        $this->assertEquals('value 3', $content->getFieldValue('field3', 'eng-US'));
+        $this->assertEquals('value 4', $content->getFieldValue('field4', 'eng-US'));
+
+        // eng-GB
+        $this->assertEquals('value 1', $content->getFieldValue('field1', 'eng-GB'));
+        $this->assertEquals('value 2', $content->getFieldValue('field2', 'eng-GB'));
+        $this->assertEquals('value 3 eng-GB', $content->getFieldValue('field3', 'eng-GB'));
+        $this->assertEquals('value 4 eng-GB', $content->getFieldValue('field4', 'eng-GB'));
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\NonRedundantFieldSetTest::testCreateContentDraft
+     * @depends eZ\Publish\API\Repository\Tests\NonRedundantFieldSetTest::testCreateContentDraftFields
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content[] $data
+     */
+    public function testCreateContentDraftFieldsRetainsIds(array $data)
+    {
+        $this->assertFieldIds($data[0], $data[1]);
     }
 
     /**
@@ -399,13 +468,13 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      */
     public function testUpdateContentWithNewLanguage()
     {
-        $initialLanguageCode = "ger-DE";
+        $initialLanguageCode = 'ger-DE';
         $fieldValues = array(
-            "field4" => array( "ger-DE" => "new value 4" )
+            'field4' => array('ger-DE' => 'new value 4'),
         );
 
-        $content = $this->updateTestContent( $initialLanguageCode, $fieldValues );
-        $this->assertInstanceOf( "\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content", $content );
+        $content = $this->updateTestContent($initialLanguageCode, $fieldValues);
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
 
         return $content;
     }
@@ -418,26 +487,33 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      */
-    public function testUpdateContentWithNewLanguageFields( Content $content )
+    public function testUpdateContentWithNewLanguageFields(Content $content)
     {
-        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType( "ezstring" )->getEmptyValue();
+        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType('ezstring')->getEmptyValue();
 
-        $this->assertCount( 2, $content->versionInfo->languageCodes );
-        $this->assertContains( "ger-DE", $content->versionInfo->languageCodes );
-        $this->assertContains( "eng-US", $content->versionInfo->languageCodes );
-        $this->assertCount( 8, $content->getFields() );
+        $this->assertCount(3, $content->versionInfo->languageCodes);
+        $this->assertContains('ger-DE', $content->versionInfo->languageCodes);
+        $this->assertContains('eng-US', $content->versionInfo->languageCodes);
+        $this->assertContains('eng-GB', $content->versionInfo->languageCodes);
+        $this->assertCount(12, $content->getFields());
 
         // eng-US
-        $this->assertEquals( "value 1", $content->getFieldValue( "field1", "eng-US" ) );
-        $this->assertEquals( "value 2", $content->getFieldValue( "field2", "eng-US" ) );
-        $this->assertEquals( "value 3", $content->getFieldValue( "field3", "eng-US" ) );
-        $this->assertEquals( "value 4", $content->getFieldValue( "field4", "eng-US" ) );
+        $this->assertEquals('value 1', $content->getFieldValue('field1', 'eng-US'));
+        $this->assertEquals('value 2', $content->getFieldValue('field2', 'eng-US'));
+        $this->assertEquals('value 3', $content->getFieldValue('field3', 'eng-US'));
+        $this->assertEquals('value 4', $content->getFieldValue('field4', 'eng-US'));
+
+        // eng-GB
+        $this->assertEquals('value 1', $content->getFieldValue('field1', 'eng-GB'));
+        $this->assertEquals('value 2', $content->getFieldValue('field2', 'eng-GB'));
+        $this->assertEquals('value 3 eng-GB', $content->getFieldValue('field3', 'eng-GB'));
+        $this->assertEquals('value 4 eng-GB', $content->getFieldValue('field4', 'eng-GB'));
 
         // ger-DE
-        $this->assertEquals( "value 1", $content->getFieldValue( "field1", "ger-DE" ) );
-        $this->assertEquals( "value 2", $content->getFieldValue( "field2", "ger-DE" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field3", "ger-DE" ) );
-        $this->assertEquals( "new value 4", $content->getFieldValue( "field4", "ger-DE" ) );
+        $this->assertEquals('value 1', $content->getFieldValue('field1', 'ger-DE'));
+        $this->assertEquals('value 2', $content->getFieldValue('field2', 'ger-DE'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field3', 'ger-DE'));
+        $this->assertEquals('new value 4', $content->getFieldValue('field4', 'ger-DE'));
     }
 
     /**
@@ -458,14 +534,14 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      */
     public function testUpdateContentWithNewLanguageVariant()
     {
-        $initialLanguageCode = "ger-DE";
+        $initialLanguageCode = 'ger-DE';
         $fieldValues = array(
-            "field1" => array( "eng-US" => null ),
-            "field4" => array( "ger-DE" => "new value 4" )
+            'field1' => array('eng-US' => null),
+            'field4' => array('ger-DE' => 'new value 4'),
         );
 
-        $content = $this->updateTestContent( $initialLanguageCode, $fieldValues );
-        $this->assertInstanceOf( "\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content", $content );
+        $content = $this->updateTestContent($initialLanguageCode, $fieldValues);
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
 
         return $content;
     }
@@ -478,26 +554,33 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      */
-    public function testUpdateContentWithNewLanguageVariantFields( Content $content )
+    public function testUpdateContentWithNewLanguageVariantFields(Content $content)
     {
-        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType( "ezstring" )->getEmptyValue();
+        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType('ezstring')->getEmptyValue();
 
-        $this->assertCount( 2, $content->versionInfo->languageCodes );
-        $this->assertContains( "ger-DE", $content->versionInfo->languageCodes );
-        $this->assertContains( "eng-US", $content->versionInfo->languageCodes );
-        $this->assertCount( 8, $content->getFields() );
+        $this->assertCount(3, $content->versionInfo->languageCodes);
+        $this->assertContains('ger-DE', $content->versionInfo->languageCodes);
+        $this->assertContains('eng-US', $content->versionInfo->languageCodes);
+        $this->assertContains('eng-GB', $content->versionInfo->languageCodes);
+        $this->assertCount(12, $content->getFields());
 
         // eng-US
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field1", "eng-US" ) );
-        $this->assertEquals( "value 2", $content->getFieldValue( "field2", "eng-US" ) );
-        $this->assertEquals( "value 3", $content->getFieldValue( "field3", "eng-US" ) );
-        $this->assertEquals( "value 4", $content->getFieldValue( "field4", "eng-US" ) );
+        $this->assertEquals($emptyValue, $content->getFieldValue('field1', 'eng-US'));
+        $this->assertEquals('value 2', $content->getFieldValue('field2', 'eng-US'));
+        $this->assertEquals('value 3', $content->getFieldValue('field3', 'eng-US'));
+        $this->assertEquals('value 4', $content->getFieldValue('field4', 'eng-US'));
+
+        // eng-GB
+        $this->assertEquals($emptyValue, $content->getFieldValue('field1', 'eng-GB'));
+        $this->assertEquals('value 2', $content->getFieldValue('field2', 'eng-GB'));
+        $this->assertEquals('value 3 eng-GB', $content->getFieldValue('field3', 'eng-GB'));
+        $this->assertEquals('value 4 eng-GB', $content->getFieldValue('field4', 'eng-GB'));
 
         // ger-DE
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field1", "ger-DE" ) );
-        $this->assertEquals( "value 2", $content->getFieldValue( "field2", "ger-DE" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field3", "ger-DE" ) );
-        $this->assertEquals( "new value 4", $content->getFieldValue( "field4", "ger-DE" ) );
+        $this->assertEquals($emptyValue, $content->getFieldValue('field1', 'ger-DE'));
+        $this->assertEquals('value 2', $content->getFieldValue('field2', 'ger-DE'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field3', 'ger-DE'));
+        $this->assertEquals('new value 4', $content->getFieldValue('field4', 'ger-DE'));
     }
 
     /**
@@ -513,11 +596,11 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      */
     public function testUpdateContentWithNewLanguageNoValues()
     {
-        $initialLanguageCode = "ger-DE";
+        $initialLanguageCode = 'ger-DE';
         $fieldValues = array();
 
-        $content = $this->updateTestContent( $initialLanguageCode, $fieldValues );
-        $this->assertInstanceOf( "\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content", $content );
+        $content = $this->updateTestContent($initialLanguageCode, $fieldValues);
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
 
         return $content;
     }
@@ -530,26 +613,89 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      */
-    public function testUpdateContentWithNewLanguageNoValuesFields( Content $content )
+    public function testUpdateContentWithNewLanguageNoValuesFields(Content $content)
     {
-        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType( "ezstring" )->getEmptyValue();
+        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType('ezstring')->getEmptyValue();
 
-        $this->assertCount( 2, $content->versionInfo->languageCodes );
-        $this->assertContains( "ger-DE", $content->versionInfo->languageCodes );
-        $this->assertContains( "eng-US", $content->versionInfo->languageCodes );
-        $this->assertCount( 8, $content->getFields() );
+        $this->assertCount(3, $content->versionInfo->languageCodes);
+        $this->assertContains('ger-DE', $content->versionInfo->languageCodes);
+        $this->assertContains('eng-US', $content->versionInfo->languageCodes);
+        $this->assertContains('eng-GB', $content->versionInfo->languageCodes);
+        $this->assertCount(12, $content->getFields());
 
         // eng-US
-        $this->assertEquals( "value 1", $content->getFieldValue( "field1", "eng-US" ) );
-        $this->assertEquals( "value 2", $content->getFieldValue( "field2", "eng-US" ) );
-        $this->assertEquals( "value 3", $content->getFieldValue( "field3", "eng-US" ) );
-        $this->assertEquals( "value 4", $content->getFieldValue( "field4", "eng-US" ) );
+        $this->assertEquals('value 1', $content->getFieldValue('field1', 'eng-US'));
+        $this->assertEquals('value 2', $content->getFieldValue('field2', 'eng-US'));
+        $this->assertEquals('value 3', $content->getFieldValue('field3', 'eng-US'));
+        $this->assertEquals('value 4', $content->getFieldValue('field4', 'eng-US'));
+
+        // eng-GB
+        $this->assertEquals('value 1', $content->getFieldValue('field1', 'eng-GB'));
+        $this->assertEquals('value 2', $content->getFieldValue('field2', 'eng-GB'));
+        $this->assertEquals('value 3 eng-GB', $content->getFieldValue('field3', 'eng-GB'));
+        $this->assertEquals('value 4 eng-GB', $content->getFieldValue('field4', 'eng-GB'));
 
         // ger-DE
-        $this->assertEquals( "value 1", $content->getFieldValue( "field1", "ger-DE" ) );
-        $this->assertEquals( "value 2", $content->getFieldValue( "field2", "ger-DE" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field3", "ger-DE" ) );
-        $this->assertEquals( "default value 4", $content->getFieldValue( "field4", "ger-DE" ) );
+        $this->assertEquals('value 1', $content->getFieldValue('field1', 'ger-DE'));
+        $this->assertEquals('value 2', $content->getFieldValue('field2', 'ger-DE'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field3', 'ger-DE'));
+        $this->assertEquals('default value 4', $content->getFieldValue('field4', 'ger-DE'));
+    }
+
+    /**
+     * Test for the updateContent() method.
+     *
+     * When updating Content with two languages, updating non-translatable field will also update it's value
+     * for non-main language.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    public function testUpdateContentUpdatingNonTranslatableFieldUpdatesFieldCopy()
+    {
+        $initialLanguageCode = 'eng-US';
+        $fieldValues = array(
+            'field1' => array('eng-US' => 'new value 1'),
+            'field2' => array('eng-US' => null),
+        );
+
+        $content = $this->updateTestContent($initialLanguageCode, $fieldValues);
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
+
+        return $content;
+    }
+
+    /**
+     * Test for the updateContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @depends eZ\Publish\API\Repository\Tests\NonRedundantFieldSetTest::testUpdateContentUpdatingNonTranslatableFieldUpdatesFieldCopy
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     */
+    public function testUpdateContentUpdatingNonTranslatableFieldUpdatesFieldCopyFields(Content $content)
+    {
+        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType('ezstring')->getEmptyValue();
+
+        $this->assertCount(2, $content->versionInfo->languageCodes);
+        $this->assertContains('eng-US', $content->versionInfo->languageCodes);
+        $this->assertContains('eng-GB', $content->versionInfo->languageCodes);
+        $this->assertCount(8, $content->getFields());
+
+        // eng-US
+        $this->assertEquals('new value 1', $content->getFieldValue('field1', 'eng-US'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field2', 'eng-US'));
+        $this->assertEquals('value 3', $content->getFieldValue('field3', 'eng-US'));
+        $this->assertEquals('value 4', $content->getFieldValue('field4', 'eng-US'));
+
+        // eng-GB
+        $this->assertEquals('new value 1', $content->getFieldValue('field1', 'eng-GB'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field2', 'eng-GB'));
+        $this->assertEquals('value 3 eng-GB', $content->getFieldValue('field3', 'eng-GB'));
+        $this->assertEquals('value 4 eng-GB', $content->getFieldValue('field4', 'eng-GB'));
     }
 
     /**
@@ -565,15 +711,15 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      */
     public function testUpdateContentWithTwoLanguagesInitialLanguageTranslationNotCreated()
     {
-        $initialLanguageCode = "ger-DE";
+        $initialLanguageCode = 'ger-DE';
         $fieldValues = array(
-            "field1" => array( "eng-US" => null ),
-            "field2" => array( "eng-US" => null ),
-            "field4" => array( "ger-DE" => null )
+            'field1' => array('eng-US' => null),
+            'field2' => array('eng-US' => null),
+            'field4' => array('ger-DE' => null),
         );
 
-        $content = $this->updateTestContent( $initialLanguageCode, $fieldValues );
-        $this->assertInstanceOf( "\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content", $content );
+        $content = $this->updateTestContent($initialLanguageCode, $fieldValues);
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
 
         return $content;
     }
@@ -586,25 +732,63 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      */
-    public function testUpdateContentWithTwoLanguagesInitialLanguageTranslationNotCreatedFields( Content $content )
+    public function testUpdateContentWithTwoLanguagesInitialLanguageTranslationNotCreatedFields(Content $content)
     {
-        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType( "ezstring" )->getEmptyValue();
+        $emptyValue = $this->getRepository()->getFieldTypeService()->getFieldType('ezstring')->getEmptyValue();
 
-        $this->assertCount( 2, $content->versionInfo->languageCodes );
-        $this->assertContains( "ger-DE", $content->versionInfo->languageCodes );
-        $this->assertContains( "eng-US", $content->versionInfo->languageCodes );
-        $this->assertCount( 8, $content->getFields() );
+        $this->assertCount(3, $content->versionInfo->languageCodes);
+        $this->assertContains('ger-DE', $content->versionInfo->languageCodes);
+        $this->assertContains('eng-US', $content->versionInfo->languageCodes);
+        $this->assertContains('eng-GB', $content->versionInfo->languageCodes);
+        $this->assertCount(12, $content->getFields());
 
         // eng-US
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field1", "eng-US" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field2", "eng-US" ) );
-        $this->assertEquals( "value 3", $content->getFieldValue( "field3", "eng-US" ) );
-        $this->assertEquals( "value 4", $content->getFieldValue( "field4", "eng-US" ) );
+        $this->assertEquals($emptyValue, $content->getFieldValue('field1', 'eng-US'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field2', 'eng-US'));
+        $this->assertEquals('value 3', $content->getFieldValue('field3', 'eng-US'));
+        $this->assertEquals('value 4', $content->getFieldValue('field4', 'eng-US'));
+
+        // eng-GB
+        $this->assertEquals($emptyValue, $content->getFieldValue('field1', 'eng-GB'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field2', 'eng-GB'));
+        $this->assertEquals('value 3 eng-GB', $content->getFieldValue('field3', 'eng-GB'));
+        $this->assertEquals('value 4 eng-GB', $content->getFieldValue('field4', 'eng-GB'));
 
         // ger-DE
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field1", "ger-DE" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field2", "ger-DE" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field3", "ger-DE" ) );
-        $this->assertEquals( $emptyValue, $content->getFieldValue( "field4", "ger-DE" ) );
+        $this->assertEquals($emptyValue, $content->getFieldValue('field1', 'ger-DE'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field2', 'ger-DE'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field3', 'ger-DE'));
+        $this->assertEquals($emptyValue, $content->getFieldValue('field4', 'ger-DE'));
+    }
+
+    protected function assertFieldIds(Content $content1, Content $content2)
+    {
+        $fields1 = $this->mapFields($content1->getFields());
+        $fields2 = $this->mapFields($content2->getFields());
+
+        foreach ($fields1 as $fieldDefinitionIdentifier => $languageFieldIds) {
+            foreach ($languageFieldIds as $languageCode => $fieldId) {
+                $this->assertEquals(
+                    $fields2[$fieldDefinitionIdentifier][$languageCode],
+                    $fieldId
+                );
+            }
+        }
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Field[] $fields
+     *
+     * @return array
+     */
+    protected function mapFields(array $fields)
+    {
+        $mappedFields = array();
+
+        foreach ($fields as $field) {
+            $mappedFields[$field->fieldDefIdentifier][$field->languageCode] = $field->id;
+        }
+
+        return $mappedFields;
     }
 }

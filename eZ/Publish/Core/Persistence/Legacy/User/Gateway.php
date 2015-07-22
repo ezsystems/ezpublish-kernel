@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the User Gateway class
+ * File containing the User Gateway class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,20 +19,20 @@ use eZ\Publish\SPI\Persistence\User;
 abstract class Gateway
 {
     /**
-     * Create user
+     * Create user.
      *
      * @param user $user
      *
      * @return mixed
      */
-    abstract public function createUser( User $user );
+    abstract public function createUser(User $user);
 
     /**
      * Delete user with the given ID.
      *
      * @param mixed $userId
      */
-    abstract public function deleteUser( $userId );
+    abstract public function deleteUser($userId);
 
     /**
      * Loads user with user ID.
@@ -39,47 +41,47 @@ abstract class Gateway
      *
      * @return array
      */
-    abstract public function load( $userId );
+    abstract public function load($userId);
+
+     /**
+      * Loads user with user login.
+      *
+      * @param string $login
+      *
+      * @return array
+      */
+     abstract public function loadByLogin($login);
+
+     /**
+      * Loads user with user email.
+      *
+      * @param string $email
+      *
+      * @return array
+      */
+     abstract public function loadByEmail($email);
 
     /**
-     * Loads user with user login.
-     *
-     * @param string $login
-     *
-     * @return array
-     */
-     abstract public function loadByLogin( $login );
-
-    /**
-     * Loads user with user email.
-     *
-     * @param string $email
-     *
-     * @return array
-     */
-     abstract public function loadByEmail( $email );
-
-    /**
-     * Update the user information specified by the user struct
+     * Update the user information specified by the user struct.
      *
      * @param User $user
      */
-    abstract public function updateUser( User $user );
+    abstract public function updateUser(User $user);
 
     /**
-     * Assigns role to user with given limitation
+     * Assigns role to user with given limitation.
      *
      * @param mixed $contentId
      * @param mixed $roleId
      * @param array $limitation
      */
-    abstract public function assignRole( $contentId, $roleId, array $limitation );
+    abstract public function assignRole($contentId, $roleId, array $limitation);
 
     /**
-     * Remove role from user
+     * Remove role from user or user group.
      *
      * @param mixed $contentId
      * @param mixed $roleId
      */
-    abstract public function removeRole( $contentId, $roleId );
+    abstract public function removeRole($contentId, $roleId);
 }

@@ -1,4 +1,10 @@
 parameters:
+    ezpublish_rest.routing.options_loader.class: eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader
+    ezpublish_rest.routing.options_loader.route_collection_mapper.class: eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\RouteCollectionMapper
+    ezpublish_rest.routing.options_loader.mapper.class: eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\Mapper
+
+    ezpublish_rest.cors_options_provider.class: eZ\Bundle\EzPublishRestBundle\CorsOptions\RestProvider
+
     ezpublish_rest.controller.base.class: eZ\Publish\Core\REST\Server\Controller
     ezpublish_rest.controller.binary_content.class: eZ\Publish\Core\REST\Server\Controller\BinaryContent
     ezpublish_rest.controller.content.class: eZ\Publish\Core\REST\Server\Controller\Content
@@ -12,13 +18,18 @@ parameters:
     ezpublish_rest.controller.user.class: eZ\Publish\Core\REST\Server\Controller\User
     ezpublish_rest.controller.url_wildcard.class: eZ\Publish\Core\REST\Server\Controller\URLWildcard
     ezpublish_rest.controller.url_alias.class: eZ\Publish\Core\REST\Server\Controller\URLAlias
+    ezpublish_rest.controller.options.class: eZ\Publish\Core\REST\Server\Controller\Options
+    ezpublish_rest.controller.services.class: eZ\Publish\Core\REST\Server\Controller\Services
 
     ezpublish_rest.factory.class: eZ\Bundle\EzPublishRestBundle\ApiLoader\Factory
     ezpublish_rest.request_parser.class: eZ\Bundle\EzPublishRestBundle\RequestParser\Router
     ezpublish_rest.parser_tools.class: eZ\Publish\Core\REST\Common\Input\ParserTools
     ezpublish_rest.field_type_parser.class: eZ\Publish\Core\REST\Common\Input\FieldTypeParser
-    ezpublish_rest.listener.class: eZ\Bundle\EzPublishRestBundle\EventListener\RestListener
     ezpublish_rest.field_type_serializer.class: eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
+
+    ezpublish_rest.request_listener.class: eZ\Bundle\EzPublishRestBundle\EventListener\RequestListener
+    ezpublish_rest.csrf_listener.class: eZ\Bundle\EzPublishRestBundle\EventListener\CsrfListener
+    ezpublish_rest.response_listener.class: eZ\Bundle\EzPublishRestBundle\EventListener\ResponseListener
 
     ezpublish_rest.field_type_processor_registry.class: eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry
     ezpublish_rest.field_type_processor.ezimage.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor
@@ -28,6 +39,7 @@ parameters:
     ezpublish_rest.field_type_processor.ezobjectrelationlist.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\RelationListProcessor
     ezpublish_rest.field_type_processor.ezobjectrelation.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\RelationProcessor
     ezpublish_rest.field_type_processor.eztime.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\TimeProcessor
+    ezpublish_rest.field_type_processor.ezrichtext.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\RichTextProcessor
     ezpublish_rest.field_type_processor.ezxmltext.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\XmlTextProcessor
     ezpublish_rest.field_type_processor.ezbinaryfile.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryProcessor
     ezpublish_rest.field_type_processor.ezpage.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\PageProcessor
@@ -55,7 +67,31 @@ parameters:
     ezpublish_rest.input.handler.json.class: eZ\Publish\Core\REST\Common\Input\Handler\Json
     ezpublish_rest.input.handler.xml.class: eZ\Publish\Core\REST\Common\Input\Handler\Xml
 
+    ezpublish_rest.templated_router.class: %router.class%
+
 services:
+    ezpublish_rest.routing.options_loader:
+        class: %ezpublish_rest.routing.options_loader.class%
+        arguments:
+            - @ezpublish_rest.routing.options_loader.route_collection_mapper
+            - @ezpublish_rest.templated_router
+        tags:
+            - { name: routing.loader }
+
+    ezpublish_rest.routing.options_loader.route_collection_mapper:
+        class: %ezpublish_rest.routing.options_loader.route_collection_mapper.class%
+        arguments:
+            - @ezpublish_rest.routing.options_loader.mapper
+
+    ezpublish_rest.routing.options_loader.mapper:
+        class: %ezpublish_rest.routing.options_loader.mapper.class%
+
+    ezpublish_rest.cors_option_provider:
+        class: %ezpublish_rest.cors_options_provider.class%
+        arguments: [@router.default]
+        tags:
+            - { name: nelmio_cors.options_provider }
+
     ezpublish_rest.field_type_serializer:
         class: %ezpublish_rest.field_type_serializer.class%
         arguments:
@@ -65,7 +101,6 @@ services:
     ezpublish_rest.request_parser:
         class: %ezpublish_rest.request_parser.class%
         arguments:
-            - %ezpublish_rest.path_prefix%
             - @router
 
     ezpublish_rest.parser_tools:
@@ -81,16 +116,17 @@ services:
 
     ezpublish_rest.factory:
         class: %ezpublish_rest.factory.class%
-        arguments: [@service_container, @ezpublish.api.repository]
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        calls:
+            - [setRequestStack, [@request_stack]]
 
     ezpublish_rest.controller.base:
         class: %ezpublish_rest.controller.base.class%
         calls:
+            - [ setContainer, [@service_container] ]
             - [ setInputDispatcher, [@ezpublish_rest.input.dispatcher] ]
             - [ setRouter, [@router] ]
             - [ setRequestParser, [@ezpublish_rest.request_parser] ]
-            - [ setRequest, [@?request=] ]
-            - [ setContainer, [@service_container] ]
             - [ setRepository, [@ezpublish.api.repository] ]
 
     ezpublish_rest.controller.root:
@@ -174,21 +210,44 @@ services:
             - @ezpublish.api.service.url_alias
             - @ezpublish.api.service.location
 
-    ezpublish_rest.listener:
-        class: %ezpublish_rest.listener.class%
+    ezpublish_rest.request_listener:
+        class: %ezpublish_rest.request_listener.class%
         arguments:
-            - @service_container
-            - @?form.csrf_provider
+            - %ezpublish_rest.path_prefix%
         tags:
             - { name: kernel.event_subscriber }
+
+    ezpublish_rest.response_listener:
+        class: %ezpublish_rest.response_listener.class%
+        arguments:
+            - @ezpublish_rest.output.visitor.dispatcher
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish_rest.csrf_listener:
+        class: %ezpublish_rest.csrf_listener.class%
+        arguments:
+            - @event_dispatcher
+            - %form.type_extension.csrf.enabled%
+            - %ezpublish_rest.csrf_token_intention%
+            - @?security.csrf.token_manager
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish_rest.controller.options:
+        class: %ezpublish_rest.controller.options.class%
+        parent: ezpublish_rest.controller.base
+
+    ezpublish_rest.controller.services:
+        class: %ezpublish_rest.controller.services.class%
+        arguments: [%ezpublish.fieldType.ezcountry.data%]
 
     ezpublish_rest.field_type_processor_registry:
         class: %ezpublish_rest.field_type_processor_registry.class%
 
     ezpublish_rest.field_type_processor.ezimage:
         class: %ezpublish_rest.field_type_processor.ezimage.class%
-        factory_service: ezpublish_rest.factory
-        factory_method: getImageFieldTypeProcessor
+        factory: ["@ezpublish_rest.factory", getImageFieldTypeProcessor]
         arguments:
             - @router
         tags:
@@ -206,6 +265,7 @@ services:
 
     ezpublish_rest.field_type_processor.ezmedia:
         class: %ezpublish_rest.field_type_processor.ezmedia.class%
+        factory: ["@ezpublish_rest.factory", getMediaFieldTypeProcessor]
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezmedia }
 
@@ -224,6 +284,13 @@ services:
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: eztime }
 
+    ezpublish_rest.field_type_processor.ezrichtext:
+        class: %ezpublish_rest.field_type_processor.ezrichtext.class%
+        arguments:
+            - @ezpublish.fieldType.ezrichtext.converter.edit.xhtml5
+        tags:
+            - { name: ezpublish_rest.field_type_processor, alias: ezrichtext }
+
     ezpublish_rest.field_type_processor.ezxmltext:
         class: %ezpublish_rest.field_type_processor.ezxmltext.class%
         tags:
@@ -231,10 +298,9 @@ services:
 
     ezpublish_rest.field_type_processor.ezbinaryfile:
         class: %ezpublish_rest.field_type_processor.ezbinaryfile.class%
-        factory_service: ezpublish_rest.factory
-        factory_method: getBinaryFileFieldTypeProcessor
+        factory: ["@ezpublish_rest.factory", getBinaryFileFieldTypeProcessor]
         arguments:
-            - @ezpublish.fieldtype.ezbinaryfile.ioservice
+            - @ezpublish.core.io.default_url_decorator
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezbinaryfile }
 
@@ -272,6 +338,8 @@ services:
         class: %ezpublish_rest.output.generator.xml.class%
         arguments:
             - @ezpublish_rest.output.generator.xml.field_type_hash_generator
+        calls:
+            - [ setFormatOutput, [ %kernel.debug% ] ]
 
     ezpublish_rest.output.generator.xml.field_type_hash_generator:
         class: %ezpublish_rest.output.generator.xml.field_type_hash_generator.class%
@@ -280,6 +348,8 @@ services:
         class: %ezpublish_rest.output.generator.json.class%
         arguments:
             - @ezpublish_rest.output.generator.json.field_type_hash_generator
+        calls:
+            - [ setFormatOutput, [ %kernel.debug% ] ]
 
     ezpublish_rest.output.generator.json.field_type_hash_generator:
         class: %ezpublish_rest.output.generator.json.field_type_hash_generator.class%
@@ -295,7 +365,6 @@ services:
 
     ezpublish_rest.input.dispatcher:
         class: %ezpublish_rest.input.dispatcher.class%
-        factory_service: ezpublish_rest.factory
         arguments:
             - @ezpublish_rest.input.parsing_dispatcher
             - []
@@ -315,3 +384,9 @@ services:
         class: %ezpublish_rest.input.handler.xml.class%
         tags:
             - { name: ezpublish_rest.input.handler, format: xml }
+
+    ezpublish_rest.templated_router:
+        class: %ezpublish_rest.templated_router.class%
+        parent: hautelook.router.template
+        calls:
+            - [ setOption, [ strict_requirements, ~ ] ]

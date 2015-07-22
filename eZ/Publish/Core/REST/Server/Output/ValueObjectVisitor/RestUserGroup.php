@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RestUserGroup ValueObjectVisitor class
+ * File containing the RestUserGroup ValueObjectVisitor class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,110 +17,113 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Server\Values\Version as VersionValue;
 
 /**
- * RestUserGroup value object visitor
+ * RestUserGroup value object visitor.
  */
 class RestUserGroup extends ValueObjectVisitor
 {
     /**
-     * Visit struct returned by controllers
+     * Visit struct returned by controllers.
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param \eZ\Publish\Core\REST\Server\Values\RestUserGroup $data
      */
-    public function visit( Visitor $visitor, Generator $generator, $data )
+    public function visit(Visitor $visitor, Generator $generator, $data)
     {
         $contentInfo = $data->contentInfo;
         $mainLocation = $data->mainLocation;
-        $mainLocationPath = trim( $mainLocation->pathString, '/' );
+        $mainLocationPath = trim($mainLocation->pathString, '/');
 
-        $generator->startObjectElement( 'UserGroup' );
+        $generator->startObjectElement('UserGroup');
 
         $generator->startAttribute(
             'href',
-            $this->router->generate( 'ezpublish_rest_loadUserGroup', array( 'groupPath' => $mainLocationPath ) )
+            $this->router->generate('ezpublish_rest_loadUserGroup', array('groupPath' => $mainLocationPath))
         );
-        $generator->endAttribute( 'href' );
+        $generator->endAttribute('href');
 
-        $generator->startAttribute( 'id', $contentInfo->id );
-        $generator->endAttribute( 'id' );
+        $generator->startAttribute('id', $contentInfo->id);
+        $generator->endAttribute('id');
 
-        $generator->startAttribute( 'remoteId', $contentInfo->remoteId );
-        $generator->endAttribute( 'remoteId' );
+        $generator->startAttribute('remoteId', $contentInfo->remoteId);
+        $generator->endAttribute('remoteId');
 
-        $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'UserGroup' ) );
-        $visitor->setHeader( 'Accept-Patch', $generator->getMediaType( 'UserGroupUpdate' ) );
+        $visitor->setHeader('Content-Type', $generator->getMediaType('UserGroup'));
+        $visitor->setHeader('Accept-Patch', $generator->getMediaType('UserGroupUpdate'));
 
-        $generator->startObjectElement( 'ContentType' );
+        $generator->startObjectElement('ContentType');
 
         $generator->startAttribute(
             'href',
             $this->router->generate(
                 'ezpublish_rest_loadContentType',
-                array( 'contentTypeId' => $contentInfo->contentTypeId )
+                array('contentTypeId' => $contentInfo->contentTypeId)
             )
         );
-        $generator->endAttribute( 'href' );
+        $generator->endAttribute('href');
 
-        $generator->endObjectElement( 'ContentType' );
+        $generator->endObjectElement('ContentType');
 
-        $generator->startValueElement( 'name', $contentInfo->name );
-        $generator->endValueElement( 'name' );
+        $generator->startValueElement('name', $contentInfo->name);
+        $generator->endValueElement('name');
 
-        $generator->startObjectElement( 'Versions', 'VersionList' );
+        $generator->startObjectElement('Versions', 'VersionList');
         $generator->startAttribute(
             'href',
-            $this->router->generate( 'ezpublish_rest_loadContentVersions', array( 'contentId' => $contentInfo->id ) )
+            $this->router->generate('ezpublish_rest_loadContentVersions', array('contentId' => $contentInfo->id))
         );
-        $generator->endAttribute( 'href' );
-        $generator->endObjectElement( 'Versions' );
+        $generator->endAttribute('href');
+        $generator->endObjectElement('Versions');
 
-        $generator->startObjectElement( 'Section' );
+        $generator->startObjectElement('Section');
         $generator->startAttribute(
             'href',
-            $this->router->generate( 'ezpublish_rest_loadSection', array( 'sectionId' => $contentInfo->sectionId ) )
+            $this->router->generate('ezpublish_rest_loadSection', array('sectionId' => $contentInfo->sectionId))
         );
-        $generator->endAttribute( 'href' );
-        $generator->endObjectElement( 'Section' );
+        $generator->endAttribute('href');
+        $generator->endObjectElement('Section');
 
-        $generator->startObjectElement( 'MainLocation', 'Location' );
+        $generator->startObjectElement('MainLocation', 'Location');
         $generator->startAttribute(
             'href',
             $this->router->generate(
                 'ezpublish_rest_loadLocation',
-                array( 'locationPath' => $mainLocationPath )
+                array('locationPath' => $mainLocationPath)
             )
         );
-        $generator->endAttribute( 'href' );
-        $generator->endObjectElement( 'MainLocation' );
+        $generator->endAttribute('href');
+        $generator->endObjectElement('MainLocation');
 
-        $generator->startObjectElement( 'Locations', 'LocationList' );
+        $generator->startObjectElement('Locations', 'LocationList');
         $generator->startAttribute(
             'href',
-            $this->router->generate( 'ezpublish_rest_loadLocationsForContent', array( 'contentId' => $contentInfo->id ) )
+            $this->router->generate('ezpublish_rest_loadLocationsForContent', array('contentId' => $contentInfo->id))
         );
-        $generator->endAttribute( 'href' );
-        $generator->endObjectElement( 'Locations' );
+        $generator->endAttribute('href');
+        $generator->endObjectElement('Locations');
 
-        $generator->startObjectElement( 'Owner', 'User' );
+        $generator->startObjectElement('Owner', 'User');
         $generator->startAttribute(
             'href',
-            $this->router->generate( 'ezpublish_rest_loadUser', array( 'userId' => $contentInfo->ownerId ) )
+            $this->router->generate('ezpublish_rest_loadUser', array('userId' => $contentInfo->ownerId))
         );
-        $generator->endAttribute( 'href' );
-        $generator->endObjectElement( 'Owner' );
+        $generator->endAttribute('href');
+        $generator->endObjectElement('Owner');
 
-        $generator->startValueElement( 'publishDate', $contentInfo->publishedDate->format( 'c' ) );
-        $generator->endValueElement( 'publishDate' );
+        $generator->startValueElement('publishDate', $contentInfo->publishedDate->format('c'));
+        $generator->endValueElement('publishDate');
 
-        $generator->startValueElement( 'lastModificationDate', $contentInfo->modificationDate->format( 'c' ) );
-        $generator->endValueElement( 'lastModificationDate' );
+        $generator->startValueElement('lastModificationDate', $contentInfo->modificationDate->format('c'));
+        $generator->endValueElement('lastModificationDate');
 
-        $generator->startValueElement( 'mainLanguageCode', $contentInfo->mainLanguageCode );
-        $generator->endValueElement( 'mainLanguageCode' );
+        $generator->startValueElement('mainLanguageCode', $contentInfo->mainLanguageCode);
+        $generator->endValueElement('mainLanguageCode');
 
-        $generator->startValueElement( 'alwaysAvailable', $contentInfo->alwaysAvailable ? 'true' : 'false' );
-        $generator->endValueElement( 'alwaysAvailable' );
+        $generator->startValueElement(
+            'alwaysAvailable',
+            $this->serializeBool($generator, $contentInfo->alwaysAvailable)
+        );
+        $generator->endValueElement('alwaysAvailable');
 
         $visitor->visitValueObject(
             new VersionValue(
@@ -128,58 +133,58 @@ class RestUserGroup extends ValueObjectVisitor
             )
         );
 
-        $generator->startObjectElement( 'ParentUserGroup', 'UserGroup' );
+        $generator->startObjectElement('ParentUserGroup', 'UserGroup');
         $generator->startAttribute(
             'href',
             $this->router->generate(
                 'ezpublish_rest_loadUserGroup',
                 array(
-                    'groupPath' => implode( '/', array_slice( $mainLocation->path, 0, count( $mainLocation->path ) - 1 ) )
+                    'groupPath' => implode('/', array_slice($mainLocation->path, 0, count($mainLocation->path) - 1)),
                 )
             )
         );
-        $generator->endAttribute( 'href' );
-        $generator->endObjectElement( 'ParentUserGroup' );
+        $generator->endAttribute('href');
+        $generator->endObjectElement('ParentUserGroup');
 
-        $generator->startObjectElement( 'Subgroups', 'UserGroupList' );
+        $generator->startObjectElement('Subgroups', 'UserGroupList');
         $generator->startAttribute(
             'href',
             $this->router->generate(
                 'ezpublish_rest_loadSubUserGroups',
                 array(
-                    'groupPath' => $mainLocationPath
+                    'groupPath' => $mainLocationPath,
                 )
             )
         );
-        $generator->endAttribute( 'href' );
-        $generator->endObjectElement( 'Subgroups' );
+        $generator->endAttribute('href');
+        $generator->endObjectElement('Subgroups');
 
-        $generator->startObjectElement( 'Users', 'UserList' );
+        $generator->startObjectElement('Users', 'UserList');
         $generator->startAttribute(
             'href',
             $this->router->generate(
                 'ezpublish_rest_loadUsersFromGroup',
                 array(
-                    'groupPath' => $mainLocationPath
+                    'groupPath' => $mainLocationPath,
                 )
             )
         );
-        $generator->endAttribute( 'href' );
-        $generator->endObjectElement( 'Users' );
+        $generator->endAttribute('href');
+        $generator->endObjectElement('Users');
 
-        $generator->startObjectElement( 'Roles', 'RoleAssignmentList' );
+        $generator->startObjectElement('Roles', 'RoleAssignmentList');
         $generator->startAttribute(
             'href',
             $this->router->generate(
                 'ezpublish_rest_loadRoleAssignmentsForUserGroup',
                 array(
-                    'groupPath' => $mainLocationPath
+                    'groupPath' => $mainLocationPath,
                 )
             )
         );
-        $generator->endAttribute( 'href' );
-        $generator->endObjectElement( 'Roles' );
+        $generator->endAttribute('href');
+        $generator->endObjectElement('Roles');
 
-        $generator->endObjectElement( 'UserGroup' );
+        $generator->endObjectElement('UserGroup');
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the UrlTest class
+ * File containing the UrlTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,7 +13,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Url\Type as UrlType;
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
-use ReflectionObject;
 
 /**
  * @group fieldType
@@ -32,7 +33,10 @@ class UrlTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new UrlType();
+        $fieldType = new UrlType();
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
+
+        return $fieldType;
     }
 
     /**
@@ -57,12 +61,10 @@ class UrlTest extends FieldTypeTest
 
     /**
      * Returns the empty value expected from the field type.
-     *
-     * @return void
      */
     protected function getEmptyValueExpectation()
     {
-        return new UrlValue;
+        return new UrlValue();
     }
 
     /**
@@ -96,7 +98,7 @@ class UrlTest extends FieldTypeTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                new UrlValue( 23 ),
+                new UrlValue(23),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
@@ -136,21 +138,21 @@ class UrlTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new UrlValue,
+                new UrlValue(),
             ),
             array(
                 'http://example.com/sindelfingen',
-                new UrlValue( 'http://example.com/sindelfingen' ),
+                new UrlValue('http://example.com/sindelfingen'),
             ),
             array(
-                new UrlValue( 'http://example.com/sindelfingen', 'Sindelfingen!' ),
-                new UrlValue( 'http://example.com/sindelfingen', 'Sindelfingen!' ),
+                new UrlValue('http://example.com/sindelfingen', 'Sindelfingen!'),
+                new UrlValue('http://example.com/sindelfingen', 'Sindelfingen!'),
             ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -188,18 +190,18 @@ class UrlTest extends FieldTypeTest
     {
         return array(
             array(
-                new UrlValue,
-                null
+                new UrlValue(),
+                null,
             ),
             array(
-                new UrlValue( 'http://example.com/sindelfingen' ),
+                new UrlValue('http://example.com/sindelfingen'),
                 array(
                     'link' => 'http://example.com/sindelfingen',
                     'text' => '',
                 ),
             ),
             array(
-                new UrlValue( 'http://example.com/sindelfingen', 'Sindelfingen!' ),
+                new UrlValue('http://example.com/sindelfingen', 'Sindelfingen!'),
                 array(
                     'link' => 'http://example.com/sindelfingen',
                     'text' => 'Sindelfingen!',
@@ -209,7 +211,7 @@ class UrlTest extends FieldTypeTest
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -248,22 +250,35 @@ class UrlTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new UrlValue,
+                new UrlValue(),
             ),
             array(
                 array(
                     'link' => 'http://example.com/sindelfingen',
                     'text' => null,
                 ),
-                new UrlValue( 'http://example.com/sindelfingen' ),
+                new UrlValue('http://example.com/sindelfingen'),
             ),
             array(
                 array(
                     'link' => 'http://example.com/sindelfingen',
                     'text' => 'Sindelfingen!',
                 ),
-                new UrlValue( 'http://example.com/sindelfingen', 'Sindelfingen!' ),
+                new UrlValue('http://example.com/sindelfingen', 'Sindelfingen!'),
             ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezurl';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array($this->getEmptyValueExpectation(), ''),
+            array(new UrlValue('', 'Url text'), 'Url text'),
         );
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a ContentTest class
+ * File containing a ContentTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,7 +13,6 @@ namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
-use eZ\Publish\API\Repository\Values;
 
 class FieldDefinitionListTest extends BaseTest
 {
@@ -21,7 +22,7 @@ class FieldDefinitionListTest extends BaseTest
     protected $contentTypeServiceMock;
 
     /**
-     * Tests the section parser
+     * Tests the section parser.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
@@ -45,19 +46,19 @@ class FieldDefinitionListTest extends BaseTest
             ),
         );
 
-        $this->contentTypeServiceMock->expects( $this->exactly( 2 ) )
-            ->method( 'loadFieldDefinition' )
-            ->with( $this->isType( 'string' ) );
+        $this->contentTypeServiceMock->expects($this->exactly(2))
+            ->method('loadFieldDefinition')
+            ->with($this->isType('string'));
 
-        $result = $fieldDefinitionListParser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $fieldDefinitionListParser->parse($inputArray, $this->getParsingDispatcherMock());
 
         $fieldDefinitionArray = $result->getFieldDefinitions();
 
-        $this->assertInternalType( 'array', $fieldDefinitionArray );
+        $this->assertInternalType('array', $fieldDefinitionArray);
     }
 
     /**
-     * Gets the section parser
+     * Gets the section parser.
      *
      * @return \eZ\Publish\Core\REST\Client\Input\Parser\FieldDefinitionList
      */
@@ -74,8 +75,7 @@ class FieldDefinitionListTest extends BaseTest
      */
     protected function getContentTypeServiceMock()
     {
-        if ( !isset( $this->contentTypeServiceMock ) )
-        {
+        if (!isset($this->contentTypeServiceMock)) {
             $this->contentTypeServiceMock = $this->getMock(
                 'eZ\\Publish\\Core\\REST\\Client\\ContentTypeService',
                 array(),
@@ -84,6 +84,7 @@ class FieldDefinitionListTest extends BaseTest
                 false
             );
         }
+
         return $this->contentTypeServiceMock;
     }
 }

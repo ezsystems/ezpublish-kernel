@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContentTypeGroup Id matcher class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,11 +22,11 @@ class ContentTypeGroup extends MultipleValued
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchLocation( APILocation $location )
+    public function matchLocation(APILocation $location)
     {
-        return $this->matchContentInfo( $location->getContentInfo() );
+        return $this->matchContentInfo($location->getContentInfo());
     }
 
     /**
@@ -32,19 +34,19 @@ class ContentTypeGroup extends MultipleValued
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchContentInfo( ContentInfo $contentInfo )
+    public function matchContentInfo(ContentInfo $contentInfo)
     {
         $contentTypeGroups = $this->repository
             ->getContentTypeService()
-            ->loadContentType( $contentInfo->contentTypeId )
+            ->loadContentType($contentInfo->contentTypeId)
             ->getContentTypeGroups();
 
-        foreach ( $contentTypeGroups as $group )
-        {
-            if ( isset( $this->values[$group->id] ) )
+        foreach ($contentTypeGroups as $group) {
+            if (isset($this->values[$group->id])) {
                 return true;
+            }
         }
 
         return false;

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContentViewInterface interface.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,7 +24,7 @@ interface ContentViewInterface
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      */
-    public function setTemplateIdentifier( $templateIdentifier );
+    public function setTemplateIdentifier($templateIdentifier);
 
     /**
      * Returns the registered template identifier.
@@ -37,14 +39,14 @@ interface ContentViewInterface
      *
      * @param array $parameters Hash of parameters
      */
-    public function setParameters( array $parameters );
+    public function setParameters(array $parameters);
 
     /**
      * Adds a hash of parameters to the existing parameters.
      *
      * @param array $parameters
      */
-    public function addParameters( array $parameters );
+    public function addParameters(array $parameters);
 
     /**
      * Returns registered parameters.
@@ -58,9 +60,9 @@ interface ContentViewInterface
      *
      * @param string $parameterName
      *
-     * @return boolean
+     * @return bool
      */
-    public function hasParameter( $parameterName );
+    public function hasParameter($parameterName);
 
     /**
      * Returns parameter value by $parameterName.
@@ -72,18 +74,18 @@ interface ContentViewInterface
      *
      * @return mixed
      */
-    public function getParameter( $parameterName );
+    public function getParameter($parameterName);
 
     /**
      * Injects the config hash that was used to match and generate the current view.
      * Typically, the hash would have as keys:
      *  - template : The template that has been matched
      *  - match : The matching configuration, including the matcher "identifier" and what has been passed to it.
-     *  - matcher : The matcher object
+     *  - matcher : The matcher object.
      *
      * @param array $config
      */
-    public function setConfigHash( array $config );
+    public function setConfigHash(array $config);
 
     /**
      * Returns the config hash.

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the BinaryProcessorTest class
+ * File containing the BinaryProcessorTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,26 +22,27 @@ class BinaryProcessorTest extends BinaryInputProcessorTest
      */
     public function testPostProcessValueHash()
     {
-        $path = 'application/815b3aa9.pdf';
+        $uri = '/var/ezdemo_site/storage/original/application/815b3aa9.pdf';
         $processor = $this->getProcessor();
 
         $inputHash = array(
-            'path' => $path,
+            'uri' => '/var/ezdemo_site/storage/original/application/815b3aa9.pdf',
         );
 
-        $outputHash = $processor->postProcessValueHash( $inputHash );
+        $outputHash = $processor->postProcessValueHash($inputHash);
 
+        $expectedUri = 'http://static.example.com' . $uri;
         $this->assertEquals(
             array(
-                'path' => $path,
-                'url' => str_replace( '{path}', $path, self::TEMPLATE_URL )
+                'url' => $expectedUri,
+                'uri' => $expectedUri,
             ),
             $outputHash
         );
     }
 
     /**
-     * Returns the processor under test
+     * Returns the processor under test.
      *
      * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryProcessor
      */
@@ -47,7 +50,7 @@ class BinaryProcessorTest extends BinaryInputProcessorTest
     {
         return new BinaryProcessor(
             $this->getTempDir(),
-            self::TEMPLATE_URL
+            'http://static.example.com'
         );
     }
 }

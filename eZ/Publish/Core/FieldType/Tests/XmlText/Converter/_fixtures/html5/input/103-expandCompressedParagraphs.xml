@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+  <paragraph class="pest">Speak, vision of the night, Tell me why you haunt me so.</paragraph>
+  <paragraph class="test">
+    Speak, ere the morning light, <anchor name="first"/>Whisper all my heart would know,
+  </paragraph>
+  <embed view="embed" size="small" align="left" object_id="42"/>
+  <paragraph class="test">
+    Dawn ever finds you gone, <anchor name="middle"/>Back to where the shadows dwell,
+  </paragraph>
+  <embed object_id="106" view="embed" size="medium" class="embedClass" align="left" custom:offset="10" custom:limit="5"/>
+  <paragraph class="test">
+    Speak, my beloved speak, <anchor name="last"/>Tho' you only say "Farewell".
+  </paragraph>
+  <paragraph class="nest">Speak! Speak!</paragraph>
+</section>

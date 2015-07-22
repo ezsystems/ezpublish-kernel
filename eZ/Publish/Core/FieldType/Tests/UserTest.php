@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the UserTest class
+ * File containing the UserTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,7 +13,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\User\Type as UserType;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
-use ReflectionObject;
 
 /**
  * @group fieldType
@@ -32,7 +33,10 @@ class UserTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new UserType();
+        $fieldType = new UserType();
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
+
+        return $fieldType;
     }
 
     /**
@@ -57,12 +61,10 @@ class UserTest extends FieldTypeTest
 
     /**
      * Returns the empty value expected from the field type.
-     *
-     * @return void
      */
     protected function getEmptyValueExpectation()
     {
-        return new UserValue;
+        return new UserValue();
     }
 
     /**
@@ -132,15 +134,15 @@ class UserTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new UserValue,
+                new UserValue(),
             ),
             array(
                 array(),
-                new UserValue( array() ),
+                new UserValue(array()),
             ),
             array(
-                new UserValue( array( 'login' => 'sindelfingen' ) ),
-                new UserValue( array( 'login' => 'sindelfingen' ) ),
+                new UserValue(array('login' => 'sindelfingen')),
+                new UserValue(array('login' => 'sindelfingen')),
             ),
             array(
                 $userData = array(
@@ -153,7 +155,7 @@ class UserTest extends FieldTypeTest
                     'enabled' => true,
                     'maxLogin' => 1000,
                 ),
-                new UserValue( $userData ),
+                new UserValue($userData),
             ),
             array(
                 new UserValue(
@@ -168,13 +170,13 @@ class UserTest extends FieldTypeTest
                         'maxLogin' => 1000,
                     )
                 ),
-                new UserValue( $userData ),
+                new UserValue($userData),
             ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -214,8 +216,8 @@ class UserTest extends FieldTypeTest
     {
         return array(
             array(
-                new UserValue,
-                null
+                new UserValue(),
+                null,
             ),
             array(
                 new UserValue(
@@ -236,7 +238,7 @@ class UserTest extends FieldTypeTest
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -277,7 +279,7 @@ class UserTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new UserValue,
+                new UserValue(),
             ),
             array(
                 $userData = array(
@@ -290,8 +292,21 @@ class UserTest extends FieldTypeTest
                     'enabled' => true,
                     'maxLogin' => 1000,
                 ),
-                new UserValue( $userData ),
+                new UserValue($userData),
             ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezuser';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array($this->getEmptyValueExpectation(), ''),
+            array(new UserValue(array('login' => 'johndoe')), 'johndoe'),
         );
     }
 }

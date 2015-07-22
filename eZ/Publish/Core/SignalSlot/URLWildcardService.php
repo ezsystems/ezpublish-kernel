@@ -1,9 +1,11 @@
 <?php
+
 /**
- * URLWildcardService class
+ * URLWildcardService class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,27 +18,26 @@ use eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\RemoveSignal;
 use eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\TranslateSignal;
 
 /**
- * URLWildcardService class
- * @package eZ\Publish\Core\SignalSlot
+ * URLWildcardService class.
  */
 class URLWildcardService implements URLWildcardServiceInterface
 {
     /**
-     * Aggregated service
+     * Aggregated service.
      *
      * @var \eZ\Publish\API\Repository\URLWildcardService
      */
     protected $service;
 
     /**
-     * SignalDispatcher
+     * SignalDispatcher.
      *
      * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * Construct service object from aggregated service and signal
      * dispatcher
@@ -44,14 +45,14 @@ class URLWildcardService implements URLWildcardServiceInterface
      * @param \eZ\Publish\API\Repository\URLWildcardService $service
      * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
      */
-    public function __construct( URLWildcardServiceInterface $service, SignalDispatcher $signalDispatcher )
+    public function __construct(URLWildcardServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->signalDispatcher = $signalDispatcher;
     }
 
     /**
-     * Creates a new url wildcard
+     * Creates a new url wildcard.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the $sourceUrl pattern already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create url wildcards
@@ -61,13 +62,13 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @param string $sourceUrl
      * @param string $destinationUrl
-     * @param boolean $forward
+     * @param bool $forward
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
-    public function create( $sourceUrl, $destinationUrl, $forward = false )
+    public function create($sourceUrl, $destinationUrl, $forward = false)
     {
-        $returnValue = $this->service->create( $sourceUrl, $destinationUrl, $forward );
+        $returnValue = $this->service->create($sourceUrl, $destinationUrl, $forward);
         $this->signalDispatcher->emit(
             new CreateSignal(
                 array(
@@ -75,19 +76,20 @@ class URLWildcardService implements URLWildcardServiceInterface
                 )
             )
         );
+
         return $returnValue;
     }
 
     /**
-     * removes an url wildcard
+     * removes an url wildcard.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to remove url wildcards
      *
      * @param \eZ\Publish\API\Repository\Values\Content\URLWildcard $urlWildcard the url wildcard to remove
      */
-    public function remove( URLWildcard $urlWildcard )
+    public function remove(URLWildcard $urlWildcard)
     {
-        $returnValue = $this->service->remove( $urlWildcard );
+        $returnValue = $this->service->remove($urlWildcard);
         $this->signalDispatcher->emit(
             new RemoveSignal(
                 array(
@@ -95,11 +97,12 @@ class URLWildcardService implements URLWildcardServiceInterface
                 )
             )
         );
+
         return $returnValue;
     }
 
     /**
-     * Loads a url wild card
+     * Loads a url wild card.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
      *
@@ -107,22 +110,22 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
-    public function load( $id )
+    public function load($id)
     {
-        return $this->service->load( $id );
+        return $this->service->load($id);
     }
 
     /**
-     * Loads all url wild card (paged)
+     * Loads all url wild card (paged).
      *
      * @param int $offset
      * @param int $limit
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard[]
      */
-    public function loadAll( $offset = 0, $limit = -1 )
+    public function loadAll($offset = 0, $limit = -1)
     {
-        return $this->service->loadAll( $offset, $limit );
+        return $this->service->loadAll($offset, $limit);
     }
 
     /**
@@ -138,9 +141,9 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult
      */
-    public function translate( $url )
+    public function translate($url)
     {
-        $returnValue = $this->service->translate( $url );
+        $returnValue = $this->service->translate($url);
         $this->signalDispatcher->emit(
             new TranslateSignal(
                 array(
@@ -148,6 +151,7 @@ class URLWildcardService implements URLWildcardServiceInterface
                 )
             )
         );
+
         return $returnValue;
     }
 }

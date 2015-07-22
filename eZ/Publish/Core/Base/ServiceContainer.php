@@ -1,403 +1,250 @@
 <?php
+
 /**
- * Service Container class
+ * File containing ServiceContainer class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\Base;
 
-use eZ\Publish\Core\Base\Exceptions\BadConfiguration;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Base\Exceptions\MissingClass;
 use eZ\Publish\API\Container;
-use ReflectionClass;
+use Symfony\Component\Config\ConfigCache;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use Symfony\Bridge\ProxyManager\LazyProxy\PhpDumper\ProxyDumper;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use RuntimeException;
 
 /**
- * Service container class
- *
- * A dependency injection container that uses configuration for defining dependencies.
- *
- * Usage:
- *
- *     $sc = new eZ\Publish\Core\Base\ServiceContainer( $configManager->getConfiguration( 'service' )->getAll() );
- *     $sc->getRepository->getContentService()...;
- *
- * Or overriding $dependencies (in unit tests):
- * ( $dependencies keys should have same value as service.ini "arguments" values explained bellow )
- *
- *     $sc = new eZ\Publish\Core\Base\ServiceContainer(
- *         $configManager->getConfiguration( 'service' )->getAll(),
- *         array(
- *             '@persistence_handler' => new \eZ\Publish\Core\Persistence\InMemory\Handler()
- *         )
- *     );
- *     $sc->getRepository->getContentService()...;
- *
- * Settings are defined in service.ini like the following example:
- *
- *     [repository]
- *     class=eZ\Publish\Core\Base\Repository
- *     arguments[persistence_handler]=@persistence_handler_inmemory
- *
- *     [persistence_handler_inmemory]
- *     class=eZ\Publish\Core\Persistence\InMemory\Handler
- *
- *     # @see \eZ\Publish\Core\settings\service.ini For more options and examples.
- *
- * "arguments" values in service.ini can start with either @ in case of other services being dependency, $ if a
- * predefined global variable is to be used ( currently: $_SERVER, $_REQUEST, $_COOKIE, $_FILES )
- * or plain scalar if that is to be given directly as argument value.
- * If the argument value starts with %, then it is a lazy loaded service provided as a callback (closure).
+ * Container implementation wrapping Symfony container component.
+ * Provides cache generation.
  */
 class ServiceContainer implements Container
 {
     /**
-     * Holds service objects and variables
+     * Holds class name for generated container cache.
      *
-     * @var object[]
+     * @var string
      */
-    private $dependencies;
+    protected $containerClassName = 'EzPublishPublicAPIServiceContainer';
 
     /**
-     * Array of optional settings overrides
+     * Holds inner Symfony container instance.
      *
-     * @var array[]
+     * @var \Symfony\Component\DependencyInjection\Container|\Symfony\Component\DependencyInjection\ContainerBuilder
      */
-    private $settings;
+    protected $innerContainer;
 
     /**
-     * Construct object with optional configuration overrides
+     * Holds installation directory path.
      *
-     * @param array $settings Services settings
-     * @param mixed[]|object[] $dependencies Optional initial dependencies
+     * @var string
      */
-    public function __construct( array $settings, array $dependencies = array() )
+    protected $installDir;
+
+    /**
+     * Holds cache directory path.
+     *
+     * @var string
+     */
+    protected $cacheDir;
+
+    /**
+     * Holds debug flag for cache service.
+     *
+     * @var bool
+     */
+    protected $debug;
+
+    /**
+     * Holds flag whether cache should be bypassed.
+     *
+     * @var bool
+     */
+    protected $bypassCache;
+
+    /**
+     * @param string|ContainerInterface $container Path to the container file or container instance
+     * @param string $installDir Installation directory, required by default 'containerBuilder.php' file
+     * @param string $cacheDir Directory where PHP container cache will be stored
+     * @param bool $debug Default false should be used for production, if true resources will be checked
+     *                    and cache will be regenerated if necessary
+     * @param bool $bypassCache Default false should be used for production, if true completely bypasses the cache
+     */
+    public function __construct($container, $installDir, $cacheDir, $debug = false, $bypassCache = false)
     {
-        // Set parameters as $dependencies, globals and settings parameters
-        $parameters = array(
-            '$_SERVER' => $_SERVER,
-            '$_REQUEST' => $_REQUEST,
-            '$_COOKIE' => $_COOKIE,
-            '$_FILES' => $_FILES,
-            '$_POST' => $_POST,
-            '$_GET' => $_GET,
-        );
+        $this->innerContainer = $container;
+        $this->installDir = $installDir;
+        $this->cacheDir = $cacheDir;
+        $this->debug = $debug;
+        $this->bypassCache = $bypassCache;
 
-        if ( !empty( $settings['parameters'] ) )
-        {
-            foreach ( $settings['parameters'] as $parameterKey => $parameter )
-            {
-                $parameters['$' . $parameterKey ] = $parameter;
-            }
-            unset( $settings['parameters'] );
-        }
-
-        // Set properties
-        $this->settings = $settings;
-        $this->dependencies = $dependencies + $parameters;
+        $this->initializeContainer();
     }
 
     /**
-     * Service function to get Repository object
+     * Get Repository object.
      *
-     * Alias with type hints for $repo->get( 'repository' );
-     *
-     * @uses get()
+     * Public API for
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
     public function getRepository()
     {
-        if ( isset( $this->dependencies['@repository'] ) )
-            return $this->dependencies['@repository'];
-        return $this->get( 'repository' );
+        return $this->innerContainer->get('ezpublish.api.repository');
     }
 
     /**
-     * Get a variable dependency
-     *
-     * @param string $variable
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
-     *
-     * @return mixed
+     * @return \Symfony\Component\DependencyInjection\ContainerBuilder
      */
-    public function getVariable( $variable )
+    public function getInnerContainer()
     {
-        $variableKey = "\${$variable}";
-        if ( isset( $this->dependencies[$variableKey] ) )
-        {
-            return $this->dependencies[$variableKey];
-        }
-
-        throw new InvalidArgumentException(
-            "{$variableKey}",
-            'Could not find this variable among existing dependencies'
-        );
+        return $this->innerContainer;
     }
 
     /**
-     * Get service by name
+     * Convenience method to inner container.
      *
-     * @uses lookupArguments()
-     * @throws \eZ\Publish\Core\Base\Exceptions\BadConfiguration
-     * @throws \eZ\Publish\Core\Base\Exceptions\MissingClass
-     * @param string $serviceName
+     * @param string $id
      *
      * @return object
      */
-    public function get( $serviceName )
+    public function get($id)
     {
-        // If you have endless loop here; Congrats, you have recursive aliases!
-        do
-        {
-            // Return directly if it already exists
-            if ( isset( $this->dependencies["@{$serviceName}"] ) )
-                return $this->dependencies["@{$serviceName}"];
-
-            // Validate settings
-            if ( empty( $this->settings[$serviceName] ) )
-                throw new BadConfiguration( "service\\[{$serviceName}]", "no settings exist for '{$serviceName}'" );
-
-            $origServiceName = $serviceName;
-            if ( isset( $this->settings[$serviceName]['alias'] ) )
-                $serviceName = $this->settings[$serviceName]['alias'];
-        }
-        while ( $origServiceName !== $serviceName );
-
-        $settings = $this->settings[$serviceName] + array( 'shared' => true );
-        if ( empty( $settings['class'] ) )
-        {
-            throw new BadConfiguration( "service\\[{$serviceName}]\\class", 'class setting is not defined' );
-        }
-        else if ( !class_exists( $settings['class'] ) )
-        {
-            throw new MissingClass( $settings['class'], 'service' );
-        }
-
-        // Expand arguments with other service objects on arguments that start with @ and predefined variables that start with $
-        if ( !empty( $settings['arguments'] ) )
-        {
-            $arguments = $this->lookupArguments( $settings['arguments'], true );
-        }
-        else
-        {
-            $arguments = array();
-        }
-
-        // Create new object
-        if ( !empty( $settings['factory'] ) )
-        {
-            $serviceObject = call_user_func_array( "{$settings['class']}::{$settings['factory']}", $arguments );
-        }
-        else if ( empty( $arguments ) )
-        {
-            $serviceObject = new $settings['class']();
-        }
-        else if ( isset( $arguments[0] ) && !isset( $arguments[2] ) )
-        {
-            if ( !isset( $arguments[1] ) )
-                $serviceObject = new $settings['class']( $arguments[0] );
-            else
-                $serviceObject = new $settings['class']( $arguments[0], $arguments[1] );
-        }
-        else
-        {
-            $reflectionObj = new ReflectionClass( $settings['class'] );
-            $serviceObject = $reflectionObj->newInstanceArgs( $arguments );
-        }
-
-        if ( $settings['shared'] )
-            $this->dependencies["@{$serviceName}"] = $serviceObject;
-
-        if ( !empty( $settings['method'] ) )
-        {
-            $list = $this->recursivelyLookupArguments( $settings['method'] );
-            foreach ( $list as $methodName => $arguments )
-            {
-                foreach ( $arguments as $argumentKey => $argumentValue )
-                    $serviceObject->$methodName( $argumentValue, $argumentKey );
-            }
-        }
-
-        return $serviceObject;
+        return $this->innerContainer->get($id);
     }
 
     /**
-     * Lookup arguments for variable, service or arrays for recursive lookup
+     * Convenience method to inner container.
      *
-     * 1. Does not keep keys of first level arguments
-     * 2. Exists loop when it encounters optional non existing service dependencies
+     * @param string $name
      *
-     * @uses getServiceArgument()
-     * @uses recursivelyLookupArguments()
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If undefined variable is used.
-     * @param array $arguments
-     * @param boolean $recursively
-     *
-     * @return array
+     * @return mixed
      */
-    protected function lookupArguments( array $arguments, $recursively = false )
+    public function getParameter($name)
     {
-        $builtArguments = array();
-        foreach ( $arguments as $argument )
-        {
-            if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@' || $argument[0] === '%' ) )
-            {
-                $serviceObject = $this->getServiceArgument( $argument );
-                if ( $argument[1] === '?' && $serviceObject === null )
-                    break;
-
-                $builtArguments[] = $serviceObject;
-            }
-            else if ( $recursively && is_array( $argument ) )
-            {
-                $builtArguments[] = $this->recursivelyLookupArguments( $argument );
-            }
-            // Scalar values
-            else
-            {
-                $builtArguments[] = $argument;
-            }
-        }
-        return $builtArguments;
+        return $this->innerContainer->getParameter($name);
     }
 
     /**
-     * Lookup arguments for variable, service or arrays for recursive lookup
+     * Initializes inner container.
      *
-     * 1. Keep keys of arguments
-     * 2. Does not exit loop on optional non existing service dependencies
-     *
-     * @uses getServiceArgument()
-     * @uses recursivelyLookupArguments()
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If undefined variable is used.
-     * @param array $arguments
-     *
-     * @return array
+     * @throws \RuntimeException
      */
-    protected function recursivelyLookupArguments( array $arguments )
+    protected function initializeContainer()
     {
-        $builtArguments = array();
-        foreach ( $arguments as $key => $argument )
-        {
-            if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@' || $argument[0] === '%' ) )
-            {
-                $serviceObject = $this->getServiceArgument( $argument );
-                if ( $argument[1] !== '?' || $serviceObject !== null )
-                    $builtArguments[$key] = $serviceObject;
-            }
-            else if ( is_array( $argument ) )
-            {
-                $builtArguments[$key] = $this->recursivelyLookupArguments( $argument );
-            }
-            // Scalar values
-            else
-            {
-                $builtArguments[$key] = $argument;
-            }
+        // First check if cache should be bypassed
+        if ($this->bypassCache) {
+            $this->getContainer();
+
+            return;
         }
-        return $builtArguments;
+
+        // Prepare cache directory
+        $this->prepareDirectory($this->cacheDir, 'cache');
+
+        // Instantiate cache
+        $cache = new ConfigCache(
+            $this->cacheDir . '/container/' . $this->containerClassName . '.php',
+            $this->debug
+        );
+
+        // Check if cache needs to be regenerated, depends on debug being set to true
+        if (!$cache->isFresh()) {
+            $this->getContainer();
+            $this->dumpContainer($cache);
+        }
+
+        // Include container cache
+        require_once $cache;
+
+        // Instantiate container
+        $this->innerContainer = new $this->containerClassName();
     }
 
     /**
-     * @uses getListOfExtendedServices()
-     * @uses recursivelyLookupArguments()
-     * @param string $argument
+     * Returns ContainerBuilder by including the default file 'containerBuilder.php' from settings directory.
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
-     *
-     * @return array|closure|mixed|object|null Null on non existing optional dependencies
+     * @throws \RuntimeException
      */
-    protected function getServiceArgument( $argument )
+    protected function getContainer()
     {
-        $function = '';
-        $serviceContainer = $this;
-        // callback
-        if ( stripos( $argument, '::' ) !== false )
-            list( $argument, $function  ) = explode( '::', $argument );
-
-        // expand extended services
-        if ( ( $argument[0] === '%' || $argument[0] === '@' ) && $argument[1] === ':' )
-        {
-            return $this->recursivelyLookupArguments( $this->getListOfExtendedServices( $argument, $function ) );
-        }
-        // lazy loaded services
-        else if ( $argument[0] === '%' )
-        {
-            // Optional dependency handling
-            if ( $argument[1] === '?' && !isset( $this->settings[substr( $argument, 2 )] ) )
-                return null;
-
-            if ( $function !== '' )
-                return function () use ( $serviceContainer, $argument, $function )
-                {
-                    $serviceObject = $serviceContainer->get( ltrim( $argument, '%' ) );
-                    return call_user_func_array( array( $serviceObject, $function ), func_get_args() );
-                };
-            else
-                return function () use ( $serviceContainer, $argument )
-                {
-                    return $serviceContainer->get( ltrim( $argument, '%' ) );
-                };
-        }
-        // Existing dependencies (@Service / $Variable)
-        else if ( isset( $this->dependencies[ $argument ] ) )
-        {
-            $serviceObject = $this->dependencies[ $argument ];
-        }
-        // Undefined variables will trow an exception
-        else if ( $argument[0] === '$' )
-        {
-            // Optional dependency handling
-            if ( $argument[1] === '?' )
-                return null;
-
-            throw new InvalidArgumentValue( "\$arguments", $argument );
-        }
-        // Try to load a @service dependency
-        else
-        {
-            // Optional dependency handling
-            if ( $argument[1] === '?' && !isset( $this->settings[substr( $argument, 2 )] ) )
-                return null;
-
-            $serviceObject = $this->get( ltrim( $argument, '@' ) );
+        if ($this->innerContainer instanceof ContainerInterface) {
+            // Do nothing
+        } elseif (!is_readable($this->innerContainer)) {
+            throw new RuntimeException(
+                sprintf(
+                    "Unable to read file %s\n",
+                    $this->innerContainer
+                )
+            );
+        } else {
+            // 'containerBuilder.php' file expects $installDir variable to be set by caller
+            $installDir = $this->installDir;
+            $this->innerContainer = require_once $this->innerContainer;
         }
 
-        if ( $function !== '' )
-            return array( $serviceObject, $function );
-
-        return $serviceObject;
+        // Compile container if necessary
+        if ($this->innerContainer instanceof ContainerBuilder && !$this->innerContainer->isFrozen()) {
+            $this->innerContainer->compile();
+        }
     }
 
     /**
-     * @param string $parent Eg: %:controller
-     * @param string $function Optional function string
+     * Dumps the service container to PHP code in the cache.
      *
-     * @return array
+     * @param \Symfony\Component\Config\ConfigCache $cache
      */
-    protected function getListOfExtendedServices( $parent, $function = '' )
+    protected function dumpContainer(ConfigCache $cache)
     {
-        $prefix = $parent[0];
-        $parent = ltrim( $parent, '@%' );// Keep starting ':' on parent for easier matching bellow
-        $services = array();
-        if ( $function !== '' )
-            $function = '::' . $function;
+        $dumper = new PhpDumper($this->innerContainer);
 
-        foreach ( $this->settings as $service => $settings )
-        {
-            if ( stripos( $service, $parent ) !== false &&
-                 !empty( $settings['class'] ) &&
-                 preg_match( "/^(?P<prefix>[\w:]+){$parent}$/", $service, $match ) )
-            {
-                $services[$match['prefix']] = $prefix . $match['prefix'] . $parent . $function;
-            }
+        if (class_exists('ProxyManager\Configuration')) {
+            $dumper->setProxyDumper(new ProxyDumper());
         }
-        return $services;
+
+        $content = $dumper->dump(
+            array(
+                'class' => $this->containerClassName,
+                'base_class' => 'Container',
+            )
+        );
+
+        $cache->write($content, $this->innerContainer->getResources());
+    }
+
+    /**
+     * Checks for existence of given $directory and tries to create it if found missing.
+     *
+     * @throws \RuntimeException
+     *
+     * @param string $directory Path to the directory
+     * @param string $name Used for exception message
+     */
+    protected function prepareDirectory($directory, $name)
+    {
+        if (!is_dir($directory)) {
+            if (false === @mkdir($directory, 0777, true)) {
+                throw new RuntimeException(
+                    sprintf(
+                        "Unable to create the %s directory (%s)\n",
+                        $name,
+                        $directory
+                    )
+                );
+            }
+        } elseif (!is_writable($directory)) {
+            throw new RuntimeException(
+                sprintf(
+                    "Unable to write in the %s directory (%s)\n",
+                    $name,
+                    $directory
+                )
+            );
+        }
     }
 }

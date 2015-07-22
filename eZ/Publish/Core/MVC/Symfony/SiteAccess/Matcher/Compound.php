@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the abstract Compound Siteaccess matcher.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,7 +28,10 @@ abstract class Compound implements CompoundInterface, URILexer
     protected $config;
 
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher[]
+     * Matchers map.
+     * Consists of an array of matchers, grouped by ruleset (so array of array of matchers).
+     *
+     * @var array
      */
     protected $matchersMap = array();
 
@@ -45,63 +50,67 @@ abstract class Compound implements CompoundInterface, URILexer
      */
     protected $request;
 
-    public function __construct( array $config )
+    public function __construct(array $config)
     {
         $this->config = $config;
         $this->matchersMap = array();
     }
 
-    public function setMatcherBuilder( MatcherBuilderInterface $matcherBuidler )
+    public function setMatcherBuilder(MatcherBuilderInterface $matcherBuilder)
     {
-        $this->matcherBuilder = $matcherBuidler;
-        foreach ( $this->config as $i => $rule )
-        {
-            foreach ( $rule['matchers'] as $matcherClass => $matchingConfig )
-            {
-                $this->matchersMap[$i][$matcherClass] = $matcherBuidler->buildMatcher( $matcherClass, $matchingConfig, $this->request );
+        $this->matcherBuilder = $matcherBuilder;
+        foreach ($this->config as $i => $rule) {
+            foreach ($rule['matchers'] as $matcherClass => $matchingConfig) {
+                $this->matchersMap[$i][$matcherClass] = $matcherBuilder->buildMatcher($matcherClass, $matchingConfig, $this->request);
             }
         }
     }
 
-    public function setRequest( SimplifiedRequest $request )
+    public function setRequest(SimplifiedRequest $request)
     {
         $this->request = $request;
+        foreach ($this->matchersMap as $ruleset) {
+            foreach ($ruleset as $matcher) {
+                $matcher->setRequest($request);
+            }
+        }
     }
 
-    public function analyseURI( $uri )
+    public function getRequest()
     {
-        foreach ( $this->getSubMatchers() as $matcher )
-        {
-            if ( $matcher instanceof URILexer )
-            {
-                $uri = $matcher->analyseURI( $uri );
+        return $this->request;
+    }
+
+    public function analyseURI($uri)
+    {
+        foreach ($this->getSubMatchers() as $matcher) {
+            if ($matcher instanceof URILexer) {
+                $uri = $matcher->analyseURI($uri);
             }
         }
 
         return $uri;
     }
 
-    public function analyseLink( $linkUri )
+    public function analyseLink($linkUri)
     {
-        foreach ( $this->getSubMatchers() as $matcher )
-        {
-            if ( $matcher instanceof URILexer )
-            {
-                $linkUri = $matcher->analyseLink( $linkUri );
+        foreach ($this->getSubMatchers() as $matcher) {
+            if ($matcher instanceof URILexer) {
+                $linkUri = $matcher->analyseLink($linkUri);
             }
         }
 
         return $linkUri;
     }
 
-    /**
-     * Returns all used sub-matchers.
-     *
-     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher[]
-     */
     public function getSubMatchers()
     {
         return $this->subMatchers;
+    }
+
+    public function setSubMatchers(array $subMatchers)
+    {
+        $this->subMatchers = $subMatchers;
     }
 
     /**
@@ -117,7 +126,19 @@ abstract class Compound implements CompoundInterface, URILexer
            static::NAME . '(' .
            implode(
                ', ',
-               array_keys( $this->getSubMatchers() )
+               array_keys($this->getSubMatchers())
            ) . ')';
+    }
+
+    /**
+     * Serialization occurs when serializing the siteaccess for subrequests.
+     *
+     * @see \eZ\Bundle\EzPublishCoreBundle\Fragment\FragmentUriGenerator::generateFragmentUri()
+     */
+    public function __sleep()
+    {
+        // We don't need the whole matcher map and the matcher builder once serialized.
+        // config property is not needed either as it's only needed for matching.
+        return array('subMatchers');
     }
 }

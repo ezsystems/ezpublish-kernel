@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
+         xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
+         version="5.0-variant ezpublish-1.0">
+  <title ezxhtml:level="2">Heading 2</title>
+  <title ezxhtml:level="2">Heading 2</title>
+  <title ezxhtml:level="3">Heading 3</title>
+  <informaltable border="1" class="class1" style="border-width:1px;" title="summary1" width="100%">
+    <tbody>
+      <tr>
+        <td>
+          <title ezxhtml:level="2">Heading 2</title>
+          <title ezxhtml:level="2">Heading 2</title>
+          <title ezxhtml:level="3">Heading 3</title>
+          <title ezxhtml:level="3">Heading 3</title>
+          <informaltable border="1" class="class2" style="border-width:1px;" title="summary2" width="100%">
+            <tbody>
+              <tr>
+                <td>
+                  <title ezxhtml:level="2">Heading 2</title>
+                  <title ezxhtml:level="3">Heading 3</title>
+                </td>
+              </tr>
+            </tbody>
+          </informaltable>
+        </td>
+      </tr>
+    </tbody>
+  </informaltable>
+</section>

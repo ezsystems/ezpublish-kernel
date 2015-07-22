@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Time Value class
+ * File containing the Time Value class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,10 +15,9 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use Exception;
 use DateTime;
-use DateTimeZone;
 
 /**
- * Value for Time field type
+ * Value for Time field type.
  */
 class Value extends BaseValue
 {
@@ -32,14 +33,14 @@ class Value extends BaseValue
      *
      * @var string
      */
-    public $stringFormat = "H:i:s";
+    public $stringFormat = 'H:i:s';
 
     /**
      * Construct a new Value object and initialize it with $seconds as number of seconds from beginning of day.
      *
      * @param mixed $seconds
      */
-    public function __construct( $seconds = null )
+    public function __construct($seconds = null)
     {
         $this->time = $seconds;
     }
@@ -51,10 +52,11 @@ class Value extends BaseValue
      *
      * @return \eZ\Publish\Core\FieldType\Time\Value
      */
-    public static function fromDateTime( DateTime $dateTime )
+    public static function fromDateTime(DateTime $dateTime)
     {
         $dateTime = clone $dateTime;
-        return new static( $dateTime->getTimestamp() - $dateTime->setTime( 0, 0, 0 )->getTimestamp() );
+
+        return new static($dateTime->getTimestamp() - $dateTime->setTime(0, 0, 0)->getTimestamp());
     }
 
     /**
@@ -66,15 +68,12 @@ class Value extends BaseValue
      *
      * @return \eZ\Publish\Core\FieldType\Time\Value
      */
-    public static function fromString( $timeString )
+    public static function fromString($timeString)
     {
-        try
-        {
-            return static::fromDateTime( new DateTime( $timeString ) );
-        }
-        catch ( Exception $e )
-        {
-            throw new InvalidArgumentValue( '$timeString', $timeString, __CLASS__, $e );
+        try {
+            return static::fromDateTime(new DateTime($timeString));
+        } catch (Exception $e) {
+            throw new InvalidArgumentValue('$timeString', $timeString, __CLASS__, $e);
         }
     }
 
@@ -87,17 +86,15 @@ class Value extends BaseValue
      *
      * @return static
      */
-    public static function fromTimestamp( $timestamp )
+    public static function fromTimestamp($timestamp)
     {
-        try
-        {
+        try {
             $dateTime = new DateTime();
-            $dateTime->setTimestamp( $timestamp );
-            return static::fromDateTime( $dateTime );
-        }
-        catch ( Exception $e )
-        {
-            throw new InvalidArgumentValue( '$timestamp', $timestamp, __CLASS__, $e );
+            $dateTime->setTimestamp($timestamp);
+
+            return static::fromDateTime($dateTime);
+        } catch (Exception $e) {
+            throw new InvalidArgumentValue('$timestamp', $timestamp, __CLASS__, $e);
         }
     }
 
@@ -106,12 +103,12 @@ class Value extends BaseValue
      */
     public function __toString()
     {
-        if ( $this->time === null )
-        {
-            return "";
+        if ($this->time === null) {
+            return '';
         }
 
-        $dateTime = new DateTime( "@{$this->time}" );
-        return $dateTime->format( $this->stringFormat );
+        $dateTime = new DateTime("@{$this->time}");
+
+        return $dateTime->format($this->stringFormat);
     }
 }

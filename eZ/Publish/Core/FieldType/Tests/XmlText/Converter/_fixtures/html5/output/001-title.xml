@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5">
+  <a id="eztoc_1_1"/>
+  <h2 class="titleClass">This is a heading.</h2>
+  <a id="eztoc_2_1"/>
+  <h2 align="left" class="titleClass2">This is a left aligned heading.</h2>
+  <a id="eztoc_3_1_1"/>
+  <h3 align="center">This is a centered heading.</h3>
+  <a id="eztoc_4_1_1"/>
+  <h3 align="right">This is a right aligned heading.</h3>
+  <a id="eztoc_5_1_1"/>
+  <h3 align="justify">This is a justified heading.</h3>
+</section>

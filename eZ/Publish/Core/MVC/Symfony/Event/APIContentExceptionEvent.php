@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the APIExceptionEvent class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -34,7 +36,7 @@ class APIContentExceptionEvent extends Event
      */
     private $contentMeta;
 
-    public function __construct( Exception $apiException, array $contentMeta )
+    public function __construct(Exception $apiException, array $contentMeta)
     {
         $this->apiException = $apiException;
         $this->contentMeta = $contentMeta;
@@ -54,7 +56,7 @@ class APIContentExceptionEvent extends Event
      *
      * @param \eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface $contentView
      */
-    public function setContentView( ContentViewInterface $contentView )
+    public function setContentView(ContentViewInterface $contentView)
     {
         $this->contentView = $contentView;
     }
@@ -68,11 +70,11 @@ class APIContentExceptionEvent extends Event
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasContentView()
     {
-        return isset( $this->contentView );
+        return isset($this->contentView);
     }
 
     /**

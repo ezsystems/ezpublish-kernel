@@ -1,0 +1,143 @@
+parameters:
+    # Redefining default ezfloat field type class with the implementation that defines the type
+    # as searchable. Needed in order to test searching wiht Solr engine.
+    ezpublish.fieldType.ezfloat.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableFloat
+    # Redefining default ezimage field type class with the implementation that defines the type
+    # as searchable. Needed in order to test searching wiht Solr engine.
+    ezpublish.fieldType.ezimage.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableImage
+    # Redefining default eztext field type class with the implementation that defines the type
+    # as searchable. Needed in order to test searching wiht Solr engine.
+    ezpublish.fieldType.eztext.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableTextBlock
+    # Redefining default ezmedia field type class with the implementation that defines the type
+    # as searchable. Needed in order to test searching wiht Solr engine.
+    ezpublish.fieldType.ezmedia.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableMedia
+    languages:
+        - eng-US
+        - eng-GB
+    ezpublish.cache_pool.spi.cache.decorator.class: eZ\Publish\Core\Persistence\Cache\Tests\Helpers\IntegrationTestCacheServiceDecorator
+    ignored_storage_files:
+        -
+            var/ezdemo_site/storage/images/design/plain-site/172-2-eng-US/eZ-Publish-Demo-Design-without-demo-content1.png
+    ezpublish.solr.endpoint.class: eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint
+
+    ezpublish.search.solr.content.entry_endpoints:
+          - endpoint0
+    ezpublish.search.solr.content.cluster_endpoints:
+          eng-GB: endpoint0
+          eng-US: endpoint1
+          por-PT: endpoint2
+          ger-DE: endpoint3
+    ezpublish.search.solr.content.default_endpoint: null
+    ezpublish.search.solr.content.main_translations_endpoint: null
+    ezpublish.search.solr.location.entry_endpoints:
+          - endpoint0
+    ezpublish.search.solr.location.cluster_endpoints:
+          eng-GB: endpoint4
+          eng-US: endpoint5
+          por-PT: endpoint6
+          ger-DE: endpoint7
+    ezpublish.search.solr.location.default_endpoint: null
+    ezpublish.search.solr.location.main_translations_endpoint: null
+
+services:
+    ezpublish.cache_pool.spi.cache.decorator:
+        class: %ezpublish.cache_pool.spi.cache.decorator.class%
+
+    ezpublish.spi.search_engine:
+        alias: ezpublish.spi.search.solr
+
+    ezpublish.search.solr.endpoint.endpoint0:
+        class: %ezpublish.solr.endpoint.class%
+        arguments:
+            -
+                scheme: http
+                host: localhost
+                port: 8983
+                path: /solr
+                core: core0
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: endpoint0}
+
+    ezpublish.search.solr.endpoint.endpoint1:
+        class: %ezpublish.solr.endpoint.class%
+        arguments:
+            -
+                scheme: http
+                host: localhost
+                port: 8983
+                path: /solr
+                core: core1
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: endpoint1}
+
+    ezpublish.search.solr.endpoint.endpoint2:
+        class: %ezpublish.solr.endpoint.class%
+        arguments:
+            -
+                scheme: http
+                host: localhost
+                port: 8983
+                path: /solr
+                core: core2
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: endpoint2}
+
+    ezpublish.search.solr.endpoint.endpoint3:
+        class: %ezpublish.solr.endpoint.class%
+        arguments:
+            -
+                scheme: http
+                host: localhost
+                port: 8983
+                path: /solr
+                core: core3
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: endpoint3}
+
+    ezpublish.search.solr.endpoint.endpoint4:
+        class: %ezpublish.solr.endpoint.class%
+        arguments:
+            -
+                scheme: http
+                host: localhost
+                port: 8983
+                path: /solr
+                core: core4
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: endpoint4}
+
+    ezpublish.search.solr.endpoint.endpoint5:
+        class: %ezpublish.solr.endpoint.class%
+        arguments:
+            -
+                scheme: http
+                host: localhost
+                port: 8983
+                path: /solr
+                core: core5
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: endpoint5}
+
+    ezpublish.search.solr.endpoint.endpoint6:
+        class: %ezpublish.solr.endpoint.class%
+        arguments:
+            -
+                scheme: http
+                host: localhost
+                port: 8983
+                path: /solr
+                core: core6
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: endpoint6}
+
+    ezpublish.search.solr.endpoint.endpoint7:
+        class: %ezpublish.solr.endpoint.class%
+        arguments:
+            -
+                scheme: http
+                host: localhost
+                port: 8983
+                path: /solr
+                core: core7
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: endpoint7}

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ParameterProviderRegistry class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,9 +24,9 @@ class ParameterProviderRegistry implements ParameterProviderRegistryInterface
      *
      * @return bool
      */
-    public function hasParameterProvider( $fieldTypeIdentifier )
+    public function hasParameterProvider($fieldTypeIdentifier)
     {
-        return isset( $this->providers[$fieldTypeIdentifier] );
+        return isset($this->providers[$fieldTypeIdentifier]);
     }
 
     /**
@@ -36,10 +38,11 @@ class ParameterProviderRegistry implements ParameterProviderRegistryInterface
      *
      * @return \eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderInterface
      */
-    public function getParameterProvider( $fieldTypeIdentifier )
+    public function getParameterProvider($fieldTypeIdentifier)
     {
-        if ( !isset( $this->providers[$fieldTypeIdentifier] ) )
-            throw new InvalidArgumentException( "No parameter provider found for '$fieldTypeIdentifier' field type." );
+        if (!isset($this->providers[$fieldTypeIdentifier])) {
+            throw new InvalidArgumentException("No parameter provider found for '$fieldTypeIdentifier' field type.");
+        }
 
         return $this->providers[$fieldTypeIdentifier];
     }
@@ -50,7 +53,7 @@ class ParameterProviderRegistry implements ParameterProviderRegistryInterface
      * @param \eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderInterface $parameterProvider
      * @param string $fieldTypeIdentifier
      */
-    public function setParameterProvider( ParameterProviderInterface $parameterProvider, $fieldTypeIdentifier )
+    public function setParameterProvider(ParameterProviderInterface $parameterProvider, $fieldTypeIdentifier)
     {
         $this->providers[$fieldTypeIdentifier] = $parameterProvider;
     }

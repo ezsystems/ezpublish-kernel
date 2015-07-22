@@ -1,16 +1,18 @@
 <?php
+
 /**
- * File containing the Persistence Cache SPI logger class
+ * File containing the Persistence Cache SPI logger class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\Persistence\Cache;
 
 /**
- * Log un-cached use of SPI Persistence
+ * Log un-cached use of SPI Persistence.
  *
  * Stops logging details when reaching $maxLogCalls to conserve memory use
  */
@@ -41,7 +43,7 @@ class PersistenceLogger
     /**
      * @param bool $logCalls Flag to enable logging of calls or not, should be disabled in prod
      */
-    public function __construct( $logCalls = true )
+    public function __construct($logCalls = true)
     {
         $this->logCalls = $logCalls;
     }
@@ -52,30 +54,28 @@ class PersistenceLogger
      * @param string $method
      * @param array $arguments
      */
-    public function logCall( $method, array $arguments = array() )
+    public function logCall($method, array $arguments = array())
     {
-        $this->count++;
-        if ( $this->logCalls )
-        {
+        ++$this->count;
+        if ($this->logCalls) {
             $this->calls[] = array(
                 'method' => $method,
-                'arguments' => $arguments
+                'arguments' => $arguments,
             );
         }
     }
 
     /**
-     * Log uncached handler being loaded
+     * Log uncached handler being loaded.
      *
      * @param string $handler
      */
-    public function logUnCachedHandler( $handler )
+    public function logUnCachedHandler($handler)
     {
-        if ( !isset( $this->unCachedHandlers[$handler] ) )
-        {
+        if (!isset($this->unCachedHandlers[$handler])) {
             $this->unCachedHandlers[$handler] = 0;
         }
-        $this->unCachedHandlers[$handler]++;
+        ++$this->unCachedHandlers[$handler];
     }
 
     /**

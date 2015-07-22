@@ -67,7 +67,7 @@
           <xsd:element name="childCount" type="xsd:int">
             <xsd:annotation>
               <xsd:documentation>
-                the number of chidren visible to the
+                the number of children visible to the
                 authenticated user which has
                 loaded this instance.
               </xsd:documentation>
@@ -79,6 +79,13 @@
           <xsd:element name="Content" type="ref" />
           <xsd:element name="sortField" type="sortFieldType" />
           <xsd:element name="sortOrder" type="sortOrderType" />
+          <xsd:element name="UrlAliases" type="ref">
+              <xsd:annotation>
+                  <xsd:documentation>
+                      The location's URL aliases list
+                  </xsd:documentation>
+              </xsd:annotation>
+          </xsd:element>
         </xsd:all>
       </xsd:extension>
     </xsd:complexContent>

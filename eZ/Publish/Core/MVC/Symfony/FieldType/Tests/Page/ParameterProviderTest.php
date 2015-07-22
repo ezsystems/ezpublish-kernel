@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ParameterProviderTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,12 +21,15 @@ class ParameterProviderTest extends PHPUnit_Framework_TestCase
      */
     public function testGetViewParameters()
     {
-        $pageService = $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Page\\PageService' );
-        $field = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Field' );
-        $parameterProvider = new ParameterProvider( $pageService );
+        $pageService = $this
+            ->getMockBuilder('eZ\\Publish\\Core\\FieldType\\Page\\PageService')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $field = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Field');
+        $parameterProvider = new ParameterProvider($pageService);
         $this->assertSame(
-            array( 'pageService' => $pageService ),
-            $parameterProvider->getViewParameters( $field )
+            array('pageService' => $pageService),
+            $parameterProvider->getViewParameters($field)
         );
     }
 }

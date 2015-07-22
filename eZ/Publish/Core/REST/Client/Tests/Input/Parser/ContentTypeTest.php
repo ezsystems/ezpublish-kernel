@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a ContentTest class
+ * File containing a ContentTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,7 +28,7 @@ class ContentTypeTest extends BaseTest
     protected $contentTypeServiceMock;
 
     /**
-     * Tests the section parser
+     * Tests the section parser.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
@@ -79,12 +81,12 @@ class ContentTypeTest extends BaseTest
                 '_media-type' => 'application/vnd.ez.api.FieldDefinitionList+json',
                 '_href' => '/content/types/1/fieldDefinitions',
                 'FieldDefinition' => array(),
-            )
+            ),
         );
 
-        $result = $contentTypeParser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $contentTypeParser->parse($inputArray, $this->getParsingDispatcherMock());
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
@@ -93,7 +95,7 @@ class ContentTypeTest extends BaseTest
      * @dataProvider provideExpectedContentTypeProperties
      * @depends testParse
      */
-    public function testParsedProperties( $propertyName, $expectedValue, $parsedContentType )
+    public function testParsedProperties($propertyName, $expectedValue, $parsedContentType)
     {
         $this->assertEquals(
             $expectedValue,
@@ -119,11 +121,11 @@ class ContentTypeTest extends BaseTest
             ),
             array(
                 'creationDate',
-                new \DateTime( '2002-06-18T11:21:38+02:00' ),
+                new \DateTime('2002-06-18T11:21:38+02:00'),
             ),
             array(
                 'modificationDate',
-                new \DateTime( '2004-04-20T11:54:35+02:00' ),
+                new \DateTime('2004-04-20T11:54:35+02:00'),
             ),
             array(
                 'creatorId',
@@ -167,17 +169,17 @@ class ContentTypeTest extends BaseTest
             ),
             array(
                 'names',
-                array( 'eng-US' => 'Folder' ),
+                array('eng-US' => 'Folder'),
             ),
             array(
                 'descriptions',
-                array( 'eng-US' => 'Bielefeld' ),
+                array('eng-US' => 'Bielefeld'),
             ),
         );
     }
 
     /**
-     * Gets the section parser
+     * Gets the section parser.
      *
      * @return \eZ\Publish\Core\REST\Client\Input\Parser\ContentType
      */
@@ -194,8 +196,7 @@ class ContentTypeTest extends BaseTest
      */
     protected function getContentTypeServiceMock()
     {
-        if ( !isset( $this->contentTypeServiceMock ) )
-        {
+        if (!isset($this->contentTypeServiceMock)) {
             $this->contentTypeServiceMock = $this->getMock(
                 'eZ\\Publish\\Core\\REST\\Client\\ContentTypeService',
                 array(),
@@ -204,6 +205,7 @@ class ContentTypeTest extends BaseTest
                 false
             );
         }
+
         return $this->contentTypeServiceMock;
     }
 }

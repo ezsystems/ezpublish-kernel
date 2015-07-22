@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\SPI\Tests\FieldType\CheckboxIntegrationTest class
+ * File contains: eZ\Publish\SPI\Tests\FieldType\CheckboxIntegrationTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
 
 /**
- * Integration test for legacy storage field types
+ * Integration test for legacy storage field types.
  *
  * This abstract base test case is supposed to be the base for field type
  * integration tests. It basically calls all involved methods in the field type
@@ -36,38 +38,31 @@ use eZ\Publish\SPI\Persistence\Content;
 class CheckboxIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
     public function getTypeName()
     {
-        return 'ezbool';
+        return 'ezboolean';
     }
 
     /**
-     * Get handler with required custom field types registered
+     * Get handler with required custom field types registered.
      *
      * @return Handler
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
+        $fieldType = new FieldType\Checkbox\Type();
+        $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
-        $handler->getFieldTypeRegistry()->register(
-            'ezbool',
-            new FieldType\Checkbox\Type()
-        );
-        $handler->getStorageRegistry()->register(
-            'ezbool',
+        return $this->getHandler(
+            'ezboolean',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\CheckboxConverter(),
             new FieldType\NullStorage()
         );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezbool',
-            new Legacy\Content\FieldValue\Converter\Checkbox()
-        );
-
-        return $handler;
     }
 
     /**
@@ -82,7 +77,7 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field definition data values
+     * Get field definition data values.
      *
      * This is a PHPUnit data provider
      *
@@ -93,13 +88,13 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
         return array(
             // The ezbool field type does not have any special field definition
             // properties
-            array( 'fieldType', 'ezbool' ),
-            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints( array() ) ),
+            array('fieldType', 'ezboolean'),
+            array('fieldTypeConstraints', new Content\FieldTypeConstraints(array())),
         );
     }
 
     /**
-     * Get initial field value
+     * Get initial field value.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -107,9 +102,9 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => true,
+                'data' => true,
                 'externalData' => null,
-                'sortKey'      => 1,
+                'sortKey' => 1,
             )
         );
     }
@@ -125,9 +120,9 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => false,
+                'data' => false,
                 'externalData' => null,
-                'sortKey'      => 0,
+                'sortKey' => 0,
             )
         );
     }

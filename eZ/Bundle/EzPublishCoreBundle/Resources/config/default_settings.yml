@@ -12,20 +12,35 @@ parameters:
     ezsettings.default.block_view: {}
 
     # Common settings
-    ezsettings.default.database.params: ~
-    ezsettings.default.session_name: "eZSESSID{siteaccess_hash}"    # Using "{siteaccess_hash}" in session name makes it unique per siteaccess
-    ezsettings.default.legacy_mode: false
+    ezpublish.repositories: {}
+    ezsettings.default.repository: ~
+    ezpublish.session_name.default: "eZSESSID{siteaccess_hash}"
+    ezsettings.default.session_name: %ezpublish.session_name.default%    # Using "{siteaccess_hash}" in session name makes it unique per siteaccess
+    ezsettings.default.session: { name: %ezpublish.session_name.default% } # Session options that will override options from framework
     ezsettings.default.url_alias_router: true                       # Use UrlAliasRouter by default
+    ezsettings.default.index_page: ~                    # The page to show when accessing IndexPage (/)
+    ezsettings.default.default_page: ~                  # The default page to show, e.g. after user login this will be used for default redirection
     ezsettings.default.languages: []
+    ezsettings.default.translation_siteaccesses: []
+    ezsettings.default.related_siteaccesses: []
+    ezsettings.default.cache_pool_name: "default"       # The cache pool name to use for a siteaccess / siteaccess-group
     ezsettings.default.var_dir: "var"                   # The root directory where all log files, cache files and other stored files are created
     ezsettings.default.storage_dir: "storage"           # Where to place new files for storage, it's relative to var directory
     ezsettings.default.binary_dir: "original"
+    ezsettings.default.anonymous_user_id: 10            # The ID of the user to be used for everyone who is not logged in
+
+    # IO
+    ezsettings.default.io.metadata_handler: "default"
+    ezsettings.default.io.binarydata_handler: "default"
+    ezsettings.default.io.url_prefix: "$var_dir$/$storage_dir$"
+    ezsettings.default.io.legacy_url_prefix: "$var_dir$/$storage_dir$"
+    ezsettings.default.io.root_dir: "%webroot_dir%/$var_dir$/$storage_dir$"
 
     # Content settings
     ezsettings.default.content.view_cache: true         # Whether to use content view cache or not (Etag/Last-Modified based)
     ezsettings.default.content.ttl_cache: true          # Whether to use TTL Cache for content (i.e. Max-Age response header)
     ezsettings.default.content.default_ttl: 60          # Default TTL cache value for content
-    ezsettings.default.content.tree_root.location_id: ~ # Root locationId for routing and link generation. Useful for multisite apps with one repository.
+    ezsettings.default.content.tree_root.location_id: 2 # Root locationId for routing and link generation. Useful for multisite apps with one repository.
     ezsettings.default.content.tree_root.excluded_uri_prefixes: [] # URI prefixes that are allowed to be outside the content tree
 
     # FieldType settings
@@ -39,8 +54,49 @@ parameters:
             path: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_custom.xsl
             priority: 0
 
+    # FieldType settings
+    # Default XSL stylesheets for RichText rendering to HTML5.
+    # Built-in stylesheets are treated as custom for the sake of extensibility.
+    ezsettings.default.fieldtypes.ezrichtext.output_custom_xsl:
+        -
+            path: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/output/core.xsl
+            priority: 0
+
+    ezsettings.default.fieldtypes.ezrichtext.edit_custom_xsl:
+        -
+            path: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/edit/core.xsl
+            priority: 0
+
+    ezsettings.default.fieldtypes.ezrichtext.input_custom_xsl: []
+
+    # RichText field type template tag settings
+    # 'default' and 'default_inline' tag identifiers are reserved for fallback
+    ezsettings.default.fieldtypes.ezrichtext.tags.default:
+        template: EzPublishCoreBundle:FieldType/RichText/tag:default.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.tags.default_inline:
+        template: EzPublishCoreBundle:FieldType/RichText/tag:default_inline.html.twig
+
+    # RichText field type embed settings
+    ezsettings.default.fieldtypes.ezrichtext.embed.content:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:content.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.embed.content_denied:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:content_denied.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.embed.content_inline:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:content_inline.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.embed.content_inline_denied:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:content_inline_denied.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.embed.location:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:location.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.embed.location_denied:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:location_denied.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.embed.location_inline:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:location_inline.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.embed.location_inline_denied:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:location_inline_denied.html.twig
+
     # Cache settings
-    ezsettings.default.http_cache.purge_servers: ["http://localhost/"]   # Server(s) URL(s) that will be used for purging HTTP cache with PURGE requests.
+    # Server(s) URL(s) that will be used for purging HTTP cache with BAN requests.
+    ezsettings.default.http_cache.purge_servers: []
 
     # Treemenu settings (admin interface)
     ezsettings.default.treemenu.http_cache: true        # Whether to use HttpCache or not for admin tree menu
@@ -50,10 +106,19 @@ parameters:
     ezsettings.default.field_templates:
         - {template: EzPublishCoreBundle::content_fields.html.twig, priority: 0}
 
+    # Templates for Field edition. Follows the same structure than for field_templates
+    ezsettings.default.field_edit_templates: []
+
     # Templates to use while rendering field definition settings
     ezsettings.default.fielddefinition_settings_templates:
         - {template: EzPublishCoreBundle::fielddefinition_settings.html.twig, priority: 0}
 
+    # Templates for FieldDefinition edition. Follows the same structure than for field_templates
+    ezsettings.default.fielddefinition_edit_templates: []
+
+    # Security settings
+    ezsettings.default.security.login_template: "EzPublishCoreBundle:Security:login.html.twig"
+    ezsettings.default.security.base_layout: %ezpublish.content_view.viewbase_layout%
 
     # Image settings
     ezsettings.default.image.temporary_dir: imagetmp
@@ -63,62 +128,26 @@ parameters:
         reference:
             reference: ~
             filters:
-                - {name: geometry/scaledownonly, params: [600, 600]}
+                geometry/scaledownonly: [600, 600]
         small:
             reference: reference
             filters:
-                - {name: geometry/scaledownonly, params: [100, 100]}
+                geometry/scaledownonly: [100, 100]
         tiny:
             reference: reference
             filters:
-                - {name: geometry/scaledownonly, params: [30, 30]}
+                geometry/scaledownonly: [30, 30]
         medium:
             reference: reference
             filters:
-                - {name: geometry/scaledownonly, params: [200, 200]}
+                geometry/scaledownonly: [200, 200]
         large:
             reference: reference
             filters:
-                - {name: geometry/scaledownonly, params: [300, 300]}
-        rss:
-            reference: reference
-            filters:
-                - {name: geometry/scale, params: [88, 31]}
-        campaign:
-            reference: ~
-            filters:
-                - {name: geometry/scalewidthdownonly, params: [770]}
-                - {name: geometry/crop, params: [770, 390, 0, 0]}
-        backgroundimage:
-            reference: ~
-            filters:
-                - {name: geometry/scalewidthdownonly, params: [770]}
-                - {name: geometry/crop, params: [770, 390, 0, 0]}
-        highlighted:
-            reference: ~
-            filters:
-                - {name: geometry/scalewidthdownonly, params: [300]}
-                - {name: geometry/crop, params: [300, 300, 0, 0]}
-        galleryfull:
-            reference: ~
-            filters:
-                - {name: geometry/scalewidthdownonly, params: [770]}
-        contentgrid:
-            reference: ~
-            filters:
-                - {name: geometry/scalewidthdownonly, params: [770]}
-                - {name: geometry/crop, params: [370, 160, 0, 0]}
-        gallery:
-            reference: ~
-            filters:
-                - {name: geometry/scalewidthdownonly, params: [770]}
-                - {name: geometry/crop, params: [770, 390, 0, 0]}
-        imagefull:
-            reference: ~
-            filters:
-                - {name: geometry/scalewidthdownonly, params: [770]}
+                geometry/scaledownonly: [300, 300]
 
     # ImageMagick
+    # TODO: Deprecated. Move this to ezpublish_legacy.
     ezpublish.image.imagemagick.enabled: false
     ezpublish.image.imagemagick.executable_path:
     ezpublish.image.imagemagick.executable: convert
@@ -229,3 +258,10 @@ parameters:
     ###
     ezpublish.siteaccess.groups: {}
     ezpublish.siteaccess.groups_by_siteaccess: {}
+    ezpublish.siteaccess.default: ~
+    # SiteAccesses relation map. 2 dimensions array.
+    # First dimension is indexed by repository identifier.
+    # Second dimension is indexed by root location Id.
+    ezpublish.siteaccess.relation_map: {}
+    # SiteAccesses, indexed by language.
+    ezpublish.siteaccesses_by_language: {}

@@ -1,0 +1,65 @@
+--TEST--
+"twig" filter
+--TEMPLATE--
+{{ 10|ez_file_size( 2 ) }}
+{{ 1024|ez_file_size( 0 ) }}
+{{ 5000|ez_file_size( 3 ) }}
+{{ 12000|ez_file_size( 1 ) }}
+{{ 151515|ez_file_size( 0 ) }}
+{{ 26151256|ez_file_size( 5 ) }}
+{{ 123123123|ez_file_size( 4 ) }}
+{{ 456456456456|ez_file_size( 1 ) }}
+{{ 789789789789789|ez_file_size( 6 ) }}
+{{ 789789789789789789|ez_file_size( 10 ) }}
+{{ 789789789789789789789|ez_file_size( 2 ) }}
+{{ 789789789789789789789789789|ez_file_size( 4 ) }}
+--DATA--
+$this->setConfigurationLocale( array( 'wrong local' ), 'eng-GB' );
+return array()
+--EXPECT--
+10 B wrong local so we take the default one which is en-GB here
+1 kB wrong local so we take the default one which is en-GB here
+5 kB wrong local so we take the default one which is en-GB here
+12 kB wrong local so we take the default one which is en-GB here
+152 kB wrong local so we take the default one which is en-GB here
+26.15126 MB wrong local so we take the default one which is en-GB here
+123.1231 MB wrong local so we take the default one which is en-GB here
+456.5 GB wrong local so we take the default one which is en-GB here
+789.78979 TB wrong local so we take the default one which is en-GB here
+789.7897897898 PB wrong local so we take the default one which is en-GB here
+789.79 EB wrong local so we take the default one which is en-GB here
+789789789.7898 EB wrong local so we take the default one which is en-GB here
+--DATA--
+return array()
+--CONFIG--
+$this->locale = "fre-FR"; return array();
+--EXPECT--
+10 B French version
+1 kB French version
+5 kB French version
+12 kB French version
+152 kB French version
+26,15126 MB French version
+123,1231 MB French version
+456,5 GB French version
+789,78979 TB French version
+789,7897897898 PB French version
+789,79 EB French version
+789789789,7898 EB French version
+--DATA--
+return array()
+--CONFIG--
+$this->locale = "eng-GB"; return array();
+--EXPECT--
+10 B English version
+1 kB English version
+5 kB English version
+12 kB English version
+152 kB English version
+26.15126 MB English version
+123.1231 MB English version
+456.5 GB English version
+789.78979 TB English version
+789.7897897898 PB English version
+789.79 EB English version
+789789789.7898 EB English version

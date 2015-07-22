@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the UserStorage class
+ * File containing the UserStorage class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
- * Description of UserStorage
+ * Description of UserStorage.
  *
  * Methods in this interface are called by storage engine.
  *
@@ -25,7 +27,7 @@ use eZ\Publish\SPI\Persistence\Content\Field;
  *   - connection (the connection handler)
  * For example, using Legacy storage engine, $context will be:
  *   - identifier = 'LegacyStorage'
- *   - connection = {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler} object handler (for DB connection),
+ *   - connection = {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler} object handler (for DB connection),
  *                  to be used accordingly to
  *                  {@link http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html ezcDatabase} usage
  *
@@ -60,7 +62,7 @@ class UserStorage extends GatewayBasedStorage
      *   - connection (the connection handler)
      * For example, using Legacy storage engine, $context will be:
      *   - identifier = 'LegacyStorage'
-     *   - connection = {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler} object handler (for DB connection),
+     *   - connection = {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler} object handler (for DB connection),
      *                  to be used accordingly to
      * The context array provides some context for the field handler about the
      * currently used storage engine.
@@ -69,7 +71,7 @@ class UserStorage extends GatewayBasedStorage
      *   - connection (the connection handler)
      * For example, using Legacy storage engine, $context will be:
      *   - identifier = 'LegacyStorage'
-     *   - connection = {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler} object handler (for DB connection),
+     *   - connection = {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler} object handler (for DB connection),
      *                  to be used accordingly to
      *                  {@link http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html ezcDatabase} usage
      *
@@ -81,7 +83,7 @@ class UserStorage extends GatewayBasedStorage
      *
      * @return null|true
      */
-    public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
+    public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
         // Only the UserService may update user data
     }
@@ -94,13 +96,11 @@ class UserStorage extends GatewayBasedStorage
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
-     *
-     * @return void
      */
-    public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
+    public function getFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        $gateway = $this->getGateway( $context );
-        $field->value->externalData = $gateway->getFieldData( $field->id );
+        $gateway = $this->getGateway($context);
+        $field->value->externalData = $gateway->getFieldData($field->id);
     }
 
     /**
@@ -108,17 +108,17 @@ class UserStorage extends GatewayBasedStorage
      * @param array $fieldIds Array of field Ids
      * @param array $context
      *
-     * @return boolean
+     * @return bool
      */
-    public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
+    public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds, array $context)
     {
         // Only the UserService may update user data
     }
 
     /**
-     * Checks if field type has external data to deal with
+     * Checks if field type has external data to deal with.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasFieldData()
     {
@@ -126,13 +126,13 @@ class UserStorage extends GatewayBasedStorage
     }
 
     /**
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
+     * @return \eZ\Publish\SPI\Search\Field[]
      */
-    public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
+    public function getIndexData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        // @todo: How to call this function? Yet undefined.
-        echo __METHOD__, PHP_EOL;
-        var_dump( func_get_args() );
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains Test class
+ * File contains Test class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,29 +18,36 @@ use eZ\Publish\Core\Persistence\Cache\ContentHandler as CacheContentHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler as CacheContentLanguageHandler;
 use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
 use eZ\Publish\Core\Persistence\Cache\UserHandler as CacheUserHandler;
-use eZ\Publish\Core\Persistence\Cache\SearchHandler as CacheSearchHandler;
+use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHandler;
+use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
+use eZ\Publish\Core\Persistence\Cache\ObjectStateHandler as CacheObjectStateHandler;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Abstract test case for spi cache impl
+ * Abstract test case for spi cache impl.
  */
 abstract class HandlerTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Tedivm\StashBundle\Service\CacheService|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Stash\Interfaces\PoolInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cacheMock;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $persistenceFactoryMock;
+    protected $persistenceHandlerMock;
+
+    /**
+     * @var \eZ\Publish\SPI\Persistence\TransactionHandler|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $transactionHandlerMock;
 
     /**
      * @var \eZ\Publish\Core\Persistence\Cache\Handler
      */
-    protected $persistenceHandler;
+    protected $persistenceCacheHandler;
 
     /**
      * @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger|\PHPUnit_Framework_MockObject_MockObject
@@ -57,47 +66,44 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->persistenceFactoryMock = $this->getMock(
-            "eZ\\Publish\\Core\\Persistence\\Factory",
-            $this->persistenceFactoryMockMethods,
-            array(),
-            '',
-            false
-        );
+        $this->persistenceHandlerMock = $this->getMock('eZ\Publish\SPI\Persistence\Handler');
 
         $this->cacheMock = $this->getMock(
-            "Tedivm\\StashBundle\\Service\\CacheService",
+            'eZ\\Publish\\Core\\Persistence\\Cache\\CacheServiceDecorator',
             array(),
             array(),
             '',
             false
         );
 
-        $this->loggerMock = $this->getMock( "eZ\\Publish\\Core\\Persistence\\Cache\\PersistenceLogger" );
+        $this->loggerMock = $this->getMock('eZ\\Publish\\Core\\Persistence\\Cache\\PersistenceLogger');
 
-        $this->persistenceHandler = new CacheHandler(
-            $this->persistenceFactoryMock,
-            new CacheSectionHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
-            new CacheLocationHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
-            new CacheContentHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
-            new CacheContentLanguageHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
-            new CacheContentTypeHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
-            new CacheUserHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
-            new CacheSearchHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
-            new CacheUrlAliasHandler( $this->cacheMock, $this->persistenceFactoryMock, $this->loggerMock ),
-            $this->loggerMock
+        $this->persistenceCacheHandler = new CacheHandler(
+            $this->persistenceHandlerMock,
+            new CacheSectionHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheLocationHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheContentHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheContentLanguageHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheContentTypeHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheUserHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheTransactionHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheTrashHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheUrlAliasHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheObjectStateHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            $this->loggerMock,
+            $this->cacheMock
         );
     }
 
     /**
-     * Tear down test (properties)
+     * Tear down test (properties).
      */
     protected function tearDown()
     {
-        unset( $this->cacheMock );
-        unset( $this->persistenceFactoryMock );
-        unset( $this->persistenceHandler );
-        unset( $this->loggerMock );
+        unset($this->cacheMock);
+        unset($this->persistenceHandlerMock);
+        unset($this->persistenceCacheHandler);
+        unset($this->loggerMock);
         parent::tearDown();
     }
 }

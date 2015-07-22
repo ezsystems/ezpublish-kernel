@@ -1,66 +1,24 @@
 <?php
 /**
- * eZ Publish 5.x config.php file
+ * eZ Publish 5.x config.php file.
  *
  * Returns global application settings
  * Usually contain settings needed to setup services needed for ezp startup.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  *
  * @doc Copy this file to config.php to get started!
  */
 
-// Optional: only for development, comment in production
-error_reporting( E_ALL | E_STRICT );
-
 // Required: Settings bellow are runtime settings that needs to be set here, you can
 // optionally also override any other setting here.
 return array(
-    'base' => array(
-        'Configuration' => array(
-            // Disable cache, default false
-            'UseCache' => false,
-
-            // List of parser classes where key is file suffix
-            'Parsers' => array(
-                '.ini' => 'eZ\\Publish\\Core\\Base\\Configuration\\Parser\\Ini',
-                '.ini.append.php' => 'eZ\\Publish\\Core\\Base\\Configuration\\Parser\\Ini',
-            ),
-
-            // Enable strict ini parsing using parse_ini_string(), default false using eZ/Zeta Components INI Reader
-            'IniParserStrict' => false,
-
-            // Switch for development mode or not, default false
-            'DevelopmentMode' => true,
-
-            // File Permissions, default 0644
-            'CacheFilePermission' => 0644,
-
-            // Dir permissions, default 0755
-            'CacheDirPermission' => 0755,
-
-            // Paths and scopes to read ini settings from
-            'Paths' => array(
-                'base' => array( 'settings/' ),
-                'modules' => array( __DIR__ . '/eZ/Publish/Core/settings/' ),
-                'access' => array(),
-                'global' => array( 'settings/override/' ),
-            ),
-        ),
-    ),
-    'service' => array(
-        'parameters' => array(
-            // The installation directory
-            'install_dir' => __DIR__,
-
-            // The Legacy Kernel installation directory, detect legacy location
-            'legacy_dir' => (
-                is_dir( './ezpublish_legacy' ) ?
-                getcwd() . '/ezpublish_legacy' :
-                __DIR__ . '/vendor/ezsystems/ezpublish-legacy'
-            ),
-        )
-    )
+    // The installation directory
+    'install_dir' => __DIR__,
+    // Path to the containerBuilder.php file used by service container
+    'container_builder_path' => __DIR__ . '/eZ/Publish/Core/settings/containerBuilder.php',
+    // The cache directory
+    'cache_dir' => __DIR__ . '/var/cache',
 );

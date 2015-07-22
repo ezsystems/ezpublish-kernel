@@ -1,95 +1,91 @@
 <?php
+
 /**
- * File containing the LocationUpdate parser class
+ * File containing the LocationUpdate parser class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\LocationService;
-
 use eZ\Publish\Core\REST\Server\Values\RestLocationUpdateStruct;
 
 /**
- * Parser for LocationUpdate
+ * Parser for LocationUpdate.
  */
-class LocationUpdate extends Base
+class LocationUpdate extends BaseParser
 {
     /**
-     * Location service
+     * Location service.
      *
      * @var \eZ\Publish\API\Repository\LocationService
      */
     protected $locationService;
 
     /**
-     * Parser tools
+     * Parser tools.
      *
      * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
      */
     protected $parserTools;
 
     /**
-     * Construct
+     * Construct.
      *
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( LocationService $locationService, ParserTools $parserTools )
+    public function __construct(LocationService $locationService, ParserTools $parserTools)
     {
         $this->locationService = $locationService;
         $this->parserTools = $parserTools;
     }
 
     /**
-     * Parse input structure
+     * Parse input structure.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RestLocationUpdateStruct
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
         $locationUpdateStruct = $this->locationService->newLocationUpdateStruct();
 
-        if ( array_key_exists( 'priority', $data ) )
-        {
+        if (array_key_exists('priority', $data)) {
             $locationUpdateStruct->priority = (int)$data['priority'];
         }
 
-        if ( array_key_exists( 'remoteId', $data ) )
-        {
+        if (array_key_exists('remoteId', $data)) {
             $locationUpdateStruct->remoteId = $data['remoteId'];
         }
 
         $hidden = null;
-        if ( array_key_exists( 'hidden', $data ) )
-        {
-            $hidden = $this->parserTools->parseBooleanValue( $data['hidden'] );
+        if (array_key_exists('hidden', $data)) {
+            $hidden = $this->parserTools->parseBooleanValue($data['hidden']);
         }
 
-        if ( !array_key_exists( 'sortField', $data ) )
-        {
-            throw new Exceptions\Parser( "Missing 'sortField' element for LocationUpdate." );
+        if (!array_key_exists('sortField', $data)) {
+            throw new Exceptions\Parser("Missing 'sortField' element for LocationUpdate.");
         }
 
-        $locationUpdateStruct->sortField = $this->parserTools->parseDefaultSortField( $data['sortField'] );
+        $locationUpdateStruct->sortField = $this->parserTools->parseDefaultSortField($data['sortField']);
 
-        if ( !array_key_exists( 'sortOrder', $data ) )
-        {
-            throw new Exceptions\Parser( "Missing 'sortOrder' element for LocationUpdate." );
+        if (!array_key_exists('sortOrder', $data)) {
+            throw new Exceptions\Parser("Missing 'sortOrder' element for LocationUpdate.");
         }
 
-        $locationUpdateStruct->sortOrder = $this->parserTools->parseDefaultSortOrder( $data['sortOrder'] );
+        $locationUpdateStruct->sortOrder = $this->parserTools->parseDefaultSortOrder($data['sortOrder']);
 
-        return new RestLocationUpdateStruct( $locationUpdateStruct, $hidden );
+        return new RestLocationUpdateStruct($locationUpdateStruct, $hidden);
     }
 }

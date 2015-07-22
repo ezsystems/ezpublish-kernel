@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\MapperTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\MapperTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,11 +17,9 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 // Needed for $sortOrder and $sortField properties
 use eZ\Publish\SPI\Persistence\Content\Location;
-
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
-
 use eZ\Publish\SPI\Persistence\Content\Type\Group;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
 
@@ -30,16 +30,14 @@ class MapperTest extends TestCase
 {
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createGroupFromCreateStruct
-     *
-     * @return void
      */
     public function testCreateGroupFromCreateStruct()
     {
         $createStruct = $this->getGroupCreateStructFixture();
 
-        $mapper = new Mapper( $this->getConverterRegistryMock() );
+        $mapper = new Mapper($this->getConverterRegistryMock());
 
-        $group = $mapper->createGroupFromCreateStruct( $createStruct );
+        $group = $mapper->createGroupFromCreateStruct($createStruct);
 
         $this->assertInstanceOf(
             'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Group',
@@ -86,18 +84,15 @@ class MapperTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createTypeFromCreateStruct
-     *
-     * @return void
      */
     public function testTypeFromCreateStruct()
     {
         $struct = $this->getContentTypeCreateStructFixture();
 
-        $mapper = new Mapper( $this->getConverterRegistryMock() );
-        $type = $mapper->createTypeFromCreateStruct( $struct );
+        $mapper = new Mapper($this->getConverterRegistryMock());
+        $type = $mapper->createTypeFromCreateStruct($struct);
 
-        foreach ( $struct as $propName => $propVal )
-        {
+        foreach ($struct as $propName => $propVal) {
             $this->assertEquals(
                 $struct->$propName,
                 $type->$propName,
@@ -144,7 +139,7 @@ class MapperTest extends TestCase
 
         $struct->fieldDefinitions = array(
             $fieldDefName,
-            $fieldDefShortDescription
+            $fieldDefShortDescription,
         );
 
         return $struct;
@@ -152,19 +147,16 @@ class MapperTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createCreateStructFromType
-     *
-     * @return void
      */
     public function testCreateStructFromType()
     {
         $type = $this->getContentTypeFixture();
 
-        $mapper = new Mapper( $this->getConverterRegistryMock() );
-        $struct = $mapper->createCreateStructFromType( $type );
+        $mapper = new Mapper($this->getConverterRegistryMock());
+        $struct = $mapper->createCreateStructFromType($type);
 
         // Iterate through struct, since it has fewer props
-        foreach ( $struct as $propName => $propVal )
-        {
+        foreach ($struct as $propName => $propVal) {
             $this->assertEquals(
                 $struct->$propName,
                 $type->$propName,
@@ -213,7 +205,7 @@ class MapperTest extends TestCase
 
         $type->fieldDefinitions = array(
             $fieldDefName,
-            $fieldDefShortDescription
+            $fieldDefShortDescription,
         );
 
         return $type;
@@ -221,15 +213,13 @@ class MapperTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractGroupsFromRows
-     *
-     * @return void
      */
     public function testExtractGroupsFromRows()
     {
         $rows = $this->getLoadGroupFixture();
 
-        $mapper = new Mapper( $this->getConverterRegistryMock() );
-        $groups = $mapper->extractGroupsFromRows( $rows );
+        $mapper = new Mapper($this->getConverterRegistryMock());
+        $groups = $mapper->extractGroupsFromRows($rows);
 
         $groupFixture = new Group();
         $groupFixture->created = 1032009743;
@@ -240,13 +230,12 @@ class MapperTest extends TestCase
         $groupFixture->identifier = 'Media';
 
         $this->assertEquals(
-            array( $groupFixture ),
+            array($groupFixture),
             $groups
         );
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractTypesFromRows
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractTypeFromRow
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractStorageFieldFromRow
@@ -257,11 +246,11 @@ class MapperTest extends TestCase
         $rows = $this->getLoadTypeFixture();
 
         $mapper = $this->getNonConvertingMapper();
-        $types = $mapper->extractTypesFromRows( $rows );
+        $types = $mapper->extractTypesFromRows($rows);
 
         $this->assertEquals(
             1,
-            count( $types ),
+            count($types),
             'Incorrect number of types extracted'
         );
 
@@ -270,7 +259,7 @@ class MapperTest extends TestCase
                 'id' => 1,
                 'status' => 0,
                 'name' => array(
-                    'eng-US' => 'Folder'
+                    'eng-US' => 'Folder',
                 ),
                 'description' => array(),
                 'created' => 1024392098,
@@ -283,7 +272,7 @@ class MapperTest extends TestCase
                 'nameSchema' => '<short_name|name>',
                 'isContainer' => true,
                 'initialLanguageId' => 2,
-                'groupIds' => array( 1 ),
+                'groupIds' => array(1),
                 'sortField' => 1,
                 'sortOrder' => 1,
                 'defaultAlwaysAvailable' => true,
@@ -293,7 +282,7 @@ class MapperTest extends TestCase
 
         $this->assertEquals(
             5,
-            count( $types[0]->fieldDefinitions ),
+            count($types[0]->fieldDefinitions),
             'Incorrect number of field definitions'
         );
         $this->assertPropertiesCorrect(
@@ -317,7 +306,6 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::toStorageFieldDefinition
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition
      */
@@ -326,8 +314,8 @@ class MapperTest extends TestCase
         $converterMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
         );
-        $converterMock->expects( $this->once() )
-            ->method( 'toStorageFieldDefinition' )
+        $converterMock->expects($this->once())
+            ->method('toStorageFieldDefinition')
             ->with(
                 $this->isInstanceOf(
                     'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition'
@@ -337,20 +325,19 @@ class MapperTest extends TestCase
                 )
             );
 
-        $converterRegistry = new ConverterRegistry( array( 'some_type' => $converterMock  ) );
+        $converterRegistry = new ConverterRegistry(array('some_type' => $converterMock));
 
-        $mapper = new Mapper( $converterRegistry );
+        $mapper = new Mapper($converterRegistry);
 
         $fieldDef = new FieldDefinition();
         $fieldDef->fieldType = 'some_type';
 
         $storageFieldDef = new StorageFieldDefinition();
 
-        $mapper->toStorageFieldDefinition( $fieldDef, $storageFieldDef );
+        $mapper->toStorageFieldDefinition($fieldDef, $storageFieldDef);
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::toFieldDefinition
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition
      */
@@ -359,8 +346,8 @@ class MapperTest extends TestCase
         $converterMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
         );
-        $converterMock->expects( $this->once() )
-            ->method( 'toFieldDefinition' )
+        $converterMock->expects($this->once())
+            ->method('toFieldDefinition')
             ->with(
                 $this->isInstanceOf(
                     'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition'
@@ -370,20 +357,20 @@ class MapperTest extends TestCase
                 )
             );
 
-        $converterRegistry = new ConverterRegistry( array( 'some_type' => $converterMock  ) );
+        $converterRegistry = new ConverterRegistry(array('some_type' => $converterMock));
 
-        $mapper = new Mapper( $converterRegistry );
+        $mapper = new Mapper($converterRegistry);
 
         $storageFieldDef = new StorageFieldDefinition();
 
         $fieldDef = new FieldDefinition();
         $fieldDef->fieldType = 'some_type';
 
-        $mapper->toFieldDefinition( $storageFieldDef, $fieldDef );
+        $mapper->toFieldDefinition($storageFieldDef, $fieldDef);
     }
 
     /**
-     * Returns a Mapper with conversion methods mocked
+     * Returns a Mapper with conversion methods mocked.
      *
      * @return Mapper
      */
@@ -391,29 +378,29 @@ class MapperTest extends TestCase
     {
         $mapper = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Mapper',
-            array( 'toFieldDefinition' ),
-            array( $this->getConverterRegistryMock() )
+            array('toFieldDefinition'),
+            array($this->getConverterRegistryMock())
         );
         // Dedicatedly tested test
-        $mapper->expects( $this->atLeastOnce() )
-            ->method( 'toFieldDefinition' )
+        $mapper->expects($this->atLeastOnce())
+            ->method('toFieldDefinition')
             ->with(
                 $this->isInstanceOf(
                     'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition'
                 )
             )->will(
                 $this->returnCallback(
-                    function ()
-                    {
+                    function () {
                         return new FieldDefinition();
                     }
                 )
             );
+
         return $mapper;
     }
 
     /**
-     * Returns a converter registry mock
+     * Returns a converter registry mock.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
@@ -422,12 +409,12 @@ class MapperTest extends TestCase
         return $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
             array(),
-            array( array() )
+            array(array())
         );
     }
 
     /**
-     * Returns fixture for {@link testExtractTypesFromRowsSingle()}
+     * Returns fixture for {@link testExtractTypesFromRowsSingle()}.
      *
      * @return array
      */
@@ -437,7 +424,7 @@ class MapperTest extends TestCase
     }
 
     /**
-     * Returns fixture for {@link testExtractGroupsFromRows()}
+     * Returns fixture for {@link testExtractGroupsFromRows()}.
      *
      * @return array
      */

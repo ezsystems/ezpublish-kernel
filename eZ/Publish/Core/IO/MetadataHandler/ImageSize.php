@@ -1,19 +1,21 @@
 <?php
+
 /**
- * File containing the ImageSize class.
+ * This file is part of the eZ Publish Kernel package.
  *
- * @copyright Copyright (C) 2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
- * @version //autogentag//
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace eZ\Publish\Core\IO\MetadataHandler;
+
 use eZ\Publish\Core\IO\MetadataHandler;
 
 class ImageSize implements MetadataHandler
 {
-    public function extract( $filePath )
+    public function extract($filePath)
     {
-        $metadata = getimagesize( $filePath );
+        $metadata = getimagesize($filePath);
 
         return array(
             'width' => $metadata[0],
@@ -21,6 +23,5 @@ class ImageSize implements MetadataHandler
             // required until a dedicated mimetype metadata handler is added
             'mime' => $metadata['mime'],
         );
-
     }
 }

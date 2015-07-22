@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentTypeTest class
+ * File containing the ContentTypeTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -33,17 +35,17 @@ class ContentTypeTest extends PHPUnit_Framework_TestCase
         $contentType = new ContentType(
             $this->contentTypeServiceMock,
             array(
-                'names' => array( 'eng-US' => 'Sindelfingen', 'eng-GB' => 'Bielefeld' )
+                'names' => array('eng-US' => 'Sindelfingen', 'eng-GB' => 'Bielefeld'),
             )
         );
 
         $this->assertEquals(
             'Sindelfingen',
-            $contentType->getName( 'eng-US' )
+            $contentType->getName('eng-US')
         );
         $this->assertEquals(
             'Bielefeld',
-            $contentType->getName( 'eng-GB' )
+            $contentType->getName('eng-GB')
         );
     }
 
@@ -52,17 +54,17 @@ class ContentTypeTest extends PHPUnit_Framework_TestCase
         $contentType = new ContentType(
             $this->contentTypeServiceMock,
             array(
-                'descriptions' => array( 'eng-US' => 'Sindelfingen', 'eng-GB' => 'Bielefeld' )
+                'descriptions' => array('eng-US' => 'Sindelfingen', 'eng-GB' => 'Bielefeld'),
             )
         );
 
         $this->assertEquals(
             'Sindelfingen',
-            $contentType->getDescription( 'eng-US' )
+            $contentType->getDescription('eng-US')
         );
         $this->assertEquals(
             'Bielefeld',
-            $contentType->getDescription( 'eng-GB' )
+            $contentType->getDescription('eng-GB')
         );
     }
 
@@ -77,10 +79,10 @@ class ContentTypeTest extends PHPUnit_Framework_TestCase
 
         $contentTypeServiceMock = $this->contentTypeServiceMock;
 
-        $contentTypeServiceMock->expects( $this->once() )
-            ->method( 'loadFieldDefinitionList' )
-            ->with( $this->equalTo( '/content/types/23/fieldDefinitions' ) )
-            ->will( $this->returnValue( $this->getFieldDefinitionListMock() ) );
+        $contentTypeServiceMock->expects($this->once())
+            ->method('loadFieldDefinitionList')
+            ->with($this->equalTo('/content/types/23/fieldDefinitions'))
+            ->will($this->returnValue($this->getFieldDefinitionListMock()));
 
         $this->assertEquals(
             $this->getFieldDefinitions(),
@@ -99,16 +101,16 @@ class ContentTypeTest extends PHPUnit_Framework_TestCase
 
         $contentTypeServiceMock = $this->contentTypeServiceMock;
 
-        $contentTypeServiceMock->expects( $this->once() )
-            ->method( 'loadFieldDefinitionList' )
-            ->with( $this->equalTo( '/content/types/23/fieldDefinitions' ) )
-            ->will( $this->returnValue( $this->getFieldDefinitionListMock() ) );
+        $contentTypeServiceMock->expects($this->once())
+            ->method('loadFieldDefinitionList')
+            ->with($this->equalTo('/content/types/23/fieldDefinitions'))
+            ->will($this->returnValue($this->getFieldDefinitionListMock()));
 
         $fieldDefinitions = $this->getFieldDefinitions();
 
         $this->assertEquals(
             $fieldDefinitions[1],
-            $contentType->getFieldDefinition( 'second-field' )
+            $contentType->getFieldDefinition('second-field')
         );
     }
 
@@ -123,14 +125,14 @@ class ContentTypeTest extends PHPUnit_Framework_TestCase
 
         $contentTypeServiceMock = $this->contentTypeServiceMock;
 
-        $contentTypeServiceMock->expects( $this->once() )
-            ->method( 'loadFieldDefinitionList' )
-            ->with( $this->equalTo( '/content/types/23/fieldDefinitions' ) )
-            ->will( $this->returnValue( $this->getFieldDefinitionListMock() ) );
+        $contentTypeServiceMock->expects($this->once())
+            ->method('loadFieldDefinitionList')
+            ->with($this->equalTo('/content/types/23/fieldDefinitions'))
+            ->will($this->returnValue($this->getFieldDefinitionListMock()));
 
         $this->assertEquals(
             null,
-            $contentType->getFieldDefinition( 'non-existent' )
+            $contentType->getFieldDefinition('non-existent')
         );
     }
 
@@ -143,9 +145,10 @@ class ContentTypeTest extends PHPUnit_Framework_TestCase
             '',
             false
         );
-        $mock->expects( $this->any() )
-            ->method( 'getFieldDefinitions' )
-            ->will( $this->returnValue( $this->getFieldDefinitions() ) );
+        $mock->expects($this->any())
+            ->method('getFieldDefinitions')
+            ->will($this->returnValue($this->getFieldDefinitions()));
+
         return $mock;
     }
 

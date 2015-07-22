@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+  <paragraph>
+    Look!
+    <embed-inline
+        ezlegacytmp-embed-link-anchor_name="fragment"
+        ezlegacytmp-embed-link-class="class"
+        ezlegacytmp-embed-link-id="id"
+        ezlegacytmp-embed-link-target="_blank"
+        ezlegacytmp-embed-link-title="title"
+        ezlegacytmp-embed-link-url="http://www.hr"
+        ezlegacytmp-embed-link-url_id="72"
+        object_id="110"
+        size="medium"
+        view="embed"
+        custom:limit="5"
+        custom:offset="0"
+        />
+    It's an embed!
+  </paragraph>
+</section>

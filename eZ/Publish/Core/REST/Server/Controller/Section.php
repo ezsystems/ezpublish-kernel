@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Section controller class
+ * File containing the Section controller class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,155 +14,147 @@ namespace eZ\Publish\Core\REST\Server\Controller;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
-
 use eZ\Publish\API\Repository\SectionService;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 use eZ\Publish\Core\REST\Server\Values\NoContent;
-
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Section controller
+ * Section controller.
  */
 class Section extends RestController
 {
     /**
-     * Section service
+     * Section service.
      *
      * @var \eZ\Publish\API\Repository\SectionService
      */
     protected $sectionService;
 
     /**
-     * Construct controller
+     * Construct controller.
      *
      * @param \eZ\Publish\API\Repository\SectionService $sectionService
      */
-    public function __construct( SectionService $sectionService )
+    public function __construct(SectionService $sectionService)
     {
-        $this->sectionService  = $sectionService;
+        $this->sectionService = $sectionService;
     }
 
     /**
-     * List sections
+     * List sections.
      *
      * @return \eZ\Publish\Core\REST\Server\Values\SectionList
      */
-    public function listSections()
+    public function listSections(Request $request)
     {
-        if ( $this->request->query->has( 'identifier' ) )
-        {
+        if ($request->query->has('identifier')) {
             $sections = array(
-                $this->loadSectionByIdentifier()
+                $this->loadSectionByIdentifier($request),
             );
-        }
-        else
-        {
+        } else {
             $sections = $this->sectionService->loadSections();
         }
 
-        return new Values\SectionList( $sections, $this->request->getPathInfo() );
+        return new Values\SectionList($sections, $request->getPathInfo());
     }
 
     /**
-     * Loads section by identifier
+     * Loads section by identifier.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function loadSectionByIdentifier()
+    public function loadSectionByIdentifier(Request $request)
     {
         return $this->sectionService->loadSectionByIdentifier(
             // GET variable
-            $this->request->query->get( 'identifier' )
+            $request->query->get('identifier')
         );
     }
 
     /**
-     * Create new section
+     * Create new section.
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedSection
      */
-    public function createSection()
+    public function createSection(Request $request)
     {
-        try
-        {
+        try {
             $createdSection = $this->sectionService->createSection(
                 $this->inputDispatcher->parse(
                     new Message(
-                        array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                        $this->request->getContent()
+                        array('Content-Type' => $request->headers->get('Content-Type')),
+                        $request->getContent()
                     )
                 )
             );
-        }
-        catch ( InvalidArgumentException $e )
-        {
-            throw new ForbiddenException( $e->getMessage() );
+        } catch (InvalidArgumentException $e) {
+            throw new ForbiddenException($e->getMessage());
         }
 
         return new Values\CreatedSection(
             array(
-                'section' => $createdSection
+                'section' => $createdSection,
             )
         );
     }
 
     /**
-     * Loads a section
+     * Loads a section.
      *
      * @param $sectionId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function loadSection( $sectionId )
+    public function loadSection($sectionId)
     {
-        return $this->sectionService->loadSection( $sectionId );
+        return $this->sectionService->loadSection($sectionId);
     }
 
     /**
-     * Updates a section
+     * Updates a section.
      *
      * @param $sectionId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function updateSection( $sectionId )
+    public function updateSection($sectionId, Request $request)
     {
         $createStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                $this->request->getContent()
+                array('Content-Type' => $request->headers->get('Content-Type')),
+                $request->getContent()
             )
         );
 
-        try
-        {
+        try {
             return $this->sectionService->updateSection(
-                $this->sectionService->loadSection( $sectionId ),
-                $this->mapToUpdateStruct( $createStruct )
+                $this->sectionService->loadSection($sectionId),
+                $this->mapToUpdateStruct($createStruct)
             );
-        }
-        catch ( InvalidArgumentException $e )
-        {
-            throw new ForbiddenException( $e->getMessage() );
+        } catch (InvalidArgumentException $e) {
+            throw new ForbiddenException($e->getMessage());
         }
     }
 
     /**
-     * Delete a section by ID
+     * Delete a section by ID.
      *
      * @param $sectionId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function deleteSection( $sectionId )
+    public function deleteSection($sectionId)
     {
         $this->sectionService->deleteSection(
-            $this->sectionService->loadSection( $sectionId )
+            $this->sectionService->loadSection($sectionId)
         );
 
         return new NoContent();
@@ -175,11 +169,11 @@ class Section extends RestController
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */
-    protected function mapToUpdateStruct( SectionCreateStruct $createStruct )
+    protected function mapToUpdateStruct(SectionCreateStruct $createStruct)
     {
         return new SectionUpdateStruct(
             array(
-                'name'       => $createStruct->name,
+                'name' => $createStruct->name,
                 'identifier' => $createStruct->identifier,
             )
         );

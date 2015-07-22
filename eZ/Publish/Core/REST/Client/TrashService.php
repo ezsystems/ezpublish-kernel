@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the TrashService class
+ * File containing the TrashService class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,6 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
-
 use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
@@ -22,8 +23,6 @@ use eZ\Publish\Core\REST\Common\Message;
 
 /**
  * Trash service used for content/location trash handling.
- *
- * @package eZ\Publish\API\Repository
  */
 class TrashService implements APITrashService, Sessionable
 {
@@ -59,27 +58,26 @@ class TrashService implements APITrashService, Sessionable
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      */
-    public function __construct( LocationService $locationService, HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, RequestParser $requestParser )
+    public function __construct(LocationService $locationService, HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, RequestParser $requestParser)
     {
         $this->locationService = $locationService;
-        $this->client          = $client;
+        $this->client = $client;
         $this->inputDispatcher = $inputDispatcher;
-        $this->outputVisitor   = $outputVisitor;
-        $this->requestParser   = $requestParser;
+        $this->outputVisitor = $outputVisitor;
+        $this->requestParser = $requestParser;
     }
 
     /**
-     * Set session ID
+     * Set session ID.
      *
      * Only for testing
      *
      * @param mixed $id
      */
-    public function setSession( $id )
+    public function setSession($id)
     {
-        if ( $this->outputVisitor instanceof Sessionable )
-        {
-            $this->outputVisitor->setSession( $id );
+        if ($this->outputVisitor instanceof Sessionable) {
+            $this->outputVisitor->setSession($id);
         }
     }
 
@@ -95,18 +93,19 @@ class TrashService implements APITrashService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
-    public function loadTrashItem( $trashItemId )
+    public function loadTrashItem($trashItemId)
     {
         $response = $this->client->request(
             'GET',
             $trashItemId,
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'Location' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('Location'))
             )
         );
 
-        $location = $this->inputDispatcher->parse( $response );
-        return $this->buildTrashItem( $location );
+        $location = $this->inputDispatcher->parse($response);
+
+        return $this->buildTrashItem($location);
     }
 
     /**
@@ -120,9 +119,9 @@ class TrashService implements APITrashService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
-    public function trash( Location $location )
+    public function trash(Location $location)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
@@ -137,9 +136,9 @@ class TrashService implements APITrashService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created or recovered location
      */
-    public function recover( APITrashItem $trashItem, Location $newParentLocation = null )
+    public function recover(APITrashItem $trashItem, Location $newParentLocation = null)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
@@ -154,18 +153,19 @@ class TrashService implements APITrashService, Sessionable
     {
         $response = $this->client->request(
             'DELETE',
-            $this->requestParser->generate( 'trashItems' ),
+            $this->requestParser->generate('trashItems'),
             new Message(
                 // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Location" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'Location' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('Location'))
             )
         );
 
-        if ( !empty( $response->body ) )
-            $this->inputDispatcher->parse( $response );
+        if (!empty($response->body)) {
+            $this->inputDispatcher->parse($response);
+        }
     }
 
     /**
@@ -177,7 +177,7 @@ class TrashService implements APITrashService, Sessionable
      *
      * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
      */
-    public function deleteTrashItem( APITrashItem $trashItem )
+    public function deleteTrashItem(APITrashItem $trashItem)
     {
         $response = $this->client->request(
             'DELETE',
@@ -187,12 +187,13 @@ class TrashService implements APITrashService, Sessionable
                 // all expected exceptions + none? Or is "Location" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'Location' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('Location'))
             )
         );
 
-        if ( !empty( $response->body ) )
-            $this->inputDispatcher->parse( $response );
+        if (!empty($response->body)) {
+            $this->inputDispatcher->parse($response);
+        }
     }
 
     /**
@@ -204,34 +205,34 @@ class TrashService implements APITrashService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
      */
-    public function findTrashItems( Query $query )
+    public function findTrashItems(Query $query)
     {
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate( 'trashItems' ),
+            $this->requestParser->generate('trashItems'),
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'LocationList' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('LocationList'))
             )
         );
 
-        $locations = $this->inputDispatcher->parse( $response );
+        $locations = $this->inputDispatcher->parse($response);
 
         $trashItems = array();
-        foreach ( $locations as $location )
-        {
-            $trashItems[] = $this->buildTrashItem( $location );
+        foreach ($locations as $location) {
+            $trashItems[] = $this->buildTrashItem($location);
         }
+
         return $trashItems;
     }
 
     /**
-     * Converts the Location value object to TrashItem value object
+     * Converts the Location value object to TrashItem value object.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
-    protected function buildTrashItem( Location $location )
+    protected function buildTrashItem(Location $location)
     {
         return new TrashItem(
             array(

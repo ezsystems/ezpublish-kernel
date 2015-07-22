@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RestLocation class
+ * File containing the RestLocation class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,19 +15,19 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
- * RestLocation view model
+ * RestLocation view model.
  */
 class RestLocation extends RestValue
 {
     /**
-     * A location
+     * A location.
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */
     public $location;
 
     /**
-     * Number of children of the location
+     * Number of children of the location.
      *
      * @var int
      */
@@ -35,7 +37,7 @@ class RestLocation extends RestValue
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param int $childCount
      */
-    public function __construct( Location $location, $childCount )
+    public function __construct(Location $location, $childCount)
     {
         $this->location = $location;
         $this->childCount = $childCount;

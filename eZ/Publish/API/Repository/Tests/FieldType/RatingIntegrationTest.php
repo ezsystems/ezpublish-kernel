@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\API\Repository\Tests\FieldType\RatingIntegrationTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\RatingIntegrationTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,7 @@ use eZ\Publish\Core\FieldType\Rating\Value as RatingValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
@@ -21,7 +23,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class RatingIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -31,7 +33,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expected settings schema
+     * Get expected settings schema.
      *
      * @return array
      */
@@ -41,7 +43,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get a valid $fieldSettings value.
      *
      * @return mixed
      */
@@ -51,7 +53,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get $fieldSettings value not accepted by the field type
+     * Get $fieldSettings value not accepted by the field type.
      *
      * @return mixed
      */
@@ -63,7 +65,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expected validator schema
+     * Get expected validator schema.
      *
      * @return array
      */
@@ -73,7 +75,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $validatorConfiguration.
      *
      * @return mixed
      */
@@ -83,7 +85,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get $validatorConfiguration not accepted by the field type
+     * Get $validatorConfiguration not accepted by the field type.
      *
      * @return mixed
      */
@@ -95,13 +97,13 @@ class RatingIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get initial field data for valid object creation
+     * Get initial field data for valid object creation.
      *
      * @return mixed
      */
     public function getValidCreationFieldData()
     {
-        return new RatingValue( false );
+        return new RatingValue(false);
     }
 
     /**
@@ -111,10 +113,8 @@ class RatingIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field )
+    public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Rating\\Value',
@@ -131,7 +131,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during creation
+     * Get field data which will result in errors during creation.
      *
      * This is a PHPUnit data provider.
      *
@@ -153,7 +153,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        $value = new RatingValue( true );
+        $value = new RatingValue(true);
         $value->isDisabled = 'foo';
 
         return array(
@@ -165,23 +165,23 @@ class RatingIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get update field externals data
+     * Get update field externals data.
      *
      * @return array
      */
     public function getValidUpdateFieldData()
     {
-        return new RatingValue( true );
+        return new RatingValue(true);
     }
 
     /**
-     * Get externals updated field data values
+     * Get externals updated field data values.
      *
      * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Rating\\Value',
@@ -198,7 +198,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during update
+     * Get field data which will result in errors during update.
      *
      * This is a PHPUnit data provider.
      *
@@ -231,7 +231,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
      *
      * @param Field $field
      */
-    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Rating\\Value',
@@ -248,7 +248,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get data to test to hash method
+     * Get data to test to hash method.
      *
      * This is a PHPUnit data provider
      *
@@ -271,14 +271,14 @@ class RatingIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new RatingValue( false ),
+                new RatingValue(false),
                 0,
             ),
         );
     }
 
     /**
-     * Get expectations for the fromHash call on our field value
+     * Get expectations for the fromHash call on our field value.
      *
      * This is a PHPUnit data provider
      *
@@ -289,7 +289,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
         return array(
             array(
                 1,
-                new RatingValue( true )
+                new RatingValue(true),
             ),
         );
     }
@@ -297,7 +297,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
     /**
      * Emptiness for rating doesn't make sense, field is always considered as non empty.
      */
-    public function testIsEmptyValue( $value = null )
+    public function testIsEmptyValue($value = null)
     {
     }
 
@@ -309,9 +309,9 @@ class RatingIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
             ),
-            array( new RatingValue ),
+            array(new RatingValue()),
         );
     }
 
@@ -322,10 +322,10 @@ class RatingIntegrationTest extends BaseIntegrationTest
     {
         $content = $this->addFieldDefinition();
 
-        $this->assertCount( 2, $content->getFields() );
+        $this->assertCount(2, $content->getFields());
         $this->assertEquals(
-            $this->getRepository()->getFieldTypeService()->buildFieldType( $this->getTypeName() )->getEmptyValue(),
-            $content->getFieldValue( "data" )
+            $this->getRepository()->getFieldTypeService()->getFieldType($this->getTypeName())->getEmptyValue(),
+            $content->getFieldValue('data')
         );
     }
 }

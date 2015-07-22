@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the Block id matcher class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,10 +21,10 @@ class Block extends MultipleValued
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Block $block
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchBlock( PageBlock $block )
+    public function matchBlock(PageBlock $block)
     {
-        return isset( $this->values[$block->id] );
+        return isset($this->values[$block->id]);
     }
 }

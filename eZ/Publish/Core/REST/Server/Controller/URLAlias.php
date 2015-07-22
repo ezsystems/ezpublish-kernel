@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the URLAlias controller class
+ * File containing the URLAlias controller class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,55 +16,55 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
-
 use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\API\Repository\LocationService;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * URLAlias controller
+ * URLAlias controller.
  */
 class URLAlias extends RestController
 {
     /**
-     * URLAlias service
+     * URLAlias service.
      *
      * @var \eZ\Publish\API\Repository\URLAliasService
      */
     protected $urlAliasService;
 
     /**
-     * Location service
+     * Location service.
      *
      * @var \eZ\Publish\API\Repository\LocationService
      */
     protected $locationService;
 
     /**
-     * Construct controller
+     * Construct controller.
      *
      * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      */
-    public function __construct( URLAliasService $urlAliasService, LocationService $locationService )
+    public function __construct(URLAliasService $urlAliasService, LocationService $locationService)
     {
         $this->urlAliasService = $urlAliasService;
         $this->locationService = $locationService;
     }
 
     /**
-     * Returns the URL alias with the given ID
+     * Returns the URL alias with the given ID.
      *
      * @param $urlAliasId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function loadURLAlias( $urlAliasId )
+    public function loadURLAlias($urlAliasId)
     {
-        return $this->urlAliasService->load( $urlAliasId );
+        return $this->urlAliasService->load($urlAliasId);
     }
 
     /**
-     * Returns the list of global URL aliases
+     * Returns the list of global URL aliases.
      *
      * @return \eZ\Publish\Core\REST\Server\Values\URLAliasRefList
      */
@@ -70,61 +72,63 @@ class URLAlias extends RestController
     {
         return new Values\URLAliasRefList(
             $this->urlAliasService->listGlobalAliases(),
-            $this->router->generate( 'ezpublish_rest_listGlobalURLAliases' )
+            $this->router->generate('ezpublish_rest_listGlobalURLAliases')
         );
     }
 
     /**
-     * Returns the list of URL aliases for a location
+     * Returns the list of URL aliases for a location.
      *
      * @param $locationPath
      *
      * @return \eZ\Publish\Core\REST\Server\Values\URLAliasRefList
      */
-    public function listLocationURLAliases( $locationPath )
+    public function listLocationURLAliases($locationPath, Request $request)
     {
-        $locationPathParts = explode( '/', $locationPath );
+        $locationPathParts = explode('/', $locationPath);
 
         $location = $this->locationService->loadLocation(
-            array_pop( $locationPathParts )
+            array_pop($locationPathParts)
         );
 
-        $custom = $this->request->query->has( 'custom' ) && $this->request->query->get( 'custom' ) === 'false' ? false : true;
+        $custom = $request->query->has('custom') && $request->query->get('custom') === 'false' ? false : true;
 
-        return new Values\URLAliasRefList(
-            $this->urlAliasService->listLocationAliases( $location, $custom ),
-            $this->request->getPathInfo()
+        return new Values\CachedValue(
+            new Values\URLAliasRefList(
+                $this->urlAliasService->listLocationAliases($location, $custom),
+                $request->getPathInfo()
+            ),
+            array('locationId' => $location->id)
         );
     }
 
     /**
-     * Creates a new URL alias
+     * Creates a new URL alias.
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedURLAlias
      */
-    public function createURLAlias()
+    public function createURLAlias(Request $request)
     {
         $urlAliasCreate = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                $this->request->getContent()
+                array('Content-Type' => $request->headers->get('Content-Type')),
+                $request->getContent()
             )
         );
 
-        if ( $urlAliasCreate['_type'] === 'LOCATION' )
-        {
+        if ($urlAliasCreate['_type'] === 'LOCATION') {
             $locationPathParts = explode(
                 '/',
-                $this->requestParser->parseHref( $urlAliasCreate['location']['_href'], 'locationPath' )
+                $this->requestParser->parseHref($urlAliasCreate['location']['_href'], 'locationPath')
             );
 
             $location = $this->locationService->loadLocation(
-                array_pop( $locationPathParts )
+                array_pop($locationPathParts)
             );
 
-            try
-            {
+            try {
                 $createdURLAlias = $this->urlAliasService->createUrlAlias(
                     $location,
                     $urlAliasCreate['path'],
@@ -132,16 +136,11 @@ class URLAlias extends RestController
                     $urlAliasCreate['forward'],
                     $urlAliasCreate['alwaysAvailable']
                 );
+            } catch (InvalidArgumentException $e) {
+                throw new ForbiddenException($e->getMessage());
             }
-            catch ( InvalidArgumentException $e )
-            {
-                throw new ForbiddenException( $e->getMessage() );
-            }
-        }
-        else
-        {
-            try
-            {
+        } else {
+            try {
                 $createdURLAlias = $this->urlAliasService->createGlobalUrlAlias(
                     $urlAliasCreate['resource'],
                     $urlAliasCreate['path'],
@@ -149,32 +148,30 @@ class URLAlias extends RestController
                     $urlAliasCreate['forward'],
                     $urlAliasCreate['alwaysAvailable']
                 );
-            }
-            catch ( InvalidArgumentException $e )
-            {
-                throw new ForbiddenException( $e->getMessage() );
+            } catch (InvalidArgumentException $e) {
+                throw new ForbiddenException($e->getMessage());
             }
         }
 
         return new Values\CreatedURLAlias(
             array(
-                'urlAlias' => $createdURLAlias
+                'urlAlias' => $createdURLAlias,
             )
         );
     }
 
     /**
-     * The given URL alias is deleted
+     * The given URL alias is deleted.
      *
      * @param $urlAliasId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function deleteURLAlias( $urlAliasId )
+    public function deleteURLAlias($urlAliasId)
     {
         $this->urlAliasService->removeAliases(
             array(
-                $this->urlAliasService->load( $urlAliasId )
+                $this->urlAliasService->load($urlAliasId),
             )
         );
 

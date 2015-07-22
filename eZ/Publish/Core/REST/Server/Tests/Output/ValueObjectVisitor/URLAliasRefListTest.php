@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,36 +15,35 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\URLAliasRefList;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
-use eZ\Publish\Core\REST\Common;
 
 class URLAliasRefListTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the URLAliasRefList visitor
+     * Test the URLAliasRefList visitor.
      *
      * @return \DOMDocument
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $urlAliasRefList = new URLAliasRefList(
             array(
                 new URLAlias(
                     array(
-                        'id' => 'some-id'
+                        'id' => 'some-id',
                     )
-                )
+                ),
             ),
             '/some/path'
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadURLAlias',
-            array( 'urlAliasId' => $urlAliasRefList->urlAliases[0]->id ),
+            array('urlAliasId' => $urlAliasRefList->urlAliases[0]->id),
             "/content/urlaliases/{$urlAliasRefList->urlAliases[0]->id}"
         );
 
@@ -52,12 +53,12 @@ class URLAliasRefListTest extends ValueObjectVisitorBaseTest
             $urlAliasRefList
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         $dom = new \DOMDocument();
-        $dom->loadXml( $result );
+        $dom->loadXml($result);
 
         return $dom;
     }
@@ -67,9 +68,9 @@ class URLAliasRefListTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisit
      */
-    public function testUrlAliasRefListHrefCorrect( \DOMDocument $dom )
+    public function testUrlAliasRefListHrefCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/UrlAliasRefList[@href="/some/path"]'  );
+        $this->assertXPath($dom, '/UrlAliasRefList[@href="/some/path"]');
     }
 
     /**
@@ -77,9 +78,9 @@ class URLAliasRefListTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisit
      */
-    public function testUrlAliasRefListMediaTypeCorrect( \DOMDocument $dom )
+    public function testUrlAliasRefListMediaTypeCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/UrlAliasRefList[@media-type="application/vnd.ez.api.UrlAliasRefList+xml"]'  );
+        $this->assertXPath($dom, '/UrlAliasRefList[@media-type="application/vnd.ez.api.UrlAliasRefList+xml"]');
     }
 
     /**
@@ -87,9 +88,9 @@ class URLAliasRefListTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisit
      */
-    public function testUrlAliasHrefCorrect( \DOMDocument $dom )
+    public function testUrlAliasHrefCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/UrlAliasRefList/UrlAlias[@href="/content/urlaliases/some-id"]'  );
+        $this->assertXPath($dom, '/UrlAliasRefList/UrlAlias[@href="/content/urlaliases/some-id"]');
     }
 
     /**
@@ -97,18 +98,18 @@ class URLAliasRefListTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisit
      */
-    public function testUrlAliasMediaTypeCorrect( \DOMDocument $dom )
+    public function testUrlAliasMediaTypeCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/UrlAliasRefList/UrlAlias[@media-type="application/vnd.ez.api.UrlAlias+xml"]'  );
+        $this->assertXPath($dom, '/UrlAliasRefList/UrlAlias[@media-type="application/vnd.ez.api.UrlAlias+xml"]');
     }
 
     /**
-     * Get the URLAliasRefList visitor
+     * Get the URLAliasRefList visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\URLAliasRefList
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\URLAliasRefList;
+        return new ValueObjectVisitor\URLAliasRefList();
     }
 }

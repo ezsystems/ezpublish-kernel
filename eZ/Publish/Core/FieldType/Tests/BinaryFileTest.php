@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the BinaryFileTest class
+ * File containing the BinaryFileTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -31,15 +33,15 @@ class BinaryFileTest extends BinaryBaseTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new BinaryFileType(
-            $this->getIOServiceMock(),
-            $this->getMimeTypeDetectorMock()
-        );
+        $fieldType = new BinaryFileType();
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
+
+        return $fieldType;
     }
 
     protected function getEmptyValueExpectation()
     {
-        return new BinaryFileValue;
+        return new BinaryFileValue();
     }
 
     public function provideInvalidInputForAcceptValue()
@@ -47,11 +49,12 @@ class BinaryFileTest extends BinaryBaseTest
         $baseInput = parent::provideInvalidInputForAcceptValue();
         $binaryFileInput = array(
             array(
-                new BinaryFileValue( array( 'id' => '/foo/bar' ) ),
+                new BinaryFileValue(array('id' => '/foo/bar')),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
             ),
         );
-        return array_merge( $baseInput, $binaryFileInput );
+
+        return array_merge($baseInput, $binaryFileInput);
     }
 
     public function provideValidInputForAcceptValue()
@@ -59,99 +62,112 @@ class BinaryFileTest extends BinaryBaseTest
         return array(
             array(
                 null,
-                new BinaryFileValue
+                new BinaryFileValue(),
             ),
             array(
                 new BinaryFileValue(),
-                new BinaryFileValue()
+                new BinaryFileValue(),
             ),
             array(
                 array(),
-                new BinaryFileValue()
+                new BinaryFileValue(),
             ),
             array(
                 __FILE__,
                 new BinaryFileValue(
                     array(
-                        'id' => __FILE__,
-                        'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
+                        'inputUri' => __FILE__,
+                        'fileName' => basename(__FILE__),
+                        'fileSize' => filesize(__FILE__),
                         'downloadCount' => 0,
                         'mimeType' => null,
                     )
                 ),
-                array( /* 'getFileSize' => filesize( __FILE__ ) */ ),
-                array( /* 'getMimeType' => 'text/plain' */ )
+                array(/* 'getFileSize' => filesize( __FILE__ ) */),
+                array(/* 'getMimeType' => 'text/plain' */),
             ),
             array(
-                array( 'id' => __FILE__ ),
+                array('inputUri' => __FILE__),
                 new BinaryFileValue(
                     array(
-                        'id' => __FILE__,
-                        'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
+                        'inputUri' => __FILE__,
+                        'fileName' => basename(__FILE__),
+                        'fileSize' => filesize(__FILE__),
                         'downloadCount' => 0,
                         'mimeType' => null,
                     )
                 ),
-                array( /*'getFileSize' => filesize( __FILE__ ) */ ),
-                array( /* 'getMimeType' => 'text/plain' */ )
+                array(/*'getFileSize' => filesize( __FILE__ ) */),
+                array(/* 'getMimeType' => 'text/plain' */),
             ),
             array(
                 array(
-                    'id' => __FILE__,
+                    'inputUri' => __FILE__,
                     'fileSize' => 23,
                 ),
                 new BinaryFileValue(
                     array(
-                        'id' => __FILE__,
-                        'fileName' => basename( __FILE__ ),
+                        'inputUri' => __FILE__,
+                        'fileName' => basename(__FILE__),
                         'fileSize' => 23,
                         'downloadCount' => 0,
                         'mimeType' => null,
                     )
                 ),
                 array(),
-                array( /* 'getMimeType' => 'text/plain' */ )
+                array(/* 'getMimeType' => 'text/plain' */),
             ),
             array(
                 array(
-                    'id' => __FILE__,
+                    'inputUri' => __FILE__,
                     'downloadCount' => 42,
                 ),
                 new BinaryFileValue(
                     array(
-                        'id' => __FILE__,
-                        'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
+                        'inputUri' => __FILE__,
+                        'fileName' => basename(__FILE__),
+                        'fileSize' => filesize(__FILE__),
                         'downloadCount' => 42,
                         'mimeType' => null,
                     )
                 ),
-                array( /* 'getFileSize' => filesize( __FILE__ ) */ ),
-                array( /* 'getMimeType' => 'text/plain' */ )
+                array(/* 'getFileSize' => filesize( __FILE__ ) */),
+                array(/* 'getMimeType' => 'text/plain' */),
             ),
             array(
                 array(
-                    'id' => __FILE__,
+                    'inputUri' => __FILE__,
                     'mimeType' => 'application/text+php',
                 ),
                 new BinaryFileValue(
                     array(
-                        'id' => __FILE__,
-                        'fileName' => basename( __FILE__ ),
-                        'fileSize' => filesize( __FILE__ ),
+                        'inputUri' => __FILE__,
+                        'fileName' => basename(__FILE__),
+                        'fileSize' => filesize(__FILE__),
                         'downloadCount' => 0,
                         'mimeType' => 'application/text+php',
                     )
                 ),
-                array( /* 'getFileSize' => filesize( __FILE__ ) */ )
+                array(/* 'getFileSize' => filesize( __FILE__ ) */),
+            ),
+            // BC with 5.2 (EZP-22808). Id can be used as input instead of inputUri.
+            array(
+                array('id' => __FILE__),
+                new BinaryFileValue(
+                    array(
+                        'inputUri' => __FILE__,
+                        'fileName' => basename(__FILE__),
+                        'fileSize' => filesize(__FILE__),
+                        'downloadCount' => 0,
+                        'mimeType' => null,
+                    )
+                ),
             ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -189,8 +205,8 @@ class BinaryFileTest extends BinaryBaseTest
     {
         return array(
             array(
-                new BinaryFileValue,
-                null
+                new BinaryFileValue(),
+                null,
             ),
             array(
                 new BinaryFileValue(
@@ -205,6 +221,29 @@ class BinaryFileTest extends BinaryBaseTest
                 ),
                 array(
                     'id' => 'some/file/here',
+                    'inputUri' => null,
+                    'path' => null,
+                    'fileName' => 'sindelfingen.jpg',
+                    'fileSize' => 2342,
+                    'downloadCount' => 0,
+                    'mimeType' => 'image/jpeg',
+                    'uri' => 'http://some/file/here',
+                ),
+            ),
+            array(
+                new BinaryFileValue(
+                    array(
+                        'inputUri' => 'some/file/here',
+                        'fileName' => 'sindelfingen.jpg',
+                        'fileSize' => 2342,
+                        'downloadCount' => 0,
+                        'mimeType' => 'image/jpeg',
+                        'uri' => 'http://some/file/here',
+                    )
+                ),
+                array(
+                    'id' => null,
+                    'inputUri' => 'some/file/here',
                     // Used for BC with 5.0 (EZP-20948)
                     'path' => 'some/file/here',
                     'fileName' => 'sindelfingen.jpg',
@@ -212,9 +251,9 @@ class BinaryFileTest extends BinaryBaseTest
                     'downloadCount' => 0,
                     'mimeType' => 'image/jpeg',
                     'uri' => 'http://some/file/here',
-                )
+                ),
             ),
-            // BC with 5.0 (EZP-20948). Path can be used as input instead of ID.
+            // BC with 5.0 (EZP-20948). Path can be used as input instead of inputUri.
             array(
                 new BinaryFileValue(
                     array(
@@ -228,19 +267,89 @@ class BinaryFileTest extends BinaryBaseTest
                 ),
                 array(
                     'id' => 'some/file/here',
-                    'path' => 'some/file/here',
+                    'inputUri' => null,
+                    'path' => null,
                     'fileName' => 'sindelfingen.jpg',
                     'fileSize' => 2342,
                     'downloadCount' => 0,
                     'mimeType' => 'image/jpeg',
                     'uri' => 'http://some/file/here',
-                )
-            )
+                ),
+            ),
+            // BC with 5.0 (EZP-20948). Path can be used as input instead of inputUri.
+            array(
+                new BinaryFileValue(
+                    array(
+                        'path' => __FILE__,
+                        'fileName' => 'sindelfingen.jpg',
+                        'fileSize' => 2342,
+                        'downloadCount' => 0,
+                        'mimeType' => 'image/jpeg',
+                        'uri' => 'http://some/file/here',
+                    )
+                ),
+                array(
+                    'id' => null,
+                    'inputUri' => __FILE__,
+                    'path' => __FILE__,
+                    'fileName' => 'sindelfingen.jpg',
+                    'fileSize' => 2342,
+                    'downloadCount' => 0,
+                    'mimeType' => 'image/jpeg',
+                    'uri' => 'http://some/file/here',
+                ),
+            ),
+            // BC with 5.2 (EZP-22808). Id can be used as input instead of inputUri.
+            array(
+                new BinaryFileValue(
+                    array(
+                        'id' => __FILE__,
+                        'fileName' => 'sindelfingen.jpg',
+                        'fileSize' => 2342,
+                        'downloadCount' => 0,
+                        'mimeType' => 'image/jpeg',
+                        'uri' => 'http://some/file/here',
+                    )
+                ),
+                array(
+                    'id' => null,
+                    'inputUri' => __FILE__,
+                    'path' => __FILE__,
+                    'fileName' => 'sindelfingen.jpg',
+                    'fileSize' => 2342,
+                    'downloadCount' => 0,
+                    'mimeType' => 'image/jpeg',
+                    'uri' => 'http://some/file/here',
+                ),
+            ),
+            // BC with 5.2 (EZP-22808). Id is recognized as such if not pointing to existing file.
+            array(
+                new BinaryFileValue(
+                    array(
+                        'id' => 'application/asdf1234.pdf',
+                        'fileName' => 'asdf1234.pdf',
+                        'fileSize' => 2342,
+                        'downloadCount' => 0,
+                        'mimeType' => 'application/pdf',
+                        'uri' => 'http://some/file/here',
+                    )
+                ),
+                array(
+                    'id' => 'application/asdf1234.pdf',
+                    'inputUri' => null,
+                    'path' => null,
+                    'fileName' => 'asdf1234.pdf',
+                    'fileSize' => 2342,
+                    'downloadCount' => 0,
+                    'mimeType' => 'application/pdf',
+                    'uri' => 'http://some/file/here',
+                ),
+            ),
         );
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -279,7 +388,7 @@ class BinaryFileTest extends BinaryBaseTest
         return array(
             array(
                 null,
-                new BinaryFileValue
+                new BinaryFileValue(),
             ),
             array(
                 array(
@@ -297,9 +406,9 @@ class BinaryFileTest extends BinaryBaseTest
                         'downloadCount' => 0,
                         'mimeType' => 'image/jpeg',
                     )
-                )
+                ),
             ),
-            // BC with 5.0 (EZP-20948). Path can be used as input instead of ID.
+            // BC with 5.0 (EZP-20948). Path can be used as input instead of inputUri.
             array(
                 array(
                     'path' => 'some/file/here',
@@ -316,9 +425,49 @@ class BinaryFileTest extends BinaryBaseTest
                         'downloadCount' => 0,
                         'mimeType' => 'image/jpeg',
                     )
-                )
-            )
+                ),
+            ),
+            // BC with 5.2 (EZP-22808). Id can be used as input instead of inputUri.
+            array(
+                array(
+                    'id' => __FILE__,
+                    'fileName' => 'sindelfingen.jpg',
+                    'fileSize' => 2342,
+                    'downloadCount' => 0,
+                    'mimeType' => 'image/jpeg',
+                ),
+                new BinaryFileValue(
+                    array(
+                        'id' => null,
+                        'inputUri' => __FILE__,
+                        'path' => __FILE__,
+                        'fileName' => 'sindelfingen.jpg',
+                        'fileSize' => 2342,
+                        'downloadCount' => 0,
+                        'mimeType' => 'image/jpeg',
+                    )
+                ),
+            ),
             // @todo: Provide upload struct (via REST)!
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezbinaryfile';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array(
+                new BinaryFileValue(),
+                '',
+            ),
+            array(
+                new BinaryFileValue(array('fileName' => 'sindelfingen.jpg')),
+                'sindelfingen.jpg',
+            ),
         );
     }
 }

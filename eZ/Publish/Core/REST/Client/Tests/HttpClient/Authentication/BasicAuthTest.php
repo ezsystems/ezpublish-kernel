@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing BasicAuthTest test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,32 +21,32 @@ use PHPUnit_Framework_TestCase;
 class BasicAuthTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Mock for the inner HTTP client
+     * Mock for the inner HTTP client.
      *
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $innerHttpClientMock;
 
     /**
-     * Tests authentication without message
+     * Tests authentication without message.
      */
     public function testAuthWithoutMessage()
     {
         $innerClientMock = $this->getInnerHttpClientMock();
 
-        $client = new BasicAuth( $innerClientMock, 'sindelfingen', 's3cr3t' );
+        $client = new BasicAuth($innerClientMock, 'sindelfingen', 's3cr3t');
 
-        $innerClientMock->expects( $this->once() )
-            ->method( 'request' )
+        $innerClientMock->expects($this->once())
+            ->method('request')
             ->with(
                 'GET',
                 '/some/path',
                 new Message(
-                    array( 'Authorization' => 'Basic c2luZGVsZmluZ2VuOnMzY3IzdA==' )
+                    array('Authorization' => 'Basic c2luZGVsZmluZ2VuOnMzY3IzdA==')
                 )
-            )->will( $this->returnValue( new \stdClass() ) );
+            )->will($this->returnValue(new \stdClass()));
 
-        $result = $client->request( 'GET', '/some/path' );
+        $result = $client->request('GET', '/some/path');
 
         $this->assertInstanceOf(
             '\\stdClass',
@@ -53,27 +55,27 @@ class BasicAuthTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests authentication with message
+     * Tests authentication with message.
      */
     public function testAuthWithMessage()
     {
         $innerClientMock = $this->getInnerHttpClientMock();
 
-        $client = new BasicAuth( $innerClientMock, 'sindelfingen', 's3cr3t' );
+        $client = new BasicAuth($innerClientMock, 'sindelfingen', 's3cr3t');
 
-        $innerClientMock->expects( $this->once() )
-            ->method( 'request' )
+        $innerClientMock->expects($this->once())
+            ->method('request')
             ->with(
                 'PUT',
                 '/some/path',
                 new Message(
                     array(
                         'X-Some-Header' => 'foobar',
-                        'Authorization' => 'Basic c2luZGVsZmluZ2VuOnMzY3IzdA=='
+                        'Authorization' => 'Basic c2luZGVsZmluZ2VuOnMzY3IzdA==',
                     ),
                     'body content'
                 )
-            )->will( $this->returnValue( new \stdClass() ) );
+            )->will($this->returnValue(new \stdClass()));
 
         $result = $client->request(
             'PUT',
@@ -93,14 +95,13 @@ class BasicAuthTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Gets the inner HTTP client mock
+     * Gets the inner HTTP client mock.
      *
      * @return \eZ\Publish\Core\REST\Client\HttpClient
      */
     protected function getInnerHttpClientMock()
     {
-        if ( !isset( $this->innerHttpClientMock ) )
-        {
+        if (!isset($this->innerHttpClientMock)) {
             $this->innerHttpClientMock = $this->getMock(
                 '\\eZ\\Publish\\Core\\REST\\Client\\HttpClient',
                 array(),
@@ -109,6 +110,7 @@ class BasicAuthTest extends PHPUnit_Framework_TestCase
                 false
             );
         }
+
         return $this->innerHttpClientMock;
     }
 }

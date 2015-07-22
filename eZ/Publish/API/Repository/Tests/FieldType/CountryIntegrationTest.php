@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\API\Repository\Tests\FieldType\CountryIntegrationTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\CountryIntegrationTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,7 @@ use eZ\Publish\Core\FieldType\Country\Value as CountryValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
@@ -21,7 +23,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class CountryIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -31,34 +33,34 @@ class CountryIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expected settings schema
+     * Get expected settings schema.
      *
      * @return array
      */
     public function getSettingsSchema()
     {
         return array(
-            "isMultiple" => array(
-                "type" => "boolean",
-                "default" => false
-            )
+            'isMultiple' => array(
+                'type' => 'boolean',
+                'default' => false,
+            ),
         );
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get a valid $fieldSettings value.
      *
      * @return mixed
      */
     public function getValidFieldSettings()
     {
         return array(
-            "isMultiple" => false
+            'isMultiple' => false,
         );
     }
 
     /**
-     * Get $fieldSettings value not accepted by the field type
+     * Get $fieldSettings value not accepted by the field type.
      *
      * @return mixed
      */
@@ -70,7 +72,7 @@ class CountryIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expected validator schema
+     * Get expected validator schema.
      *
      * @return array
      */
@@ -80,7 +82,7 @@ class CountryIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $validatorConfiguration.
      *
      * @return mixed
      */
@@ -90,19 +92,19 @@ class CountryIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get $validatorConfiguration not accepted by the field type
+     * Get $validatorConfiguration not accepted by the field type.
      *
      * @return mixed
      */
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            "unknown" => array( "value" => 42 ),
+            'unknown' => array('value' => 42),
         );
     }
 
     /**
-     * Get initial field data for valid object creation
+     * Get initial field data for valid object creation.
      *
      * @return mixed
      */
@@ -110,12 +112,12 @@ class CountryIntegrationTest extends BaseIntegrationTest
     {
         return new CountryValue(
             array(
-                "BE" => array(
-                    "Name" => "Belgium",
-                    "Alpha2" => "BE",
-                    "Alpha3" => "BEL",
-                    "IDC" => 32,
-                )
+                'BE' => array(
+                    'Name' => 'Belgium',
+                    'Alpha2' => 'BE',
+                    'Alpha3' => 'BEL',
+                    'IDC' => 32,
+                ),
             )
         );
     }
@@ -127,10 +129,8 @@ class CountryIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field )
+    public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Country\\Value',
@@ -138,14 +138,14 @@ class CountryIntegrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            "countries" => array(
-                "BE" => array(
-                    "Name" => "Belgium",
-                    "Alpha2" => "BE",
-                    "Alpha3" => "BEL",
-                    "IDC" => 32,
-                )
-            )
+            'countries' => array(
+                'BE' => array(
+                    'Name' => 'Belgium',
+                    'Alpha2' => 'BE',
+                    'Alpha3' => 'BEL',
+                    'IDC' => 32,
+                ),
+            ),
         );
 
         $this->assertPropertiesCorrect(
@@ -155,7 +155,7 @@ class CountryIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during creation
+     * Get field data which will result in errors during creation.
      *
      * This is a PHPUnit data provider.
      *
@@ -180,34 +180,34 @@ class CountryIntegrationTest extends BaseIntegrationTest
         return array(
             array(
                 'Sindelfingen',
-                'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'
+                'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                array( "NON_VALID_ALPHA2_CODE"  ),
-                'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'
+                array('NON_VALID_ALPHA2_CODE'),
+                'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                array( "BE", "FR"  ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException'
+                array('BE', 'FR'),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
             ),
             array(
                 new CountryValue(
                     array(
-                        "NON_VALID_ALPHA2_CODE" => array(
-                            "Name" => "Belgium",
-                            "Alpha2" => "BE",
-                            "Alpha3" => "BEL",
-                            "IDC" => 32,
-                        )
+                        'NON_VALID_ALPHA2_CODE' => array(
+                            'Name' => 'Belgium',
+                            'Alpha2' => 'BE',
+                            'Alpha3' => 'BEL',
+                            'IDC' => 32,
+                        ),
                     )
                 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException'
+                'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
             ),
         );
     }
 
     /**
-     * Get update field externals data
+     * Get update field externals data.
      *
      * @return array
      */
@@ -215,24 +215,24 @@ class CountryIntegrationTest extends BaseIntegrationTest
     {
         return new CountryValue(
             array(
-                "FR" => array(
-                    "Name" => "France",
-                    "Alpha2" => "FR",
-                    "Alpha3" => "FRA",
-                    "IDC" => 33,
-                )
+                'FR' => array(
+                    'Name' => 'France',
+                    'Alpha2' => 'FR',
+                    'Alpha3' => 'FRA',
+                    'IDC' => 33,
+                ),
             )
         );
     }
 
     /**
-     * Get externals updated field data values
+     * Get externals updated field data values.
      *
      * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Country\\Value',
@@ -240,14 +240,14 @@ class CountryIntegrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            "countries" => array(
-                "FR" => array(
-                    "Name" => "France",
-                    "Alpha2" => "FR",
-                    "Alpha3" => "FRA",
-                    "IDC" => 33,
-                )
-            )
+            'countries' => array(
+                'FR' => array(
+                    'Name' => 'France',
+                    'Alpha2' => 'FR',
+                    'Alpha3' => 'FRA',
+                    'IDC' => 33,
+                ),
+            ),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -256,7 +256,7 @@ class CountryIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during update
+     * Get field data which will result in errors during update.
      *
      * This is a PHPUnit data provider.
      *
@@ -289,7 +289,7 @@ class CountryIntegrationTest extends BaseIntegrationTest
      *
      * @param Field $field
      */
-    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Country\\Value',
@@ -297,14 +297,14 @@ class CountryIntegrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            "countries" => array(
-                "BE" => array(
-                    "Name" => "Belgium",
-                    "Alpha2" => "BE",
-                    "Alpha3" => "BEL",
-                    "IDC" => 32,
-                )
-            )
+            'countries' => array(
+                'BE' => array(
+                    'Name' => 'Belgium',
+                    'Alpha2' => 'BE',
+                    'Alpha3' => 'BEL',
+                    'IDC' => 32,
+                ),
+            ),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -313,7 +313,7 @@ class CountryIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get data to test to hash method
+     * Get data to test to hash method.
      *
      * This is a PHPUnit data provider
      *
@@ -338,27 +338,27 @@ class CountryIntegrationTest extends BaseIntegrationTest
             array(
                 new CountryValue(
                     array(
-                        "BE" => array(
-                            "Name" => "Belgium",
-                            "Alpha2" => "BE",
-                            "Alpha3" => "BEL",
-                            "IDC" => 32,
+                        'BE' => array(
+                            'Name' => 'Belgium',
+                            'Alpha2' => 'BE',
+                            'Alpha3' => 'BEL',
+                            'IDC' => 32,
                         ),
-                        "FR" => array(
-                            "Name" => "France",
-                            "Alpha2" => "FR",
-                            "Alpha3" => "FRA",
-                            "IDC" => 33,
-                        )
+                        'FR' => array(
+                            'Name' => 'France',
+                            'Alpha2' => 'FR',
+                            'Alpha3' => 'FRA',
+                            'IDC' => 33,
+                        ),
                     )
                 ),
-                array( 'BE', 'FR' ),
+                array('BE', 'FR'),
             ),
         );
     }
 
     /**
-     * Get expectations for the fromHash call on our field value
+     * Get expectations for the fromHash call on our field value.
      *
      * This is a PHPUnit data provider
      *
@@ -368,21 +368,21 @@ class CountryIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                array( "BE", "FR" ),
+                array('BE', 'FR'),
                 new CountryValue(
                     array(
-                        "BE" => array(
-                            "Name" => "Belgium",
-                            "Alpha2" => "BE",
-                            "Alpha3" => "BEL",
-                            "IDC" => 32,
+                        'BE' => array(
+                            'Name' => 'Belgium',
+                            'Alpha2' => 'BE',
+                            'Alpha3' => 'BEL',
+                            'IDC' => 32,
                         ),
-                        "FR" => array(
-                            "Name" => "France",
-                            "Alpha2" => "FR",
-                            "Alpha3" => "FRA",
-                            "IDC" => 33,
-                        )
+                        'FR' => array(
+                            'Name' => 'France',
+                            'Alpha2' => 'FR',
+                            'Alpha3' => 'FRA',
+                            'IDC' => 33,
+                        ),
                     )
                 ),
             ),
@@ -392,8 +392,8 @@ class CountryIntegrationTest extends BaseIntegrationTest
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new CountryValue ),
-            array( new CountryValue( array() ) ),
+            array(new CountryValue()),
+            array(new CountryValue(array())),
         );
     }
 
@@ -401,7 +401,7 @@ class CountryIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
             ),
         );
     }

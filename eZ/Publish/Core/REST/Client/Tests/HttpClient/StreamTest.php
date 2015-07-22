@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the StreamTest class
+ * File containing the StreamTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,71 +26,68 @@ class StreamTest extends PHPUnit_Framework_TestCase
     protected $client;
 
     /**
-     * Sets up the testing environment
+     * Sets up the testing environment.
      */
     public function setUp()
     {
-        $this->client = new Stream( 'http://localhost:8042' );
+        $this->client = new Stream('http://localhost:8042');
 
-        try
-        {
-            $this->client->request( 'GET', '/' );
-        }
-        catch ( ConnectionException $e )
-        {
-            $this->markTestSkipped( 'No HTTP server at http://localhost:8042 found.' );
+        try {
+            $this->client->request('GET', '/');
+        } catch (ConnectionException $e) {
+            $this->markTestSkipped('No HTTP server at http://localhost:8042 found.');
         }
     }
 
     /**
-     * Tests the response status
+     * Tests the response status.
      */
     public function testResponseStatus()
     {
-        $response = $this->client->request( 'GET', '/' );
+        $response = $this->client->request('GET', '/');
 
-        $this->assertSame( 500, $response->headers['status'] );
+        $this->assertSame(500, $response->headers['status']);
     }
 
     /**
-     * Tests that the response body is not empty
+     * Tests that the response body is not empty.
      */
     public function testResponseNonEmptyBody()
     {
-        $response = $this->client->request( 'GET', '/' );
+        $response = $this->client->request('GET', '/');
 
-        $this->assertFalse( empty( $response->body ) );
+        $this->assertFalse(empty($response->body));
     }
 
     /**
-     * Tests presence of response headers
+     * Tests presence of response headers.
      */
     public function testResponseHeadersArray()
     {
-        $response = $this->client->request( 'GET', '/' );
+        $response = $this->client->request('GET', '/');
 
-        $this->assertTrue( is_array( $response->headers ) );
+        $this->assertTrue(is_array($response->headers));
     }
 
     /**
-     * Test presence of X-Powered-By header
+     * Test presence of X-Powered-By header.
      */
     public function testResponseXPoweredByHeader()
     {
-        $response = $this->client->request( 'GET', '/' );
+        $response = $this->client->request('GET', '/');
 
-        $this->assertTrue( isset( $response->headers['X-Powered-By'] ) );
-        $this->assertTrue( is_string( $response->headers['X-Powered-By'] ) );
+        $this->assertTrue(isset($response->headers['X-Powered-By']));
+        $this->assertTrue(is_string($response->headers['X-Powered-By']));
     }
 
     /**
-     * Tests that ConnectionException is thrown
+     * Tests that ConnectionException is thrown.
      *
      * @expectedException \eZ\Publish\Core\REST\Client\HttpClient\ConnectionException
      */
     public function testConnectionException()
     {
-        $client = new Stream( 'http://localhost:54321' );
-        $client->request( 'GET', '/' );
+        $client = new Stream('http://localhost:54321');
+        $client->request('GET', '/');
     }
 }

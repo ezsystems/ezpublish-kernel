@@ -1,15 +1,16 @@
 <?php
+
 /**
- * File containing the ContentInfo class
+ * File containing the ContentInfo class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Values\Content;
 
-use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use eZ\Publish\Core\REST\Client\ContentTypeService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
 
@@ -30,6 +31,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
  * @property-read string $remoteId a global unique id of the content object
  * @property-read string $mainLanguageCode The main language code of the content. If the available flag is set to true the content is shown in this language if the requested language does not exist.
  * @property-read mixed $mainLocationId Identifier of the main location.
+ *
  * @see \eZ\Publish\API\Repository\Values\Content\ContentInfo
  */
 class ContentInfo extends APIContentInfo
@@ -44,9 +46,9 @@ class ContentInfo extends APIContentInfo
      */
     protected $contentTypeService;
 
-    public function __construct( ContentTypeService $contentTypeService, array $data = array() )
+    public function __construct(ContentTypeService $contentTypeService, array $data = array())
     {
-        parent::__construct( $data );
+        parent::__construct($data);
         $this->contentTypeService = $contentTypeService;
     }
 }

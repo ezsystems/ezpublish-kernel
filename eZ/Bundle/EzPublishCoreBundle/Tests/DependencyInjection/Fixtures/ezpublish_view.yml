@@ -1,0 +1,133 @@
+siteaccess:
+    default_siteaccess: ezdemo_site
+    list:
+        - ezdemo_site
+        - fre
+        - ezdemo_site_admin
+    groups:
+        ezdemo_group:
+            - ezdemo_site
+            - fre
+            - ezdemo_site_admin
+        ezdemo_frontend_group:
+            - ezdemo_site
+            - fre
+    match:
+        URIElement: 1
+        Map\URI:
+            the_front: ezdemo_site
+            the_back: ezdemo_site_admin
+
+system:
+    ezdemo_frontend_group:
+        location_view:
+            full:
+                article:
+                    controller: "eZDemoBundle:Demo:showArticle"
+                    template: "eZDemoBundle:full:article.html.twig"
+                    match:
+                        Identifier\ContentType: [article]
+                # There are two ways to add extra information to your response using a custom controller
+                blog:
+                    # Fully customized, handling everything yourself
+                    controller: "eZDemoBundle:Demo:listBlogPosts"
+                    match:
+                        Identifier\ContentType: [blog]
+                blog_post:
+                    # Enriched controller, only adding extra parameters
+                    controller: "eZDemoBundle:Demo:showBlogPost"
+                    # Overriding the template used by the default viewLocation
+                    template: "eZDemoBundle:full:blog_post.html.twig"
+                    match:
+                        Identifier\ContentType: [blog_post]
+                frontpage:
+                    template: "eZDemoBundle:full:landing_page.html.twig"
+                    match:
+                        Identifier\ContentType: "landing_page"
+                    params:
+                        foo: bar
+                        zorglub: 123
+
+            line:
+                article:
+                    template: "eZDemoBundle:line:article.html.twig"
+                    match:
+                        Identifier\ContentType: [article]
+                blog_post:
+                    controller: "eZDemoBundle:Demo:showBlogPost"
+                    template: "eZDemoBundle:line:blog_post.html.twig"
+                    match:
+                        Identifier\ContentType: [blog_post]
+
+        content_view:
+            full:
+                article:
+                    controller: "eZDemoBundle:Demo:showArticle"
+                    template: "eZDemoBundle:full:article.html.twig"
+                    match:
+                        Identifier\ContentType: [article]
+                # There are two ways to add extra information to your response using a custom controller
+                blog:
+                    # Fully customized, handling everything yourself
+                    controller: "eZDemoBundle:Demo:listBlogPosts"
+                    match:
+                        Identifier\ContentType: [blog]
+                blog_post:
+                    # Enriched controller, only adding extra parameters
+                    controller: "eZDemoBundle:Demo:showBlogPost"
+                    # Overriding the template used by the default viewLocation
+                    template: "eZDemoBundle:full:blog_post.html.twig"
+                    match:
+                        Identifier\ContentType: [blog_post]
+                    params:
+                        foo: bar
+                        zorglub: 123
+                frontpage:
+                    template: "eZDemoBundle:full:landing_page.html.twig"
+                    match:
+                        Identifier\ContentType: "landing_page"
+
+            line:
+                article:
+                    template: "eZDemoBundle:line:article.html.twig"
+                    match:
+                        Identifier\ContentType: [article]
+                blog_post:
+                    controller: "eZDemoBundle:Demo:showBlogPost"
+                    template: "eZDemoBundle:line:blog_post.html.twig"
+                    match:
+                        Identifier\ContentType: [blog_post]
+
+        block_view:
+            campaign:
+                template: eZDemoBundle:block:campaign.html.twig
+                match:
+                    Type: Campaign
+
+            content_grid_2cols_2_rows:
+                template: eZDemoBundle:block:content_grid_2cols_2rows.html.twig
+                match:
+                    Type: ContentGrid
+                    View: 2_columns_2_rows
+
+            content_grid_1col_2rows:
+                template: eZDemoBundle:block:content_grid_1col_2rows.html.twig
+                match:
+                    Type: ContentGrid
+                    View: default
+
+            content_grid_1col_4rows:
+                template: eZDemoBundle:block:content_grid_1col_4rows.html.twig
+                match:
+                    Type: ContentGrid
+                    View: 1_column_4_rows
+
+imagemagick:
+    enabled: false
+
+http_cache:
+    purge_type: local
+
+router:
+    default_router:
+        non_siteaccess_aware_routes: ['foo_route', 'my_prefix_']

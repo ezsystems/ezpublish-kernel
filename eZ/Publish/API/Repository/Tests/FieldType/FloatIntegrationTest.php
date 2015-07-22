@@ -1,27 +1,30 @@
 <?php
+
 /**
- * File contains: eZ\Publish\API\Repository\Tests\FieldType\FloatIntegrationTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\FloatIntegrationTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
+use eZ\Publish\Core\FieldType\Float\Type;
 use eZ\Publish\Core\FieldType\Float\Value as FloatValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
  */
-class FloatIntegrationTest extends BaseIntegrationTest
+class FloatIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -31,7 +34,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expected settings schema
+     * Get expected settings schema.
      *
      * @return array
      */
@@ -41,7 +44,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get a valid $fieldSettings value.
      *
      * @return mixed
      */
@@ -51,7 +54,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get $fieldSettings value not accepted by the field type
+     * Get $fieldSettings value not accepted by the field type.
      *
      * @return mixed
      */
@@ -63,7 +66,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expected validator schema
+     * Get expected validator schema.
      *
      * @return array
      */
@@ -72,19 +75,19 @@ class FloatIntegrationTest extends BaseIntegrationTest
         return array(
             'FloatValueValidator' => array(
                 'minFloatValue' => array(
-                    'type'    => 'float',
+                    'type' => 'float',
                     'default' => false,
                 ),
                 'maxFloatValue' => array(
-                    'type'    => 'float',
+                    'type' => 'float',
                     'default' => false,
                 ),
-            )
+            ),
         );
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $validatorConfiguration.
      *
      * @return mixed
      */
@@ -94,12 +97,12 @@ class FloatIntegrationTest extends BaseIntegrationTest
             'FloatValueValidator' => array(
                 'minFloatValue' => 23.,
                 'maxFloatValue' => 43.,
-            )
+            ),
         );
     }
 
     /**
-     * Get $validatorConfiguration not accepted by the field type
+     * Get $validatorConfiguration not accepted by the field type.
      *
      * @return mixed
      */
@@ -108,18 +111,18 @@ class FloatIntegrationTest extends BaseIntegrationTest
         return array(
             'FloatValueValidator' => array(
                 'minStringLength' => new \stdClass(),
-            )
+            ),
         );
     }
 
     /**
-     * Get initial field data for valid object creation
+     * Get initial field data for valid object creation.
      *
      * @return mixed
      */
     public function getValidCreationFieldData()
     {
-        return new FloatValue( 23.5 );
+        return new FloatValue(23.5);
     }
 
     /**
@@ -129,10 +132,8 @@ class FloatIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field )
+    public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Float\\Value',
@@ -149,7 +150,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during creation
+     * Get field data which will result in errors during creation.
      *
      * This is a PHPUnit data provider.
      *
@@ -177,34 +178,34 @@ class FloatIntegrationTest extends BaseIntegrationTest
                 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                new FloatValue( 5.5 ),
+                new FloatValue(5.5),
                 'eZ\\Publish\\API\\Repository\\Exceptions\\ContentFieldValidationException',
             ),
             array(
-                new FloatValue( 127.5 ),
+                new FloatValue(127.5),
                 'eZ\\Publish\\API\\Repository\\Exceptions\\ContentFieldValidationException',
             ),
         );
     }
 
     /**
-     * Get update field externals data
+     * Get update field externals data.
      *
      * @return array
      */
     public function getValidUpdateFieldData()
     {
-        return new FloatValue( 42.5 );
+        return new FloatValue(42.5);
     }
 
     /**
-     * Get externals updated field data values
+     * Get externals updated field data values.
      *
      * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Float\\Value',
@@ -221,7 +222,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during update
+     * Get field data which will result in errors during update.
      *
      * This is a PHPUnit data provider.
      *
@@ -254,7 +255,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
      *
      * @param Field $field
      */
-    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Float\\Value',
@@ -271,7 +272,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get data to test to hash method
+     * Get data to test to hash method.
      *
      * This is a PHPUnit data provider
      *
@@ -294,14 +295,14 @@ class FloatIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new FloatValue( 23.5 ),
+                new FloatValue(23.5),
                 23.5,
             ),
         );
     }
 
     /**
-     * Get expectations for the fromHash call on our field value
+     * Get expectations for the fromHash call on our field value.
      *
      * This is a PHPUnit data provider
      *
@@ -312,7 +313,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
         return array(
             array(
                 42.5,
-                new FloatValue( 42.5 )
+                new FloatValue(42.5),
             ),
         );
     }
@@ -320,7 +321,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new FloatValue ),
+            array(new FloatValue()),
         );
     }
 
@@ -328,10 +329,20 @@ class FloatIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
             ),
-            array( new FloatValue( 0 ) ),
-            array( new FloatValue( 0.0 ) ),
+            array(new FloatValue(0)),
+            array(new FloatValue(0.0)),
         );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return 25.519;
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return 25.59;
     }
 }

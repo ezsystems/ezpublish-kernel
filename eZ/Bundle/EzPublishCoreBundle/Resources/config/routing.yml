@@ -2,8 +2,14 @@ parameters:
     # Redefining the default router class to implement the RequestMatcherInterface
     router.class: eZ\Bundle\EzPublishCoreBundle\Routing\DefaultRouter
     ezpublish.default_router.non_siteaccess_aware_routes: ['_assetic_', '_wdt', '_profiler', '_configurator_']
+    # characters that may require encoding in the urlalias generator
+    ezpublish.urlalias_generator.charmap:
+        "\"" : "%22"
+        "'" : "%27"
+        "<" : "%3C"
+        ">" : "%3E"
 
-    ezpublish.chain_router.class: Symfony\Cmf\Component\Routing\ChainRouter
+    ezpublish.chain_router.class: eZ\Publish\Core\MVC\Symfony\Routing\ChainRouter
     ezpublish.url_generator.base.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator
     ezpublish.urlalias_router.class: eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter
     ezpublish.urlalias_generator.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator
@@ -12,7 +18,12 @@ parameters:
     ezpublish.siteaccess_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\SiteAccessListener
     ezpublish.siteaccess_listener.routing.class: eZ\Bundle\EzPublishCoreBundle\EventListener\RoutingListener
     ezpublish.request_redirect_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener
+    ezpublish.request_index_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\IndexRequestListener
     ezpublish.siteaccess_match_listener.class: eZ\Publish\Core\MVC\Symfony\EventListener\SiteAccessMatchListener
+    ezpublish.route_reference.generator.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGenerator
+    ezpublish.route_reference.listener.language_switch.class: eZ\Publish\Core\MVC\Symfony\EventListener\LanguageSwitchListener
+    ezpublish.original_request_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\OriginalRequestListener
+    ezpublish.route_reference.listener.content_download.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ContentDownloadRouteReferenceListener
 
 services:
     ezpublish.chain_router:
@@ -23,7 +34,7 @@ services:
 
     ezpublish.siteaccess_match_listener:
         class: %ezpublish.siteaccess_match_listener.class%
-        arguments: [@ezpublish.siteaccess_router, @event_dispatcher]
+        arguments: [@ezpublish.siteaccess_router, @event_dispatcher, @fos_http_cache.user_context.request_matcher]
         tags:
             - { name: kernel.event_subscriber }
 
@@ -32,18 +43,31 @@ services:
         abstract: true
         calls:
             - [setRequestContext, [@router.request_context]]
+            - [setSiteAccess, [@?ezpublish.siteaccess=]]
+            - [setSiteAccessRouter, [@ezpublish.siteaccess_router]]
+            - [setLogger, [@?logger]]
 
     ezpublish.urlalias_router:
         class: %ezpublish.urlalias_router.class%
-        arguments: [@ezpublish.api.repository.lazy, @ezpublish.urlalias_generator, @?router.request_context, @?logger]
+        arguments:
+            - @ezpublish.api.service.location
+            - @ezpublish.api.service.url_alias
+            - @ezpublish.api.service.content
+            - @ezpublish.urlalias_generator
+            - @?router.request_context
+            - @?logger
         calls:
-            - [setContainer, [@service_container]]
+            - [setConfigResolver, [@ezpublish.config.resolver]]
         tags:
             - {name: router, priority: 200}
 
     ezpublish.urlalias_generator:
         class: %ezpublish.urlalias_generator.class%
-        arguments: [@ezpublish.api.repository.lazy, @router.default, @?logger]
+        arguments:
+            - @ezpublish.api.repository
+            - @router.default
+            - @ezpublish.config.resolver
+            - %ezpublish.urlalias_generator.charmap%
         parent: ezpublish.url_generator.base
 
     ezpublish.siteaccess.matcher_builder:
@@ -62,18 +86,54 @@ services:
 
     ezpublish.siteaccess_listener:
         class: %ezpublish.siteaccess_listener.class%
-        arguments: [@service_container, @router.default, @ezpublish.urlalias_generator]
+        arguments: [@router.default, @ezpublish.urlalias_generator, @security.http_utils]
+        calls:
+            - [setContainer, [@service_container]]
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.siteaccess_listener.routing:
         class: %ezpublish.siteaccess_listener.routing.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, @ezpublish.urlalias_router, @ezpublish.urlalias_generator]
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.request_redirect_listener:
         class: %ezpublish.request_redirect_listener.class%
-        arguments: [@service_container, @?logger]
+        arguments:
+            - @ezpublish.config.resolver
+            - @router
+            - %ezpublish.siteaccess.default%
+            - @?logger
         tags:
             - { name: kernel.event_subscriber }
+
+    ezpublish.request_index_listener:
+        class: %ezpublish.request_index_listener.class%
+        arguments:
+            - @ezpublish.config.resolver
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.route_reference.generator:
+      class: %ezpublish.route_reference.generator.class%
+      arguments: [@event_dispatcher]
+      calls:
+        - [setRequestStack, [@request_stack]]
+
+    ezpublish.route_reference.listener.language_switch:
+        class: %ezpublish.route_reference.listener.language_switch.class%
+        arguments: [@ezpublish.translation_helper]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.original_request_listener:
+        class: %ezpublish.original_request_listener.class%
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.route_reference.listener.content_download:
+        class: eZ\Bundle\EzPublishCoreBundle\EventListener\ContentDownloadRouteReferenceListener
+        tags:
+            - { name: kernel.event_subscriber }
+        arguments: [@ezpublish.translation_helper]

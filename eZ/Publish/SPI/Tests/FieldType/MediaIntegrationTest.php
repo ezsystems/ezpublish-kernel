@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,9 +19,10 @@ use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use FileSystemIterator;
+use eZ\Publish\Core\IO\MimeTypeDetector\FileInfo;
 
 /**
- * Integration test for legacy storage field types
+ * Integration test for legacy storage field types.
  *
  * This abstract base test case is supposed to be the base for field type
  * integration tests. It basically calls all involved methods in the field type
@@ -41,27 +44,17 @@ use FileSystemIterator;
 class MediaIntegrationTest extends FileBaseIntegrationTest
 {
     /**
-     * Returns the storage dir used by the file service
+     * Returns the storage identifier prefix used by the file service.
      *
      * @return string
      */
-    protected function getStorageDir()
-    {
-        return self::$storageDir;
-    }
-
-    /**
-     * Returns the storage identifier prefix used by the file service
-     *
-     * @return void
-     */
     protected function getStoragePrefix()
     {
-        return 'original';
+        return self::$container->getParameter('binaryfile_storage_prefix');
     }
 
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -71,38 +64,28 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get handler with required custom field types registered
+     * Get handler with required custom field types registered.
      *
      * @return Handler
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
+        $fieldType = new FieldType\Media\Type();
+        $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
-        $handler->getFieldTypeRegistry()->register(
+        return $this->getHandler(
             'ezmedia',
-            new FieldType\Media\Type(
-                $this->getIOService(),
-                $this->getMimeTypeDetector()
-            )
-        );
-        $handler->getStorageRegistry()->register(
-            'ezmedia',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\MediaConverter(),
             new FieldType\Media\MediaStorage(
                 array(
                     'LegacyStorage' => new FieldType\Media\MediaStorage\Gateway\LegacyStorage(),
                 ),
-                $this->getIOService(),
-                new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator(),
-                $this->getMimeTypeDetector()
+                $this->ioService = self::$container->get('ezpublish.fieldType.ezbinaryfile.io_service'),
+                $legacyPathGenerator = new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator(),
+                new FileInfo()
             )
         );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezmedia',
-            new Legacy\Content\FieldValue\Converter\Media()
-        );
-
-        return $handler;
     }
 
     /**
@@ -118,19 +101,19 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                 'validators' => array(
                     'FileSizeValidator' => array(
                         'maxFileSize' => 2 * 1024 * 1024, // 2 MB
-                    )
+                    ),
                 ),
                 'fieldSettings' => new FieldType\FieldSettings(
                     array(
                         'mediaType' => FieldType\Media\Type::TYPE_SILVERLIGHT,
                     )
-                )
+                ),
             )
         );
     }
 
     /**
-     * Get field definition data values
+     * Get field definition data values.
      *
      * This is a PHPUnit data provider
      *
@@ -139,7 +122,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     public function getFieldDefinitionData()
     {
         return array(
-            array( 'fieldType', 'ezmedia' ),
+            array('fieldType', 'ezmedia'),
             array(
                 'fieldTypeConstraints',
                 new FieldTypeConstraints(
@@ -147,21 +130,21 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                         'validators' => array(
                             'FileSizeValidator' => array(
                                 'maxFileSize' => 2 * 1024 * 1024, // 2 MB
-                            )
+                            ),
                         ),
                         'fieldSettings' => new FieldType\FieldSettings(
                             array(
                                 'mediaType' => FieldType\Media\Type::TYPE_SILVERLIGHT,
                             )
-                        )
+                        ),
                     )
-                )
+                ),
             ),
         );
     }
 
     /**
-     * Get initial field value
+     * Get initial field value.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -169,11 +152,12 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => null,
+                'data' => null,
                 'externalData' => array(
-                    'id' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                    'id' => null,
+                    'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
                     'fileName' => 'Ice-Flower-Media.jpg',
-                    'fileSize' => filesize( $path ),
+                    'fileSize' => filesize($path),
                     'mimeType' => 'image/jpeg',
                     'hasController' => true,
                     'autoplay' => true,
@@ -182,13 +166,13 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                     'height' => 42,
                     'uri' => $path,
                 ),
-                'sortKey'      => '',
+                'sortKey' => '',
             )
         );
     }
 
     /**
-     * Asserts that the loaded field data is correct
+     * Asserts that the loaded field data is correct.
      *
      * Performs assertions on the loaded field, mainly checking that the
      * $field->value->externalData is loaded correctly. If the loading of
@@ -196,25 +180,25 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
      * also needs to be asserted. Make sure you implement this method agnostic
      * to the used SPI\Persistence implementation!
      */
-    public function assertLoadedFieldDataCorrect( Field $field )
+    public function assertLoadedFieldDataCorrect(Field $field)
     {
-        $this->assertNotNull( $field->value->externalData );
+        $this->assertNotNull($field->value->externalData);
 
         $this->assertTrue(
-            file_exists( $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'] ),
-            "Stored file $path exists"
+            file_exists($path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id']),
+            "Stored file $path does not exists"
         );
 
-        $this->assertEquals( 'Ice-Flower-Media.jpg', $field->value->externalData['fileName'] );
-        $this->assertEquals( filesize( $path ), $field->value->externalData['fileSize'] );
-        $this->assertEquals( 'image/jpeg', $field->value->externalData['mimeType'] );
-        $this->assertEquals( true, $field->value->externalData['hasController'] );
-        $this->assertEquals( true, $field->value->externalData['autoplay'] );
-        $this->assertEquals( true, $field->value->externalData['loop'] );
-        $this->assertEquals( 23, $field->value->externalData['width'] );
-        $this->assertEquals( 42, $field->value->externalData['height'] );
+        $this->assertEquals('Ice-Flower-Media.jpg', $field->value->externalData['fileName']);
+        $this->assertEquals(filesize($path), $field->value->externalData['fileSize']);
+        $this->assertEquals('image/jpeg', $field->value->externalData['mimeType']);
+        $this->assertEquals(true, $field->value->externalData['hasController']);
+        $this->assertEquals(true, $field->value->externalData['autoplay']);
+        $this->assertEquals(true, $field->value->externalData['loop']);
+        $this->assertEquals(23, $field->value->externalData['width']);
+        $this->assertEquals(42, $field->value->externalData['height']);
 
-        $this->assertNull( $field->value->data );
+        $this->assertNull($field->value->data);
     }
 
     /**
@@ -228,11 +212,12 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => null,
+                'data' => null,
                 'externalData' => array(
-                    'id' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                    'id' => null,
+                    'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
                     'fileName' => 'Blueish-Blue-Media.jpg',
-                    'fileSize' => filesize( $path ),
+                    'fileSize' => filesize($path),
                     'mimeType' => 'image/png',
                     'hasController' => false,
                     'autoplay' => false,
@@ -241,13 +226,13 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                     'height' => 0,
                     'uri' => $path,
                 ),
-                'sortKey'      => '',
+                'sortKey' => '',
             )
         );
     }
 
     /**
-     * Asserts that the updated field data is loaded correct
+     * Asserts that the updated field data is loaded correct.
      *
      * Performs assertions on the loaded field after it has been updated,
      * mainly checking that the $field->value->externalData is loaded
@@ -255,44 +240,40 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
      * $field, their correctness also needs to be asserted. Make sure you
      * implement this method agnostic to the used SPI\Persistence
      * implementation!
-     *
-     * @return void
      */
-    public function assertUpdatedFieldDataCorrect( Field $field )
+    public function assertUpdatedFieldDataCorrect(Field $field)
     {
-        $this->assertNotNull( $field->value->externalData );
+        $this->assertNotNull($field->value->externalData);
 
         $this->assertTrue(
-            file_exists( $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'] ),
-            "Stored file $path exists"
+            file_exists($path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id']),
+            "Stored file $path does not exists"
         );
 
         // Check old file removed before update
         $this->assertEquals(
             1,
-            count( glob( dirname( $path ) . '/*' ) )
+            count(glob(dirname($path) . '/*'))
         );
 
-        $this->assertEquals( 'Blueish-Blue-Media.jpg', $field->value->externalData['fileName'] );
-        $this->assertEquals( filesize( $path ), $field->value->externalData['fileSize'] );
-        $this->assertEquals( 'image/png', $field->value->externalData['mimeType'] );
-        $this->assertEquals( false, $field->value->externalData['hasController'] );
-        $this->assertEquals( false, $field->value->externalData['autoplay'] );
-        $this->assertEquals( false, $field->value->externalData['loop'] );
-        $this->assertEquals( 0, $field->value->externalData['width'] );
-        $this->assertEquals( 0, $field->value->externalData['height'] );
+        $this->assertEquals('Blueish-Blue-Media.jpg', $field->value->externalData['fileName']);
+        $this->assertEquals(filesize($path), $field->value->externalData['fileSize']);
+        $this->assertEquals('image/png', $field->value->externalData['mimeType']);
+        $this->assertEquals(false, $field->value->externalData['hasController']);
+        $this->assertEquals(false, $field->value->externalData['autoplay']);
+        $this->assertEquals(false, $field->value->externalData['loop']);
+        $this->assertEquals(0, $field->value->externalData['width']);
+        $this->assertEquals(0, $field->value->externalData['height']);
 
-        $this->assertNull( $field->value->data );
+        $this->assertNull($field->value->data);
     }
 
     /**
-     * Can be overwritten to assert that additional data has been deleted
+     * Can be overwritten to assert that additional data has been deleted.
      *
      * @param Content $content
-     *
-     * @return void
      */
-    public function assertDeletedFieldDataCorrect( Content $content )
+    public function assertDeletedFieldDataCorrect(Content $content)
     {
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
@@ -302,10 +283,8 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
             RecursiveIteratorIterator::CHILD_FIRST
         );
 
-        foreach ( $iterator as $path => $fileInfo )
-        {
-            if ( $fileInfo->isFile() )
-            {
+        foreach ($iterator as $path => $fileInfo) {
+            if ($fileInfo->isFile()) {
                 $this->fail(
                     sprintf(
                         'Found undeleted file "%s"',
@@ -314,6 +293,5 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                 );
             }
         }
-
     }
 }

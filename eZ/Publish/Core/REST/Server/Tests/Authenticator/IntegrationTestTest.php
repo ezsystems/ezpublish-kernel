@@ -1,22 +1,23 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Authenticator;
 
 use eZ\Publish\Core\REST\Server\Tests\BaseTest;
-
 use eZ\Publish\Core\REST\Server\Authenticator\IntegrationTest;
-
 use Qafoo\RMF;
 
 /**
- * IntegrationTestTest
+ * IntegrationTestTest.
+ *
  * @todo Remove when the REST client is refactored
  */
 class IntegrationTestTest extends BaseTest
@@ -33,27 +34,27 @@ class IntegrationTestTest extends BaseTest
 
     public function testAuthenticate()
     {
-        $auth = new IntegrationTest( $this->getRepositoryMock() );
+        $auth = new IntegrationTest($this->getRepositoryMock());
 
         $this->getUserServiceMock()
-            ->expects( $this->once() )
-            ->method( 'loadUser' )
-            ->with( 23 )
+            ->expects($this->once())
+            ->method('loadUser')
+            ->with(23)
             ->will(
                 $this->returnValue(
-                    $user = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\User\\User' )
+                    $user = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\User\\User')
                 )
             );
 
         $this->getRepositoryMock()
-            ->expects( $this->once() )
-            ->method( 'setCurrentUser' )
-            ->with( $user );
+            ->expects($this->once())
+            ->method('setCurrentUser')
+            ->with($user);
 
         $request = new RMF\Request();
         $request->testUser = 23;
 
-        $auth->authenticate( $request );
+        $auth->authenticate($request);
     }
 
     /**
@@ -61,8 +62,7 @@ class IntegrationTestTest extends BaseTest
      */
     protected function getRepositoryMock()
     {
-        if ( !isset( $this->repositoryMock ) )
-        {
+        if (!isset($this->repositoryMock)) {
             $this->repositoryMock = $this->getMock(
                 '\\eZ\\Publish\\API\\Repository\\Repository',
                 array(),
@@ -73,17 +73,17 @@ class IntegrationTestTest extends BaseTest
 
             $userServiceMock = $this->getUserServiceMock();
 
-            $this->repositoryMock->expects( $this->any() )
-                ->method( 'getUserService' )
+            $this->repositoryMock->expects($this->any())
+                ->method('getUserService')
                 ->will(
                     $this->returnCallback(
-                        function () use ( $userServiceMock )
-                        {
+                        function () use ($userServiceMock) {
                             return $userServiceMock;
                         }
                     )
                 );
         }
+
         return $this->repositoryMock;
     }
 
@@ -92,8 +92,7 @@ class IntegrationTestTest extends BaseTest
      */
     protected function getUserServiceMock()
     {
-        if ( !isset( $this->userServiceMock ) )
-        {
+        if (!isset($this->userServiceMock)) {
             $this->userServiceMock = $this->getMock(
                 '\\eZ\\Publish\\API\\Repository\\UserService',
                 array(),
@@ -102,6 +101,7 @@ class IntegrationTestTest extends BaseTest
                 false
             );
         }
+
         return $this->userServiceMock;
     }
 }

@@ -1,16 +1,20 @@
 <?php
+
 /**
  * File containing the UrlAliasRouterTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Routing;
 
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\URLAliasService;
+use eZ\Publish\API\Repository\ContentService;
 use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
@@ -22,121 +26,85 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $container;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     private $configResolver;
 
     protected function setUp()
     {
-        $this->configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
+        $this->configResolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
         $this->configResolver
-            ->expects( $this->any() )
-            ->method( 'getParameter' )
+            ->expects($this->any())
+            ->method('getParameter')
             ->will(
                 $this->returnValueMap(
                     array(
-                        array( 'url_alias_router', null, null, true ),
-                        array( 'content.tree_root.location_id', null, null, null ),
-                        array( 'content.tree_root.excluded_uri_prefixes', null, null, array() ),
-                    )
-                )
-            );
-        $this->container = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
-        $this->container
-            ->expects( $this->any() )
-            ->method( 'get' )
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array( 'ezpublish.config.resolver', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->configResolver )
+                        array('url_alias_router', null, null, true),
+                        array('content.tree_root.location_id', null, null, null),
+                        array('content.tree_root.excluded_uri_prefixes', null, null, array()),
                     )
                 )
             );
         parent::setUp();
     }
 
-    protected function getRouter( \Closure $lazyRepository, UrlAliasGenerator $urlAliasGenerator, RequestContext $requestContext )
+    protected function getRouter(LocationService $locationService, URLAliasService $urlAliasService, ContentService $contentService, UrlAliasGenerator $urlAliasGenerator, RequestContext $requestContext)
     {
-        $router = new UrlAliasRouter( $lazyRepository, $urlAliasGenerator, $requestContext );
-        $router->setContainer( $this->container );
+        $router = new UrlAliasRouter($locationService, $urlAliasService, $contentService, $urlAliasGenerator, $requestContext);
+        $router->setConfigResolver($this->configResolver);
+
         return $router;
     }
 
     /**
-     * Resets container and configResolver mocks
+     * Resets container and configResolver mocks.
      */
-    protected function resetContainerAndConfigResolver()
+    protected function resetConfigResolver()
     {
-        $this->configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
-        $this->container = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
-        $this->container
-            ->expects( $this->any() )
-            ->method( 'get' )
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array( 'ezpublish.config.resolver', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->configResolver )
-                    )
-                )
-            );
-        $this->router->setContainer( $this->container );
+        $this->configResolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $this->container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $this->router->setConfigResolver($this->configResolver);
     }
 
     /**
-     * @expectedException Symfony\Component\Routing\Exception\ResourceNotFoundException
-     *
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::setContainer
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::getConfigResolver
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::matchRequest
+     * @expectedException \Symfony\Component\Routing\Exception\ResourceNotFoundException
      */
     public function testMatchRequestDeactivatedUrlAlias()
     {
-        $this->resetContainerAndConfigResolver();
+        $this->resetConfigResolver();
         $this->configResolver
-            ->expects( $this->any() )
-            ->method( 'getParameter' )
+            ->expects($this->any())
+            ->method('getParameter')
             ->will(
                 $this->returnValueMap(
                     array(
-                        array( 'url_alias_router', null, null, false ),
+                        array('url_alias_router', null, null, false),
                     )
                 )
             );
-        $this->router->matchRequest( $this->getRequestByPathInfo( '/foo' ) );
+        $this->router->matchRequest($this->getRequestByPathInfo('/foo'));
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::setContainer
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::setRootLocationId
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::getUrlAlias
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::getConfigResolver
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::matchRequest
-     */
     public function testMatchRequestWithRootLocation()
     {
         $rootLocationId = 123;
-        $this->resetContainerAndConfigResolver();
+        $this->resetConfigResolver();
         $this->configResolver
-            ->expects( $this->any() )
-            ->method( 'getParameter' )
+            ->expects($this->any())
+            ->method('getParameter')
             ->will(
                 $this->returnValueMap(
                     array(
-                        array( 'url_alias_router', null, null, true ),
+                        array('url_alias_router', null, null, true),
                     )
                 )
             );
-        $this->router->setRootLocationId( $rootLocationId );
+        $this->router->setRootLocationId($rootLocationId);
 
         $prefix = '/root/prefix';
         $this->urlALiasGenerator
-            ->expects( $this->once() )
-            ->method( 'getPathPrefixByRootLocationId' )
-            ->with( $rootLocationId )
-            ->will( $this->returnValue( $prefix ) );
+            ->expects($this->exactly(2))
+            ->method('getPathPrefixByRootLocationId')
+            ->with($rootLocationId)
+            ->will($this->returnValue($prefix));
 
         $locationId = 789;
         $path = '/foo/bar';
@@ -145,82 +113,277 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
                 'destination' => $locationId,
                 'path' => $prefix . $path,
                 'type' => URLAlias::LOCATION,
-                'isHistory' => false
+                'isHistory' => false,
             )
         );
         $this->urlAliasService
-            ->expects( $this->once() )
-            ->method( 'lookup' )
-            ->with( $prefix . $path )
-            ->will( $this->returnValue( $urlAlias ) );
+            ->expects($this->once())
+            ->method('lookup')
+            ->with($prefix . $path)
+            ->will($this->returnValue($urlAlias));
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
             '_controller' => UrlAliasRouter::LOCATION_VIEW_CONTROLLER,
             'locationId' => $locationId,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
-            'layout' => true
+            'layout' => true,
         );
-        $request = $this->getRequestByPathInfo( $path );
-        $this->assertEquals( $expected, $this->router->matchRequest( $request ) );
-        $this->assertSame( $locationId, $request->attributes->get( 'locationId' ) );
+        $request = $this->getRequestByPathInfo($path);
+        $this->assertEquals($expected, $this->router->matchRequest($request));
+        $this->assertSame($locationId, $request->attributes->get('locationId'));
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::setContainer
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::setRootLocationId
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::getUrlAlias
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::getConfigResolver
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::matchRequest
-     */
-    public function testMatchRequestWithRootLocationAndExclusion()
+    public function testMatchRequestLocationCaseRedirectWithRootLocation()
     {
-        $this->resetContainerAndConfigResolver();
+        $rootLocationId = 123;
+        $this->resetConfigResolver();
         $this->configResolver
-            ->expects( $this->any() )
-            ->method( 'getParameter' )
+            ->expects($this->any())
+            ->method('getParameter')
             ->will(
                 $this->returnValueMap(
                     array(
-                        array( 'url_alias_router', null, null, true ),
-                        array( 'content.tree_root.location_id', null, null, 123 ),
-                        array( 'content.tree_root.excluded_uri_prefixes', null, null, array( '/shared/content' ) ),
+                        array('url_alias_router', null, null, true),
                     )
                 )
             );
-        $this->router->setRootLocationId( 123 );
+        $this->router->setRootLocationId($rootLocationId);
+
+        $prefix = '/root/prefix';
+        $this->urlALiasGenerator
+            ->expects($this->exactly(2))
+            ->method('getPathPrefixByRootLocationId')
+            ->with($rootLocationId)
+            ->will($this->returnValue($prefix));
+
+        $locationId = 789;
+        $path = '/foo/bar';
+        $requestedPath = '/Foo/Bar';
+        $urlAlias = new URLAlias(
+            array(
+                'destination' => $locationId,
+                'path' => $prefix . $path,
+                'type' => URLAlias::LOCATION,
+                'isHistory' => false,
+            )
+        );
+        $this->urlAliasService
+            ->expects($this->once())
+            ->method('lookup')
+            ->with($prefix . $requestedPath)
+            ->will($this->returnValue($urlAlias));
+
+        $expected = array(
+            '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            '_controller' => UrlAliasRouter::LOCATION_VIEW_CONTROLLER,
+            'locationId' => $locationId,
+            'viewType' => ViewManager::VIEW_TYPE_FULL,
+            'layout' => true,
+        );
+        $request = $this->getRequestByPathInfo($requestedPath);
+        $this->assertEquals($expected, $this->router->matchRequest($request));
+        $this->assertSame($locationId, $request->attributes->get('locationId'));
+        $this->assertTrue($request->attributes->get('needsRedirect'));
+        $this->assertSame($path, $request->attributes->get('semanticPathinfo'));
+    }
+
+    public function testMatchRequestLocationCaseRedirectWithRootRootLocation()
+    {
+        $rootLocationId = 123;
+        $this->resetConfigResolver();
+        $this->configResolver
+            ->expects($this->any())
+            ->method('getParameter')
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array('url_alias_router', null, null, true),
+                    )
+                )
+            );
+        $this->router->setRootLocationId($rootLocationId);
+
+        $prefix = '/';
+        $this->urlALiasGenerator
+            ->expects($this->exactly(2))
+            ->method('getPathPrefixByRootLocationId')
+            ->with($rootLocationId)
+            ->will($this->returnValue($prefix));
+
+        $locationId = 789;
+        $path = '/foo/bar';
+        $requestedPath = '/Foo/Bar';
+        $urlAlias = new URLAlias(
+            array(
+                'destination' => $locationId,
+                'path' => $path,
+                'type' => URLAlias::LOCATION,
+                'isHistory' => false,
+            )
+        );
+        $this->urlAliasService
+            ->expects($this->once())
+            ->method('lookup')
+            ->with($requestedPath)
+            ->will($this->returnValue($urlAlias));
+
+        $expected = array(
+            '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            '_controller' => UrlAliasRouter::LOCATION_VIEW_CONTROLLER,
+            'locationId' => $locationId,
+            'viewType' => ViewManager::VIEW_TYPE_FULL,
+            'layout' => true,
+        );
+        $request = $this->getRequestByPathInfo($requestedPath);
+        $this->assertEquals($expected, $this->router->matchRequest($request));
+        $this->assertSame($locationId, $request->attributes->get('locationId'));
+        $this->assertTrue($request->attributes->get('needsRedirect'));
+        $this->assertSame($path, $request->attributes->get('semanticPathinfo'));
+    }
+
+    public function testMatchRequestResourceCaseRedirectWithRootLocation()
+    {
+        $rootLocationId = 123;
+        $this->resetConfigResolver();
+        $this->configResolver
+            ->expects($this->any())
+            ->method('getParameter')
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array('url_alias_router', null, null, true),
+                    )
+                )
+            );
+        $this->router->setRootLocationId($rootLocationId);
+
+        $prefix = '/root/prefix';
+        $this->urlALiasGenerator
+            ->expects($this->exactly(2))
+            ->method('getPathPrefixByRootLocationId')
+            ->with($rootLocationId)
+            ->will($this->returnValue($prefix));
+
+        $path = '/foo/bar';
+        $requestedPath = '/Foo/Bar';
+        $urlAlias = new URLAlias(
+            array(
+                'destination' => '/content/search',
+                'path' => $prefix . $path,
+                'type' => URLAlias::RESOURCE,
+                'isHistory' => false,
+            )
+        );
+        $this->urlAliasService
+            ->expects($this->once())
+            ->method('lookup')
+            ->with($prefix . $requestedPath)
+            ->will($this->returnValue($urlAlias));
+
+        $expected = array(
+            '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+        );
+        $request = $this->getRequestByPathInfo($requestedPath);
+        $this->assertEquals($expected, $this->router->matchRequest($request));
+        $this->assertTrue($request->attributes->get('needsRedirect'));
+        $this->assertSame($path, $request->attributes->get('semanticPathinfo'));
+    }
+
+    public function testMatchRequestVirtualCaseRedirectWithRootLocation()
+    {
+        $rootLocationId = 123;
+        $this->resetConfigResolver();
+        $this->configResolver
+            ->expects($this->any())
+            ->method('getParameter')
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array('url_alias_router', null, null, true),
+                    )
+                )
+            );
+        $this->router->setRootLocationId($rootLocationId);
+
+        $prefix = '/root/prefix';
+        $this->urlALiasGenerator
+            ->expects($this->exactly(2))
+            ->method('getPathPrefixByRootLocationId')
+            ->with($rootLocationId)
+            ->will($this->returnValue($prefix));
+
+        $path = '/foo/bar';
+        $requestedPath = '/Foo/Bar';
+        $urlAlias = new URLAlias(
+            array(
+                'path' => $prefix . $path,
+                'type' => URLAlias::VIRTUAL,
+            )
+        );
+        $this->urlAliasService
+            ->expects($this->once())
+            ->method('lookup')
+            ->with($prefix . $requestedPath)
+            ->will($this->returnValue($urlAlias));
+
+        $expected = array(
+            '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+        );
+        $request = $this->getRequestByPathInfo($requestedPath);
+        $this->assertEquals($expected, $this->router->matchRequest($request));
+        $this->assertTrue($request->attributes->get('needsRedirect'));
+        $this->assertSame($path, $request->attributes->get('semanticPathinfo'));
+    }
+
+    public function testMatchRequestWithRootLocationAndExclusion()
+    {
+        $this->resetConfigResolver();
+        $this->configResolver
+            ->expects($this->any())
+            ->method('getParameter')
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array('url_alias_router', null, null, true),
+                        array('content.tree_root.location_id', null, null, 123),
+                        array('content.tree_root.excluded_uri_prefixes', null, null, array('/shared/content')),
+                    )
+                )
+            );
+        $this->router->setRootLocationId(123);
 
         $pathInfo = '/shared/content/foo-bar';
         $destinationId = 789;
         $this->urlALiasGenerator
-            ->expects( $this->once() )
-            ->method( 'isUriPrefixExcluded' )
-            ->with( $pathInfo )
-            ->will( $this->returnValue( true ) );
+            ->expects($this->any())
+            ->method('isUriPrefixExcluded')
+            ->with($pathInfo)
+            ->will($this->returnValue(true));
 
         $urlAlias = new URLAlias(
             array(
                 'path' => $pathInfo,
                 'type' => UrlAlias::LOCATION,
                 'destination' => $destinationId,
-                'isHistory' => false
+                'isHistory' => false,
             )
         );
-        $request = $this->getRequestByPathInfo( $pathInfo );
+        $request = $this->getRequestByPathInfo($pathInfo);
         $this->urlAliasService
-            ->expects( $this->once() )
-            ->method( 'lookup' )
-            ->with( $pathInfo )
-            ->will( $this->returnValue( $urlAlias ) );
+            ->expects($this->once())
+            ->method('lookup')
+            ->with($pathInfo)
+            ->will($this->returnValue($urlAlias));
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
             '_controller' => UrlAliasRouter::LOCATION_VIEW_CONTROLLER,
             'locationId' => $destinationId,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
-            'layout' => true
+            'layout' => true,
         );
-        $this->assertEquals( $expected, $this->router->matchRequest( $request ) );
-        $this->assertSame( $destinationId, $request->attributes->get( 'locationId' ) );
+        $this->assertEquals($expected, $this->router->matchRequest($request));
+        $this->assertSame($destinationId, $request->attributes->get('locationId'));
     }
 }

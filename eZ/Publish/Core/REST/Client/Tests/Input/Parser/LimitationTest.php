@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a LimitationTest class
+ * File containing a LimitationTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\Core\REST\Client\Input\Parser;
 class LimitationTest extends BaseTest
 {
     /**
-     * Tests the Limitation parser
+     * Tests the Limitation parser.
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation
      */
@@ -27,33 +29,33 @@ class LimitationTest extends BaseTest
             'values' => array(
                 'ref' => array(
                     array(
-                        '_href' => 1
+                        '_href' => 1,
                     ),
                     array(
-                        '_href' => 2
+                        '_href' => 2,
                     ),
                     array(
-                        '_href' => 3
-                    )
-                )
-            )
+                        '_href' => 3,
+                    ),
+                ),
+            ),
         );
 
-        $result = $limitationParser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $limitationParser->parse($inputArray, $this->getParsingDispatcherMock());
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Tests that the resulting policy is in fact an instance of Limitation class
+     * Tests that the resulting policy is in fact an instance of Limitation class.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $result
      *
      * @depends testParse
      */
-    public function testResultIsLimitation( $result )
+    public function testResultIsLimitation($result)
     {
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation',
@@ -62,13 +64,13 @@ class LimitationTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting policy contains the identifier
+     * Tests that the resulting policy contains the identifier.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $result
      *
      * @depends testParse
      */
-    public function testResultContainsIdentifier( $result )
+    public function testResultContainsIdentifier($result)
     {
         $this->assertEquals(
             'Class',
@@ -77,22 +79,22 @@ class LimitationTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting policy contains limitation values
+     * Tests that the resulting policy contains limitation values.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $result
      *
      * @depends testParse
      */
-    public function testResultContainsLimitationValues( $result )
+    public function testResultContainsLimitationValues($result)
     {
         $this->assertEquals(
-            array( 1, 2, 3 ),
+            array(1, 2, 3),
             $result->limitationValues
         );
     }
 
     /**
-     * Gets the parser for Limitation
+     * Gets the parser for Limitation.
      *
      * @return \eZ\Publish\Core\REST\Client\Input\Parser\Limitation
      */

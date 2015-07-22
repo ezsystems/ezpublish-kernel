@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,29 +21,29 @@ use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 class UserGroupUpdateTest extends BaseTest
 {
     /**
-     * Tests the UserGroupUpdate parser
+     * Tests the UserGroupUpdate parser.
      */
     public function testParse()
     {
         $inputArray = array(
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
-                '_href' => '/content/sections/1'
+                '_href' => '/content/sections/1',
             ),
             'remoteId' => 'remoteId123456',
             'fields' => array(
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'name',
-                        'fieldValue' => array()
-                    )
-                )
+                        'fieldValue' => array(),
+                    ),
+                ),
             ),
-            '__url' => '/user/groups/1/5'
+            '__url' => '/user/groups/1/5',
         );
 
         $userGroupUpdate = $this->getParser();
-        $result = $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $userGroupUpdate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestUserGroupUpdateStruct',
@@ -79,8 +81,7 @@ class UserGroupUpdateTest extends BaseTest
             'remoteId not created correctly'
         );
 
-        foreach ( $result->userGroupUpdateStruct->contentUpdateStruct->fields as $field )
-        {
+        foreach ($result->userGroupUpdateStruct->contentUpdateStruct->fields as $field) {
             $this->assertEquals(
                 'foo',
                 $field->value,
@@ -90,7 +91,7 @@ class UserGroupUpdateTest extends BaseTest
     }
 
     /**
-     * Test UserGroupUpdate parser throwing exception on missing Section href
+     * Test UserGroupUpdate parser throwing exception on missing Section href.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for Section element in UserGroupUpdate.
@@ -105,19 +106,19 @@ class UserGroupUpdateTest extends BaseTest
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'name',
-                        'fieldValue' => array()
-                    )
-                )
+                        'fieldValue' => array(),
+                    ),
+                ),
             ),
-            '__url' => '/user/groups/1/5'
+            '__url' => '/user/groups/1/5',
         );
 
         $userGroupUpdate = $this->getParser();
-        $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $userGroupUpdate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test UserGroupUpdate parser throwing exception on invalid fields data
+     * Test UserGroupUpdate parser throwing exception on invalid fields data.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'fields' element for UserGroupUpdate.
@@ -127,19 +128,19 @@ class UserGroupUpdateTest extends BaseTest
         $inputArray = array(
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
-                '_href' => '/content/sections/1'
+                '_href' => '/content/sections/1',
             ),
             'remoteId' => 'remoteId123456',
             'fields' => array(),
-            '__url' => '/user/groups/1/5'
+            '__url' => '/user/groups/1/5',
         );
 
         $userGroupUpdate = $this->getParser();
-        $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $userGroupUpdate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test UserGroupUpdate parser throwing exception on missing field definition identifier
+     * Test UserGroupUpdate parser throwing exception on missing field definition identifier.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldDefinitionIdentifier' element in field data for UserGroupUpdate.
@@ -149,25 +150,25 @@ class UserGroupUpdateTest extends BaseTest
         $inputArray = array(
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
-                '_href' => '/content/sections/1'
+                '_href' => '/content/sections/1',
             ),
             'remoteId' => 'remoteId123456',
             'fields' => array(
                 'field' => array(
                     array(
-                        'fieldValue' => array()
-                    )
-                )
+                        'fieldValue' => array(),
+                    ),
+                ),
             ),
-            '__url' => '/user/groups/1/5'
+            '__url' => '/user/groups/1/5',
         );
 
         $userGroupUpdate = $this->getParser();
-        $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $userGroupUpdate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test UserGroupUpdate parser throwing exception on missing field value
+     * Test UserGroupUpdate parser throwing exception on missing field value.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldValue' element for 'name' identifier in UserGroupUpdate.
@@ -177,25 +178,25 @@ class UserGroupUpdateTest extends BaseTest
         $inputArray = array(
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
-                '_href' => '/content/sections/1'
+                '_href' => '/content/sections/1',
             ),
             'remoteId' => 'remoteId123456',
             'fields' => array(
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'name',
-                    )
-                )
+                    ),
+                ),
             ),
-            '__url' => '/user/groups/1/5'
+            '__url' => '/user/groups/1/5',
         );
 
         $userGroupUpdate = $this->getParser();
-        $userGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $userGroupUpdate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Returns the UserGroupUpdate parser
+     * Returns the UserGroupUpdate parser.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\UserGroupUpdate
      */
@@ -210,7 +211,7 @@ class UserGroupUpdateTest extends BaseTest
     }
 
     /**
-     * Get the field type parser mock object
+     * Get the field type parser mock object.
      *
      * @return \eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
      */
@@ -234,22 +235,22 @@ class UserGroupUpdateTest extends BaseTest
                     array(),
                     '',
                     false
-                )
+                ),
             ),
             '',
             false
         );
 
-        $fieldTypeParserMock->expects( $this->any() )
-            ->method( 'parseFieldValue' )
-            ->with( 4, 'name', array() )
-            ->will( $this->returnValue( 'foo' ) );
+        $fieldTypeParserMock->expects($this->any())
+            ->method('parseFieldValue')
+            ->with(4, 'name', array())
+            ->will($this->returnValue('foo'));
 
         return $fieldTypeParserMock;
     }
 
     /**
-     * Get the user service mock object
+     * Get the user service mock object.
      *
      * @return \eZ\Publish\API\Repository\UserService
      */
@@ -263,17 +264,17 @@ class UserGroupUpdateTest extends BaseTest
             false
         );
 
-        $userServiceMock->expects( $this->any() )
-            ->method( 'newUserGroupUpdateStruct' )
+        $userServiceMock->expects($this->any())
+            ->method('newUserGroupUpdateStruct')
             ->will(
-                $this->returnValue( new UserGroupUpdateStruct() )
+                $this->returnValue(new UserGroupUpdateStruct())
             );
 
         return $userServiceMock;
     }
 
     /**
-     * Get the location service mock object
+     * Get the location service mock object.
      *
      * @return \eZ\Publish\API\Repository\LocationService
      */
@@ -287,18 +288,18 @@ class UserGroupUpdateTest extends BaseTest
             false
         );
 
-        $userServiceMock->expects( $this->any() )
-            ->method( 'loadLocation' )
-            ->with( $this->equalTo( 5 ) )
+        $userServiceMock->expects($this->any())
+            ->method('loadLocation')
+            ->with($this->equalTo(5))
             ->will(
                 $this->returnValue(
                     new Location(
                         array(
                             'contentInfo' => new ContentInfo(
                                 array(
-                                    'id' => 4
+                                    'id' => 4,
                                 )
-                            )
+                            ),
                         )
                     )
                 )
@@ -308,7 +309,7 @@ class UserGroupUpdateTest extends BaseTest
     }
 
     /**
-     * Get the content service mock object
+     * Get the content service mock object.
      *
      * @return \eZ\Publish\API\Repository\ContentService
      */
@@ -322,16 +323,16 @@ class UserGroupUpdateTest extends BaseTest
             false
         );
 
-        $contentServiceMock->expects( $this->any() )
-            ->method( 'newContentUpdateStruct' )
+        $contentServiceMock->expects($this->any())
+            ->method('newContentUpdateStruct')
             ->will(
-                $this->returnValue( new ContentUpdateStruct() )
+                $this->returnValue(new ContentUpdateStruct())
             );
 
-        $contentServiceMock->expects( $this->any() )
-            ->method( 'newContentMetadataUpdateStruct' )
+        $contentServiceMock->expects($this->any())
+            ->method('newContentMetadataUpdateStruct')
             ->will(
-                $this->returnValue( new ContentMetadataUpdateStruct() )
+                $this->returnValue(new ContentMetadataUpdateStruct())
             );
 
         return $contentServiceMock;
@@ -340,8 +341,8 @@ class UserGroupUpdateTest extends BaseTest
     public function getParseHrefExpectationsMap()
     {
         return array(
-            array( '/content/sections/1', 'sectionId', 1 ),
-            array( '/user/groups/1/5', 'groupPath', '1/5' )
+            array('/content/sections/1', 'sectionId', 1),
+            array('/user/groups/1/5', 'groupPath', '1/5'),
         );
     }
 }

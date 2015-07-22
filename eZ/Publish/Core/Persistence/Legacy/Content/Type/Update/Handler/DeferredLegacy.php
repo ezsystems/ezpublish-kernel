@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the DeferredLegacy Type Update Handler class
+ * File containing the DeferredLegacy Type Update Handler class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,9 +13,10 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
+use eZ\Publish\SPI\Persistence\Content\Type;
 
 /**
- * DeferredLegacy based type update handler
+ * DeferredLegacy based type update handler.
  */
 class DeferredLegacy extends Handler
 {
@@ -23,47 +26,41 @@ class DeferredLegacy extends Handler
     protected $contentTypeGateway;
 
     /**
-     * Creates a new content type update handler
+     * Creates a new content type update handler.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway $contentTypeGateway
      */
-    public function __construct( Gateway $contentTypeGateway )
+    public function __construct(Gateway $contentTypeGateway)
     {
         $this->contentTypeGateway = $contentTypeGateway;
     }
 
     /**
-     * Updates existing content objects from $fromType to $toType
+     * Updates existing content objects from $fromType to $toType.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $fromType
      * @param \eZ\Publish\SPI\Persistence\Content\Type $toType
-     *
-     * @return void
      */
-    public function updateContentObjects( $fromType, $toType )
+    public function updateContentObjects(Type $fromType, Type $toType)
     {
     }
 
     /**
-     * Deletes $fromType and all of its field definitions
+     * Deletes $fromType and all of its field definitions.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $fromType
-     *
-     * @return void
      */
-    public function deleteOldType( $fromType )
+    public function deleteOldType(Type $fromType)
     {
     }
 
     /**
-     * Publishes $toType to $newStatus
+     * Publishes $toType to $newStatus.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type $toType
      * @param int $newStatus
-     *
-     * @return void
      */
-    public function publishNewType( $toType, $newStatus )
+    public function publishNewType(Type $toType, $newStatus)
     {
         $this->contentTypeGateway->publishTypeAndFields(
             $toType->id,
@@ -71,11 +68,11 @@ class DeferredLegacy extends Handler
             Type::STATUS_MODIFIED
         );
 
-        $script = eZScheduledScript::create(
+        $script = \eZScheduledScript::create(
             'syncobjectattributes.php',
-            eZINI::instance( 'ezscriptmonitor.ini' )->variable( 'GeneralSettings', 'PhpCliCommand' ) .
-            ' extension/ezscriptmonitor/bin/' . eZScheduledScript::SCRIPT_NAME_STRING .
-            ' -s ' . eZScheduledScript::SITE_ACCESS_STRING . ' --classid=' . $toType->id
+            \eZINI::instance('ezscriptmonitor.ini')->variable('GeneralSettings', 'PhpCliCommand') .
+            ' extension/ezscriptmonitor/bin/' . \eZScheduledScript::SCRIPT_NAME_STRING .
+            ' -s ' . \eZScheduledScript::SITE_ACCESS_STRING . ' --classid=' . $toType->id
         );
         $script->store();
     }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Content Handler class
+ * File containing the Content Handler class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,6 +13,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway as UrlAliasGateway;
 use eZ\Publish\SPI\Persistence\Content;
@@ -41,13 +44,6 @@ class Handler implements BaseContentHandler
     protected $locationGateway;
 
     /**
-     * Location handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
-     */
-    public $locationHandler;
-
-    /**
      * Mapper.
      *
      * @var Mapper
@@ -55,7 +51,7 @@ class Handler implements BaseContentHandler
     protected $mapper;
 
     /**
-     * FieldHandler
+     * FieldHandler.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
      */
@@ -69,11 +65,25 @@ class Handler implements BaseContentHandler
     protected $slugConverter;
 
     /**
-     * UrlAlias gateway
+     * UrlAlias gateway.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway
      */
     protected $urlAliasGateway;
+
+    /**
+     * ContentType handler.
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
+     */
+    protected $contentTypeHandler;
+
+    /**
+     * Tree handler.
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler
+     */
+    protected $treeHandler;
 
     /**
      * Creates a new content handler.
@@ -84,6 +94,8 @@ class Handler implements BaseContentHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler $fieldHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter $slugConverter
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $urlAliasGateway
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler $treeHandler
      */
     public function __construct(
         Gateway $contentGateway,
@@ -91,15 +103,18 @@ class Handler implements BaseContentHandler
         Mapper $mapper,
         FieldHandler $fieldHandler,
         SlugConverter $slugConverter,
-        UrlAliasGateway $urlAliasGateway
-    )
-    {
+        UrlAliasGateway $urlAliasGateway,
+        ContentTypeHandler $contentTypeHandler,
+        TreeHandler $treeHandler
+    ) {
         $this->contentGateway = $contentGateway;
         $this->locationGateway = $locationGateway;
         $this->mapper = $mapper;
         $this->fieldHandler = $fieldHandler;
         $this->slugConverter = $slugConverter;
         $this->urlAliasGateway = $urlAliasGateway;
+        $this->contentTypeHandler = $contentTypeHandler;
+        $this->treeHandler = $treeHandler;
     }
 
     /**
@@ -114,9 +129,9 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
-    public function create( CreateStruct $struct )
+    public function create(CreateStruct $struct)
     {
-        return $this->internalCreate( $struct );
+        return $this->internalCreate($struct);
     }
 
     /**
@@ -132,24 +147,24 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
-    protected function internalCreate( CreateStruct $struct, $versionNo = 1 )
+    protected function internalCreate(CreateStruct $struct, $versionNo = 1)
     {
         $content = new Content();
 
         $content->fields = $struct->fields;
-        $content->versionInfo = $this->mapper->createVersionInfoFromCreateStruct( $struct, $versionNo );
+        $content->versionInfo = $this->mapper->createVersionInfoFromCreateStruct($struct, $versionNo);
 
-        $content->versionInfo->contentInfo->id = $this->contentGateway->insertContentObject( $struct, $versionNo );
+        $content->versionInfo->contentInfo->id = $this->contentGateway->insertContentObject($struct, $versionNo);
         $content->versionInfo->id = $this->contentGateway->insertVersion(
             $content->versionInfo,
             $struct->fields
         );
 
-        $this->fieldHandler->createNewFields( $content );
+        $contentType = $this->contentTypeHandler->load($struct->typeId);
+        $this->fieldHandler->createNewFields($content, $contentType);
 
         // Create node assignments
-        foreach ( $struct->locations as $location )
-        {
+        foreach ($struct->locations as $location) {
             $location->contentId = $content->versionInfo->contentInfo->id;
             $location->contentVersion = $content->versionInfo->versionNo;
             $this->locationGateway->createNodeAssignment(
@@ -160,8 +175,7 @@ class Handler implements BaseContentHandler
         }
 
         // Create names
-        foreach ( $content->versionInfo->names as $language => $name )
-        {
+        foreach ($content->versionInfo->names as $language => $name) {
             $this->contentGateway->setName(
                 $content->versionInfo->contentInfo->id,
                 $content->versionInfo->versionNo,
@@ -190,12 +204,11 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
-    public function publish( $contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct )
+    public function publish($contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct)
     {
         // Archive currently published version
-        $versionInfo = $this->loadVersionInfo( $contentId, $versionNo );
-        if ( $versionInfo->contentInfo->currentVersionNo != $versionNo )
-        {
+        $versionInfo = $this->loadVersionInfo($contentId, $versionNo);
+        if ($versionInfo->contentInfo->currentVersionNo != $versionNo) {
             $this->setStatus(
                 $contentId,
                 VersionInfo::STATUS_ARCHIVED,
@@ -206,16 +219,16 @@ class Handler implements BaseContentHandler
         // Set always available name for the content
         $metaDataUpdateStruct->name = $versionInfo->names[$versionInfo->contentInfo->mainLanguageCode];
 
-        $this->contentGateway->updateContent( $contentId, $metaDataUpdateStruct, $versionInfo );
+        $this->contentGateway->updateContent($contentId, $metaDataUpdateStruct, $versionInfo);
         $this->locationGateway->createLocationsFromNodeAssignments(
             $contentId,
             $versionNo
         );
 
-        $this->locationGateway->updateLocationsContentVersionNo( $contentId, $versionNo );
-        $this->setStatus( $contentId, VersionInfo::STATUS_PUBLISHED, $versionNo );
+        $this->locationGateway->updateLocationsContentVersionNo($contentId, $versionNo);
+        $this->setStatus($contentId, VersionInfo::STATUS_PUBLISHED, $versionNo);
 
-        return $this->load( $contentId, $versionNo );
+        return $this->load($contentId, $versionNo);
     }
 
     /**
@@ -234,14 +247,14 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function createDraftFromVersion( $contentId, $srcVersion, $userId )
+    public function createDraftFromVersion($contentId, $srcVersion, $userId)
     {
-        $content = $this->load( $contentId, $srcVersion );
+        $content = $this->load($contentId, $srcVersion);
 
         // Create new version
         $content->versionInfo = $this->mapper->createVersionInfoForContent(
             $content,
-            $this->contentGateway->getLastVersionNumber( $contentId ) + 1,
+            $this->contentGateway->getLastVersionNumber($contentId) + 1,
             $userId
         );
         $content->versionInfo->id = $this->contentGateway->insertVersion(
@@ -250,36 +263,26 @@ class Handler implements BaseContentHandler
         );
 
         // Clone fields from previous version and append them to the new one
-        $fields = $content->fields;
-        $content->fields = array();
-        foreach ( $fields as $field )
-        {
-            $newField = clone $field;
-            $newField->versionNo = $content->versionInfo->versionNo;
-            $content->fields[] = $newField;
-        }
-        $this->fieldHandler->createExistingFieldsInNewVersion( $content );
+        $this->fieldHandler->createExistingFieldsInNewVersion($content);
 
         // Create relations for new version
-        $relations = $this->contentGateway->loadRelations( $contentId, $srcVersion );
-        foreach ( $relations as $relation )
-        {
+        $relations = $this->contentGateway->loadRelations($contentId, $srcVersion);
+        foreach ($relations as $relation) {
             $this->contentGateway->insertRelation(
                 new RelationCreateStruct(
                     array(
-                        "sourceContentId" => $contentId,
-                        "sourceContentVersionNo" => $content->versionInfo->versionNo,
-                        "sourceFieldDefinitionId" => $relation["ezcontentobject_link_contentclassattribute_id"],
-                        "destinationContentId" => $relation["ezcontentobject_link_to_contentobject_id"],
-                        "type" => (int)$relation["ezcontentobject_link_relation_type"],
+                        'sourceContentId' => $contentId,
+                        'sourceContentVersionNo' => $content->versionInfo->versionNo,
+                        'sourceFieldDefinitionId' => $relation['ezcontentobject_link_contentclassattribute_id'],
+                        'destinationContentId' => $relation['ezcontentobject_link_to_contentobject_id'],
+                        'type' => (int)$relation['ezcontentobject_link_relation_type'],
                     )
                 )
             );
         }
 
         // Create content names for new version
-        foreach ( $content->versionInfo->names as $language => $name )
-        {
+        foreach ($content->versionInfo->names as $language => $name) {
             $this->contentGateway->setName(
                 $contentId,
                 $content->versionInfo->versionNo,
@@ -308,19 +311,18 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
-    public function load( $id, $version, $translations = null )
+    public function load($id, $version, array $translations = null)
     {
-        $rows = $this->contentGateway->load( $id, $version, $translations );
+        $rows = $this->contentGateway->load($id, $version, $translations);
 
-        if ( empty( $rows ) )
-        {
-            throw new NotFound( 'content', "contentId: $id, versionNo: $version" );
+        if (empty($rows)) {
+            throw new NotFound('content', "contentId: $id, versionNo: $version");
         }
 
-        $contentObjects = $this->mapper->extractContentFromRows( $rows );
+        $contentObjects = $this->mapper->extractContentFromRows($rows);
         $content = $contentObjects[0];
 
-        $this->fieldHandler->loadExternalFieldData( $content );
+        $this->fieldHandler->loadExternalFieldData($content);
 
         return $content;
     }
@@ -332,15 +334,27 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
-    public function loadContentInfo( $contentId )
+    public function loadContentInfo($contentId)
+    {
+        return $this->treeHandler->loadContentInfo($contentId);
+    }
+
+    /**
+     * Returns the metadata object for a content identified by $remoteId.
+     *
+     * @param mixed $remoteId
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
+     */
+    public function loadContentInfoByRemoteId($remoteId)
     {
         return $this->mapper->extractContentInfoFromRow(
-            $this->contentGateway->loadContentInfo( $contentId )
+            $this->contentGateway->loadContentInfoByRemoteId($remoteId)
         );
     }
 
     /**
-     * Returns the version object for a content/version identified by $contentId and $versionNo
+     * Returns the version object for a content/version identified by $contentId and $versionNo.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If version is not found
      *
@@ -349,30 +363,29 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      */
-    public function loadVersionInfo( $contentId, $versionNo )
+    public function loadVersionInfo($contentId, $versionNo)
     {
-        $rows = $this->contentGateway->loadVersionInfo( $contentId, $versionNo );
-        if ( empty( $rows ) )
-        {
-            throw new NotFound( 'content', $contentId );
+        $rows = $this->contentGateway->loadVersionInfo($contentId, $versionNo);
+        if (empty($rows)) {
+            throw new NotFound('content', $contentId);
         }
 
-        $versionInfo = $this->mapper->extractVersionInfoListFromRows( $rows );
+        $versionInfo = $this->mapper->extractVersionInfoListFromRows($rows);
 
-        return reset( $versionInfo );
+        return reset($versionInfo);
     }
 
     /**
-     * Returns all versions with draft status created by the given $userId
+     * Returns all versions with draft status created by the given $userId.
      *
      * @param int $userId
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
-    public function loadDraftsForUser( $userId )
+    public function loadDraftsForUser($userId)
     {
         return $this->mapper->extractVersionInfoListFromRows(
-            $this->contentGateway->listVersionsForUser( $userId, VersionInfo::STATUS_DRAFT )
+            $this->contentGateway->listVersionsForUser($userId, VersionInfo::STATUS_DRAFT)
         );
     }
 
@@ -386,11 +399,11 @@ class Handler implements BaseContentHandler
      * @param int $status
      * @param int $version
      *
-     * @return boolean
+     * @return bool
      */
-    public function setStatus( $contentId, $status, $version )
+    public function setStatus($contentId, $status, $version)
     {
-        return $this->contentGateway->setStatus( $contentId, $version, $status );
+        return $this->contentGateway->setStatus($contentId, $version, $status);
     }
 
     /**
@@ -401,12 +414,12 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
-    public function updateMetadata( $contentId, MetadataUpdateStruct $content )
+    public function updateMetadata($contentId, MetadataUpdateStruct $content)
     {
-        $this->contentGateway->updateContent( $contentId, $content );
-        $this->updatePathIdentificationString( $contentId, $content );
+        $this->contentGateway->updateContent($contentId, $content);
+        $this->updatePathIdentificationString($contentId, $content);
 
-        return $this->loadContentInfo( $contentId );
+        return $this->loadContentInfo($contentId);
     }
 
     /**
@@ -417,33 +430,28 @@ class Handler implements BaseContentHandler
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
-     *
-     * @return void
      */
-    protected function updatePathIdentificationString( $contentId, MetadataUpdateStruct $content )
+    protected function updatePathIdentificationString($contentId, MetadataUpdateStruct $content)
     {
-        if ( isset( $content->mainLanguageId ) )
-        {
-            $contentLocationsRows = $this->locationGateway->loadLocationDataByContent( $contentId );
-            foreach ( $contentLocationsRows as $row )
-            {
-                $locationName = "";
+        if (isset($content->mainLanguageId)) {
+            $contentLocationsRows = $this->locationGateway->loadLocationDataByContent($contentId);
+            foreach ($contentLocationsRows as $row) {
+                $locationName = '';
                 $urlAliasRows = $this->urlAliasGateway->loadLocationEntries(
-                    $row["node_id"],
+                    $row['node_id'],
                     false,
                     $content->mainLanguageId
                 );
-                if ( !empty( $urlAliasRows ) )
-                {
-                    $locationName = $urlAliasRows[0]["text"];
+                if (!empty($urlAliasRows)) {
+                    $locationName = $urlAliasRows[0]['text'];
                 }
                 $this->locationGateway->updatePathIdentificationString(
-                    $row["node_id"],
-                    $row["parent_node_id"],
+                    $row['node_id'],
+                    $row['parent_node_id'],
                     $this->slugConverter->convert(
                         $locationName,
-                        "node_" . $row["node_id"],
-                        "urlalias_compat"
+                        'node_' . $row['node_id'],
+                        'urlalias_compat'
                     )
                 );
             }
@@ -451,7 +459,7 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Updates a content version, identified by $contentId and $versionNo
+     * Updates a content version, identified by $contentId and $versionNo.
      *
      * @param int $contentId
      * @param int $versionNo
@@ -459,13 +467,13 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function updateContent( $contentId, $versionNo, UpdateStruct $updateStruct )
+    public function updateContent($contentId, $versionNo, UpdateStruct $updateStruct)
     {
-        $content = $this->load( $contentId, $versionNo );
-        $this->contentGateway->updateVersion( $contentId, $versionNo, $updateStruct );
-        $this->fieldHandler->updateFields( $content, $updateStruct );
-        foreach ( $updateStruct->name as $language => $name )
-        {
+        $content = $this->load($contentId, $versionNo);
+        $this->contentGateway->updateVersion($contentId, $versionNo, $updateStruct);
+        $contentType = $this->contentTypeHandler->load($content->versionInfo->contentInfo->contentTypeId);
+        $this->fieldHandler->updateFields($content, $updateStruct, $contentType);
+        foreach ($updateStruct->name as $language => $name) {
             $this->contentGateway->setName(
                 $contentId,
                 $versionNo,
@@ -474,7 +482,7 @@ class Handler implements BaseContentHandler
             );
         }
 
-        return $this->load( $contentId, $versionNo );
+        return $this->load($contentId, $versionNo);
     }
 
     /**
@@ -485,43 +493,28 @@ class Handler implements BaseContentHandler
      *
      * @param int $contentId
      *
-     * @return boolean
+     * @return bool
      */
-    public function deleteContent( $contentId )
+    public function deleteContent($contentId)
     {
-        $contentLocations = $this->contentGateway->getAllLocationIds( $contentId );
-        if ( empty( $contentLocations ) )
-        {
-            $this->removeRawContent( $contentId );
-        }
-        else
-        {
-            foreach ( $contentLocations as $locationId )
-            {
-                $this->locationHandler->removeSubtree( $locationId );
+        $contentLocations = $this->contentGateway->getAllLocationIds($contentId);
+        if (empty($contentLocations)) {
+            $this->removeRawContent($contentId);
+        } else {
+            foreach ($contentLocations as $locationId) {
+                $this->treeHandler->removeSubtree($locationId);
             }
         }
     }
 
     /**
-     * Deletes raw content data
+     * Deletes raw content data.
      *
      * @param int $contentId
      */
-    public function removeRawContent( $contentId )
+    public function removeRawContent($contentId)
     {
-        $this->locationGateway->removeElementFromTrash(
-            $this->loadContentInfo( $contentId )->mainLocationId
-        );
-
-        foreach ( $this->listVersions( $contentId ) as $versionInfo )
-        {
-            $this->fieldHandler->deleteFields( $contentId, $versionInfo );
-        }
-        $this->contentGateway->deleteRelations( $contentId );
-        $this->contentGateway->deleteVersions( $contentId );
-        $this->contentGateway->deleteNames( $contentId );
-        $this->contentGateway->deleteContent( $contentId );
+        $this->treeHandler->removeRawContent($contentId);
     }
 
     /**
@@ -532,33 +525,31 @@ class Handler implements BaseContentHandler
      * @param int $contentId
      * @param int $versionNo
      *
-     * @return boolean
+     * @return bool
      */
-    public function deleteVersion( $contentId, $versionNo )
+    public function deleteVersion($contentId, $versionNo)
     {
-        $versionInfo = $this->loadVersionInfo( $contentId, $versionNo );
+        $versionInfo = $this->loadVersionInfo($contentId, $versionNo);
 
-        $this->locationGateway->deleteNodeAssignment( $contentId, $versionNo );
+        $this->locationGateway->deleteNodeAssignment($contentId, $versionNo);
 
-        $this->fieldHandler->deleteFields( $contentId, $versionInfo );
+        $this->fieldHandler->deleteFields($contentId, $versionInfo);
 
-        $this->contentGateway->deleteRelations( $contentId, $versionNo );
-        $this->contentGateway->deleteVersions( $contentId, $versionNo );
-        $this->contentGateway->deleteNames( $contentId, $versionNo );
+        $this->contentGateway->deleteRelations($contentId, $versionNo);
+        $this->contentGateway->deleteVersions($contentId, $versionNo);
+        $this->contentGateway->deleteNames($contentId, $versionNo);
     }
 
     /**
-     * Returns the versions for $contentId
+     * Returns the versions for $contentId.
      *
      * @param int $contentId
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
-    public function listVersions( $contentId )
+    public function listVersions($contentId)
     {
-        return $this->mapper->extractVersionInfoListFromRows(
-            $this->contentGateway->listVersions( $contentId )
-        );
+        return $this->treeHandler->listVersions($contentId);
     }
 
     /**
@@ -576,29 +567,27 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function copy( $contentId, $versionNo = null )
+    public function copy($contentId, $versionNo = null)
     {
-        $currentVersionNo = isset( $versionNo ) ?
+        $currentVersionNo = isset($versionNo) ?
             $versionNo :
-            $this->loadContentInfo( $contentId )->currentVersionNo;
+            $this->loadContentInfo($contentId)->currentVersionNo;
 
         // Copy content in given version or current version
         $createStruct = $this->mapper->createCreateStructFromContent(
-            $this->load( $contentId, $currentVersionNo )
+            $this->load($contentId, $currentVersionNo)
         );
-        $content = $this->internalCreate( $createStruct, $currentVersionNo );
+        $content = $this->internalCreate($createStruct, $currentVersionNo);
+        $contentType = $this->contentTypeHandler->load($createStruct->typeId);
 
         // If version was not passed also copy other versions
-        if ( !isset( $versionNo ) )
-        {
-            foreach ( $this->listVersions( $contentId ) as $versionInfo )
-            {
-                if ( $versionInfo->versionNo === $currentVersionNo )
-                {
+        if (!isset($versionNo)) {
+            foreach ($this->listVersions($contentId) as $versionInfo) {
+                if ($versionInfo->versionNo === $currentVersionNo) {
                     continue;
                 }
 
-                $versionContent = $this->load( $contentId, $versionInfo->versionNo );
+                $versionContent = $this->load($contentId, $versionInfo->versionNo);
 
                 $versionContent->versionInfo->contentInfo->id = $content->versionInfo->contentInfo->id;
                 $versionContent->versionInfo->modificationDate = $createStruct->modified;
@@ -608,11 +597,10 @@ class Handler implements BaseContentHandler
                     $versionContent->fields
                 );
 
-                $this->fieldHandler->createNewFields( $versionContent );
+                $this->fieldHandler->createNewFields($versionContent, $contentType);
 
                 // Create names
-                foreach ( $versionContent->versionInfo->names as $language => $name )
-                {
+                foreach ($versionContent->versionInfo->names as $language => $name) {
                     $this->contentGateway->setName(
                         $content->versionInfo->contentInfo->id,
                         $versionInfo->versionNo,
@@ -636,11 +624,11 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation
      */
-    public function addRelation( RelationCreateStruct $createStruct )
+    public function addRelation(RelationCreateStruct $createStruct)
     {
-        $relation = $this->mapper->createRelationFromCreateStruct( $createStruct );
+        $relation = $this->mapper->createRelationFromCreateStruct($createStruct);
 
-        $relation->id = $this->contentGateway->insertRelation( $createStruct );
+        $relation->id = $this->contentGateway->insertRelation($createStruct);
 
         return $relation;
     }
@@ -655,12 +643,10 @@ class Handler implements BaseContentHandler
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
-     *
-     * @return void
      */
-    public function removeRelation( $relationId, $type )
+    public function removeRelation($relationId, $type)
     {
-        $this->contentGateway->deleteRelation( $relationId, $type );
+        $this->contentGateway->deleteRelation($relationId, $type);
     }
 
     /**
@@ -675,10 +661,10 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
-    public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null )
+    public function loadRelations($sourceContentId, $sourceContentVersionNo = null, $type = null)
     {
         return $this->mapper->extractRelationsFromRows(
-            $this->contentGateway->loadRelations( $sourceContentId, $sourceContentVersionNo, $type )
+            $this->contentGateway->loadRelations($sourceContentId, $sourceContentVersionNo, $type)
         );
     }
 
@@ -692,12 +678,13 @@ class Handler implements BaseContentHandler
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
-    public function loadReverseRelations( $destinationContentId, $type = null )
+    public function loadReverseRelations($destinationContentId, $type = null)
     {
         return $this->mapper->extractRelationsFromRows(
-            $this->contentGateway->loadReverseRelations( $destinationContentId, $type )
+            $this->contentGateway->loadReverseRelations($destinationContentId, $type)
         );
     }
 }

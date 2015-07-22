@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Root controller class
+ * File containing the Root controller class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,12 +16,12 @@ use eZ\Publish\Core\REST\Common\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 /**
- * Root controller
+ * Root controller.
  */
 class Root extends RestController
 {
     /**
-     * List the root resources of the eZ Publish installation
+     * List the root resources of the eZ Publish installation.
      *
      * @return \eZ\Publish\Core\REST\Common\Values\Root
      */
@@ -29,12 +31,12 @@ class Root extends RestController
     }
 
     /**
-     * Catch-all for REST requests
+     * Catch-all for REST requests.
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
      */
     public function catchAll()
     {
-        throw new NotFoundException( "No such route" );
+        throw new NotFoundException('No such route');
     }
 }

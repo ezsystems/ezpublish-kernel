@@ -1,29 +1,30 @@
 <?php
+
 /**
- * File containing the Authenticator base class
+ * File containing the Authenticator base class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server;
 
 use eZ\Publish\API\Repository\Repository;
-
 use Qafoo\RMF;
 
 /**
- * Authenticator base class
+ * Authenticator base class.
  */
 abstract class Authenticator
 {
     /**
-     * Creates an new Authenticator to $repository
+     * Creates an new Authenticator to $repository.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      */
-    public function __construct( Repository $repository )
+    public function __construct(Repository $repository)
     {
         $this->repository = $repository;
     }
@@ -37,7 +38,7 @@ abstract class Authenticator
      *
      * @param RMF\Request $request
      *
-     * @return boolean
+     * @return bool
      */
-    abstract public function authenticate( RMF\Request $request );
+    abstract public function authenticate(RMF\Request $request);
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\ContentType\FieldDefinition class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,7 @@ namespace eZ\Publish\API\Repository\Values\ContentType;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * This class represents a field definition
+ * This class represents a field definition.
  *
  * @property-read mixed $fieldSettings calls getFieldSettings()
  * @property-read mixed $validatorConfiguration calls getValidatorConfiguration()
@@ -30,14 +32,14 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 abstract class FieldDefinition extends ValueObject
 {
     /**
-     * the unique id of this field definition
+     * the unique id of this field definition.
      *
      * @var mixed
      */
     protected $id;
 
     /**
-     * Readable string identifier of a field definition
+     * Readable string identifier of a field definition.
      *
      * @var string
      */
@@ -45,7 +47,7 @@ abstract class FieldDefinition extends ValueObject
 
     /**
      * This method returns the human readable name of this field in all provided languages
-     * of the content type
+     * of the content type.
      *
      * The structure of the return value is:
      * <code>
@@ -57,16 +59,16 @@ abstract class FieldDefinition extends ValueObject
     abstract public function getNames();
 
     /**
-     * This method returns the name of the field in the given language
+     * This method returns the name of the field in the given language.
      *
      * @param string $languageCode
      *
      * @return string the name for the given language or null if none exists.
      */
-    abstract public function getName( $languageCode );
+    abstract public function getName($languageCode);
 
     /**
-     * This method returns the human readable description of the field
+     * This method returns the human readable description of the field.
      *
      * The structure of this field is:
      * <code>
@@ -78,81 +80,81 @@ abstract class FieldDefinition extends ValueObject
     abstract public function getDescriptions();
 
     /**
-     * This method returns the name of the field in the given language
+     * This method returns the name of the field in the given language.
      *
      * @param string $languageCode
      *
      * @return string the description for the given language or null if none exists.
      */
-    abstract public function getDescription( $languageCode );
+    abstract public function getDescription($languageCode);
 
     /**
-     * Field group name
+     * Field group name.
      *
      * @var string
      */
     protected $fieldGroup;
 
     /**
-     * the position of the field definition in the content typr
+     * the position of the field definition in the content typr.
      *
      * @var int
      */
     protected $position;
 
     /**
-     * String identifier of the field type
+     * String identifier of the field type.
      *
      * @var string
      */
     protected $fieldTypeIdentifier;
 
     /**
-     * If the field is translatable
+     * If the field is translatable.
      *
-     * @var boolean
+     * @var bool
      */
     protected $isTranslatable;
 
     /**
-     * Is the field required
+     * Is the field required.
      *
-     * @var boolean
+     * @var bool
      */
     protected $isRequired;
 
     /**
-     * the flag if this field is used for information collection
+     * the flag if this field is used for information collection.
      *
-     * @var boolean
+     * @var bool
      */
     protected $isInfoCollector;
 
     /**
-     * This method returns the validator configuration of this field definition supported by the field type
+     * This method returns the validator configuration of this field definition supported by the field type.
      *
      * @return mixed
      */
     abstract public function getValidatorConfiguration();
 
     /**
-     * This method returns settings for the field definition supported by the field type
+     * This method returns settings for the field definition supported by the field type.
      *
      * @return mixed
      */
     abstract public function getFieldSettings();
 
     /**
-     * Default value of the field
+     * Default value of the field.
      *
      * @var mixed
      */
     protected $defaultValue;
 
     /**
-     * Indicates if th the content is searchable by this attribute
+     * Indicates if th the content is searchable by this attribute.
      *
-     * @var boolean
+     * @var bool
      */
     protected $isSearchable;
 }

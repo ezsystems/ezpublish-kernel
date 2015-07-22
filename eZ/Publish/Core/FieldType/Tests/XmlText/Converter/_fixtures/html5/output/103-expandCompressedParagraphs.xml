@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5">
+  <p class="pest">Speak, vision of the night, Tell me why you haunt me so.</p>
+  <p class="test">
+    Speak, ere the morning light, <a id="first"/>Whisper all my heart would know,
+  </p>
+  <div class="object-left"/>
+  <p class="test">
+    Dawn ever finds you gone, <a id="middle"/>Back to where the shadows dwell,
+  </p>
+  <div class="object-left"/>
+  <p class="test">
+    Speak, my beloved speak, <a id="last"/>Tho' you only say "Farewell".
+  </p>
+  <p class="nest">Speak! Speak!</p>
+</section>

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
 class ObjectStateGroupCreateTest extends BaseTest
 {
     /**
-     * Tests the ObjectStateGroupCreate parser
+     * Tests the ObjectStateGroupCreate parser.
      */
     public function testParse()
     {
@@ -26,22 +28,22 @@ class ObjectStateGroupCreateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test group'
-                    )
-                )
+                        '#text' => 'Test group',
+                    ),
+                ),
             ),
             'descriptions' => array(
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test group description'
-                    )
-                )
-            )
+                        '#text' => 'Test group description',
+                    ),
+                ),
+            ),
         );
 
         $objectStateGroupCreate = $this->getParser();
-        $result = $objectStateGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $objectStateGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroupCreateStruct',
@@ -62,20 +64,20 @@ class ObjectStateGroupCreateTest extends BaseTest
         );
 
         $this->assertEquals(
-            array( 'eng-GB' => 'Test group' ),
+            array('eng-GB' => 'Test group'),
             $result->names,
             'ObjectStateGroupCreateStruct names property not created correctly.'
         );
 
         $this->assertEquals(
-            array( 'eng-GB' => 'Test group description' ),
+            array('eng-GB' => 'Test group description'),
             $result->descriptions,
             'ObjectStateGroupCreateStruct descriptions property not created correctly.'
         );
     }
 
     /**
-     * Test ObjectStateGroupCreate parser throwing exception on missing identifier
+     * Test ObjectStateGroupCreate parser throwing exception on missing identifier.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'identifier' attribute for ObjectStateGroupCreate.
@@ -88,26 +90,26 @@ class ObjectStateGroupCreateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test group'
-                    )
-                )
+                        '#text' => 'Test group',
+                    ),
+                ),
             ),
             'descriptions' => array(
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test group description'
-                    )
-                )
-            )
+                        '#text' => 'Test group description',
+                    ),
+                ),
+            ),
         );
 
         $objectStateGroupCreate = $this->getParser();
-        $objectStateGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $objectStateGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ObjectStateGroupCreate parser throwing exception on missing defaultLanguageCode
+     * Test ObjectStateGroupCreate parser throwing exception on missing defaultLanguageCode.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'defaultLanguageCode' attribute for ObjectStateGroupCreate.
@@ -120,26 +122,26 @@ class ObjectStateGroupCreateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test group'
-                    )
-                )
+                        '#text' => 'Test group',
+                    ),
+                ),
             ),
             'descriptions' => array(
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test group description'
-                    )
-                )
-            )
+                        '#text' => 'Test group description',
+                    ),
+                ),
+            ),
         );
 
         $objectStateGroupCreate = $this->getParser();
-        $objectStateGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $objectStateGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ObjectStateGroupCreate parser throwing exception on missing names
+     * Test ObjectStateGroupCreate parser throwing exception on missing names.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'names' element for ObjectStateGroupCreate.
@@ -153,18 +155,18 @@ class ObjectStateGroupCreateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test group description'
-                    )
-                )
-            )
+                        '#text' => 'Test group description',
+                    ),
+                ),
+            ),
         );
 
         $objectStateGroupCreate = $this->getParser();
-        $objectStateGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $objectStateGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ObjectStateGroupCreate parser throwing exception on invalid names structure
+     * Test ObjectStateGroupCreate parser throwing exception on invalid names structure.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'names' element for ObjectStateGroupCreate.
@@ -179,18 +181,18 @@ class ObjectStateGroupCreateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test group description'
-                    )
-                )
-            )
+                        '#text' => 'Test group description',
+                    ),
+                ),
+            ),
         );
 
         $objectStateGroupCreate = $this->getParser();
-        $objectStateGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $objectStateGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Returns the ObjectStateGroupCreate parser
+     * Returns the ObjectStateGroupCreate parser.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateGroupCreate
      */
@@ -203,7 +205,7 @@ class ObjectStateGroupCreateTest extends BaseTest
     }
 
     /**
-     * Get the object state service mock object
+     * Get the object state service mock object.
      *
      * @return \eZ\Publish\API\Repository\ObjectStateService
      */
@@ -217,11 +219,11 @@ class ObjectStateGroupCreateTest extends BaseTest
             false
         );
 
-        $objectStateServiceMock->expects( $this->any() )
-            ->method( 'newObjectStateGroupCreateStruct' )
-            ->with( $this->equalTo( 'test-group' ) )
+        $objectStateServiceMock->expects($this->any())
+            ->method('newObjectStateGroupCreateStruct')
+            ->with($this->equalTo('test-group'))
             ->will(
-                $this->returnValue( new ObjectStateGroupCreateStruct( array( 'identifier' => 'test-group' ) ) )
+                $this->returnValue(new ObjectStateGroupCreateStruct(array('identifier' => 'test-group')))
             );
 
         return $objectStateServiceMock;

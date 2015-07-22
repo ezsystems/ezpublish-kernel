@@ -1,9 +1,11 @@
 <?php
+
 /**
- * URLAliasService class
+ * URLAliasService class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,27 +18,26 @@ use eZ\Publish\Core\SignalSlot\Signal\URLAliasService\CreateGlobalUrlAliasSignal
 use eZ\Publish\Core\SignalSlot\Signal\URLAliasService\RemoveAliasesSignal;
 
 /**
- * URLAliasService class
- * @package eZ\Publish\Core\SignalSlot
+ * URLAliasService class.
  */
 class URLAliasService implements URLAliasServiceInterface
 {
     /**
-     * Aggregated service
+     * Aggregated service.
      *
      * @var \eZ\Publish\API\Repository\URLAliasService
      */
     protected $service;
 
     /**
-     * SignalDispatcher
+     * SignalDispatcher.
      *
      * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * Construct service object from aggregated service and signal
      * dispatcher
@@ -44,9 +45,9 @@ class URLAliasService implements URLAliasServiceInterface
      * @param \eZ\Publish\API\Repository\URLAliasService $service
      * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
      */
-    public function __construct( URLAliasServiceInterface $service, SignalDispatcher $signalDispatcher )
+    public function __construct(URLAliasServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->signalDispatcher = $signalDispatcher;
     }
 
@@ -60,16 +61,16 @@ class URLAliasService implements URLAliasServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $path
      * @param string $languageCode the languageCode for which this alias is valid
-     * @param boolean $forwarding if true a redirect is performed
-     * @param boolean $alwaysAvailable
+     * @param bool $forwarding if true a redirect is performed
+     * @param bool $alwaysAvailable
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function createUrlAlias( Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
+    public function createUrlAlias(Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false)
     {
-        $returnValue = $this->service->createUrlAlias( $location, $path, $languageCode, $forwarding, $alwaysAvailable );
+        $returnValue = $this->service->createUrlAlias($location, $path, $languageCode, $forwarding, $alwaysAvailable);
         $this->signalDispatcher->emit(
             new CreateUrlAliasSignal(
                 array(
@@ -77,6 +78,7 @@ class URLAliasService implements URLAliasServiceInterface
                 )
             )
         );
+
         return $returnValue;
     }
 
@@ -90,20 +92,20 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * $alwaysAvailable makes the alias available in all languages.
      *
-      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given
-      *         language or if resource is not valid
-      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given
+     *         language or if resource is not valid
+     *
      * @param string $resource
      * @param string $path
      * @param string $languageCode
-     * @param boolean $forwarding
-     * @param boolean $alwaysAvailable
+     * @param bool $forwarding
+     * @param bool $alwaysAvailable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function createGlobalUrlAlias( $resource, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
+    public function createGlobalUrlAlias($resource, $path, $languageCode, $forwarding = false, $alwaysAvailable = false)
     {
-        $returnValue = $this->service->createGlobalUrlAlias( $resource, $path, $languageCode, $forwarding, $alwaysAvailable );
+        $returnValue = $this->service->createGlobalUrlAlias($resource, $path, $languageCode, $forwarding, $alwaysAvailable);
         $this->signalDispatcher->emit(
             new CreateGlobalUrlAliasSignal(
                 array(
@@ -111,6 +113,7 @@ class URLAliasService implements URLAliasServiceInterface
                 )
             )
         );
+
         return $returnValue;
     }
 
@@ -118,18 +121,31 @@ class URLAliasService implements URLAliasServiceInterface
      * List of url aliases pointing to $location, sorted by language priority.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param boolean $custom if true the user generated aliases are listed otherwise the autogenerated
+     * @param bool $custom if true the user generated aliases are listed otherwise the autogenerated
      * @param string $languageCode filters those which are valid for the given language
+     * @param null|bool $showAllTranslations
+     * @param null|string[] $prioritizedLanguageList
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias[]
      */
-    public function listLocationAliases( Location $location, $custom = true, $languageCode = null )
-    {
-        return $this->service->listLocationAliases( $location, $custom, $languageCode );
+    public function listLocationAliases(
+        Location $location,
+        $custom = true,
+        $languageCode = null,
+        $showAllTranslations = null,
+        array $prioritizedLanguageList = null
+    ) {
+        return $this->service->listLocationAliases(
+            $location,
+            $custom,
+            $languageCode,
+            $showAllTranslations,
+            $prioritizedLanguageList
+        );
     }
 
     /**
-     * List global aliases
+     * List global aliases.
      *
      * @param string $languageCode filters those which are valid for the given language
      * @param int $offset
@@ -137,9 +153,9 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias[]
      */
-    public function listGlobalAliases( $languageCode = null, $offset = 0, $limit = -1 )
+    public function listGlobalAliases($languageCode = null, $offset = 0, $limit = -1)
     {
-        return $this->service->listGlobalAliases( $languageCode, $offset, $limit );
+        return $this->service->listGlobalAliases($languageCode, $offset, $limit);
     }
 
     /**
@@ -151,12 +167,10 @@ class URLAliasService implements URLAliasServiceInterface
      *         autogenerated alias
      *
      * @param \eZ\Publish\API\Repository\Values\Content\URLAlias[] $aliasList
-     *
-     * @return void
      */
-    public function removeAliases( array $aliasList )
+    public function removeAliases(array $aliasList)
     {
-        $returnValue = $this->service->removeAliases( $aliasList );
+        $returnValue = $this->service->removeAliases($aliasList);
         $this->signalDispatcher->emit(
             new RemoveAliasesSignal(
                 array(
@@ -164,6 +178,7 @@ class URLAliasService implements URLAliasServiceInterface
                 )
             )
         );
+
         return $returnValue;
     }
 
@@ -177,9 +192,9 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function lookup( $url, $languageCode = null )
+    public function lookup($url, $languageCode = null)
     {
-        return $this->service->lookup( $url, $languageCode );
+        return $this->service->lookup($url, $languageCode);
     }
 
     /**
@@ -191,16 +206,27 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $languageCode
+     * @param null|bool $showAllTranslations
+     * @param null|string[] $prioritizedLanguageList
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function reverseLookup( Location $location, $languageCode = null )
-    {
-        return $this->service->reverseLookup( $location, $languageCode );
+    public function reverseLookup(
+        Location $location,
+        $languageCode = null,
+        $showAllTranslations = null,
+        array $prioritizedLanguageList = null
+    ) {
+        return $this->service->reverseLookup(
+            $location,
+            $languageCode,
+            $showAllTranslations,
+            $prioritizedLanguageList
+        );
     }
 
     /**
-     * Loads URL alias by given $id
+     * Loads URL alias by given $id.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
@@ -208,8 +234,8 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function load( $id )
+    public function load($id)
     {
-        return $this->service->load( $id );
+        return $this->service->load($id);
     }
 }

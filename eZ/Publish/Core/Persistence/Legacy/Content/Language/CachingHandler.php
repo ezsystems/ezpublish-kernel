@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Language Handler class
+ * File containing the Language Handler class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,89 +16,86 @@ use eZ\Publish\SPI\Persistence\Content\Language\Handler as BaseLanguageHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 
 /**
- * Language Handler
+ * Language Handler.
  */
 class CachingHandler implements BaseLanguageHandler
 {
     /**
-     * Inner Language handler
+     * Inner Language handler.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
      */
     protected $innerHandler;
 
     /**
-     * Language cache
+     * Language cache.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
      */
     protected $languageCache;
 
     /**
-     * If the cache has already been initialized
+     * If the cache has already been initialized.
      *
-     * @var boolean
+     * @var bool
      */
     protected $isCacheInitialized = false;
 
     /**
-     * Creates a caching handler around $innerHandler
+     * Creates a caching handler around $innerHandler.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $innerHandler
      */
-    public function __construct( BaseLanguageHandler $innerHandler, Cache $languageCache )
+    public function __construct(BaseLanguageHandler $innerHandler, Cache $languageCache)
     {
         $this->innerHandler = $innerHandler;
         $this->languageCache = $languageCache;
     }
 
     /**
-     * Initializes the cache if necessary
-     *
-     * @return void
+     * Initializes the cache if necessary.
      */
     protected function initializeCache()
     {
-        if ( false === $this->isCacheInitialized )
-        {
+        if (false === $this->isCacheInitialized) {
             $languages = $this->innerHandler->loadAll();
-            foreach ( $languages as $language )
-            {
-                $this->languageCache->store( $language );
+            foreach ($languages as $language) {
+                $this->languageCache->store($language);
             }
             $this->isCacheInitialized = true;
         }
     }
 
     /**
-     * Create a new language
+     * Create a new language.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct $struct
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
-    public function create( CreateStruct $struct )
+    public function create(CreateStruct $struct)
     {
         $this->initializeCache();
-        $language = $this->innerHandler->create( $struct );
-        $this->languageCache->store( $language );
+        $language = $this->innerHandler->create($struct);
+        $this->languageCache->store($language);
+
         return $language;
     }
 
     /**
-     * Update language
+     * Update language.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Language $language
      */
-    public function update( Language $language )
+    public function update(Language $language)
     {
         $this->initializeCache();
-        $this->innerHandler->update( $language );
-        $this->languageCache->store( $language );
+        $this->innerHandler->update($language);
+        $this->languageCache->store($language);
     }
 
     /**
-     * Get language by id
+     * Get language by id.
      *
      * @param mixed $id
      *
@@ -104,14 +103,15 @@ class CachingHandler implements BaseLanguageHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
-    public function load( $id )
+    public function load($id)
     {
         $this->initializeCache();
-        return $this->languageCache->getById( $id );
+
+        return $this->languageCache->getById($id);
     }
 
     /**
-     * Get language by Language Code (eg: eng-GB)
+     * Get language by Language Code (eg: eng-GB).
      *
      * @param string $languageCode
      *
@@ -119,39 +119,39 @@ class CachingHandler implements BaseLanguageHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
-    public function loadByLanguageCode( $languageCode )
+    public function loadByLanguageCode($languageCode)
     {
         $this->initializeCache();
-        return $this->languageCache->getByLocale( $languageCode );
+
+        return $this->languageCache->getByLocale($languageCode);
     }
 
     /**
-     * Get all languages
+     * Get all languages.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language[]
      */
     public function loadAll()
     {
         $this->initializeCache();
+
         return $this->languageCache->getAll();
     }
 
     /**
-     * Delete a language
+     * Delete a language.
      *
      * @param mixed $id
      */
-    public function delete( $id )
+    public function delete($id)
     {
         $this->initializeCache();
-        $this->innerHandler->delete( $id );
-        $this->languageCache->remove( $id );
+        $this->innerHandler->delete($id);
+        $this->languageCache->remove($id);
     }
 
     /**
-     * Clear internal cache
-     *
-     * @return void
+     * Clear internal cache.
      */
     public function clearCache()
     {

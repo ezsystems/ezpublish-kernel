@@ -1,15 +1,18 @@
 <?php
+
 /**
  * File containing the ParentLocation matcher class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
@@ -20,11 +23,11 @@ class ParentLocation extends MultipleValued
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchLocation( APILocation $location )
+    public function matchLocation(APILocation $location)
     {
-        return isset( $this->values[$location->parentLocationId] );
+        return isset($this->values[$location->parentLocationId]);
     }
 
     /**
@@ -32,16 +35,16 @@ class ParentLocation extends MultipleValued
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchContentInfo( ContentInfo $contentInfo )
+    public function matchContentInfo(ContentInfo $contentInfo)
     {
         $location = $this->repository->sudo(
-            function ( $repository ) use ( $contentInfo )
-            {
-                return $repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
+            function (Repository $repository) use ($contentInfo) {
+                return $repository->getLocationService()->loadLocation($contentInfo->mainLocationId);
             }
         );
-        return isset( $this->values[$location->parentLocationId] );
+
+        return isset($this->values[$location->parentLocationId]);
     }
 }

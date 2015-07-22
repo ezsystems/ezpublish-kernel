@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the LocaleConvertTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -30,16 +32,16 @@ class LocaleConverterTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->conversionMap = array(
-            'eng-GB'       => 'en_GB',
-            'eng-US'       => 'en_US',
-            'fre-FR'       => 'fr_FR',
-            'ger-DE'       => 'de_DE',
-            'nor-NO'       => 'no_NO',
-            'cro-HR'       => 'hr_HR',
+            'eng-GB' => 'en_GB',
+            'eng-US' => 'en_US',
+            'fre-FR' => 'fr_FR',
+            'ger-DE' => 'de_DE',
+            'nor-NO' => 'no_NO',
+            'cro-HR' => 'hr_HR',
         );
 
-        $this->logger = $this->getMock( 'Psr\\Log\\LoggerInterface' );
-        $this->localeConverter = new LocaleConverter( $this->conversionMap, $this->logger );
+        $this->logger = $this->getMock('Psr\\Log\\LoggerInterface');
+        $this->localeConverter = new LocaleConverter($this->conversionMap, $this->logger);
     }
 
     /**
@@ -50,27 +52,26 @@ class LocaleConverterTest extends PHPUnit_Framework_TestCase
      * @param $ezpLocale
      * @param $expected
      */
-    public function testConvertToPOSIX( $ezpLocale, $expected )
+    public function testConvertToPOSIX($ezpLocale, $expected)
     {
-        if ( $expected === null )
-        {
+        if ($expected === null) {
             $this->logger
-                ->expects( $this->once() )
-                ->method( 'warning' );
+                ->expects($this->once())
+                ->method('warning');
         }
 
-        $this->assertSame( $expected, $this->localeConverter->convertToPOSIX( $ezpLocale ) );
+        $this->assertSame($expected, $this->localeConverter->convertToPOSIX($ezpLocale));
     }
 
     public function convertToPOSIXProvider()
     {
         return array(
-            array( 'eng-GB', 'en_GB' ),
-            array( 'eng-US', 'en_US' ),
-            array( 'fre-FR', 'fr_FR' ),
-            array( 'chi-CN', null ),
-            array( 'epo-EO', null ),
-            array( 'nor-NO', 'no_NO' ),
+            array('eng-GB', 'en_GB'),
+            array('eng-US', 'en_US'),
+            array('fre-FR', 'fr_FR'),
+            array('chi-CN', null),
+            array('epo-EO', null),
+            array('nor-NO', 'no_NO'),
         );
     }
 
@@ -82,27 +83,26 @@ class LocaleConverterTest extends PHPUnit_Framework_TestCase
      * @param $posixLocale
      * @param $expected
      */
-    public function testConvertToEz( $posixLocale, $expected )
+    public function testConvertToEz($posixLocale, $expected)
     {
-        if ( $expected === null )
-        {
+        if ($expected === null) {
             $this->logger
-                ->expects( $this->once() )
-                ->method( 'warning' );
+                ->expects($this->once())
+                ->method('warning');
         }
 
-        $this->assertSame( $expected, $this->localeConverter->convertToEz( $posixLocale ) );
+        $this->assertSame($expected, $this->localeConverter->convertToEz($posixLocale));
     }
 
     public function convertToEzProvider()
     {
         return array(
-            array( 'en_GB', 'eng-GB' ),
-            array( 'en_US', 'eng-US' ),
-            array( 'fr_FR', 'fre-FR' ),
-            array( 'zh-CN', null ),
-            array( 'eo', null ),
-            array( 'no_NO', 'nor-NO' ),
+            array('en_GB', 'eng-GB'),
+            array('en_US', 'eng-US'),
+            array('fr_FR', 'fre-FR'),
+            array('zh-CN', null),
+            array('eo', null),
+            array('no_NO', 'nor-NO'),
         );
     }
 }

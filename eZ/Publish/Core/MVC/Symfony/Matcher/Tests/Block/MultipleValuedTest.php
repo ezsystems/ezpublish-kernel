@@ -1,15 +1,16 @@
 <?php
+
 /**
  * File containing the MultipleValuedTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\Block;
 
-use eZ\Publish\Core\MVC\Symfony\View\Tests\ContentViewProvider\Configured\BaseTest;
 use PHPUnit_Framework_TestCase;
 
 class MultipleValuedTest extends PHPUnit_Framework_TestCase
@@ -19,17 +20,16 @@ class MultipleValuedTest extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::getValues
      */
-    public function testSetMatchingConfig( $matchingConfig )
+    public function testSetMatchingConfig($matchingConfig)
     {
         $matcher = $this->getMultipleValuedMatcherMock();
-        $matcher->setMatchingConfig( $matchingConfig );
+        $matcher->setMatchingConfig($matchingConfig);
         $values = $matcher->getValues();
-        $this->assertInternalType( 'array', $values );
+        $this->assertInternalType('array', $values);
 
-        $matchingConfig = is_array( $matchingConfig ) ? $matchingConfig : array( $matchingConfig );
-        foreach ( $matchingConfig as $val )
-        {
-            $this->assertContains( $val, $values );
+        $matchingConfig = is_array($matchingConfig) ? $matchingConfig : array($matchingConfig);
+        foreach ($matchingConfig as $val) {
+            $this->assertContains($val, $values);
         }
     }
 
@@ -43,10 +43,10 @@ class MultipleValuedTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 'singleValue',
-                array( 'one', 'two', 'three' ),
-                array( 123, 'nous irons au bois' ),
-                456
-            )
+                array('one', 'two', 'three'),
+                array(123, 'nous irons au bois'),
+                456,
+            ),
         );
     }
 
@@ -57,13 +57,13 @@ class MultipleValuedTest extends PHPUnit_Framework_TestCase
     public function testInjectRepository()
     {
         $matcher = $this->getMultipleValuedMatcherMock();
-        $repositoryMock = $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' );
-        $matcher->setRepository( $repositoryMock );
-        $this->assertSame( $repositoryMock, $matcher->getRepository() );
+        $repositoryMock = $this->getMock('eZ\\Publish\\API\\Repository\\Repository');
+        $matcher->setRepository($repositoryMock);
+        $this->assertSame($repositoryMock, $matcher->getRepository());
     }
 
     private function getMultipleValuedMatcherMock()
     {
-        return $this->getMockForAbstractClass( 'eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\Block\\MultipleValued' );
+        return $this->getMockForAbstractClass('eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\Block\\MultipleValued');
     }
 }

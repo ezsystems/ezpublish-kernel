@@ -1,37 +1,37 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\Trash;
 use eZ\Publish\Core\REST\Server\Values\RestTrashItem;
-use eZ\Publish\Core\REST\Common;
 use eZ\Publish\Core\Repository\Values\Content;
 
 class TrashTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the Trash visitor
+     * Test the Trash visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
-        $trash = new Trash( array(), '/content/trash' );
+        $trash = new Trash(array(), '/content/trash');
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -39,23 +39,23 @@ class TrashTest extends ValueObjectVisitorBaseTest
             $trash
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains Trash element
+     * Test if result contains Trash element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsTrashElement( $result )
+    public function testResultContainsTrashElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'Trash',
             ),
@@ -66,21 +66,21 @@ class TrashTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains Trash element attributes
+     * Test if result contains Trash element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsTrashAttributes( $result )
+    public function testResultContainsTrashAttributes($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'Trash',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Trash+xml',
                     'href' => '/content/trash',
-                )
+                ),
             ),
             $result,
             'Invalid <Trash> attributes.',
@@ -89,14 +89,14 @@ class TrashTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if Trash visitor visits the children
+     * Test if Trash visitor visits the children.
      */
     public function testTrashVisitsChildren()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $trashList = new Trash(
             array(
@@ -114,9 +114,9 @@ class TrashTest extends ValueObjectVisitorBaseTest
             '/content/trash'
         );
 
-        $this->getVisitorMock()->expects( $this->exactly( 2 ) )
-            ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Server\\Values\\RestTrashItem' ) );
+        $this->getVisitorMock()->expects($this->exactly(2))
+            ->method('visitValueObject')
+            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\RestTrashItem'));
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -126,12 +126,12 @@ class TrashTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the Trash visitor
+     * Get the Trash visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Trash
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Trash;
+        return new ValueObjectVisitor\Trash();
     }
 }

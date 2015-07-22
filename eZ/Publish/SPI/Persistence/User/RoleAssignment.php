@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RoleAssignment class
+ * File containing the RoleAssignment class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,21 +18,21 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class RoleAssignment extends ValueObject
 {
     /**
-     * The Role connected to this assignment
+     * The Role connected to this assignment.
      *
      * @var mixed
      */
     public $roleId;
 
     /**
-     * The user or user group id
+     * The user or user group id.
      *
      * @var mixed
      */
     public $contentId;
 
     /**
-     * One of 'Subtree' or 'Section'
+     * One of 'Subtree' or 'Section'.
      *
      * @var string|null
      */

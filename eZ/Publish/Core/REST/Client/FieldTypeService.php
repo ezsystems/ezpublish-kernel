@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the FieldTypeService class
+ * File containing the FieldTypeService class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\Core\REST\Common\Exceptions;
 class FieldTypeService implements APIFieldTypeService
 {
     /**
-     * FieldTypes by identifier
+     * FieldTypes by identifier.
      *
      * @var \eZ\Publish\Core\REST\Client\FieldType[]
      */
@@ -23,29 +25,22 @@ class FieldTypeService implements APIFieldTypeService
 
     /**
      * @param \eZ\Publish\Core\REST\Client\FieldType[] $fieldTypes
-     *
-     * @return void
      */
-    public function __construct( array $fieldTypes = array() )
+    public function __construct(array $fieldTypes = array())
     {
-        foreach ( $fieldTypes as $fieldType )
-        {
-            $this->addFieldType( $fieldType );
+        foreach ($fieldTypes as $fieldType) {
+            $this->addFieldType($fieldType);
         }
     }
 
     /**
-     * Adds the given $fieldType
+     * Adds the given $fieldType.
      *
      * Note, this is not an API method and not meant to be used directly!
      *
      * @param FieldType $fieldType
-     *
-     * @access protected
-     *
-     * @return void
      */
-    public function addFieldType( FieldType $fieldType )
+    public function addFieldType(FieldType $fieldType)
     {
         $this->fieldTypes[$fieldType->getFieldTypeIdentifier()] = $fieldType;
     }
@@ -57,22 +52,22 @@ class FieldTypeService implements APIFieldTypeService
      */
     public function getFieldTypes()
     {
-        return array_values( $this->fieldTypes );
+        return array_values($this->fieldTypes);
     }
 
     /**
-     * Returns the FieldType registered with the given identifier
+     * Returns the FieldType registered with the given identifier.
      *
      * @param string $identifier
      *
      * @return \eZ\Publish\API\Repository\FieldType
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *         if there is no FieldType registered with $identifier
      */
-    public function getFieldType( $identifier )
+    public function getFieldType($identifier)
     {
-        if ( $this->hasFieldType( $identifier ) )
-        {
+        if ($this->hasFieldType($identifier)) {
             return $this->fieldTypes[$identifier];
         }
 
@@ -85,14 +80,14 @@ class FieldTypeService implements APIFieldTypeService
     }
 
     /**
-     * Returns if there is a FieldType registered under $identifier
+     * Returns if there is a FieldType registered under $identifier.
      *
      * @param string $identifier
      *
-     * @return boolean
+     * @return bool
      */
-    public function hasFieldType( $identifier )
+    public function hasFieldType($identifier)
     {
-        return isset( $this->fieldTypes[$identifier] );
+        return isset($this->fieldTypes[$identifier]);
     }
 }

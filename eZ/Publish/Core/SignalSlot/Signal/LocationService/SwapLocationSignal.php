@@ -1,9 +1,11 @@
 <?php
+
 /**
- * SwapLocationSignal class
+ * SwapLocationSignal class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,34 +14,33 @@ namespace eZ\Publish\Core\SignalSlot\Signal\LocationService;
 use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
- * SwapLocationSignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\LocationService
+ * SwapLocationSignal class.
  */
 class SwapLocationSignal extends Signal
 {
     /**
-     * Content1 Id
+     * Content1 Id.
      *
      * @var mixed
      */
     public $content1Id;
 
     /**
-     * Location1 Id
+     * Location1 Id.
      *
      * @var mixed
      */
     public $location1Id;
 
     /**
-     * Content2 Id
+     * Content2 Id.
      *
      * @var mixed
      */
     public $content2Id;
 
     /**
-     * Location2 Id
+     * Location2 Id.
      *
      * @var mixed
      */

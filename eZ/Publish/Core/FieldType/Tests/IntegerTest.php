@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the IntegerTest class
+ * File containing the IntegerTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,7 +13,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Integer\Type as Integer;
 use eZ\Publish\Core\FieldType\Integer\Value as IntegerValue;
-use ReflectionObject;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * @group fieldType
@@ -32,7 +34,10 @@ class IntegerTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Integer();
+        $fieldType = new Integer();
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
+
+        return $fieldType;
     }
 
     /**
@@ -43,16 +48,16 @@ class IntegerTest extends FieldTypeTest
     protected function getValidatorConfigurationSchemaExpectation()
     {
         return array(
-            "IntegerValueValidator" => array(
-                "minIntegerValue" => array(
-                    "type" => "int",
-                    "default" => 0
+            'IntegerValueValidator' => array(
+                'minIntegerValue' => array(
+                    'type' => 'int',
+                    'default' => null,
                 ),
-                "maxIntegerValue" => array(
-                    "type" => "int",
-                    "default" => false
-                )
-            )
+                'maxIntegerValue' => array(
+                    'type' => 'int',
+                    'default' => null,
+                ),
+            ),
         );
     }
 
@@ -68,12 +73,10 @@ class IntegerTest extends FieldTypeTest
 
     /**
      * Returns the empty value expected from the field type.
-     *
-     * @return void
      */
     protected function getEmptyValueExpectation()
     {
-        return new IntegerValue;
+        return new IntegerValue();
     }
 
     /**
@@ -111,7 +114,7 @@ class IntegerTest extends FieldTypeTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                new IntegerValue( 'foo' ),
+                new IntegerValue('foo'),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
@@ -151,25 +154,25 @@ class IntegerTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new IntegerValue,
+                new IntegerValue(),
             ),
             array(
                 42,
-                new IntegerValue( 42 ),
+                new IntegerValue(42),
             ),
             array(
                 23,
-                new IntegerValue( 23 ),
+                new IntegerValue(23),
             ),
             array(
-                new IntegerValue( 23 ),
-                new IntegerValue( 23 ),
+                new IntegerValue(23),
+                new IntegerValue(23),
             ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -207,18 +210,18 @@ class IntegerTest extends FieldTypeTest
     {
         return array(
             array(
-                new IntegerValue,
+                new IntegerValue(),
                 null,
             ),
             array(
-                new IntegerValue( 42 ),
+                new IntegerValue(42),
                 42,
             ),
         );
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -257,11 +260,11 @@ class IntegerTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new IntegerValue,
+                new IntegerValue(),
             ),
             array(
                 42,
-                new IntegerValue( 42 ),
+                new IntegerValue(42),
             ),
         );
     }
@@ -298,43 +301,43 @@ class IntegerTest extends FieldTypeTest
     {
         return array(
             array(
-                array()
+                array(),
             ),
             array(
                 array(
                     'IntegerValueValidator' => array(
-                        'minIntegerValue' => false,
-                    )
-                )
+                        'minIntegerValue' => null,
+                    ),
+                ),
             ),
             array(
                 array(
                     'IntegerValueValidator' => array(
                         'minIntegerValue' => 23,
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 array(
                     'IntegerValueValidator' => array(
-                        'maxIntegerValue' => false,
-                    )
-                )
+                        'maxIntegerValue' => null,
+                    ),
+                ),
             ),
             array(
                 array(
                     'IntegerValueValidator' => array(
                         'maxIntegerValue' => 23,
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 array(
                     'IntegerValueValidator' => array(
                         'minIntegerValue' => 23,
                         'maxIntegerValue' => 42,
-                    )
-                )
+                    ),
+                ),
             ),
         );
     }
@@ -392,7 +395,7 @@ class IntegerTest extends FieldTypeTest
             array(
                 array(
                     'IntegerValueValidator' => array(
-                        'nonExistentValue' => 23
+                        'nonExistentValue' => 23,
                     ),
                 ),
             ),
@@ -408,7 +411,223 @@ class IntegerTest extends FieldTypeTest
                     'IntegerValueValidator' => array(
                         'maxIntegerValue' => .42,
                     ),
-                )
+                ),
+            ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezinteger';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array($this->getEmptyValueExpectation(), ''),
+            array(new IntegerValue(42), '42'),
+        );
+    }
+
+    /**
+     * Provides data sets with validator configuration and/or field settings and
+     * field value which are considered valid by the {@link validate()} method.
+     *
+     * ATTENTION: This is a default implementation, which must be overwritten if
+     * a FieldType supports validation!
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(
+     *              "validatorConfiguration" => array(
+     *                  "StringLengthValidator" => array(
+     *                      "minStringLength" => 2,
+     *                      "maxStringLength" => 10,
+     *                  ),
+     *              ),
+     *          ),
+     *          new TextLineValue( "lalalala" ),
+     *      ),
+     *      array(
+     *          array(
+     *              "fieldSettings" => array(
+     *                  'isMultiple' => true
+     *              ),
+     *          ),
+     *          new CountryValue(
+     *              array(
+     *                  "BE" => array(
+     *                      "Name" => "Belgium",
+     *                      "Alpha2" => "BE",
+     *                      "Alpha3" => "BEL",
+     *                      "IDC" => 32,
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideValidDataForValidate()
+    {
+        return array(
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'IntegerValueValidator' => array(
+                            'minIntegerValue' => 5,
+                            'maxIntegerValue' => 10,
+                        ),
+                    ),
+                ),
+                new IntegerValue(7),
+            ),
+        );
+    }
+
+    /**
+     * Provides data sets with validator configuration and/or field settings,
+     * field value and corresponding validation errors returned by
+     * the {@link validate()} method.
+     *
+     * ATTENTION: This is a default implementation, which must be overwritten
+     * if a FieldType supports validation!
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(
+     *              "validatorConfiguration" => array(
+     *                  "IntegerValueValidator" => array(
+     *                      "minIntegerValue" => 5,
+     *                      "maxIntegerValue" => 10
+     *                  ),
+     *              ),
+     *          ),
+     *          new IntegerValue( 3 ),
+     *          array(
+     *              new ValidationError(
+     *                  "The value can not be lower than %size%.",
+     *                  null,
+     *                  array(
+     *                      "size" => 5
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *      array(
+     *          array(
+     *              "fieldSettings" => array(
+     *                  "isMultiple" => false
+     *              ),
+     *          ),
+     *          new CountryValue(
+     *              "BE" => array(
+     *                  "Name" => "Belgium",
+     *                  "Alpha2" => "BE",
+     *                  "Alpha3" => "BEL",
+     *                  "IDC" => 32,
+     *              ),
+     *              "FR" => array(
+     *                  "Name" => "France",
+     *                  "Alpha2" => "FR",
+     *                  "Alpha3" => "FRA",
+     *                  "IDC" => 33,
+     *              ),
+     *          )
+     *      ),
+     *      array(
+     *          new ValidationError(
+     *              "Field definition does not allow multiple countries to be selected."
+     *          ),
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInvalidDataForValidate()
+    {
+        return array(
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'IntegerValueValidator' => array(
+                            'minIntegerValue' => 5,
+                            'maxIntegerValue' => 10,
+                        ),
+                    ),
+                ),
+                new IntegerValue(3),
+                array(
+                    new ValidationError(
+                        'The value can not be lower than %size%.',
+                        null,
+                        array(
+                            'size' => 5,
+                        ),
+                        'value'
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'IntegerValueValidator' => array(
+                            'minIntegerValue' => 5,
+                            'maxIntegerValue' => 10,
+                        ),
+                    ),
+                ),
+                new IntegerValue(13),
+                array(
+                    new ValidationError(
+                        'The value can not be higher than %size%.',
+                        null,
+                        array(
+                            'size' => 10,
+                        ),
+                        'value'
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'IntegerValueValidator' => array(
+                            'minIntegerValue' => 10,
+                            'maxIntegerValue' => 5,
+                        ),
+                    ),
+                ),
+                new IntegerValue(7),
+                array(
+                    new ValidationError(
+                        'The value can not be higher than %size%.',
+                        null,
+                        array(
+                            'size' => 5,
+                        ),
+                        'value'
+                    ),
+                    new ValidationError(
+                        'The value can not be lower than %size%.',
+                        null,
+                        array(
+                            'size' => 10,
+                        ),
+                        'value'
+                    ),
+                ),
             ),
         );
     }

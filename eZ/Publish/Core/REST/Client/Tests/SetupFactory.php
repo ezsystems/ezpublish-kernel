@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Test Setup Factory for the REST SDK
+ * File containing the Test Setup Factory for the REST SDK.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,11 +23,11 @@ class SetupFactory extends Repository\Tests\SetupFactory
     /**
      * Returns a configured repository for testing.
      *
-     * @param boolean $initializeFromScratch
+     * @param bool $initializeFromScratch
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
-    public function getRepository( $initializeFromScratch = true )
+    public function getRepository($initializeFromScratch = true)
     {
         return require __DIR__ . '/../../common.php';
     }
@@ -38,7 +40,7 @@ class SetupFactory extends Repository\Tests\SetupFactory
     public function getIdManager()
     {
         return new IdManager(
-            new Common\RequestParser\eZPublish()
+            new Common\RequestParser\EzPublish()
         );
     }
 
@@ -51,8 +53,8 @@ class SetupFactory extends Repository\Tests\SetupFactory
      *
      * @return mixed
      */
-    public function getConfigValue( $configKey )
+    public function getConfigValue($configKey)
     {
-        throw new \RuntimeException( "REST implementation does not support config." );
+        throw new \RuntimeException('REST implementation does not support config.');
     }
 }

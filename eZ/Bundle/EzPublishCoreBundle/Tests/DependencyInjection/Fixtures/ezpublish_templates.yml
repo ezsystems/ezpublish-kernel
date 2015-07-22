@@ -1,0 +1,45 @@
+siteaccess:
+    default_siteaccess: ezdemo_site
+    list:
+        - ezdemo_site
+        - fre
+        - ezdemo_site_admin
+    groups:
+        ezdemo_group:
+            - ezdemo_site
+            - fre
+            - ezdemo_site_admin
+        ezdemo_frontend_group:
+            - ezdemo_site
+            - fre
+    match:
+        URIElement: 1
+        Map\URI:
+            the_front: ezdemo_site
+            the_back: ezdemo_site_admin
+
+system:
+    ezdemo_frontend_group:
+        field_templates:
+            - { template: "my_field_template.html.twig", priority: 123 }
+            - { template: "another_template.html.twig" }
+
+        fielddefinition_settings_templates:
+            - { template: "my_field_template.html.twig", priority: 123 }
+            - { template: "another_template.html.twig" }
+
+    ezdemo_site:
+        field_templates:
+            - { template: "ezdemo_site_template.html.twig", priority: 123 }
+        fielddefinition_settings_templates:
+            - { template: "ezdemo_site_template.html.twig", priority: 123 }
+
+imagemagick:
+    enabled: false
+
+http_cache:
+    purge_type: local
+
+router:
+    default_router:
+        non_siteaccess_aware_routes: ['foo_route', 'my_prefix_']

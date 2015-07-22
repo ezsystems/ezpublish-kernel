@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,7 +27,7 @@ use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
- * LanguageLimitation is a Content limitation
+ * LanguageLimitation is a Content limitation.
  */
 class LanguageLimitationType extends AbstractPersistenceLimitationType implements SPILimitationTypeInterface
 {
@@ -38,22 +40,17 @@ class LanguageLimitationType extends AbstractPersistenceLimitationType implement
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
      */
-    public function acceptValue( APILimitationValue $limitationValue )
+    public function acceptValue(APILimitationValue $limitationValue)
     {
-        if ( !$limitationValue instanceof APILanguageLimitation )
-        {
-            throw new InvalidArgumentType( "\$limitationValue", "APILanguageLimitation", $limitationValue );
-        }
-        else if ( !is_array( $limitationValue->limitationValues ) )
-        {
-            throw new InvalidArgumentType( "\$limitationValue->limitationValues", "array", $limitationValue->limitationValues );
+        if (!$limitationValue instanceof APILanguageLimitation) {
+            throw new InvalidArgumentType("\$limitationValue", 'APILanguageLimitation', $limitationValue);
+        } elseif (!is_array($limitationValue->limitationValues)) {
+            throw new InvalidArgumentType("\$limitationValue->limitationValues", 'array', $limitationValue->limitationValues);
         }
 
-        foreach ( $limitationValue->limitationValues as $key => $value )
-        {
-            if ( !is_string( $value ) )
-            {
-                throw new InvalidArgumentType( "\$limitationValue->limitationValues[{$key}]", "string", $value );
+        foreach ($limitationValue->limitationValues as $key => $value) {
+            if (!is_string($value)) {
+                throw new InvalidArgumentType("\$limitationValue->limitationValues[{$key}]", 'string', $value);
             }
         }
     }
@@ -67,44 +64,41 @@ class LanguageLimitationType extends AbstractPersistenceLimitationType implement
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( APILimitationValue $limitationValue )
+    public function validate(APILimitationValue $limitationValue)
     {
         $validationErrors = array();
-        foreach ( $limitationValue->limitationValues as $key => $value )
-        {
-            try
-            {
-                $this->persistence->contentLanguageHandler()->loadByLanguageCode( $value );
-            }
-            catch ( APINotFoundException $e )
-            {
+        foreach ($limitationValue->limitationValues as $key => $value) {
+            try {
+                $this->persistence->contentLanguageHandler()->loadByLanguageCode($value);
+            } catch (APINotFoundException $e) {
                 $validationErrors[] = new ValidationError(
                     "limitationValues[%key%] => '%value%' does not exist in the backend",
                     null,
                     array(
-                        "value" => $value,
-                        "key" => $key
+                        'value' => $value,
+                        'key' => $key,
                     )
                 );
             }
         }
+
         return $validationErrors;
     }
 
     /**
-     * Create the Limitation Value
+     * Create the Limitation Value.
      *
      * @param mixed[] $limitationValues
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation
      */
-    public function buildValue( array $limitationValues )
+    public function buildValue(array $limitationValues)
     {
-        return new APILanguageLimitation( array( 'limitationValues' => $limitationValues ) );
+        return new APILanguageLimitation(array('limitationValues' => $limitationValues));
     }
 
     /**
-     * Evaluate permission against content & target(placement/parent/assignment)
+     * Evaluate permission against content & target(placement/parent/assignment).
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      *         Example: If LimitationValue is instance of ContentTypeLimitationValue, and Type is SectionLimitationType.
@@ -116,78 +110,78 @@ class LanguageLimitationType extends AbstractPersistenceLimitationType implement
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
      * @param \eZ\Publish\API\Repository\Values\ValueObject[]|null $targets The context of the $object, like Location of Content, if null none where provided by caller
      *
-     * @return boolean
+     * @return bool
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = null )
+    public function evaluate(APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = null)
     {
-        if ( !$value instanceof APILanguageLimitation )
-        {
-            throw new InvalidArgumentException( '$value', 'Must be of type: APILanguageLimitation' );
+        if (!$value instanceof APILanguageLimitation) {
+            throw new InvalidArgumentException('$value', 'Must be of type: APILanguageLimitation');
         }
 
-        if ( $object instanceof Content )
-        {
+        if ($object instanceof Content) {
             $object = $object->getVersionInfo();
-        }
-        else if ( !$object instanceof VersionInfo && !$object instanceof ContentInfo && !$object instanceof ContentCreateStruct )
-        {
+        } elseif (!$object instanceof VersionInfo && !$object instanceof ContentInfo && !$object instanceof ContentCreateStruct) {
             throw new InvalidArgumentException(
                 '$object',
                 'Must be of type: ContentCreateStruct, Content, VersionInfo or ContentInfo'
             );
         }
 
-        if ( empty( $value->limitationValues ) )
-        {
+        if (empty($value->limitationValues)) {
             return false;
         }
 
-        if ( $object instanceof ContentInfo || $object instanceof ContentCreateStruct )
-        {
-            return in_array( $object->mainLanguageCode, $value->limitationValues, true );
+        if ($object instanceof ContentInfo || $object instanceof ContentCreateStruct) {
+            return in_array($object->mainLanguageCode, $value->limitationValues, true);
         }
 
-        /**
+        /*
          * @var $object VersionInfo
          */
-        foreach ( $value->limitationValues as $limitationLanguageCode )
-        {
-            if ( $object->initialLanguageCode === $limitationLanguageCode )
+        foreach ($value->limitationValues as $limitationLanguageCode) {
+            if ($object->initialLanguageCode === $limitationLanguageCode) {
                 return true;
-            if ( in_array( $limitationLanguageCode, $object->languageCodes, true ) )
+            }
+            if (in_array($limitationLanguageCode, $object->languageCodes, true)) {
                 return true;
+            }
         }
+
         return false;
     }
 
     /**
-     * Returns Criterion for use in find() query
+     * Returns Criterion for use in find() query.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
      */
-    public function getCriterion( APILimitationValue $value, APIUser $currentUser )
+    public function getCriterion(APILimitationValue $value, APIUser $currentUser)
     {
-        if ( empty( $value->limitationValues )  )// no limitation values
-            throw new \RuntimeException( "\$value->limitationValues is empty, it should not have been stored in the first place" );
+        if (empty($value->limitationValues)) {
+            // no limitation values
+            throw new \RuntimeException("\$value->limitationValues is empty, it should not have been stored in the first place");
+        }
 
-        if ( !isset( $value->limitationValues[1] ) )// 1 limitation value: EQ operation
-            return new Criterion\LanguageCode( $value->limitationValues[0] );
+        if (!isset($value->limitationValues[1])) {
+            // 1 limitation value: EQ operation
+            return new Criterion\LanguageCode($value->limitationValues[0]);
+        }
 
         // several limitation values: IN operation
-        return new Criterion\LanguageCode( $value->limitationValues );
+        return new Criterion\LanguageCode($value->limitationValues);
     }
 
     /**
-     * Returns info on valid $limitationValues
+     * Returns info on valid $limitationValues.
      *
      * @return mixed[]|int In case of array, a hash with key as valid limitations value and value as human readable name
      *                     of that option, in case of int on of VALUE_SCHEMA_ constants.
      */
     public function valueSchema()
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException(__METHOD__);
     }
 }

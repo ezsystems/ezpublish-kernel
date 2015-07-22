@@ -1,0 +1,80 @@
+parameters:
+    ezpublish.spi.persistence.legacy.content_type.handler.class: eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler
+    ezpublish.spi.persistence.legacy.content_type.handler.caching.class: eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler
+
+    ezpublish.persistence.legacy.content_type.gateway.class: eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase
+    ezpublish.persistence.legacy.content_type.gateway.exception_conversion.class: eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\ExceptionConversion
+    ezpublish.persistence.legacy.content_type.mapper.class: eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper
+
+    ezpublish.persistence.legacy.content_type.update_handler.base.class: eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler
+    ezpublish.persistence.legacy.content_type.update_handler.class: eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase
+    ezpublish.persistence.legacy.content_type.update_handler.deferred.class: eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DeferredLegacy
+    ezpublish.persistence.legacy.content_type.content_updater.class: eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
+
+services:
+    ezpublish.persistence.legacy.content_type.gateway.inner:
+        class: %ezpublish.persistence.legacy.content_type.gateway.class%
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish.persistence.legacy.language.mask_generator
+
+    ezpublish.persistence.legacy.content_type.gateway.exception_conversion:
+        class: %ezpublish.persistence.legacy.content_type.gateway.exception_conversion.class%
+        arguments:
+            - @ezpublish.persistence.legacy.content_type.gateway.inner
+
+    # To disable exception conversion layer override this alias so that it points to inner gateway
+    ezpublish.persistence.legacy.content_type.gateway:
+        alias: ezpublish.persistence.legacy.content_type.gateway.exception_conversion
+
+    ezpublish.persistence.legacy.content_type.mapper:
+        class: %ezpublish.persistence.legacy.content_type.mapper.class%
+        arguments:
+            - @ezpublish.persistence.legacy.field_value_converter.registry
+
+    ezpublish.persistence.legacy.content_type.content_updater:
+        class: %ezpublish.persistence.legacy.content_type.content_updater.class%
+        arguments:
+            - @ezpublish.persistence.legacy.content.gateway
+            - @ezpublish.persistence.legacy.field_value_converter.registry
+            - @ezpublish.persistence.legacy.external_storage_handler
+            - @ezpublish.persistence.legacy.content.mapper
+
+    ezpublish.persistence.legacy.content_type.update_handler.base:
+        abstract: true
+        class: %ezpublish.persistence.legacy.content_type.update_handler.base.class%
+
+    ezpublish.persistence.legacy.content_type.update_handler.basic:
+        parent: ezpublish.persistence.legacy.content_type.update_handler.base
+        class: %ezpublish.persistence.legacy.content_type.update_handler.class%
+        arguments:
+            - @ezpublish.persistence.legacy.content_type.gateway
+            - @ezpublish.persistence.legacy.content_type.content_updater
+
+    # Note: if deferred ContentType update handler is required uncomment this service and override
+    # 'ezpublish.persistence.legacy.content_type.update_handler' alias so that it points to it
+    #
+    #ezpublish.persistence.legacy.content_type.update_handler.deferred:
+    #    parent: ezpublish.persistence.legacy.content_type.update_handler.base
+    #    class: %ezpublish.persistence.legacy.content_type.update_handler.deferred.class%
+    #    arguments:
+    #        - @ezpublish.persistence.legacy.content_type.gateway
+
+    ezpublish.persistence.legacy.content_type.update_handler:
+        alias: ezpublish.persistence.legacy.content_type.update_handler.basic
+
+    ezpublish.spi.persistence.legacy.content_type.handler.inner:
+        class: %ezpublish.spi.persistence.legacy.content_type.handler.class%
+        arguments:
+            - @ezpublish.persistence.legacy.content_type.gateway
+            - @ezpublish.persistence.legacy.content_type.mapper
+            - @ezpublish.persistence.legacy.content_type.update_handler
+
+    ezpublish.spi.persistence.legacy.content_type.handler.caching:
+        class: %ezpublish.spi.persistence.legacy.content_type.handler.caching.class%
+        arguments:
+            - @ezpublish.spi.persistence.legacy.content_type.handler.inner
+
+    ezpublish.spi.persistence.legacy.content_type.handler:
+        alias: ezpublish.spi.persistence.legacy.content_type.handler.caching
+        lazy: true

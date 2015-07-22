@@ -1,15 +1,16 @@
 <?php
+
 /**
- * File containing the  class
+ * File containing the  class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Common\Tests\Output\Generator;
 
-use eZ\Publish\Core\REST\Common;
 use PHPUnit_Framework_TestCase;
 
 abstract class FieldTypeHashGeneratorBaseTest extends PHPUnit_Framework_TestCase
@@ -19,12 +20,12 @@ abstract class FieldTypeHashGeneratorBaseTest extends PHPUnit_Framework_TestCase
     private $fieldTypeHashGenerator;
 
     /**
-     * Initializes the field type hash generator
+     * Initializes the field type hash generator.
      */
     abstract protected function initializeFieldTypeHashGenerator();
 
     /**
-     * Initializes the generator
+     * Initializes the generator.
      *
      * @return \eZ\Publish\Core\REST\Common\Output\Generator
      */
@@ -37,7 +38,7 @@ abstract class FieldTypeHashGeneratorBaseTest extends PHPUnit_Framework_TestCase
             null
         );
 
-        $this->assertSerializationSame( __FUNCTION__ );
+        $this->assertSerializationSame(__FUNCTION__);
     }
 
     public function testGenerateBoolValue()
@@ -47,7 +48,7 @@ abstract class FieldTypeHashGeneratorBaseTest extends PHPUnit_Framework_TestCase
             true
         );
 
-        $this->assertSerializationSame( __FUNCTION__ );
+        $this->assertSerializationSame(__FUNCTION__);
     }
 
     public function testGenerateIntegerValue()
@@ -57,7 +58,7 @@ abstract class FieldTypeHashGeneratorBaseTest extends PHPUnit_Framework_TestCase
             23
         );
 
-        $this->assertSerializationSame( __FUNCTION__ );
+        $this->assertSerializationSame(__FUNCTION__);
     }
 
     public function testGenerateFloatValue()
@@ -67,7 +68,7 @@ abstract class FieldTypeHashGeneratorBaseTest extends PHPUnit_Framework_TestCase
             23.424242424242424242
         );
 
-        $this->assertSerializationSame( __FUNCTION__ );
+        $this->assertSerializationSame(__FUNCTION__);
     }
 
     public function testGenerateStringValue()
@@ -77,7 +78,7 @@ abstract class FieldTypeHashGeneratorBaseTest extends PHPUnit_Framework_TestCase
             'Sindelfingen'
         );
 
-        $this->assertSerializationSame( __FUNCTION__ );
+        $this->assertSerializationSame(__FUNCTION__);
     }
 
     public function testGenerateEmptyStringValue()
@@ -87,7 +88,7 @@ abstract class FieldTypeHashGeneratorBaseTest extends PHPUnit_Framework_TestCase
             ''
         );
 
-        $this->assertSerializationSame( __FUNCTION__ );
+        $this->assertSerializationSame(__FUNCTION__);
     }
 
     public function testGenerateStringValueWithSpecialChars()
@@ -97,7 +98,7 @@ abstract class FieldTypeHashGeneratorBaseTest extends PHPUnit_Framework_TestCase
             '<?xml version="1.0" encoding="UTF-8"?><ezxml>Sindelfingen</ezxml>'
         );
 
-        $this->assertSerializationSame( __FUNCTION__ );
+        $this->assertSerializationSame(__FUNCTION__);
     }
 
     public function testGenerateListArrayValue()
@@ -108,11 +109,11 @@ abstract class FieldTypeHashGeneratorBaseTest extends PHPUnit_Framework_TestCase
                 23,
                 true,
                 'Sindelfingen',
-                null
+                null,
             )
         );
 
-        $this->assertSerializationSame( __FUNCTION__ );
+        $this->assertSerializationSame(__FUNCTION__);
     }
 
     public function testGenerateHashArrayValue()
@@ -123,11 +124,11 @@ abstract class FieldTypeHashGeneratorBaseTest extends PHPUnit_Framework_TestCase
                 'age' => 23,
                 'married' => true,
                 'city' => 'Sindelfingen',
-                'cause' => null
+                'cause' => null,
             )
         );
 
-        $this->assertSerializationSame( __FUNCTION__ );
+        $this->assertSerializationSame(__FUNCTION__);
     }
 
     public function testGenerateHashArrayMixedValue()
@@ -138,11 +139,11 @@ abstract class FieldTypeHashGeneratorBaseTest extends PHPUnit_Framework_TestCase
                 23,
                 'married' => true,
                 'Sindelfingen',
-                'cause' => null
+                'cause' => null,
             )
         );
 
-        $this->assertSerializationSame( __FUNCTION__ );
+        $this->assertSerializationSame(__FUNCTION__);
     }
 
     public function testGenerateComplexValueAuthor()
@@ -150,55 +151,56 @@ abstract class FieldTypeHashGeneratorBaseTest extends PHPUnit_Framework_TestCase
         $this->getGenerator()->generateFieldTypeHash(
             'fieldValue',
             array(
-                array( 'id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com' ),
-                array( 'id' => 2, 'name' => 'Joe Bielefeld', 'email' => 'bielefeld@example.com' ),
+                array('id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com'),
+                array('id' => 2, 'name' => 'Joe Bielefeld', 'email' => 'bielefeld@example.com'),
             )
         );
 
-        $this->assertSerializationSame( __FUNCTION__ );
+        $this->assertSerializationSame(__FUNCTION__);
     }
 
     protected function getFieldTypeHashGenerator()
     {
-        if ( !isset( $this->fieldTypeHashGenerator ) )
-        {
+        if (!isset($this->fieldTypeHashGenerator)) {
             $this->fieldTypeHashGenerator = $this->initializeFieldTypeHashGenerator();
         }
+
         return $this->fieldTypeHashGenerator;
     }
 
     protected function getGenerator()
     {
-        if ( !isset( $this->generator ) )
-        {
+        if (!isset($this->generator)) {
             $this->generator = $this->initializeGenerator();
-            $this->generator->startDocument( 'Version' );
-            $this->generator->startHashElement( 'Field' );
+            $this->generator->startDocument('Version');
+            $this->generator->startHashElement('Field');
         }
+
         return $this->generator;
     }
 
     private function getGeneratorOutput()
     {
-        $this->getGenerator()->endHashElement( 'Field' );
-        return $this->getGenerator()->endDocument( 'Version' );
+        $this->getGenerator()->endHashElement('Field');
+
+        return $this->getGenerator()->endDocument('Version');
     }
 
-    private function assertSerializationSame( $functionName )
+    private function assertSerializationSame($functionName)
     {
-        $fixtureFile = $this->getFixtureFile( $functionName );
+        $fixtureFile = $this->getFixtureFile($functionName);
         $actualResult = $this->getGeneratorOutput();
 
         // file_put_contents( $fixtureFile, $actualResult );
         // $this->markTestIncomplete( "Wrote fixture to '{$fixtureFile}'." );
 
         $this->assertSame(
-            file_get_contents( $this->getFixtureFile( $functionName ) ),
+            file_get_contents($this->getFixtureFile($functionName)),
             $actualResult
         );
     }
 
-    private function getFixtureFile( $functionName )
+    private function getFixtureFile($functionName)
     {
         return sprintf(
             '%s/_fixtures/%s__%s.out',
@@ -215,9 +217,9 @@ abstract class FieldTypeHashGeneratorBaseTest extends PHPUnit_Framework_TestCase
         return strtr(
             substr(
                 $fqClassName,
-                strlen( __NAMESPACE__ ) + 1
+                strlen(__NAMESPACE__) + 1
             ),
-            array( '\\' => '_' )
+            array('\\' => '_')
         );
     }
 }

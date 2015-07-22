@@ -1,11 +1,12 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\Repository\URLWildcardService class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
- * @package eZ\Publish\Core\Repository
  */
 
 namespace eZ\Publish\Core\Repository;
@@ -23,11 +24,9 @@ use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use Exception;
 
 /**
- * URLAlias service
+ * URLAlias service.
  *
  * @example Examples/urlalias.php
- *
- * @package eZ\Publish\Core\Repository
  */
 class URLWildcardService implements URLWildcardServiceInterface
 {
@@ -47,13 +46,13 @@ class URLWildcardService implements URLWildcardServiceInterface
     protected $settings;
 
     /**
-     * Setups service with reference to repository object that created it & corresponding handler
+     * Setups service with reference to repository object that created it & corresponding handler.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler $urlWildcardHandler
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $urlWildcardHandler, array $settings = array() )
+    public function __construct(RepositoryInterface $repository, Handler $urlWildcardHandler, array $settings = array())
     {
         $this->repository = $repository;
         $this->urlWildcardHandler = $urlWildcardHandler;
@@ -64,7 +63,7 @@ class URLWildcardService implements URLWildcardServiceInterface
     }
 
     /**
-     * Creates a new url wildcard
+     * Creates a new url wildcard.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the $sourceUrl pattern already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create url wildcards
@@ -73,60 +72,53 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @param string $sourceUrl
      * @param string $destinationUrl
-     * @param boolean $forward
+     * @param bool $forward
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
-    public function create( $sourceUrl, $destinationUrl, $forward = false )
+    public function create($sourceUrl, $destinationUrl, $forward = false)
     {
-        if ( $this->repository->hasAccess( 'content', 'urltranslator' ) !== true )
-        {
-            throw new UnauthorizedException( 'content', 'urltranslator' );
+        if ($this->repository->hasAccess('content', 'urltranslator') !== true) {
+            throw new UnauthorizedException('content', 'urltranslator');
         }
 
-        $sourceUrl = $this->cleanUrl( $sourceUrl );
-        $destinationUrl = $this->cleanUrl( $destinationUrl );
+        $sourceUrl = $this->cleanUrl($sourceUrl);
+        $destinationUrl = $this->cleanUrl($destinationUrl);
 
         $spiUrlWildcards = $this->urlWildcardHandler->loadAll();
-        foreach ( $spiUrlWildcards as $wildcard )
-        {
-            if ( $wildcard->sourceUrl === $sourceUrl )
-            {
+        foreach ($spiUrlWildcards as $wildcard) {
+            if ($wildcard->sourceUrl === $sourceUrl) {
                 throw new InvalidArgumentException(
                     "\$sourceUrl",
-                    "Pattern already exists"
+                    'Pattern already exists'
                 );
             }
         }
 
-        preg_match_all( '(\\*)', $sourceUrl, $patterns );
-        preg_match_all( '(\{(\d+)\})', $destinationUrl, $placeholders );
+        preg_match_all('(\\*)', $sourceUrl, $patterns);
+        preg_match_all('(\{(\d+)\})', $destinationUrl, $placeholders);
 
-        $patterns = array_map( 'intval', $patterns[0] );
-        $placeholders = array_map( 'intval', $placeholders[1] );
+        $patterns = array_map('intval', $patterns[0]);
+        $placeholders = array_map('intval', $placeholders[1]);
 
-        if ( !empty( $placeholders ) && max( $placeholders ) > count( $patterns ) )
-        {
-            throw new ContentValidationException( "Placeholders are not matching with wildcards." );
+        if (!empty($placeholders) && max($placeholders) > count($patterns)) {
+            throw new ContentValidationException('Placeholders are not matching with wildcards.');
         }
 
         $this->repository->beginTransaction();
-        try
-        {
+        try {
             $spiUrlWildcard = $this->urlWildcardHandler->create(
                 $sourceUrl,
                 $destinationUrl,
                 $forward
             );
             $this->repository->commit();
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             $this->repository->rollback();
             throw $e;
         }
 
-        return $this->buildUrlWildcardDomainObject( $spiUrlWildcard );
+        return $this->buildUrlWildcardDomainObject($spiUrlWildcard);
     }
 
     /**
@@ -136,42 +128,38 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @return string
      */
-    protected function cleanUrl( $url )
+    protected function cleanUrl($url)
     {
-        return "/" . trim( $url, "/ " );
+        return '/' . trim($url, '/ ');
     }
 
     /**
-     * removes an url wildcard
+     * removes an url wildcard.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to remove url wildcards
      *
      * @param \eZ\Publish\API\Repository\Values\Content\UrlWildcard $urlWildcard the url wildcard to remove
      */
-    public function remove( URLWildcard $urlWildcard )
+    public function remove(URLWildcard $urlWildcard)
     {
-        if ( $this->repository->hasAccess( 'content', 'urltranslator' ) !== true )
-        {
-            throw new UnauthorizedException( 'content', 'urltranslator' );
+        if ($this->repository->hasAccess('content', 'urltranslator') !== true) {
+            throw new UnauthorizedException('content', 'urltranslator');
         }
 
         $this->repository->beginTransaction();
-        try
-        {
+        try {
             $this->urlWildcardHandler->remove(
                 $urlWildcard->id
             );
             $this->repository->commit();
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             $this->repository->rollback();
             throw $e;
         }
     }
 
     /**
-     * Loads a url wild card
+     * Loads a url wild card.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
      *
@@ -179,22 +167,22 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
      */
-    public function load( $id )
+    public function load($id)
     {
         return $this->buildUrlWildcardDomainObject(
-            $this->urlWildcardHandler->load( $id )
+            $this->urlWildcardHandler->load($id)
         );
     }
 
     /**
-     * Loads all url wild card (paged)
+     * Loads all url wild card (paged).
      *
      * @param int $offset
      * @param int $limit
      *
      * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard[]
      */
-    public function loadAll( $offset = 0, $limit = -1 )
+    public function loadAll($offset = 0, $limit = -1)
     {
         $spiUrlWildcards = $this->urlWildcardHandler->loadAll(
             $offset,
@@ -202,9 +190,8 @@ class URLWildcardService implements URLWildcardServiceInterface
         );
 
         $urlWildcards = array();
-        foreach ( $spiUrlWildcards as $spiUrlWildcard )
-        {
-            $urlWildcards[] = $this->buildUrlWildcardDomainObject( $spiUrlWildcard );
+        foreach ($spiUrlWildcards as $spiUrlWildcard) {
+            $urlWildcards[] = $this->buildUrlWildcardDomainObject($spiUrlWildcard);
         }
 
         return $urlWildcards;
@@ -220,7 +207,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult
      */
-    public function translate( $url )
+    public function translate($url)
     {
         $spiUrlWildcards = $this->urlWildcardHandler->loadAll();
 
@@ -228,47 +215,23 @@ class URLWildcardService implements URLWildcardServiceInterface
         // @todo sort by specificity of the pattern?
         uasort(
             $spiUrlWildcards,
-            function ( SPIUrlWildcard $w1, SPIUrlWildcard $w2 )
-            {
-                return strlen( $w2->sourceUrl ) - strlen( $w1->sourceUrl );
+            function (SPIUrlWildcard $w1, SPIUrlWildcard $w2) {
+                return strlen($w2->sourceUrl) - strlen($w1->sourceUrl);
             }
         );
 
-        foreach ( $spiUrlWildcards as $wildcard )
-        {
-            if ( $uri = $this->match( $url, $wildcard ) )
-            {
+        foreach ($spiUrlWildcards as $wildcard) {
+            if ($uri = $this->match($url, $wildcard)) {
                 return new URLWildcardTranslationResult(
                     array(
                         'uri' => $uri,
-                        'forward' => $wildcard->forward
+                        'forward' => $wildcard->forward,
                     )
                 );
             }
         }
 
-        throw new NotFoundException( "URLWildcard", $url );
-    }
-
-    /**
-     * Map by specificity
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard[] $spiUrlWildcards
-     *
-     * @todo use or remove
-     *
-     * @return array
-     */
-    private function buildSpecificityScoreMap( array $spiUrlWildcards )
-    {
-        $map = array();
-
-        foreach ( $spiUrlWildcards as $spiUrlWildcard )
-        {
-            $map[$spiUrlWildcard->id] = preg_replace( "/[\\D]/", "", strtr( $spiUrlWildcard->sourceUrl, "/*", "10" ) );
-        }
-
-        return $map;
+        throw new NotFoundException('URLWildcard', $url);
     }
 
     /**
@@ -282,12 +245,12 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @return null|string
      */
-    private function match( $url, SPIUrlWildcard $wildcard )
+    private function match($url, SPIUrlWildcard $wildcard)
     {
-        if ( preg_match( $this->compile( $wildcard->sourceUrl ), $url, $match ) )
-        {
-            return $this->substitute( $wildcard->destinationUrl, $match );
+        if (preg_match($this->compile($wildcard->sourceUrl), $url, $match)) {
+            return $this->substitute($wildcard->destinationUrl, $match);
         }
+
         return null;
     }
 
@@ -298,9 +261,9 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @return string
      */
-    private function compile( $sourceUrl )
+    private function compile($sourceUrl)
     {
-        return '(^' . str_replace( '\\*', '(.*)', preg_quote( $sourceUrl ) ) . '$)U';
+        return '(^' . str_replace('\\*', '(.*)', preg_quote($sourceUrl)) . '$)U';
     }
 
     /**
@@ -312,32 +275,32 @@ class URLWildcardService implements URLWildcardServiceInterface
      *
      * @return string
      */
-    private function substitute( $destinationUrl, array $values )
+    private function substitute($destinationUrl, array $values)
     {
-        preg_match_all( '(\{(\d+)\})', $destinationUrl, $matches );
+        preg_match_all('(\{(\d+)\})', $destinationUrl, $matches);
 
-        foreach ( $matches[1] as $match )
-        {
-            $destinationUrl = str_replace( "{{$match}}", $values[$match], $destinationUrl );
+        foreach ($matches[1] as $match) {
+            $destinationUrl = str_replace("{{$match}}", $values[$match], $destinationUrl);
         }
+
         return $destinationUrl;
     }
 
     /**
-     * Builds API UrlWildcard object from given SPI UrlWildcard object
+     * Builds API UrlWildcard object from given SPI UrlWildcard object.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard $wildcard
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLWildcard
      */
-    private function buildUrlWildcardDomainObject( SPIUrlWildcard $wildcard )
+    private function buildUrlWildcardDomainObject(SPIUrlWildcard $wildcard)
     {
         return new URLWildcard(
             array(
-                "id" => $wildcard->id,
-                "destinationUrl" => $wildcard->destinationUrl,
-                "sourceUrl" => $wildcard->sourceUrl,
-                "forward" => $wildcard->forward
+                'id' => $wildcard->id,
+                'destinationUrl' => $wildcard->destinationUrl,
+                'sourceUrl' => $wildcard->sourceUrl,
+                'forward' => $wildcard->forward,
             )
         );
     }

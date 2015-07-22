@@ -1,15 +1,18 @@
 <?php
+
 /**
- * File containing the FieldType class
+ * File containing the FieldType class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\FieldType;
 
 use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceValue;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
@@ -45,7 +48,7 @@ abstract class FieldType implements FieldTypeInterface
     protected $settingsSchema = array();
 
     /**
-     * The validator configuration schema
+     * The validator configuration schema.
      *
      * This is a base implementation, containing an empty array() that indicates
      * that no validators are supported. Overwrite in derived types, if
@@ -58,7 +61,22 @@ abstract class FieldType implements FieldTypeInterface
     protected $validatorConfigurationSchema = array();
 
     /**
-     * Returns a schema for the settings expected by the FieldType
+     * String transformation processor, used to normalize sort string as needed.
+     *
+     * @var \eZ\Publish\Core\Persistence\TransformationProcessor
+     */
+    protected $transformationProcessor;
+
+    /**
+     * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
+     */
+    public function setTransformationProcessor(TransformationProcessor $transformationProcessor)
+    {
+        $this->transformationProcessor = $transformationProcessor;
+    }
+
+    /**
+     * Returns a schema for the settings expected by the FieldType.
      *
      * This implementation returns an array.
      * where the key is the setting name, and the value is the default value for given
@@ -72,7 +90,7 @@ abstract class FieldType implements FieldTypeInterface
     }
 
     /**
-     * Returns a schema for the validator configuration expected by the FieldType
+     * Returns a schema for the validator configuration expected by the FieldType.
      *
      * @see FieldTypeInterface::getValidatorConfigurationSchema()
      *
@@ -103,7 +121,7 @@ abstract class FieldType implements FieldTypeInterface
     }
 
     /**
-     * Validates a field based on the validators in the field definition
+     * Validates a field based on the validators in the field definition.
      *
      * This is a base implementation, returning an empty array() that indicates
      * that no validation errors occurred. Overwrite in derived types, if
@@ -116,13 +134,13 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( FieldDefinition $fieldDefinition, SPIValue $value )
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $value)
     {
         return array();
     }
 
     /**
-     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
      * This method expects that given $validatorConfiguration is complete, for this purpose method
      * {@link self::applyDefaultValidatorConfiguration()} is provided.
@@ -135,18 +153,18 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateValidatorConfiguration( $validatorConfiguration )
+    public function validateValidatorConfiguration($validatorConfiguration)
     {
         $validationErrors = array();
 
-        foreach ( (array)$validatorConfiguration as $validatorIdentifier => $constraints )
-        {
+        foreach ((array)$validatorConfiguration as $validatorIdentifier => $constraints) {
             $validationErrors[] = new ValidationError(
                 "Validator '%validator%' is unknown",
                 null,
                 array(
-                    "validator" => $validatorIdentifier
-                )
+                    'validator' => $validatorIdentifier,
+                ),
+                "[$validatorIdentifier]"
             );
         }
 
@@ -154,7 +172,7 @@ abstract class FieldType implements FieldTypeInterface
     }
 
     /**
-     * Applies the default values to the given $validatorConfiguration of a FieldDefinitionCreateStruct
+     * Applies the default values to the given $validatorConfiguration of a FieldDefinitionCreateStruct.
      *
      * This is a base implementation, expecting best practice validator configuration format used by
      * field types in standard eZ publish installation. Overwrite in derived types if needed.
@@ -163,34 +181,29 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @param mixed $validatorConfiguration
      */
-    public function applyDefaultValidatorConfiguration( &$validatorConfiguration )
+    public function applyDefaultValidatorConfiguration(&$validatorConfiguration)
     {
-        if ( $validatorConfiguration !== null && !is_array( $validatorConfiguration ) )
-        {
-            throw new InvalidArgumentType( "\$validatorConfiguration", "array|null", $validatorConfiguration );
+        if ($validatorConfiguration !== null && !is_array($validatorConfiguration)) {
+            throw new InvalidArgumentType("\$validatorConfiguration", 'array|null', $validatorConfiguration);
         }
 
-        foreach ( $this->getValidatorConfigurationSchema() as $validatorName => $configurationSchema )
-        {
+        foreach ($this->getValidatorConfigurationSchema() as $validatorName => $configurationSchema) {
             // Set configuration of specific validator to empty array if it is not already provided
-            if ( !isset( $validatorConfiguration[$validatorName] ) )
-            {
+            if (!isset($validatorConfiguration[$validatorName])) {
                 $validatorConfiguration[$validatorName] = array();
             }
 
-            foreach ( $configurationSchema as $settingName => $settingConfiguration )
-            {
+            foreach ($configurationSchema as $settingName => $settingConfiguration) {
                 // Check that a default entry exists in the configuration schema for the validator but that no value has been provided
-                if ( !isset( $validatorConfiguration[$validatorName][$settingName] ) && isset( $settingConfiguration["default"] ) )
-                {
-                    $validatorConfiguration[$validatorName][$settingName] = $settingConfiguration["default"];
+                if (!isset($validatorConfiguration[$validatorName][$settingName]) && array_key_exists('default', $settingConfiguration)) {
+                    $validatorConfiguration[$validatorName][$settingName] = $settingConfiguration['default'];
                 }
             }
         }
     }
 
     /**
-     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
      * This method expects that given $fieldSettings are complete, for this purpose method
      * {@link self::applyDefaultSettings()} is provided.
@@ -199,18 +212,18 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateFieldSettings( $fieldSettings )
+    public function validateFieldSettings($fieldSettings)
     {
-        if ( !empty( $fieldSettings ) )
-        {
+        if (!empty($fieldSettings)) {
             return array(
                 new ValidationError(
                     "FieldType '%fieldType%' does not accept settings",
                     null,
                     array(
-                        "fieldType" => $this->getFieldTypeIdentifier()
-                    )
-                )
+                        'fieldType' => $this->getFieldTypeIdentifier(),
+                    ),
+                    'fieldType'
+                ),
             );
         }
 
@@ -218,7 +231,7 @@ abstract class FieldType implements FieldTypeInterface
     }
 
     /**
-     * Applies the default values to the fieldSettings of a FieldDefinitionCreateStruct
+     * Applies the default values to the fieldSettings of a FieldDefinitionCreateStruct.
      *
      * This is a base implementation, expecting best practice field settings format used by
      * field types in standard eZ publish installation. Overwrite in derived types if needed.
@@ -227,19 +240,16 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @param mixed $fieldSettings
      */
-    public function applyDefaultSettings( &$fieldSettings )
+    public function applyDefaultSettings(&$fieldSettings)
     {
-        if ( $fieldSettings !== null && !is_array( $fieldSettings ) )
-        {
-            throw new InvalidArgumentType( "\$fieldSettings", "array|null", $fieldSettings );
+        if ($fieldSettings !== null && !is_array($fieldSettings)) {
+            throw new InvalidArgumentType("\$fieldSettings", 'array|null', $fieldSettings);
         }
 
-        foreach ( $this->getSettingsSchema() as $settingName => $settingConfiguration )
-        {
+        foreach ($this->getSettingsSchema() as $settingName => $settingConfiguration) {
             // Checking that a default entry exists in the settingsSchema but that no value has been provided
-            if ( !array_key_exists( $settingName, (array)$fieldSettings ) && array_key_exists( "default", $settingConfiguration ) )
-            {
-                $fieldSettings[$settingName] = $settingConfiguration["default"];
+            if (!array_key_exists($settingName, (array)$fieldSettings) && array_key_exists('default', $settingConfiguration)) {
+                $fieldSettings[$settingName] = $settingConfiguration['default'];
             }
         }
     }
@@ -260,48 +270,48 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @return mixed
      */
-    protected function getSortInfo( Value $value )
+    protected function getSortInfo(Value $value)
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException('Not implemented, yet.');
     }
 
     /**
-     * Converts a $value to a persistence value
+     * Converts a $value to a persistence value.
      *
      * @param \eZ\Publish\Core\FieldType\Value $value
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function toPersistenceValue( SPIValue $value )
+    public function toPersistenceValue(SPIValue $value)
     {
         // @todo Evaluate if creating the sortKey in every case is really needed
         //       Couldn't this be retrieved with a method, which would initialize
         //       that info on request only?
         return new PersistenceValue(
             array(
-                "data" => $this->toHash( $value ),
-                "externalData" => null,
-                "sortKey" => $this->getSortInfo( $value ),
+                'data' => $this->toHash($value),
+                'externalData' => null,
+                'sortKey' => $this->getSortInfo($value),
             )
         );
     }
 
     /**
-     * Converts a persistence $fieldValue to a Value
+     * Converts a persistence $fieldValue to a Value.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
      * @return \eZ\Publish\Core\FieldType\Value
      */
-    public function fromPersistenceValue( PersistenceValue $fieldValue )
+    public function fromPersistenceValue(PersistenceValue $fieldValue)
     {
-        return $this->fromHash( $fieldValue->data );
+        return $this->fromHash($fieldValue->data);
     }
 
     /**
-     * Returns whether the field type is searchable
+     * Returns whether the field type is searchable.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSearchable()
     {
@@ -311,7 +321,7 @@ abstract class FieldType implements FieldTypeInterface
     /**
      * Indicates if the field definition of this type can appear only once in the same ContentType.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSingular()
     {
@@ -321,7 +331,7 @@ abstract class FieldType implements FieldTypeInterface
     /**
      * Indicates if the field definition of this type can be added to a ContentType with Content instances.
      *
-     * @return boolean
+     * @return bool
      */
     public function onlyEmptyInstance()
     {
@@ -329,7 +339,7 @@ abstract class FieldType implements FieldTypeInterface
     }
 
     /**
-     * Returns if the given $value is considered empty by the field type
+     * Returns if the given $value is considered empty by the field type.
      *
      * Default implementation, which performs a "==" check with the value
      * returned by {@link getEmptyValue()}. Overwrite in the specific field
@@ -337,9 +347,9 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @param \eZ\Publish\Core\FieldType\Value $value
      *
-     * @return boolean
+     * @return bool
      */
-    public function isEmptyValue( SPIValue $value )
+    public function isEmptyValue(SPIValue $value)
     {
         return $value === null || $value == $this->getEmptyValue();
     }
@@ -365,23 +375,21 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @return \eZ\Publish\Core\FieldType\Value The potentially converted and structurally plausible value.
      */
-    final public function acceptValue( $inputValue )
+    final public function acceptValue($inputValue)
     {
-        if ( $inputValue === null )
-        {
+        if ($inputValue === null) {
             return $this->getEmptyValue();
         }
 
-        $value = $this->createValueFromInput( $inputValue );
+        $value = $this->createValueFromInput($inputValue);
 
-        static::checkValueType( $value );
+        static::checkValueType($value);
 
-        if ( $this->isEmptyValue( $value ) )
-        {
+        if ($this->isEmptyValue($value)) {
             return $this->getEmptyValue();
         }
 
-        $this->checkValueStructure( $value );
+        $this->checkValueStructure($value);
 
         return $value;
     }
@@ -411,7 +419,7 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @return mixed The potentially converted input value.
      */
-    abstract protected function createValueFromInput( $inputValue );
+    abstract protected function createValueFromInput($inputValue);
 
     /**
      * Throws an exception if the given $value is not an instance of the supported value subtype.
@@ -435,17 +443,14 @@ abstract class FieldType implements FieldTypeInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the parameter is not an instance of the supported value subtype.
      *
      * @param mixed $value A value returned by {@see createValueFromInput()}.
-     *
-     * @return void
      */
-    static protected function checkValueType( $value )
+    protected static function checkValueType($value)
     {
         $fieldTypeFQN = get_called_class();
-        $valueFQN = substr_replace( $fieldTypeFQN, "Value", strrpos( $fieldTypeFQN, "\\" ) + 1 );
+        $valueFQN = substr_replace($fieldTypeFQN, 'Value', strrpos($fieldTypeFQN, '\\') + 1);
 
-        if ( !$value instanceof $valueFQN )
-        {
-            throw new InvalidArgumentType( "\$value", $valueFQN, $value );
+        if (!$value instanceof $valueFQN) {
+            throw new InvalidArgumentType("\$value", $valueFQN, $value);
         }
     }
 
@@ -472,13 +477,11 @@ abstract class FieldType implements FieldTypeInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\Value $value
-     *
-     * @return void
      */
-    abstract protected function checkValueStructure( Value $value );
+    abstract protected function checkValueStructure(Value $value);
 
     /**
-     * Converts the given $fieldSettings to a simple hash format
+     * Converts the given $fieldSettings to a simple hash format.
      *
      * This is the default implementation, which just returns the given
      * $fieldSettings, assuming they are already in a hash format. Overwrite
@@ -488,13 +491,13 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @return array|hash|scalar|null
      */
-    public function fieldSettingsToHash( $fieldSettings )
+    public function fieldSettingsToHash($fieldSettings)
     {
         return $fieldSettings;
     }
 
     /**
-     * Converts the given $fieldSettingsHash to field settings of the type
+     * Converts the given $fieldSettingsHash to field settings of the type.
      *
      * This is the reverse operation of {@link fieldSettingsToHash()}.
      *
@@ -507,13 +510,13 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @return mixed
      */
-    public function fieldSettingsFromHash( $fieldSettingsHash )
+    public function fieldSettingsFromHash($fieldSettingsHash)
     {
         return $fieldSettingsHash;
     }
 
     /**
-     * Converts the given $validatorConfiguration to a simple hash format
+     * Converts the given $validatorConfiguration to a simple hash format.
      *
      * Default implementation, which just returns the given
      * $validatorConfiguration, which is by convention an array for all
@@ -523,14 +526,14 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @return array|hash|scalar|null
      */
-    public function validatorConfigurationToHash( $validatorConfiguration )
+    public function validatorConfigurationToHash($validatorConfiguration)
     {
         return $validatorConfiguration;
     }
 
     /**
      * Converts the given $validatorConfigurationHash to a validator
-     * configuration of the type
+     * configuration of the type.
      *
      * Default implementation, which just returns the given
      * $validatorConfigurationHash, since the validator configuration is by
@@ -541,7 +544,7 @@ abstract class FieldType implements FieldTypeInterface
      *
      * @return mixed
      */
-    public function validatorConfigurationFromHash( $validatorConfigurationHash )
+    public function validatorConfigurationFromHash($validatorConfigurationHash)
     {
         return $validatorConfigurationHash;
     }
@@ -571,7 +574,7 @@ abstract class FieldType implements FieldTypeInterface
      *  )
      * </code>
      */
-    public function getRelations( SPIValue $fieldValue )
+    public function getRelations(SPIValue $fieldValue)
     {
         return array();
     }

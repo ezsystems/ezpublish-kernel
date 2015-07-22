@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RestUser class
+ * File containing the RestUser class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
- * REST User, as received by /user/users/<ID>
+ * REST User, as received by /user/users/<ID>.
  */
 class RestUser extends RestValue
 {
@@ -46,14 +48,14 @@ class RestUser extends RestValue
     public $mainLocation;
 
     /**
-     * Construct
+     * Construct.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\Location $mainLocation
      * @param \eZ\Publish\API\Repository\Values\Content\Relation[] $relations
      */
-    public function __construct( Content $content, ContentType $contentType, ContentInfo $contentInfo, Location $mainLocation, array $relations )
+    public function __construct(Content $content, ContentType $contentType, ContentInfo $contentInfo, Location $mainLocation, array $relations)
     {
         $this->content = $content;
         $this->contentType = $contentType;

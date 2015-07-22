@@ -1,37 +1,37 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\ContentList;
 use eZ\Publish\Core\REST\Server\Values\RestContent;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\REST\Common;
 
 class ContentListTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the ContentList visitor
+     * Test the ContentList visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
-        $contentList = new ContentList( array() );
+        $contentList = new ContentList(array());
 
         $this->addRouteExpectation(
             'ezpublish_rest_redirectContent',
@@ -45,23 +45,23 @@ class ContentListTest extends ValueObjectVisitorBaseTest
             $contentList
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains ContentList element
+     * Test if result contains ContentList element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsContentListElement( $result )
+    public function testResultContainsContentListElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'ContentList',
             ),
@@ -72,21 +72,21 @@ class ContentListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains ContentList element attributes
+     * Test if result contains ContentList element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsContentListAttributes( $result )
+    public function testResultContainsContentListAttributes($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'ContentList',
+                'tag' => 'ContentList',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ContentList+xml',
-                    'href'       => '/content/objects',
-                )
+                    'href' => '/content/objects',
+                ),
             ),
             $result,
             'Invalid <ContentList> attributes.',
@@ -95,25 +95,25 @@ class ContentListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if ContentList visitor visits the children
+     * Test if ContentList visitor visits the children.
      */
     public function testContentListVisitsChildren()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $contentList = new ContentList(
             array(
-                new RestContent( new ContentInfo() ),
-                new RestContent( new ContentInfo() ),
+                new RestContent(new ContentInfo()),
+                new RestContent(new ContentInfo()),
             )
         );
 
-        $this->getVisitorMock()->expects( $this->exactly( 2 ) )
-            ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\Rest\\Server\\Values\\RestContent' ) );
+        $this->getVisitorMock()->expects($this->exactly(2))
+            ->method('visitValueObject')
+            ->with($this->isInstanceOf('eZ\\Publish\\Core\\Rest\\Server\\Values\\RestContent'));
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -123,12 +123,12 @@ class ContentListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the ContentList visitor
+     * Get the ContentList visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ContentList
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\ContentList;
+        return new ValueObjectVisitor\ContentList();
     }
 }

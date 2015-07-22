@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentObjectStates visitor class
+ * File containing the ContentObjectStates visitor class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,43 +16,42 @@ use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
- * ContentObjectStates value object visitor
+ * ContentObjectStates value object visitor.
  */
 class ContentObjectStates extends ValueObjectVisitor
 {
     /**
-     * Visit struct returned by controllers
+     * Visit struct returned by controllers.
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param mixed $data
      */
-    public function visit( Visitor $visitor, Generator $generator, $data )
+    public function visit(Visitor $visitor, Generator $generator, $data)
     {
-        $generator->startObjectElement( 'ContentObjectStates' );
-        $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'ContentObjectStates' ) );
+        $generator->startObjectElement('ContentObjectStates');
+        $visitor->setHeader('Content-Type', $generator->getMediaType('ContentObjectStates'));
 
-        $generator->startList( 'ObjectState' );
+        $generator->startList('ObjectState');
 
-        foreach ( $data->states as $state )
-        {
-            $generator->startObjectElement( 'ObjectState' );
+        foreach ($data->states as $state) {
+            $generator->startObjectElement('ObjectState');
             $generator->startAttribute(
                 'href',
                 $this->requestParser->generate(
                     'objectstate',
                     array(
                         'objectstategroup' => $state->groupId,
-                        'objectstate' => $state->objectState->id
+                        'objectstate' => $state->objectState->id,
                     )
                 )
             );
-            $generator->endAttribute( 'href' );
-            $generator->endObjectElement( 'ObjectState' );
+            $generator->endAttribute('href');
+            $generator->endObjectElement('ObjectState');
         }
 
-        $generator->endList( 'ObjectState' );
+        $generator->endList('ObjectState');
 
-        $generator->endObjectElement( 'ContentObjectStates' );
+        $generator->endObjectElement('ContentObjectStates');
     }
 }

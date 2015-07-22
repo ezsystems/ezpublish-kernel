@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the user Identity class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,6 +16,8 @@ use eZ\Publish\SPI\User\Identity as IdentityInterface;
 /**
  * Represents a user "identity", or footprint.
  * Instance can be transformed to a hash and used as an identity token.
+ *
+ * @deprecated since 5.4. Will be removed in 6.0. Use FOSHttpCacheBundle user context feature instead.
  */
 class Identity implements IdentityInterface
 {
@@ -37,7 +41,7 @@ class Identity implements IdentityInterface
      *
      * @param array $information Hash where key is the information type and value is a scalar.
      */
-    public function addInformation( array $information )
+    public function addInformation(array $information)
     {
         $this->identityInfo += $information;
         $this->resetHash();
@@ -49,7 +53,7 @@ class Identity implements IdentityInterface
      * @param string $informationName
      * @param scalar $informationValue
      */
-    public function setInformation( $informationName, $informationValue )
+    public function setInformation($informationName, $informationValue)
     {
         $this->identityInfo[$informationName] = $informationValue;
         $this->resetHash();
@@ -60,7 +64,7 @@ class Identity implements IdentityInterface
      *
      * @param array $information Hash where key is the information type and value is a scalar.
      */
-    public function replaceInformation( array $information )
+    public function replaceInformation(array $information)
     {
         $this->identityInfo = $information;
         $this->resetHash();
@@ -85,21 +89,19 @@ class Identity implements IdentityInterface
     }
 
     /**
-     * Returns the hash of the current identity (e.g. md5, sha1...)
+     * Returns the hash of the current identity (e.g. md5, sha1...).
      *
      * @return string
      */
     public function getHash()
     {
-        if ( !isset( $this->hash ) )
-        {
+        if (!isset($this->hash)) {
             $hashArray = array();
-            foreach ( $this->identityInfo as $infoType => $infoValue )
-            {
+            foreach ($this->identityInfo as $infoType => $infoValue) {
                 $hashArray[] = "$infoType=$infoValue";
             }
 
-            $this->hash = sha1( implode( '-', $hashArray ) );
+            $this->hash = sha1(implode('-', $hashArray));
         }
 
         return $this->hash;

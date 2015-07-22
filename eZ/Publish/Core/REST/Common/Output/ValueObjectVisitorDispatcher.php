@@ -1,19 +1,20 @@
 <?php
+
 /**
  * File containing the ValueObjectVisitorDispatcher class.
  *
- * @copyright Copyright (C) 2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
+
 namespace eZ\Publish\Core\REST\Common\Output;
 
-use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Common\Output\Visitor as OutputVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator as OutputGenerator;
 
 /**
- * Dispatches value objects to a visitor depending on the class name
+ * Dispatches value objects to a visitor depending on the class name.
  */
 class ValueObjectVisitorDispatcher
 {
@@ -32,12 +33,12 @@ class ValueObjectVisitorDispatcher
      */
     private $outputGenerator;
 
-    public function setOutputVisitor( Visitor $outputVisitor )
+    public function setOutputVisitor(Visitor $outputVisitor)
     {
         $this->outputVisitor = $outputVisitor;
     }
 
-    public function setOutputGenerator( Generator $outputGenerator )
+    public function setOutputGenerator(Generator $outputGenerator)
     {
         $this->outputGenerator = $outputGenerator;
     }
@@ -46,7 +47,7 @@ class ValueObjectVisitorDispatcher
      * @param string $visitedClassName The FQN of the visited class
      * @param \eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor $visitor The visitor object
      */
-    public function addVisitor( $visitedClassName, ValueObjectVisitor $visitor )
+    public function addVisitor($visitedClassName, ValueObjectVisitor $visitor)
     {
         $this->visitors[$visitedClassName] = $visitor;
     }
@@ -56,27 +57,24 @@ class ValueObjectVisitorDispatcher
      *
      * @throws \eZ\Publish\Core\REST\Common\Output\Exceptions\NoVisitorFoundException
      * @throws \eZ\Publish\Core\REST\Common\Output\Exceptions\InvalidTypeException
+     *
      * @return mixed
      */
-    public function visit( $data )
+    public function visit($data)
     {
-        if ( !is_object( $data ) )
-        {
-            throw new Exceptions\InvalidTypeException( $data );
+        if (!is_object($data)) {
+            throw new Exceptions\InvalidTypeException($data);
         }
         $checkedClassNames = array();
 
-        $className = get_class( $data );
-        do
-        {
+        $className = get_class($data);
+        do {
             $checkedClassNames[] = $className;
-            if ( isset( $this->visitors[$className] ) )
-            {
-                return $this->visitors[$className]->visit( $this->outputVisitor, $this->outputGenerator, $data );
+            if (isset($this->visitors[$className])) {
+                return $this->visitors[$className]->visit($this->outputVisitor, $this->outputGenerator, $data);
             }
-        }
-        while ( $className = get_parent_class( $className ) );
+        } while ($className = get_parent_class($className));
 
-        throw new Exceptions\NoVisitorFoundException( $checkedClassNames );
+        throw new Exceptions\NoVisitorFoundException($checkedClassNames);
     }
 }

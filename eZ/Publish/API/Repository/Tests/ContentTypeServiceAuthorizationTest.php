@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentTypeServiceAuthorizationTest class
+ * File containing the ContentTypeServiceAuthorizationTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,7 +24,6 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
     /**
      * Test for the createContentTypeGroup() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
@@ -31,8 +32,11 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
-        $creatorId = $this->generateId( 'user', 14 );
+        $creatorId = $this->generateId('user', 14);
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $userService = $repository->getUserService();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -49,17 +53,16 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         */
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will fail with a "UnauthorizedException"
-        $contentTypeService->createContentTypeGroup( $groupCreate );
+        $contentTypeService->createContentTypeGroup($groupCreate);
         /* END: Use Case */
     }
 
     /**
      * Test for the updateContentTypeGroup() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeGroup
@@ -68,12 +71,15 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
-        $modifierId = $this->generateId( 'user', 42 );
+        $modifierId = $this->generateId('user', 42);
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $userService = $repository->getUserService();
         $contentTypeService = $repository->getContentTypeService();
 
-        $group = $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' );
+        $group = $contentTypeService->loadContentTypeGroupByIdentifier('Setup');
 
         $groupUpdate = $contentTypeService->newContentTypeGroupUpdateStruct();
 
@@ -95,17 +101,16 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         */
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will fail with a "UnauthorizedException"
-        $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
+        $contentTypeService->updateContentTypeGroup($group, $groupUpdate);
         /* END: Use Case */
     }
 
     /**
      * Test for the deleteContentTypeGroup() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentTypeGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testDeleteContentTypeGroup
@@ -114,31 +119,88 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $userService = $repository->getUserService();
         $contentTypeService = $repository->getContentTypeService();
 
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
-        $contentTypeService->createContentTypeGroup( $groupCreate );
+        $contentTypeService->createContentTypeGroup($groupCreate);
 
         // ...
 
-        $group = $contentTypeService->loadContentTypeGroupByIdentifier( 'new-group' );
+        $group = $contentTypeService->loadContentTypeGroupByIdentifier('new-group');
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will fail with a "UnauthorizedException"
-        $contentTypeService->deleteContentTypeGroup( $group );
+        $contentTypeService->deleteContentTypeGroup($group);
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the createContentType() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     */
+    public function testCreateContentTypeThrowsUnauthorizedException()
+    {
+        $repository = $this->getRepository();
+
+        $creatorId = $this->generateId('user', 14);
+        $anonymousUserId = $this->generateId('user', 10);
+        /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
+        $userService = $repository->getUserService();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'new-group'
+        );
+        // $creatorId is the ID of the administrator user
+        $groupCreate->creatorId = $creatorId;
+        $groupCreate->creationDate = $this->createDateTime();
+        $contentTypeGroup = $contentTypeService->createContentTypeGroup($groupCreate);
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct(
+            'new-type'
+        );
+        // $creatorId is the ID of the administrator user
+        $typeCreate->creatorId = $creatorId;
+        $typeCreate->creationDate = $this->createDateTime();
+        $typeCreate->mainLanguageCode = 'eng-GB';
+        $typeCreate->names = array('eng-GB' => 'A name.');
+        $typeCreate->descriptions = array('eng-GB' => 'A description.');
+
+        $titleFieldCreateStruct = $contentTypeService->newFieldDefinitionCreateStruct('title', 'ezstring');
+        $titleFieldCreateStruct->names = array('eng-GB' => 'Title');
+        $titleFieldCreateStruct->descriptions = array('eng-GB' => 'The Title');
+        $titleFieldCreateStruct->fieldGroup = 'content';
+        $titleFieldCreateStruct->position = 10;
+        $titleFieldCreateStruct->isTranslatable = true;
+        $titleFieldCreateStruct->isRequired = true;
+        $titleFieldCreateStruct->isSearchable = true;
+        $typeCreate->addFieldDefinition($titleFieldCreateStruct);
+
+        // Set anonymous user
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
+
+        // This call will fail with a "UnauthorizedException"
+        $contentTypeService->createContentType($typeCreate, array($contentTypeGroup));
         /* END: Use Case */
     }
 
     /**
      * Test for the updateContentTypeDraft() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
@@ -148,8 +210,11 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
-        $modifierId = $this->generateId( 'user', 42 );
+        $modifierId = $this->generateId('user', 42);
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $contentTypeDraft = $this->createContentTypeDraft();
 
         $typeUpdate = $contentTypeService->newContentTypeUpdateStruct();
@@ -176,17 +241,16 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will fail with a "UnauthorizedException"
-        $contentTypeService->updateContentTypeDraft( $contentTypeDraft, $typeUpdate );
+        $contentTypeService->updateContentTypeDraft($contentTypeDraft, $typeUpdate);
         /* END: Use Case */
     }
 
     /**
      * Test for the addFieldDefinition() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAddFieldDefinition
@@ -196,12 +260,13 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $contentTypeDraft = $this->createContentTypeDraft();
 
-        $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'tags', 'string'
-        );
+        $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct('tags', 'string');
         $fieldDefCreate->names = array(
             'eng-GB' => 'Tags',
             'ger-DE' => 'Schlagworte',
@@ -222,7 +287,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
             ),
         );
         $fieldDefCreate->fieldSettings = array(
-            'textRows' => 10
+            'textRows' => 10,
         );
         $fieldDefCreate->isSearchable = true;
 
@@ -230,17 +295,16 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will fail with a "UnauthorizedException"
-        $contentTypeService->addFieldDefinition( $contentTypeDraft, $fieldDefCreate );
+        $contentTypeService->addFieldDefinition($contentTypeDraft, $fieldDefCreate);
         /* END: Use Case */
     }
 
     /**
      * Test for the removeFieldDefinition() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testRemoveFieldDefinition
@@ -250,26 +314,28 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $contentTypeDraft = $this->createContentTypeDraft();
 
         // Load the user service
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        $bodyField = $contentTypeDraft->getFieldDefinition( 'body' );
+        $bodyField = $contentTypeDraft->getFieldDefinition('body');
 
         // This call will fail with a "UnauthorizedException"
-        $contentTypeService->removeFieldDefinition( $contentTypeDraft, $bodyField );
+        $contentTypeService->removeFieldDefinition($contentTypeDraft, $bodyField);
         /* END: Use Case */
     }
 
     /**
      * Test for the updateFieldDefinition() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateFieldDefinition
@@ -279,16 +345,19 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $contentTypeDraft = $this->createContentTypeDraft();
 
         // Load the user service
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        $bodyField = $contentTypeDraft->getFieldDefinition( 'body' );
+        $bodyField = $contentTypeDraft->getFieldDefinition('body');
 
         $bodyUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
         $bodyUpdateStruct->identifier = 'blog-body';
@@ -307,7 +376,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $bodyUpdateStruct->isInfoCollector = true;
         $bodyUpdateStruct->validatorConfiguration = array();
         $bodyUpdateStruct->fieldSettings = array(
-            'textRows' => 60
+            'textRows' => 60,
         );
         $bodyUpdateStruct->isSearchable = false;
 
@@ -323,7 +392,6 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
     /**
      * Test for the publishContentTypeDraft() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::publishContentTypeDraft()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testPublishContentTypeDraft
@@ -333,24 +401,26 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $contentTypeDraft = $this->createContentTypeDraft();
 
         // Load the user service
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will fail with a "UnauthorizedException"
-        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
         /* END: Use Case */
     }
 
     /**
      * Test for the createContentTypeDraft() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeDraft()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeDraft
@@ -359,26 +429,28 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $contentTypeService = $repository->getContentTypeService();
 
         // Load the user service
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        $commentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
+        $commentType = $contentTypeService->loadContentTypeByIdentifier('comment');
 
         // This call will fail with a "UnauthorizedException"
-        $contentTypeService->createContentTypeDraft( $commentType );
+        $contentTypeService->createContentTypeDraft($commentType);
         /* END: Use Case */
     }
 
     /**
      * Test for the deleteContentType() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentType()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testDeleteContentType
@@ -387,26 +459,28 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $contentTypeService = $repository->getContentTypeService();
 
         // Load the user service
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        $commentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
+        $commentType = $contentTypeService->loadContentTypeByIdentifier('comment');
 
         // This call will fail with a "UnauthorizedException"
-        $contentTypeService->deleteContentType( $commentType );
+        $contentTypeService->deleteContentType($commentType);
         /* END: Use Case */
     }
 
     /**
      * Test for the copyContentType() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::copyContentType()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCopyContentType
@@ -415,26 +489,28 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $contentTypeService = $repository->getContentTypeService();
 
         // Load the user service
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        $commentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
+        $commentType = $contentTypeService->loadContentTypeByIdentifier('comment');
 
         // This call will fail with a "UnauthorizedException"
-        $contentTypeService->copyContentType( $commentType );
+        $contentTypeService->copyContentType($commentType);
         /* END: Use Case */
     }
 
     /**
      * Test for the assignContentTypeGroup() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::assignContentTypeGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAssignContentTypeGroup
@@ -443,27 +519,29 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $contentTypeService = $repository->getContentTypeService();
 
         // Load the user service
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        $mediaGroup = $contentTypeService->loadContentTypeGroupByIdentifier( 'Media' );
-        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+        $mediaGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Media');
+        $folderType = $contentTypeService->loadContentTypeByIdentifier('folder');
 
         // This call will fail with a "UnauthorizedException"
-        $contentTypeService->assignContentTypeGroup( $folderType, $mediaGroup );
+        $contentTypeService->assignContentTypeGroup($folderType, $mediaGroup);
         /* END: Use Case */
     }
 
     /**
      * Test for the unassignContentTypeGroup() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::unassignContentTypeGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUnassignContentTypeGroup
@@ -472,25 +550,28 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $contentTypeService = $repository->getContentTypeService();
 
-        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+        $folderType = $contentTypeService->loadContentTypeByIdentifier('folder');
 
-        $mediaGroup = $contentTypeService->loadContentTypeGroupByIdentifier( 'Media' );
-        $contentGroup = $contentTypeService->loadContentTypeGroupByIdentifier( 'Content' );
+        $mediaGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Media');
+        $contentGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Content');
 
         // May not unassign last group
-        $contentTypeService->assignContentTypeGroup( $folderType, $mediaGroup );
+        $contentTypeService->assignContentTypeGroup($folderType, $mediaGroup);
 
         // Load the user service
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will fail with a "UnauthorizedException"
-        $contentTypeService->unassignContentTypeGroup( $folderType, $contentGroup );
+        $contentTypeService->unassignContentTypeGroup($folderType, $contentGroup);
         /* END: Use Case */
     }
 }

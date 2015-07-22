@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\Content\Content class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,7 @@ namespace eZ\Publish\API\Repository\Values\Content;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * this class represents a content object in a specific version
+ * this class represents a content object in a specific version.
  *
  * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo convenience getter for getVersionInfo()->getContentInfo()
  * @property-read mixed $id convenience getter for retrieving the contentId: $versionInfo->contentInfo->id
@@ -22,7 +24,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 abstract class Content extends ValueObject
 {
     /**
-     * Returns the VersionInfo for this version
+     * Returns the VersionInfo for this version.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
@@ -40,17 +42,17 @@ abstract class Content extends ValueObject
      *
      * @return mixed a primitive type or a field type Value object depending on the field type.
      */
-    abstract public function getFieldValue( $fieldDefIdentifier, $languageCode = null );
+    abstract public function getFieldValue($fieldDefIdentifier, $languageCode = null);
 
     /**
-     * This method returns the complete fields collection
+     * This method returns the complete fields collection.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field}
      */
     abstract public function getFields();
 
     /**
-     * This method returns the fields for a given language and non translatable fields
+     * This method returns the fields for a given language and non translatable fields.
      *
      * If note set the initialLanguage of the content version is used.
      *
@@ -58,5 +60,5 @@ abstract class Content extends ValueObject
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field} with field identifier as keys
      */
-    abstract public function getFieldsByLanguage( $languageCode = null );
+    abstract public function getFieldsByLanguage($languageCode = null);
 }

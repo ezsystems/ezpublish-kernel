@@ -1,11 +1,12 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\TrashService class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
- * @package eZ\Publish\API\Repository
  */
 
 namespace eZ\Publish\API\Repository;
@@ -15,9 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\TrashItem;
 use eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
- * Trash service, used for managing trashed content
- *
- * @package eZ\Publish\API\Repository
+ * Trash service, used for managing trashed content.
  */
 interface TrashService
 {
@@ -33,7 +32,7 @@ interface TrashService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
-    public function loadTrashItem( $trashItemId );
+    public function loadTrashItem($trashItemId);
 
     /**
      * Sends $location and all its children to trash and returns the corresponding trash item.
@@ -46,7 +45,7 @@ interface TrashService
      *
      * @return null|\eZ\Publish\API\Repository\Values\Content\TrashItem null if location was deleted, otherwise TrashItem
      */
-    public function trash( Location $location );
+    public function trash(Location $location);
 
     /**
      * Recovers the $trashedLocation at its original place if possible.
@@ -60,7 +59,7 @@ interface TrashService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created or recovered location
      */
-    public function recover( TrashItem $trashItem, Location $newParentLocation = null );
+    public function recover(TrashItem $trashItem, Location $newParentLocation = null);
 
     /**
      * Empties trash.
@@ -81,7 +80,7 @@ interface TrashService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
      */
-    public function deleteTrashItem( TrashItem $trashItem );
+    public function deleteTrashItem(TrashItem $trashItem);
 
     /**
      * Returns a collection of Trashed locations contained in the trash.
@@ -92,5 +91,5 @@ interface TrashService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
      */
-    public function findTrashItems( Query $query );
+    public function findTrashItems(Query $query);
 }

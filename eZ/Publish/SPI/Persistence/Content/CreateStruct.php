@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Content CreateStruct struct
+ * File containing the Content CreateStruct struct.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -56,7 +58,7 @@ class CreateStruct extends ValueObject
     public $fields = array();
 
     /**
-     * @var boolean Always available flag
+     * @var bool Always available flag
      */
     public $alwaysAvailable = false;
 
@@ -66,14 +68,14 @@ class CreateStruct extends ValueObject
     public $remoteId;
 
     /**
-     * Language id the content was initially created in
+     * Language id the content was initially created in.
      *
      * @var mixed
      */
     public $initialLanguageId;
 
     /**
-     * Modification date
+     * Modification date.
      *
      * @var int
      */

@@ -1,0 +1,21 @@
+{
+    "name": "ezsystems/ezpublish-spi",
+    "description": "eZ Publish SPI (persistence interfaces). This is a read-only split of ezsystems/ezpublish-kernel, made available to make dependencies easier and more lightweight",
+    "homepage": "http://share.ez.no",
+    "license": "GPL-2.0",
+    "require": {
+        "php": ">=5.4.4",
+        "ezsystems/ezpublish-api": "self.version"
+    },
+    "autoload": {
+        "psr-0": {
+            "eZ\\Publish\\SPI": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "5.4.x-dev"
+        }
+    },
+    "target-dir": "eZ/Publish/SPI"
+}

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Policy class
+ * File containing the Policy class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,21 +18,21 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class Policy extends ValueObject
 {
     /**
-     * ID of the policy
+     * ID of the policy.
      *
      * @var mixed
      */
     public $id;
 
     /**
-     * Foreign ID of the role
+     * Foreign ID of the role.
      *
      * @var mixed
      */
     public $roleId;
 
     /**
-     * Name of module, associated with the Policy
+     * Name of module, associated with the Policy.
      *
      * Eg: content
      *
@@ -39,7 +41,7 @@ class Policy extends ValueObject
     public $module;
 
     /**
-     * Name of the module function Or all functions with '*'
+     * Name of the module function Or all functions with '*'.
      *
      * Eg: read
      *

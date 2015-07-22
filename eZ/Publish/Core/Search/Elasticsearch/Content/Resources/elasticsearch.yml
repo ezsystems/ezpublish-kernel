@@ -1,0 +1,121 @@
+index:
+    analysis:
+        analyzer:
+            string_lowercase:
+                tokenizer: keyword
+                filter: lowercase
+            arabic:
+                alias:
+                    - analyzer_ara_SA
+                type: arabic
+            brazilian:
+                alias:
+                    - analyzer_por_BR
+                type: brazilian
+            catalan:
+                alias:
+                    - analyzer_cat_ES
+                type: catalan
+            chinese:
+                alias:
+                    - analyzer_chi_CN
+                    - analyzer_chi_HK
+                    - analyzer_chi_TW
+                type: chinese
+            cjk:
+                alias:
+                    - analyzer_jpn_JP
+                    - analyzer_kor_KR
+                type: cjk
+            czech:
+                alias:
+                    - analyzer_cze_CZ
+                type: czech
+            danish:
+                alias:
+                    - analyzer_dan_DK
+                type: danish
+            dutch:
+                alias:
+                    - analyzer_dut_NL
+                type: dutch
+            english:
+                alias:
+                    - analyzer_eng_AU
+                    - analyzer_eng_CA
+                    - analyzer_eng_GB
+                    - analyzer_eng_NZ
+                    - analyzer_eng_US
+                type: english
+            finnish:
+                alias:
+                    - analyzer_fin_FI
+                type: finnish
+            french:
+                alias:
+                    - analyzer_fre_BE
+                    - analyzer_fre_CA
+                    - analyzer_fre_FR
+                type: french
+            german:
+                alias:
+                    - analyzer_ger_DE
+                type: german
+            greek:
+                alias:
+                    - analyzer_ell_GR
+                type: greek
+            hindi:
+                alias:
+                    - analyzer_hin_IN
+                type: hindi
+            hungarian:
+                alias:
+                    - analyzer_hun_HU
+                type: hungarian
+            indonesian:
+                alias:
+                    - analyzer_ind_ID
+                type: indonesian
+            italian:
+                alias:
+                    - analyzer_ita_IT
+                type: italian
+            norwegian:
+                alias:
+                    - analyzer_nno_NO
+                    - analyzer_nor_NO
+                type: norwegian
+            portuguese:
+                alias:
+                    - analyzer_por_MZ
+                    - analyzer_por_PT
+                type: portuguese
+            russian:
+                alias:
+                    - analyzer_rus_RU
+                type: russian
+            spanish:
+                alias:
+                    - analyzer_esl_ES
+                    - analyzer_esl_MX
+                type: spanish
+            swedish:
+                alias:
+                    - analyzer_swe_SE
+                type: swedish
+            turkish:
+                alias:
+                    - analyzer_tur_TR
+                type: turkish
+            standard:
+                alias:
+                    - analyzer_cro_HR
+                    - analyzer_epo_EO
+                    - analyzer_heb_IL
+                    - analyzer_pol_PL
+                    - analyzer_ser_SR
+                    - analyzer_slk_SK
+                    - analyzer_srp_RS
+                    - analyzer_ukr_UA
+                type: standard

@@ -1,0 +1,98 @@
+parameters:
+    ezpublish.cache_pool.class: Stash\Pool
+    ezpublish.cache_pool.spi.cache.decorator.class: eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator
+
+    ezpublish.spi.persistence.cache.class: eZ\Publish\Core\Persistence\Cache\Handler
+    ezpublish.spi.persistence.cache.abstractHandler.class: eZ\Publish\Core\Persistence\Cache\AbstractHandler
+    ezpublish.spi.persistence.cache.sectionHandler.class: eZ\Publish\Core\Persistence\Cache\SectionHandler
+    ezpublish.spi.persistence.cache.locationHandler.class: eZ\Publish\Core\Persistence\Cache\LocationHandler
+    ezpublish.spi.persistence.cache.contentHandler.class: eZ\Publish\Core\Persistence\Cache\ContentHandler
+    ezpublish.spi.persistence.cache.contentLanguageHandler.class: eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler
+    ezpublish.spi.persistence.cache.contentTypeHandler.class: eZ\Publish\Core\Persistence\Cache\ContentTypeHandler
+    ezpublish.spi.persistence.cache.userHandler.class: eZ\Publish\Core\Persistence\Cache\UserHandler
+    ezpublish.spi.persistence.cache.searchHandler.class: eZ\Publish\Core\Persistence\Cache\SearchHandler
+    ezpublish.spi.persistence.cache.transactionhandler.class: eZ\Publish\Core\Persistence\Cache\TransactionHandler
+    ezpublish.spi.persistence.cache.trashHandler.class: eZ\Publish\Core\Persistence\Cache\TrashHandler
+    ezpublish.spi.persistence.cache.locationSearchHandler.class: eZ\Publish\Core\Persistence\Cache\LocationSearchHandler
+    ezpublish.spi.persistence.cache.urlAliasHandler.class: eZ\Publish\Core\Persistence\Cache\UrlAliasHandler
+    ezpublish.spi.persistence.cache.objectStateHandler.class: eZ\Publish\Core\Persistence\Cache\ObjectStateHandler
+    ezpublish.spi.persistence.cache.persistenceLogger.class: eZ\Publish\Core\Persistence\Cache\PersistenceLogger
+    # Make sure logging is only enabled for debug by default
+    ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging: %kernel.debug%
+
+services:
+    ezpublish.cache_pool:
+        class: %ezpublish.cache_pool.class%
+
+    ezpublish.cache_pool.spi.cache.decorator:
+        class: %ezpublish.cache_pool.spi.cache.decorator.class%
+        arguments: [@ezpublish.cache_pool]
+
+    ezpublish.spi.persistence.cache.persistenceLogger:
+        class: %ezpublish.spi.persistence.cache.persistenceLogger.class%
+        arguments:
+            - %ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging%
+
+    ezpublish.spi.persistence.cache.abstractHandler:
+        class: %ezpublish.spi.persistence.cache.abstractHandler.class%
+        abstract:  true
+        arguments:
+            - @ezpublish.cache_pool.spi.cache.decorator
+            - @ezpublish.api.storage_engine
+            - @ezpublish.spi.persistence.cache.persistenceLogger
+
+    ezpublish.spi.persistence.cache.sectionHandler:
+        class: %ezpublish.spi.persistence.cache.sectionHandler.class%
+        parent: ezpublish.spi.persistence.cache.abstractHandler
+
+    ezpublish.spi.persistence.cache.locationHandler:
+        class: %ezpublish.spi.persistence.cache.locationHandler.class%
+        parent: ezpublish.spi.persistence.cache.abstractHandler
+
+    ezpublish.spi.persistence.cache.contentHandler:
+        class: %ezpublish.spi.persistence.cache.contentHandler.class%
+        parent: ezpublish.spi.persistence.cache.abstractHandler
+
+    ezpublish.spi.persistence.cache.contentLanguageHandler:
+        class: %ezpublish.spi.persistence.cache.contentLanguageHandler.class%
+        parent: ezpublish.spi.persistence.cache.abstractHandler
+
+    ezpublish.spi.persistence.cache.contentTypeHandler:
+        class: %ezpublish.spi.persistence.cache.contentTypeHandler.class%
+        parent: ezpublish.spi.persistence.cache.abstractHandler
+
+    ezpublish.spi.persistence.cache.userHandler:
+        class: %ezpublish.spi.persistence.cache.userHandler.class%
+        parent: ezpublish.spi.persistence.cache.abstractHandler
+
+    ezpublish.spi.persistence.cache.transactionhandler:
+        class: %ezpublish.spi.persistence.cache.transactionhandler.class%
+        parent: ezpublish.spi.persistence.cache.abstractHandler
+
+    ezpublish.spi.persistence.cache.trashHandler:
+        class: %ezpublish.spi.persistence.cache.trashHandler.class%
+        parent: ezpublish.spi.persistence.cache.abstractHandler
+
+    ezpublish.spi.persistence.cache.urlAliasHandler:
+        class: %ezpublish.spi.persistence.cache.urlAliasHandler.class%
+        parent: ezpublish.spi.persistence.cache.abstractHandler
+
+    ezpublish.spi.persistence.cache.objectStateHandler:
+        class: %ezpublish.spi.persistence.cache.objectStateHandler.class%
+        parent: ezpublish.spi.persistence.cache.abstractHandler
+
+    ezpublish.spi.persistence.cache:
+        class: %ezpublish.spi.persistence.cache.class%
+        arguments:
+            - @ezpublish.api.storage_engine
+            - @ezpublish.spi.persistence.cache.sectionHandler
+            - @ezpublish.spi.persistence.cache.locationHandler
+            - @ezpublish.spi.persistence.cache.contentHandler
+            - @ezpublish.spi.persistence.cache.contentLanguageHandler
+            - @ezpublish.spi.persistence.cache.contentTypeHandler
+            - @ezpublish.spi.persistence.cache.userHandler
+            - @ezpublish.spi.persistence.cache.transactionhandler
+            - @ezpublish.spi.persistence.cache.trashHandler
+            - @ezpublish.spi.persistence.cache.urlAliasHandler
+            - @ezpublish.spi.persistence.cache.objectStateHandler
+            - @ezpublish.spi.persistence.cache.persistenceLogger

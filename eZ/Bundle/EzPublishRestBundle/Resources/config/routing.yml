@@ -230,12 +230,23 @@ ezpublish_rest_createView:
         _controller: ezpublish_rest.controller.content:createView
     methods: [POST]
 
-# @todo this doesn't actually exist. Must generate a 404.
-ezpublish_rest_loadView:
-    path: /content/views/{viewId}
+ezpublish_rest_listView:
+    path: /content/views
+    defaults:
+        _controller: ezpublish_rest.controller.content:listView
+    methods: [GET]
+
+ezpublish_rest_getView:
+    path : /content/views/{viewId}
+    defaults:
+        _controller: ezpublish_rest.controller.content:getView
+    methods: [GET]
 
 ezpublish_rest_loadViewResults:
     path: /content/views/{viewId}/results
+    defaults:
+        _controller: ezpublish_rest.controller.content:loadViewResults
+    methods: [GET]
 
 # Object states
 
@@ -1033,6 +1044,11 @@ ezpublish_rest_deleteSession:
         _controller: ezpublish_rest.controller.user:deleteSession
     methods: [DELETE]
 
+ezpublish_rest_refreshSession:
+    path: /user/sessions/{sessionId}/refresh
+    defaults:
+        _controller: ezpublish_rest.controller.user:refreshSession
+    methods: [POST]
 
 
 # URL aliases
@@ -1070,9 +1086,12 @@ ezpublish_rest_deleteURLAlias:
         _controller: ezpublish_rest.controller.url_alias:deleteURLAlias
     methods: [DELETE]
 
-ezpublis_rest_catchAll:
-    path: /{requestUri}
+
+# Services
+
+
+ezpublish_rest_loadCountryList:
+    path: /services/countries
     defaults:
-        _controller: ezpublish_rest.controller.root:catchAll
-    requirements:
-        requestUri: ".*"
+        _controller: ezpublish_rest.controller.services:loadCountryList
+    methods: [GET]

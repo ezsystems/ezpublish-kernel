@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+  <section>
+    <header>Assorted array of links</header>
+  </section>
+  <paragraph>
+    <link anchor_name="anchor" target="_blank" xhtml:id="id1" xhtml:title="Anchor link title" class="linkClass1">Jump to content</link>
+  </paragraph>
+  <paragraph>
+    <link url_id="95" anchor_name="fragment1" target="_blank" xhtml:id="id2" xhtml:title="Link title" class="linkClass2">Link text</link>
+  </paragraph>
+  <paragraph>
+    <link node_id="111" target="_blank" xhtml:id="id3" xhtml:title="Location title" class="linkClass3">Location content name</link>
+  </paragraph>
+  <paragraph>
+    <link node_id="222" anchor_name="fragment2" target="_blank" xhtml:id="id4" xhtml:title="Location title 2" class="linkClass4">Location content name 2</link>
+  </paragraph>
+  <paragraph>
+    <link object_id="333" xhtml:id="id5" xhtml:title="Content title" class="linkClass5">Content name</link>
+  </paragraph>
+  <paragraph><anchor name="anchor"/>Some anchored content.</paragraph>
+</section>

@@ -1,0 +1,31 @@
+parameters:
+    ezpublish.debug.data_collector.class: eZ\Bundle\EzPublishDebugBundle\Collector\EzPublishCoreCollector
+    ezpublish_debug.persistence_collector.class: eZ\Bundle\EzPublishDebugBundle\Collector\PersistenceCacheCollector
+    ezpublish_debug.templates_collector.class: eZ\Bundle\EzPublishDebugBundle\Collector\TemplatesDataCollector
+
+services:
+    ezpublish_debug.data_collector:
+        class: %ezpublish.debug.data_collector.class%
+        tags:
+            -
+                name: data_collector
+                template: "EzPublishDebugBundle:Profiler:layout"
+                id: "ezpublish.debug.toolbar"
+
+    ezpublish_debug.persistence_collector:
+        class: %ezpublish_debug.persistence_collector.class%
+        arguments: [@ezpublish.spi.persistence.cache.persistenceLogger]
+        tags:
+            -
+                name: ezpublish_data_collector
+                id: "ezpublish.debug.persistence"
+                panelTemplate: "EzPublishDebugBundle:Profiler/persistence:panel.html.twig"
+                toolbarTemplate: "EzPublishDebugBundle:Profiler/persistence:toolbar.html.twig"
+
+    ezpublish_debug.templates_collector:
+        class: %ezpublish_debug.templates_collector.class%
+        tags:
+            -
+                name: ezpublish_data_collector
+                panelTemplate: "EzPublishDebugBundle:Profiler/templates:panel.html.twig"
+                toolbarTemplate: "EzPublishDebugBundle:Profiler/templates:toolbar.html.twig"

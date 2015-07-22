@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContentViewTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,32 +25,30 @@ class ContentViewTest extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getTemplateIdentifier
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getParameters
      */
-    public function testConstruct( $templateIdentifier, array $params )
+    public function testConstruct($templateIdentifier, array $params)
     {
-        $contentView = new ContentView( $templateIdentifier, $params );
-        self::assertSame( $templateIdentifier, $contentView->getTemplateIdentifier() );
-        self::assertSame( $params, $contentView->getParameters() );
+        $contentView = new ContentView($templateIdentifier, $params);
+        self::assertSame($templateIdentifier, $contentView->getTemplateIdentifier());
+        self::assertSame($params, $contentView->getParameters());
     }
 
     public function constructProvider()
     {
         return array(
-            array( 'some:valid:identifier', array( 'foo' => 'bar' ) ),
-            array( 'another::identifier', array() ),
-            array( 'oops:i_did_it:again', array( 'singer' => 'Britney Spears' ) ),
+            array('some:valid:identifier', array('foo' => 'bar')),
+            array('another::identifier', array()),
+            array('oops:i_did_it:again', array('singer' => 'Britney Spears')),
             array(
-                function ()
-                {
+                function () {
                     return true;
                 },
-                array()
+                array(),
             ),
             array(
-                function ()
-                {
+                function () {
                     return true;
                 },
-                array( 'truc' => 'muche' )
+                array('truc' => 'muche'),
             ),
         );
     }
@@ -58,17 +58,17 @@ class ContentViewTest extends PHPUnit_Framework_TestCase
      * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::__construct
      */
-    public function testConstructFail( $templateIdentifier )
+    public function testConstructFail($templateIdentifier)
     {
-        new ContentView( $templateIdentifier );
+        new ContentView($templateIdentifier);
     }
 
     public function constructFailProvider()
     {
         return array(
-            array( 123 ),
-            array( new \stdClass ),
-            array( array( 1, 2, 3 ) ),
+            array(123),
+            array(new \stdClass()),
+            array(array(1, 2, 3)),
         );
     }
 
@@ -79,10 +79,10 @@ class ContentViewTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSetParameters()
     {
-        $params = array( 'bar' => 'baz', 'fruit' => 'apple' );
-        $contentView = new ContentView( 'foo' );
-        $contentView->setParameters( $params );
-        self::assertSame( $params, $contentView->getParameters() );
+        $params = array('bar' => 'baz', 'fruit' => 'apple');
+        $contentView = new ContentView('foo');
+        $contentView->setParameters($params);
+        self::assertSame($params, $contentView->getParameters());
     }
 
     /**
@@ -92,12 +92,12 @@ class ContentViewTest extends PHPUnit_Framework_TestCase
      */
     public function testAddParameters()
     {
-        $params = array( 'bar' => 'baz', 'fruit' => 'apple' );
-        $contentView = new ContentView( 'foo', $params );
+        $params = array('bar' => 'baz', 'fruit' => 'apple');
+        $contentView = new ContentView('foo', $params);
 
-        $additionalParams = array( 'truc' => 'muche', 'laurel' => 'hardy' );
-        $contentView->addParameters( $additionalParams );
-        self::assertSame( $params + $additionalParams, $contentView->getParameters() );
+        $additionalParams = array('truc' => 'muche', 'laurel' => 'hardy');
+        $contentView->addParameters($additionalParams);
+        self::assertSame($params + $additionalParams, $contentView->getParameters());
     }
 
     /**
@@ -107,9 +107,10 @@ class ContentViewTest extends PHPUnit_Framework_TestCase
      */
     public function testHasParameter()
     {
-        $contentView = new ContentView( __METHOD__, array( 'foo' => 'bar' ) );
-        self::assertTrue( $contentView->hasParameter( 'foo' ) );
-        self::assertFalse( $contentView->hasParameter( 'nonExistent' ) );
+        $contentView = new ContentView(__METHOD__, array('foo' => 'bar'));
+        self::assertTrue($contentView->hasParameter('foo'));
+        self::assertFalse($contentView->hasParameter('nonExistent'));
+
         return $contentView;
     }
 
@@ -119,9 +120,10 @@ class ContentViewTest extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::setParameters
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getParameters
      */
-    public function testGetParameter( ContentView $contentView )
+    public function testGetParameter(ContentView $contentView)
     {
-        self::assertSame( 'bar', $contentView->getParameter( 'foo' ) );
+        self::assertSame('bar', $contentView->getParameter('foo'));
+
         return $contentView;
     }
 
@@ -132,8 +134,55 @@ class ContentViewTest extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::setParameters
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getParameters
      */
-    public function testGetParameterFail( ContentView $contentView )
+    public function testGetParameterFail(ContentView $contentView)
     {
-        $contentView->getParameter( 'nonExistent' );
+        $contentView->getParameter('nonExistent');
+    }
+
+    /**
+     * @dataProvider goodTemplateIdentifierProvider
+     *
+     * @param $templateIdentifier
+     */
+    public function testSetTemplateIdentifier($templateIdentifier)
+    {
+        $contentView = new ContentView();
+        $contentView->setTemplateIdentifier($templateIdentifier);
+        $this->assertSame($templateIdentifier, $contentView->getTemplateIdentifier());
+    }
+
+    public function goodTemplateIdentifierProvider()
+    {
+        return array(
+            array('foo:bar:baz.html.twig'),
+            array(
+                function () {
+                    return 'foo';
+                },
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider badTemplateIdentifierProvider
+     *
+     * @expectedException eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
+     *
+     * @param $badTemplateIdentifier
+     */
+    public function testSetTemplateIdentifierWrongType($badTemplateIdentifier)
+    {
+        $contentView = new ContentView();
+        $contentView->setTemplateIdentifier($badTemplateIdentifier);
+    }
+
+    public function badTemplateIdentifierProvider()
+    {
+        return array(
+            array(123),
+            array(true),
+            array(new \stdClass()),
+            array(array('foo', 'bar')),
+        );
     }
 }

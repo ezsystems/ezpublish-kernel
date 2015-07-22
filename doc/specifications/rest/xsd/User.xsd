@@ -14,7 +14,7 @@
           <xsd:element name="enabled" type="xsd:boolean" />
           <xsd:element name="Content" type="vnd.ez.api.Version+xml" />
           <xsd:element name="Roles" type="ref" />
-          <xsd:element name="UserGroups" type="ref" />
+          <xsd:element name="Groups" type="ref" />
         </xsd:all>
       </xsd:extension>
     </xsd:complexContent>

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * FieldTypeService class
+ * FieldTypeService class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,27 +14,26 @@ namespace eZ\Publish\Core\SignalSlot;
 use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
 
 /**
- * FieldTypeService class
- * @package eZ\Publish\Core\SignalSlot
+ * FieldTypeService class.
  */
 class FieldTypeService implements FieldTypeServiceInterface
 {
     /**
-     * Aggregated service
+     * Aggregated service.
      *
      * @var \eZ\Publish\API\Repository\FieldTypeService
      */
     protected $service;
 
     /**
-     * SignalDispatcher
+     * SignalDispatcher.
      *
      * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * Construct service object from aggregated service and signal
      * dispatcher
@@ -40,9 +41,9 @@ class FieldTypeService implements FieldTypeServiceInterface
      * @param \eZ\Publish\API\Repository\FieldTypeService $service
      * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
      */
-    public function __construct( FieldTypeServiceInterface $service, SignalDispatcher $signalDispatcher )
+    public function __construct(FieldTypeServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->signalDispatcher = $signalDispatcher;
     }
 
@@ -57,46 +58,29 @@ class FieldTypeService implements FieldTypeServiceInterface
     }
 
     /**
-     * Returns the FieldType registered with the given identifier
+     * Returns the FieldType registered with the given identifier.
      *
      * @param string $identifier
      *
      * @return \eZ\Publish\API\Repository\FieldType
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *         if there is no FieldType registered with $identifier
      */
-    public function getFieldType( $identifier )
+    public function getFieldType($identifier)
     {
-        return $this->service->getFieldType( $identifier );
+        return $this->service->getFieldType($identifier);
     }
 
     /**
-     * Returns if there is a FieldType registered under $identifier
+     * Returns if there is a FieldType registered under $identifier.
      *
      * @param string $identifier
      *
-     * @return boolean
+     * @return bool
      */
-    public function hasFieldType( $identifier )
+    public function hasFieldType($identifier)
     {
-        return $this->service->hasFieldType( $identifier );
-    }
-
-    /**
-     * Instantiates a FieldType\Type object
-     *
-     * @todo Move this to a internal service provided to services that needs this (including this)
-     *
-     * @access private This function is for internal use only.
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $type not properly setup
-     *         with settings injected to service
-     *
-     * @param string $identifier
-     *
-     * @return \eZ\Publish\SPI\FieldType\FieldType
-     */
-    public function buildFieldType( $identifier )
-    {
-        return $this->service->buildFieldType( $identifier );
+        return $this->service->hasFieldType($identifier);
     }
 }

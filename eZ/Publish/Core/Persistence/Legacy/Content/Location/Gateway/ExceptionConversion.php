@@ -1,18 +1,22 @@
 <?php
+
 /**
- * File containing the Location Gateway class
+ * File containing the Location Gateway class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
-use ezcDbException;
+use Doctrine\DBAL\DBALException;
 use PDOException;
 use RuntimeException;
 
@@ -22,289 +26,248 @@ use RuntimeException;
 class ExceptionConversion extends Gateway
 {
     /**
-     * The wrapped gateway
+     * The wrapped gateway.
      *
      * @var Gateway
      */
     protected $innerGateway;
 
     /**
-     * Creates a new exception conversion gateway around $innerGateway
+     * Creates a new exception conversion gateway around $innerGateway.
      *
      * @param Gateway $innerGateway
      */
-    public function __construct( Gateway $innerGateway )
+    public function __construct(Gateway $innerGateway)
     {
         $this->innerGateway = $innerGateway;
     }
 
     /**
-     * Returns an array with basic node data
+     * Returns an array with basic node data.
      *
      * We might want to cache this, since this method is used by about every
      * method in the location handler.
      *
      * @todo optimize
+     *
      * @param mixed $nodeId
      *
      * @return array
      */
-    public function getBasicNodeData( $nodeId )
+    public function getBasicNodeData($nodeId)
     {
-        try
-        {
-            return $this->innerGateway->getBasicNodeData( $nodeId );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->getBasicNodeData($nodeId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Returns an array with basic node data for the node with $remoteId
+     * Returns an array with basic node data for the node with $remoteId.
      *
      * @todo optimize
+     *
      * @param mixed $remoteId
      *
      * @return array
      */
-    public function getBasicNodeDataByRemoteId( $remoteId )
+    public function getBasicNodeDataByRemoteId($remoteId)
     {
-        try
-        {
-            return $this->innerGateway->getBasicNodeDataByRemoteId( $remoteId );
+        try {
+            return $this->innerGateway->getBasicNodeDataByRemoteId($remoteId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+    }
+
+    /**
+     * Returns total count and data for all Locations satisfying the parameters.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param int $offset
+     * @param int|null $limit
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     *
+     * @return mixed[][]
+     */
+    public function find(Criterion $criterion, $offset = 0, $limit = null, array $sortClauses = null)
+    {
+        try {
+            return $this->innerGateway->find($criterion, $offset, $limit, $sortClauses);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
      * Loads data for all Locations for $contentId, optionally only in the
-     * subtree starting at $rootLocationId
+     * subtree starting at $rootLocationId.
      *
      * @param int $contentId
      * @param int $rootLocationId
      *
      * @return array
      */
-    public function loadLocationDataByContent( $contentId, $rootLocationId = null )
+    public function loadLocationDataByContent($contentId, $rootLocationId = null)
     {
-        try
-        {
-            return $this->innerGateway->loadLocationDataByContent( $contentId, $rootLocationId );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->loadLocationDataByContent($contentId, $rootLocationId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
      * @see \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway::loadParentLocationsDataForDraftContent
      */
-    public function loadParentLocationsDataForDraftContent( $contentId )
+    public function loadParentLocationsDataForDraftContent($contentId)
     {
-        try
-        {
-            return $this->innerGateway->loadParentLocationsDataForDraftContent( $contentId );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->loadParentLocationsDataForDraftContent($contentId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Find all content in the given subtree
+     * Find all content in the given subtree.
      *
      * @param mixed $sourceId
      * @param bool $onlyIds
      *
      * @return array
      */
-    public function getSubtreeContent( $sourceId, $onlyIds = false )
+    public function getSubtreeContent($sourceId, $onlyIds = false)
     {
-        try
-        {
-            return $this->innerGateway->getSubtreeContent( $sourceId, $onlyIds );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->getSubtreeContent($sourceId, $onlyIds);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Returns data for the first level children of the location identified by given $locationId
+     * Returns data for the first level children of the location identified by given $locationId.
      *
      * @param mixed $locationId
      *
      * @return array
      */
-    public function getChildren( $locationId )
+    public function getChildren($locationId)
     {
-        try
-        {
-            return $this->innerGateway->getChildren( $locationId );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->getChildren($locationId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Update path strings to move nodes in the ezcontentobject_tree table
+     * Update path strings to move nodes in the ezcontentobject_tree table.
      *
      * This query can likely be optimized to use some more advanced string
      * operations, which then depend on the respective database.
      *
      * @todo optimize
+     *
      * @param array $fromPathString
      * @param array $toPathString
-     *
-     * @return void
      */
-    public function moveSubtreeNodes( array $fromPathString, array $toPathString )
+    public function moveSubtreeNodes(array $fromPathString, array $toPathString)
     {
-        try
-        {
-            return $this->innerGateway->moveSubtreeNodes( $fromPathString, $toPathString );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->moveSubtreeNodes($fromPathString, $toPathString);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Updated subtree modification time for all nodes on path
+     * Updated subtree modification time for all nodes on path.
      *
      * @param string $pathString
      * @param int|null $timestamp
-     *
-     * @return void
      */
-    public function updateSubtreeModificationTime( $pathString, $timestamp = null )
+    public function updateSubtreeModificationTime($pathString, $timestamp = null)
     {
-        try
-        {
-            return $this->innerGateway->updateSubtreeModificationTime( $pathString, $timestamp );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->updateSubtreeModificationTime($pathString, $timestamp);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Update node assignment table
+     * Update node assignment table.
      *
      * @param int $contentObjectId
      * @param int $oldParent
      * @param int $newParent
      * @param int $opcode
-     *
-     * @return void
      */
-    public function updateNodeAssignment( $contentObjectId, $oldParent, $newParent, $opcode )
+    public function updateNodeAssignment($contentObjectId, $oldParent, $newParent, $opcode)
     {
-        try
-        {
-            return $this->innerGateway->updateNodeAssignment( $contentObjectId, $oldParent, $newParent, $opcode );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->updateNodeAssignment($contentObjectId, $oldParent, $newParent, $opcode);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Create locations from node assignments
+     * Create locations from node assignments.
      *
      * Convert existing node assignments into real locations.
      *
      * @param mixed $contentId
      * @param mixed $versionNo
-     *
-     * @return void
      */
-    public function createLocationsFromNodeAssignments( $contentId, $versionNo )
+    public function createLocationsFromNodeAssignments($contentId, $versionNo)
     {
-        try
-        {
-            return $this->innerGateway->createLocationsFromNodeAssignments( $contentId, $versionNo );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->createLocationsFromNodeAssignments($contentId, $versionNo);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Updates all Locations of content identified with $contentId with $versionNo
+     * Updates all Locations of content identified with $contentId with $versionNo.
      *
      * @param mixed $contentId
      * @param mixed $versionNo
-     *
-     * @return void
      */
-    public function updateLocationsContentVersionNo( $contentId, $versionNo )
+    public function updateLocationsContentVersionNo($contentId, $versionNo)
     {
-        try
-        {
-            return $this->innerGateway->updateLocationsContentVersionNo( $contentId, $versionNo );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->updateLocationsContentVersionNo($contentId, $versionNo);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -313,19 +276,14 @@ class ExceptionConversion extends Gateway
      *
      * @param string $pathString
      */
-    public function hideSubtree( $pathString )
+    public function hideSubtree($pathString)
     {
-        try
-        {
-            return $this->innerGateway->hideSubtree( $pathString );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->hideSubtree($pathString);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -335,19 +293,14 @@ class ExceptionConversion extends Gateway
      *
      * @param string $pathString
      */
-    public function unHideSubtree( $pathString )
+    public function unHideSubtree($pathString)
     {
-        try
-        {
-            return $this->innerGateway->unHideSubtree( $pathString );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->unHideSubtree($pathString);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -360,120 +313,89 @@ class ExceptionConversion extends Gateway
      * @param mixed $locationId1
      * @param mixed $locationId2
      *
-     * @return boolean
+     * @return bool
      */
-    public function swap( $locationId1, $locationId2 )
+    public function swap($locationId1, $locationId2)
     {
-        try
-        {
-            return $this->innerGateway->swap( $locationId1, $locationId2 );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->swap($locationId1, $locationId2);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Creates a new location in given $parentNode
+     * Creates a new location in given $parentNode.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param array $parentNode
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function create( CreateStruct $createStruct, array $parentNode )
+    public function create(CreateStruct $createStruct, array $parentNode)
     {
-        try
-        {
-            return $this->innerGateway->create( $createStruct, $parentNode );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->create($createStruct, $parentNode);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Create an entry in the node assignment table
+     * Create an entry in the node assignment table.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param mixed $parentNodeId
      * @param int $type
-     *
-     * @return void
      */
-    public function createNodeAssignment( CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP )
+    public function createNodeAssignment(CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP)
     {
-        try
-        {
-            return $this->innerGateway->createNodeAssignment( $createStruct, $parentNodeId, $type );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->createNodeAssignment($createStruct, $parentNodeId, $type);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Deletes node assignment for given $contentId and $versionNo
+     * Deletes node assignment for given $contentId and $versionNo.
      *
      * @param int $contentId
      * @param int $versionNo
-     *
-     * @return void
      */
-    public function deleteNodeAssignment( $contentId, $versionNo = null )
+    public function deleteNodeAssignment($contentId, $versionNo = null)
     {
-        try
-        {
-            return $this->innerGateway->deleteNodeAssignment( $contentId, $versionNo );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->deleteNodeAssignment($contentId, $versionNo);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
      * Updates an existing location.
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * Will not throw anything if location id is invalid or no entries are affected.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
-     *
-     * @return void
      */
-    public function update( UpdateStruct $location, $locationId )
+    public function update(UpdateStruct $location, $locationId)
     {
-        try
-        {
-            return $this->innerGateway->update( $location, $locationId );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->update($location, $locationId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -483,48 +405,36 @@ class ExceptionConversion extends Gateway
      * @param mixed $locationId
      * @param mixed $parentLocationId
      * @param string $text
-     *
-     * @return void
      */
-    public function updatePathIdentificationString( $locationId, $parentLocationId, $text )
+    public function updatePathIdentificationString($locationId, $parentLocationId, $text)
     {
-        try
-        {
-            return $this->innerGateway->updatePathIdentificationString( $locationId, $parentLocationId, $text );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->updatePathIdentificationString($locationId, $parentLocationId, $text);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Deletes ezcontentobject_tree row for given $locationId (node_id)
+     * Deletes ezcontentobject_tree row for given $locationId (node_id).
      *
      * @param mixed $locationId
      */
-    public function removeLocation( $locationId )
+    public function removeLocation($locationId)
     {
-        try
-        {
-            return $this->innerGateway->removeLocation( $locationId );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->removeLocation($locationId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Returns id of the next in line node to be set as a new main node
+     * Returns id of the next in line node to be set as a new main node.
      *
      * This returns lowest node id for content identified by $contentId, and not of
      * the node identified by given $locationId (current main node).
@@ -535,19 +445,14 @@ class ExceptionConversion extends Gateway
      *
      * @return array
      */
-    public function getFallbackMainNodeData( $contentId, $locationId )
+    public function getFallbackMainNodeData($contentId, $locationId)
     {
-        try
-        {
-            return $this->innerGateway->getFallbackMainNodeData( $contentId, $locationId );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->getFallbackMainNodeData($contentId, $locationId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -558,21 +463,16 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $locationId
      *
-     * @return boolean
+     * @return bool
      */
-    public function trashLocation( $locationId )
+    public function trashLocation($locationId)
     {
-        try
-        {
-            return $this->innerGateway->trashLocation( $locationId );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->trashLocation($locationId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -589,42 +489,32 @@ class ExceptionConversion extends Gateway
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function untrashLocation( $locationId, $newParentId = null )
+    public function untrashLocation($locationId, $newParentId = null)
     {
-        try
-        {
-            return $this->innerGateway->untrashLocation( $locationId, $newParentId );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->untrashLocation($locationId, $newParentId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Loads trash data specified by location ID
+     * Loads trash data specified by location ID.
      *
      * @param mixed $locationId
      *
      * @return array
      */
-    public function loadTrashByLocation( $locationId )
+    public function loadTrashByLocation($locationId)
     {
-        try
-        {
-            return $this->innerGateway->loadTrashByLocation( $locationId );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->loadTrashByLocation($locationId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -633,22 +523,15 @@ class ExceptionConversion extends Gateway
      * Will NOT remove associated content objects nor attributes.
      *
      * Basically truncates ezcontentobject_trash table.
-     *
-     * @return void
      */
     public function cleanupTrash()
     {
-        try
-        {
+        try {
             return $this->innerGateway->cleanupTrash();
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -662,19 +545,14 @@ class ExceptionConversion extends Gateway
      *
      * @return array
      */
-    public function listTrashed( $offset, $limit, array $sort = null )
+    public function listTrashed($offset, $limit, array $sort = null)
     {
-        try
-        {
-            return $this->innerGateway->listTrashed( $offset, $limit, $sort );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->listTrashed($offset, $limit, $sort);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
@@ -683,74 +561,57 @@ class ExceptionConversion extends Gateway
      * Will NOT remove associated content object nor attributes.
      *
      * @param int $id The trashed location Id
-     *
-     * @return void
      */
-    public function removeElementFromTrash( $id )
+    public function removeElementFromTrash($id)
     {
-        try
-        {
-            return $this->innerGateway->removeElementFromTrash( $id );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->removeElementFromTrash($id);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Set section on all content objects in the subtree
+     * Set section on all content objects in the subtree.
      *
      * @param mixed $pathString
      * @param mixed $sectionId
      *
-     * @return boolean
+     * @return bool
      */
-    public function setSectionForSubtree( $pathString, $sectionId )
+    public function setSectionForSubtree($pathString, $sectionId)
     {
-        try
-        {
-            return $this->innerGateway->setSectionForSubtree( $pathString, $sectionId );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->setSectionForSubtree($pathString, $sectionId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Returns how many locations given content object identified by $contentId has
+     * Returns how many locations given content object identified by $contentId has.
      *
      * @param int $contentId
      *
      * @return int
      */
-    public function countLocationsByContentId( $contentId )
+    public function countLocationsByContentId($contentId)
     {
-        try
-        {
-            return $this->innerGateway->countLocationsByContentId( $contentId );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->countLocationsByContentId($contentId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Changes main location of content identified by given $contentId to location identified by given $locationId
+     * Changes main location of content identified by given $contentId to location identified by given $locationId.
      *
      * Updates ezcontentobject_tree table for the given $contentId and eznode_assignment table for the given
      * $contentId, $parentLocationId and $versionNo
@@ -760,22 +621,15 @@ class ExceptionConversion extends Gateway
      * @param mixed $versionNo version number, needed to update eznode_assignment table
      * @param mixed $parentLocationId parent location of location identified by $locationId, needed to update
      *        eznode_assignment table
-     *
-     * @return void
      */
-    public function changeMainLocation( $contentId, $locationId, $versionNo, $parentLocationId )
+    public function changeMainLocation($contentId, $locationId, $versionNo, $parentLocationId)
     {
-        try
-        {
-            return $this->innerGateway->changeMainLocation( $contentId, $locationId, $versionNo, $parentLocationId );
-        }
-        catch ( ezcDbException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->changeMainLocation($contentId, $locationId, $versionNo, $parentLocationId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 }

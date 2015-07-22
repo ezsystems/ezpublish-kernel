@@ -1,953 +1,208 @@
 <?php
+
 /**
- * File containing the Handler interface
+ * File containing the Legacy Storage Handler.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy;
 
 use eZ\Publish\SPI\Persistence\Handler as HandlerInterface;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type;
-use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler as ContentFieldHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as TypeHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as TypeMapper;
-use eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper;
-use eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
-use eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler as TrashHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler as ObjectStateHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper as ObjectStateMapper;
-use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
-use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
-use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper as UrlAliasMapper;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase as UrlAliasGateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\ExceptionConversion as UrlAliasExceptionConversionGateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler as UrlWildcardHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper as UrlWildcardMapper;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase as UrlWildcardGateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
-use eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as ConverterRegistry;
-use eZ\Publish\Core\Persistence\FieldTypeRegistry;
-use ezcDbTransactionException;
-use RuntimeException;
+use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
+use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandler;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
+use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandler;
+use eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler as UrlWildcardHandler;
+use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
+use eZ\Publish\SPI\Persistence\TransactionHandler as SPITransactionHandler;
 
 /**
- * The repository handler for the legacy storage engine
+ * The main handler for Legacy Storage Engine.
  */
 class Handler implements HandlerInterface
 {
     /**
-     * Content handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\Handler
      */
     protected $contentHandler;
 
     /**
-     * Content mapper
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
-     */
-    protected $contentMapper;
-
-    /**
-     * Storage handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
-     */
-    protected $storageHandler;
-
-    /**
-     * Field handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
-     */
-    protected $fieldHandler;
-
-    /**
-     * Search handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler
-     */
-    protected $searchHandler;
-
-    /**
-     * Content type handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
      */
     protected $contentTypeHandler;
 
     /**
-     * Content Type gateway
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
-     */
-    protected $contentTypeGateway;
-
-    /**
-     * Content Type update handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler
-     */
-    protected $typeUpdateHandler;
-
-    /**
-     * Location handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
-     */
-    protected $locationHandler;
-
-    /**
-     * Location gateway
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
-     */
-    protected $locationGateway;
-
-    /**
-     * Location mapper
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
-     */
-    protected $locationMapper;
-
-    /**
-     * ObjectState handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler
-     */
-    protected $objectStateHandler;
-
-    /**
-     * ObjectState gateway
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway
-     */
-    protected $objectStateGateway;
-
-    /**
-     * ObjectState mapper
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper
-     */
-    protected $objectStateMapper;
-
-    /**
-     * User handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\User\Handler
-     */
-    protected $userHandler;
-
-    /**
-     * Section handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler
-     */
-    protected $sectionHandler;
-
-    /**
-     * Trash handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler
-     */
-    protected $trashHandler;
-
-    /**
-     * Content gateway
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
-     */
-    protected $contentGateway;
-
-    /**
-     * Language handler
-     *
      * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
      */
     protected $languageHandler;
 
     /**
-     * Language cache
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
+     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
-    protected $languageCache;
+    protected $locationHandler;
 
     /**
-     * Language mask generator
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
+     * @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
      */
-    protected $languageMaskGenerator;
+    protected $objectStateHandler;
 
     /**
-     * UrlAlias handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\Section\Handler
+     */
+    protected $sectionHandler;
+
+    /**
+     * @var \eZ\Publish\SPI\Persistence\TransactionHandler
+     */
+    protected $transactionHandler;
+
+    /**
+     * @var \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     */
+    protected $trashHandler;
+
+    /**
+     * @var \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
      */
     protected $urlAliasHandler;
 
     /**
-     * UrlAlias gateway
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway
-     */
-    protected $urlAliasGateway;
-
-    /**
-     * UrlAlias mapper
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper
-     */
-    protected $urlAliasMapper;
-
-    /**
-     * UrlWildcard handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
      */
     protected $urlWildcardHandler;
 
     /**
-     * UrlWildcard gateway
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway
+     * @var \eZ\Publish\SPI\Persistence\User\Handler
      */
-    protected $urlWildcardGateway;
+    protected $userHandler;
 
-    /**
-     * UrlWildcard mapper
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper
-     */
-    protected $urlWildcardMapper;
-
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
-     */
-    protected $dbHandler;
-
-    /**
-     * Field value converter registry
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
-     */
-    protected $converterRegistry;
-
-    /**
-     * Storage registry
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
-     */
-    protected $storageRegistry;
-
-    /**
-     * FieldType registry
-     *
-     * @var \eZ\Publish\Core\Persistence\FieldTypeRegistry
-     */
-    protected $fieldTypeRegistry;
-
-    /**
-     * Transform Processor
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
-     */
-    protected $transformationProcessor;
-
-    /**
-     * General configuration
-     *
-     * @var array
-     */
-    protected $config;
-
-    /**
-     * Creates a new repository handler.
-     *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler The database handler
-     * @param \eZ\Publish\Core\Persistence\FieldTypeRegistry $fieldTypeRegistry Should contain field types
-     * @param Content\FieldValue\ConverterRegistry $converterRegistry Should contain Field Type converters
-     * @param Content\StorageRegistry $storageRegistry Should contain Field Type external storage handlers
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor $transformationProcessor Search Text Transformation processor
-     * @param array $config List of optional configuration flags:
-     *                      The flag 'defer_type_update' defines if content types should be
-     *                      published immediately (false), when the
-     *                      {@link \eZ\Publish\SPI\Persistence\Content\Type\Handler::publish()} method
-     *                      is called, or if a background process should be triggered (true), which
-     *                      is then executed by the old eZ Publish core.
-     */
     public function __construct(
-        EzcDbHandler $dbHandler,
-        FieldTypeRegistry $fieldTypeRegistry,
-        ConverterRegistry $converterRegistry,
-        StorageRegistry $storageRegistry,
-        TransformationProcessor $transformationProcessor,
-        array $config = array()
-    )
-    {
-        $this->dbHandler = $dbHandler;
-        $this->fieldTypeRegistry = $fieldTypeRegistry;
-        $this->converterRegistry = $converterRegistry;
-        $this->storageRegistry = $storageRegistry;
-        $this->transformationProcessor = $transformationProcessor;
-        $this->config = $config;
+        ContentHandler $contentHandler,
+        ContentTypeHandler $contentTypeHandler,
+        LanguageHandler $languageHandler,
+        LocationHandler $locationHandler,
+        ObjectStateHandler $objectStateHandler,
+        SectionHandler $sectionHandler,
+        SPITransactionHandler $transactionHandler,
+        TrashHandler $trashHandler,
+        UrlAliasHandler $urlAliasHandler,
+        UrlWildcardHandler $urlWildcardHandler,
+        UserHandler $userHandler
+    ) {
+        $this->contentHandler = $contentHandler;
+        $this->contentTypeHandler = $contentTypeHandler;
+        $this->languageHandler = $languageHandler;
+        $this->locationHandler = $locationHandler;
+        $this->objectStateHandler = $objectStateHandler;
+        $this->sectionHandler = $sectionHandler;
+        $this->transactionHandler = $transactionHandler;
+        $this->trashHandler = $trashHandler;
+        $this->urlAliasHandler = $urlAliasHandler;
+        $this->urlWildcardHandler = $urlWildcardHandler;
+        $this->userHandler = $userHandler;
     }
 
-    /**
-     * @todo remove circular dependency with LocationHandler
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Handler
-     */
     public function contentHandler()
     {
-        if ( !isset( $this->contentHandler ) )
-        {
-            $this->contentHandler = new ContentHandler(
-                $this->getContentGateway(),
-                $this->getLocationGateway(),
-                $this->getContentMapper(),
-                $this->getFieldHandler(),
-                $this->getSlugConverter(),
-                $this->getUrlAliasGateway()
-            );
-            $this->contentHandler->locationHandler = $this->locationHandler();
-        }
         return $this->contentHandler;
     }
 
-    /**
-     * Returns a content mapper
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
-     */
-    protected function getContentMapper()
-    {
-        if ( !isset( $this->contentMapper ) )
-        {
-            $this->contentMapper = new ContentMapper(
-                $this->converterRegistry,
-                $this->contentLanguageHandler()
-            );
-        }
-        return $this->contentMapper;
-    }
-
-    /**
-     * Returns a content gateway
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
-     */
-    protected function getContentGateway()
-    {
-        if ( !isset( $this->contentGateway ) )
-        {
-            $this->contentGateway = new Content\Gateway\ExceptionConversion(
-                new Content\Gateway\EzcDatabase(
-                    $this->dbHandler,
-                    new Content\Gateway\EzcDatabase\QueryBuilder( $this->dbHandler ),
-                    $this->contentLanguageHandler(),
-                    $this->getLanguageMaskGenerator()
-                )
-            );
-        }
-        return $this->contentGateway;
-    }
-
-    /**
-     * Returns a field handler
-     *
-     * @todo remove circular dependency with ContentTypeHandler
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
-     */
-    protected function getFieldHandler()
-    {
-        if ( !isset( $this->fieldHandler ) )
-        {
-            $this->fieldHandler = new ContentFieldHandler(
-                $this->getContentGateway(),
-                $this->getContentMapper(),
-                $this->getStorageHandler(),
-                $this->contentLanguageHandler(),
-                $this->getFieldTypeRegistry()
-            );
-            $this->fieldHandler->typeHandler = $this->contentTypeHandler();
-        }
-        return $this->fieldHandler;
-    }
-
-    /**
-     * Returns a language mask generator
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
-     */
-    protected function getLanguageMaskGenerator()
-    {
-        if ( !isset( $this->languageMaskGenerator ) )
-        {
-            $this->languageMaskGenerator = new Content\Language\MaskGenerator(
-                $this->contentLanguageHandler()
-            );
-        }
-        return $this->languageMaskGenerator;
-    }
-
-    /**
-     * Returns the field value converter registry
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
-     */
-    public function getFieldValueConverterRegistry()
-    {
-        return $this->converterRegistry;
-    }
-
-    /**
-     * Returns the storage registry
-     *
-     * @return Content\StorageRegistry
-     */
-    public function getStorageRegistry()
-    {
-        return $this->storageRegistry;
-    }
-
-    /**
-     * Returns the field type registry
-     *
-     * @return \eZ\Publish\Core\Persistence\FieldTypeRegistry
-     */
-    public function getFieldTypeRegistry()
-    {
-        return $this->fieldTypeRegistry;
-    }
-
-    /**
-     * Returns a storage handler
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
-     */
-    protected function getStorageHandler()
-    {
-        if ( !isset( $this->storageHandler ) )
-        {
-            $this->storageHandler = new StorageHandler(
-                $this->storageRegistry,
-                $this->getContentGateway()->getContext()
-            );
-        }
-        return $this->storageHandler;
-    }
-
-    /**
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\Handler
-     */
-    public function searchHandler()
-    {
-        if ( !isset( $this->searchHandler ) )
-        {
-            $db = $this->dbHandler;
-            $this->searchHandler = new Content\Search\Handler(
-                new Content\Search\Gateway\ExceptionConversion(
-                    new Content\Search\Gateway\EzcDatabase(
-                        $db,
-                        new Content\Search\Gateway\CriteriaConverter(
-                            array(
-                                new CriterionHandler\ContentId( $db ),
-                                new CriterionHandler\LogicalNot( $db ),
-                                new CriterionHandler\LogicalAnd( $db ),
-                                new CriterionHandler\LogicalOr( $db ),
-                                new CriterionHandler\Subtree( $db ),
-                                new CriterionHandler\ContentTypeId( $db ),
-                                new CriterionHandler\ContentTypeIdentifier( $db ),
-                                new CriterionHandler\ContentTypeGroupId( $db ),
-                                new CriterionHandler\DateMetadata( $db ),
-                                new CriterionHandler\LocationId( $db ),
-                                new CriterionHandler\LocationPriority( $db ),
-                                new CriterionHandler\ParentLocationId( $db ),
-                                new CriterionHandler\RemoteId( $db ),
-                                new CriterionHandler\LocationRemoteId( $db ),
-                                new CriterionHandler\SectionId( $db ),
-                                new CriterionHandler\Status( $db ),
-                                new CriterionHandler\FullText(
-                                    $db,
-                                    $this->transformationProcessor
-                                ),
-                                new CriterionHandler\Field(
-                                    $db,
-                                    $this->converterRegistry
-                                ),
-                                new CriterionHandler\ObjectStateId( $db ),
-                                new CriterionHandler\LanguageCode(
-                                    $db,
-                                    $this->getLanguageMaskGenerator()
-                                ),
-                                new CriterionHandler\Visibility( $db ),
-                            )
-                        ),
-                        new Content\Search\Gateway\SortClauseConverter(
-                            array(
-                                new SortClauseHandler\LocationPathString( $db ),
-                                new SortClauseHandler\LocationDepth( $db ),
-                                new SortClauseHandler\LocationPriority( $db ),
-                                new SortClauseHandler\DateModified( $db ),
-                                new SortClauseHandler\DatePublished( $db ),
-                                new SortClauseHandler\SectionIdentifier( $db ),
-                                new SortClauseHandler\SectionName( $db ),
-                                new SortClauseHandler\ContentName( $db ),
-                                new SortClauseHandler\ContentId( $db ),
-                                new SortClauseHandler\Field( $db ),
-                            )
-                        ),
-                        new Content\Gateway\EzcDatabase\QueryBuilder( $this->dbHandler ),
-                        $this->contentLanguageHandler(),
-                        $this->getLanguageMaskGenerator()
-                    )
-                ),
-                $this->getContentMapper(),
-                $this->getFieldHandler()
-            );
-        }
-        return $this->searchHandler;
-    }
-
-    /**
-     * @todo remove circular dependency with FieldHandler
-     * @return \eZ\Publish\SPI\Persistence\Content\Type\Handler
-     */
     public function contentTypeHandler()
     {
-        $this->getFieldHandler();
-        if ( !isset( $this->contentTypeHandler ) )
-        {
-            $this->contentTypeHandler = new Content\Type\MemoryCachingHandler(
-                new TypeHandler(
-                    $this->getContentTypeGateway(),
-                    new TypeMapper( $this->converterRegistry ),
-                    $this->getTypeUpdateHandler()
-                )
-            );
-        }
         return $this->contentTypeHandler;
     }
 
-    /**
-     * Returns a Content Type update handler
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler
-     */
-    protected function getTypeUpdateHandler()
-    {
-        if ( !isset( $this->typeUpdateHandler ) )
-        {
-            if ( isset( $this->config['defer_type_update'] ) && $this->config['defer_type_update'] )
-            {
-                $this->typeUpdateHandler = new Type\Update\Handler\DeferredLegacy(
-                    $this->getContentGateway()
-                );
-            }
-            else
-            {
-                $this->typeUpdateHandler = new Type\Update\Handler\EzcDatabase(
-                    $this->getContentTypeGateway(),
-                    new Type\ContentUpdater(
-                        $this->searchHandler(),
-                        $this->getContentGateway(),
-                        $this->converterRegistry,
-                        $this->getStorageHandler()
-                    )
-                );
-            }
-        }
-        return $this->typeUpdateHandler;
-    }
-
-    /**
-     * Returns the content type gateway
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
-     */
-    protected function getContentTypeGateway()
-    {
-        if ( !isset( $this->contentTypeGateway ) )
-        {
-            $this->contentTypeGateway = new Type\Gateway\ExceptionConversion(
-                new Type\Gateway\EzcDatabase(
-                    $this->dbHandler,
-                    $this->getLanguageMaskGenerator()
-                )
-            );
-        }
-        return $this->contentTypeGateway;
-    }
-
-    /**
-     * @return \eZ\Publish\SPI\Persistence\Content\Language\Handler
-     */
     public function contentLanguageHandler()
     {
-        if ( !isset( $this->languageHandler ) )
-        {
-            $this->languageHandler = new Content\Language\CachingHandler(
-                new Content\Language\Handler(
-                    new Content\Language\Gateway\ExceptionConversion(
-                        new Content\Language\Gateway\EzcDatabase( $this->dbHandler )
-                    ),
-                    new LanguageMapper()
-                ),
-                $this->getLanguageCache()
-            );
-        }
         return $this->languageHandler;
     }
 
-    /**
-     * Returns a Language cache
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
-     */
-    protected function getLanguageCache()
-    {
-        if ( !isset( $this->languageCache ) )
-        {
-            $this->languageCache = new Content\Language\Cache();
-        }
-        return $this->languageCache;
-    }
-
-    /**
-     * @todo remove circular dependency with ContentHandler
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Location\Handler
-     */
     public function locationHandler()
     {
-        $this->contentHandler();
-        if ( !isset( $this->locationHandler ) )
-        {
-            $this->locationHandler = new LocationHandler(
-                $this->getLocationGateway(),
-                $this->getLocationMapper(),
-                $this->contentHandler(),
-                $this->getContentMapper()
-            );
-        }
         return $this->locationHandler;
     }
 
-    /**
-     * Returns a location gateway
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase
-     */
-    protected function getLocationGateway()
-    {
-        if ( !isset( $this->locationGateway ) )
-        {
-            $this->locationGateway = new Content\Location\Gateway\ExceptionConversion(
-                new Content\Location\Gateway\EzcDatabase( $this->dbHandler )
-            );
-        }
-        return $this->locationGateway;
-    }
-
-    /**
-     * Returns a location mapper
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
-     */
-    protected function getLocationMapper()
-    {
-        if ( !isset( $this->locationMapper ) )
-        {
-            $this->locationMapper = new LocationMapper();
-        }
-        return $this->locationMapper;
-    }
-
-    /**
-     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
-     */
     public function objectStateHandler()
     {
-        if ( !isset( $this->objectStateHandler ) )
-        {
-            $this->objectStateHandler = new ObjectStateHandler(
-                $this->getObjectStateGateway(),
-                $this->getObjectStateMapper()
-            );
-        }
         return $this->objectStateHandler;
     }
 
-    /**
-     * Returns an object state gateway
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase
-     */
-    protected function getObjectStateGateway()
+    public function sectionHandler()
     {
-        if ( !isset( $this->objectStateGateway ) )
-        {
-            $this->objectStateGateway = new Content\ObjectState\Gateway\ExceptionConversion(
-                new Content\ObjectState\Gateway\EzcDatabase(
-                    $this->dbHandler,
-                    $this->getLanguageMaskGenerator()
-                )
-            );
-        }
-        return $this->objectStateGateway;
+        return $this->sectionHandler;
     }
 
-    /**
-     * Returns an object state mapper
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper
-     */
-    protected function getObjectStateMapper()
+    public function trashHandler()
     {
-        if ( !isset( $this->objectStateMapper ) )
-        {
-            $this->objectStateMapper = new ObjectStateMapper(
-                $this->contentLanguageHandler()
-            );
-        }
-        return $this->objectStateMapper;
+        return $this->trashHandler;
     }
 
-    /**
-     * @return \eZ\Publish\SPI\Persistence\User\Handler
-     */
+    public function urlAliasHandler()
+    {
+        return $this->urlAliasHandler;
+    }
+
+    public function urlWildcardHandler()
+    {
+        return $this->urlWildcardHandler;
+    }
+
     public function userHandler()
     {
-        if ( !isset( $this->userHandler ) )
-        {
-            $this->userHandler = new User\Handler(
-                new User\Gateway\ExceptionConversion(
-                    new User\Gateway\EzcDatabase( $this->dbHandler )
-                ),
-                new User\Role\Gateway\EzcDatabase( $this->dbHandler ),
-                new UserMapper()
-            );
-        }
         return $this->userHandler;
     }
 
     /**
-     * @return \eZ\Publish\SPI\Persistence\Content\Section\Handler
+     * @return \eZ\Publish\SPI\Persistence\TransactionHandler
      */
-    public function sectionHandler()
+    public function transactionHandler()
     {
-        if ( !isset( $this->sectionHandler ) )
-        {
-            $this->sectionHandler = new Content\Section\Handler(
-                new Content\Section\Gateway\ExceptionConversion(
-                    new Content\Section\Gateway\EzcDatabase( $this->dbHandler )
-                )
-            );
-        }
-        return $this->sectionHandler;
+        return $this->transactionHandler;
     }
 
     /**
-     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
-     */
-    public function trashHandler()
-    {
-        if ( !isset( $this->trashHandler ) )
-        {
-            $this->trashHandler = new TrashHandler(
-                $this->locationHandler(),
-                $this->getLocationGateway(),
-                $this->getLocationMapper(),
-                $this->contentHandler()
-            );
-        }
-
-        return $this->trashHandler;
-    }
-
-    /**
-     * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
-     */
-    public function urlAliasHandler()
-    {
-        if ( !isset( $this->urlAliasHandler ) )
-        {
-            $this->urlAliasHandler = new UrlAliasHandler(
-                $this->getUrlAliasGateway(),
-                $this->getUrlAliasMapper(),
-                $this->getLocationGateway(),
-                $this->contentLanguageHandler(),
-                $this->getSlugConverter()
-            );
-        }
-
-        return $this->urlAliasHandler;
-    }
-
-    /**
-     * Returns a UrlAlias gateway
+     * Begin transaction.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase
-     */
-    protected function getUrlAliasGateway()
-    {
-        if ( !isset( $this->urlAliasGateway ) )
-        {
-            $this->urlAliasGateway = new UrlAliasExceptionConversionGateway(
-                new UrlAliasGateway(
-                    $this->dbHandler,
-                    $this->getLanguageMaskGenerator()
-                )
-            );
-        }
-        return $this->urlAliasGateway;
-    }
-
-    /**
-     * Returns a UrlAlias mapper
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper
-     */
-    protected function getUrlAliasMapper()
-    {
-        if ( !isset( $this->urlAliasMapper ) )
-        {
-            $this->urlAliasMapper = new UrlAliasMapper(
-                $this->getLanguageMaskGenerator()
-            );
-        }
-        return $this->urlAliasMapper;
-    }
-
-    /**
-     * Returns a slug converter
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter
-     */
-    protected function getSlugConverter()
-    {
-        if ( !isset( $this->slugConverter ) )
-        {
-            $this->slugConverter = new SlugConverter(
-                $this->transformationProcessor
-            );
-        }
-        return $this->slugConverter;
-    }
-
-    /**
-     * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
-     */
-    public function urlWildcardHandler()
-    {
-        if ( !isset( $this->urlWildcardHandler ) )
-        {
-            $this->urlWildcardHandler = new UrlWildcardHandler(
-                $this->getUrlWildcardGateway(),
-                $this->getUrlWildcardMapper()
-            );
-        }
-
-        return $this->urlWildcardHandler;
-    }
-
-    /**
-     * Returns a UrlWildcard gateway
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase
-     */
-    protected function getUrlWildcardGateway()
-    {
-        if ( !isset( $this->urlWildcardGateway ) )
-        {
-            $this->urlWildcardGateway = new UrlWildcardGateway( $this->dbHandler );
-        }
-        return $this->urlWildcardGateway;
-    }
-
-    /**
-     * Returns a UrlWildcard mapper
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper
-     */
-    protected function getUrlWildcardMapper()
-    {
-        if ( !isset( $this->urlWildcardMapper ) )
-        {
-            $this->urlWildcardMapper = new UrlWildcardMapper();
-        }
-        return $this->urlWildcardMapper;
-    }
-
-    /**
-     * Begin transaction
-     *
-     * Begins an transaction, make sure you'll call commit or rollback when done,
-     * otherwise work will be lost.
+     * @deprecated Since 5.3 {@use transactionHandler()->beginTransaction()}
      */
     public function beginTransaction()
     {
-        $this->dbHandler->beginTransaction();
+        $this->transactionHandler->beginTransaction();
     }
 
     /**
-     * Commit transaction
+     * Commit transaction.
      *
      * Commit transaction, or throw exceptions if no transactions has been started.
      *
      * @throws \RuntimeException If no transaction has been started
+     *
+     * @deprecated Since 5.3 {@use transactionHandler()->beginTransaction()}
      */
     public function commit()
     {
-        try
-        {
-            $this->dbHandler->commit();
-        }
-        catch ( ezcDbTransactionException $e )
-        {
-            throw new RuntimeException( $e->getMessage() );
-        }
+        $this->transactionHandler->commit();
     }
 
     /**
-     * Rollback transaction
+     * Rollback transaction.
      *
      * Rollback transaction, or throw exceptions if no transactions has been started.
      *
      * @throws \RuntimeException If no transaction has been started
+     *
+     * @deprecated Since 5.3 {@use transactionHandler()->beginTransaction()}
      */
     public function rollback()
     {
-        try
-        {
-            $this->dbHandler->rollback();
-
-            // Clear all caches after rollback
-            if ( isset( $this->contentTypeHandler ) )
-                $this->contentTypeHandler->clearCache();
-
-            if ( isset( $this->languageHandler ) )
-                $this->languageHandler->clearCache();
-        }
-        catch ( ezcDbTransactionException $e )
-        {
-            throw new RuntimeException( $e->getMessage() );
-        }
+        $this->transactionHandler->rollback();
     }
 }

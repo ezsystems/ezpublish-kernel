@@ -1,23 +1,25 @@
 <?php
+
 /**
- * File containing the SignalDispatcher class
+ * File containing the SignalDispatcher class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\SignalSlot;
 
 /**
- * Fetches (creates) Slots by their identifier
+ * Fetches (creates) Slots by their identifier.
  *
  * @internal
  */
 abstract class SlotFactory
 {
     /**
-     * Returns a Slot with the given $slotIdentifier
+     * Returns a Slot with the given $slotIdentifier.
      *
      * @param string $slotIdentifier
      *
@@ -25,5 +27,5 @@ abstract class SlotFactory
      *
      * @return \eZ\Publish\Core\SignalSlot\Slot
      */
-    abstract public function getSlot( $slotIdentifier );
+    abstract public function getSlot($slotIdentifier);
 }

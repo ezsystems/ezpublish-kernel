@@ -1,50 +1,53 @@
 <?php
+
 /**
- * File containing the Message class
+ * File containing the Message class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Common;
 
 /**
- * Simple response struct
+ * Simple response struct.
  */
 class Message
 {
     /**
-     * Response headers
+     * Response headers.
      *
      * @var array
      */
     public $headers;
 
     /**
-     * Response body
+     * Response body.
      *
      * @var string
      */
     public $body;
 
     /**
-     * HTTP status code
+     * HTTP status code.
+     *
      * @var int
      */
     public $statusCode;
 
     /**
-     * Construct from headers and body
+     * Construct from headers and body.
      *
      * @param array $headers
      * @param string $body
      * @param int $statusCode
      */
-    public function __construct( array $headers = array(), $body = '', $statusCode = 200 )
+    public function __construct(array $headers = array(), $body = '', $statusCode = 200)
     {
-        $this->headers    = $headers;
-        $this->body       = $body;
+        $this->headers = $headers;
+        $this->body = $body;
         $this->statusCode = $statusCode;
     }
 }

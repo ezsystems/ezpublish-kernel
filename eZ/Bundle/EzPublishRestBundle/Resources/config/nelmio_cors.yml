@@ -1,0 +1,8 @@
+paths:
+    '^/api/ezp/v2/':
+        max_age: 60
+        allow_credentials: true
+        allow_origin: []
+        allow_headers: [ "authorization", "accept", "content-type", "X-CSRF-Token", "destination", "x-siteaccess" ]
+        expose_headers: true
+

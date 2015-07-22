@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ObjectState controller class
+ * File containing the ObjectState controller class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,104 +15,99 @@ use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Common\Values\RestObjectState;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
-
 use eZ\Publish\API\Repository\ObjectStateService;
 use eZ\Publish\API\Repository\ContentService;
-
 use eZ\Publish\Core\REST\Common\Values\ContentObjectStates;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * ObjectState controller
+ * ObjectState controller.
  */
 class ObjectState extends RestController
 {
     /**
-     * ObjectState service
+     * ObjectState service.
      *
      * @var \eZ\Publish\API\Repository\ObjectStateService
      */
     protected $objectStateService;
 
     /**
-     * Content service
+     * Content service.
      *
      * @var \eZ\Publish\API\Repository\ContentService
      */
     protected $contentService;
 
     /**
-     * Construct controller
+     * Construct controller.
      *
      * @param \eZ\Publish\API\Repository\ObjectStateService $objectStateService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      */
-    public function __construct( ObjectStateService $objectStateService, ContentService $contentService )
+    public function __construct(ObjectStateService $objectStateService, ContentService $contentService)
     {
         $this->objectStateService = $objectStateService;
         $this->contentService = $contentService;
     }
 
     /**
-     * Creates a new object state group
+     * Creates a new object state group.
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedObjectStateGroup
      */
-    public function createObjectStateGroup()
+    public function createObjectStateGroup(Request $request)
     {
-        try
-        {
+        try {
             $createdStateGroup = $this->objectStateService->createObjectStateGroup(
                 $this->inputDispatcher->parse(
                     new Message(
-                        array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                        $this->request->getContent()
+                        array('Content-Type' => $request->headers->get('Content-Type')),
+                        $request->getContent()
                     )
                 )
             );
-        }
-        catch ( InvalidArgumentException $e )
-        {
-            throw new ForbiddenException( $e->getMessage() );
+        } catch (InvalidArgumentException $e) {
+            throw new ForbiddenException($e->getMessage());
         }
 
         return new Values\CreatedObjectStateGroup(
             array(
-                'objectStateGroup' => $createdStateGroup
+                'objectStateGroup' => $createdStateGroup,
             )
         );
     }
 
     /**
-     * Creates a new object state
+     * Creates a new object state.
      *
      * @param $objectStateGroupId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedObjectState
      */
-    public function createObjectState( $objectStateGroupId )
+    public function createObjectState($objectStateGroupId, Request $request)
     {
-        $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $objectStateGroupId );
+        $objectStateGroup = $this->objectStateService->loadObjectStateGroup($objectStateGroupId);
 
-        try
-        {
+        try {
             $createdObjectState = $this->objectStateService->createObjectState(
                 $objectStateGroup,
                 $this->inputDispatcher->parse(
                     new Message(
-                        array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                        $this->request->getContent()
+                        array('Content-Type' => $request->headers->get('Content-Type')),
+                        $request->getContent()
                     )
                 )
             );
-        }
-        catch ( InvalidArgumentException $e )
-        {
-            throw new ForbiddenException( $e->getMessage() );
+        } catch (InvalidArgumentException $e) {
+            throw new ForbiddenException($e->getMessage());
         }
 
         return new Values\CreatedObjectState(
@@ -118,41 +115,41 @@ class ObjectState extends RestController
                 'objectState' => new RestObjectState(
                     $createdObjectState,
                     $objectStateGroup->id
-                )
+                ),
             )
         );
     }
 
     /**
-     * Loads an object state group
+     * Loads an object state group.
      *
      * @param $objectStateGroupId
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function loadObjectStateGroup( $objectStateGroupId )
+    public function loadObjectStateGroup($objectStateGroupId)
     {
-        return $this->objectStateService->loadObjectStateGroup( $objectStateGroupId );
+        return $this->objectStateService->loadObjectStateGroup($objectStateGroupId);
     }
 
     /**
-     * Loads an object state
+     * Loads an object state.
      *
      * @param $objectStateGroupId
      * @param $objectStateId
      *
      * @return \eZ\Publish\Core\REST\Common\Values\RestObjectState
      */
-    public function loadObjectState( $objectStateGroupId, $objectStateId )
+    public function loadObjectState($objectStateGroupId, $objectStateId)
     {
         return new RestObjectState(
-            $this->objectStateService->loadObjectState( $objectStateId ),
+            $this->objectStateService->loadObjectState($objectStateId),
             $objectStateGroupId
         );
     }
 
     /**
-     * Returns a list of all object state groups
+     * Returns a list of all object state groups.
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ObjectStateGroupList
      */
@@ -164,194 +161,183 @@ class ObjectState extends RestController
     }
 
     /**
-     * Returns a list of all object states of the given group
+     * Returns a list of all object states of the given group.
      *
      * @param $objectStateGroupId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ObjectStateList
      */
-    public function loadObjectStates( $objectStateGroupId )
+    public function loadObjectStates($objectStateGroupId)
     {
-        $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $objectStateGroupId );
+        $objectStateGroup = $this->objectStateService->loadObjectStateGroup($objectStateGroupId);
+
         return new Values\ObjectStateList(
-            $this->objectStateService->loadObjectStates( $objectStateGroup ),
+            $this->objectStateService->loadObjectStates($objectStateGroup),
             $objectStateGroup->id
         );
     }
 
     /**
-     * The given object state group including the object states is deleted
+     * The given object state group including the object states is deleted.
      *
      * @param $objectStateGroupId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function deleteObjectStateGroup( $objectStateGroupId )
+    public function deleteObjectStateGroup($objectStateGroupId)
     {
         $this->objectStateService->deleteObjectStateGroup(
-            $this->objectStateService->loadObjectStateGroup( $objectStateGroupId )
+            $this->objectStateService->loadObjectStateGroup($objectStateGroupId)
         );
 
         return new Values\NoContent();
     }
 
     /**
-     * The given object state is deleted
+     * The given object state is deleted.
      *
      * @param $objectStateId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function deleteObjectState( $objectStateId )
+    public function deleteObjectState($objectStateId)
     {
         $this->objectStateService->deleteObjectState(
-            $this->objectStateService->loadObjectState( $objectStateId )
+            $this->objectStateService->loadObjectState($objectStateId)
         );
 
         return new Values\NoContent();
     }
 
     /**
-     * Updates an object state group
+     * Updates an object state group.
      *
      * @param $objectStateGroupId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function updateObjectStateGroup( $objectStateGroupId )
+    public function updateObjectStateGroup($objectStateGroupId, Request $request)
     {
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                $this->request->getContent()
+                array('Content-Type' => $request->headers->get('Content-Type')),
+                $request->getContent()
             )
         );
 
-        $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $objectStateGroupId );
+        $objectStateGroup = $this->objectStateService->loadObjectStateGroup($objectStateGroupId);
 
-        try
-        {
-            $updatedStateGroup = $this->objectStateService->updateObjectStateGroup( $objectStateGroup, $updateStruct );
+        try {
+            $updatedStateGroup = $this->objectStateService->updateObjectStateGroup($objectStateGroup, $updateStruct);
+
             return $updatedStateGroup;
-        }
-        catch ( InvalidArgumentException $e )
-        {
-            throw new ForbiddenException( $e->getMessage() );
+        } catch (InvalidArgumentException $e) {
+            throw new ForbiddenException($e->getMessage());
         }
     }
 
     /**
-     * Updates an object state
+     * Updates an object state.
      *
      * @param $objectStateGroupId
      * @param $objectStateId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     *
      * @return \eZ\Publish\Core\REST\Common\Values\RestObjectState
      */
-    public function updateObjectState( $objectStateGroupId, $objectStateId )
+    public function updateObjectState($objectStateGroupId, $objectStateId, Request $request)
     {
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                $this->request->getContent()
+                array('Content-Type' => $request->headers->get('Content-Type')),
+                $request->getContent()
             )
         );
 
-        $objectState = $this->objectStateService->loadObjectState( $objectStateId );
+        $objectState = $this->objectStateService->loadObjectState($objectStateId);
 
-        try
-        {
-            $updatedObjectState = $this->objectStateService->updateObjectState( $objectState, $updateStruct );
-            return new RestObjectState( $updatedObjectState, $objectStateGroupId );
-        }
-        catch ( InvalidArgumentException $e )
-        {
-            throw new ForbiddenException( $e->getMessage() );
+        try {
+            $updatedObjectState = $this->objectStateService->updateObjectState($objectState, $updateStruct);
+
+            return new RestObjectState($updatedObjectState, $objectStateGroupId);
+        } catch (InvalidArgumentException $e) {
+            throw new ForbiddenException($e->getMessage());
         }
     }
 
     /**
-     * Returns the object states of content
+     * Returns the object states of content.
      *
      * @param $contentId
      *
      * @return \eZ\Publish\Core\REST\Common\Values\ContentObjectStates
      */
-    public function getObjectStatesForContent( $contentId )
+    public function getObjectStatesForContent($contentId)
     {
         $groups = $this->objectStateService->loadObjectStateGroups();
-        $contentInfo = $this->contentService->loadContentInfo( $contentId );
+        $contentInfo = $this->contentService->loadContentInfo($contentId);
 
         $contentObjectStates = array();
 
-        foreach ( $groups as $group )
-        {
-            try
-            {
-                $state = $this->objectStateService->getContentState( $contentInfo, $group );
-                $contentObjectStates[] = new RestObjectState( $state, $group->id );
-            }
-            catch ( NotFoundException $e )
-            {
+        foreach ($groups as $group) {
+            try {
+                $state = $this->objectStateService->getContentState($contentInfo, $group);
+                $contentObjectStates[] = new RestObjectState($state, $group->id);
+            } catch (NotFoundException $e) {
                 // Do nothing
             }
         }
 
-        return new ContentObjectStates( $contentObjectStates );
+        return new ContentObjectStates($contentObjectStates);
     }
 
     /**
      * Updates object states of content
-     * An object state in the input overrides the state of the object state group
+     * An object state in the input overrides the state of the object state group.
      *
      * @param $contentId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     *
      * @return \eZ\Publish\Core\REST\Common\Values\ContentObjectStates
      */
-    public function setObjectStatesForContent( $contentId)
+    public function setObjectStatesForContent($contentId, Request $request)
     {
         $newObjectStates = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                $this->request->getContent()
+                array('Content-Type' => $request->headers->get('Content-Type')),
+                $request->getContent()
             )
         );
 
         $countByGroups = array();
-        foreach ( $newObjectStates as $newObjectState )
-        {
+        foreach ($newObjectStates as $newObjectState) {
             $groupId = (int)$newObjectState->groupId;
-            if ( array_key_exists( $groupId, $countByGroups ) )
-            {
-                $countByGroups[$groupId]++;
-            }
-            else
-            {
+            if (array_key_exists($groupId, $countByGroups)) {
+                ++$countByGroups[$groupId];
+            } else {
                 $countByGroups[$groupId] = 1;
             }
         }
 
-        foreach ( $countByGroups as $groupId => $count )
-        {
-            if ( $count > 1 )
-            {
-                throw new ForbiddenException( "Multiple object states provided for group with ID $groupId" );
+        foreach ($countByGroups as $groupId => $count) {
+            if ($count > 1) {
+                throw new ForbiddenException("Multiple object states provided for group with ID $groupId");
             }
         }
 
-        $contentInfo = $this->contentService->loadContentInfo( $contentId );
+        $contentInfo = $this->contentService->loadContentInfo($contentId);
 
         $contentObjectStates = array();
-        foreach ( $newObjectStates as $newObjectState )
-        {
-            $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $newObjectState->groupId );
-            $this->objectStateService->setContentState( $contentInfo, $objectStateGroup, $newObjectState->objectState );
+        foreach ($newObjectStates as $newObjectState) {
+            $objectStateGroup = $this->objectStateService->loadObjectStateGroup($newObjectState->groupId);
+            $this->objectStateService->setContentState($contentInfo, $objectStateGroup, $newObjectState->objectState);
             $contentObjectStates[(int)$objectStateGroup->id] = $newObjectState;
         }
 
-        return new ContentObjectStates( $contentObjectStates );
+        return new ContentObjectStates($contentObjectStates);
     }
 }

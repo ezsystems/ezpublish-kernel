@@ -1,42 +1,42 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values;
-use eZ\Publish\Core\REST\Common;
 
 class TemporaryRedirectTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the TemporaryRedirect visitor
+     * Test the TemporaryRedirect visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
-        $redirect = new Values\TemporaryRedirect( '/some/redirect/uri' );
+        $redirect = new Values\TemporaryRedirect('/some/redirect/uri');
 
-        $this->getVisitorMock()->expects( $this->once() )
-            ->method( 'setStatus' )
-            ->with( $this->equalTo( 307 ) );
-        $this->getVisitorMock()->expects( $this->once() )
-            ->method( 'setHeader' )
-            ->with( $this->equalTo( 'Location' ), $this->equalTo( '/some/redirect/uri' ) );
+        $this->getVisitorMock()->expects($this->once())
+            ->method('setStatus')
+            ->with($this->equalTo(307));
+        $this->getVisitorMock()->expects($this->once())
+            ->method('setHeader')
+            ->with($this->equalTo('Location'), $this->equalTo('/some/redirect/uri'));
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -44,16 +44,16 @@ class TemporaryRedirectTest extends ValueObjectVisitorBaseTest
             $redirect
         );
 
-        $this->assertTrue( $generator->isEmpty() );
+        $this->assertTrue($generator->isEmpty());
     }
 
     /**
-     * Get the TemporaryRedirect visitor
+     * Get the TemporaryRedirect visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\TemporaryRedirect
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\TemporaryRedirect;
+        return new ValueObjectVisitor\TemporaryRedirect();
     }
 }

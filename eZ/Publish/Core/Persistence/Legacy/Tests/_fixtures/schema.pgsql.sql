@@ -1,194 +1,68 @@
 DROP SEQUENCE IF EXISTS ezcobj_state_s;
-CREATE SEQUENCE ezcobj_state_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezcobj_state_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezcobj_state_group_s;
-CREATE SEQUENCE ezcobj_state_group_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezcobj_state_group_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezcontentclass_s;
-CREATE SEQUENCE ezcontentclass_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezcontentclass_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezcontentclass_attribute_s;
-CREATE SEQUENCE ezcontentclass_attribute_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezcontentclass_attribute_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezcontentclassgroup_s;
-CREATE SEQUENCE ezcontentclassgroup_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezcontentclassgroup_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezcontentobject_s;
-CREATE SEQUENCE ezcontentobject_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezcontentobject_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezcontentobject_attribute_s;
-CREATE SEQUENCE ezcontentobject_attribute_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezcontentobject_attribute_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezcontentobject_link_s;
-CREATE SEQUENCE ezcontentobject_link_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezcontentobject_link_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezcontentobject_tree_s;
-CREATE SEQUENCE ezcontentobject_tree_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezcontentobject_tree_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezcontentobject_version_s;
-CREATE SEQUENCE ezcontentobject_version_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezcontentobject_version_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS eznode_assignment_s;
-CREATE SEQUENCE eznode_assignment_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE eznode_assignment_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezpolicy_s;
-CREATE SEQUENCE ezpolicy_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezpolicy_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezpolicy_limitation_s;
-CREATE SEQUENCE ezpolicy_limitation_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezpolicy_limitation_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezpolicy_limitation_value_s;
-CREATE SEQUENCE ezpolicy_limitation_value_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezpolicy_limitation_value_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezrole_s;
-CREATE SEQUENCE ezrole_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezrole_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezsearch_object_word_link_s;
-CREATE SEQUENCE ezsearch_object_word_link_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
-
-DROP SEQUENCE IF EXISTS ezsearch_return_count_s;
-CREATE SEQUENCE ezsearch_return_count_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
-
-DROP SEQUENCE IF EXISTS ezsearch_search_phrase_s;
-CREATE SEQUENCE ezsearch_search_phrase_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezsearch_object_word_link_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezsearch_word_s;
-CREATE SEQUENCE ezsearch_word_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezsearch_word_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezsection_s;
-CREATE SEQUENCE ezsection_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezsection_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezurl_s;
-CREATE SEQUENCE ezurl_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezurl_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezurlalias_s;
-CREATE SEQUENCE ezurlalias_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezurlalias_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezurlalias_ml_incr_s;
-CREATE SEQUENCE ezurlalias_ml_incr_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezurlalias_ml_incr_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezurlwildcard_s;
-CREATE SEQUENCE ezurlwildcard_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezurlwildcard_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezuser_accountkey_s;
 CREATE SEQUENCE ezuser_accountkey_s
@@ -199,36 +73,19 @@ CREATE SEQUENCE ezuser_accountkey_s
     CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezuser_role_s;
-CREATE SEQUENCE ezuser_role_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezuser_role_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
+
+DROP SEQUENCE IF EXISTS ezuser_accountkey_s;
+CREATE SEQUENCE ezuser_accountkey_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezkeyword_s;
-CREATE SEQUENCE ezkeyword_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezkeyword_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezkeyword_attribute_link_s;
-CREATE SEQUENCE ezkeyword_attribute_link_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezkeyword_attribute_link_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP SEQUENCE IF EXISTS ezimagefile_s;
-CREATE SEQUENCE ezimagefile_s
-    START 1
-    INCREMENT 1
-    MAXVALUE 9223372036854775807
-    MINVALUE 1
-    CACHE 1;
+CREATE SEQUENCE ezimagefile_s START 1 INCREMENT 1 MAXVALUE 9223372036854775807 MINVALUE 1 CACHE 1;
 
 DROP TABLE IF EXISTS ezbinaryfile;
 CREATE TABLE ezbinaryfile (
@@ -248,14 +105,14 @@ CREATE TABLE ezmedia (
     mime_type character varying(255) DEFAULT ''::character varying NOT NULL,
     original_filename character varying(255) DEFAULT ''::character varying NOT NULL,
     "version" integer DEFAULT 0 NOT NULL,
-    "controls" character varying(50) DEFAULT ''::character varying NOT NULL,
-    "has_controller" integer DEFAULT 0 NOT NULL,
-    "height" integer DEFAULT 0 NOT NULL,
-    "is_autoplay" integer DEFAULT 0 NOT NULL,
-    "is_loop" integer DEFAULT 0 NOT NULL,
-    "pluginspage" character varying(255) DEFAULT ''::character varying NOT NULL,
-    "quality" character varying(50) DEFAULT ''::character varying NOT NULL,
-    "width" integer DEFAULT NULL
+    controls character varying(50) DEFAULT ''::character varying NOT NULL,
+    has_controller integer DEFAULT 0 NOT NULL,
+    height integer DEFAULT 0 NOT NULL,
+    is_autoplay integer DEFAULT 0 NOT NULL,
+    is_loop integer DEFAULT 0 NOT NULL,
+    pluginspage character varying(255) DEFAULT ''::character varying NOT NULL,
+    quality character varying(50) DEFAULT ''::character varying NOT NULL,
+    width integer DEFAULT NULL
 );
 
 DROP TABLE IF EXISTS ezimagefile;
@@ -276,39 +133,36 @@ CREATE TABLE ezgmaplocation (
 
 DROP TABLE IF EXISTS ezcobj_state;
 CREATE TABLE ezcobj_state (
-    default_language_id integer NOT NULL DEFAULT 0,
+    default_language_id bigint NOT NULL DEFAULT 0,
     group_id integer NOT NULL DEFAULT 0,
     id integer DEFAULT nextval('ezcobj_state_s'::text) NOT NULL,
     identifier character varying(45) NOT NULL DEFAULT ''::character varying,
-    language_mask integer NOT NULL DEFAULT 0,
+    language_mask bigint NOT NULL DEFAULT 0,
     priority integer NOT NULL DEFAULT 0
 );
 
-
 DROP TABLE IF EXISTS ezcobj_state_group;
 CREATE TABLE ezcobj_state_group (
-    default_language_id integer NOT NULL DEFAULT 0,
+    default_language_id bigint NOT NULL DEFAULT 0,
     id integer DEFAULT nextval('ezcobj_state_group_s'::text) NOT NULL,
     identifier character varying(45) NOT NULL DEFAULT ''::character varying,
-    language_mask integer NOT NULL DEFAULT 0
+    language_mask bigint NOT NULL DEFAULT 0
 );
-
 
 DROP TABLE IF EXISTS ezcobj_state_group_language;
 CREATE TABLE ezcobj_state_group_language (
     contentobject_state_group_id integer NOT NULL DEFAULT 0,
     description text NOT NULL,
-    language_id integer NOT NULL DEFAULT 0,
-    real_language_id integer NOT NULL DEFAULT 0,
+    language_id bigint NOT NULL DEFAULT 0,
+    real_language_id bigint NOT NULL DEFAULT 0,
     name character varying(45) NOT NULL DEFAULT ''::character varying
 );
-
 
 DROP TABLE IF EXISTS ezcobj_state_language;
 CREATE TABLE ezcobj_state_language (
     contentobject_state_id integer NOT NULL DEFAULT 0,
     description text NOT NULL,
-    language_id integer NOT NULL DEFAULT 0,
+    language_id bigint NOT NULL DEFAULT 0,
     name character varying(45) NOT NULL DEFAULT ''::character varying
 );
 
@@ -321,7 +175,7 @@ CREATE TABLE ezcobj_state_link (
 DROP TABLE IF EXISTS ezcontent_language;
 CREATE TABLE ezcontent_language (
     disabled integer DEFAULT 0 NOT NULL,
-    id integer DEFAULT 0 NOT NULL,
+    id bigint DEFAULT 0 NOT NULL,
     locale character varying(20) DEFAULT ''::character varying NOT NULL,
     name character varying(255) DEFAULT ''::character varying NOT NULL
 );
@@ -334,9 +188,9 @@ CREATE TABLE ezcontentclass (
     creator_id integer DEFAULT 0 NOT NULL,
     id integer DEFAULT nextval('ezcontentclass_s'::text) NOT NULL,
     identifier character varying(50) DEFAULT ''::character varying NOT NULL,
-    initial_language_id integer DEFAULT 0 NOT NULL,
+    initial_language_id bigint DEFAULT 0 NOT NULL,
     is_container integer DEFAULT 0 NOT NULL,
-    language_mask integer DEFAULT 0 NOT NULL,
+    language_mask bigint DEFAULT 0 NOT NULL,
     modified integer DEFAULT 0 NOT NULL,
     modifier_id integer DEFAULT 0 NOT NULL,
     remote_id character varying(100) DEFAULT ''::character varying NOT NULL,
@@ -391,7 +245,7 @@ DROP TABLE IF EXISTS ezcontentclass_name;
 CREATE TABLE ezcontentclass_name (
     contentclass_id integer DEFAULT 0 NOT NULL,
     contentclass_version integer DEFAULT 0 NOT NULL,
-    language_id integer DEFAULT 0 NOT NULL,
+    language_id bigint DEFAULT 0 NOT NULL,
     language_locale character varying(20) DEFAULT ''::character varying NOT NULL,
     name character varying(255) DEFAULT ''::character varying NOT NULL
 );
@@ -411,8 +265,8 @@ CREATE TABLE ezcontentobject (
     contentclass_id integer DEFAULT 0 NOT NULL,
     current_version integer,
     id integer DEFAULT nextval('ezcontentobject_s'::text) NOT NULL,
-    initial_language_id integer DEFAULT 0 NOT NULL,
-    language_mask integer DEFAULT 0 NOT NULL,
+    initial_language_id bigint DEFAULT 0 NOT NULL,
+    language_mask bigint DEFAULT 0 NOT NULL,
     modified integer DEFAULT 0 NOT NULL,
     name character varying(255),
     owner_id integer DEFAULT 0 NOT NULL,
@@ -433,7 +287,7 @@ CREATE TABLE ezcontentobject_attribute (
     data_type_string character varying(50) DEFAULT ''::character varying,
     id integer DEFAULT nextval('ezcontentobject_attribute_s'::text) NOT NULL,
     language_code character varying(20) DEFAULT ''::character varying NOT NULL,
-    language_id integer DEFAULT 0 NOT NULL,
+    language_id bigint DEFAULT 0 NOT NULL,
     sort_key_int integer DEFAULT 0 NOT NULL,
     sort_key_string character varying(255) DEFAULT ''::character varying NOT NULL,
     "version" integer DEFAULT 0 NOT NULL
@@ -454,7 +308,7 @@ CREATE TABLE ezcontentobject_name (
     content_translation character varying(20) DEFAULT ''::character varying NOT NULL,
     content_version integer DEFAULT 0 NOT NULL,
     contentobject_id integer DEFAULT 0 NOT NULL,
-    language_id integer DEFAULT 0 NOT NULL,
+    language_id bigint DEFAULT 0 NOT NULL,
     name character varying(255),
     real_translation character varying(20)
 );
@@ -504,8 +358,8 @@ CREATE TABLE ezcontentobject_version (
     created integer DEFAULT 0 NOT NULL,
     creator_id integer DEFAULT 0 NOT NULL,
     id integer DEFAULT nextval('ezcontentobject_version_s'::text) NOT NULL,
-    initial_language_id integer DEFAULT 0 NOT NULL,
-    language_mask integer DEFAULT 0 NOT NULL,
+    initial_language_id bigint DEFAULT 0 NOT NULL,
+    language_mask bigint DEFAULT 0 NOT NULL,
     modified integer DEFAULT 0 NOT NULL,
     status integer DEFAULT 0 NOT NULL,
     user_id integer DEFAULT 0 NOT NULL,
@@ -525,7 +379,9 @@ CREATE TABLE eznode_assignment (
     parent_remote_id character varying(100) DEFAULT ''::character varying NOT NULL,
     remote_id character varying(100) DEFAULT '0'::character varying NOT NULL,
     sort_field integer DEFAULT 1,
-    sort_order integer DEFAULT 1
+    sort_order integer DEFAULT 1,
+    priority integer DEFAULT 0 NOT NULL,
+    is_hidden integer DEFAULT 0 NOT NULL
 );
 
 DROP TABLE IF EXISTS ezpolicy;
@@ -575,22 +431,6 @@ CREATE TABLE ezsearch_object_word_link (
     published integer DEFAULT 0 NOT NULL,
     section_id integer DEFAULT 0 NOT NULL,
     word_id integer DEFAULT 0 NOT NULL
-);
-
-DROP TABLE IF EXISTS ezsearch_return_count;
-CREATE TABLE ezsearch_return_count (
-    count integer DEFAULT 0 NOT NULL,
-    id integer DEFAULT nextval('ezsearch_return_count_s'::text) NOT NULL,
-    phrase_id integer DEFAULT 0 NOT NULL,
-    "time" integer DEFAULT 0 NOT NULL
-);
-
-DROP TABLE IF EXISTS ezsearch_search_phrase;
-CREATE TABLE ezsearch_search_phrase (
-    id integer DEFAULT nextval('ezsearch_search_phrase_s'::text) NOT NULL,
-    phrase character varying(250),
-    phrase_count integer DEFAULT 0,
-    result_count integer DEFAULT 0
 );
 
 DROP TABLE IF EXISTS ezsearch_word;
@@ -647,7 +487,7 @@ CREATE TABLE ezurlalias_ml (
     id integer DEFAULT 0 NOT NULL,
     is_alias integer DEFAULT 0 NOT NULL,
     is_original integer DEFAULT 0 NOT NULL,
-    lang_mask integer DEFAULT 0 NOT NULL,
+    lang_mask bigint DEFAULT 0 NOT NULL,
     link integer DEFAULT 0 NOT NULL,
     parent integer DEFAULT 0 NOT NULL,
     text text NOT NULL,
@@ -697,6 +537,14 @@ DROP TABLE IF EXISTS ezuser_setting;
 CREATE TABLE ezuser_setting (
     is_enabled integer DEFAULT 0 NOT NULL,
     max_login integer,
+    user_id integer DEFAULT 0 NOT NULL
+);
+
+DROP TABLE IF EXISTS ezuser_accountkey;
+CREATE TABLE ezuser_accountkey (
+    hash_key character varying(32) DEFAULT '' NOT NULL,
+    id integer DEFAULT nextval('ezuser_accountkey_s'::text) NOT NULL,
+    time integer DEFAULT 0 NOT NULL,
     user_id integer DEFAULT 0 NOT NULL
 );
 
@@ -764,6 +612,8 @@ CREATE INDEX ezcontentobject_status ON ezcontentobject USING btree (status);
 CREATE INDEX ezcontentobject_attribute_co_id_ver_lang_code ON ezcontentobject_attribute USING btree (contentobject_id, "version", language_code);
 
 CREATE INDEX ezcontentobject_attribute_language_code ON ezcontentobject_attribute USING btree (language_code);
+
+CREATE INDEX ezcontentobject_classattr_id ON ezcontentobject_attribute USING btree (contentclassattribute_id); 
 
 CREATE INDEX sort_key_int ON ezcontentobject_attribute USING btree (sort_key_int);
 
@@ -841,12 +691,6 @@ CREATE INDEX ezsearch_object_word_link_object ON ezsearch_object_word_link USING
 
 CREATE INDEX ezsearch_object_word_link_word ON ezsearch_object_word_link USING btree (word_id);
 
-CREATE INDEX ezsearch_return_cnt_ph_id_cnt ON ezsearch_return_count USING btree (phrase_id, count);
-
-CREATE INDEX ezsearch_search_phrase_count ON ezsearch_search_phrase USING btree (phrase_count);
-
-CREATE UNIQUE INDEX ezsearch_search_phrase_phrase ON ezsearch_search_phrase USING btree (phrase);
-
 CREATE INDEX ezsearch_word_obj_count ON ezsearch_word USING btree (object_count);
 
 CREATE INDEX ezsearch_word_word_i ON ezsearch_word USING btree (word);
@@ -896,10 +740,12 @@ CREATE INDEX ezuser_role_role_id ON ezuser_role USING btree (role_id);
 CREATE INDEX ezuservisit_co_visit_count ON ezuservisit USING btree (current_visit_timestamp, login_count);
 
 CREATE INDEX ezkeyword_keyword ON ezkeyword USING btree (keyword);
-CREATE INDEX ezkeyword_id ON ezkeyword USING btree (keyword,id);
 
 CREATE INDEX ezkeyword_attr_link_kid_oaid ON ezkeyword_attribute_link USING btree (keyword_id,objectattribute_id);
+
 CREATE INDEX ezkeyword_attr_link_oaid ON ezkeyword_attribute_link USING btree (objectattribute_id);
+
+CREATE INDEX ezuser_accountkey_hash_key ON ezuser_accountkey USING btree (hash_key);
 
 ALTER TABLE ONLY ezcobj_state
     ADD CONSTRAINT ezcobj_state_pkey PRIMARY KEY (id);
@@ -984,12 +830,6 @@ ALTER TABLE ONLY ezrole
 
 ALTER TABLE ONLY ezsearch_object_word_link
     ADD CONSTRAINT ezsearch_object_word_link_pkey PRIMARY KEY (id);
-
-ALTER TABLE ONLY ezsearch_return_count
-    ADD CONSTRAINT ezsearch_return_count_pkey PRIMARY KEY (id);
-
-ALTER TABLE ONLY ezsearch_search_phrase
-    ADD CONSTRAINT ezsearch_search_phrase_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY ezsearch_word
     ADD CONSTRAINT ezsearch_word_pkey PRIMARY KEY (id);

@@ -1,39 +1,39 @@
 <?php
+
 /**
- * File containing a PolicyUpdateStructTest class
+ * File containing a PolicyUpdateStructTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Client\Values\User;
-use eZ\Publish\Core\REST\Common;
 
 class PolicyUpdateStructTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Tests the PolicyUpdateStruct visitor
+     * Tests the PolicyUpdateStruct visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $contentTypeLimitation = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
-        $contentTypeLimitation->limitationValues = array( 1, 2, 3 );
+        $contentTypeLimitation->limitationValues = array(1, 2, 3);
 
         $policyUpdateStruct = new User\PolicyUpdateStruct();
-        $policyUpdateStruct->addLimitation( $contentTypeLimitation );
+        $policyUpdateStruct->addLimitation($contentTypeLimitation);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -41,28 +41,28 @@ class PolicyUpdateStructTest extends ValueObjectVisitorBaseTest
             $policyUpdateStruct
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Tests that the result contains PolicyUpdate element
+     * Tests that the result contains PolicyUpdate element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsPolicyUpdateElement( $result )
+    public function testResultContainsPolicyUpdateElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'PolicyUpdate',
+                'tag' => 'PolicyUpdate',
                 'children' => array(
-                    'count' => 1
-                )
+                    'count' => 1,
+                ),
             ),
             $result,
             'Invalid <PolicyUpdate> element.',
@@ -71,20 +71,20 @@ class PolicyUpdateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains PolicyUpdate attributes
+     * Tests that the result contains PolicyUpdate attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsPolicyUpdateAttributes( $result )
+    public function testResultContainsPolicyUpdateAttributes($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'PolicyUpdate',
+                'tag' => 'PolicyUpdate',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.PolicyUpdate+xml',
-                )
+                ),
             ),
             $result,
             'Invalid <PolicyUpdate> attributes.',
@@ -93,17 +93,17 @@ class PolicyUpdateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains limitations element
+     * Tests that the result contains limitations element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsLimitationsElement( $result )
+    public function testResultContainsLimitationsElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag' => 'limitations'
+                'tag' => 'limitations',
             ),
             $result,
             'Invalid or non-existing <PolicyUpdate> limitations element.',
@@ -112,20 +112,20 @@ class PolicyUpdateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains limitations attributes
+     * Tests that the result contains limitations attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsLimitationsAttributes( $result )
+    public function testResultContainsLimitationsAttributes($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'limitations',
+                'tag' => 'limitations',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.limitations+xml',
-                )
+                ),
             ),
             $result,
             'Invalid <PolicyUpdate> limitations attributes.',
@@ -134,12 +134,12 @@ class PolicyUpdateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Gets the PolicyUpdateStruct visitor
+     * Gets the PolicyUpdateStruct visitor.
      *
      * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\PolicyUpdateStruct
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\PolicyUpdateStruct;
+        return new ValueObjectVisitor\PolicyUpdateStruct();
     }
 }

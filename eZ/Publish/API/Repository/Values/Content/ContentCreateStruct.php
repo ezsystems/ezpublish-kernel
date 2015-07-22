@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\Content\ContentCreateStruct class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,13 +14,14 @@ namespace eZ\Publish\API\Repository\Values\Content;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * This class is used for creating a new content object
+ * This class is used for creating a new content object.
+ *
  * @property-write \eZ\Publish\API\Repository\Values\Content\Field[] $fields
  */
 abstract class ContentCreateStruct extends ValueObject
 {
     /**
-     * The content type for which the new content is created
+     * The content type for which the new content is created.
      *
      * @required
      *
@@ -42,14 +45,14 @@ abstract class ContentCreateStruct extends ValueObject
     public $ownerId;
 
     /**
-     * Indicates if the content object is shown in the mainlanguage if its not present in an other requested language
+     * Indicates if the content object is shown in the mainlanguage if its not present in an other requested language.
      *
-     * @var boolean
+     * @var bool
      */
     public $alwaysAvailable;
 
     /**
-     * Remote identifier used as a custom identifier for the object
+     * Remote identifier used as a custom identifier for the object.
      *
      * Needs to be a unique Content->remoteId string value.
      *
@@ -83,11 +86,9 @@ abstract class ContentCreateStruct extends ValueObject
      * is an equivalent call.
      *
      * @param string $fieldDefIdentifier the identifier of the field definition
-     *
      * @param mixed $value Either a plain value which is understandable by the corresponding
      *                     field type or an instance of a Value class provided by the field type
-     *
      * @param string|null $language If not given on a translatable field the initial language is used
      */
-    abstract public function setField( $fieldDefIdentifier, $value, $language = null );
+    abstract public function setField($fieldDefIdentifier, $value, $language = null);
 }

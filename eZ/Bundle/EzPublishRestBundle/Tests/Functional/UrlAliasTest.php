@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Functional\UrlAliasTest class
+ * File containing the Functional\UrlAliasTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,12 +17,14 @@ class UrlAliasTest extends RESTFunctionalTestCase
 {
     /**
      * @covers nothing. Creates a folder for other tests.
+     *
      * @return string The folder's main location href
      */
     public function testCreateFolder()
     {
-        $folderArray = $this->createFolder( __METHOD__, '/api/ezp/v2/content/locations/1/2' );
-        $folderLocations = $this->getContentLocations( $folderArray['_href'] );
+        $folderArray = $this->createFolder(__METHOD__, '/api/ezp/v2/content/locations/1/2');
+        $folderLocations = $this->getContentLocations($folderArray['_href']);
+
         return $folderLocations['LocationList']['Location'][0]['_href'];
     }
 
@@ -30,10 +34,10 @@ class UrlAliasTest extends RESTFunctionalTestCase
     public function testListGlobalURLAliases()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "/api/ezp/v2/content/urlaliases" )
+            $this->createHttpRequest('GET', '/api/ezp/v2/content/urlaliases')
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
@@ -41,9 +45,9 @@ class UrlAliasTest extends RESTFunctionalTestCase
      * @covers POST /content/urlaliases
      * @returns string The created url alias href
      */
-    public function testCreateUrlAlias( $locationHref )
+    public function testCreateUrlAlias($locationHref)
     {
-        $text = $this->addTestSuffix( __FUNCTION__ );
+        $text = $this->addTestSuffix(__FUNCTION__);
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <UrlAliasCreate type="LOCATION">
@@ -56,20 +60,21 @@ class UrlAliasTest extends RESTFunctionalTestCase
 XML;
 
         $request = $this->createHttpRequest(
-            "POST",
-            "/api/ezp/v2/content/urlaliases",
-            "UrlAliasCreate+xml",
-            "UrlAlias+json"
+            'POST',
+            '/api/ezp/v2/content/urlaliases',
+            'UrlAliasCreate+xml',
+            'UrlAlias+json'
         );
-        $request->setContent( $xml );
+        $request->setContent($xml);
 
-        $response = $this->sendHttpRequest( $request );
+        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals( $response, 201 );
-        self::assertHttpResponseHasHeader( $response, 'Location' );
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader( 'Location' );
-        $this->addCreatedElement( $href );
+        $href = $response->getHeader('Location');
+        $this->addCreatedElement($href);
+
         return $href;
     }
 
@@ -79,7 +84,7 @@ XML;
      */
     public function testCreateGlobalUrlAlias()
     {
-        $text = $this->addTestSuffix( __FUNCTION__ );
+        $text = $this->addTestSuffix(__FUNCTION__);
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <UrlAliasCreate type="RESOURCE">
@@ -92,20 +97,21 @@ XML;
 XML;
 
         $request = $this->createHttpRequest(
-            "POST",
-            "/api/ezp/v2/content/urlaliases",
-            "UrlAliasCreate+xml",
-            "UrlAlias+json"
+            'POST',
+            '/api/ezp/v2/content/urlaliases',
+            'UrlAliasCreate+xml',
+            'UrlAlias+json'
         );
-        $request->setContent( $xml );
+        $request->setContent($xml);
 
-        $response = $this->sendHttpRequest( $request );
+        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals( $response, 201 );
-        self::assertHttpResponseHasHeader( $response, 'Location' );
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader( 'Location' );
-        $this->addCreatedElement( $href );
+        $href = $response->getHeader('Location');
+        $this->addCreatedElement($href);
+
         return $href;
     }
 
@@ -113,45 +119,45 @@ XML;
      * @depends testCreateUrlAlias
      * @covers GET /content/urlaliases/{urlAliasId}
      */
-    public function testLoadURLAlias( $urlAliasHref )
+    public function testLoadURLAlias($urlAliasHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", $urlAliasHref )
+            $this->createHttpRequest('GET', $urlAliasHref)
         );
 
         // @todo Will fail because of EZP-21082
         // self::assertHttpResponseCodeEquals( $response, 200 );
-        self::assertHttpResponseCodeEquals( $response, 500 );
-        self::markTestSkipped( "@todo Fix when EZP-21082 is fixed" );
+        self::assertHttpResponseCodeEquals($response, 500);
+        self::markTestSkipped('@todo Fix when EZP-21082 is fixed');
     }
 
     /**
      * @depends testCreateUrlAlias
      * @covers DELETE /content/urlaliases/{urlAliasId}
      */
-    public function testDeleteURLAlias( $urlAliasHref )
+    public function testDeleteURLAlias($urlAliasHref)
     {
         $response = $this->sendHttpRequest(
-            $request = $this->createHttpRequest( "DELETE", $urlAliasHref )
+            $request = $this->createHttpRequest('DELETE', $urlAliasHref)
         );
 
         // @todo will fail because of EZP-21082
         // self::assertHttpResponseCodeEquals( $response, 204 );
-        self::assertHttpResponseCodeEquals( $response, 500 );
+        self::assertHttpResponseCodeEquals($response, 500);
 
-        self::markTestSkipped( "@todo Fix when EZP-21082 is fixed" );
+        self::markTestSkipped('@todo Fix when EZP-21082 is fixed');
     }
 
     /**
      * @depends testCreateFolder
      * @covers GET /content/locations/{locationPath}/urlaliases
      */
-    public function testListLocationURLAliases( $contentLocationHref )
+    public function testListLocationURLAliases($contentLocationHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "$contentLocationHref/urlaliases" )
+            $this->createHttpRequest('GET', "$contentLocationHref/urlaliases")
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 }

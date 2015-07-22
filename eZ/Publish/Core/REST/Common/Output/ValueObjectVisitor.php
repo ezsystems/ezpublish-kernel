@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ValueObjectVisitor class
+ * File containing the ValueObjectVisitor class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,12 +17,12 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
- * Basic ValueObjectVisitor
+ * Basic ValueObjectVisitor.
  */
 abstract class ValueObjectVisitor
 {
     /**
-     * URL handler for URL generation
+     * URL handler for URL generation.
      *
      * @var \eZ\Publish\Core\REST\Common\RequestParser
      */
@@ -32,122 +34,130 @@ abstract class ValueObjectVisitor
     protected $router;
 
     /**
-     * Visit struct returned by controllers
+     * @var \Symfony\Component\Routing\RouterInterface
+     */
+    protected $templateRouter;
+
+    /**
+     * Visit struct returned by controllers.
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param mixed $data
      */
-    abstract public function visit( Visitor $visitor, Generator $generator, $data );
+    abstract public function visit(Visitor $visitor, Generator $generator, $data);
 
     /**
      * @param \Symfony\Component\Routing\RouterInterface $router
      */
-    public function setRouter( RouterInterface $router )
+    public function setRouter(RouterInterface $router)
     {
         $this->router = $router;
     }
 
-    public function setRequestParser( RequestParser $requestParser )
+    public function setTemplateRouter(RouterInterface $templateRouter)
+    {
+        $this->templateRouter = $templateRouter;
+    }
+
+    public function setRequestParser(RequestParser $requestParser)
     {
         $this->requestParser = $requestParser;
     }
 
     /**
-     * Returns a string representation for the given $boolValue
+     * Returns a string representation for the given $boolValue.
      *
-     * @param boolean $boolValue
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     * @param bool $boolValue
      *
-     * @return string
+     * @return mixed
      */
-    protected function serializeBool( $boolValue )
+    protected function serializeBool(Generator $generator, $boolValue)
     {
-        return ( $boolValue ? 'true' : 'false' );
+        return $generator->serializeBool($boolValue);
     }
 
     /**
-     * Visits the given list of $names
+     * Visits the given list of $names.
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param array $names
      */
-    protected function visitNamesList( Generator $generator, array $names )
+    protected function visitNamesList(Generator $generator, array $names)
     {
-        $this->visitTranslatedList( $generator, $names, 'names' );
+        $this->visitTranslatedList($generator, $names, 'names');
     }
 
     /**
-     * Visits the given list of $descriptions
+     * Visits the given list of $descriptions.
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param array $descriptions
      */
-    protected function visitDescriptionsList( Generator $generator, array $descriptions )
+    protected function visitDescriptionsList(Generator $generator, array $descriptions)
     {
-        $this->visitTranslatedList( $generator, $descriptions, 'descriptions' );
+        $this->visitTranslatedList($generator, $descriptions, 'descriptions');
     }
 
     /**
-     * Visits a list of translated elements
+     * Visits a list of translated elements.
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param array $translatedElements
      * @param mixed $listName
      */
-    protected function visitTranslatedList( Generator $generator, array $translatedElements, $listName )
+    protected function visitTranslatedList(Generator $generator, array $translatedElements, $listName)
     {
-        $generator->startHashElement( $listName );
-        $generator->startList( 'value' );
-        foreach ( $translatedElements as $languageCode => $element )
-        {
-            $generator->startValueElement( 'value', $element, array( 'languageCode' => $languageCode ) );
-            $generator->endValueElement( 'value' );
+        $generator->startHashElement($listName);
+        $generator->startList('value');
+        foreach ($translatedElements as $languageCode => $element) {
+            $generator->startValueElement('value', $element, array('languageCode' => $languageCode));
+            $generator->endValueElement('value');
         }
-        $generator->endList( 'value' );
-        $generator->endHashElement( $listName );
+        $generator->endList('value');
+        $generator->endHashElement($listName);
     }
 
     /**
-     * Visits a limitation
+     * Visits a limitation.
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
      */
-    protected function visitLimitation( Generator $generator, Limitation $limitation )
+    protected function visitLimitation(Generator $generator, Limitation $limitation)
     {
-        $generator->startHashElement( 'limitation' );
+        $generator->startHashElement('limitation');
 
-        $generator->startAttribute( 'identifier', $limitation->getIdentifier() );
-        $generator->endAttribute( 'identifier' );
+        $generator->startAttribute('identifier', $limitation->getIdentifier());
+        $generator->endAttribute('identifier');
 
-        $generator->startHashElement( 'values' );
-        $generator->startList( 'ref' );
+        $generator->startHashElement('values');
+        $generator->startList('ref');
 
-        foreach ( $limitation->limitationValues as $limitationValue )
-        {
-            $generator->startObjectElement( 'ref' );
-            $generator->startAttribute( 'href', $limitationValue );
-            $generator->endAttribute( 'href' );
-            $generator->endObjectElement( 'ref' );
+        foreach ($limitation->limitationValues as $limitationValue) {
+            $generator->startObjectElement('ref');
+            $generator->startAttribute('href', $limitationValue);
+            $generator->endAttribute('href');
+            $generator->endObjectElement('ref');
         }
 
-        $generator->endList( 'ref' );
-        $generator->endHashElement( 'values' );
+        $generator->endList('ref');
+        $generator->endHashElement('values');
 
-        $generator->endHashElement( 'limitation' );
+        $generator->endHashElement('limitation');
     }
 
     /**
-     * Serializes the given $sortField to a string representation
+     * Serializes the given $sortField to a string representation.
      *
      * @param int $sortField
      *
      * @return string
      */
-    protected function serializeSortField( $sortField )
+    protected function serializeSortField($sortField)
     {
-        switch ( $sortField )
-        {
+        switch ($sortField) {
             case Location::SORT_FIELD_PATH:
                 return 'PATH';
             case Location::SORT_FIELD_PUBLISHED:
@@ -174,26 +184,25 @@ abstract class ValueObjectVisitor
                 return 'CONTENTOBJECT_ID';
         }
 
-        throw new \RuntimeException( "Unknown default sort field: '{$sortField}'." );
+        throw new \RuntimeException("Unknown default sort field: '{$sortField}'.");
     }
 
     /**
-     * Serializes the given $sortOrder to a string representation
+     * Serializes the given $sortOrder to a string representation.
      *
      * @param int $sortOrder
      *
      * @return string
      */
-    protected function serializeSortOrder( $sortOrder )
+    protected function serializeSortOrder($sortOrder)
     {
-        switch ( $sortOrder )
-        {
+        switch ($sortOrder) {
             case Location::SORT_ORDER_ASC:
                 return 'ASC';
             case Location::SORT_ORDER_DESC:
                 return 'DESC';
         }
 
-        throw new \RuntimeException( "Unknown default sort order: '{$sortOrder}'." );
+        throw new \RuntimeException("Unknown default sort order: '{$sortOrder}'.");
     }
 }

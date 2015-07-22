@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a ContentTest class
+ * File containing a ContentTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -31,7 +33,7 @@ class ContentTest extends BaseTest
     protected $fieldTypeParserMock;
 
     /**
-     * Tests the section parser
+     * Tests the section parser.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
@@ -58,26 +60,26 @@ class ContentTest extends BaseTest
                         'fieldValue' => 'User',
                     ),
                 ),
-            )
+            ),
         );
 
         $versionInfoMock = new \stdClass();
         $versionInfoMock->contentInfoId = '/content/objects/10';
 
-        $this->getVersionInfoParserMock()->expects( $this->once() )
-            ->method( 'parse' )
+        $this->getVersionInfoParserMock()->expects($this->once())
+            ->method('parse')
             ->with(
-                $this->equalTo( array() ),
-                $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher' )
-            )->will( $this->returnValue( $versionInfoMock ) );
+                $this->equalTo(array()),
+                $this->isInstanceOf('eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher')
+            )->will($this->returnValue($versionInfoMock));
 
-        $this->getFieldTypeParserMock()->expects( $this->exactly( 2 ) )
-            ->method( 'parseFieldValue' )
-            ->will( $this->returnValue( 'MockedValue' ) );
+        $this->getFieldTypeParserMock()->expects($this->exactly(2))
+            ->method('parseFieldValue')
+            ->will($this->returnValue('MockedValue'));
 
-        $result = $relationParser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $relationParser->parse($inputArray, $this->getParsingDispatcherMock());
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
@@ -85,7 +87,7 @@ class ContentTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedVersionInfo( $parsedContent )
+    public function testParsedVersionInfo($parsedContent)
     {
         $this->assertInstanceOf(
             // Mocked result
@@ -97,7 +99,7 @@ class ContentTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedFirstNameField( $parsedContent )
+    public function testParsedFirstNameField($parsedContent)
     {
         $this->assertEquals(
             // Mocked result
@@ -109,14 +111,14 @@ class ContentTest extends BaseTest
                     'value' => 'MockedValue',
                 )
             ),
-            $parsedContent->getField( 'first_name', 'eng-US' )
+            $parsedContent->getField('first_name', 'eng-US')
         );
     }
 
     /**
      * @depends testParse
      */
-    public function testParsedLastNameField( $parsedContent )
+    public function testParsedLastNameField($parsedContent)
     {
         $this->assertEquals(
             // Mocked result
@@ -128,12 +130,12 @@ class ContentTest extends BaseTest
                     'value' => 'MockedValue',
                 )
             ),
-            $parsedContent->getField( 'last_name', 'eng-US' )
+            $parsedContent->getField('last_name', 'eng-US')
         );
     }
 
     /**
-     * Gets the section parser
+     * Gets the section parser.
      *
      * @return \eZ\Publish\Core\REST\Client\Input\Parser\Content
      */
@@ -152,8 +154,7 @@ class ContentTest extends BaseTest
      */
     protected function getVersionInfoParserMock()
     {
-        if ( !isset( $this->versionInfoParserMock ) )
-        {
+        if (!isset($this->versionInfoParserMock)) {
             $this->versionInfoParserMock = $this->getMock(
                 'eZ\\Publish\\Core\\REST\\Client\\Input\\Parser\\VersionInfo',
                 array(),
@@ -162,6 +163,7 @@ class ContentTest extends BaseTest
                 false
             );
         }
+
         return $this->versionInfoParserMock;
     }
 
@@ -170,8 +172,7 @@ class ContentTest extends BaseTest
      */
     protected function getContentServiceMock()
     {
-        if ( !isset( $this->contentServiceMock ) )
-        {
+        if (!isset($this->contentServiceMock)) {
             $this->contentServiceMock = $this->getMock(
                 'eZ\\Publish\\Core\\REST\\Client\\ContentService',
                 array(),
@@ -180,6 +181,7 @@ class ContentTest extends BaseTest
                 false
             );
         }
+
         return $this->contentServiceMock;
     }
 
@@ -188,8 +190,7 @@ class ContentTest extends BaseTest
      */
     protected function getFieldTypeParserMock()
     {
-        if ( !isset( $this->fieldTypeParserMock ) )
-        {
+        if (!isset($this->fieldTypeParserMock)) {
             $this->fieldTypeParserMock = $this->getMock(
                 'eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
                 array(),
@@ -198,6 +199,7 @@ class ContentTest extends BaseTest
                 false
             );
         }
+
         return $this->fieldTypeParserMock;
     }
 }

@@ -1,0 +1,24 @@
+parameters:
+    legacy_dsn: sqlite://:memory:
+    anonymous_user_id: 10
+    kernel.debug: false
+    languages: []
+    image_storage_prefix: images
+    image_draft_storage_prefix: images-versioned
+    binaryfile_storage_prefix: original
+    storage_dir: var/ezdemo_site/storage
+    io_root_dir: %storage_dir%
+
+services:
+    ezpublish.api.persistence_handler:
+        #To disable cache, switch alias to ezpublish.api.storage_engine
+        alias: ezpublish.spi.persistence.cache
+
+    ezpublish.api.storage_engine:
+        alias: ezpublish.spi.persistence.legacy
+
+    ezpublish.spi.search:
+        alias: ezpublish.spi.search_engine
+
+    ezpublish.spi.search_engine:
+        alias: ezpublish.spi.search.legacy

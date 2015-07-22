@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the User Value class
+ * File containing the User Value class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,61 +14,61 @@ namespace eZ\Publish\Core\FieldType\User;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
- * Value for User field type
+ * Value for User field type.
  */
 class Value extends BaseValue
 {
     /**
-     * Has stored login
+     * Has stored login.
      *
-     * @var boolean
+     * @var bool
      */
     public $hasStoredLogin;
 
     /**
-     * Contentobject id
+     * Contentobject id.
      *
      * @var mixed
      */
     public $contentId;
 
     /**
-     * Login
+     * Login.
      *
      * @var string
      */
     public $login;
 
     /**
-     * Email
+     * Email.
      *
      * @var string
      */
     public $email;
 
     /**
-     * Password hash
+     * Password hash.
      *
      * @var string
      */
     public $passwordHash;
 
     /**
-     * Password hash type
+     * Password hash type.
      *
      * @var mixed
      */
     public $passwordHashType;
 
     /**
-     * Is enabled
+     * Is enabled.
      *
-     * @var boolean
+     * @var bool
      */
     public $enabled;
 
     /**
-     * Max login
+     * Max login.
      *
      * @var int
      */
@@ -80,4 +82,3 @@ class Value extends BaseValue
         return (string)$this->login;
     }
 }
-

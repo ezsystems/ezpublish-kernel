@@ -1,25 +1,26 @@
 <?php
+
 /**
- * File containing the ezimage Type class
+ * File containing the ezimage Type class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\FieldType\Image;
 
-use eZ\Publish\Core\FieldType\FieldType;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
-use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\SPI\Persistence\Content\FieldValue;
-use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
- * The Image field type
+ * The Image field type.
  */
 class Type extends FieldType
 {
@@ -27,16 +28,16 @@ class Type extends FieldType
      * @see eZ\Publish\Core\FieldType::$validatorConfigurationSchema
      */
     protected $validatorConfigurationSchema = array(
-        "FileSizeValidator" => array(
+        'FileSizeValidator' => array(
             'maxFileSize' => array(
                 'type' => 'int',
-                'default' => false,
-            )
-        )
+                'default' => null,
+            ),
+        ),
     );
 
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
@@ -55,9 +56,9 @@ class Type extends FieldType
      *
      * @return string
      */
-    public function getName( SPIValue $value )
+    public function getName(SPIValue $value)
     {
-        return !empty( $value->alternativeText ) ? $value->alternativeText : $value->fileName;
+        return !empty($value->alternativeText) ? $value->alternativeText : (string)$value->fileName;
     }
 
     /**
@@ -68,7 +69,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value;
+        return new Value();
     }
 
     /**
@@ -78,17 +79,21 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\Image\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
-        // default construction from array
-        if ( is_array( $inputValue ) )
-        {
-            $inputValue = new Value( $inputValue );
+        if (is_string($inputValue)) {
+            $inputValue = Value::fromString($inputValue);
         }
-        // just given the file path as a string
-        else if ( is_string( $inputValue ) )
-        {
-            $inputValue = Value::fromString( $inputValue );
+
+        if (is_array($inputValue)) {
+            if (isset($inputValue['inputUri']) && file_exists($inputValue['inputUri'])) {
+                $inputValue['fileSize'] = filesize($inputValue['inputUri']);
+                if (!isset($inputValue['fileName'])) {
+                    $inputValue['fileName'] = basename($inputValue['inputUri']);
+                }
+            }
+
+            $inputValue = new Value($inputValue);
         }
 
         return $inputValue;
@@ -100,52 +105,42 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\Image\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
-        // Required parameter $path
-        if ( !isset( $value->id ) || !file_exists( $value->id ) )
-        {
-            throw new InvalidArgumentValue(
-                '$value->path',
-                $value->path
-            );
+        if (isset($value->inputUri) && !is_string($value->inputUri)) {
+            throw new InvalidArgumentType('$value->inputUri', 'string', $value->inputUri);
         }
 
-        // Required parameter $fileSize
-        if ( !isset( $value->fileSize ) || !is_int( $value->fileSize ) )
-        {
-            throw new InvalidArgumentValue(
-                '$value->fileSize',
-                $value->fileSize
-            );
+        if (isset($value->id) && !is_string($value->id)) {
+            throw new InvalidArgumentType('$value->id', 'string', $value->id);
         }
 
         // Required parameter $fileName
-        if ( !isset( $value->fileName ) || !is_string( $value->fileName ) )
-        {
-            throw new InvalidArgumentType(
-                '$value->fileName',
-                'integer',
-                $value->fileName
-            );
+        if (!isset($value->fileName) || !is_string($value->fileName)) {
+            throw new InvalidArgumentType('$value->fileName', 'string', $value->fileName);
         }
 
         // Optional parameter $alternativeText
-        if ( isset( $value->alternativeText ) && !is_string( $value->alternativeText ) )
-        {
+        if (isset($value->alternativeText) && !is_string($value->alternativeText)) {
             throw new InvalidArgumentType(
                 '$value->alternativeText',
                 'string',
                 $value->alternativeText
             );
         }
+
+        if (isset($value->fileSize) && (!is_int($value->fileSize) || $value->fileSize < 0)) {
+            throw new InvalidArgumentType(
+                '$value->fileSize',
+                'int',
+                $value->alternativeText
+            );
+        }
     }
 
     /**
-     * Validates a field based on the validators in the field definition
+     * Validates a field based on the validators in the field definition.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
@@ -154,80 +149,85 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( FieldDefinition $fieldDefinition, SPIValue $fieldValue )
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
     {
         $errors = array();
 
-        if ( $this->isEmptyValue( $fieldValue ) )
-        {
+        if ($this->isEmptyValue($fieldValue)) {
             return $errors;
         }
 
-        foreach ( (array)$fieldDefinition->getValidatorConfiguration() as $validatorIdentifier => $parameters )
-        {
-            switch ( $validatorIdentifier )
-            {
+        if (isset($fieldValue->inputUri) && !getimagesize($fieldValue->inputUri)) {
+            $errors[] = new ValidationError('A valid image file is required.', null, array(), 'inputUri');
+        }
+
+        // BC: Check if file is a valid image if the value of 'id' matches a local file
+        if (isset($fieldValue->id) && file_exists($fieldValue->id) && !getimagesize($fieldValue->id)) {
+            $errors[] = new ValidationError('A valid image file is required.', null, array(), 'id');
+        }
+
+        foreach ((array)$fieldDefinition->getValidatorConfiguration() as $validatorIdentifier => $parameters) {
+            switch ($validatorIdentifier) {
                 case 'FileSizeValidator':
-                    if ( !isset( $parameters['maxFileSize'] ) || $parameters['maxFileSize'] == false )
-                    {
+                    if (empty($parameters['maxFileSize'])) {
                         // No file size limit
                         break;
                     }
+
                     // Database stores maxFileSize in MB
-                    if ( ( $parameters['maxFileSize'] * 1024 * 1024 ) < $fieldValue->fileSize )
-                    {
+                    if (($parameters['maxFileSize'] * 1024 * 1024) < $fieldValue->fileSize) {
                         $errors[] = new ValidationError(
-                            "The file size cannot exceed %size% byte.",
-                            "The file size cannot exceed %size% bytes.",
+                            'The file size cannot exceed %size% byte.',
+                            'The file size cannot exceed %size% bytes.',
                             array(
-                                "size" => $parameters['maxFileSize'],
-                            )
+                                'size' => $parameters['maxFileSize'],
+                            ),
+                            'fileSize'
                         );
                     }
                     break;
             }
         }
+
         return $errors;
     }
 
     /**
-     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
      * @param mixed $validatorConfiguration
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateValidatorConfiguration( $validatorConfiguration )
+    public function validateValidatorConfiguration($validatorConfiguration)
     {
         $validationErrors = array();
 
-        foreach ( $validatorConfiguration as $validatorIdentifier => $parameters )
-        {
-            switch ( $validatorIdentifier )
-            {
+        foreach ($validatorConfiguration as $validatorIdentifier => $parameters) {
+            switch ($validatorIdentifier) {
                 case 'FileSizeValidator':
-                    if ( !isset( $parameters['maxFileSize'] ) )
-                    {
+                    if (!array_key_exists('maxFileSize', $parameters)) {
                         $validationErrors[] = new ValidationError(
-                            "Validator %validator% expects parameter %parameter% to be set.",
+                            'Validator %validator% expects parameter %parameter% to be set.',
                             null,
                             array(
-                                "validator" => $validatorIdentifier,
-                                "parameter" => 'maxFileSize',
-                            )
+                                'validator' => $validatorIdentifier,
+                                'parameter' => 'maxFileSize',
+                            ),
+                            "[$validatorIdentifier]"
                         );
                         break;
                     }
-                    if ( !is_int( $parameters['maxFileSize'] ) && $parameters['maxFileSize'] !== false )
-                    {
+                    if (!is_int($parameters['maxFileSize']) && $parameters['maxFileSize'] !== null) {
                         $validationErrors[] = new ValidationError(
-                            "Validator %validator% expects parameter %parameter% to be of %type%.",
+                            'Validator %validator% expects parameter %parameter% to be of %type%.',
                             null,
                             array(
-                                "validator" => $validatorIdentifier,
-                                "parameter" => 'maxFileSize',
-                                "type" => 'integer',
-                            )
+                                'validator' => $validatorIdentifier,
+                                'parameter' => 'maxFileSize',
+                                'type' => 'integer',
+                            ),
+                            "[$validatorIdentifier][maxFileSize]"
                         );
                     }
                     break;
@@ -236,8 +236,9 @@ class Type extends FieldType
                         "Validator '%validator%' is unknown",
                         null,
                         array(
-                            "validator" => $validatorIdentifier
-                        )
+                            'validator' => $validatorIdentifier,
+                        ),
+                        "[$validatorIdentifier]"
                     );
             }
         }
@@ -252,85 +253,85 @@ class Type extends FieldType
      *
      * @param \eZ\Publish\Core\FieldType\Image\Value $value
      *
-     * @return boolean
+     * @return bool
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo(BaseValue $value)
     {
         return false;
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * @param mixed $hash
      *
      * @return \eZ\Publish\Core\FieldType\Image\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        if ( $hash === null )
-        {
+        if ($hash === null) {
             return $this->getEmptyValue();
         }
 
-        return new Value( $hash );
+        return new Value($hash);
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\Image\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
-        if ( $this->isEmptyValue( $value ) )
-        {
+        if ($this->isEmptyValue($value)) {
             return null;
         }
 
         return array(
             'id' => $value->id,
-            'path' => $value->id,
+            'path' => $value->inputUri ?: $value->id,
             'alternativeText' => $value->alternativeText,
             'fileName' => $value->fileName,
             'fileSize' => $value->fileSize,
             'imageId' => $value->imageId,
-            'uri' => $value->uri
+            'uri' => $value->uri,
+            'inputUri' => $value->inputUri,
+            'width' => $value->width,
+            'height' => $value->height,
         );
     }
 
     /**
-     * Converts a $value to a persistence value
+     * Converts a $value to a persistence value.
      *
      * @param \eZ\Publish\Core\FieldType\Image\Value $value
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function toPersistenceValue( SPIValue $value )
+    public function toPersistenceValue(SPIValue $value)
     {
         // Store original data as external (to indicate they need to be stored)
         return new FieldValue(
             array(
-                "data" => null,
-                "externalData" => $this->toHash( $value ),
-                "sortKey" => $this->getSortInfo( $value ),
+                'data' => null,
+                'externalData' => $this->toHash($value),
+                'sortKey' => $this->getSortInfo($value),
             )
         );
     }
 
     /**
-     * Converts a persistence $fieldValue to a Value
+     * Converts a persistence $fieldValue to a Value.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      *
      * @return \eZ\Publish\Core\FieldType\Image\Value
      */
-    public function fromPersistenceValue( FieldValue $fieldValue )
+    public function fromPersistenceValue(FieldValue $fieldValue)
     {
-        if ( $fieldValue->data === null )
-        {
+        if ($fieldValue->data === null) {
             return $this->getEmptyValue();
         }
 
@@ -338,27 +339,33 @@ class Type extends FieldType
         // there might be more data in the persistence value than needed here
         $result = $this->fromHash(
             array(
-                'id' => ( isset( $fieldValue->data['id'] )
+                'id' => (isset($fieldValue->data['id'])
                     ? $fieldValue->data['id']
-                    : null ),
-                'alternativeText' => ( isset( $fieldValue->data['alternativeText'] )
+                    : null),
+                'alternativeText' => (isset($fieldValue->data['alternativeText'])
                     ? $fieldValue->data['alternativeText']
-                    : null ),
-                'fileName' => ( isset( $fieldValue->data['fileName'] )
+                    : null),
+                'fileName' => (isset($fieldValue->data['fileName'])
                     ? $fieldValue->data['fileName']
-                    : null ),
-                'fileSize' => ( isset( $fieldValue->data['fileSize'] )
+                    : null),
+                'fileSize' => (isset($fieldValue->data['fileSize'])
                     ? $fieldValue->data['fileSize']
-                    : null ),
-                'uri' => ( isset( $fieldValue->data['uri'] )
+                    : null),
+                'uri' => (isset($fieldValue->data['uri'])
                     ? $fieldValue->data['uri']
-                    : null ),
-                'imageId' => ( isset( $fieldValue->data['imageId'] )
+                    : null),
+                'imageId' => (isset($fieldValue->data['imageId'])
                     ? $fieldValue->data['imageId']
-                    : null ),
+                    : null),
+                'width' => (isset($fieldValue->data['width'])
+                    ? $fieldValue->data['width']
+                    : null),
+                'height' => (isset($fieldValue->data['height'])
+                    ? $fieldValue->data['height']
+                    : null),
             )
         );
+
         return $result;
     }
-
 }

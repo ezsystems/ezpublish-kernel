@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the BinaryBaseStorage Gateway
+ * File containing the BinaryBaseStorage Gateway.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,11 +14,13 @@ namespace eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use eZ\Publish\Core\Persistence\Database\InsertQuery;
 
 abstract class LegacyStorage extends Gateway
 {
     /**
-     * Connection
+     * Connection.
      *
      * @var mixed
      */
@@ -48,31 +52,29 @@ abstract class LegacyStorage extends Gateway
             'original_filename' => array(
                 'name' => 'fileName',
                 'cast' => 'strval',
-            )
+            ),
         );
     }
 
     /**
-     * Set columns to be fetched from the database
+     * Set columns to be fetched from the database.
      *
      * This method is intended to be overwritten by derived classes in order to
      * add additional columns to be fetched from the database. Please do not
      * forget to call the parent when overwriting this method.
      *
-     * @param \ezcQuerySelect $selectQuery
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $selectQuery
      * @param int $fieldId
      * @param int $versionNo
-     *
-     * @return void
      */
-    protected function setFetchColumns( \ezcQuerySelect $selectQuery, $fieldId, $versionNo )
+    protected function setFetchColumns(SelectQuery $selectQuery, $fieldId, $versionNo)
     {
         $connection = $this->getConnection();
 
         $selectQuery->select(
-            $connection->quoteColumn( 'filename' ),
-            $connection->quoteColumn( 'mime_type' ),
-            $connection->quoteColumn( 'original_filename' )
+            $connection->quoteColumn('filename'),
+            $connection->quoteColumn('mime_type'),
+            $connection->quoteColumn('original_filename')
         );
     }
 
@@ -83,93 +85,87 @@ abstract class LegacyStorage extends Gateway
      * add additional columns to be set in the database. Please do not forget
      * to call the parent when overwriting this method.
      *
-     * @param \ezcQueryInsert $insertQuery
+     * @param \eZ\Publish\Core\Persistence\Database\InsertQuery $insertQuery
      * @param VersionInfo $versionInfo
      * @param Field $field
-     *
-     * @return void
      */
-    protected function setInsertColumns( \ezcQueryInsert $insertQuery, VersionInfo $versionInfo, Field $field )
+    protected function setInsertColumns(InsertQuery $insertQuery, VersionInfo $versionInfo, Field $field)
     {
         $connection = $this->getConnection();
 
         $insertQuery->set(
-            $connection->quoteColumn( 'contentobject_attribute_id' ),
-            $insertQuery->bindValue( $field->id, null, \PDO::PARAM_INT )
+            $connection->quoteColumn('contentobject_attribute_id'),
+            $insertQuery->bindValue($field->id, null, \PDO::PARAM_INT)
         )->set(
-            $connection->quoteColumn( 'filename' ),
+            $connection->quoteColumn('filename'),
             $insertQuery->bindValue(
-                $this->removeMimeFromPath( $field->value->externalData['id'] )
+                $this->removeMimeFromPath($field->value->externalData['id'])
             )
         )->set(
-            $connection->quoteColumn( 'mime_type' ),
-            $insertQuery->bindValue( $field->value->externalData['mimeType'] )
+            $connection->quoteColumn('mime_type'),
+            $insertQuery->bindValue($field->value->externalData['mimeType'])
         )->set(
-            $connection->quoteColumn( 'original_filename' ),
-            $insertQuery->bindValue( $field->value->externalData['fileName'] )
+            $connection->quoteColumn('original_filename'),
+            $insertQuery->bindValue($field->value->externalData['fileName'])
         )->set(
-            $connection->quoteColumn( 'version' ),
-            $insertQuery->bindValue( $versionInfo->versionNo, null, \PDO::PARAM_INT )
+            $connection->quoteColumn('version'),
+            $insertQuery->bindValue($versionInfo->versionNo, null, \PDO::PARAM_INT)
         );
     }
 
     /**
-     * Set database handler for this gateway
+     * Set database handler for this gateway.
      *
      * @param mixed $dbHandler
      *
-     * @return void
      * @throws \RuntimeException if $dbHandler is not an instance of
-     *         {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler}
+     *         {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler}
      */
-    public function setConnection( $dbHandler )
+    public function setConnection($dbHandler)
     {
         // This obviously violates the Liskov substitution Principle, but with
         // the given class design there is no sane other option. Actually the
         // dbHandler *should* be passed to the constructor, and there should
         // not be the need to post-inject it.
-        if ( !$dbHandler instanceof \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler )
-        {
-            throw new \RuntimeException( "Invalid dbHandler passed" );
+        if (!$dbHandler instanceof \eZ\Publish\Core\Persistence\Database\DatabaseHandler) {
+            throw new \RuntimeException('Invalid dbHandler passed');
         }
 
         $this->dbHandler = $dbHandler;
     }
 
     /**
-     * Returns the active connection
+     * Returns the active connection.
      *
      * @throws \RuntimeException if no connection has been set, yet.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected function getConnection()
     {
-        if ( $this->dbHandler === null )
-        {
-            throw new \RuntimeException( "Missing database connection." );
+        if ($this->dbHandler === null) {
+            throw new \RuntimeException('Missing database connection.');
         }
+
         return $this->dbHandler;
     }
 
     /**
-     * Stores the file reference in $field for $versionNo
+     * Stores the file reference in $field for $versionNo.
      *
      * @param VersionInfo $versionInfo
      * @param Field $field
-     *
-     * @return void
      */
-    public function storeFileReference( VersionInfo $versionInfo, Field $field )
+    public function storeFileReference(VersionInfo $versionInfo, Field $field)
     {
         $connection = $this->getConnection();
 
         $insertQuery = $connection->createInsertQuery();
         $insertQuery->insertInto(
-            $connection->quoteTable( $this->getStorageTable() )
+            $connection->quoteTable($this->getStorageTable())
         );
 
-        $this->setInsertColumns( $insertQuery, $versionInfo, $field );
+        $this->setInsertColumns($insertQuery, $versionInfo, $field);
 
         $insertQuery->prepare()->execute();
 
@@ -185,39 +181,40 @@ abstract class LegacyStorage extends Gateway
      *
      * @return string
      */
-    public function removeMimeFromPath( $path )
+    public function removeMimeFromPath($path)
     {
-        $res = substr( $path, strpos( $path, '/' ) + 1 );
+        $res = substr($path, strpos($path, '/') + 1);
+
         return $res;
     }
 
     /**
-     * Returns the file reference data for the given $fieldId in $versionNo
+     * Returns the file reference data for the given $fieldId in $versionNo.
      *
      * @param mixed $fieldId
      * @param int $versionNo
      *
      * @return array|void
      */
-    public function getFileReferenceData( $fieldId, $versionNo )
+    public function getFileReferenceData($fieldId, $versionNo)
     {
         $connection = $this->getConnection();
 
         $selectQuery = $connection->createSelectQuery();
 
-        $this->setFetchColumns( $selectQuery, $fieldId, $versionNo );
+        $this->setFetchColumns($selectQuery, $fieldId, $versionNo);
 
         $selectQuery->from(
-            $connection->quoteTable( $this->getStorageTable() )
+            $connection->quoteTable($this->getStorageTable())
         )->where(
             $selectQuery->expr->lAnd(
                 $selectQuery->expr->eq(
-                    $connection->quoteColumn( 'contentobject_attribute_id' ),
-                    $selectQuery->bindValue( $fieldId, null, \PDO::PARAM_INT )
+                    $connection->quoteColumn('contentobject_attribute_id'),
+                    $selectQuery->bindValue($fieldId, null, \PDO::PARAM_INT)
                 ),
                 $selectQuery->expr->eq(
-                    $connection->quoteColumn( 'version' ),
-                    $selectQuery->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                    $connection->quoteColumn('version'),
+                    $selectQuery->bindValue($versionNo, null, \PDO::PARAM_INT)
                 )
             )
         );
@@ -225,17 +222,15 @@ abstract class LegacyStorage extends Gateway
         $statement = $selectQuery->prepare();
         $statement->execute();
 
-        $result = $statement->fetchAll( \PDO::FETCH_ASSOC );
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        if ( count( $result ) < 1 )
-        {
+        if (count($result) < 1) {
             return null;
         }
 
         $convertedResult = array();
-        foreach ( reset( $result ) as $column => $value )
-        {
-            $convertedResult[$this->toPropertyName( $column )] = $this->castToPropertyValue( $value, $column );
+        foreach (reset($result) as $column => $value) {
+            $convertedResult[$this->toPropertyName($column)] = $this->castToPropertyValue($value, $column);
         }
         $convertedResult['id'] = $this->prependMimeToPath(
             $convertedResult['id'],
@@ -246,16 +241,17 @@ abstract class LegacyStorage extends Gateway
     }
 
     /**
-     * Returns the property name for the given $columnName
+     * Returns the property name for the given $columnName.
      *
      * @param string $columnName
      *
      * @return string
      */
-    protected function toPropertyName( $columnName )
+    protected function toPropertyName($columnName)
     {
         $propertyMap = $this->getPropertyMapping();
-        return ( $propertyMap[$columnName]['name'] );
+
+        return ($propertyMap[$columnName]['name']);
     }
 
     /**
@@ -266,11 +262,12 @@ abstract class LegacyStorage extends Gateway
      *
      * @return mixed
      */
-    protected function castToPropertyValue( $value, $columnName )
+    protected function castToPropertyValue($value, $columnName)
     {
         $propertyMap = $this->getPropertyMapping();
         $castFunction = $propertyMap[$columnName]['cast'];
-        return $castFunction( $value );
+
+        return $castFunction($value);
     }
 
     /**
@@ -283,23 +280,21 @@ abstract class LegacyStorage extends Gateway
      *
      * @return string
      */
-    public function prependMimeToPath( $path, $mimeType )
+    public function prependMimeToPath($path, $mimeType)
     {
-        $res = substr( $mimeType, 0, strpos( $mimeType, '/' ) ) . '/' . $path;
+        $res = substr($mimeType, 0, strpos($mimeType, '/')) . '/' . $path;
+
         return $res;
     }
 
     /**
-     * Removes all file references for the given $fieldIds
+     * Removes all file references for the given $fieldIds.
      *
      * @param array $fieldIds
-     *
-     * @return void
      */
-    public function removeFileReferences( array $fieldIds, $versionNo )
+    public function removeFileReferences(array $fieldIds, $versionNo)
     {
-        if ( empty( $fieldIds ) )
-        {
+        if (empty($fieldIds)) {
             return;
         }
 
@@ -307,16 +302,16 @@ abstract class LegacyStorage extends Gateway
 
         $deleteQuery = $connection->createDeleteQuery();
         $deleteQuery->deleteFrom(
-            $connection->quoteTable( $this->getStorageTable() )
+            $connection->quoteTable($this->getStorageTable())
         )->where(
             $deleteQuery->expr->lAnd(
                 $deleteQuery->expr->in(
-                    $connection->quoteColumn( 'contentobject_attribute_id' ),
+                    $connection->quoteColumn('contentobject_attribute_id'),
                     $fieldIds
                 ),
                 $deleteQuery->expr->eq(
-                    $connection->quoteColumn( 'version' ),
-                    $deleteQuery->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                    $connection->quoteColumn('version'),
+                    $deleteQuery->bindValue($versionNo, null, \PDO::PARAM_INT)
                 )
             )
         );
@@ -325,29 +320,27 @@ abstract class LegacyStorage extends Gateway
     }
 
     /**
-     * Removes a specific file reference for $fieldId and $versionId
+     * Removes a specific file reference for $fieldId and $versionId.
      *
      * @param mixed $fieldId
      * @param int $versionNo
-     *
-     * @return void
      */
-    public function removeFileReference( $fieldId, $versionNo )
+    public function removeFileReference($fieldId, $versionNo)
     {
         $connection = $this->getConnection();
 
         $deleteQuery = $connection->createDeleteQuery();
         $deleteQuery->deleteFrom(
-            $connection->quoteTable( $this->getStorageTable() )
+            $connection->quoteTable($this->getStorageTable())
         )->where(
             $deleteQuery->expr->lAnd(
                 $deleteQuery->expr->eq(
-                    $connection->quoteColumn( 'contentobject_attribute_id' ),
-                    $deleteQuery->bindValue( $fieldId, null, \PDO::PARAM_INT )
+                    $connection->quoteColumn('contentobject_attribute_id'),
+                    $deleteQuery->bindValue($fieldId, null, \PDO::PARAM_INT)
                 ),
                 $deleteQuery->expr->eq(
-                    $connection->quoteColumn( 'version' ),
-                    $deleteQuery->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                    $connection->quoteColumn('version'),
+                    $deleteQuery->bindValue($versionNo, null, \PDO::PARAM_INT)
                 )
             )
         );
@@ -362,10 +355,9 @@ abstract class LegacyStorage extends Gateway
      *
      * @return array
      */
-    public function getReferencedFiles( array $fieldIds, $versionNo )
+    public function getReferencedFiles(array $fieldIds, $versionNo)
     {
-        if ( empty( $fieldIds ) )
-        {
+        if (empty($fieldIds)) {
             return array();
         }
 
@@ -373,19 +365,19 @@ abstract class LegacyStorage extends Gateway
 
         $selectQuery = $connection->createSelectQuery();
         $selectQuery->select(
-            $connection->quoteColumn( 'filename' ),
-            $connection->quoteColumn( 'mime_type' )
+            $connection->quoteColumn('filename'),
+            $connection->quoteColumn('mime_type')
         )->from(
-            $connection->quoteTable( $this->getStorageTable() )
+            $connection->quoteTable($this->getStorageTable())
         )->where(
             $selectQuery->expr->lAnd(
                 $selectQuery->expr->in(
-                    $connection->quoteColumn( 'contentobject_attribute_id' ),
+                    $connection->quoteColumn('contentobject_attribute_id'),
                     $fieldIds
                 ),
                 $selectQuery->expr->eq(
-                    $connection->quoteColumn( 'version' ),
-                    $selectQuery->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                    $connection->quoteColumn('version'),
+                    $selectQuery->bindValue($versionNo, null, \PDO::PARAM_INT)
                 )
             )
         );
@@ -394,26 +386,25 @@ abstract class LegacyStorage extends Gateway
         $statement->execute();
 
         $gateway = $this;
+
         return array_map(
-            function ( $row ) use ( $gateway )
-            {
-                return $gateway->prependMimeToPath( $row['filename'], $row['mime_type'] );
+            function ($row) use ($gateway) {
+                return $gateway->prependMimeToPath($row['filename'], $row['mime_type']);
             },
-            $statement->fetchAll( \PDO::FETCH_ASSOC )
+            $statement->fetchAll(\PDO::FETCH_ASSOC)
         );
     }
 
     /**
-     * Returns a map with the number of references each file from $files has
+     * Returns a map with the number of references each file from $files has.
      *
      * @param array $files
      *
      * @return array
      */
-    public function countFileReferences( array $files )
+    public function countFileReferences(array $files)
     {
-        if ( empty( $files ) )
-        {
+        if (empty($files)) {
             return array();
         }
 
@@ -421,43 +412,40 @@ abstract class LegacyStorage extends Gateway
 
         $selectQuery = $connection->createSelectQuery();
         $selectQuery->select(
-            $connection->quoteColumn( 'filename' ),
-            $connection->quoteColumn( 'mime_type' ),
+            $connection->quoteColumn('filename'),
+            $connection->quoteColumn('mime_type'),
             $selectQuery->alias(
-                $selectQuery->expr->count( $connection->quoteColumn( 'contentobject_attribute_id' ) ),
+                $selectQuery->expr->count($connection->quoteColumn('contentobject_attribute_id')),
                 'count'
             )
         )->from(
-            $connection->quoteTable( $this->getStorageTable() )
+            $connection->quoteTable($this->getStorageTable())
         )->where(
             $selectQuery->expr->in(
-                $connection->quoteColumn( 'filename' ),
+                $connection->quoteColumn('filename'),
                 array_map(
-                    array( $this, 'removeMimeFromPath' ),
+                    array($this, 'removeMimeFromPath'),
                     $files
                 )
             )
         )->groupBy(
-            $connection->quoteColumn( 'filename' ),
-            $connection->quoteColumn( 'mime_type' )
+            $connection->quoteColumn('filename'),
+            $connection->quoteColumn('mime_type')
         );
 
         $statement = $selectQuery->prepare();
         $statement->execute();
 
         $countMap = array();
-        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
-        {
-            $path = $this->prependMimeToPath( $row['filename'], $row['mime_type'] );
+        foreach ($statement->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+            $path = $this->prependMimeToPath($row['filename'], $row['mime_type']);
             $countMap[$path] = (int)$row['count'];
         }
 
         // Complete counts
-        foreach ( $files as $path )
-        {
+        foreach ($files as $path) {
             // This is already the correct path
-            if ( !isset( $countMap[$path] ) )
-            {
+            if (!isset($countMap[$path])) {
                 $countMap[$path] = 0;
             }
         }
@@ -465,4 +453,3 @@ abstract class LegacyStorage extends Gateway
         return $countMap;
     }
 }
-

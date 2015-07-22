@@ -1,15 +1,16 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Server\Tests\BaseTest as ParentBaseTest;
 
@@ -34,14 +35,13 @@ abstract class BaseTest extends ParentBaseTest
     protected $parserTools;
 
     /**
-     * Get the parsing dispatcher
+     * Get the parsing dispatcher.
      *
      * @return \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
      */
     protected function getParsingDispatcherMock()
     {
-        if ( !isset( $this->parsingDispatcherMock ) )
-        {
+        if (!isset($this->parsingDispatcherMock)) {
             $this->parsingDispatcherMock = $this->getMock(
                 '\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher',
                 array(),
@@ -50,6 +50,7 @@ abstract class BaseTest extends ParentBaseTest
                 false
             );
         }
+
         return $this->parsingDispatcherMock;
     }
 
@@ -57,7 +58,8 @@ abstract class BaseTest extends ParentBaseTest
      * Returns the parseHref invocation expectations, as an array of:
      * 0. route to parse the href from (/content/objects/59
      * 1. attribute name we are looking for (contentId)
-     * 2. expected return value (59)*
+     * 2. expected return value (59)*.
+     *
      * @return array
      */
     public function getParseHrefExpectationsMap()
@@ -66,64 +68,65 @@ abstract class BaseTest extends ParentBaseTest
     }
 
     /**
-     * Get the Request parser
+     * Get the Request parser.
      *
      * @return \eZ\Publish\Core\REST\Common\RequestParser|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getRequestParserMock()
     {
-        if ( !isset( $this->requestParserMock ) )
-        {
-            $that =& $this;
+        if (!isset($this->requestParserMock)) {
+            $that = &$this;
 
-            $callback = function( $href, $attribute ) use ( $that )
-            {
-                foreach ( $that->getParseHrefExpectationsMap() as $map )
-                {
-                    if ( $map[0] == $href && $map[1] == $attribute )
-                    {
-                        if ( $map[2] instanceof \Exception )
+            $callback = function ($href, $attribute) use ($that) {
+                foreach ($that->getParseHrefExpectationsMap() as $map) {
+                    if ($map[0] == $href && $map[1] == $attribute) {
+                        if ($map[2] instanceof \Exception) {
                             throw $map[2];
-                        else
+                        } else {
                             return $map[2];
+                        }
                     }
                 }
+
                 return null;
             };
 
-            $this->requestParserMock = $this->getMock( 'eZ\\Publish\\Core\\REST\\Common\\RequestParser' );
+            $this->requestParserMock = $this->getMock('eZ\\Publish\\Core\\REST\\Common\\RequestParser');
 
             $this->requestParserMock
-                ->expects( $this->any() )
-                ->method( 'parseHref' )
-                ->will( $this->returnCallback( $callback ) );
+                ->expects($this->any())
+                ->method('parseHref')
+                ->will($this->returnCallback($callback));
         }
+
         return $this->requestParserMock;
     }
 
     /**
-     * Get the parser tools
+     * Get the parser tools.
      *
      * @return \eZ\Publish\Core\REST\Common\Input\ParserTools
      */
     protected function getParserTools()
     {
-        if ( !isset( $this->parserTools ) )
-        {
-            $this->parserTools = new Input\ParserTools;
+        if (!isset($this->parserTools)) {
+            $this->parserTools = new Input\ParserTools();
         }
+
         return $this->parserTools;
     }
 
     protected function getParser()
     {
         $parser = $this->internalGetParser();
-        $parser->setRequestParser( $this->getRequestParserMock() );
+        $parser->setRequestParser($this->getRequestParserMock());
+
         return $parser;
     }
 
     /**
      * Must return the tested parser object.
+     *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\Base
      */
     abstract protected function internalGetParser();

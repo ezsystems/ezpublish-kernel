@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\SPI\Tests\FieldType\MailIntegrationTest class
+ * File contains: eZ\Publish\SPI\Tests\FieldType\MailIntegrationTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
 
 /**
- * Integration test for legacy storage field types
+ * Integration test for legacy storage field types.
  *
  * This abstract base test case is supposed to be the base for field type
  * integration tests. It basically calls all involved methods in the field type
@@ -36,7 +38,7 @@ use eZ\Publish\SPI\Persistence\Content;
 class EmailAddressIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -46,28 +48,21 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get handler with required custom field types registered
+     * Get handler with required custom field types registered.
      *
      * @return Handler
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
+        $fieldType = new FieldType\EmailAddress\Type();
+        $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
-        $handler->getFieldTypeRegistry()->register(
+        return $this->getHandler(
             'ezemail',
-            new FieldType\EmailAddress\Type()
-        );
-        $handler->getStorageRegistry()->register(
-            'ezemail',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\EmailAddressConverter(),
             new FieldType\NullStorage()
         );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezemail',
-            new Legacy\Content\FieldValue\Converter\EmailAddress()
-        );
-
-        return $handler;
     }
 
     /**
@@ -82,7 +77,7 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field definition data values
+     * Get field definition data values.
      *
      * This is a PHPUnit data provider
      *
@@ -93,7 +88,7 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
         return array(
             // The ezstring field type does not have any special field definition
             // properties
-            array( 'fieldType', 'ezemail' ),
+            array('fieldType', 'ezemail'),
             array(
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(
@@ -102,13 +97,13 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
                             'EmailAddressValidator' => array(),
                         ),
                     )
-                )
+                ),
             ),
         );
     }
 
     /**
-     * Get initial field value
+     * Get initial field value.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -116,9 +111,9 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => 'nospam@ez.no',
+                'data' => 'nospam@ez.no',
                 'externalData' => null,
-                'sortKey'      => 'nospam@ez.no',
+                'sortKey' => 'nospam@ez.no',
             )
         );
     }
@@ -134,11 +129,10 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => 'no-spam@example.com',
+                'data' => 'no-spam@example.com',
                 'externalData' => null,
-                'sortKey'      => 'no-spam@example.com',
+                'sortKey' => 'no-spam@example.com',
             )
         );
     }
 }
-

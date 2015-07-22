@@ -1,27 +1,26 @@
 <?php
 
 return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state(array(
-   'facets' => 
-  array (
+   'facets' =>
+  array(
   ),
-   'searchHits' => 
-  array (
-    0 => 
+   'searchHits' =>
+  array(
+    0 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
-       'valueObject' => 
-      array (
+       'valueObject' =>
+      array(
         'id' => 11,
         'title' => 'Members',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
   ),
-   'spellSuggestion' => NULL,
+   'spellSuggestion' => null,
    'time' => 1,
-   'timedOut' => NULL,
-   'maxScore' => NULL,
+   'timedOut' => null,
+   'maxScore' => null,
    'totalCount' => 1,
 ));
-

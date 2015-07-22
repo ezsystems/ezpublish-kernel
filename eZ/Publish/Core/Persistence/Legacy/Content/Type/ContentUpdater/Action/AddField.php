@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the content updater add field action class
+ * File containing the content updater add field action class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,94 +18,122 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 /**
- * Action to add a field to content objects
+ * Action to add a field to content objects.
  */
 class AddField extends Action
 {
     /**
-     * Field definition of the field to add
+     * Field definition of the field to add.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      */
     protected $fieldDefinition;
 
     /**
-     * Storage handler
+     * Storage handler.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected $storageHandler;
 
     /**
-     * Field value converter
+     * Field value converter.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter
      */
     protected $fieldValueConverter;
 
     /**
-     * Creates a new action
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
+     */
+    protected $contentMapper;
+
+    /**
+     * Creates a new action.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter $converter
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
      */
     public function __construct(
         Gateway $contentGateway,
         FieldDefinition $fieldDef,
         Converter $converter,
-        StorageHandler $storageHandler )
-    {
+        StorageHandler $storageHandler,
+        ContentMapper $contentMapper
+    ) {
         $this->contentGateway = $contentGateway;
         $this->fieldDefinition = $fieldDef;
         $this->fieldValueConverter = $converter;
         $this->storageHandler = $storageHandler;
+        $this->contentMapper = $contentMapper;
     }
 
     /**
-     * Applies the action to the given $content
+     * Applies the action to the given $content.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param int $contentId
      */
-    public function apply( Content $content )
+    public function apply($contentId)
     {
-        $languageCodeSet = array();
-        $versionNumbers = $this->contentGateway->listVersionNumbers(
-            $content->versionInfo->contentInfo->id
-        );
+        $versionNumbers = $this->contentGateway->listVersionNumbers($contentId);
+        $languageCodeToFieldId = array();
 
-        foreach ( $content->fields as $field )
-        {
-            if ( isset( $languageCodeSet[$field->languageCode] ) )
-            {
-                continue;
-            }
+        foreach ($versionNumbers as $versionNo) {
+            $contentRows = $this->contentGateway->load($contentId, $versionNo);
+            $contentList = $this->contentMapper->extractContentFromRows($contentRows);
+            $content = $contentList[0];
+            $languageCodeSet = array();
 
-            $languageCodeSet[$field->languageCode] = true;
+            // Each subsequent Content version can have additional language(s)
+            foreach ($content->fields as $field) {
+                $languageCode = $field->languageCode;
 
-            foreach ( $versionNumbers as $versionNo )
-            {
-                $this->insertField(
+                // Add once for each language per version
+                if (isset($languageCodeSet[$languageCode])) {
+                    continue;
+                }
+
+                $languageCodeSet[$languageCode] = true;
+
+                // Check if field was already inserted for current language code,
+                // in that case we need to preserve its ID across versions
+                if (isset($languageCodeToFieldId[$languageCode])) {
+                    $fieldId = $languageCodeToFieldId[$languageCode];
+                } else {
+                    $fieldId = null;
+                }
+
+                $languageCodeToFieldId[$languageCode] = $this->insertField(
                     $content,
-                    $this->createField( $versionNo, $field->languageCode )
+                    $this->createField(
+                        $fieldId,
+                        $versionNo,
+                        $languageCode
+                    )
                 );
             }
         }
     }
 
     /**
-     * Inserts given $field and appends it to the given $content field collection.
+     * Inserts given $field to the internal and external storage.
+     *
+     * If $field->id is null, creating new field id will be created.
+     * Otherwise it will be inserted for the given $content version, reusing existing Field id.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      *
-     * @return void
+     * @return int The ID of the field that was inserted
      */
-    protected function insertField( Content $content, Field $field )
+    protected function insertField(Content $content, Field $field)
     {
         $storageValue = new StorageFieldValue();
         $this->fieldValueConverter->toStorageValue(
@@ -111,55 +141,56 @@ class AddField extends Action
             $storageValue
         );
 
-        $field->id = $this->contentGateway->insertNewField(
-            $content,
-            $field,
-            $storageValue
-        );
+        if (isset($field->id)) {
+            // Insert with existing Field id and given Content version number
+            $this->contentGateway->insertExistingField(
+                $content,
+                $field,
+                $storageValue
+            );
+        } else {
+            // Insert with creating new Field id and given Content version number
+            $field->id = $this->contentGateway->insertNewField(
+                $content,
+                $field,
+                $storageValue
+            );
+        }
 
         // If the storage handler returns true, it means that $field value has been modified
         // So we need to update it in order to store those modifications
         // Field converter is called once again via the Mapper
-        if ( $this->storageHandler->storeFieldData( $content->versionInfo, $field ) === true )
-        {
+        if ($this->storageHandler->storeFieldData($content->versionInfo, $field) === true) {
             $storageValue = new StorageFieldValue();
             $this->fieldValueConverter->toStorageValue(
                 $field->value,
                 $storageValue
             );
 
-            if ( $this->fieldDefinition->isTranslatable )
-            {
-                $this->contentGateway->updateField(
-                    $field,
-                    $storageValue
-                );
-            }
-            else
-            {
-                $this->contentGateway->updateNonTranslatableField(
-                    $field,
-                    $storageValue,
-                    $content->versionInfo->contentInfo->id
-                );
-            }
+            $this->contentGateway->updateField(
+                $field,
+                $storageValue
+            );
         }
 
-        $content->fields[] = $field;
+        return $field->id;
     }
 
     /**
+     * Creates new Field value object, setting given parameters and default value
+     * for a field definition the action is constructed for.
      *
-     *
+     * @param null|int $id
      * @param int $versionNo
      * @param string $languageCode
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Field
      */
-    protected function createField( $versionNo, $languageCode )
+    protected function createField($id, $versionNo, $languageCode)
     {
         $field = new Field();
 
+        $field->id = $id;
         $field->fieldDefinitionId = $this->fieldDefinition->id;
         $field->type = $this->fieldDefinition->fieldType;
         $field->value = clone $this->fieldDefinition->defaultValue;

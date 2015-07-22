@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ValueObjectVisitorDispatcherTest class
+ * File containing the ValueObjectVisitorDispatcherTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use stdClass;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Visitor test
+ * Visitor test.
  */
 class ValueObjectVisitorDispatcherTest extends PHPUnit_Framework_TestCase
 {
@@ -34,14 +36,14 @@ class ValueObjectVisitorDispatcherTest extends PHPUnit_Framework_TestCase
 
         $visitor = $this->getValueObjectVisitorMock();
         $visitor
-            ->expects( $this->at( 0 ) )
-            ->method( 'visit' )
-            ->with( $this->getOutputVisitorMock(), $this->getOutputGeneratorMock(), $data );
+            ->expects($this->at(0))
+            ->method('visit')
+            ->with($this->getOutputVisitorMock(), $this->getOutputGeneratorMock(), $data);
 
         $valueObjectDispatcher = $this->getValueObjectDispatcher();
-        $valueObjectDispatcher->addVisitor( 'stdClass', $visitor );
+        $valueObjectDispatcher->addVisitor('stdClass', $visitor);
 
-        $valueObjectDispatcher->visit( $data );
+        $valueObjectDispatcher->visit($data);
     }
 
     /**
@@ -49,7 +51,7 @@ class ValueObjectVisitorDispatcherTest extends PHPUnit_Framework_TestCase
      */
     public function testVisitValueObjectInvalidType()
     {
-        $this->getValueObjectDispatcher()->visit( 42 );
+        $this->getValueObjectDispatcher()->visit(42);
     }
 
     /**
@@ -59,7 +61,7 @@ class ValueObjectVisitorDispatcherTest extends PHPUnit_Framework_TestCase
     {
         $dispatcher = $this->getValueObjectDispatcher();
 
-        $dispatcher->visit( new stdClass() );
+        $dispatcher->visit(new stdClass());
     }
 
     public function testVisitValueObjectParentMatch()
@@ -68,38 +70,38 @@ class ValueObjectVisitorDispatcherTest extends PHPUnit_Framework_TestCase
 
         $valueObjectVisitor = $this->getValueObjectVisitorMock();
         $valueObjectVisitor
-            ->expects( $this->at( 0 ) )
-            ->method( 'visit' )
-            ->with( $this->getOutputVisitorMock(), $this->getOutputGeneratorMock(), $data );
+            ->expects($this->at(0))
+            ->method('visit')
+            ->with($this->getOutputVisitorMock(), $this->getOutputGeneratorMock(), $data);
 
         $dispatcher = $this->getValueObjectDispatcher();
-        $dispatcher->addVisitor( 'stdClass', $valueObjectVisitor );
+        $dispatcher->addVisitor('stdClass', $valueObjectVisitor);
 
-        $dispatcher->visit( $data );
+        $dispatcher->visit($data);
     }
 
     public function testVisitValueObjectSecondRuleParentMatch()
     {
         $data = new ValueObject();
 
-        $generator = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' );
+        $generator = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
         $valueObjectVisitor1 = $this->getValueObjectVisitorMock();
         $valueObjectVisitor2 = $this->getValueObjectVisitorMock();
 
         $dispatcher = $this->getValueObjectDispatcher();
-        $dispatcher->addVisitor( 'WontMatch', $valueObjectVisitor1 );
-        $dispatcher->addVisitor( 'stdClass', $valueObjectVisitor2 );
+        $dispatcher->addVisitor('WontMatch', $valueObjectVisitor1);
+        $dispatcher->addVisitor('stdClass', $valueObjectVisitor2);
 
         $valueObjectVisitor1
-            ->expects( $this->never() )
-            ->method( 'visit' );
+            ->expects($this->never())
+            ->method('visit');
 
         $valueObjectVisitor2
-            ->expects( $this->at( 0 ) )
-            ->method( 'visit' )
-            ->with( $this->getOutputVisitorMock(), $this->getOutputGeneratorMock(), $data );
+            ->expects($this->at(0))
+            ->method('visit')
+            ->with($this->getOutputVisitorMock(), $this->getOutputGeneratorMock(), $data);
 
-        $dispatcher->visit( $data );
+        $dispatcher->visit($data);
     }
 
     /**
@@ -108,8 +110,9 @@ class ValueObjectVisitorDispatcherTest extends PHPUnit_Framework_TestCase
     private function getValueObjectDispatcher()
     {
         $dispatcher = new Common\Output\ValueObjectVisitorDispatcher();
-        $dispatcher->setOutputGenerator( $this->getOutputGeneratorMock() );
-        $dispatcher->setOutputVisitor( $this->getOutputVisitorMock() );
+        $dispatcher->setOutputGenerator($this->getOutputGeneratorMock());
+        $dispatcher->setOutputVisitor($this->getOutputVisitorMock());
+
         return $dispatcher;
     }
 
@@ -118,7 +121,7 @@ class ValueObjectVisitorDispatcherTest extends PHPUnit_Framework_TestCase
      */
     private function getValueObjectVisitorMock()
     {
-        return $this->getMockForAbstractClass( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitor' );
+        return $this->getMockForAbstractClass('\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitor');
     }
 
     /**
@@ -126,12 +129,12 @@ class ValueObjectVisitorDispatcherTest extends PHPUnit_Framework_TestCase
      */
     private function getOutputVisitorMock()
     {
-        if ( !isset( $this->outputVisitorMock) )
-        {
-            $this->outputVisitorMock = $this->getMockBuilder( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor' )
+        if (!isset($this->outputVisitorMock)) {
+            $this->outputVisitorMock = $this->getMockBuilder('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor')
                 ->disableOriginalConstructor()
                 ->getMock();
         }
+
         return $this->outputVisitorMock;
     }
 
@@ -140,10 +143,10 @@ class ValueObjectVisitorDispatcherTest extends PHPUnit_Framework_TestCase
      */
     private function getOutputGeneratorMock()
     {
-        if ( !isset( $this->outputGeneratorMock ) )
-        {
-            $this->outputGeneratorMock = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' );
+        if (!isset($this->outputGeneratorMock)) {
+            $this->outputGeneratorMock = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
         }
+
         return $this->outputGeneratorMock;
     }
 }

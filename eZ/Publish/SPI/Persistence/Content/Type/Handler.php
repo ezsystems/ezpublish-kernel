@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Content Type Handler class
+ * File containing the Content Type Handler class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,12 +24,12 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
      */
-    public function createGroup( GroupCreateStruct $group );
+    public function createGroup(GroupCreateStruct $group);
 
     /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct $group
      */
-    public function updateGroup( GroupUpdateStruct $group );
+    public function updateGroup(GroupUpdateStruct $group);
 
     /**
      * @param mixed $groupId
@@ -35,7 +37,7 @@ interface Handler
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type group contains types
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type group with id is not found
      */
-    public function deleteGroup( $groupId );
+    public function deleteGroup($groupId);
 
     /**
      * @param mixed $groupId
@@ -44,10 +46,10 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
      */
-    public function loadGroup( $groupId );
+    public function loadGroup($groupId);
 
     /**
-     * Loads Type Group by identifier
+     * Loads Type Group by identifier.
      *
      * Legacy note: Uses name for identifier.
      *
@@ -57,7 +59,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
      */
-    public function loadGroupByIdentifier( $identifier );
+    public function loadGroupByIdentifier($identifier);
 
     /**
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group[]
@@ -70,10 +72,12 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type[]
      */
-    public function loadContentTypes( $groupId, $status = Type::STATUS_DEFINED );
+    public function loadContentTypes($groupId, $status = Type::STATUS_DEFINED);
 
     /**
-     * Loads a content type by id and status
+     * Loads a content type by id and status.
+     *
+     * Note: This method is responsible of having the Field Definitions of the loaded ContentType sorted by placement.
      *
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
@@ -82,10 +86,12 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
-    public function load( $contentTypeId, $status = Type::STATUS_DEFINED );
+    public function load($contentTypeId, $status = Type::STATUS_DEFINED);
 
     /**
-     * Loads a (defined) content type by identifier
+     * Loads a (defined) content type by identifier.
+     *
+     * Note: This method is responsible of having the Field Definitions of the loaded ContentType sorted by placement.
      *
      * @param string $identifier
      *
@@ -93,10 +99,12 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
-    public function loadByIdentifier( $identifier );
+    public function loadByIdentifier($identifier);
 
     /**
-     * Loads a (defined) content type by remote id
+     * Loads a (defined) content type by remote id.
+     *
+     * Note: This method is responsible of having the Field Definitions of the loaded ContentType sorted by placement.
      *
      * @param mixed $remoteId
      *
@@ -104,21 +112,21 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
-    public function loadByRemoteId( $remoteId );
+    public function loadByRemoteId($remoteId);
 
     /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $contentType
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
-    public function create( CreateStruct $contentType );
+    public function create(CreateStruct $contentType);
 
     /**
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $contentType
      */
-    public function update( $contentTypeId, $status, UpdateStruct $contentType );
+    public function update($contentTypeId, $status, UpdateStruct $contentType);
 
     /**
      * @param mixed $contentTypeId
@@ -127,10 +135,10 @@ interface Handler
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is defined and still has content
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
      */
-    public function delete( $contentTypeId, $status );
+    public function delete($contentTypeId, $status);
 
     /**
-     * Creates a draft of existing defined content type
+     * Creates a draft of existing defined content type.
      *
      * Updates modified date, sets $modifierId and status to Type::STATUS_DRAFT on the new returned draft.
      *
@@ -141,10 +149,10 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
-    public function createDraft( $modifierId, $contentTypeId );
+    public function createDraft($modifierId, $contentTypeId);
 
     /**
-     * Copy a Type incl fields and group-relations from a given status to a new Type with status {@link Type::STATUS_DRAFT}
+     * Copy a Type incl fields and group-relations from a given status to a new Type with status {@link Type::STATUS_DRAFT}.
      *
      * New Content Type will have $userId as creator / modifier, created / modified should be updated, new remoteId created
      * and identifier should be 'copy_of_<identifier>_' + the new remoteId or another unique number.
@@ -157,10 +165,10 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
-    public function copy( $userId, $contentTypeId, $status );
+    public function copy($userId, $contentTypeId, $status);
 
     /**
-     * Unlink a content type group from a content type
+     * Unlink a content type group from a content type.
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
@@ -170,10 +178,10 @@ interface Handler
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If $groupId is last group on $contentTypeId or
      *                                                                 not a group assigned to type
      */
-    public function unlink( $groupId, $contentTypeId, $status );
+    public function unlink($groupId, $contentTypeId, $status);
 
     /**
-     * Link a content type group with a content type
+     * Link a content type group with a content type.
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
@@ -182,10 +190,10 @@ interface Handler
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group or type with provided status is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is already part of group
      */
-    public function link( $groupId, $contentTypeId, $status );
+    public function link($groupId, $contentTypeId, $status);
 
     /**
-     * Returns field definition for the given field definition id
+     * Returns field definition for the given field definition id.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If field definition is not found
      *
@@ -194,7 +202,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      */
-    public function getFieldDefinition( $id, $status );
+    public function getFieldDefinition($id, $status);
 
     /**
      * Counts the number of Content instances of the ContentType identified by given $contentTypeId.
@@ -203,7 +211,7 @@ interface Handler
      *
      * @return int
      */
-    public function getContentCount( $contentTypeId );
+    public function getContentCount($contentTypeId);
 
     /**
      * Adds a new field definition to an existing Type.
@@ -217,10 +225,12 @@ interface Handler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
+     *
      * @todo Add FieldDefinition\CreateStruct?
      */
-    public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition );
+    public function addFieldDefinition($contentTypeId, $status, FieldDefinition $fieldDefinition);
 
     /**
      * Removes a field definition from an existing Type.
@@ -234,10 +244,8 @@ interface Handler
      * @param mixed $fieldDefinitionId
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If field is not found
-     *
-     * @return void
      */
-    public function removeFieldDefinition( $contentTypeId, $status, $fieldDefinitionId );
+    public function removeFieldDefinition($contentTypeId, $status, $fieldDefinitionId);
 
     /**
      * This method updates the given $fieldDefinition on a Type.
@@ -251,14 +259,14 @@ interface Handler
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      *
-     * @return void
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If field is not found
+     *
      * @todo Add FieldDefinition\UpdateStruct?
      */
-    public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition );
+    public function updateFieldDefinition($contentTypeId, $status, FieldDefinition $fieldDefinition);
 
     /**
-     * Update content objects
+     * Update content objects.
      *
      * Updates content objects, depending on the changed field definitions.
      *
@@ -270,8 +278,30 @@ interface Handler
      * @param mixed $contentTypeId
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type with $contentTypeId and Type::STATUS_DRAFT is not found
-     *
-     * @return void
      */
-    public function publish( $contentTypeId );
+    public function publish($contentTypeId);
+
+    /**
+     * Returns content type, field definition and field type mapping information
+     * for search engine usage. Only searchable field definitions will be included
+     * in the returned data.
+     *
+     * Returns an array in the form:
+     *
+     * <code>
+     *  array(
+     *      "<ContentType identifier>" => array(
+     *          "<FieldDefinition identifier>" => array(
+     *              "field_definition_id" => "<FieldDefinition id>",
+     *              "field_type_identifier" => "<FieldType identifier>",
+     *          ),
+     *          ...
+     *      ),
+     *      ...
+     *  )
+     * </code>
+     *
+     * @return array
+     */
+    public function getSearchableFieldMap();
 }

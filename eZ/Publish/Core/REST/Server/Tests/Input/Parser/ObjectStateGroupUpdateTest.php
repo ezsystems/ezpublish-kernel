@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
 class ObjectStateGroupUpdateTest extends BaseTest
 {
     /**
-     * Tests the ObjectStateGroupUpdate parser
+     * Tests the ObjectStateGroupUpdate parser.
      */
     public function testParse()
     {
@@ -26,22 +28,22 @@ class ObjectStateGroupUpdateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test group'
-                    )
-                )
+                        '#text' => 'Test group',
+                    ),
+                ),
             ),
             'descriptions' => array(
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test group description'
-                    )
-                )
-            )
+                        '#text' => 'Test group description',
+                    ),
+                ),
+            ),
         );
 
         $objectStateGroupUpdate = $this->getParser();
-        $result = $objectStateGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $objectStateGroupUpdate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroupUpdateStruct',
@@ -62,20 +64,20 @@ class ObjectStateGroupUpdateTest extends BaseTest
         );
 
         $this->assertEquals(
-            array( 'eng-GB' => 'Test group' ),
+            array('eng-GB' => 'Test group'),
             $result->names,
             'ObjectStateGroupUpdateStruct names property not created correctly.'
         );
 
         $this->assertEquals(
-            array( 'eng-GB' => 'Test group description' ),
+            array('eng-GB' => 'Test group description'),
             $result->descriptions,
             'ObjectStateGroupUpdateStruct descriptions property not created correctly.'
         );
     }
 
     /**
-     * Test ObjectStateGroupUpdate parser throwing exception on invalid names structure
+     * Test ObjectStateGroupUpdate parser throwing exception on invalid names structure.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'names' element for ObjectStateGroupUpdate.
@@ -90,18 +92,18 @@ class ObjectStateGroupUpdateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-GB',
-                        '#text' => 'Test group description'
-                    )
-                )
-            )
+                        '#text' => 'Test group description',
+                    ),
+                ),
+            ),
         );
 
         $objectStateGroupUpdate = $this->getParser();
-        $objectStateGroupUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $objectStateGroupUpdate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Returns the ObjectStateGroupUpdate parser
+     * Returns the ObjectStateGroupUpdate parser.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateGroupUpdate
      */
@@ -114,7 +116,7 @@ class ObjectStateGroupUpdateTest extends BaseTest
     }
 
     /**
-     * Get the object state service mock object
+     * Get the object state service mock object.
      *
      * @return \eZ\Publish\API\Repository\ObjectStateService
      */
@@ -128,10 +130,10 @@ class ObjectStateGroupUpdateTest extends BaseTest
             false
         );
 
-        $objectStateServiceMock->expects( $this->any() )
-            ->method( 'newObjectStateGroupUpdateStruct' )
+        $objectStateServiceMock->expects($this->any())
+            ->method('newObjectStateGroupUpdateStruct')
             ->will(
-                $this->returnValue( new ObjectStateGroupUpdateStruct() )
+                $this->returnValue(new ObjectStateGroupUpdateStruct())
             );
 
         return $objectStateServiceMock;

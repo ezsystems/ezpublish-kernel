@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the TimeProcessorTest class
+ * File containing the TimeProcessorTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,18 +17,17 @@ use PHPUnit_Framework_TestCase;
 class TimeProcessorTest extends PHPUnit_Framework_TestCase
 {
     protected $constants = array(
-        "DEFAULT_EMPTY",
-        "DEFAULT_CURRENT_TIME"
+        'DEFAULT_EMPTY',
+        'DEFAULT_CURRENT_TIME',
     );
 
     public function fieldSettingsHashes()
     {
         return array_map(
-            function ( $constantName )
-            {
+            function ($constantName) {
                 return array(
-                    array( "defaultType" => $constantName ),
-                    array( "defaultType" => constant( "eZ\\Publish\\Core\\FieldType\\Time\\Type::{$constantName}" ) )
+                    array('defaultType' => $constantName),
+                    array('defaultType' => constant("eZ\\Publish\\Core\\FieldType\\Time\\Type::{$constantName}")),
                 );
             },
             $this->constants
@@ -37,13 +38,13 @@ class TimeProcessorTest extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\TimeProcessor::preProcessFieldSettingsHash
      * @dataProvider fieldSettingsHashes
      */
-    public function testPreProcessFieldSettingsHash( $inputSettings, $outputSettings )
+    public function testPreProcessFieldSettingsHash($inputSettings, $outputSettings)
     {
         $processor = $this->getProcessor();
 
         $this->assertEquals(
             $outputSettings,
-            $processor->preProcessFieldSettingsHash( $inputSettings )
+            $processor->preProcessFieldSettingsHash($inputSettings)
         );
     }
 
@@ -51,13 +52,13 @@ class TimeProcessorTest extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\TimeProcessor::postProcessFieldSettingsHash
      * @dataProvider fieldSettingsHashes
      */
-    public function testPostProcessFieldSettingsHash( $outputSettings, $inputSettings )
+    public function testPostProcessFieldSettingsHash($outputSettings, $inputSettings)
     {
         $processor = $this->getProcessor();
 
         $this->assertEquals(
             $outputSettings,
-            $processor->postProcessFieldSettingsHash( $inputSettings )
+            $processor->postProcessFieldSettingsHash($inputSettings)
         );
     }
 
@@ -66,6 +67,6 @@ class TimeProcessorTest extends PHPUnit_Framework_TestCase
      */
     protected function getProcessor()
     {
-        return new TimeProcessor;
+        return new TimeProcessor();
     }
 }

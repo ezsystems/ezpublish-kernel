@@ -1,18 +1,18 @@
 <?php
+
 /**
- * File containing the FieldType interface
+ * File containing the FieldType interface.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\SPI\FieldType;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\SPI\FieldType\Value;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
-use eZ\Publish\SPI\FieldType\Event;
 
 /**
  * The field type interface which all field types have to implement.
@@ -34,7 +34,7 @@ use eZ\Publish\SPI\FieldType\Event;
 interface FieldType
 {
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * This identifier should be globally unique and the implementer of a
      * FieldType must take care for the uniqueness. It is therefore recommended
@@ -47,7 +47,7 @@ interface FieldType
     public function getFieldTypeIdentifier();
 
     /**
-     * Returns a human readable string representation from the given $value
+     * Returns a human readable string representation from the given $value.
      *
      * It will be used to generate content name and url alias if current field
      * is designated to be used in the content name/urlAlias pattern.
@@ -59,10 +59,10 @@ interface FieldType
      *
      * @return string
      */
-    public function getName( Value $value );
+    public function getName(Value $value);
 
     /**
-     * Returns a schema for the settings expected by the FieldType
+     * Returns a schema for the settings expected by the FieldType.
      *
      * Returns an arbitrary value, representing a schema for the settings of
      * the FieldType.
@@ -83,7 +83,7 @@ interface FieldType
     public function getSettingsSchema();
 
     /**
-     * Returns a schema for the validator configuration expected by the FieldType
+     * Returns a schema for the validator configuration expected by the FieldType.
      *
      * Returns an arbitrary value, representing a schema for the validator
      * configuration of the FieldType.
@@ -124,7 +124,7 @@ interface FieldType
     public function getValidatorConfigurationSchema();
 
     /**
-     * Validates a field based on the validator configuration in the field definition
+     * Validates a field based on the validator configuration in the field definition.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
@@ -133,10 +133,10 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( FieldDefinition $fieldDef, Value $value );
+    public function validate(FieldDefinition $fieldDef, Value $value);
 
     /**
-     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
      * This methods determines if the given $validatorConfiguration is
      * structurally correct and complies to the validator configuration schema
@@ -146,19 +146,19 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateValidatorConfiguration( $validatorConfiguration );
+    public function validateValidatorConfiguration($validatorConfiguration);
 
     /**
-     * Applies the default values to the given $validatorConfiguration of a FieldDefinitionCreateStruct
+     * Applies the default values to the given $validatorConfiguration of a FieldDefinitionCreateStruct.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param mixed $validatorConfiguration
      */
-    public function applyDefaultValidatorConfiguration( &$validatorConfiguration );
+    public function applyDefaultValidatorConfiguration(&$validatorConfiguration);
 
     /**
-     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
      * This methods determines if the given $fieldSettings are structurally
      * correct and comply to the settings schema returned by {@link
@@ -168,35 +168,35 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateFieldSettings( $fieldSettings );
+    public function validateFieldSettings($fieldSettings);
 
     /**
-     * Applies the default values to the fieldSettings of a FieldDefinitionCreateStruct
+     * Applies the default values to the fieldSettings of a FieldDefinitionCreateStruct.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param mixed $fieldSettings
      */
-    public function applyDefaultSettings( &$fieldSettings );
+    public function applyDefaultSettings(&$fieldSettings);
 
     /**
-     * Indicates if the field type supports indexing and sort keys for searching
+     * Indicates if the field type supports indexing and sort keys for searching.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSearchable();
 
     /**
      * Indicates if the field definition of this type can appear only once in the same ContentType.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSingular();
 
     /**
      * Indicates if the field definition of this type can be added to a ContentType with Content instances.
      *
-     * @return boolean
+     * @return bool
      */
     public function onlyEmptyInstance();
 
@@ -213,7 +213,7 @@ interface FieldType
     public function getEmptyValue();
 
     /**
-     * Returns if the given $value is considered empty by the field type
+     * Returns if the given $value is considered empty by the field type.
      *
      * Usually, only the value returned by {@link getEmptyValue()} is
      * considered empty. The given $value can be safely assumed to have already
@@ -221,9 +221,9 @@ interface FieldType
      *
      * @param \eZ\Publish\SPI\FieldType\Value $value
      *
-     * @return boolean
+     * @return bool
      */
-    public function isEmptyValue( Value $value );
+    public function isEmptyValue(Value $value);
 
     /**
      * Potentially builds and checks the type and structure of the $inputValue.
@@ -246,10 +246,10 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\Value The potentially converted and structurally plausible value.
      */
-    public function acceptValue( $inputValue );
+    public function acceptValue($inputValue);
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * This is the reverse operation to {@link toHash()}. At least the hash
      * format generated by {@link toHash()} must be converted in reverse.
@@ -260,10 +260,10 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\Value
      */
-    public function fromHash( $hash );
+    public function fromHash($hash);
 
     /**
-     * Converts the given $value into a plain hash format
+     * Converts the given $value into a plain hash format.
      *
      * Converts the given $value into a plain hash format, which can be used to
      * transfer the value through plain text formats, e.g. XML, which do not
@@ -274,10 +274,10 @@ interface FieldType
      *
      * @return mixed
      */
-    public function toHash( Value $value );
+    public function toHash(Value $value);
 
     /**
-     * Converts the given $fieldSettings to a simple hash format
+     * Converts the given $fieldSettings to a simple hash format.
      *
      * See the class description for more details on a hash format.
      *
@@ -285,10 +285,10 @@ interface FieldType
      *
      * @return array|hash|scalar|null
      */
-    public function fieldSettingsToHash( $fieldSettings );
+    public function fieldSettingsToHash($fieldSettings);
 
     /**
-     * Converts the given $fieldSettingsHash to field settings of the type
+     * Converts the given $fieldSettingsHash to field settings of the type.
      *
      * This is the reverse operation of {@link fieldSettingsToHash()}.
      * See the class description for more details on a hash format.
@@ -297,10 +297,10 @@ interface FieldType
      *
      * @return mixed
      */
-    public function fieldSettingsFromHash( $fieldSettingsHash );
+    public function fieldSettingsFromHash($fieldSettingsHash);
 
     /**
-     * Converts the given $validatorConfiguration to a simple hash format
+     * Converts the given $validatorConfiguration to a simple hash format.
      *
      * See the class description for more details on a hash format.
      *
@@ -308,11 +308,11 @@ interface FieldType
      *
      * @return array|hash|scalar|null
      */
-    public function validatorConfigurationToHash( $validatorConfiguration );
+    public function validatorConfigurationToHash($validatorConfiguration);
 
     /**
      * Converts the given $validatorConfigurationHash to a validator
-     * configuration of the type
+     * configuration of the type.
      *
      * See the class description for more details on a hash format.
      *
@@ -320,7 +320,7 @@ interface FieldType
      *
      * @return mixed
      */
-    public function validatorConfigurationFromHash( $validatorConfigurationHash );
+    public function validatorConfigurationFromHash($validatorConfigurationHash);
 
     /**
      * Converts a $value to a persistence value.
@@ -344,10 +344,10 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue the value processed by the storage engine
      */
-    public function toPersistenceValue( Value $value );
+    public function toPersistenceValue(Value $value);
 
     /**
-     * Converts a persistence $value to a Value
+     * Converts a persistence $value to a Value.
      *
      * This method builds a field type value from the $data and $externalData properties.
      *
@@ -355,7 +355,7 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\Value
      */
-    public function fromPersistenceValue( FieldValue $fieldValue );
+    public function fromPersistenceValue(FieldValue $fieldValue);
 
     /**
      * Returns relation data extracted from value.
@@ -382,5 +382,5 @@ interface FieldType
      *  )
      * </code>
      */
-    public function getRelations( Value $value );
+    public function getRelations(Value $value);
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Trash Handler class
+ * File containing the Trash Handler class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -30,28 +32,28 @@ class Handler implements BaseTrashHandler
     protected $locationHandler;
 
     /**
-     * Gateway for handling location data
+     * Gateway for handling location data.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected $locationGateway;
 
     /**
-     * Mapper for handling location data
+     * Mapper for handling location data.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
      */
     protected $locationMapper;
 
     /**
-     * Content handler
+     * Content handler.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Handler
      */
     protected $contentHandler;
 
     /**
-     * Construct from userGateway
+     * Construct from userGateway.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
@@ -65,8 +67,7 @@ class Handler implements BaseTrashHandler
         LocationGateway $locationGateway,
         LocationMapper $locationMapper,
         ContentHandler $contentHandler
-    )
-    {
+    ) {
         $this->locationHandler = $locationHandler;
         $this->locationGateway = $locationGateway;
         $this->locationMapper = $locationMapper;
@@ -75,7 +76,7 @@ class Handler implements BaseTrashHandler
 
     /**
      * Loads the data for the trashed location identified by $id.
-     * $id is the same as original location (which has been previously trashed)
+     * $id is the same as original location (which has been previously trashed).
      *
      * @param int $id
      *
@@ -83,10 +84,11 @@ class Handler implements BaseTrashHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
      */
-    public function loadTrashItem( $id )
+    public function loadTrashItem($id)
     {
-        $data = $this->locationGateway->loadTrashByLocation( $id );
-        return $this->locationMapper->createLocationFromRow( $data, null, new Trashed() );
+        $data = $this->locationGateway->loadTrashByLocation($id);
+
+        return $this->locationMapper->createLocationFromRow($data, null, new Trashed());
     }
 
     /**
@@ -102,54 +104,46 @@ class Handler implements BaseTrashHandler
      *
      * @return null|\eZ\Publish\SPI\Persistence\Content\Location\Trashed null if location was deleted, otherwise Trashed object
      */
-    public function trashSubtree( $locationId )
+    public function trashSubtree($locationId)
     {
-        $locationRows = $this->locationGateway->getSubtreeContent( $locationId );
+        $locationRows = $this->locationGateway->getSubtreeContent($locationId);
         $isLocationRemoved = false;
         $parentLocationId = null;
 
-        foreach ( $locationRows as $locationRow )
-        {
-            if ( $locationRow["node_id"] == $locationId )
-            {
-                $parentLocationId = $locationRow["parent_node_id"];
+        foreach ($locationRows as $locationRow) {
+            if ($locationRow['node_id'] == $locationId) {
+                $parentLocationId = $locationRow['parent_node_id'];
             }
 
-            if ( $this->locationGateway->countLocationsByContentId( $locationRow["contentobject_id"] ) == 1 )
-            {
-                $this->locationGateway->trashLocation( $locationRow["node_id"] );
-            }
-            else
-            {
-                if ( $locationRow["node_id"] == $locationId )
-                {
+            if ($this->locationGateway->countLocationsByContentId($locationRow['contentobject_id']) == 1) {
+                $this->locationGateway->trashLocation($locationRow['node_id']);
+            } else {
+                if ($locationRow['node_id'] == $locationId) {
                     $isLocationRemoved = true;
                 }
-                $this->locationGateway->removeLocation( $locationRow["node_id"] );
+                $this->locationGateway->removeLocation($locationRow['node_id']);
 
-                if ( $locationRow["node_id"] == $locationRow["main_node_id"] )
-                {
+                if ($locationRow['node_id'] == $locationRow['main_node_id']) {
                     $newMainLocationRow = $this->locationGateway->getFallbackMainNodeData(
-                        $locationRow["contentobject_id"],
-                        $locationRow["node_id"]
+                        $locationRow['contentobject_id'],
+                        $locationRow['node_id']
                     );
 
                     $this->locationHandler->changeMainLocation(
-                        $locationRow["contentobject_id"],
-                        $newMainLocationRow["node_id"],
-                        $newMainLocationRow["contentobject_version"],
-                        $newMainLocationRow["parent_node_id"]
+                        $locationRow['contentobject_id'],
+                        $newMainLocationRow['node_id'],
+                        $newMainLocationRow['contentobject_version'],
+                        $newMainLocationRow['parent_node_id']
                     );
                 }
             }
         }
 
-        if ( isset( $parentLocationId ) )
-        {
-            $this->locationHandler->markSubtreeModified( $parentLocationId, time() );
+        if (isset($parentLocationId)) {
+            $this->locationHandler->markSubtreeModified($parentLocationId, time());
         }
 
-        return $isLocationRemoved ? null : $this->loadTrashItem( $locationId );
+        return $isLocationRemoved ? null : $this->loadTrashItem($locationId);
     }
 
     /**
@@ -165,18 +159,20 @@ class Handler implements BaseTrashHandler
      * @param mixed $newParentId
      *
      * @return int Newly restored location id
+     *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If $newParentId is invalid
+     *
      * @todo Handle field types actions
      */
-    public function recover( $trashedId, $newParentId )
+    public function recover($trashedId, $newParentId)
     {
-        return $this->locationGateway->untrashLocation( $trashedId, $newParentId )->id;
+        return $this->locationGateway->untrashLocation($trashedId, $newParentId)->id;
     }
 
     /**
      * Returns an array of all trashed locations satisfying the $criterion (if provided),
      * sorted with SortClause objects contained in $sort (if any).
-     * If no criterion is provided (null), no filter is applied
+     * If no criterion is provided (null), no filter is applied.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param int $offset Offset to start listing from, 0 by default
@@ -185,15 +181,14 @@ class Handler implements BaseTrashHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed[]
      */
-    public function findTrashItems( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null )
+    public function findTrashItems(Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null)
     {
         // CBA: Ignore criterion for now.
-        $rows = $this->locationGateway->listTrashed( $offset, $limit, $sort );
+        $rows = $this->locationGateway->listTrashed($offset, $limit, $sort);
         $items = array();
 
-        foreach ( $rows as $row )
-        {
-            $items[] = $this->locationMapper->createLocationFromRow( $row, null, new Trashed() );
+        foreach ($rows as $row) {
+            $items[] = $this->locationMapper->createLocationFromRow($row, null, new Trashed());
         }
 
         return $items;
@@ -201,16 +196,13 @@ class Handler implements BaseTrashHandler
 
     /**
      * Empties the trash
-     * Everything contained in the trash must be removed
-     *
-     * @return void
+     * Everything contained in the trash must be removed.
      */
     public function emptyTrash()
     {
         $trashedItems = $this->findTrashItems();
-        foreach ( $trashedItems as $item )
-        {
-            $this->delete( $item );
+        foreach ($trashedItems as $item) {
+            $this->delete($item);
         }
 
         $this->locationGateway->cleanupTrash();
@@ -218,15 +210,13 @@ class Handler implements BaseTrashHandler
 
     /**
      * Removes a trashed location identified by $trashedLocationId from trash
-     * Associated content has to be deleted
+     * Associated content has to be deleted.
      *
      * @param int $trashedId
-     *
-     * @return void
      */
-    public function deleteTrashItem( $trashedId )
+    public function deleteTrashItem($trashedId)
     {
-        $this->delete( $this->loadTrashItem( $trashedId ) );
+        $this->delete($this->loadTrashItem($trashedId));
     }
 
     /**
@@ -234,15 +224,13 @@ class Handler implements BaseTrashHandler
      * If there is no more locations for corresponding content, then it will be deleted as well.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Trashed $trashItem
-     *
-     * @return void
      */
-    protected function delete( Trashed $trashItem )
+    protected function delete(Trashed $trashItem)
     {
-        $this->locationGateway->removeElementFromTrash( $trashItem->id );
+        $this->locationGateway->removeElementFromTrash($trashItem->id);
 
-        if ( $this->locationGateway->countLocationsByContentId( $trashItem->contentId ) < 1 )
-            $this->contentHandler->deleteContent( $trashItem->contentId );
+        if ($this->locationGateway->countLocationsByContentId($trashItem->contentId) < 1) {
+            $this->contentHandler->deleteContent($trashItem->contentId);
+        }
     }
 }
-

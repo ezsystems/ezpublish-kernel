@@ -7,7 +7,6 @@
  */
 function indent($json)
 {
-
     $result      = '';
     $pos         = 0;
     $strLen      = strlen($json);
@@ -16,26 +15,21 @@ function indent($json)
     $prevChar    = '';
     $outOfQuotes = true;
 
-    for ($i=0; $i<=$strLen; $i++)
-    {
+    for ($i=0; $i<=$strLen; $i++) {
 
         // Grab the next character in the string.
         $char = substr($json, $i, 1);
 
         // Are we inside a quoted string?
-        if ($char == '"' && $prevChar != '\\')
-        {
+        if ($char == '"' && $prevChar != '\\') {
             $outOfQuotes = !$outOfQuotes;
 
             // If this character is the end of an element,
             // output a new line and indent the next line.
-        }
-        else if(($char == '}' || $char == ']') && $outOfQuotes)
-        {
+        } elseif (($char == '}' || $char == ']') && $outOfQuotes) {
             $result .= $newLine;
             $pos --;
-            for ($j=0; $j<$pos; $j++)
-            {
+            for ($j=0; $j<$pos; $j++) {
                 $result .= $indentStr;
             }
         }
@@ -45,16 +39,13 @@ function indent($json)
 
         // If the last character was the beginning of an element,
         // output a new line and indent the next line.
-        if (($char == ',' || $char == '{' || $char == '[') && $outOfQuotes)
-        {
+        if (($char == ',' || $char == '{' || $char == '[') && $outOfQuotes) {
             $result .= $newLine;
-            if ($char == '{' || $char == '[')
-            {
+            if ($char == '{' || $char == '[') {
                 $pos ++;
             }
 
-            for ($j = 0; $j < $pos; $j++)
-            {
+            for ($j = 0; $j < $pos; $j++) {
                 $result .= $indentStr;
             }
         }
@@ -73,20 +64,19 @@ function indent($json)
 function dom_to_array($root)
 {
     // if the node has only a single text node
-    if(!$root->hasAttributes() && $root->childNodes->length==1
-    && $root->childNodes->item(0)->nodeType == XML_TEXT_NODE)
-    {
+    if (!$root->hasAttributes() && $root->childNodes->length==1
+    && $root->childNodes->item(0)->nodeType == XML_TEXT_NODE) {
         return $root->childNodes->item(0)->nodeValue;
     }
 
     $result = array();
 
-    if ($root->hasAttributes())
-    {
+    if ($root->hasAttributes()) {
         $attrs = $root->attributes;
 
-        foreach ($attrs as $i => $attr)
-        $result["_" . $attr->name] = $attr->value;
+        foreach ($attrs as $i => $attr) {
+            $result["_" . $attr->name] = $attr->value;
+        }
     }
 
     $children = $root->childNodes;
@@ -95,21 +85,15 @@ function dom_to_array($root)
 
     $text = "";
 
-    for($i = 0; $i < $children->length; $i++)
-    {
+    for ($i = 0; $i < $children->length; $i++) {
         $child = $children->item($i);
-        if($child->nodeType == XML_TEXT_NODE)
-        {
+        if ($child->nodeType == XML_TEXT_NODE) {
             $text = $text . $child->nodeValue;
-        }
-        else
-        {
-            if (!isset($result[$child->nodeName]))
+        } else {
+            if (!isset($result[$child->nodeName])) {
                 $result[$child->nodeName] = dom_to_array($child);
-            else
-            {
-                if (!isset($group[$child->nodeName]))
-                {
+            } else {
+                if (!isset($group[$child->nodeName])) {
                     $tmp = $result[$child->nodeName];
                     $result[$child->nodeName] = array($tmp);
                     $group[$child->nodeName] = 1;
@@ -120,8 +104,9 @@ function dom_to_array($root)
         }
     }
     $trimmed = trim($text);
-    if($trimmed != "")
-    $result['#text'] = $text;
+    if ($trimmed != "") {
+        $result['#text'] = $text;
+    }
     return $result;
 }
 /**
@@ -137,6 +122,4 @@ function convert($fileName)
     return json_encode($ret);
 }
 
-echo indent(str_replace("\/","/",convert($argv[1])));
-
-?>
+echo indent(str_replace("\/", "/", convert($argv[1])));

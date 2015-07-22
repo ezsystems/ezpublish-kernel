@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentType class
+ * File containing the ContentType class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -32,21 +34,21 @@ class Type extends ValueObject
     const STATUS_MODIFIED = 2;
 
     /**
-     * Primary key: Content type ID
+     * Primary key: Content type ID.
      *
      * @var mixed
      */
     public $id;
 
     /**
-     * Primary key: Status (legacy: "version")
+     * Primary key: Status (legacy: "version").
      *
      * @var int One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      */
     public $status = self::STATUS_DRAFT;
 
     /**
-     * Human readable name of the content type
+     * Human readable name of the content type.
      *
      * The structure of this field is:
      * <code>
@@ -58,7 +60,7 @@ class Type extends ValueObject
     public $name;
 
     /**
-     * Human readable description of the content type
+     * Human readable description of the content type.
      *
      * The structure of this field is:
      * <code>
@@ -70,43 +72,42 @@ class Type extends ValueObject
     public $description = array();
 
     /**
-     * String identifier of a type
+     * String identifier of a type.
      *
      * @var string
      */
     public $identifier;
 
     /**
-     * Creation date (timestamp)
+     * Creation date (timestamp).
      *
      * @var int
      */
     public $created;
 
     /**
-     * Modification date (timestamp)
+     * Modification date (timestamp).
      *
      * @var int
      */
     public $modified;
 
     /**
-     * Creator user id
+     * Creator user id.
      *
      * @var mixed
      */
     public $creatorId;
 
     /**
-     * Modifier user id
+     * Modifier user id.
      *
      * @var mixed
-     *
      */
     public $modifierId;
 
     /**
-     * Unique remote ID
+     * Unique remote ID.
      *
      * @var string
      */
@@ -118,6 +119,7 @@ class Type extends ValueObject
      * If nothing is provided, $nameSchema will be used instead.
      *
      * @var string
+     *
      * @see \eZ\Publish\SPI\Persistence\Content\Type::$nameSchema
      */
     public $urlAliasSchema;
@@ -128,28 +130,28 @@ class Type extends ValueObject
      * These place holders must comply this pattern : <field_definition_identifier>.
      * An OR condition can be used :
      * <field_def|other_field_def>
-     * In this example, field_def will be used if available. If not, other_field_def will be used for content name generation
+     * In this example, field_def will be used if available. If not, other_field_def will be used for content name generation.
      *
      * @var string
      */
     public $nameSchema;
 
     /**
-     * Determines if the type is a container
+     * Determines if the type is a container.
      *
-     * @var boolean
+     * @var bool
      */
     public $isContainer;
 
     /**
-     * Initial language
+     * Initial language.
      *
      * @var mixed
      */
     public $initialLanguageId;
 
     /**
-     * Specifies which property the child locations should be sorted on by default when created
+     * Specifies which property the child locations should be sorted on by default when created.
      *
      * Valid values are found at {@link Location::SORT_FIELD_*}
      *
@@ -158,7 +160,7 @@ class Type extends ValueObject
     public $sortField = Location::SORT_FIELD_PUBLISHED;
 
     /**
-     * Specifies whether the sort order should be ascending or descending by default when created
+     * Specifies whether the sort order should be ascending or descending by default when created.
      *
      * Valid values are {@link Location::SORT_ORDER_*}
      *
@@ -167,14 +169,14 @@ class Type extends ValueObject
     public $sortOrder = Location::SORT_ORDER_DESC;
 
     /**
-     * Contains an array of type group IDs
+     * Contains an array of type group IDs.
      *
      * @var mixed[]
      */
     public $groupIds = array();
 
     /**
-     * Content fields in this type
+     * Content fields in this type.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition[]
      */
@@ -183,7 +185,7 @@ class Type extends ValueObject
     /**
      * @todo: Document.
      *
-     * @var boolean
+     * @var bool
      */
     public $defaultAlwaysAvailable = false;
 }

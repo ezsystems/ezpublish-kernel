@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the TextLineTest class
+ * File containing the TextLineTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,7 +13,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\TextLine\Type as TextLineType;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
-use ReflectionObject;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * @group fieldType
@@ -28,11 +30,14 @@ class TextLineTest extends FieldTypeTest
      * NOT take care for test case wide caching of the field type, just return
      * a new instance from this method!
      *
-     * @return FieldType
+     * @return \eZ\Publish\Core\FieldType\FieldType
      */
     protected function createFieldTypeUnderTest()
     {
-        return new TextLineType();
+        $fieldType = new TextLineType();
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
+
+        return $fieldType;
     }
 
     /**
@@ -46,13 +51,13 @@ class TextLineTest extends FieldTypeTest
             'StringLengthValidator' => array(
                 'minStringLength' => array(
                     'type' => 'int',
-                    'default' => 0
+                    'default' => 0,
                 ),
                 'maxStringLength' => array(
                     'type' => 'int',
-                    'default' => false
-                )
-            )
+                    'default' => null,
+                ),
+            ),
         );
     }
 
@@ -69,11 +74,11 @@ class TextLineTest extends FieldTypeTest
     /**
      * Returns the empty value expected from the field type.
      *
-     * @return void
+     * @return \eZ\Publish\Core\FieldType\TextLine\Value
      */
     protected function getEmptyValueExpectation()
     {
-        return new TextLineValue;
+        return new TextLineValue();
     }
 
     /**
@@ -107,7 +112,7 @@ class TextLineTest extends FieldTypeTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                new TextLineValue( 23 ),
+                new TextLineValue(23),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
@@ -147,41 +152,46 @@ class TextLineTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new TextLineValue,
+                new TextLineValue(),
             ),
             array(
-                "",
-                new TextLineValue,
+                '',
+                new TextLineValue(),
             ),
             array(
-                " ",
-                new TextLineValue,
+                ' ',
+                new TextLineValue(),
             ),
             array(
                 ' sindelfingen ',
-                new TextLineValue( ' sindelfingen ' ),
+                new TextLineValue(' sindelfingen '),
             ),
             array(
-                new TextLineValue( ' sindelfingen ' ),
-                new TextLineValue( ' sindelfingen ' ),
+                new TextLineValue(' sindelfingen '),
+                new TextLineValue(' sindelfingen '),
             ),
             array(
-                new TextLineValue( '' ),
-                new TextLineValue,
+                // 11+ numbers - EZP-21771
+                '12345678901',
+                new TextLineValue('12345678901'),
             ),
             array(
-                new TextLineValue( ' ' ),
-                new TextLineValue,
+                new TextLineValue(''),
+                new TextLineValue(),
             ),
             array(
-                new TextLineValue( null ),
-                new TextLineValue,
+                new TextLineValue(' '),
+                new TextLineValue(),
+            ),
+            array(
+                new TextLineValue(null),
+                new TextLineValue(),
             ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -219,22 +229,22 @@ class TextLineTest extends FieldTypeTest
     {
         return array(
             array(
-                new TextLineValue,
-                null
+                new TextLineValue(),
+                null,
             ),
             array(
                 new TextLineValue(),
                 '',
             ),
             array(
-                new TextLineValue( 'sindelfingen' ),
+                new TextLineValue('sindelfingen'),
                 'sindelfingen',
             ),
         );
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -273,7 +283,7 @@ class TextLineTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new TextLineValue,
+                new TextLineValue(),
             ),
             array(
                 '',
@@ -281,7 +291,7 @@ class TextLineTest extends FieldTypeTest
             ),
             array(
                 'sindelfingen',
-                new TextLineValue( 'sindelfingen' ),
+                new TextLineValue('sindelfingen'),
             ),
         );
     }
@@ -318,43 +328,43 @@ class TextLineTest extends FieldTypeTest
     {
         return array(
             array(
-                array()
+                array(),
             ),
             array(
                 array(
                     'StringLengthValidator' => array(
-                        'minStringLength' => false,
-                    )
-                )
+                        'minStringLength' => null,
+                    ),
+                ),
             ),
             array(
                 array(
                     'StringLengthValidator' => array(
                         'minStringLength' => 23,
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 array(
                     'StringLengthValidator' => array(
-                        'maxStringLength' => false,
-                    )
-                )
+                        'maxStringLength' => null,
+                    ),
+                ),
             ),
             array(
                 array(
                     'StringLengthValidator' => array(
                         'maxStringLength' => 23,
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 array(
                     'StringLengthValidator' => array(
                         'minStringLength' => 23,
                         'maxStringLength' => 42,
-                    )
-                )
+                    ),
+                ),
             ),
         );
     }
@@ -412,7 +422,7 @@ class TextLineTest extends FieldTypeTest
             array(
                 array(
                     'StringLengthValidator' => array(
-                        'nonExistentValue' => 23
+                        'nonExistentValue' => 23,
                     ),
                 ),
             ),
@@ -428,7 +438,233 @@ class TextLineTest extends FieldTypeTest
                     'StringLengthValidator' => array(
                         'maxStringLength' => .42,
                     ),
-                )
+                ),
+            ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezstring';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array($this->getEmptyValueExpectation(), ''),
+            array(new TextLineValue('This is a line of text'), 'This is a line of text'),
+        );
+    }
+
+    /**
+     * Provides data sets with validator configuration and/or field settings and
+     * field value which are considered valid by the {@link validate()} method.
+     *
+     * ATTENTION: This is a default implementation, which must be overwritten if
+     * a FieldType supports validation!
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(
+     *              "validatorConfiguration" => array(
+     *                  "StringLengthValidator" => array(
+     *                      "minStringLength" => 2,
+     *                      "maxStringLength" => 10,
+     *                  ),
+     *              ),
+     *          ),
+     *          new TextLineValue( "lalalala" ),
+     *      ),
+     *      array(
+     *          array(
+     *              "fieldSettings" => array(
+     *                  'isMultiple' => true
+     *              ),
+     *          ),
+     *          new CountryValue(
+     *              array(
+     *                  "BE" => array(
+     *                      "Name" => "Belgium",
+     *                      "Alpha2" => "BE",
+     *                      "Alpha3" => "BEL",
+     *                      "IDC" => 32,
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideValidDataForValidate()
+    {
+        return array(
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'StringLengthValidator' => array(
+                            'minStringLength' => 2,
+                            'maxStringLength' => 10,
+                        ),
+                    ),
+                ),
+                new TextLineValue('lalalala'),
+            ),
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'StringLengthValidator' => array(
+                            'maxStringLength' => 10,
+                        ),
+                    ),
+                ),
+                new TextLineValue('lililili'),
+            ),
+        );
+    }
+
+    /**
+     * Provides data sets with validator configuration and/or field settings,
+     * field value and corresponding validation errors returned by
+     * the {@link validate()} method.
+     *
+     * ATTENTION: This is a default implementation, which must be overwritten
+     * if a FieldType supports validation!
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(
+     *              "validatorConfiguration" => array(
+     *                  "IntegerValueValidator" => array(
+     *                      "minIntegerValue" => 5,
+     *                      "maxIntegerValue" => 10
+     *                  ),
+     *              ),
+     *          ),
+     *          new IntegerValue( 3 ),
+     *          array(
+     *              new ValidationError(
+     *                  "The value can not be lower than %size%.",
+     *                  null,
+     *                  array(
+     *                      "size" => 5
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *      array(
+     *          array(
+     *              "fieldSettings" => array(
+     *                  "isMultiple" => false
+     *              ),
+     *          ),
+     *          new CountryValue(
+     *              "BE" => array(
+     *                  "Name" => "Belgium",
+     *                  "Alpha2" => "BE",
+     *                  "Alpha3" => "BEL",
+     *                  "IDC" => 32,
+     *              ),
+     *              "FR" => array(
+     *                  "Name" => "France",
+     *                  "Alpha2" => "FR",
+     *                  "Alpha3" => "FRA",
+     *                  "IDC" => 33,
+     *              ),
+     *          )
+     *      ),
+     *      array(
+     *          new ValidationError(
+     *              "Field definition does not allow multiple countries to be selected."
+     *          ),
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInvalidDataForValidate()
+    {
+        return array(
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'StringLengthValidator' => array(
+                            'minStringLength' => 5,
+                            'maxStringLength' => 10,
+                        ),
+                    ),
+                ),
+                new TextLineValue('aaa'),
+                array(
+                    new ValidationError(
+                        'The string can not be shorter than %size% character.',
+                        'The string can not be shorter than %size% characters.',
+                        array(
+                            'size' => 5,
+                        ),
+                        'text'
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'StringLengthValidator' => array(
+                            'minStringLength' => 5,
+                            'maxStringLength' => 10,
+                        ),
+                    ),
+                ),
+                new TextLineValue('0123456789012345'),
+                array(
+                    new ValidationError(
+                        'The string can not exceed %size% character.',
+                        'The string can not exceed %size% characters.',
+                        array(
+                            'size' => 10,
+                        ),
+                        'text'
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'StringLengthValidator' => array(
+                            'minStringLength' => 10,
+                            'maxStringLength' => 5,
+                        ),
+                    ),
+                ),
+                new TextLineValue('1234567'),
+                array(
+                    new ValidationError(
+                        'The string can not exceed %size% character.',
+                        'The string can not exceed %size% characters.',
+                        array(
+                            'size' => 5,
+                        ),
+                        'text'
+                    ),
+                    new ValidationError(
+                        'The string can not be shorter than %size% character.',
+                        'The string can not be shorter than %size% characters.',
+                        array(
+                            'size' => 10,
+                        ),
+                        'text'
+                    ),
+                ),
             ),
         );
     }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the eZ\Publish\Core\FieldType\Tests\FieldTypeMockTest class
+ * File containing the eZ\Publish\Core\FieldType\Tests\FieldTypeMockTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,9 +21,14 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
     public function testApplyDefaultSettingsThrowsInvalidArgumentException()
     {
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
-        $stub = $this->getMockForAbstractClass( "\\eZ\\Publish\\Core\\FieldType\\FieldType" );
+        $stub = $this->getMockForAbstractClass(
+            '\\eZ\\Publish\\Core\\FieldType\\FieldType',
+            array(),
+            '',
+            false
+        );
 
-        $stub->applyDefaultSettings( new \DateTime );
+        $stub->applyDefaultSettings(new \DateTime());
     }
 
     /**
@@ -29,59 +36,59 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
      *
      * @covers \eZ\Publish\Core\FieldType\FieldType::applyDefaultSettings
      */
-    public function testApplyDefaultSettings( $initialSettings, $expectedSettings )
+    public function testApplyDefaultSettings($initialSettings, $expectedSettings)
     {
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
         $stub = $this->getMockForAbstractClass(
-            "\\eZ\\Publish\\Core\\FieldType\\FieldType",
+            '\\eZ\\Publish\\Core\\FieldType\\FieldType',
             array(),
-            "",
+            '',
+            false,
             true,
             true,
-            true,
-            array( "getSettingsSchema" )
+            array('getSettingsSchema')
         );
 
         $stub
-            ->expects( $this->any() )
-            ->method( "getSettingsSchema" )
+            ->expects($this->any())
+            ->method('getSettingsSchema')
             ->will(
                 $this->returnValue(
                     array(
-                        "true" => array(
-                            "default" => true
+                        'true' => array(
+                            'default' => true,
                         ),
-                        "false" => array(
-                            "default" => false
+                        'false' => array(
+                            'default' => false,
                         ),
-                        "null" => array(
-                            "default" => null
+                        'null' => array(
+                            'default' => null,
                         ),
-                        "zero" => array(
-                            "default" => 0
+                        'zero' => array(
+                            'default' => 0,
                         ),
-                        "int" => array(
-                            "default" => 42
+                        'int' => array(
+                            'default' => 42,
                         ),
-                        "float" => array(
-                            "default" => 42.42
+                        'float' => array(
+                            'default' => 42.42,
                         ),
-                        "string" => array(
-                            "default" => "string"
+                        'string' => array(
+                            'default' => 'string',
                         ),
-                        "emptystring" => array(
-                            "default" => ""
+                        'emptystring' => array(
+                            'default' => '',
                         ),
-                        "emptyarray" => array(
-                            "default" => array()
+                        'emptyarray' => array(
+                            'default' => array(),
                         ),
-                        "nodefault" => array(),
+                        'nodefault' => array(),
                     )
                 )
             );
 
         $fieldSettings = $initialSettings;
-        $stub->applyDefaultSettings( $fieldSettings );
+        $stub->applyDefaultSettings($fieldSettings);
         $this->assertSame(
             $expectedSettings,
             $fieldSettings
@@ -94,63 +101,63 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
             array(
                 array(),
                 array(
-                    "true" => true,
-                    "false" => false,
-                    "null" => null,
-                    "zero" => 0,
-                    "int" => 42,
-                    "float" => 42.42,
-                    "string" => "string",
-                    "emptystring" => "",
-                    "emptyarray" => array(),
-                )
+                    'true' => true,
+                    'false' => false,
+                    'null' => null,
+                    'zero' => 0,
+                    'int' => 42,
+                    'float' => 42.42,
+                    'string' => 'string',
+                    'emptystring' => '',
+                    'emptyarray' => array(),
+                ),
             ),
             array(
                 array(
-                    "true" => "foo",
+                    'true' => 'foo',
                 ),
                 array(
-                    "true" => "foo",
-                    "false" => false,
-                    "null" => null,
-                    "zero" => 0,
-                    "int" => 42,
-                    "float" => 42.42,
-                    "string" => "string",
-                    "emptystring" => "",
-                    "emptyarray" => array(),
-                )
+                    'true' => 'foo',
+                    'false' => false,
+                    'null' => null,
+                    'zero' => 0,
+                    'int' => 42,
+                    'float' => 42.42,
+                    'string' => 'string',
+                    'emptystring' => '',
+                    'emptyarray' => array(),
+                ),
             ),
             array(
                 array(
-                    "null" => "foo",
+                    'null' => 'foo',
                 ),
                 array(
-                    "null" => "foo",
-                    "true" => true,
-                    "false" => false,
-                    "zero" => 0,
-                    "int" => 42,
-                    "float" => 42.42,
-                    "string" => "string",
-                    "emptystring" => "",
-                    "emptyarray" => array(),
-                )
+                    'null' => 'foo',
+                    'true' => true,
+                    'false' => false,
+                    'zero' => 0,
+                    'int' => 42,
+                    'float' => 42.42,
+                    'string' => 'string',
+                    'emptystring' => '',
+                    'emptyarray' => array(),
+                ),
             ),
             array(
                 $array = array(
-                    "false" => true,
-                    "emptystring" => array( "foo" ),
-                    "null" => "notNull",
-                    "additionalEntry" => "baz",
-                    "zero" => 10,
-                    "int" => "this is not an int",
-                    "string" => null,
-                    "emptyarray" => array( array() ),
-                    "true" => false,
-                    "float" => true,
+                    'false' => true,
+                    'emptystring' => array('foo'),
+                    'null' => 'notNull',
+                    'additionalEntry' => 'baz',
+                    'zero' => 10,
+                    'int' => 'this is not an int',
+                    'string' => null,
+                    'emptyarray' => array(array()),
+                    'true' => false,
+                    'float' => true,
                 ),
-                $array
+                $array,
             ),
         );
     }
@@ -161,33 +168,38 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
     public function testApplyDefaultValidatorConfigurationEmptyThrowsInvalidArgumentException()
     {
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
-        $stub = $this->getMockForAbstractClass( "\\eZ\\Publish\\Core\\FieldType\\FieldType" );
+        $stub = $this->getMockForAbstractClass(
+            '\\eZ\\Publish\\Core\\FieldType\\FieldType',
+            array(),
+            '',
+            false
+        );
 
-        $stub->applyDefaultValidatorConfiguration( new \DateTime );
+        $stub->applyDefaultValidatorConfiguration(new \DateTime());
     }
 
     public function testApplyDefaultValidatorConfigurationEmpty()
     {
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
         $stub = $this->getMockForAbstractClass(
-            "\\eZ\\Publish\\Core\\FieldType\\FieldType",
+            '\\eZ\\Publish\\Core\\FieldType\\FieldType',
             array(),
-            "",
+            '',
+            false,
             true,
             true,
-            true,
-            array( "getValidatorConfigurationSchema" )
+            array('getValidatorConfigurationSchema')
         );
 
         $stub
-            ->expects( $this->any() )
-            ->method( "getValidatorConfigurationSchema" )
+            ->expects($this->any())
+            ->method('getValidatorConfigurationSchema')
             ->will(
-                $this->returnValue( array() )
+                $this->returnValue(array())
             );
 
         $validatorConfiguration = null;
-        $stub->applyDefaultValidatorConfiguration( $validatorConfiguration );
+        $stub->applyDefaultValidatorConfiguration($validatorConfiguration);
         $this->assertSame(
             null,
             $validatorConfiguration
@@ -197,39 +209,39 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider providerForTestApplyDefaultValidatorConfiguration
      */
-    public function testApplyDefaultValidatorConfiguration( $initialConfiguration, $expectedConfiguration )
+    public function testApplyDefaultValidatorConfiguration($initialConfiguration, $expectedConfiguration)
     {
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
         $stub = $this->getMockForAbstractClass(
-            "\\eZ\\Publish\\Core\\FieldType\\FieldType",
+            '\\eZ\\Publish\\Core\\FieldType\\FieldType',
             array(),
-            "",
+            '',
+            false,
             true,
             true,
-            true,
-            array( "getValidatorConfigurationSchema" )
+            array('getValidatorConfigurationSchema')
         );
 
         $stub
-            ->expects( $this->any() )
-            ->method( "getValidatorConfigurationSchema" )
+            ->expects($this->any())
+            ->method('getValidatorConfigurationSchema')
             ->will(
                 $this->returnValue(
                     array(
-                        "TestValidator" => array(
-                            "valueClick" => array(
-                                "default" => 1
+                        'TestValidator' => array(
+                            'valueClick' => array(
+                                'default' => 1,
                             ),
-                            "valueClack" => array(
-                                "default" => 0
+                            'valueClack' => array(
+                                'default' => 0,
                             ),
-                        )
+                        ),
                     )
                 )
             );
 
         $validatorConfiguration = $initialConfiguration;
-        $stub->applyDefaultValidatorConfiguration( $validatorConfiguration );
+        $stub->applyDefaultValidatorConfiguration($validatorConfiguration);
         $this->assertSame(
             $expectedConfiguration,
             $validatorConfiguration
@@ -239,10 +251,10 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
     public function providerForTestApplyDefaultValidatorConfiguration()
     {
         $defaultConfiguration = array(
-            "TestValidator" => array(
-                "valueClick" => 1,
-                "valueClack" => 0
-            )
+            'TestValidator' => array(
+                'valueClick' => 1,
+                'valueClack' => 0,
+            ),
         );
 
         return array(
@@ -256,17 +268,17 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
             ),
             array(
                 array(
-                    "TestValidator" => array(
-                        "valueClick" => 100
-                    )
+                    'TestValidator' => array(
+                        'valueClick' => 100,
+                    ),
                 ),
                 array(
-                    "TestValidator" => array(
-                        "valueClick" => 100,
-                        "valueClack" => 0
-                    )
+                    'TestValidator' => array(
+                        'valueClick' => 100,
+                        'valueClack' => 0,
+                    ),
                 ),
-            )
+            ),
         );
     }
 }

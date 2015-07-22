@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,7 +22,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 abstract class ContentTypeCreateStruct extends ValueObject
 {
     /**
-     * String unique identifier of a type
+     * String unique identifier of a type.
      *
      * @required
      *
@@ -38,35 +40,35 @@ abstract class ContentTypeCreateStruct extends ValueObject
     public $mainLanguageCode;
 
     /**
-     * The remote id
+     * The remote id.
      *
      * @var string
      */
     public $remoteId;
 
     /**
-     * URL alias schema
+     * URL alias schema.
      *
      * @var string
      */
     public $urlAliasSchema;
 
     /**
-     * Name schema
+     * Name schema.
      *
      * @var string
      */
     public $nameSchema;
 
     /**
-     * Determines if the type is a container
+     * Determines if the type is a container.
      *
-     * @var boolean
+     * @var bool
      */
     public $isContainer = false;
 
     /**
-     * Specifies which property the child locations should be sorted on by default when created
+     * Specifies which property the child locations should be sorted on by default when created.
      *
      * Valid values are found at {@link Location::SORT_FIELD_*}
      *
@@ -75,7 +77,7 @@ abstract class ContentTypeCreateStruct extends ValueObject
     public $defaultSortField = Location::SORT_FIELD_PUBLISHED;
 
     /**
-     * Specifies whether the sort order should be ascending or descending by default when created
+     * Specifies whether the sort order should be ascending or descending by default when created.
      *
      * Valid values are {@link Location::SORT_ORDER_*}
      *
@@ -87,12 +89,12 @@ abstract class ContentTypeCreateStruct extends ValueObject
      * If an instance of a content type is created the always available flag is set
      * by default this this value.
      *
-     * @var boolean
+     * @var bool
      */
     public $defaultAlwaysAvailable = true;
 
     /**
-     * AN array of names with languageCode keys
+     * An array of names with languageCode keys.
      *
      * @required - at least one name in the main language is required
      *
@@ -101,28 +103,28 @@ abstract class ContentTypeCreateStruct extends ValueObject
     public $names;
 
     /**
-     * An array of descriptions with languageCode keys
+     * An array of descriptions with languageCode keys.
      *
      * @var array an array of string
      */
     public $descriptions;
 
     /**
-     * Adds a new field definition
+     * Adds a new field definition.
      *
      * @param FieldDefinitionCreateStruct $fieldDef
      */
-    abstract public function addFieldDefinition( FieldDefinitionCreateStruct $fieldDef );
+    abstract public function addFieldDefinition(FieldDefinitionCreateStruct $fieldDef);
 
     /**
-     * If set this value overrides the current user as creator
+     * If set this value overrides the current user as creator.
      *
      * @var mixed
      */
     public $creatorId = null;
 
     /**
-     * If set this value overrides the current time for creation
+     * If set this value overrides the current time for creation.
      *
      * @var \DateTime
      */

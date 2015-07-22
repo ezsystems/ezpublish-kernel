@@ -1,26 +1,27 @@
 <?php
+
 /**
- * File containing the Limitation parser class
+ * File containing the Limitation parser class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitation;
 
 /**
- * Parser for Limitation
+ * Parser for Limitation.
  */
-class Limitation extends Parser
+class Limitation extends BaseParser
 {
     /**
-     * Parse input structure
+     * Parse input structure.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -29,13 +30,12 @@ class Limitation extends Parser
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        $limitation = $this->getLimitationByIdentifier( $data['_identifier'] );
+        $limitation = $this->getLimitationByIdentifier($data['_identifier']);
 
         $limitationValues = array();
-        foreach ( $data['values']['ref'] as $limitationValue )
-        {
+        foreach ($data['values']['ref'] as $limitationValue) {
             $limitationValues[] = $limitationValue['_href'];
         }
 
@@ -45,7 +45,7 @@ class Limitation extends Parser
     }
 
     /**
-     * Instantiates Limitation object based on identifier
+     * Instantiates Limitation object based on identifier.
      *
      * @param string $identifier
      *
@@ -55,10 +55,9 @@ class Limitation extends Parser
      *
      * @todo Use dependency injection system
      */
-    protected function getLimitationByIdentifier( $identifier )
+    protected function getLimitationByIdentifier($identifier)
     {
-        switch ( $identifier )
-        {
+        switch ($identifier) {
             case APILimitation::CONTENTTYPE:
                 return new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
 
@@ -99,7 +98,7 @@ class Limitation extends Parser
                 return new \eZ\Publish\API\Repository\Values\User\Limitation\ParentUserGroupLimitation();
 
             default:
-                throw new \eZ\Publish\Core\Base\Exceptions\NotFoundException( 'Limitation', $identifier );
+                throw new \eZ\Publish\Core\Base\Exceptions\NotFoundException('Limitation', $identifier);
         }
     }
 }

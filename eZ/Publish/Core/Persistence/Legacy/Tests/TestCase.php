@@ -1,44 +1,46 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\TestCase class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\TestCase class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use PHPUnit_Framework_TestCase;
 use InvalidArgumentException;
 use PDOException;
 use Exception;
 
 /**
- * Base test case for database related tests
+ * Base test case for database related tests.
  */
 abstract class TestCase extends PHPUnit_Framework_TestCase
 {
     /**
-     * DSN used for the DB backend
+     * DSN used for the DB backend.
      *
      * @var string
      */
     protected $dsn;
 
     /**
-     * Name of the DB, extracted from DSN
+     * Name of the DB, extracted from DSN.
      *
      * @var string
      */
     protected $db;
 
     /**
-     * Database handler -- to not be constructed twice for one test
+     * Database handler -- to not be constructed twice for one test.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $handler;
 
@@ -50,7 +52,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected static $initial = true;
 
     /**
-     * Get data source name
+     * Get data source name.
      *
      * The database connection string is read from an optional environment
      * variable "DATABASE" and defaults to an in-memory SQLite database.
@@ -59,32 +61,32 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected function getDsn()
     {
-        if ( !$this->dsn )
-        {
-            $this->dsn = getenv( "DATABASE" );
-            if ( !$this->dsn )
-                $this->dsn = "sqlite://:memory:";
-            $this->db = preg_replace( '(^([a-z]+).*)', '\\1', $this->dsn );
+        if (!$this->dsn) {
+            $this->dsn = getenv('DATABASE');
+            if (!$this->dsn) {
+                $this->dsn = 'sqlite://:memory:';
+            }
+            $this->db = preg_replace('(^([a-z]+).*)', '\\1', $this->dsn);
         }
 
         return $this->dsn;
     }
 
     /**
-     * Get a ezcDbHandler
+     * Get a Doctrine database connection handler.
      *
-     * Get a ezcDbHandler, which can be used to interact with the configured
+     * Get a ConnectionHandler, which can be used to interact with the configured
      * database. The database connection string is read from an optional
      * environment variable "DATABASE" and defaults to an in-memory SQLite
      * database.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
      */
     public function getDatabaseHandler()
     {
-        if ( !$this->handler )
-        {
-            $this->handler = EzcDbHandler::create( $this->getDsn() );
+        if (!$this->handler) {
+            $this->handler = ConnectionHandler::createFromDSN($this->getDsn());
+            $this->db = $this->handler->getName();
         }
 
         return $this->handler;
@@ -93,22 +95,12 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * Resets the database on test setup, so we always operate on a clean
      * database.
-     *
-     * @return void
      */
     public function setUp()
     {
-        if ( !class_exists( 'ezcBase' ) )
-        {
-            $this->markTestSkipped( 'Missing Apache Zeta Components.' );
-        }
-
-        try
-        {
+        try {
             $handler = $this->getDatabaseHandler();
-        }
-        catch ( PDOException $e )
-        {
+        } catch (PDOException $e) {
             $this->markTestSkipped(
                 'PDO session could not be created: ' . $e->getMessage()
             );
@@ -116,10 +108,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         $schema = __DIR__ . '/_fixtures/schema.' . $this->db . '.sql';
 
-        $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $schema ) ) );
-        foreach ( $queries as $query )
-        {
-            $handler->exec( $query );
+        $queries = array_filter(preg_split('(;\\s*$)m', file_get_contents($schema)));
+        foreach ($queries as $query) {
+            $handler->exec($query);
         }
 
         $this->resetSequences();
@@ -130,24 +121,23 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        unset( $this->handler );
+        unset($this->handler);
     }
 
     /**
-     * Get a text representation of a result set
+     * Get a text representation of a result set.
      *
      * @param array $result
      *
      * @return string
      */
-    protected static function getResultTextRepresentation( array $result )
+    protected static function getResultTextRepresentation(array $result)
     {
         return implode(
             "\n",
             array_map(
-                function ( $row )
-                {
-                    return implode( ', ', $row );
+                function ($row) {
+                    return implode(', ', $row);
                 },
                 $result
             )
@@ -158,57 +148,47 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * Inserts database fixture from $file.
      *
      * @param string $file
-     *
-     * @return void
      */
-    protected function insertDatabaseFixture( $file )
+    protected function insertDatabaseFixture($file)
     {
         $data = require $file;
         $db = $this->getDatabaseHandler();
 
-        foreach ( $data as $table => $rows )
-        {
+        foreach ($data as $table => $rows) {
             // Check that at least one row exists
-            if ( !isset( $rows[0] ) )
-            {
+            if (!isset($rows[0])) {
                 continue;
             }
 
             $q = $db->createInsertQuery();
-            $q->insertInto( $db->quoteIdentifier( $table ) );
+            $q->insertInto($db->quoteIdentifier($table));
 
             // Contains the bound parameters
             $values = array();
 
             // Binding the parameters
-            foreach ( $rows[0] as $col => $val )
-            {
+            foreach ($rows[0] as $col => $val) {
                 $q->set(
-                    $db->quoteIdentifier( $col ),
-                    $q->bindParam( $values[$col] )
+                    $db->quoteIdentifier($col),
+                    $q->bindParam($values[$col])
                 );
             }
 
             $stmt = $q->prepare();
 
-            foreach ( $rows as $row )
-            {
-                try
-                {
+            foreach ($rows as $row) {
+                try {
                     // This CANNOT be replaced by:
                     // $values = $row
                     // each $values[$col] is a PHP reference which should be
                     // kept for parameters binding to work
-                    foreach ( $row as $col => $val )
-                    {
+                    foreach ($row as $col => $val) {
                         $values[$col] = $val;
                     }
 
                     $stmt->execute();
-                }
-                catch ( Exception $e )
-                {
-                    echo "$table ( ", implode( ', ', $row ), " )\n";
+                } catch (Exception $e) {
+                    echo "$table ( ", implode(', ', $row), " )\n";
                     throw $e;
                 }
             }
@@ -218,31 +198,28 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Reset DB sequences
-     *
-     * @return void
+     * Reset DB sequences.
      */
     public function resetSequences()
     {
-        switch ( $this->db )
-        {
+        switch ($this->db) {
             case 'pgsql':
                 // Update PostgreSQL sequences
                 $handler = $this->getDatabaseHandler();
 
-                $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( __DIR__ . '/_fixtures/setval.pgsql.sql' ) ) );
-                foreach ( $queries as $query )
-                {
-                    $handler->exec( $query );
+                $queries = array_filter(preg_split('(;\\s*$)m',
+                    file_get_contents(__DIR__ . '/_fixtures/setval.pgsql.sql')));
+                foreach ($queries as $query) {
+                    $handler->exec($query);
                 }
         }
     }
 
     /**
-     * Assert query result as correct
+     * Assert query result as correct.
      *
      * Builds text representations of the asserted and fetched query result,
-     * based on a ezcQuerySelect object. Compares them using classic diff for
+     * based on a eZ\Publish\Core\Persistence\Database\SelectQuery object. Compares them using classic diff for
      * maximum readability of the differences between expectations and real
      * results.
      *
@@ -250,25 +227,22 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * rows of columns.
      *
      * @param array $expectation
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param string $message
-     *
-     * @return void
      */
-    public static function assertQueryResult( array $expectation, ezcQuerySelect $query, $message = null )
+    public static function assertQueryResult(array $expectation, SelectQuery $query, $message = null)
     {
         $statement = $query->prepare();
         $statement->execute();
 
         $result = array();
-        while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
-        {
+        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $result[] = $row;
         }
 
         return self::assertEquals(
-            self::getResultTextRepresentation( $expectation ),
-            self::getResultTextRepresentation( $result ),
+            self::getResultTextRepresentation($expectation),
+            self::getResultTextRepresentation($result),
             $message
         );
     }
@@ -281,19 +255,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      *
      * @param array $properties
      * @param object $object
-     *
-     * @return void
      */
-    protected function assertPropertiesCorrect( array $properties, $object )
+    protected function assertPropertiesCorrect(array $properties, $object)
     {
-        if ( !is_object( $object ) )
-        {
+        if (!is_object($object)) {
             throw new InvalidArgumentException(
-                'Expected object as second parameter, received ' . gettype( $object )
+                'Expected object as second parameter, received ' . gettype($object)
             );
         }
-        foreach ( $properties as $propName => $propVal )
-        {
+        foreach ($properties as $propName => $propVal) {
             $this->assertSame(
                 $propVal,
                 $object->$propName,
@@ -303,7 +273,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Asserts $expStruct equals $actStruct in at least $propertyNames
+     * Asserts $expStruct equals $actStruct in at least $propertyNames.
      *
      * Asserts that properties of $actStruct equal properties of $expStruct (not
      * vice versa!). If $propertyNames is null, all properties are checked.
@@ -314,14 +284,14 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @param array $propertyNames
      */
     protected function assertStructsEqual(
-        $expStruct, $actStruct, array $propertyNames = null )
-    {
-        if ( $propertyNames === null )
-        {
-            $propertyNames = $this->getPublicPropertyNames( $expStruct );
+        $expStruct,
+        $actStruct,
+        array $propertyNames = null
+    ) {
+        if ($propertyNames === null) {
+            $propertyNames = $this->getPublicPropertyNames($expStruct);
         }
-        foreach ( $propertyNames as $propName )
-        {
+        foreach ($propertyNames as $propName) {
             $this->assertEquals(
                 $expStruct->$propName,
                 $actStruct->$propName,
@@ -331,35 +301,35 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns public property names in $object
+     * Returns public property names in $object.
      *
      * @param object $object
      *
      * @return array
      */
-    protected function getPublicPropertyNames( $object )
+    protected function getPublicPropertyNames($object)
     {
-        $refl = new ReflectionObject( $object );
+        $refl = new ReflectionObject($object);
+
         return array_map(
-            function ( $prop )
-            {
+            function ($prop) {
                 return $prop->getName();
             },
-            $refl->getProperties( ReflectionProperty::IS_PUBLIC )
+            $refl->getProperties(ReflectionProperty::IS_PUBLIC)
         );
     }
 
     /**
      * @return string
      */
-    static protected function getInstallationDir()
+    protected static function getInstallationDir()
     {
         static $installDir = null;
-        if ( $installDir === null )
-        {
+        if ($installDir === null) {
             $config = require 'config.php';
-            $installDir = $config['service']['parameters']['install_dir'];
+            $installDir = $config['install_dir'];
         }
+
         return $installDir;
     }
 }

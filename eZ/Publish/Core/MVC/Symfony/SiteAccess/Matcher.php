@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher interface
+ * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher interface.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,10 +22,8 @@ interface Matcher
      * Injects the request object to match against.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
-     *
-     * @return void
      */
-    public function setRequest( SimplifiedRequest $request );
+    public function setRequest(SimplifiedRequest $request);
 
     /**
      * Returns matched Siteaccess or false if no siteaccess could be matched.

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,12 +14,12 @@ namespace eZ\Publish\API\Repository\Values\ContentType;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * this class is used to create a field definition
+ * this class is used to create a field definition.
  */
 class FieldDefinitionCreateStruct extends ValueObject
 {
     /**
-     * String identifier of the field type
+     * String identifier of the field type.
      *
      * @required
      *
@@ -26,7 +28,7 @@ class FieldDefinitionCreateStruct extends ValueObject
     public $fieldTypeIdentifier;
 
     /**
-     * Readable string identifier of a field definition
+     * Readable string identifier of a field definition.
      *
      * Needs to be unique within the context of the Content Type this is added to.
      *
@@ -37,80 +39,80 @@ class FieldDefinitionCreateStruct extends ValueObject
     public $identifier;
 
     /**
-     * An array of names with languageCode keys
+     * An array of names with languageCode keys.
      *
      * @var array an array of string
      */
     public $names;
 
     /**
-     * An array of descriptions with languageCode keys
+     * An array of descriptions with languageCode keys.
      *
      * @var array an array of string
      */
     public $descriptions;
 
     /**
-     * Field group name
+     * Field group name.
      *
      * @var string
      */
     public $fieldGroup;
 
     /**
-     * the position of the field definition in the content typr
-     * if not set the field is added at the end
+     * The position of the field definition in the content type
+     * if not set the field is added at the end.
      *
      * @var int
      */
     public $position;
 
     /**
-     * Indicates if the field is translatable
+     * Indicates if the field is translatable.
      *
-     * @var boolean
+     * @var bool
      */
     public $isTranslatable;
 
     /**
-     * Indicates if the field is required
+     * Indicates if the field is required.
      *
-     * @var boolean
+     * @var bool
      */
     public $isRequired;
 
     /**
-     * Indicates if this attribute is used for information collection
+     * Indicates if this attribute is used for information collection.
      *
-     * @var boolean
+     * @var bool
      */
     public $isInfoCollector;
 
     /**
-     * The validator configuration supported by the field type
+     * The validator configuration supported by the field type.
      *
      * @var mixed
      */
     public $validatorConfiguration;
 
     /**
-     * The settings supported by the field type
+     * The settings supported by the field type.
      *
      * @var mixed
      */
     public $fieldSettings;
 
     /**
-     * Default value of the field
+     * Default value of the field.
      *
      * @var mixed
      */
     public $defaultValue;
 
     /**
-     * Indicates if th the content is searchable by this attribute
+     * Indicates if th the content is searchable by this attribute.
      *
-     * @var boolean
+     * @var bool
      */
     public $isSearchable;
 }

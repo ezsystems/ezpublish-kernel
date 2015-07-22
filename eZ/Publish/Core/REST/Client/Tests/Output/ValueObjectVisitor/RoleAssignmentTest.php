@@ -1,25 +1,25 @@
 <?php
+
 /**
- * File containing a RoleAssignmentTest class
+ * File containing a RoleAssignmentTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Client\Values\User\RoleAssignment;
 use eZ\Publish\Core\REST\Client\Values\User\Role;
-use eZ\Publish\Core\REST\Common;
 
 class RoleAssignmentTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Tests the RoleAssignment visitor
+     * Tests the RoleAssignment visitor.
      *
      * @todo test with limitations
      *
@@ -27,18 +27,18 @@ class RoleAssignmentTest extends ValueObjectVisitorBaseTest
      */
     public function testVisitComplete()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $roleAssignment = new RoleAssignment(
             array(
                 'role' => new Role(
                     array(
-                        'id' => 42
+                        'id' => 42,
                     )
-                )
+                ),
             )
         );
 
@@ -48,25 +48,25 @@ class RoleAssignmentTest extends ValueObjectVisitorBaseTest
             $roleAssignment
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Tests if result contains Role element
+     * Tests if result contains Role element.
      *
      * @param string $result
      *
      * @depends testVisitComplete
      */
-    public function testResultContainsRoleElement( $result )
+    public function testResultContainsRoleElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'Role'
+                'tag' => 'Role',
             ),
             $result,
             'Invalid <Role> element.',
@@ -75,21 +75,21 @@ class RoleAssignmentTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests if result contains Role element attributes
+     * Tests if result contains Role element attributes.
      *
      * @param string $result
      *
      * @depends testVisitComplete
      */
-    public function testResultContainsRoleElementAttributes( $result )
+    public function testResultContainsRoleElementAttributes($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'Role',
+                'tag' => 'Role',
                 'attributes' => array(
                     'href' => '/user/roles/42',
                     'media-type' => 'application/vnd.ez.api.Role+xml',
-                )
+                ),
             ),
             $result,
             'Invalid <Role> element attributes.',
@@ -98,12 +98,12 @@ class RoleAssignmentTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Returns the RoleAssignment visitor
+     * Returns the RoleAssignment visitor.
      *
      * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\RoleAssignment
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\RoleAssignment;
+        return new ValueObjectVisitor\RoleAssignment();
     }
 }

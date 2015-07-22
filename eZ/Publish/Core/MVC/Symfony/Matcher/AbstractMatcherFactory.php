@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the AbstractMatcherFactory class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -47,13 +49,13 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
 
     /**
      * Already matched value objects with their config hash.
-     * Key is the view type
+     * Key is the view type.
      *
      * @var \SplObjectStorage[]
      */
     protected $alreadyMatched;
 
-    public function __construct( Repository $repository, array $matchConfig )
+    public function __construct(Repository $repository, array $matchConfig)
     {
         $this->repository = $repository;
         $this->matchConfig = $matchConfig;
@@ -72,29 +74,25 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
      *
      * @return \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface
      */
-    protected function getMatcher( $matcherIdentifier )
+    protected function getMatcher($matcherIdentifier)
     {
         // Not a FQ class name, so take the relative namespace.
-        if ( $matcherIdentifier[0] !== '\\' && defined( 'static::MATCHER_RELATIVE_NAMESPACE' ) )
-        {
+        if ($matcherIdentifier[0] !== '\\' && defined('static::MATCHER_RELATIVE_NAMESPACE')) {
             $matcherIdentifier = static::MATCHER_RELATIVE_NAMESPACE . "\\$matcherIdentifier";
         }
 
         // Retrieving the matcher instance from in-memory cache
-        if ( isset( $this->matchers[$matcherIdentifier] ) )
-        {
+        if (isset($this->matchers[$matcherIdentifier])) {
             return $this->matchers[$matcherIdentifier];
         }
 
-        if ( !class_exists( $matcherIdentifier ) )
-        {
-            throw new InvalidArgumentException( "Invalid matcher class '$matcherIdentifier'" );
+        if (!class_exists($matcherIdentifier)) {
+            throw new InvalidArgumentException("Invalid matcher class '$matcherIdentifier'");
         }
         $this->matchers[$matcherIdentifier] = new $matcherIdentifier();
 
-        if ( $this->matchers[$matcherIdentifier] instanceof RepositoryAwareInterface )
-        {
-            $this->matchers[$matcherIdentifier]->setRepository( $this->repository );
+        if ($this->matchers[$matcherIdentifier] instanceof RepositoryAwareInterface) {
+            $this->matchers[$matcherIdentifier]->setRepository($this->repository);
         }
 
         return $this->matchers[$matcherIdentifier];
@@ -107,43 +105,38 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
      * $valueObject can be for example a Location or a Content object.
      *
      * @param \eZ\Publish\API\Repository\Values\ValueObject $valueObject
-     *
      * @param string $viewType
      *
      * @return array|null The matched configuration as a hash, containing template or controller to use, or null if not matched.
      */
-    public function match( ValueObject $valueObject, $viewType )
+    public function match(ValueObject $valueObject, $viewType)
     {
-        if ( !isset( $this->matchConfig[$viewType] ) )
-        {
+        if (!isset($this->matchConfig[$viewType])) {
             return;
         }
 
-        if ( !isset( $this->alreadyMatched[$viewType] ) )
-        {
+        if (!isset($this->alreadyMatched[$viewType])) {
             $this->alreadyMatched[$viewType] = new SplObjectStorage();
         }
 
         // If we already matched, just returned the matched value.
-        if ( isset( $this->alreadyMatched[$viewType][$valueObject] ) )
-        {
+        if (isset($this->alreadyMatched[$viewType][$valueObject])) {
             return $this->alreadyMatched[$viewType][$valueObject];
         }
 
-        foreach ( $this->matchConfig[$viewType] as $configHash )
-        {
+        foreach ($this->matchConfig[$viewType] as $configHash) {
             $hasMatched = true;
-            foreach ( $configHash['match'] as $matcherIdentifier => $value )
-            {
-                $matcher = $this->getMatcher( $matcherIdentifier );
-                $matcher->setMatchingConfig( $value );
-                if ( !$this->doMatch( $matcher, $valueObject ) )
+            $matcher = null;
+            foreach ($configHash['match'] as $matcherIdentifier => $value) {
+                $matcher = $this->getMatcher($matcherIdentifier);
+                $matcher->setMatchingConfig($value);
+                if (!$this->doMatch($matcher, $valueObject)) {
                     $hasMatched = false;
+                }
             }
 
-            if ( $hasMatched )
-            {
-                return $this->alreadyMatched[$viewType][$valueObject] = $configHash + array( 'matcher' => $matcher );
+            if ($hasMatched) {
+                return $this->alreadyMatched[$viewType][$valueObject] = $configHash + array('matcher' => $matcher);
             }
         }
 
@@ -158,5 +151,5 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
      *
      * @return bool
      */
-    abstract protected function doMatch( MatcherInterface $matcher, ValueObject $valueObject );
+    abstract protected function doMatch(MatcherInterface $matcher, ValueObject $valueObject);
 }

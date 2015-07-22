@@ -1,23 +1,28 @@
 <?php
+
 /**
  * File containing the DefaultRouter class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Bundle\EzPublishCoreBundle\Routing;
 
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Extension of Symfony default router implementing RequestMatcherInterface
+ * Extension of Symfony default router implementing RequestMatcherInterface.
  */
 class DefaultRouter extends Router implements RequestMatcherInterface, SiteAccessAware
 {
@@ -28,7 +33,22 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
 
     protected $nonSiteAccessAwareRoutes = array();
 
-    public function setSiteAccess( SiteAccess $siteAccess = null )
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    protected $configResolver;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface
+     */
+    protected $siteAccessRouter;
+
+    public function setConfigResolver(ConfigResolverInterface $configResolver)
+    {
+        $this->configResolver = $configResolver;
+    }
+
+    public function setSiteAccess(SiteAccess $siteAccess = null)
     {
         $this->siteAccess = $siteAccess;
     }
@@ -39,58 +59,69 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
      *
      * @param array $routes
      */
-    public function setNonSiteAccessAwareRoutes( array $routes )
+    public function setNonSiteAccessAwareRoutes(array $routes)
     {
         $this->nonSiteAccessAwareRoutes = $routes;
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request The request to match
-     *
-     * @return array An array of parameters
-     *
-     * @throws ResourceNotFoundException If no matching resource could be found
-     * @throws MethodNotAllowedException If a matching resource was found but the request method is not allowed
+     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface $siteAccessRouter
      */
-    public function matchRequest( Request $request )
+    public function setSiteAccessRouter(SiteAccessRouterInterface $siteAccessRouter)
     {
-        if ( $request->attributes->has( 'semanticPathinfo' ) )
-        {
-            return $this->match( $request->attributes->get( 'semanticPathinfo' ) );
-        }
-
-        return $this->match( $request->getPathInfo() );
+        $this->siteAccessRouter = $siteAccessRouter;
     }
 
-    public function generate( $name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH )
+    public function matchRequest(Request $request)
     {
-        $url = parent::generate( $name, $parameters, $referenceType );
-        if ( $this->isSiteAccessAwareRoute( $name ) && isset( $this->siteAccess ) && $this->siteAccess->matcher instanceof URILexer )
-        {
-            $context = $this->getContext();
-            if ( $referenceType == self::ABSOLUTE_URL || $referenceType == self::NETWORK_PATH )
-            {
+        return $this->match($request->attributes->get('semanticPathinfo', $request->getPathInfo()));
+    }
+
+    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
+    {
+        $siteAccess = $this->siteAccess;
+        $originalContext = $context = $this->getContext();
+        $isSiteAccessAware = $this->isSiteAccessAwareRoute($name);
+
+        // Retrieving the appropriate SiteAccess to generate the link for.
+        if (isset($parameters['siteaccess']) && $isSiteAccessAware) {
+            $siteAccess = $this->siteAccessRouter->matchByName($parameters['siteaccess']);
+            if ($siteAccess instanceof SiteAccess && $siteAccess->matcher instanceof SiteAccess\VersatileMatcher) {
+                // Switch request context for link generation.
+                $context = $this->getContextBySimplifiedRequest($siteAccess->matcher->getRequest());
+                $this->setContext($context);
+            } elseif ($this->logger) {
+                $siteAccess = $this->siteAccess;
+                $this->logger->notice("Could not generate a link using provided 'siteaccess' parameter: {$parameters['siteaccess']}. Generating using current context.");
+            }
+
+            unset($parameters['siteaccess']);
+        }
+
+        $url = parent::generate($name, $parameters, $referenceType);
+
+        // Now putting back SiteAccess URI if needed.
+        if ($isSiteAccessAware && $siteAccess && $siteAccess->matcher instanceof URILexer) {
+            if ($referenceType == self::ABSOLUTE_URL || $referenceType == self::NETWORK_PATH) {
                 $scheme = $context->getScheme();
                 $port = '';
-                if ( $scheme === 'http' && $this->context->getHttpPort() != 80 )
-                {
+                if ($scheme === 'http' && $this->context->getHttpPort() != 80) {
                     $port = ':' . $this->context->getHttpPort();
-                }
-                else if ( $scheme === 'https' && $this->context->getHttpsPort() != 443 )
-                {
+                } elseif ($scheme === 'https' && $this->context->getHttpsPort() != 443) {
                     $port = ':' . $this->context->getHttpsPort();
                 }
 
                 $base = $context->getHost() . $port . $context->getBaseUrl();
-            }
-            else
-            {
+            } else {
                 $base = $context->getBaseUrl();
             }
 
-            $linkUri = $base ? substr( $url, strpos( $url, $base ) + strlen( $base ) ) : $url;
-            $url = str_replace( $linkUri, $this->siteAccess->matcher->analyseLink( $linkUri ), $url );
+            $linkUri = $base ? substr($url, strpos($url, $base) + strlen($base)) : $url;
+            $url = str_replace($linkUri, $siteAccess->matcher->analyseLink($linkUri), $url);
         }
+
+        // Switch back to original context, for next links generation.
+        $this->setContext($originalContext);
 
         return $url;
     }
@@ -103,16 +134,61 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
      *
      * @return bool
      */
-    protected function isSiteAccessAwareRoute( $routeName )
+    protected function isSiteAccessAwareRoute($routeName)
     {
-        foreach ( $this->nonSiteAccessAwareRoutes as $ignoredPrefix )
-        {
-            if ( strpos( $routeName, $ignoredPrefix ) === 0 )
-            {
+        foreach ($this->nonSiteAccessAwareRoutes as $ignoredPrefix) {
+            if (strpos($routeName, $ignoredPrefix) === 0) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    /**
+     * Checks if $routeName can be used in legacy mode.
+     *
+     * @param string $routeName
+     *
+     * @return bool
+     */
+    protected function isLegacyAwareRoute($routeName)
+    {
+        foreach ($this->legacyAwareRoutes as $legacyAwareRoute) {
+            if (strpos($routeName, $legacyAwareRoute) === 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Merges context from $simplifiedRequest into a clone of the current context.
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $simplifiedRequest
+     *
+     * @return \Symfony\Component\Routing\RequestContext
+     */
+    public function getContextBySimplifiedRequest(SimplifiedRequest $simplifiedRequest)
+    {
+        $context = clone $this->context;
+        if ($simplifiedRequest->scheme) {
+            $context->setScheme($simplifiedRequest->scheme);
+        }
+
+        if ($simplifiedRequest->port) {
+            $context->setHttpPort($simplifiedRequest->port);
+        }
+
+        if ($simplifiedRequest->host) {
+            $context->setHost($simplifiedRequest->host);
+        }
+
+        if ($simplifiedRequest->pathinfo) {
+            $context->setPathInfo($simplifiedRequest->pathinfo);
+        }
+
+        return $context;
     }
 }

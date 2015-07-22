@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the user Identity interface.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,6 +17,8 @@ namespace eZ\Publish\SPI\User;
  *
  * Typical use case is for content cache variation that you want to make vary on a bunch of user information (e.g. assigned roles).
  * The more you add information, the more specific and fine grained your cache variation will be.
+ *
+ * @deprecated since 5.4. Will be removed in 6.0. Use FOSHttpCacheBundle user context feature instead.
  */
 interface Identity
 {
@@ -23,7 +27,7 @@ interface Identity
      *
      * @param array $information Hash where key is the information type and value is a scalar.
      */
-    public function addInformation( array $information );
+    public function addInformation(array $information);
 
     /**
      * Registers an information in the identity.
@@ -31,14 +35,14 @@ interface Identity
      * @param string $informationName
      * @param scalar $informationValue
      */
-    public function setInformation( $informationName, $informationValue );
+    public function setInformation($informationName, $informationValue);
 
     /**
      * Replaces the information already registered in the identity.
      *
      * @param array $information Hash where key is the information type and value is a scalar.
      */
-    public function replaceInformation( array $information );
+    public function replaceInformation(array $information);
 
     /**
      * Returns registered information.
@@ -48,7 +52,7 @@ interface Identity
     public function getInformation();
 
     /**
-     * Returns the hash of the current identity (e.g. md5, sha1...)
+     * Returns the hash of the current identity (e.g. md5, sha1...).
      *
      * @return string
      */

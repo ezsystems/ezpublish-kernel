@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+  <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+    <custom name="factbox" custom:class="templateClass" custom:align="left" custom:title="Factoids">
+      <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+        <table border="0" custom:summary="tableTitle" custom:caption="About factoids">
+          <tr>
+            <th>
+              <section>
+                <section>
+                  <header align="center">Some facts about factoids</header>
+                </section>
+              </section>
+            </th>
+          </tr>
+          <tr>
+            <td>
+              <paragraph>A factoid is a questionable or spurious (unverified, false, or fabricated) statement presented as a fact, but without supporting evidence.</paragraph>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <paragraph>Factoids may give rise to, or arise from, common misconceptions and urban legends.</paragraph>
+            </td>
+          </tr>
+        </table>
+      </paragraph>
+    </custom>
+  </paragraph>
+  <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+    <custom name="externalimage" custom:class="templateClass2" custom:align="right" custom:src="http://upload.wikimedia.org/wikipedia/commons/c/c6/R-S_mk2.gif" custom:height="365" custom:width="500" custom:alt="flip-flop" custom:caption="bistable multivibrator"/>
+  </paragraph>
+  <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+    <custom name="factoidbox" custom:class="templateClass3" custom:align="center">It is widely known that the bistable multivibrator hums z's in the middle octave key of E.</custom>
+  </paragraph>
+  <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+    <custom name="factoidbox" custom:class="templateClass4" custom:align="center"/>
+  </paragraph>
+</section>

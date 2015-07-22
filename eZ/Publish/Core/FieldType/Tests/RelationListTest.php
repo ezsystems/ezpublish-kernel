@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RelationTest class
+ * File containing the RelationTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,10 +13,8 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\RelationList\Type as RelationList;
 use eZ\Publish\Core\FieldType\RelationList\Value;
-use eZ\Publish\Core\FieldType\Tests\FieldTypeTest;
-use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\API\Repository\Values\Content\Relation;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class RelationListTest extends FieldTypeTest
@@ -32,7 +32,10 @@ class RelationListTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new RelationList();
+        $fieldType = new RelationList();
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
+
+        return $fieldType;
     }
 
     /**
@@ -71,7 +74,7 @@ class RelationListTest extends FieldTypeTest
     /**
      * Returns the empty value expected from the field type.
      *
-     * @return void
+     * @return Value
      */
     protected function getEmptyValueExpectation()
     {
@@ -108,7 +111,7 @@ class RelationListTest extends FieldTypeTest
             array(
                 true,
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            )
+            ),
         );
     }
 
@@ -150,21 +153,21 @@ class RelationListTest extends FieldTypeTest
             ),
             array(
                 23,
-                new Value( array( 23 ) ),
+                new Value(array(23)),
             ),
             array(
-                new ContentInfo( array( 'id' => 23 ) ),
-                new Value( array( 23 ) ),
+                new ContentInfo(array('id' => 23)),
+                new Value(array(23)),
             ),
             array(
-                array( 23, 42 ),
-                new Value( array( 23, 42 ) ),
+                array(23, 42),
+                new Value(array(23, 42)),
             ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -202,18 +205,18 @@ class RelationListTest extends FieldTypeTest
     {
         return array(
             array(
-                new Value( array( 23, 42 ) ),
-                array( 'destinationContentIds' => array( 23, 42 ) ),
+                new Value(array(23, 42)),
+                array('destinationContentIds' => array(23, 42)),
             ),
             array(
                 new Value(),
-                array( 'destinationContentIds' => array() ),
+                array('destinationContentIds' => array()),
             ),
         );
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -251,11 +254,11 @@ class RelationListTest extends FieldTypeTest
     {
         return array(
             array(
-                array( 'destinationContentIds' => array( 23, 42 ) ),
-                new Value( array( 23, 42 ) ),
+                array('destinationContentIds' => array(23, 42)),
+                new Value(array(23, 42)),
             ),
             array(
-                array( 'destinationContentIds' => array() ),
+                array('destinationContentIds' => array()),
                 new Value(),
             ),
         );
@@ -290,20 +293,20 @@ class RelationListTest extends FieldTypeTest
                 array(
                     'selectionMethod' => RelationList::SELECTION_BROWSE,
                     'selectionDefaultLocation' => 23,
-                )
+                ),
             ),
             array(
                 array(
                     'selectionMethod' => RelationList::SELECTION_DROPDOWN,
                     'selectionDefaultLocation' => 'foo',
-                )
+                ),
             ),
             array(
                 array(
                     'selectionMethod' => RelationList::SELECTION_DROPDOWN,
                     'selectionDefaultLocation' => 'foo',
-                    'selectionContentTypes' => array( 1, 2, 3 )
-                )
+                    'selectionContentTypes' => array(1, 2, 3),
+                ),
             ),
         );
     }
@@ -341,15 +344,15 @@ class RelationListTest extends FieldTypeTest
                 // Invalid value for 'selectionMethod'
                 array(
                     'selectionMethod' => true,
-                    'selectionDefaultLocation' => 23
-                )
+                    'selectionDefaultLocation' => 23,
+                ),
             ),
             array(
                 // Invalid value for 'selectionDefaultLocation'
                 array(
                     'selectionMethod' => RelationList::SELECTION_DROPDOWN,
-                    'selectionDefaultLocation' => array()
-                )
+                    'selectionDefaultLocation' => array(),
+                ),
             ),
             array(
                 // Invalid value for 'selectionContentTypes'
@@ -357,7 +360,7 @@ class RelationListTest extends FieldTypeTest
                     'selectionMethod' => RelationList::SELECTION_DROPDOWN,
                     'selectionDefaultLocation' => 23,
                     'selectionContentTypes' => true,
-                )
+                ),
             ),
         );
     }
@@ -370,9 +373,30 @@ class RelationListTest extends FieldTypeTest
         $ft = $this->createFieldTypeUnderTest();
         $this->assertEquals(
             array(
-                Relation::FIELD => array( 70, 72 ),
+                Relation::FIELD => array(70, 72),
             ),
-            $ft->getRelations( $ft->acceptValue( array( 70, 72 ) ) )
+            $ft->getRelations($ft->acceptValue(array(70, 72)))
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezobjectrelationlist';
+    }
+
+    /**
+     * @dataProvider provideDataForGetName
+     * @expectedException \RuntimeException
+     */
+    public function testGetName(SPIValue $value, $expected)
+    {
+        $this->getFieldTypeUnderTest()->getName($value);
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array($this->getEmptyValueExpectation(), ''),
         );
     }
 }

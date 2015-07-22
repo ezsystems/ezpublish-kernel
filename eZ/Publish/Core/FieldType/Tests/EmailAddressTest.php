@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the EmailAddressValueTest class
+ * File containing the EmailAddressValueTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,7 +13,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\EmailAddress\Type as EmailAddressType;
 use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue;
-use ReflectionObject;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * @group fieldType
@@ -32,7 +34,23 @@ class EmailAddressTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new EmailAddressType();
+        $transformationProcessorMock = $this->getTransformationProcessorMock();
+
+        $transformationProcessorMock->expects($this->any())
+            ->method('transformByGroup')
+            ->with($this->anything(), 'lowercase')
+            ->will(
+                $this->returnCallback(
+                    function ($value, $group) {
+                        return strtolower($value);
+                    }
+                )
+            );
+
+        $fieldType = new EmailAddressType();
+        $fieldType->setTransformationProcessor($transformationProcessorMock);
+
+        return $fieldType;
     }
 
     /**
@@ -43,7 +61,7 @@ class EmailAddressTest extends FieldTypeTest
     protected function getValidatorConfigurationSchemaExpectation()
     {
         return array(
-            'EmailAddressValidator' => array()
+            'EmailAddressValidator' => array(),
         );
     }
 
@@ -59,12 +77,10 @@ class EmailAddressTest extends FieldTypeTest
 
     /**
      * Returns the empty value expected from the field type.
-     *
-     * @return void
      */
     protected function getEmptyValueExpectation()
     {
-        return new EmailAddressValue;
+        return new EmailAddressValue();
     }
 
     /**
@@ -98,7 +114,7 @@ class EmailAddressTest extends FieldTypeTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                new EmailAddressValue( 23 ),
+                new EmailAddressValue(23),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
@@ -138,21 +154,21 @@ class EmailAddressTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new EmailAddressValue,
+                new EmailAddressValue(),
             ),
             array(
                 'spam_mail@ex-something.no',
-                new EmailAddressValue( 'spam_mail@ex-something.no' ),
+                new EmailAddressValue('spam_mail@ex-something.no'),
             ),
             array(
-                new EmailAddressValue( 'spam_mail@ex-something.no' ),
-                new EmailAddressValue( 'spam_mail@ex-something.no' ),
+                new EmailAddressValue('spam_mail@ex-something.no'),
+                new EmailAddressValue('spam_mail@ex-something.no'),
             ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -194,14 +210,14 @@ class EmailAddressTest extends FieldTypeTest
                 '',
             ),
             array(
-                new EmailAddressValue( 'spam_mail@ex-something.no' ),
+                new EmailAddressValue('spam_mail@ex-something.no'),
                 'spam_mail@ex-something.no',
             ),
         );
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -248,7 +264,7 @@ class EmailAddressTest extends FieldTypeTest
             ),
             array(
                 'spam_mail@ex-something.no',
-                new EmailAddressValue( 'spam_mail@ex-something.no' ),
+                new EmailAddressValue('spam_mail@ex-something.no'),
             ),
         );
     }
@@ -285,19 +301,19 @@ class EmailAddressTest extends FieldTypeTest
     {
         return array(
             array(
-                array()
+                array(),
             ),
             array(
                 array(
-                    'EmailAddressValidator' => array()
-                )
+                    'EmailAddressValidator' => array(),
+                ),
             ),
             array(
                 array(
                     'EmailAddressValidator' => array(
                         'Extent' => 'regex',
-                    )
-                )
+                    ),
+                ),
             ),
         );
     }
@@ -355,7 +371,7 @@ class EmailAddressTest extends FieldTypeTest
             array(
                 array(
                     'EmailAddressValidator' => array(
-                        'Extent' => 23
+                        'Extent' => 23,
                     ),
                 ),
             ),
@@ -371,7 +387,162 @@ class EmailAddressTest extends FieldTypeTest
                     'EmailAddressValidator' => array(
                         'Extent' => '\\http\\',
                     ),
-                )
+                ),
+            ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezemail';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array(
+                new EmailAddressValue('john.doe@example.com'),
+                'john.doe@example.com',
+            ),
+            array(
+                new EmailAddressValue('JANE.DOE@EXAMPLE.COM'),
+                'jane.doe@example.com',
+            ),
+        );
+    }
+
+    /**
+     * Provides data sets with validator configuration and/or field settings and
+     * field value which are considered valid by the {@link validate()} method.
+     *
+     * ATTENTION: This is a default implementation, which must be overwritten if
+     * a FieldType supports validation!
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(
+     *              "validatorConfiguration" => array(
+     *                  "StringLengthValidator" => array(
+     *                      "minStringLength" => 2,
+     *                      "maxStringLength" => 10,
+     *                  ),
+     *              ),
+     *          ),
+     *          new TextLineValue( "lalalala" ),
+     *      ),
+     *      array(
+     *          array(
+     *              "fieldSettings" => array(
+     *                  'isMultiple' => true
+     *              ),
+     *          ),
+     *          new CountryValue(
+     *              array(
+     *                  "BE" => array(
+     *                      "Name" => "Belgium",
+     *                      "Alpha2" => "BE",
+     *                      "Alpha3" => "BEL",
+     *                      "IDC" => 32,
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideValidDataForValidate()
+    {
+        return array(
+            array(
+                array(
+                    'validatorConfiguration' => array(),
+                ),
+                new EmailAddressValue('jane.doe@example.com'),
+            ),
+        );
+    }
+
+    /**
+     * Provides data sets with validator configuration and/or field settings,
+     * field value and corresponding validation errors returned by
+     * the {@link validate()} method.
+     *
+     * ATTENTION: This is a default implementation, which must be overwritten
+     * if a FieldType supports validation!
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(
+     *              "validatorConfiguration" => array(
+     *                  "IntegerValueValidator" => array(
+     *                      "minIntegerValue" => 5,
+     *                      "maxIntegerValue" => 10
+     *                  ),
+     *              ),
+     *          ),
+     *          new IntegerValue( 3 ),
+     *          array(
+     *              new ValidationError(
+     *                  "The value can not be lower than %size%.",
+     *                  null,
+     *                  array(
+     *                      "size" => 5
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *      array(
+     *          array(
+     *              "fieldSettings" => array(
+     *                  "isMultiple" => false
+     *              ),
+     *          ),
+     *          new CountryValue(
+     *              "BE" => array(
+     *                  "Name" => "Belgium",
+     *                  "Alpha2" => "BE",
+     *                  "Alpha3" => "BEL",
+     *                  "IDC" => 32,
+     *              ),
+     *              "FR" => array(
+     *                  "Name" => "France",
+     *                  "Alpha2" => "FR",
+     *                  "Alpha3" => "FRA",
+     *                  "IDC" => 33,
+     *              ),
+     *          )
+     *      ),
+     *      array(
+     *          new ValidationError(
+     *              "Field definition does not allow multiple countries to be selected."
+     *          ),
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInvalidDataForValidate()
+    {
+        return array(
+            array(
+                array(
+                    'validatorConfiguration' => array(),
+                ),
+                new EmailAddressValue('jane.doe.example.com'),
+                array(
+                    new ValidationError('The value must be a valid email address.', null, array(), 'email'),
+                ),
             ),
         );
     }

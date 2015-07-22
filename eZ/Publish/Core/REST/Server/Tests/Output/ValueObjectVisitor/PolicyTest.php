@@ -1,52 +1,52 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\User;
-use eZ\Publish\Core\REST\Common;
 
 class PolicyTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the Policy visitor
+     * Test the Policy visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $contentTypeLimitation = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
-        $contentTypeLimitation->limitationValues = array( 1, 2, 3 );
+        $contentTypeLimitation->limitationValues = array(1, 2, 3);
 
         $policy = new User\Policy(
             array(
-                'id'       => 42,
-                'roleId'   => '84',
-                'module'   => 'content',
+                'id' => 42,
+                'roleId' => '84',
+                'module' => 'content',
                 'function' => 'delete',
                 'limitations' => array(
-                    'Class' => $contentTypeLimitation
-                )
+                    'Class' => $contentTypeLimitation,
+                ),
             )
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadPolicy',
-            array( 'roleId' => $policy->roleId, 'policyId' => $policy->id ),
+            array('roleId' => $policy->roleId, 'policyId' => $policy->id),
             "/user/roles/{$policy->roleId}/policies/{$policy->id}"
         );
 
@@ -56,29 +56,29 @@ class PolicyTest extends ValueObjectVisitorBaseTest
             $policy
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains Policy element
+     * Test if result contains Policy element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsPolicyElement( $result )
+    public function testResultContainsPolicyElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'Policy',
+                'tag' => 'Policy',
                 'children' => array(
                     'less_than' => 5,
-                    'greater_than' => 2
-                )
+                    'greater_than' => 2,
+                ),
             ),
             $result,
             'Invalid <Policy> element.',
@@ -87,21 +87,21 @@ class PolicyTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains Policy element attributes
+     * Test if result contains Policy element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsPolicyAttributes( $result )
+    public function testResultContainsPolicyAttributes($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'Policy',
+                'tag' => 'Policy',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Policy+xml',
-                    'href'       => '/user/roles/84/policies/42',
-                )
+                    'href' => '/user/roles/84/policies/42',
+                ),
             ),
             $result,
             'Invalid <Policy> attributes.',
@@ -110,18 +110,18 @@ class PolicyTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains id value element
+     * Test if result contains id value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsIdValueElement( $result )
+    public function testResultContainsIdValueElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'id',
-                'content'  => '42'
+                'tag' => 'id',
+                'content' => '42',
             ),
             $result,
             'Invalid or non-existing <Policy> id value element.',
@@ -130,18 +130,18 @@ class PolicyTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains module value element
+     * Test if result contains module value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsModuleValueElement( $result )
+    public function testResultContainsModuleValueElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'module',
-                'content'  => 'content'
+                'tag' => 'module',
+                'content' => 'content',
             ),
             $result,
             'Invalid or non-existing <Policy> module value element.',
@@ -150,18 +150,18 @@ class PolicyTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains function value element
+     * Test if result contains function value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsFunctionValueElement( $result )
+    public function testResultContainsFunctionValueElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'function',
-                'content'  => 'delete'
+                'tag' => 'function',
+                'content' => 'delete',
             ),
             $result,
             'Invalid or non-existing <Policy> function value element.',
@@ -170,17 +170,17 @@ class PolicyTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains limitations element
+     * Test if result contains limitations element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsLimitationsElement( $result )
+    public function testResultContainsLimitationsElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag' => 'limitations'
+                'tag' => 'limitations',
             ),
             $result,
             'Invalid <limitations> element.',
@@ -189,17 +189,17 @@ class PolicyTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains limitations attributes
+     * Test if result contains limitations attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsLimitationsAttributes( $result )
+    public function testResultContainsLimitationsAttributes($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'limitations'
+                'tag' => 'limitations',
             ),
             $result,
             'Invalid <limitations> attributes.',
@@ -208,12 +208,12 @@ class PolicyTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the Policy visitor
+     * Get the Policy visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Policy
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Policy;
+        return new ValueObjectVisitor\Policy();
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\Content\VersionInfo class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -29,7 +31,7 @@ abstract class VersionInfo extends ValueObject
 {
     const STATUS_DRAFT = 0;
     const STATUS_PUBLISHED = 1;
-    const STATUS_ARCHIVED = 2;
+    const STATUS_ARCHIVED = 3;
 
     /**
      * Version ID.
@@ -70,10 +72,10 @@ abstract class VersionInfo extends ValueObject
      *
      * @return string
      */
-    abstract public function getName( $languageCode = null );
+    abstract public function getName($languageCode = null);
 
     /**
-     * the last modified date of this version
+     * the last modified date of this version.
      *
      * @var \DateTime
      */
@@ -81,6 +83,8 @@ abstract class VersionInfo extends ValueObject
 
     /**
      * Creator user ID.
+     *
+     * Creator of the version, in the search API this is referred to as the modifier of the published content.
      *
      * @var mixed
      */
@@ -92,7 +96,7 @@ abstract class VersionInfo extends ValueObject
     protected $creationDate;
 
     /**
-     * One of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED
+     * One of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED.
      *
      * @var int Constant.
      */
@@ -106,7 +110,7 @@ abstract class VersionInfo extends ValueObject
     protected $initialLanguageCode;
 
     /**
-     * List of languages in this version
+     * List of languages in this version.
      *
      * Reflects which languages fields exists in for this version.
      *

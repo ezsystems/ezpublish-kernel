@@ -1,0 +1,7 @@
+parameters:
+    ezpublish.utils.deprecation_warner.class: eZ\Publish\Core\Base\Utils\DeprecationWarner
+
+services:
+    ezpublish.utils.deprecation_warner:
+        class: %ezpublish.utils.deprecation_warner.class%
+

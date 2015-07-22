@@ -1,16 +1,22 @@
 <?php
+
 /**
  * File containing the GlobalHelper class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\Templating;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\Core\Helper\TranslationHelper;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\RequestStackAware;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Templating helper object globally accessible, through the "ezpublish" variable (in Twig).
@@ -18,14 +24,38 @@ use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
  */
 class GlobalHelper
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $container;
+    use RequestStackAware;
 
-    public function __construct( ContainerInterface $container )
-    {
-        $this->container = $container;
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    protected $configResolver;
+
+    /**
+     * @var \eZ\Publish\API\Repository\LocationService
+     */
+    protected $locationService;
+
+    /**
+     * @var \Symfony\Component\Routing\RouterInterface
+     */
+    protected $router;
+
+    /**
+     * @var \eZ\Publish\Core\Helper\TranslationHelper
+     */
+    protected $translationHelper;
+
+    public function __construct(
+        ConfigResolverInterface $configResolver,
+        LocationService $locationService,
+        RouterInterface $router,
+        TranslationHelper $translationHelper
+    ) {
+        $this->configResolver = $configResolver;
+        $this->locationService = $locationService;
+        $this->router = $router;
+        $this->translationHelper = $translationHelper;
     }
 
     /**
@@ -35,9 +65,9 @@ class GlobalHelper
      */
     public function getSiteaccess()
     {
-        if ( $this->container->has( 'ezpublish.siteaccess' ) )
-        {
-            return $this->container->get( 'ezpublish.siteaccess' );
+        $request = $this->getCurrentRequest();
+        if ($request) {
+            return $request->attributes->get('siteaccess');
         }
     }
 
@@ -48,23 +78,23 @@ class GlobalHelper
      */
     public function getViewParameters()
     {
-        if ( $this->container->has( 'request' ) )
-        {
-            return $this->container->get( 'request' )->attributes->get( 'viewParameters' );
+        $request = $this->getCurrentRequest();
+        if ($request) {
+            return $request->attributes->get('viewParameters');
         }
     }
 
     /**
      * Returns the view parameters as a string.
-     * e.g. /(foo)/bar
+     * e.g. /(foo)/bar.
      *
      * @return string
      */
     public function getViewParametersString()
     {
-        if ( $this->container->has( 'request' ) )
-        {
-            return $this->container->get( 'request' )->attributes->get( 'viewParametersString' );
+        $request = $this->getCurrentRequest();
+        if ($request) {
+            return $request->attributes->get('viewParametersString');
         }
     }
 
@@ -75,16 +105,16 @@ class GlobalHelper
      */
     public function getRequestedUriString()
     {
-        if ( $this->container->has( 'request' ) )
-        {
-            return $this->container->get( 'request' )->attributes->get( 'semanticPathinfo' );
+        $request = $this->getCurrentRequest();
+        if ($request) {
+            return $request->attributes->get('semanticPathinfo');
         }
     }
 
     /**
      * Returns the "system" URI string.
      * System URI is the URI for internal content controller.
-     * E.g. /content/location/123/full
+     * E.g. /content/location/123/full.
      *
      * If current route is not an URLAlias, then the current Pathinfo is returned.
      *
@@ -92,18 +122,15 @@ class GlobalHelper
      */
     public function getSystemUriString()
     {
-        if ( $this->container->has( 'request' ) )
-        {
-            /** @var $request \Symfony\Component\HttpFoundation\Request */
-            $request = $this->container->get( 'request' );
-            if ( $request->attributes->get( '_route' ) === UrlAliasRouter::URL_ALIAS_ROUTE_NAME )
-            {
-                return $this->container->get( 'router' )
+        $request = $this->getCurrentRequest();
+        if ($request) {
+            if ($request->attributes->get('_route') === UrlAliasRouter::URL_ALIAS_ROUTE_NAME) {
+                return $this->router
                     ->generate(
                         '_ezpublishLocation',
                         array(
-                            'locationId' => $request->attributes->get( 'locationId' ),
-                            'viewType' => $request->attributes->get( 'viewType' )
+                            'locationId' => $request->attributes->get('locationId'),
+                            'viewType' => $request->attributes->get('viewType'),
                         )
                     );
             }
@@ -113,15 +140,46 @@ class GlobalHelper
     }
 
     /**
+     * Returns the root location.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     */
+    public function getRootLocation()
+    {
+        return $this->locationService->loadLocation(
+            $this->configResolver->getParameter('content.tree_root.location_id')
+        );
+    }
+
+    /**
+     * Returns the translation SiteAccess for $language, or null if it cannot be found.
+     *
+     * @param string $language
+     *
+     * @return null|string
+     */
+    public function getTranslationSiteAccess($language)
+    {
+        return $this->translationHelper->getTranslationSiteAccess($language);
+    }
+
+    /**
+     * Returns the list of available languages.
+     *
+     * @return array
+     */
+    public function getAvailableLanguages()
+    {
+        return $this->translationHelper->getAvailableLanguages();
+    }
+
+    /**
      * Returns the config resolver.
      *
      * @return \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
     public function getConfigResolver()
     {
-        if ( $this->container->has( 'ezpublish.config.resolver' ) )
-        {
-            return $this->container->get( 'ezpublish.config.resolver' );
-        }
+        return $this->configResolver;
     }
 }

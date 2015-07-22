@@ -1,0 +1,83 @@
+parameters:
+    ezpublish.fieldType.ezrichtext.validator.dispatcher.class: eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
+    ezpublish.fieldType.ezrichtext.converter.dispatcher.class: eZ\Publish\Core\FieldType\RichText\ConverterDispatcher
+    ezpublish.fieldType.ezrichtext.validator.xml.class: eZ\Publish\Core\FieldType\RichText\Validator
+    ezpublish.fieldType.ezrichtext.resources: %ezpublish.kernel.root_dir%/eZ/Publish/Core/FieldType/RichText/Resources
+    ezpublish.fieldType.ezrichtext.validator.docbook.resources:
+        - %ezpublish.fieldType.ezrichtext.resources%/schemas/docbook/ezpublish.rng
+        - %ezpublish.fieldType.ezrichtext.resources%/schemas/docbook/docbook.iso.sch.xsl
+    ezpublish.fieldType.ezpage.pageService.class: eZ\Publish\Core\FieldType\Page\PageService
+    ezpublish.fieldType.ezpage.hashConverter.class: eZ\Publish\Core\FieldType\Page\HashConverter
+    ezpublish.fieldType.ezimage.io_legacy.class: eZ\Publish\Core\FieldType\Image\IO\Legacy
+    ezpublish.fieldType.ezimage.pathGenerator.class: eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator
+    ezpublish.fieldType.ezbinaryfile.pathGenerator.class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
+    ezpublish.fieldType.ezimage.io_service.options_provider.class: eZ\Publish\Core\FieldType\Image\IO\OptionsProvider
+
+services:
+    # Deprecated since 5.4. Use ezpublish.fieldType.ezimage.io_service.
+    ezpublish.fieldType.ezimage.io:
+        alias: ezpublish.fieldType.ezimage.io_service
+
+    # Custom IOService with a proxy that handles the legacy prefix (images-versioned)
+    ezpublish.fieldType.ezimage.io_service:
+        class: %ezpublish.fieldType.ezimage.io_legacy.class%
+        arguments:
+            - @ezpublish.fieldType.ezimage.io_service.published
+            - @ezpublish.fieldType.ezimage.io_service.draft
+            - @ezpublish.fieldType.ezimage.io_service.options_provider
+
+    ezpublish.fieldType.ezimage.io_service.options_provider:
+        class: %ezpublish.fieldType.ezimage.io_service.options_provider.class%
+        calls:
+            - [ setVarDir, [ %storage_dir% ] ]
+            - [ setDraftImagesDir, [ %image_draft_storage_prefix% ] ]
+            - [ setPublishedImagesDir, [ %image_storage_prefix% ] ]
+
+    ezpublish.fieldType.ezimage.io_service.published:
+        parent: ezpublish.core.io.service
+        calls:
+            - [ setPrefix, [ %image_storage_prefix% ] ]
+
+    # Used to manipulate images with a legacy 'images-versioned' path
+    ezpublish.fieldType.ezimage.io_service.draft:
+        parent: ezpublish.core.io.service
+        calls:
+            - [ setPrefix, [ %image_draft_storage_prefix% ] ]
+
+    ezpublish.fieldType.ezimage.pathGenerator:
+        class: %ezpublish.fieldType.ezimage.pathGenerator.class%
+
+    # BinaryFile
+    ezpublish.fieldType.ezbinaryfile.io_service:
+        parent: ezpublish.core.io.service
+        calls:
+            - [ setPrefix, [ %binaryfile_storage_prefix% ] ]
+
+    ezpublish.fieldType.ezbinaryfile.pathGenerator:
+        class: %ezpublish.fieldType.ezbinaryfile.pathGenerator.class%
+
+    # RichText
+    ezpublish.fieldType.ezrichtext.converter.input.dispatcher:
+        class: %ezpublish.fieldType.ezrichtext.converter.dispatcher.class%
+        arguments:
+            -
+                http://docbook.org/ns/docbook: null
+
+    ezpublish.fieldType.ezrichtext.validator.docbook:
+        class: %ezpublish.fieldType.ezrichtext.validator.xml.class%
+        arguments: [%ezpublish.fieldType.ezrichtext.validator.docbook.resources%]
+
+    ezpublish.fieldType.ezrichtext.validator.dispatcher:
+        class: %ezpublish.fieldType.ezrichtext.validator.dispatcher.class%
+        arguments:
+            -
+                http://docbook.org/ns/docbook: @ezpublish.fieldType.ezrichtext.validator.docbook
+
+    # Page
+    ezpublish.fieldType.ezpage.pageService:
+        class: %ezpublish.fieldType.ezpage.pageService.class%
+        arguments:
+            - @ezpublish.api.service.content
+
+    ezpublish.fieldType.ezpage.hashConverter:
+        class: %ezpublish.fieldType.ezpage.hashConverter.class%

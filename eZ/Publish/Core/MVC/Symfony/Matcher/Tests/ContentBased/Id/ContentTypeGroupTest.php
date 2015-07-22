@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContentTypeGroupTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,7 +25,7 @@ class ContentTypeGroupTest extends BaseTest
     protected function setUp()
     {
         parent::setUp();
-        $this->matcher = new ContentTypeGroupIdMatcher;
+        $this->matcher = new ContentTypeGroupIdMatcher();
     }
 
     /**
@@ -33,16 +35,16 @@ class ContentTypeGroupTest extends BaseTest
      *
      * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param boolean $expectedResult
+     * @param bool $expectedResult
      */
-    public function testMatchLocation( $matchingConfig, Repository $repository, $expectedResult )
+    public function testMatchLocation($matchingConfig, Repository $repository, $expectedResult)
     {
-        $this->matcher->setRepository( $repository );
-        $this->matcher->setMatchingConfig( $matchingConfig );
+        $this->matcher->setRepository($repository);
+        $this->matcher->setMatchingConfig($matchingConfig);
 
         $this->assertSame(
             $expectedResult,
-            $this->matcher->matchLocation( $this->generateLocationMock() )
+            $this->matcher->matchLocation($this->generateLocationMock())
         );
     }
 
@@ -52,33 +54,33 @@ class ContentTypeGroupTest extends BaseTest
 
         $data[] = array(
             123,
-            $this->generateRepositoryMockForContentTypeGroupId( 123 ),
-            true
+            $this->generateRepositoryMockForContentTypeGroupId(123),
+            true,
         );
 
         $data[] = array(
             123,
-            $this->generateRepositoryMockForContentTypeGroupId( 456 ),
-            false
+            $this->generateRepositoryMockForContentTypeGroupId(456),
+            false,
         );
 
         $data[] = array(
-            array( 123, 789 ),
-            $this->generateRepositoryMockForContentTypeGroupId( 456 ),
-            false
+            array(123, 789),
+            $this->generateRepositoryMockForContentTypeGroupId(456),
+            false,
         );
 
         $data[] = array(
-            array( 123, 789 ),
-            $this->generateRepositoryMockForContentTypeGroupId( 789 ),
-            true
+            array(123, 789),
+            $this->generateRepositoryMockForContentTypeGroupId(789),
+            true,
         );
 
         return $data;
     }
 
     /**
-     * Generates a Location mock
+     * Generates a Location mock.
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
@@ -86,11 +88,11 @@ class ContentTypeGroupTest extends BaseTest
     {
         $location = $this->getLocationMock();
         $location
-            ->expects( $this->any() )
-            ->method( 'getContentInfo' )
+            ->expects($this->any())
+            ->method('getContentInfo')
             ->will(
                 $this->returnValue(
-                    $this->getContentInfoMock( array( "contentTypeId" => 42 ) )
+                    $this->getContentInfoMock(array('contentTypeId' => 42))
                 )
             );
 
@@ -104,16 +106,16 @@ class ContentTypeGroupTest extends BaseTest
      *
      * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param boolean $expectedResult
+     * @param bool $expectedResult
      */
-    public function testMatchContentInfo( $matchingConfig, Repository $repository, $expectedResult )
+    public function testMatchContentInfo($matchingConfig, Repository $repository, $expectedResult)
     {
-        $this->matcher->setRepository( $repository );
-        $this->matcher->setMatchingConfig( $matchingConfig );
+        $this->matcher->setRepository($repository);
+        $this->matcher->setMatchingConfig($matchingConfig);
 
         $this->assertSame(
             $expectedResult,
-            $this->matcher->matchContentInfo( $this->getContentInfoMock( array( "contentTypeId" => 42 ) ) )
+            $this->matcher->matchContentInfo($this->getContentInfoMock(array('contentTypeId' => 42)))
         );
     }
 
@@ -123,70 +125,70 @@ class ContentTypeGroupTest extends BaseTest
 
         $data[] = array(
             123,
-            $this->generateRepositoryMockForContentTypeGroupId( 123 ),
-            true
+            $this->generateRepositoryMockForContentTypeGroupId(123),
+            true,
         );
 
         $data[] = array(
             123,
-            $this->generateRepositoryMockForContentTypeGroupId( 456 ),
-            false
+            $this->generateRepositoryMockForContentTypeGroupId(456),
+            false,
         );
 
         $data[] = array(
-            array( 123, 789 ),
-            $this->generateRepositoryMockForContentTypeGroupId( 456 ),
-            false
+            array(123, 789),
+            $this->generateRepositoryMockForContentTypeGroupId(456),
+            false,
         );
 
         $data[] = array(
-            array( 123, 789 ),
-            $this->generateRepositoryMockForContentTypeGroupId( 789 ),
-            true
+            array(123, 789),
+            $this->generateRepositoryMockForContentTypeGroupId(789),
+            true,
         );
 
         return $data;
     }
 
     /**
-     * Returns a Repository mock configured to return the appropriate Location object with given parent location Id
+     * Returns a Repository mock configured to return the appropriate Location object with given parent location Id.
      *
      * @param int $contentTypeGroupId
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function generateRepositoryMockForContentTypeGroupId( $contentTypeGroupId )
+    private function generateRepositoryMockForContentTypeGroupId($contentTypeGroupId)
     {
         $contentTypeServiceMock = $this
-            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\ContentTypeService' )
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\ContentTypeService')
             ->disableOriginalConstructor()
             ->getMock();
-        $contentTypeMock = $this->getMockForAbstractClass( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' );
-        $contentTypeServiceMock->expects( $this->once() )
-            ->method( 'loadContentType' )
-            ->with( 42 )
-            ->will( $this->returnValue( $contentTypeMock ) );
-        $contentTypeMock->expects( $this->once() )
-            ->method( 'getContentTypeGroups' )
+        $contentTypeMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType');
+        $contentTypeServiceMock->expects($this->once())
+            ->method('loadContentType')
+            ->with(42)
+            ->will($this->returnValue($contentTypeMock));
+        $contentTypeMock->expects($this->once())
+            ->method('getContentTypeGroups')
             ->will(
                 $this->returnValue(
                     array(
                         // First a group that will never match, then the right group.
                         // This ensures to test even if the content type belongs to several groups at once.
-                        $this->getMockForAbstractClass( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup' ),
+                        $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup'),
                         $this
-                            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup' )
-                            ->setConstructorArgs( array( array( 'id' => $contentTypeGroupId ) ) )
-                            ->getMockForAbstractClass()
+                            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup')
+                            ->setConstructorArgs(array(array('id' => $contentTypeGroupId)))
+                            ->getMockForAbstractClass(),
                     )
                 )
             );
 
         $repository = $this->getRepositoryMock();
         $repository
-            ->expects( $this->once() )
-            ->method( 'getContentTypeService' )
-            ->will( $this->returnValue( $contentTypeServiceMock ) );
+            ->expects($this->once())
+            ->method('getContentTypeService')
+            ->will($this->returnValue($contentTypeServiceMock));
 
         return $repository;
     }

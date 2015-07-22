@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the Controller class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,31 +19,32 @@ use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as Authorizatio
 abstract class Controller extends ContainerAware
 {
     /**
-     * Returns value for $parameterName and fallbacks to $defaultValue if not defined
+     * Returns value for $parameterName and fallbacks to $defaultValue if not defined.
      *
      * @param string $parameterName
      * @param mixed $defaultValue
      *
      * @return mixed
      */
-    public function getParameter( $parameterName, $defaultValue = null )
+    public function getParameter($parameterName, $defaultValue = null)
     {
-        if ( $this->getConfigResolver()->hasParameter( $parameterName ) )
-            return $this->getConfigResolver()->getParameter( $parameterName );
+        if ($this->getConfigResolver()->hasParameter($parameterName)) {
+            return $this->getConfigResolver()->getParameter($parameterName);
+        }
 
         return $defaultValue;
     }
 
     /**
-     * Checks if $parameterName is defined
+     * Checks if $parameterName is defined.
      *
      * @param string $parameterName
      *
-     * @return boolean
+     * @return bool
      */
-    public function hasParameter( $parameterName )
+    public function hasParameter($parameterName)
     {
-        return $this->getConfigResolver()->hasParameter( $parameterName );
+        return $this->getConfigResolver()->hasParameter($parameterName);
     }
 
     /**
@@ -49,7 +52,7 @@ abstract class Controller extends ContainerAware
      */
     public function getConfigResolver()
     {
-        return $this->container->get( 'ezpublish.config.resolver' );
+        return $this->container->get('ezpublish.config.resolver');
     }
 
     /**
@@ -61,14 +64,14 @@ abstract class Controller extends ContainerAware
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function render( $view, array $parameters = array(), Response $response = null )
+    public function render($view, array $parameters = array(), Response $response = null)
     {
-        if ( !isset( $response ) )
-        {
+        if (!isset($response)) {
             $response = new Response();
         }
 
-        $response->setContent( $this->getTemplateEngine()->render( $view, $parameters ) );
+        $response->setContent($this->getTemplateEngine()->render($view, $parameters));
+
         return $response;
     }
 
@@ -77,7 +80,7 @@ abstract class Controller extends ContainerAware
      */
     public function getTemplateEngine()
     {
-        return $this->container->get( 'templating' );
+        return $this->container->get('templating');
     }
 
     /**
@@ -85,7 +88,7 @@ abstract class Controller extends ContainerAware
      */
     public function getLogger()
     {
-        return $this->container->get( 'logger', ContainerInterface::NULL_ON_INVALID_REFERENCE );
+        return $this->container->get('logger', ContainerInterface::NULL_ON_INVALID_REFERENCE);
     }
 
     /**
@@ -93,7 +96,7 @@ abstract class Controller extends ContainerAware
      */
     public function getRepository()
     {
-        return $this->container->get( 'ezpublish.api.repository' );
+        return $this->container->get('ezpublish.api.repository');
     }
 
     /**
@@ -101,7 +104,7 @@ abstract class Controller extends ContainerAware
      */
     public function getRequest()
     {
-        return $this->container->get( 'request' );
+        return $this->container->get('request_stack')->getCurrentRequest();
     }
 
     /**
@@ -109,18 +112,18 @@ abstract class Controller extends ContainerAware
      */
     public function getEventDispatcher()
     {
-        return $this->container->get( 'event_dispatcher' );
+        return $this->container->get('event_dispatcher');
     }
 
     /**
-     * Checks if current user has granted access to provided attribute
+     * Checks if current user has granted access to provided attribute.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute $attribute
      *
-     * @return boolean
+     * @return bool
      */
-    public function isGranted( AuthorizationAttribute $attribute )
+    public function isGranted(AuthorizationAttribute $attribute)
     {
-        return $this->container->get( 'security.context' )->isGranted( $attribute );
+        return $this->container->get('security.authorization_checker')->isGranted($attribute);
     }
 }

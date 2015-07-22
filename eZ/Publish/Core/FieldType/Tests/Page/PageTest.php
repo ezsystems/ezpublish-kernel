@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the PageTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,22 +24,22 @@ class PageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetState()
     {
-        $zone1 = new Zone( array( 'id' => 'foo' ) );
-        $zone2 = new Zone( array( 'id' => 'bar' ) );
-        $zone3 = new Zone( array( 'id' => 'baz' ) );
+        $zone1 = new Zone(array('id' => 'foo'));
+        $zone2 = new Zone(array('id' => 'bar'));
+        $zone3 = new Zone(array('id' => 'baz'));
         $properties = array(
-            'layout'    => 'my_layout',
-            'zones'     => array( $zone1, $zone2, $zone3 )
+            'layout' => 'my_layout',
+            'zones' => array($zone1, $zone2, $zone3),
         );
-        $page = new Page( $properties );
+        $page = new Page($properties);
         $this->assertEquals(
             $properties + array(
-                'zonesById'     => array(
-                    'foo'   => $zone1,
-                    'bar'   => $zone2,
-                    'baz'   => $zone3
+                'zonesById' => array(
+                    'foo' => $zone1,
+                    'bar' => $zone2,
+                    'baz' => $zone3,
                 ),
-                'attributes'    => array()
+                'attributes' => array(),
             ),
             $page->getState()
         );

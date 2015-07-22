@@ -1,20 +1,21 @@
 <?php
+
 /**
  * File containing the User class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\Security;
 
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface as BaseUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 
-class User implements AdvancedUserInterface, EquatableInterface
+class User implements UserInterface, EquatableInterface
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\User\User
@@ -26,7 +27,7 @@ class User implements AdvancedUserInterface, EquatableInterface
      */
     private $roles;
 
-    public function __construct( APIUser $user = null, array $roles = array() )
+    public function __construct(APIUser $user = null, array $roles = array())
     {
         $this->user = $user;
         $this->roles = $roles;
@@ -93,8 +94,6 @@ class User implements AdvancedUserInterface, EquatableInterface
      *
      * This is important if, at any given point, sensitive information like
      * the plain-text password is stored on this object.
-     *
-     * @return void
      */
     public function eraseCredentials()
     {
@@ -111,30 +110,15 @@ class User implements AdvancedUserInterface, EquatableInterface
     /**
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      */
-    public function setAPIUser( APIUser $user )
+    public function setAPIUser(APIUser $user)
     {
         $this->user = $user;
     }
 
-    /**
-     * The equality comparison should neither be done by referential equality
-     * nor by comparing identities (i.e. getId() === getId()).
-     *
-     * However, you do not need to compare every attribute, but only those that
-     * are relevant for assessing whether re-authentication is required.
-     *
-     * Also implementation should consider that $user instance may implement
-     * the extended user interface `AdvancedUserInterface`.
-     *
-     * @param UserInterface $user
-     *
-     * @return Boolean
-     */
-    public function isEqualTo( UserInterface $user )
+    public function isEqualTo(BaseUserInterface $user)
     {
-        if ( $user instanceof User && $this->user instanceof User )
-        {
-            return $user->getUserObject()->id === $this->user->id;
+        if ($user instanceof self && $this->user instanceof APIUser) {
+            return $user->getAPIUser()->id === $this->user->id;
         }
 
         return false;

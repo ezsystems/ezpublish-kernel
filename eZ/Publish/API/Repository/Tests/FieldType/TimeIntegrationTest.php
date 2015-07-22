@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\API\Repository\Tests\FieldType\TimeIntegrationTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\TimeIntegrationTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,15 +16,15 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use DateTime;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
  */
-class TimeIntegrationTest extends BaseIntegrationTest
+class TimeIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -32,39 +34,39 @@ class TimeIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expected settings schema
+     * Get expected settings schema.
      *
      * @return array
      */
     public function getSettingsSchema()
     {
         return array(
-            "useSeconds" => array(
-                "type"    => "bool",
-                "default" => false
+            'useSeconds' => array(
+                'type' => 'bool',
+                'default' => false,
             ),
-            "defaultType" => array(
-                "type"    => "choice",
-                "default" => 0
-            )
+            'defaultType' => array(
+                'type' => 'choice',
+                'default' => 0,
+            ),
         );
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get a valid $fieldSettings value.
      *
      * @return mixed
      */
     public function getValidFieldSettings()
     {
         return array(
-            "useSeconds"   => false,
-            "defaultType"  => 0,
+            'useSeconds' => false,
+            'defaultType' => 0,
         );
     }
 
     /**
-     * Get $fieldSettings value not accepted by the field type
+     * Get $fieldSettings value not accepted by the field type.
      *
      * @return mixed
      */
@@ -76,7 +78,7 @@ class TimeIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expected validator schema
+     * Get expected validator schema.
      *
      * @return array
      */
@@ -86,7 +88,7 @@ class TimeIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $validatorConfiguration.
      *
      * @return mixed
      */
@@ -96,19 +98,19 @@ class TimeIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get $validatorConfiguration not accepted by the field type
+     * Get $validatorConfiguration not accepted by the field type.
      *
      * @return mixed
      */
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            'unknown' => array( 'value' => 42 ),
+            'unknown' => array('value' => 42),
         );
     }
 
     /**
-     * Get initial field data for valid object creation
+     * Get initial field data for valid object creation.
      *
      * @return mixed
      */
@@ -116,7 +118,7 @@ class TimeIntegrationTest extends BaseIntegrationTest
     {
         // We may only create times from timestamps here, since storing will
         // loose information about the timezone.
-        return new TimeValue( 3661 );
+        return new TimeValue(3661);
     }
 
     /**
@@ -126,10 +128,8 @@ class TimeIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field )
+    public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Time\\Value',
@@ -146,7 +146,7 @@ class TimeIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during creation
+     * Get field data which will result in errors during creation.
      *
      * This is a PHPUnit data provider.
      *
@@ -170,29 +170,29 @@ class TimeIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                "Some unknown date format", 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'
+                'Some unknown date format', 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
             ),
         );
     }
 
     /**
-     * Get update field externals data
+     * Get update field externals data.
      *
      * @return array
      */
     public function getValidUpdateFieldData()
     {
-        return TimeValue::fromTimestamp( 12345678 );
+        return TimeValue::fromTimestamp(12345678);
     }
 
     /**
-     * Get externals updated field data values
+     * Get externals updated field data values.
      *
      * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Time\\Value',
@@ -201,7 +201,7 @@ class TimeIntegrationTest extends BaseIntegrationTest
 
         $dateTime = new DateTime();
         $expectedData = array(
-            'time' => $dateTime->setTimestamp( 12345678 )->getTimestamp() - $dateTime->setTime( 0, 0, 0 )->getTimestamp(),
+            'time' => $dateTime->setTimestamp(12345678)->getTimestamp() - $dateTime->setTime(0, 0, 0)->getTimestamp(),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -210,7 +210,7 @@ class TimeIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during update
+     * Get field data which will result in errors during update.
      *
      * This is a PHPUnit data provider.
      *
@@ -236,20 +236,18 @@ class TimeIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Tests failing content update
+     * Tests failing content update.
      *
      * @param mixed $failingValue
      * @param string $expectedException
      *
      * @dataProvider provideInvalidUpdateFieldData
-     *
-     * @return void
      */
-    public function testUpdateContentFails( $failingValue, $expectedException )
+    public function testUpdateContentFails($failingValue, $expectedException)
     {
         return array(
             array(
-                "Some unknown date format", 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'
+                'Some unknown date format', 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
             ),
         );
     }
@@ -262,7 +260,7 @@ class TimeIntegrationTest extends BaseIntegrationTest
      *
      * @param Field $field
      */
-    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Time\\Value',
@@ -279,7 +277,7 @@ class TimeIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get data to test to hash method
+     * Get data to test to hash method.
      *
      * This is a PHPUnit data provider
      *
@@ -301,16 +299,17 @@ class TimeIntegrationTest extends BaseIntegrationTest
     public function provideToHashData()
     {
         $dateTime = new DateTime();
+
         return array(
             array(
-                TimeValue::fromTimestamp( 123456 ),
-                $dateTime->setTimestamp( 123456 )->getTimestamp() - $dateTime->setTime( 0, 0, 0 )->getTimestamp(),
+                TimeValue::fromTimestamp(123456),
+                $dateTime->setTimestamp(123456)->getTimestamp() - $dateTime->setTime(0, 0, 0)->getTimestamp(),
             ),
         );
     }
 
     /**
-     * Get expectations for the fromHash call on our field value
+     * Get expectations for the fromHash call on our field value.
      *
      * This is a PHPUnit data provider
      *
@@ -321,7 +320,7 @@ class TimeIntegrationTest extends BaseIntegrationTest
         return array(
             array(
                 3661,
-                new TimeValue( 3661 )
+                new TimeValue(3661),
             ),
         );
     }
@@ -329,7 +328,7 @@ class TimeIntegrationTest extends BaseIntegrationTest
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new TimeValue ),
+            array(new TimeValue()),
         );
     }
 
@@ -337,8 +336,28 @@ class TimeIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
             ),
         );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return new TimeValue($this->getSearchTargetValueOne());
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return new TimeValue($this->getSearchTargetValueTwo());
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        return 9600;
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        return 14400;
     }
 }

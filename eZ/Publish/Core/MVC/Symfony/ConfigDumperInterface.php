@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ConfigDumperInterface interface.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,8 +25,6 @@ interface ConfigDumperInterface
      *
      * @param array $configArray Hash of settings.
      * @param int $options A binary combination of options. See class OPT_* class constants in {@link \eZ\Publish\Core\MVC\Symfony\ConfigDumperInterface}
-     *
-     * @return void
      */
-    public function dump( array $configArray, $options = ConfigDumperInterface::OPT_DEFAULT );
+    public function dump(array $configArray, $options = self::OPT_DEFAULT);
 }

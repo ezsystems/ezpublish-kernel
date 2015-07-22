@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\MapperTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\MapperTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,12 +16,12 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 
 /**
- * Test case for Location\Mapper
+ * Test case for Location\Mapper.
  */
 class MapperTest extends TestCase
 {
     /**
-     * Location data from the database
+     * Location data from the database.
      *
      * @var array
      */
@@ -42,7 +44,7 @@ class MapperTest extends TestCase
     );
 
     /**
-     * Expected Location object properties values
+     * Expected Location object properties values.
      *
      * @var array
      */
@@ -62,7 +64,7 @@ class MapperTest extends TestCase
     );
 
     /**
-     * Expected Location CreateStruct object properties values
+     * Expected Location CreateStruct object properties values.
      *
      * @var array
      */
@@ -101,8 +103,7 @@ class MapperTest extends TestCase
     public function testCreateLocationsFromRows()
     {
         $inputRows = array();
-        for ( $i = 0; $i < 3; $i++ )
-        {
+        for ($i = 0; $i < 3; ++$i) {
             $row = $this->locationRow;
             $row['node_id'] += $i;
             $inputRows[] = $row;
@@ -110,11 +111,10 @@ class MapperTest extends TestCase
 
         $mapper = new Mapper();
 
-        $locations = $mapper->createLocationsFromRows( $inputRows );
+        $locations = $mapper->createLocationsFromRows($inputRows);
 
-        $this->assertCount( 3, $locations );
-        foreach ( $locations as $location )
-        {
+        $this->assertCount(3, $locations);
+        foreach ($locations as $location) {
             $this->assertInstanceOf(
                 'eZ\\Publish\\SPI\\Persistence\\Content\\Location',
                 $location
@@ -135,7 +135,7 @@ class MapperTest extends TestCase
             new Trashed()
         );
 
-        $this->assertTrue( $location instanceof Trashed );
+        $this->assertTrue($location instanceof Trashed);
         $this->assertPropertiesCorrect(
             $this->locationValues,
             $location
@@ -150,16 +150,13 @@ class MapperTest extends TestCase
         $prefix = 'some_prefix_';
 
         $data = array();
-        foreach ( $this->locationRow as $key => $val )
-        {
+        foreach ($this->locationRow as $key => $val) {
             $data[$prefix . $key] = $val;
         }
 
         $mapper = new Mapper();
 
-        $location = $mapper->createLocationFromRow(
-            $data, $prefix
-        );
+        $location = $mapper->createLocationFromRow($data, $prefix);
 
         $this->assertPropertiesCorrect(
             $this->locationValues,
@@ -178,7 +175,7 @@ class MapperTest extends TestCase
             $this->locationRow
         );
 
-        $this->assertNotEquals( $this->locationRow["remote_id"], $createStruct->remoteId );
+        $this->assertNotEquals($this->locationRow['remote_id'], $createStruct->remoteId);
         $this->assertPropertiesCorrect(
             $this->locationCreateStructValues,
             $createStruct

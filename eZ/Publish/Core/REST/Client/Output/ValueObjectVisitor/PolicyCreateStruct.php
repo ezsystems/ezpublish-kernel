@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the PolicyCreateStruct ValueObjectVisitor class
+ * File containing the PolicyCreateStruct ValueObjectVisitor class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,43 +16,41 @@ use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
- * PolicyCreateStruct value object visitor
+ * PolicyCreateStruct value object visitor.
  */
 class PolicyCreateStruct extends ValueObjectVisitor
 {
     /**
-     * Visit struct returned by controllers
+     * Visit struct returned by controllers.
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param mixed $data
      */
-    public function visit( Visitor $visitor, Generator $generator, $data )
+    public function visit(Visitor $visitor, Generator $generator, $data)
     {
-        $generator->startObjectElement( 'PolicyCreate' );
-        $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'PolicyCreate' ) );
+        $generator->startObjectElement('PolicyCreate');
+        $visitor->setHeader('Content-Type', $generator->getMediaType('PolicyCreate'));
 
-        $generator->startValueElement( 'module', $data->module );
-        $generator->endValueElement( 'module' );
+        $generator->startValueElement('module', $data->module);
+        $generator->endValueElement('module');
 
-        $generator->startValueElement( 'function', $data->function );
-        $generator->endValueElement( 'function' );
+        $generator->startValueElement('function', $data->function);
+        $generator->endValueElement('function');
 
         $limitations = $data->getLimitations();
-        if ( !empty( $limitations ) )
-        {
-            $generator->startObjectElement( 'limitations' );
-            $generator->startList( 'limitations' );
+        if (!empty($limitations)) {
+            $generator->startObjectElement('limitations');
+            $generator->startList('limitations');
 
-            foreach ( $limitations as $limitation )
-            {
-                $visitor->visitValueObject( $limitation );
+            foreach ($limitations as $limitation) {
+                $visitor->visitValueObject($limitation);
             }
 
-            $generator->endList( 'limitations' );
-            $generator->endObjectElement( 'limitations' );
+            $generator->endList('limitations');
+            $generator->endObjectElement('limitations');
         }
 
-        $generator->endObjectElement( 'PolicyCreate' );
+        $generator->endObjectElement('PolicyCreate');
     }
 }

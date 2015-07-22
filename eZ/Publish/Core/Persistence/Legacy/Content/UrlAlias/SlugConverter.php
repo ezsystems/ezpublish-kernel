@@ -1,15 +1,17 @@
 <?php
+
 /**
- * File containing the SlugConverter class
+ * File containing the SlugConverter class.
  *
- * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
 
 /**
  * URL slug converter.
@@ -17,141 +19,141 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
 class SlugConverter
 {
     protected $configuration = array(
-        "wordSeparatorName" => "dash",
-        "urlAliasNameLimit" => 255,
-        "transformation" => "urlalias",
-        "transformationGroups" => array(
-            "urlalias" => array(
-                "commands" => array(
+        'wordSeparatorName' => 'dash',
+        'urlAliasNameLimit' => 255,
+        'transformation' => 'urlalias',
+        'transformationGroups' => array(
+            'urlalias' => array(
+                'commands' => array(
                     //normalize
-                    "space_normalize",
-                    "hyphen_normalize",
-                    "apostrophe_normalize",
-                    "doublequote_normalize",
-                    "greek_normalize",
-                    "endline_search_normalize",
-                    "tab_search_normalize",
-                    "specialwords_search_normalize",
-                    "punctuation_normalize",
+                    'space_normalize',
+                    'hyphen_normalize',
+                    'apostrophe_normalize',
+                    'doublequote_normalize',
+                    'greek_normalize',
+                    'endline_search_normalize',
+                    'tab_search_normalize',
+                    'specialwords_search_normalize',
+                    'punctuation_normalize',
 
                     //transform
-                    "apostrophe_to_doublequote",
-                    "math_to_ascii",
-                    "inverted_to_normal",
+                    'apostrophe_to_doublequote',
+                    'math_to_ascii',
+                    'inverted_to_normal',
 
                     //decompose
-                    "special_decompose",
-                    "latin_search_decompose",
+                    'special_decompose',
+                    'latin_search_decompose',
 
                     //transliterate
-                    "cyrillic_transliterate_ascii",
-                    "greek_transliterate_ascii",
-                    "hebrew_transliterate_ascii",
-                    "latin1_transliterate_ascii",
-                    "latin-exta_transliterate_ascii",
+                    'cyrillic_transliterate_ascii',
+                    'greek_transliterate_ascii',
+                    'hebrew_transliterate_ascii',
+                    'latin1_transliterate_ascii',
+                    'latin-exta_transliterate_ascii',
 
                     //diacritical
-                    "cyrillic_diacritical",
-                    "greek_diacritical",
-                    "latin1_diacritical",
-                    "latin-exta_diacritical",
+                    'cyrillic_diacritical',
+                    'greek_diacritical',
+                    'latin1_diacritical',
+                    'latin-exta_diacritical',
                 ),
-                "cleanupMethod" => "url_cleanup",
+                'cleanupMethod' => 'url_cleanup',
             ),
-            "urlalias_iri" => array(
-                "commands" => array(),
-                "cleanupMethod" => "url_cleanup_iri",
+            'urlalias_iri' => array(
+                'commands' => array(),
+                'cleanupMethod' => 'url_cleanup_iri',
             ),
-            "urlalias_compat" => array(
-                "commands" => array(
+            'urlalias_compat' => array(
+                'commands' => array(
                     //normalize
-                    "space_normalize",
-                    "hyphen_normalize",
-                    "apostrophe_normalize",
-                    "doublequote_normalize",
-                    "greek_normalize",
-                    "endline_search_normalize",
-                    "tab_search_normalize",
-                    "specialwords_search_normalize",
-                    "punctuation_normalize",
+                    'space_normalize',
+                    'hyphen_normalize',
+                    'apostrophe_normalize',
+                    'doublequote_normalize',
+                    'greek_normalize',
+                    'endline_search_normalize',
+                    'tab_search_normalize',
+                    'specialwords_search_normalize',
+                    'punctuation_normalize',
 
                     //transform
-                    "apostrophe_to_doublequote",
-                    "math_to_ascii",
-                    "inverted_to_normal",
+                    'apostrophe_to_doublequote',
+                    'math_to_ascii',
+                    'inverted_to_normal',
 
                     //decompose
-                    "special_decompose",
-                    "latin_search_decompose",
+                    'special_decompose',
+                    'latin_search_decompose',
 
                     //transliterate
-                    "cyrillic_transliterate_ascii",
-                    "greek_transliterate_ascii",
-                    "hebrew_transliterate_ascii",
-                    "latin1_transliterate_ascii",
-                    "latin-exta_transliterate_ascii",
+                    'cyrillic_transliterate_ascii',
+                    'greek_transliterate_ascii',
+                    'hebrew_transliterate_ascii',
+                    'latin1_transliterate_ascii',
+                    'latin-exta_transliterate_ascii',
 
                     //diacritical
-                    "cyrillic_diacritical",
-                    "greek_diacritical",
-                    "latin1_diacritical",
-                    "latin-exta_diacritical",
+                    'cyrillic_diacritical',
+                    'greek_diacritical',
+                    'latin1_diacritical',
+                    'latin-exta_diacritical',
 
                     //lowercase
-                    "ascii_lowercase",
-                    "cyrillic_lowercase",
-                    "greek_lowercase",
-                    "latin1_lowercase",
-                    "latin-exta_lowercase",
-                    "latin_lowercase",
+                    'ascii_lowercase',
+                    'cyrillic_lowercase',
+                    'greek_lowercase',
+                    'latin1_lowercase',
+                    'latin-exta_lowercase',
+                    'latin_lowercase',
                 ),
-                "cleanupMethod" => "url_cleanup_compat",
+                'cleanupMethod' => 'url_cleanup_compat',
             ),
         ),
-        "reservedNames" => array(
-            "class",
-            "collaboration",
-            "content",
-            "error",
-            "ezinfo",
-            "infocollector",
-            "layout",
-            "notification",
-            "oauth",
-            "oauthadmin",
-            "package",
-            "pdf",
-            "role",
-            "rss",
-            "search",
-            "section",
-            "settings",
-            "setup",
-            "shop",
-            "state",
-            "trigger",
-            "url",
-            "user",
-            "visual",
-            "workflow",
-            "switchlanguage",
+        'reservedNames' => array(
+            'class',
+            'collaboration',
+            'content',
+            'error',
+            'ezinfo',
+            'infocollector',
+            'layout',
+            'notification',
+            'oauth',
+            'oauthadmin',
+            'package',
+            'pdf',
+            'role',
+            'rss',
+            'search',
+            'section',
+            'settings',
+            'setup',
+            'shop',
+            'state',
+            'trigger',
+            'url',
+            'user',
+            'visual',
+            'workflow',
+            'switchlanguage',
         ),
     );
 
     /**
-     * Transformation processor to normalize URL strings
+     * Transformation processor to normalize URL strings.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
+     * @var \eZ\Publish\Core\Persistence\TransformationProcessor
      */
     protected $transformationProcessor;
 
     /**
-     * Creates a new URL slug converter
+     * Creates a new URL slug converter.
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor $transformationProcessor
+     * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
      * @param array $configuration
      */
-    public function __construct( TransformationProcessor $transformationProcessor, array $configuration = array() )
+    public function __construct(TransformationProcessor $transformationProcessor, array $configuration = array())
     {
         $this->transformationProcessor = $transformationProcessor;
         $this->configuration = $configuration + $this->configuration;
@@ -160,7 +162,7 @@ class SlugConverter
     /**
      * Converts given $text into a URL slug consisting of URL valid characters.
      * For non-Unicode setups this means character in the range a-z, numbers and _, for Unicode
-     * setups it means all characters except space, &, ;, /, :, =, ?, [, ], (, ), -
+     * setups it means all characters except space, &, ;, /, :, =, ?, [, ], (, ), -.
      *
      * Invalid characters are converted to -.
      *
@@ -178,31 +180,28 @@ class SlugConverter
      *
      * @return string
      */
-    public function convert( $text, $defaultText = "_1", $transformation = null )
+    public function convert($text, $defaultText = '_1', $transformation = null)
     {
-        if ( !isset( $transformation ) )
-        {
-            $transformation = $this->configuration["transformation"];
+        if (!isset($transformation)) {
+            $transformation = $this->configuration['transformation'];
         }
 
-        if ( strlen( $text ) === 0 )
-        {
+        if (strlen($text) === 0) {
             $text = $defaultText;
         }
 
-        if ( isset( $this->configuration["transformationGroups"][$transformation]["commands"] )
-            && !empty( $this->configuration["transformationGroups"][$transformation]["commands"] )
-        )
-        {
+        if (isset($this->configuration['transformationGroups'][$transformation]['commands'])
+            && !empty($this->configuration['transformationGroups'][$transformation]['commands'])
+        ) {
             $text = $this->transformationProcessor->transform(
                 $text,
-                $this->configuration["transformationGroups"][$transformation]["commands"]
+                $this->configuration['transformationGroups'][$transformation]['commands']
             );
         }
 
         return $this->cleanupText(
             $text,
-            $this->configuration["transformationGroups"][$transformation]["cleanupMethod"]
+            $this->configuration['transformationGroups'][$transformation]['cleanupMethod']
         );
     }
 
@@ -222,19 +221,16 @@ class SlugConverter
      * unique counter value determined here as starting unique counter value.
      *
      * @param string $text
-     * @param boolean $isRootLevel
+     * @param bool $isRootLevel
      *
      * @return int
      */
-    public function getUniqueCounterValue( $text, $isRootLevel = true )
+    public function getUniqueCounterValue($text, $isRootLevel = true)
     {
-        if ( $isRootLevel )
-        {
-            foreach ( $this->configuration["reservedNames"] as $reservedName )
-            {
+        if ($isRootLevel) {
+            foreach ($this->configuration['reservedNames'] as $reservedName) {
                 // Case insensitive comparison
-                if ( strcasecmp( $text, $reservedName ) === 0 )
-                {
+                if (strcasecmp($text, $reservedName) === 0) {
                     return 2;
                 }
             }
@@ -251,32 +247,31 @@ class SlugConverter
      *
      * @return string
      */
-    protected function cleanupText( $text, $method )
+    protected function cleanupText($text, $method)
     {
-        switch ( $method )
-        {
-            case "url_cleanup":
+        switch ($method) {
+            case 'url_cleanup':
                 $sep = $this->getWordSeparator();
-                $sepQ = preg_quote( $sep );
+                $sepQ = preg_quote($sep);
                 $text = preg_replace(
                     array(
-                        "#[^a-zA-Z0-9_!.-]+#",
-                        "#^[.]+|[!.]+$#", # Remove dots at beginning/end
+                        '#[^a-zA-Z0-9_!.-]+#',
+                        '#^[.]+|[!.]+$#', # Remove dots at beginning/end
                         "#\.\.+#", # Remove double dots
                         "#[{$sepQ}]+#", # Turn multiple separators into one
-                        "#^[{$sepQ}]+|[{$sepQ}]+$#" # Strip separator from beginning/end
+                        "#^[{$sepQ}]+|[{$sepQ}]+$#", # Strip separator from beginning/end
                     ),
                     array(
                         $sep,
                         $sep,
                         $sep,
                         $sep,
-                        ""
+                        '',
                     ),
                     $text
                 );
                 break;
-            case "url_cleanup_iri":
+            case 'url_cleanup_iri':
                 // With IRI support we keep all characters except some reserved ones,
                 // they are space, ampersand, semi-colon, forward slash, colon, equal sign, question mark,
                 //          square brackets, parenthesis, plus.
@@ -285,39 +280,40 @@ class SlugConverter
                 //       paste urls from the system and have the whole url recognized
                 //       instead of being broken off
                 $sep = $this->getWordSeparator();
-                $sepQ = preg_quote( $sep );
-                $prepost = " ." . $sepQ;
-                if ( $sep != "-" )
-                    $prepost .= "-";
+                $sepQ = preg_quote($sep);
+                $prepost = ' .' . $sepQ;
+                if ($sep != '-') {
+                    $prepost .= '-';
+                }
                 $text = preg_replace(
                     array(
                         "#[ \\\\%\#&;/:=?\[\]()+]+#",
-                        "#^[.]+|[!.]+$#", # Remove dots at beginning/end
+                        '#^[.]+|[!.]+$#', # Remove dots at beginning/end
                         "#\.\.+#", # Remove double dots
                         "#[{$sepQ}]+#", # Turn multiple separators into one
-                        "#^[{$prepost}]+|[{$prepost}]+$#"
+                        "#^[{$prepost}]+|[{$prepost}]+$#",
                     ),
                     array(
                         $sep,
                         $sep,
                         $sep,
                         $sep,
-                        ""
+                        '',
                     ),
                     $text
                 );
                 break;
-            case "url_cleanup_compat":
+            case 'url_cleanup_compat':
                 // Old style of url alias with lowercase only and underscores for separators
-                $text = strtolower( $text );
+                $text = strtolower($text);
                 $text = preg_replace(
                     array(
-                        "#[^a-z0-9]+#",
-                        "#^_+|_+$#"
+                        '#[^a-z0-9]+#',
+                        '#^_+|_+$#',
                     ),
                     array(
-                        "_",
-                        ""
+                        '_',
+                        '',
                     ),
                     $text
                 );
@@ -336,16 +332,15 @@ class SlugConverter
      */
     protected function getWordSeparator()
     {
-        switch ( $this->configuration["wordSeparatorName"] )
-        {
-            case "dash":
-                return "-";
-            case "underscore":
-                return "_";
-            case "space":
-                return " ";
+        switch ($this->configuration['wordSeparatorName']) {
+            case 'dash':
+                return '-';
+            case 'underscore':
+                return '_';
+            case 'space':
+                return ' ';
         }
 
-        return "-";
+        return '-';
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the MessageTest class
+ * File containing the MessageTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,32 +15,32 @@ use eZ\Publish\Core\REST\Common;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Tests for Message class
+ * Tests for Message class.
  */
 class MessageTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Tests creating the message with default headers
+     * Tests creating the message with default headers.
      */
     public function testCreateMessageDefaultHeaders()
     {
         $message = new Common\Message();
 
-        $this->assertSame( array(), $message->headers );
+        $this->assertSame(array(), $message->headers);
     }
 
     /**
-     * Tests creating the message with default body
+     * Tests creating the message with default body.
      */
     public function testCreateMessageDefaultBody()
     {
         $message = new Common\Message();
 
-        $this->assertSame( '', $message->body );
+        $this->assertSame('', $message->body);
     }
 
     /**
-     * Tests creating message with headers set through constructor
+     * Tests creating message with headers set through constructor.
      */
     public function testCreateMessageConstructorHeaders()
     {
@@ -48,11 +50,11 @@ class MessageTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $this->assertSame( $headers, $message->headers );
+        $this->assertSame($headers, $message->headers);
     }
 
     /**
-     * Tests creating message with body set through constructor
+     * Tests creating message with body set through constructor.
      */
     public function testCreateMessageConstructorBody()
     {
@@ -61,6 +63,6 @@ class MessageTest extends PHPUnit_Framework_TestCase
             'Hello world!'
         );
 
-        $this->assertSame( 'Hello world!', $message->body );
+        $this->assertSame('Hello world!', $message->body);
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentService class
+ * File containing the ContentService class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,14 +23,10 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\User\User;
-
 use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Message;
-use eZ\Publish\Core\REST\Common\Exceptions;
-
-use eZ\Publish\Core\REST\Client\Values;
 
 /**
  * @example Examples/contenttype.php
@@ -67,17 +65,17 @@ class ContentService implements APIContentService, Sessionable
      * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\Core\REST\Client\ContentTypeService $contentTypeService
      */
-    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, RequestParser $requestParser, ContentTypeService $contentTypeService )
+    public function __construct(HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, RequestParser $requestParser, ContentTypeService $contentTypeService)
     {
-        $this->client          = $client;
+        $this->client = $client;
         $this->inputDispatcher = $inputDispatcher;
-        $this->outputVisitor   = $outputVisitor;
-        $this->requestParser      = $requestParser;
+        $this->outputVisitor = $outputVisitor;
+        $this->requestParser = $requestParser;
         $this->contentTypeService = $contentTypeService;
     }
 
     /**
-     * Set session ID
+     * Set session ID.
      *
      * Only for testing
      *
@@ -85,11 +83,10 @@ class ContentService implements APIContentService, Sessionable
      *
      * @private
      */
-    public function setSession( $id )
+    public function setSession($id)
     {
-        if ( $this->outputVisitor instanceof Sessionable )
-        {
-            $this->outputVisitor->setSession( $id );
+        if ($this->outputVisitor instanceof Sessionable) {
+            $this->outputVisitor->setSession($id);
         }
     }
 
@@ -105,18 +102,19 @@ class ContentService implements APIContentService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
-    public function loadContentInfo( $contentId )
+    public function loadContentInfo($contentId)
     {
         $response = $this->client->request(
             'GET',
             $contentId,
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentInfo' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('ContentInfo'))
             )
         );
 
-        $restContentInfo = $this->inputDispatcher->parse( $response );
-        return $this->completeContentInfo( $restContentInfo );
+        $restContentInfo = $this->inputDispatcher->parse($response);
+
+        return $this->completeContentInfo($restContentInfo);
     }
 
     /**
@@ -124,50 +122,50 @@ class ContentService implements APIContentService, Sessionable
      *
      * To load fields use loadContent
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to create the content in the given location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content with the given remote id does not exist
      *
      * @param string $remoteId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
-    public function loadContentInfoByRemoteId( $remoteId )
+    public function loadContentInfoByRemoteId($remoteId)
     {
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate( 'objectByRemote', array( 'object' => $remoteId ) ),
+            $this->requestParser->generate('objectByRemote', array('object' => $remoteId)),
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentInfo' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('ContentInfo'))
             )
         );
 
-        if ( $response->statusCode == 307 )
-        {
+        if ($response->statusCode == 307) {
             $response = $this->client->request(
                 'GET',
                 $response->headers['Location'],
                 new Message(
-                    array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentInfo' ) )
+                    array('Accept' => $this->outputVisitor->getMediaType('ContentInfo'))
                 )
             );
         }
 
-        $restContentInfo = $this->inputDispatcher->parse( $response );
-        return $this->completeContentInfo( $restContentInfo );
+        $restContentInfo = $this->inputDispatcher->parse($response);
+
+        return $this->completeContentInfo($restContentInfo);
     }
 
     /**
-     * Returns a complete ContentInfo based on $restContentInfo
+     * Returns a complete ContentInfo based on $restContentInfo.
      *
      * @param \eZ\Publish\Core\REST\Client\Values\RestContentInfo $restContentInfo
      *
      * @return \eZ\Publish\Core\REST\Client\Values\Content\ContentInfo
      */
-    protected function completeContentInfo( Values\RestContentInfo $restContentInfo )
+    protected function completeContentInfo(Values\RestContentInfo $restContentInfo)
     {
         $versionUrlValues = $this->requestParser->parse(
             'objectVersion',
-            $this->fetchCurrentVersionUrl( $restContentInfo->currentVersionReference )
+            $this->fetchCurrentVersionUrl($restContentInfo->currentVersionReference)
         );
 
         return new Values\Content\ContentInfo(
@@ -193,38 +191,37 @@ class ContentService implements APIContentService, Sessionable
 
     /**
      * Returns the URL of the current version referenced by
-     * $currentVersionReference
+     * $currentVersionReference.
      *
      * @param string $currentVersionReference
      *
      * @return string
      */
-    protected function fetchCurrentVersionUrl( $currentVersionReference )
+    protected function fetchCurrentVersionUrl($currentVersionReference)
     {
         $versionResponse = $this->client->request(
             'GET',
             $currentVersionReference
         );
 
-        if ( $this->isErrorResponse( $versionResponse ) )
-        {
-            return $this->inputDispatcher->parse( $versionResponse );
+        if ($this->isErrorResponse($versionResponse)) {
+            return $this->inputDispatcher->parse($versionResponse);
         }
 
         return $versionResponse->headers['Location'];
     }
 
     /**
-     * Checks if the given response is an error
+     * Checks if the given response is an error.
      *
      * @param Message $response
      *
-     * @return boolean
+     * @return bool
      */
-    protected function isErrorResponse( Message $response )
+    protected function isErrorResponse(Message $response)
     {
         return (
-            strpos( $response->headers['Content-Type'], 'application/vnd.ez.api.ErrorMessage' ) === 0
+            strpos($response->headers['Content-Type'], 'application/vnd.ez.api.ErrorMessage') === 0
         );
     }
 
@@ -241,9 +238,9 @@ class ContentService implements APIContentService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
-    public function loadVersionInfo( ContentInfo $contentInfo, $versionNo = null )
+    public function loadVersionInfo(ContentInfo $contentInfo, $versionNo = null)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
@@ -259,9 +256,9 @@ class ContentService implements APIContentService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
-    public function loadVersionInfoById( $contentId, $versionNo = null )
+    public function loadVersionInfoById($contentId, $versionNo = null)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
@@ -274,11 +271,12 @@ class ContentService implements APIContentService, Sessionable
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param int $versionNo the version number. If not given the current version is returned.
+     * @param int $versionNo the version number. If not given the current version is returned
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null )
+    public function loadContentByContentInfo(ContentInfo $contentInfo, array $languages = null, $versionNo = null, $useAlwaysAvailable = true)
     {
         return $this->loadContent(
             $contentInfo->id,
@@ -294,14 +292,15 @@ class ContentService implements APIContentService, Sessionable
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param array $languages A language filter for fields. If not given all languages are returned
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByVersionInfo( VersionInfo $versionInfo, array $languages = null )
+    public function loadContentByVersionInfo(VersionInfo $versionInfo, array $languages = null, $useAlwaysAvailable = true)
     {
         $contentInfo = $versionInfo->getContentInfo();
 
-        return $this->loadContent( $contentInfo->id, $languages, $versionInfo->versionNo );
+        return $this->loadContent($contentInfo->id, $languages, $versionInfo->versionNo);
     }
 
     /**
@@ -314,20 +313,21 @@ class ContentService implements APIContentService, Sessionable
      *
      * @param int $contentId
      * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param int $versionNo the version number. If not given the current version is returned.
+     * @param int $versionNo the version number. If not given the current version is returned
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
+     *
      * @todo Handle $versionNo = null
      * @todo Handle language filters
      */
-    public function loadContent( $contentId, array $languages = null, $versionNo = null )
+    public function loadContent($contentId, array $languages = null, $versionNo = null, $useAlwaysAvailable = true)
     {
         // $contentId should already be a URL!
-        $contentIdValues = $this->requestParser->parse( 'object', $contentId );
+        $contentIdValues = $this->requestParser->parse('object', $contentId);
 
         $url = '';
-        if ( $versionNo === null )
-        {
+        if ($versionNo === null) {
             $url = $this->fetchCurrentVersionUrl(
                 $this->requestParser->generate(
                     'objectCurrentVersion',
@@ -336,9 +336,7 @@ class ContentService implements APIContentService, Sessionable
                     )
                 )
             );
-        }
-        else
-        {
+        } else {
             $url = $this->requestParser->generate(
                 'objectVersion',
                 array(
@@ -352,11 +350,11 @@ class ContentService implements APIContentService, Sessionable
             'GET',
             $url,
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'Version' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('Version'))
             )
         );
 
-        return $this->inputDispatcher->parse( $response );
+        return $this->inputDispatcher->parse($response);
     }
 
     /**
@@ -369,15 +367,16 @@ class ContentService implements APIContentService, Sessionable
      *
      * @param string $remoteId
      * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param int $versionNo the version number. If not given the current version is returned.
+     * @param int $versionNo the version number. If not given the current version is returned
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null )
+    public function loadContentByRemoteId($remoteId, array $languages = null, $versionNo = null, $useAlwaysAvailable = true)
     {
-        $contentInfo = $this->loadContentInfoByRemoteId( $remoteId );
+        $contentInfo = $this->loadContentInfoByRemoteId($remoteId);
 
-        return $this->loadContentByContentInfo( $contentInfo, $languages, $versionNo );
+        return $this->loadContentByContentInfo($contentInfo, $languages, $versionNo);
     }
 
     /**
@@ -402,9 +401,9 @@ class ContentService implements APIContentService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContent( ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array() )
+    public function createContent(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array())
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
@@ -412,36 +411,36 @@ class ContentService implements APIContentService, Sessionable
      *
      * (see {@link ContentMetadataUpdateStruct}) of a content object - to update fields use updateContent
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to update the content meta data
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the remoteId in $contentMetadataUpdateStruct is set but already existis
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update the content meta data
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the remoteId in $contentMetadataUpdateStruct is set but already exists
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct $contentMetadataUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content with the updated attributes
      */
-    public function updateContentMetadata( ContentInfo $contentInfo, ContentMetadataUpdateStruct $contentMetadataUpdateStruct )
+    public function updateContentMetadata(ContentInfo $contentInfo, ContentMetadataUpdateStruct $contentMetadataUpdateStruct)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
      * Deletes a content object including all its versions and locations including their subtrees.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to delete the content (in one of the locations of the given content object)
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete the content (in one of the locations of the given content object)
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      */
-    public function deleteContent( ContentInfo $contentInfo )
+    public function deleteContent(ContentInfo $contentInfo)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Creates a draft from a publshed or archived version.
+     * Creates a draft from a published or archived version.
      *
      * If no version is given, the current published version is used.
-     * 4.x: The draft is created with the initialLanguge code of the source version or if not present with the main language.
+     * 4.x: The draft is created with the initialLanguage code of the source version or if not present with the main language.
      * It can be changed on updating the version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the draft
@@ -452,9 +451,9 @@ class ContentService implements APIContentService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContentDraft( ContentInfo $contentInfo, VersionInfo $versionInfo = null, User $user = null )
+    public function createContentDraft(ContentInfo $contentInfo, VersionInfo $versionInfo = null, User $user = null)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
@@ -468,9 +467,9 @@ class ContentService implements APIContentService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo the drafts ({@link VersionInfo}) owned by the given user
      */
-    public function loadContentDrafts( User $user = null )
+    public function loadContentDrafts(User $user = null)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
@@ -486,13 +485,13 @@ class ContentService implements APIContentService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the updated fields
      */
-    public function updateContent( VersionInfo $versionInfo, ContentUpdateStruct $contentUpdateStruct )
+    public function updateContent(VersionInfo $versionInfo, ContentUpdateStruct $contentUpdateStruct)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Publishes a content version
+     * Publishes a content version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish this version
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
@@ -504,26 +503,27 @@ class ContentService implements APIContentService, Sessionable
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish this version
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      */
-    public function publishVersion( VersionInfo $versionInfo )
+    public function publishVersion(VersionInfo $versionInfo)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * removes the given version
+     * Removes the given version.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is in state published
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is in
+     *         published state or is a last version of the Content
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to remove this version
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      */
-    public function deleteVersion( VersionInfo $versionInfo )
+    public function deleteVersion(VersionInfo $versionInfo)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Loads all versions for the given content
+     * Loads all versions for the given content.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to list versions
      *
@@ -531,9 +531,9 @@ class ContentService implements APIContentService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] Sorted by creation date
      */
-    public function loadVersions( ContentInfo $contentInfo )
+    public function loadVersions(ContentInfo $contentInfo)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
@@ -548,9 +548,9 @@ class ContentService implements APIContentService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function copyContent( ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, VersionInfo $versionInfo = null )
+    public function copyContent(ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, VersionInfo $versionInfo = null)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
@@ -561,36 +561,37 @@ class ContentService implements APIContentService, Sessionable
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
-     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
+     * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
      */
-    public function findContent( Query $query, array $fieldFilters, $filterOnUserPermissions = true )
+    public function findContent(Query $query, array $fieldFilters, $filterOnUserPermissions = true)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Performs a query for a single content object
+     * Performs a query for a single content object.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the query would return more than one result
      *
      * @todo define structs for the field filters
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
-     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
+     * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle( Query $query, array $fieldFilters, $filterOnUserPermissions = true )
+    public function findSingle(Query $query, array $fieldFilters, $filterOnUserPermissions = true)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Loads all outgoing relations for the given version
+     * Loads all outgoing relations for the given version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read this version
      *
@@ -598,9 +599,9 @@ class ContentService implements APIContentService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
-    public function loadRelations( VersionInfo $versionInfo )
+    public function loadRelations(VersionInfo $versionInfo)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
@@ -615,9 +616,9 @@ class ContentService implements APIContentService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
-    public function loadReverseRelations( ContentInfo $contentInfo )
+    public function loadReverseRelations(ContentInfo $contentInfo)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
@@ -634,9 +635,9 @@ class ContentService implements APIContentService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation the newly created relation
      */
-    public function addRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent )
+    public function addRelation(VersionInfo $sourceVersion, ContentInfo $destinationContent)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
@@ -649,41 +650,42 @@ class ContentService implements APIContentService, Sessionable
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent
      */
-    public function deleteRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent )
+    public function deleteRelation(VersionInfo $sourceVersion, ContentInfo $destinationContent)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Instantiates a new content create struct object
+     * Instantiates a new content create struct object.
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param string $mainLanguageCode
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
      */
-    public function newContentCreateStruct( ContentType $contentType, $mainLanguageCode )
+    public function newContentCreateStruct(ContentType $contentType, $mainLanguageCode)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Instantiates a new content meta data update struct
+     * Instantiates a new content meta data update struct.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct
      */
     public function newContentMetadataUpdateStruct()
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Instantiates a new content update struct
+     * Instantiates a new content update struct.
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
      */
     public function newContentUpdateStruct()
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     // Ignore this eZ Publish 5 feature by now.
@@ -691,14 +693,14 @@ class ContentService implements APIContentService, Sessionable
     // @codeCoverageIgnoreStart
 
     /**
-     * Translate a version
+     * Translate a version.
      *
      * updates the destination version given in $translationInfo with the provided translated fields in $translationValues
      *
      * @example Examples/translation_5x.php
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destiantioon version is not a draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destination version is not a draft
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
      *
@@ -710,13 +712,13 @@ class ContentService implements APIContentService, Sessionable
      *
      * @since 5.0
      */
-    public function translateVersion( TranslationInfo $translationInfo, TranslationValues $translationValues, User $user = null )
+    public function translateVersion(TranslationInfo $translationInfo, TranslationValues $translationValues, User $user = null)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Adds translation information to the content object
+     * Adds translation information to the content object.
      *
      * @example Examples/translation_5x.php
      *
@@ -726,13 +728,13 @@ class ContentService implements APIContentService, Sessionable
      *
      * @since 5.0
      */
-    public function addTranslationInfo( TranslationInfo $translationInfo )
+    public function addTranslationInfo(TranslationInfo $translationInfo)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * lists the translations done on this content object
+     * lists the translations done on this content object.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed read translation infos
      *
@@ -745,26 +747,28 @@ class ContentService implements APIContentService, Sessionable
      *
      * @since 5.0
      */
-    public function loadTranslationInfos( ContentInfo $contentInfo, array $filter = array() )
+    public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = array())
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Instantiates a new TranslationInfo object
+     * Instantiates a new TranslationInfo object.
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
      */
     public function newTranslationInfo()
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Instantiates a Translation object
+     * Instantiates a Translation object.
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
      */
     public function newTranslationValues()
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 }

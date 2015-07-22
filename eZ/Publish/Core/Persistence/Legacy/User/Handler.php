@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the UserHandler interface
+ * File containing the UserHandler interface.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,51 +17,59 @@ use eZ\Publish\SPI\Persistence\User\Role;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Policy;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway as RoleGateway;
+use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use LogicException;
 
 /**
- * Storage Engine handler for user module
+ * Storage Engine handler for user module.
  */
 class Handler implements BaseUserHandler
 {
     /**
-     * Gateway for storing user data
+     * Gateway for storing user data.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\User\Gateway
      */
     protected $userGateway;
 
     /**
-     * Gateway for storing role data
+     * Gateway for storing role data.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway
      */
     protected $roleGateway;
 
     /**
-     * Mapper for user related objects
+     * Mapper for user related objects.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\User\Mapper
      */
     protected $mapper;
 
     /**
-     * Construct from userGateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter
+     */
+    protected $limitationConverter;
+
+    /**
+     * Construct from userGateway.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\User\Gateway $userGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway $roleGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\User\Mapper $mapper
+     * @param \eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter $limitationConverter
      */
-    public function __construct( Gateway $userGateway, RoleGateway $roleGateway, Mapper $mapper )
+    public function __construct(Gateway $userGateway, RoleGateway $roleGateway, Mapper $mapper, LimitationConverter $limitationConverter)
     {
         $this->userGateway = $userGateway;
         $this->roleGateway = $roleGateway;
         $this->mapper = $mapper;
+        $this->limitationConverter = $limitationConverter;
     }
 
     /**
-     * Create a user
+     * Create a user.
      *
      * The User struct used to create the user will contain an ID which is used
      * to reference the user.
@@ -68,9 +78,10 @@ class Handler implements BaseUserHandler
      *
      * @return \eZ\Publish\SPI\Persistence\User
      */
-    public function create( User $user )
+    public function create(User $user)
     {
-        $this->userGateway->createUser( $user );
+        $this->userGateway->createUser($user);
+
         return $user;
     }
 
@@ -81,16 +92,15 @@ class Handler implements BaseUserHandler
      *
      * @return \eZ\Publish\SPI\Persistence\User
      */
-    public function load( $userId )
+    public function load($userId)
     {
-        $data = $this->userGateway->load( $userId );
+        $data = $this->userGateway->load($userId);
 
-        if ( empty( $data ) )
-        {
-            throw new NotFound( 'user', $userId );
+        if (empty($data)) {
+            throw new NotFound('user', $userId);
         }
 
-        return $this->mapper->mapUser( reset( $data ) );
+        return $this->mapper->mapUser(reset($data));
     }
 
     /**
@@ -102,20 +112,17 @@ class Handler implements BaseUserHandler
      *
      * @return \eZ\Publish\SPI\Persistence\User
      */
-    public function loadByLogin( $login )
+    public function loadByLogin($login)
     {
-        $data = $this->userGateway->loadByLogin( $login );
+        $data = $this->userGateway->loadByLogin($login);
 
-        if ( empty( $data ) )
-        {
-            throw new NotFound( 'user', $login );
-        }
-        else if ( isset( $data[1] ) )
-        {
-            throw new LogicException( "Found more then one user with login '{$login}'" );
+        if (empty($data)) {
+            throw new NotFound('user', $login);
+        } elseif (isset($data[1])) {
+            throw new LogicException("Found more then one user with login '{$login}'");
         }
 
-        return $this->mapper->mapUser( $data[0] );
+        return $this->mapper->mapUser($data[0]);
     }
 
     /**
@@ -128,26 +135,25 @@ class Handler implements BaseUserHandler
      *
      * @return \eZ\Publish\SPI\Persistence\User[]
      */
-    public function loadByEmail( $email )
+    public function loadByEmail($email)
     {
-        $data = $this->userGateway->loadByEmail( $email );
+        $data = $this->userGateway->loadByEmail($email);
 
-        if ( empty( $data ) )
-        {
+        if (empty($data)) {
             return array();
         }
 
-        return $this->mapper->mapUsers( $data );
+        return $this->mapper->mapUsers($data);
     }
 
     /**
-     * Update the user information specified by the user struct
+     * Update the user information specified by the user struct.
      *
      * @param \eZ\Publish\SPI\Persistence\User $user
      */
-    public function update( User $user )
+    public function update(User $user)
     {
-        $this->userGateway->updateUser( $user );
+        $this->userGateway->updateUser($user);
     }
 
     /**
@@ -155,32 +161,31 @@ class Handler implements BaseUserHandler
      *
      * @param mixed $userId
      */
-    public function delete( $userId )
+    public function delete($userId)
     {
-        $this->userGateway->deleteUser( $userId );
+        $this->userGateway->deleteUser($userId);
     }
 
     /**
-     * Create new role
+     * Create new role.
      *
      * @param \eZ\Publish\SPI\Persistence\User\Role $role
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
-    public function createRole( Role $role )
+    public function createRole(Role $role)
     {
-        $this->roleGateway->createRole( $role );
+        $this->roleGateway->createRole($role);
 
-        foreach ( $role->policies as $policy )
-        {
-            $this->addPolicy( $role->id, $policy );
+        foreach ($role->policies as $policy) {
+            $this->addPolicy($role->id, $policy);
         }
 
         return $role;
     }
 
     /**
-     * Loads a specified role by $roleId
+     * Loads a specified role by $roleId.
      *
      * @param mixed $roleId
      *
@@ -188,20 +193,24 @@ class Handler implements BaseUserHandler
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
-    public function loadRole( $roleId )
+    public function loadRole($roleId)
     {
-        $data = $this->roleGateway->loadRole( $roleId );
+        $data = $this->roleGateway->loadRole($roleId);
 
-        if ( empty( $data ) )
-        {
-            throw new NotFound( 'role', $roleId );
+        if (empty($data)) {
+            throw new NotFound('role', $roleId);
         }
 
-        return $this->mapper->mapRole( $data );
+        $role = $this->mapper->mapRole($data);
+        foreach ($role->policies as $policy) {
+            $this->limitationConverter->toSPI($policy);
+        }
+
+        return $role;
     }
 
     /**
-     * Loads a specified role by $identifier
+     * Loads a specified role by $identifier.
      *
      * @param string $identifier
      *
@@ -209,20 +218,24 @@ class Handler implements BaseUserHandler
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
-    public function loadRoleByIdentifier( $identifier )
+    public function loadRoleByIdentifier($identifier)
     {
-        $data = $this->roleGateway->loadRoleByIdentifier( $identifier );
+        $data = $this->roleGateway->loadRoleByIdentifier($identifier);
 
-        if ( empty( $data ) )
-        {
-            throw new NotFound( 'role', $identifier );
+        if (empty($data)) {
+            throw new NotFound('role', $identifier);
         }
 
-        return $this->mapper->mapRole( $data );
+        $role = $this->mapper->mapRole($data);
+        foreach ($role->policies as $policy) {
+            $this->limitationConverter->toSPI($policy);
+        }
+
+        return $role;
     }
 
     /**
-     * Loads all roles
+     * Loads all roles.
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role[]
      */
@@ -230,101 +243,113 @@ class Handler implements BaseUserHandler
     {
         $data = $this->roleGateway->loadRoles();
 
-        return $this->mapper->mapRoles( $data );
+        $roles = $this->mapper->mapRoles($data);
+        foreach ($roles as $role) {
+            foreach ($role->policies as $policy) {
+                $this->limitationConverter->toSPI($policy);
+            }
+        }
+
+        return $roles;
     }
 
     /**
-     * Update role
+     * Update role.
      *
      * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
      */
-    public function updateRole( RoleUpdateStruct $role )
+    public function updateRole(RoleUpdateStruct $role)
     {
-        $this->roleGateway->updateRole( $role );
+        $this->roleGateway->updateRole($role);
     }
 
     /**
-     * Delete the specified role
+     * Delete the specified role.
      *
      * @param mixed $roleId
      */
-    public function deleteRole( $roleId )
+    public function deleteRole($roleId)
     {
-        $role = $this->loadRole( $roleId );
+        $role = $this->loadRole($roleId);
 
-        foreach ( $role->policies as $policy )
-        {
-            $this->roleGateway->removePolicy( $policy->id );
+        foreach ($role->policies as $policy) {
+            $this->roleGateway->removePolicy($policy->id);
         }
 
-        foreach ( $role->groupIds as $groupId )
-        {
-            $this->userGateway->removeRole( $groupId, $role->id );
-        }
-
-        $this->roleGateway->deleteRole( $role->id );
+        $this->roleGateway->deleteRole($role->id);
     }
 
     /**
-     * Adds a policy to a role
+     * Adds a policy to a role.
      *
      * @param mixed $roleId
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
      *
      * @return \eZ\Publish\SPI\Persistence\User\Policy
      */
-    public function addPolicy( $roleId, Policy $policy )
+    public function addPolicy($roleId, Policy $policy)
     {
-        $this->roleGateway->addPolicy( $roleId, $policy );
+        $legacyPolicy = clone $policy;
+        $this->limitationConverter->toLegacy($legacyPolicy);
+
+        $this->roleGateway->addPolicy($roleId, $legacyPolicy);
+        $policy->id = $legacyPolicy->id;
+        $policy->roleId = $legacyPolicy->roleId;
 
         return $policy;
     }
 
     /**
-     * Update a policy
+     * Update a policy.
      *
      * Replaces limitations values with new values.
      *
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
      */
-    public function updatePolicy( Policy $policy )
+    public function updatePolicy(Policy $policy)
     {
-        $this->roleGateway->removePolicyLimitations( $policy->id );
-        $this->roleGateway->addPolicyLimitations( $policy->id, $policy->limitations );
+        $policy = clone $policy;
+        $this->limitationConverter->toLegacy($policy);
+
+        $this->roleGateway->removePolicyLimitations($policy->id);
+        $this->roleGateway->addPolicyLimitations($policy->id, $policy->limitations);
     }
 
     /**
-     * Removes a policy from a role
+     * Removes a policy from a role.
      *
-     * @param mixed $roleId
      * @param mixed $policyId
-     *
-     * @return void
      */
-    public function removePolicy( $roleId, $policyId )
+    public function deletePolicy($policyId)
     {
         // Each policy can only be associated to exactly one role. Thus it is
         // sufficient to use the policyId for identification and just remove
         // the policy completely.
-        $this->roleGateway->removePolicy( $policyId );
+        $this->roleGateway->removePolicy($policyId);
     }
 
     /**
-     * Returns the user policies associated with the user (including inherited policies from user groups)
+     * Returns the user policies associated with the user (including inherited policies from user groups).
      *
      * @param mixed $userId
      *
      * @return \eZ\Publish\SPI\Persistence\User\Policy[]
      */
-    public function loadPoliciesByUserId( $userId )
+    public function loadPoliciesByUserId($userId)
     {
-        $data = $this->roleGateway->loadPoliciesByUserId( $userId );
+        $data = $this->roleGateway->loadPoliciesByUserId($userId);
 
-        return $this->mapper->mapPolicies( $data );
+        $policies = $this->mapper->mapPolicies($data);
+
+        foreach ($policies as $policy) {
+            $this->limitationConverter->toSPI($policy);
+        }
+
+        return $policies;
     }
 
     /**
-     * Assigns role to a user or user group with given limitations
+     * Assigns role to a user or user group with given limitations.
      *
      * The limitation array looks like:
      * <code>
@@ -345,25 +370,25 @@ class Handler implements BaseUserHandler
      * @param mixed $roleId
      * @param array $limitation
      */
-    public function assignRole( $contentId, $roleId, array $limitation = null )
+    public function assignRole($contentId, $roleId, array $limitation = null)
     {
-        $limitation = $limitation ?: array( '' => array( '' ) );
-        $this->userGateway->assignRole( $contentId, $roleId, $limitation );
+        $limitation = $limitation ?: array('' => array(''));
+        $this->userGateway->assignRole($contentId, $roleId, $limitation);
     }
 
     /**
-     * Un-assign a role
+     * Un-assign a role.
      *
      * @param mixed $contentId The user or user group Id to un-assign the role from.
      * @param mixed $roleId
      */
-    public function unAssignRole( $contentId, $roleId )
+    public function unAssignRole($contentId, $roleId)
     {
-        $this->userGateway->removeRole( $contentId, $roleId );
+        $this->userGateway->removeRole($contentId, $roleId);
     }
 
     /**
-     * Loads roles assignments Role
+     * Loads roles assignments Role.
      *
      * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
      *
@@ -371,29 +396,36 @@ class Handler implements BaseUserHandler
      *
      * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
      */
-    public function loadRoleAssignmentsByRoleId( $roleId )
+    public function loadRoleAssignmentsByRoleId($roleId)
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        $data = $this->roleGateway->loadRoleAssignmentsByRoleId($roleId);
+
+        if (empty($data)) {
+            return array();
+        }
+
+        return $this->mapper->mapRoleAssignments($data);
     }
 
     /**
-     * Loads roles assignments to a user/group
+     * Loads roles assignments to a user/group.
      *
      * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
      *
      * @param mixed $groupId In legacy storage engine this is the content object id roles are assigned to in ezuser_role.
      *                      By the nature of legacy this can currently also be used to get by $userId.
-     * @param boolean $inherit If true also return inherited role assignments from user groups.
+     * @param bool $inherit If true also return inherited role assignments from user groups.
      *
      * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
      */
-    public function loadRoleAssignmentsByGroupId( $groupId, $inherit = false )
+    public function loadRoleAssignmentsByGroupId($groupId, $inherit = false)
     {
-        $data = $this->roleGateway->loadRoleAssignmentsByGroupId( $groupId, $inherit );
+        $data = $this->roleGateway->loadRoleAssignmentsByGroupId($groupId, $inherit);
 
-        if ( empty( $data ) )
+        if (empty($data)) {
             return array();
+        }
 
-        return $this->mapper->mapRoleAssignments( $data );
+        return $this->mapper->mapRoleAssignments($data);
     }
 }

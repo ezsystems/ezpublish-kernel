@@ -52,15 +52,28 @@
                 The user which created the content type
               </xsd:documentation>
             </xsd:annotation>
-
           </xsd:element>
           <xsd:element name="Modifier" type="ref">
             <xsd:annotation>
               <xsd:documentation>
-                The userwhich last modified the content
+                The user which last modified the content
                 type
               </xsd:documentation>
             </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="Groups" type="ref">
+              <xsd:annotation>
+                  <xsd:documentation>
+                      The groups this content type belongs to
+                  </xsd:documentation>
+              </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="Draft" type="ref">
+              <xsd:annotation>
+                  <xsd:documentation>
+                      The draft for this content type
+                  </xsd:documentation>
+              </xsd:annotation>
           </xsd:element>
           <xsd:element name="remoteId" type="xsd:string"
             minOccurs="0">

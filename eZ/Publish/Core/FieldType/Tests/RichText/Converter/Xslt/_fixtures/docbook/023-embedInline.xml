@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
+         xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
+         version="5.0-variant ezpublish-1.0">
+  <para>Some <ezembedinline xlink:href="ezcontent://601" view="embed-inline-custom" xml:id="id3" ezxhtml:class="embedClass" ezxhtml:align="left"/> for the otherwise unremarkable paragraph.</para>
+  <para>This paragraph is just showing off its <ezembedinline xlink:href="ezcontent://501" view="embed-inline" xml:id="id5" ezxhtml:class="embedClass2" ezxhtml:align="right">
+    <ezconfig>
+      <ezvalue key="size">medium</ezvalue>
+    </ezconfig>
+  </ezembedinline> content.</para>
+</section>

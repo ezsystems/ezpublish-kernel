@@ -1,19 +1,20 @@
 <?php
+
 /**
- * File containing the GeneratorTest class
+ * File containing the GeneratorTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Common\Tests\Output;
 
-use eZ\Publish\Core\REST\Common;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Output generator test class
+ * Output generator test class.
  */
 abstract class GeneratorTest extends PHPUnit_Framework_TestCase
 {
@@ -34,19 +35,19 @@ abstract class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
-        $generator->startDocument( 'test' );
+        $generator->startDocument('test');
+        $generator->startDocument('test');
     }
 
     public function testValidDocumentStartAfterReset()
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
+        $generator->startDocument('test');
         $generator->reset();
-        $generator->startDocument( 'test' );
+        $generator->startDocument('test');
 
-        $this->assertNotNull( $generator->endDocument( 'test' ) );
+        $this->assertNotNull($generator->endDocument('test'));
     }
 
     /**
@@ -56,8 +57,8 @@ abstract class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
-        $generator->endDocument( 'invalid' );
+        $generator->startDocument('test');
+        $generator->endDocument('invalid');
     }
 
     /**
@@ -67,7 +68,7 @@ abstract class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = $this->getGenerator();
 
-        $generator->startObjectElement( 'element' );
+        $generator->startObjectElement('element');
     }
 
     /**
@@ -77,9 +78,9 @@ abstract class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
-        $generator->startObjectElement( 'element' );
-        $generator->endObjectElement( 'invalid' );
+        $generator->startDocument('test');
+        $generator->startObjectElement('element');
+        $generator->endObjectElement('invalid');
     }
 
     /**
@@ -89,9 +90,9 @@ abstract class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
-        $generator->startObjectElement( 'element' );
-        $generator->endDocument( 'test' );
+        $generator->startDocument('test');
+        $generator->startObjectElement('element');
+        $generator->endDocument('test');
     }
 
     /**
@@ -101,7 +102,7 @@ abstract class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = $this->getGenerator();
 
-        $generator->startAttribute( 'attribute', 'value' );
+        $generator->startAttribute('attribute', 'value');
     }
 
     /**
@@ -111,8 +112,8 @@ abstract class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
-        $generator->startAttribute( 'attribute', 'value' );
+        $generator->startDocument('test');
+        $generator->startAttribute('attribute', 'value');
     }
 
     /**
@@ -122,10 +123,10 @@ abstract class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
-        $generator->startObjectElement( 'element' );
-        $generator->startList( 'list' );
-        $generator->startAttribute( 'attribute', 'value' );
+        $generator->startDocument('test');
+        $generator->startObjectElement('element');
+        $generator->startList('list');
+        $generator->startAttribute('attribute', 'value');
     }
 
     /**
@@ -135,7 +136,7 @@ abstract class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = $this->getGenerator();
 
-        $generator->startValueElement( 'element', 'value' );
+        $generator->startValueElement('element', 'value');
     }
 
     /**
@@ -145,8 +146,8 @@ abstract class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
-        $generator->startValueElement( 'element', 'value' );
+        $generator->startDocument('test');
+        $generator->startValueElement('element', 'value');
     }
 
     /**
@@ -156,7 +157,7 @@ abstract class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = $this->getGenerator();
 
-        $generator->startList( 'list' );
+        $generator->startList('list');
     }
 
     /**
@@ -166,8 +167,8 @@ abstract class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
-        $generator->startList( 'list' );
+        $generator->startDocument('test');
+        $generator->startList('list');
     }
 
     /**
@@ -177,28 +178,28 @@ abstract class GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
-        $generator->startObjectElement( 'element' );
-        $generator->startList( 'list' );
-        $generator->startList( 'attribute', 'value' );
+        $generator->startDocument('test');
+        $generator->startObjectElement('element');
+        $generator->startList('list');
+        $generator->startList('attribute', 'value');
     }
 
     public function testEmptyDocument()
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
+        $generator->startDocument('test');
 
-        $this->assertTrue( $generator->isEmpty() );
+        $this->assertTrue($generator->isEmpty());
     }
 
     public function testNonEmptyDocument()
     {
         $generator = $this->getGenerator();
 
-        $generator->startDocument( 'test' );
-        $generator->startObjectElement( 'element' );
+        $generator->startDocument('test');
+        $generator->startObjectElement('element');
 
-        $this->assertFalse( $generator->isEmpty() );
+        $this->assertFalse($generator->isEmpty());
     }
 }

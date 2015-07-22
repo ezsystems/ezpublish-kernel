@@ -1,0 +1,18 @@
+parameters:
+    ezpublish.search.elasticsearch.content.gateway.client.http.stream.class: eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\HttpClient\Stream
+    ezpublish.search.elasticsearch.content.field_value_mapper.aggregate.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper\Aggregate
+    ezpublish.search.elasticsearch.content.field_name_generator.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator
+
+services:
+    ezpublish.search.elasticsearch.content.gateway.client.http.stream:
+        class: %ezpublish.search.elasticsearch.content.gateway.client.http.stream.class%
+        arguments:
+            - %ezpublish.search.elasticsearch.connection.server%
+
+    # Note: services tagged with 'ezpublish.search.elasticsearch.content.field_value_mapper'
+    # are registered to this one using compilation pass
+    ezpublish.search.elasticsearch.content.field_value_mapper.aggregate:
+        class: %ezpublish.search.elasticsearch.content.field_value_mapper.aggregate.class%
+
+    ezpublish.search.elasticsearch.content.field_name_generator:
+        class: %ezpublish.search.elasticsearch.content.field_name_generator.class%

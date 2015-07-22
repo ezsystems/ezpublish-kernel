@@ -1,19 +1,20 @@
 <?php
+
 /**
  * File containing the LanguageServiceTest class.
  *
- * @copyright Copyright (C) 2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
+
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Language;
-
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\LanguageService;
-use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class LanguageServiceTest extends ServiceTest
 {
@@ -24,9 +25,9 @@ class LanguageServiceTest extends ServiceTest
         );
     }
 
-    protected function getSignalSlotService( $coreService, SignalDispatcher $dispatcher )
+    protected function getSignalSlotService($coreService, SignalDispatcher $dispatcher)
     {
-        return new LanguageService( $coreService, $dispatcher );
+        return new LanguageService($coreService, $dispatcher);
     }
 
     public function serviceProvider()
@@ -42,7 +43,7 @@ class LanguageServiceTest extends ServiceTest
                 'id' => $languageId,
                 'languageCode' => $languageCode,
                 'name' => $languageName,
-                'enabled' => $languageEnabled
+                'enabled' => $languageEnabled,
             )
         );
 
@@ -51,82 +52,82 @@ class LanguageServiceTest extends ServiceTest
         return array(
             array(
                 'createLanguage',
-                array( $languageCreateStruct ),
+                array($languageCreateStruct),
                 $language,
                 1,
                 'eZ\Publish\Core\SignalSlot\Signal\LanguageService\CreateLanguageSignal',
-                array( 'languageId' => $languageId )
+                array('languageId' => $languageId),
             ),
             array(
                 'updateLanguageName',
-                array( $language, $languageNewName ),
+                array($language, $languageNewName),
                 $language,
                 1,
                 'eZ\Publish\Core\SignalSlot\Signal\LanguageService\UpdateLanguageNameSignal',
                 array(
                     'languageId' => $languageId,
-                    'newName' => $languageNewName
-                )
+                    'newName' => $languageNewName,
+                ),
             ),
             array(
                 'enableLanguage',
-                array( $language ),
+                array($language),
                 $language,
                 1,
                 'eZ\Publish\Core\SignalSlot\Signal\LanguageService\EnableLanguageSignal',
                 array(
                     'languageId' => $languageId,
-                )
+                ),
             ),
             array(
                 'disableLanguage',
-                array( $language ),
+                array($language),
                 $language,
                 1,
                 'eZ\Publish\Core\SignalSlot\Signal\LanguageService\DisableLanguageSignal',
                 array(
                     'languageId' => $languageId,
-                )
+                ),
             ),
             array(
                 'loadLanguage',
-                array( $languageCode ),
+                array($languageCode),
                 $language,
-                0
+                0,
             ),
             array(
                 'loadLanguages',
                 array(),
-                array( $language ),
-                0
+                array($language),
+                0,
             ),
             array(
                 'loadLanguageById',
-                array( $languageId ),
+                array($languageId),
                 $language,
-                0
+                0,
             ),
             array(
                 'deleteLanguage',
-                array( $language ),
+                array($language),
                 null,
                 1,
                 'eZ\Publish\Core\SignalSlot\Signal\LanguageService\DeleteLanguageSignal',
                 array(
                     'languageId' => $languageId,
-                )
+                ),
             ),
             array(
                 'getDefaultLanguageCode',
                 array(),
                 $languageCode,
-                0
+                0,
             ),
             array(
                 'newLanguageCreateStruct',
                 array(),
                 $languageCreateStruct,
-                0
+                0,
             ),
         );
     }

@@ -1,0 +1,42 @@
+parameters:
+    ezpublish.search.common.field_registry.class: eZ\Publish\Core\Search\Common\FieldRegistry
+    ezpublish.search.common.field_name_resolver.class: eZ\Publish\Core\Search\Common\FieldNameResolver
+    ezpublish.search.common.field_name_generator.class: eZ\Publish\Core\Search\Common\FieldNameGenerator
+    ezpublish.search.common.field_name_generator.map:
+        ez_integer: 'i'
+        ez_minteger: 'mi'
+        ez_id: 'id'
+        ez_mid: 'mid'
+        ez_string: 's'
+        ez_mstring: 'ms'
+        ez_long: 'l'
+        ez_text: 't'
+        ez_html: 'h'
+        ez_boolean: 'b'
+        ez_mboolean: 'mb'
+        ez_float: 'f'
+        ez_double: 'd'
+        ez_date: 'dt'
+        ez_point: 'p'
+        ez_currency: 'c'
+        ez_geolocation: 'gl'
+        ez_document: 'doc'
+
+services:
+    # Note: services tagged with 'ezpublish.fieldType.indexable'
+    # are registered to this one using compilation pass
+    ezpublish.search.common.field_registry:
+        class: %ezpublish.search.common.field_registry.class%
+
+    # Mapping for our internal search field types
+    ezpublish.search.common.field_name_generator:
+        class: %ezpublish.search.common.field_name_generator.class%
+        arguments:
+            - %ezpublish.search.common.field_name_generator.map%
+
+    ezpublish.search.common.field_name_resolver:
+        class: %ezpublish.search.common.field_name_resolver.class%
+        arguments:
+            - @ezpublish.search.common.field_registry
+            - @ezpublish.spi.persistence.content_type_handler
+            - @ezpublish.search.common.field_name_generator

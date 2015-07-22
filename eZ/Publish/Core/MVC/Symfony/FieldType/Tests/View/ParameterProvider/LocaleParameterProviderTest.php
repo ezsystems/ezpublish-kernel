@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ParameterProviderTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,81 +14,68 @@ namespace eZ\Publish\Core\MVC\Symfony\FieldType\Tests\View\ParameterProvider;
 use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProvider\LocaleParameterProvider;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class LocaleParameterProviderTest extends PHPUnit_Framework_TestCase
 {
     public function providerForTestGetViewParameters()
     {
         return array(
-            array( true, "fr_FR" ),
-            array( false, "hr_HR" ),
+            array(true, 'fr_FR'),
+            array(false, 'hr_HR'),
         );
     }
 
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProvider\LocaleParameterProvider::getViewParameters
      * @dataProvider providerForTestGetViewParameters
      */
-    public function testGetViewParameters( $hasRequestLocale, $expectedLocale )
+    public function testGetViewParameters($hasRequestLocale, $expectedLocale)
     {
-        $field = new Field( array( "languageCode" => "cro-HR" ) );
-        $parameterProvider = new LocaleParameterProvider(
-            $this->getContainerMock( $hasRequestLocale ),
-            $this->getLocaleConverterMock()
-        );
+        $field = new Field(array('languageCode' => 'cro-HR'));
+        $parameterProvider = new LocaleParameterProvider($this->getLocaleConverterMock());
+        $parameterProvider->setRequestStack($this->getRequestStackMock($hasRequestLocale));
         $this->assertSame(
-            array( 'locale' => $expectedLocale ),
-            $parameterProvider->getViewParameters( $field )
+            array('locale' => $expectedLocale),
+            $parameterProvider->getViewParameters($field)
         );
     }
 
-    protected function getContainerMock( $hasRequestLocale )
+    protected function getRequestStackMock($hasLocale)
     {
-        $mock = $this->getMock(
-            'Symfony\\Component\\DependencyInjection\\ContainerInterface'
-        );
+        $requestStack = new RequestStack();
+        $parameterBagMock = $this->getMock('Symfony\\Component\\HttpFoundation\\ParameterBag');
 
-        $mock->expects( $this->any() )
-            ->method( "get" )
-            ->with( $this->equalTo( "request" ) )
-            ->will( $this->returnValue( $this->getRequestMock( $hasRequestLocale ) ) );
+        $parameterBagMock->expects($this->any())
+            ->method('has')
+            ->with($this->equalTo('_locale'))
+            ->will($this->returnValue($hasLocale));
 
-        return $mock;
-    }
+        $parameterBagMock->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo('_locale'))
+            ->will($this->returnValue('fr_FR'));
 
-    protected function getRequestMock( $hasLocale )
-    {
-        $parameterBagMock = $this->getMock( "Symfony\\Component\\HttpFoundation\\ParameterBag" );
+        $requestMock = $this->getMock('Symfony\\Component\\HttpFoundation\\Request');
+        $requestMock->attributes = $parameterBagMock;
 
-        $parameterBagMock->expects( $this->any() )
-            ->method( "has" )
-            ->with( $this->equalTo( "_locale" ) )
-            ->will( $this->returnValue( $hasLocale ) );
+        $requestMock->expects($this->any())
+            ->method('__get')
+            ->with($this->equalTo('attributes'))
+            ->will($this->returnValue($parameterBagMock));
 
-        $parameterBagMock->expects( $this->any() )
-            ->method( "get" )
-            ->with( $this->equalTo( "_locale" ) )
-            ->will( $this->returnValue( "fr_FR" ) );
+        $requestStack->push($requestMock);
 
-        $mock = $this->getMock( "Symfony\\Component\\HttpFoundation\\Request" );
-        $mock->attributes = $parameterBagMock;
-
-        $mock->expects( $this->any() )
-            ->method( "__get" )
-            ->with( $this->equalTo( "attributes" ) )
-            ->will( $this->returnValue( $parameterBagMock ) );
-
-        return $mock;
+        return $requestStack;
     }
 
     protected function getLocaleConverterMock()
     {
-        $mock = $this->getMock( "eZ\\Publish\\Core\\MVC\\Symfony\\Locale\\LocaleConverterInterface" );
+        $mock = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\Locale\\LocaleConverterInterface');
 
-        $mock->expects( $this->any() )
-            ->method( "convertToPOSIX" )
-            ->with( $this->equalTo( "cro-HR" ) )
-            ->will( $this->returnValue( "hr_HR" ) );
+        $mock->expects($this->any())
+            ->method('convertToPOSIX')
+            ->with($this->equalTo('cro-HR'))
+            ->will($this->returnValue('hr_HR'));
 
         return $mock;
     }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ObjectState class
+ * File containing the ObjectState class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,7 @@ namespace eZ\Publish\Core\Repository\Values\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState as APIObjectState;
 
 /**
- * This class represents a object state value
+ * This class represents a object state value.
  *
  * @property-read mixed $id the id of the content type group
  * @property-read string $identifier the identifier of the content type group
@@ -23,14 +25,14 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectState as APIObjectState;
 class ObjectState extends APIObjectState
 {
     /**
-     * Human readable names of object state
+     * Human readable names of object state.
      *
      * @var string[]
      */
     protected $names = array();
 
     /**
-     * Human readable descriptions of object state
+     * Human readable descriptions of object state.
      *
      * @var string[]
      */
@@ -43,7 +45,7 @@ class ObjectState extends APIObjectState
 
     /**
      * This method returns the human readable name in all provided languages
-     * of the content type
+     * of the content type.
      *
      * The structure of the return value is:
      * <code>
@@ -58,22 +60,23 @@ class ObjectState extends APIObjectState
     }
 
     /**
-     * This method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language.
      *
      * @param string $languageCode
      *
      * @return string the name for the given language or null if none exists.
      */
-    public function getName( $languageCode )
+    public function getName($languageCode)
     {
-        if ( !isset( $this->names[$languageCode] ) )
+        if (!isset($this->names[$languageCode])) {
             return null;
+        }
 
         return $this->names[$languageCode];
     }
 
     /**
-     * This method returns the human readable description of the content type
+     * This method returns the human readable description of the content type.
      *
      * The structure of this field is:
      * <code>
@@ -88,22 +91,23 @@ class ObjectState extends APIObjectState
     }
 
     /**
-     * This method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language.
      *
      * @param string $languageCode
      *
      * @return string the description for the given language or null if none exists.
      */
-    public function getDescription( $languageCode )
+    public function getDescription($languageCode)
     {
-        if ( !isset( $this->descriptions[$languageCode] ) )
+        if (!isset($this->descriptions[$languageCode])) {
             return null;
+        }
 
         return $this->descriptions[$languageCode];
     }
 
     /**
-     * The object state group this object state belongs to
+     * The object state group this object state belongs to.
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */

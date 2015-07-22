@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValueConverterRegistryTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValueConverterRegistryTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,19 +15,17 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
 
 /**
- * Test case for FieldValue Converter Registry
+ * Test case for FieldValue Converter Registry.
  */
 class FieldValueConverterRegistryTest extends TestCase
 {
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::register
-     *
-     * @return void
      */
     public function testRegister()
     {
         $converter = $this->getFieldValueConverterMock();
-        $registry = new Registry( array( 'some-type' => $converter ) );
+        $registry = new Registry(array('some-type' => $converter));
 
         $this->assertAttributeSame(
             array(
@@ -38,15 +38,13 @@ class FieldValueConverterRegistryTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::getConverter
-     *
-     * @return void
      */
     public function testGetStorage()
     {
         $converter = $this->getFieldValueConverterMock();
-        $registry = new Registry( array( 'some-type' => $converter ) );
+        $registry = new Registry(array('some-type' => $converter));
 
-        $res = $registry->getConverter( 'some-type' );
+        $res = $registry->getConverter('some-type');
 
         $this->assertSame(
             $converter,
@@ -55,20 +53,19 @@ class FieldValueConverterRegistryTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::getConverter
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      * @expectedException eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      */
     public function testGetNotFound()
     {
-        $registry = new Registry( array() );
+        $registry = new Registry(array());
 
-        $registry->getConverter( 'not-found' );
+        $registry->getConverter('not-found');
     }
 
     /**
-     * Returns a mock for Storage
+     * Returns a mock for Storage.
      *
      * @return Storage
      */

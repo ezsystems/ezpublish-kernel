@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\API\Repository\Tests\FieldType\BinaryFileIntegrationTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\BinaryFileIntegrationTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,14 +13,15 @@ namespace eZ\Publish\API\Repository\Tests\FieldType;
 
 use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
  */
-class BinaryFileIntegrationTest extends FileBaseIntegrationTest
+class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
 {
     /**
      * Stores the loaded image path for copy test.
@@ -26,35 +29,38 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     protected static $loadedBinaryFilePath;
 
     /**
-     * IOService storage prefix for the tested Type's files
+     * IOService storage prefix for the tested Type's files.
+     *
      * @var string
      */
     protected static $storagePrefixConfigKey = 'binaryfile_storage_prefix';
 
     protected function getStoragePrefix()
     {
-        return $this->getConfigValue( self::$storagePrefixConfigKey );
+        return $this->getConfigValue(self::$storagePrefixConfigKey);
     }
 
     /**
      * Sets up fixture data.
      *
-     * @return void
+     * @return array
      */
     protected function getFixtureData()
     {
         return array(
             'create' => array(
-                'id' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                'id' => null,
+                'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
                 'fileName' => 'Icy-Night-Flower-Binary.jpg',
-                'fileSize' => filesize( $path ),
+                'fileSize' => filesize($path),
                 'mimeType' => 'image/jpeg',
                 // Left out'downloadCount' by intention (will be set to 0)
             ),
             'update' => array(
-                'id' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                'id' => null,
+                'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
                 'fileName' => 'Blue-Blue-Blue-Sindelfingen.png',
-                'fileSize' => filesize( $path ),
+                'fileSize' => filesize($path),
                 'downloadCount' => 23,
                 // Left out 'mimeType' by intention (will be auto-detected)
             ),
@@ -62,7 +68,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -72,7 +78,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get expected settings schema
+     * Get expected settings schema.
      *
      * @return array
      */
@@ -82,7 +88,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get a valid $fieldSettings value.
      *
      * @return mixed
      */
@@ -92,7 +98,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get $fieldSettings value not accepted by the field type
+     * Get $fieldSettings value not accepted by the field type.
      *
      * @return mixed
      */
@@ -104,7 +110,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get expected validator schema
+     * Get expected validator schema.
      *
      * @return array
      */
@@ -113,15 +119,15 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         return array(
             'FileSizeValidator' => array(
                 'maxFileSize' => array(
-                    'type'    => 'int',
+                    'type' => 'int',
                     'default' => false,
                 ),
-            )
+            ),
         );
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $validatorConfiguration.
      *
      * @return mixed
      */
@@ -135,7 +141,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get $validatorConfiguration not accepted by the field type
+     * Get $validatorConfiguration not accepted by the field type.
      *
      * @return mixed
      */
@@ -144,19 +150,20 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         return array(
             'StringLengthValidator' => array(
                 'minStringLength' => new \stdClass(),
-            )
+            ),
         );
     }
 
     /**
-     * Get initial field data for valid object creation
+     * Get initial field data for valid object creation.
      *
      * @return mixed
      */
     public function getValidCreationFieldData()
     {
         $fixtureData = $this->getFixtureData();
-        return new BinaryFileValue( $fixtureData['create'] );
+
+        return new BinaryFileValue($fixtureData['create']);
     }
 
     /**
@@ -166,10 +173,8 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field )
+    public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\BinaryFile\\Value',
@@ -180,23 +185,25 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         $expectedData = $fixtureData['create'];
 
         // Will change during storage
-        unset( $expectedData['id'] );
+        unset($expectedData['id']);
+        $expectedData['inputUri'] = null;
 
+        $this->assertNotEmpty($field->value->id);
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
         );
 
         $this->assertTrue(
-            file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->id ),
-            "File $path exists"
+            $this->uriExistsOnIO($field->value->uri),
+            "File {$field->value->uri} doesn't exist"
         );
 
         self::$loadedBinaryFilePath = $field->value->id;
     }
 
     /**
-     * Get field data which will result in errors during creation
+     * Get field data which will result in errors during creation.
      *
      * This is a PHPUnit data provider.
      *
@@ -237,24 +244,25 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get update field externals data
+     * Get update field externals data.
      *
      * @return array
      */
     public function getValidUpdateFieldData()
     {
         $fixtureData = $this->getFixtureData();
-        return new BinaryFileValue( $fixtureData['update'] );
+
+        return new BinaryFileValue($fixtureData['update']);
     }
 
     /**
-     * Get externals updated field data values
+     * Get externals updated field data values.
      *
      * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\BinaryFile\\Value',
@@ -263,22 +271,25 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
 
         $fixtureData = $this->getFixtureData();
         $expectedData = $fixtureData['update'];
-        // Will change during storage
-        unset( $expectedData['id'] );
 
+        // Will change during storage
+        unset($expectedData['id']);
+        $expectedData['inputUri'] = null;
+
+        $this->assertNotEmpty($field->value->id);
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
         );
 
         $this->assertTrue(
-            file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->id ),
-            "File $path exists."
+            $this->uriExistsOnIO($field->value->uri),
+            "File {$field->value->uri} doesn't exist."
         );
     }
 
     /**
-     * Get field data which will result in errors during update
+     * Get field data which will result in errors during update.
      *
      * This is a PHPUnit data provider.
      *
@@ -311,9 +322,9 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
      *
      * @param Field $field
      */
-    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
-        $this->assertFieldDataLoadedCorrect( $field );
+        $this->assertFieldDataLoadedCorrect($field);
 
         $this->assertEquals(
             self::$loadedBinaryFilePath,
@@ -322,7 +333,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get data to test to hash method
+     * Get data to test to hash method.
      *
      * This is a PHPUnit data provider
      *
@@ -344,23 +355,24 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     public function provideToHashData()
     {
         $fixture = $this->getFixtureData();
-        $fixture['create']['downloadCount'] = 0;
-        $fixture['create']['uri'] = $fixture['create']['id'];
-        $fixture['create']['path'] = $fixture['create']['id'];
+        $expected = $fixture['create'];
+        $expected['downloadCount'] = 0;
+        $expected['uri'] = $expected['inputUri'];
+        $expected['path'] = $expected['inputUri'];
 
         $fieldValue = $this->getValidCreationFieldData();
-        $fieldValue->uri = $fixture['create']['uri'];
+        $fieldValue->uri = $expected['uri'];
 
         return array(
             array(
                 $fieldValue,
-                $fixture['create'],
+                $expected,
             ),
         );
     }
 
     /**
-     * Get expectations for the fromHash call on our field value
+     * Get expectations for the fromHash call on our field value.
      *
      * This is a PHPUnit data provider
      *
@@ -370,7 +382,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         $fixture = $this->getFixtureData();
         $fixture['create']['downloadCount'] = 0;
-        $fixture['create']['uri'] = $fixture['create']['id'];
+        $fixture['create']['uri'] = $fixture['create']['inputUri'];
 
         $fieldValue = $this->getValidCreationFieldData();
         $fieldValue->uri = $fixture['create']['uri'];
@@ -378,7 +390,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         return array(
             array(
                 $fixture['create'],
-                $fieldValue
+                $fieldValue,
             ),
         );
     }
@@ -386,8 +398,8 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new BinaryFileValue ),
-            array( new BinaryFileValue( array() ) ),
+            array(new BinaryFileValue()),
+            array(new BinaryFileValue(array())),
         );
     }
 
@@ -395,7 +407,75 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         return array(
             array(
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
+            ),
+        );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return new BinaryFileValue(
+            array(
+                'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
+                'fileName' => 'blue-blue-blue-sindelfingen.jpg',
+                'fileSize' => filesize($path),
+            )
+        );
+    }
+
+    /**
+     * BinaryFile field type is not searchable with Field criterion
+     * and sort clause in Legacy search engine.
+     */
+    public function testCreateTestContent()
+    {
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
+            $this->markTestSkipped(
+                'BinaryFile field type is not searchable with Field criterion and sort clause in Legacy search engine'
+            );
+        }
+
+        return parent::testCreateTestContent();
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return new BinaryFileValue(
+            array(
+                'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
+                'fileName' => 'icy-night-flower-binary.png',
+                'fileSize' => filesize($path),
+            )
+        );
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        $value = $this->getValidSearchValueOne();
+        // ensure case-insensitivity
+        return strtoupper($value->fileName);
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        $value = $this->getValidSearchValueTwo();
+        // ensure case-insensitivity
+        return strtoupper($value->fileName);
+    }
+
+    protected function getAdditionallyIndexedFieldData()
+    {
+        return array(
+            array(
+                'file_size',
+                $this->getValidSearchValueOne()->fileSize,
+                $this->getValidSearchValueTwo()->fileSize,
+            ),
+            array(
+                'mime_type',
+                // ensure case-insensitivity
+                'IMAGE/JPEG',
+                'IMAGE/PNG',
             ),
         );
     }

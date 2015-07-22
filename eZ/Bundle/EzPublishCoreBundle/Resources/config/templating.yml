@@ -1,28 +1,32 @@
 parameters:
-    twig.loader.string.class: Twig_Loader_String
     twig.extension.intl.class: Twig_Extensions_Extension_Intl
 
     ezpublish.twig.extension.content.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentExtension
 
-    ezpublish.view_manager.class: eZ\Publish\Core\MVC\Symfony\View\Manager
+    ezpublish.view_manager.class: eZ\Bundle\EzPublishCoreBundle\View\Manager
     ezpublish.content_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\ContentMatcherFactory
     ezpublish.location_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\LocationMatcherFactory
     ezpublish.block_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\BlockMatcherFactory
-    ezpublish.content_view_provider.configured.class: eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured
-    ezpublish.location_view_provider.configured.class: eZ\Publish\Core\MVC\Symfony\View\Provider\Location\Configured
-    ezpublish.block_view_provider.configured.class: eZ\Publish\Core\MVC\Symfony\View\Provider\Block\Configured
+    ezpublish.content_view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\Provider\ContentConfigured
+    ezpublish.location_view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\Provider\LocationConfigured
+    ezpublish.block_view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\Provider\BlockConfigured
     ezpublish.content_view.viewbase_layout: "EzPublishCoreBundle::viewbase_layout.html.twig"
     ezpublish.content_view.content_block_name: "content"
 
     ezpublish.templating.global_helper.core.class: eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper
     ezpublish.twig.extension.core.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\CoreExtension
+    ezpublish.twig.extension.filesize.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FileSizeExtension
+    ezpublish.twig.extension.filesize.suffixes: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB']
+    ezpublish.templating.extension.routing.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\RoutingExtension
+    ezpublish.templating.field_block_renderer.twig.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\FieldBlockRenderer
+    ezpublish.twig.extension.field_rendering.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FieldRenderingExtension
+    ezpublish.twig.extension.image.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ImageExtension
+    ezpublish.twig.extension.xml_text.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\XmlTextExtension
+    ezpublish.twig.extension.rich_text.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\RichTextExtension
+
+    assetic.asset_factory.class: eZ\Bundle\EzPublishCoreBundle\Assetic\AssetFactory
 
 services:
-    twig.loader.string:
-        class: %twig.loader.string.class%
-        tags:
-            - {name: twig.loader}
-
     twig.extension.intl:
         class: %twig.extension.intl.class%
         tags:
@@ -30,23 +34,35 @@ services:
 
     ezpublish.twig.extension.content:
         class: %ezpublish.twig.extension.content.class%
-        arguments: [@service_container, @ezpublish.config.resolver]
+        arguments:
+            - @ezpublish.api.repository
+            - @ezpublish.translation_helper
+            - @ezpublish.field_helper
+            - @?logger
         tags:
             - {name: twig.extension}
 
     ezpublish.view_manager:
         class: %ezpublish.view_manager.class%
-        arguments: [@templating, @event_dispatcher, @ezpublish.api.repository, %ezpublish.content_view.viewbase_layout%, @?logger]
+        arguments:
+          - @templating
+          - @event_dispatcher
+          - @ezpublish.api.repository
+          - @ezpublish.config.resolver
+          - %ezpublish.content_view.viewbase_layout%
+          - @?logger
 
     ezpublish.content_view_provider.configured:
         class: %ezpublish.content_view_provider.configured.class%
-        arguments: [@ezpublish.location_view.matcher_factory]
+        arguments: [@ezpublish.content_view.matcher_factory]
         tags:
             - {name: ezpublish.content_view_provider, priority: 10}
 
     ezpublish.content_view.matcher_factory:
         class: %ezpublish.content_view.matcher_factory.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish.location_view_provider.configured:
         class: %ezpublish.location_view_provider.configured.class%
@@ -56,7 +72,9 @@ services:
 
     ezpublish.location_view.matcher_factory:
         class: %ezpublish.location_view.matcher_factory.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish.block_view_provider.configured:
         class: %ezpublish.block_view_provider.configured.class%
@@ -66,11 +84,15 @@ services:
 
     ezpublish.block_view.matcher_factory:
         class: %ezpublish.block_view.matcher_factory.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish.templating.global_helper.core:
         class: %ezpublish.templating.global_helper.core.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.service.location, @router, @ezpublish.translation_helper]
+        calls:
+            - [setRequestStack, [@request_stack]]
 
     ezpublish.templating.global_helper:
         alias: ezpublish.templating.global_helper.core
@@ -80,3 +102,59 @@ services:
         arguments: [@ezpublish.templating.global_helper]
         tags:
             - {name: twig.extension}
+
+    ezpublish.twig.extension.filesize:
+        class: %ezpublish.twig.extension.filesize.class%
+        arguments: [@translator, %ezpublish.twig.extension.filesize.suffixes%, @ezpublish.config.resolver, @ezpublish.locale.converter ]
+        tags:
+            - {name: twig.extension}
+
+    ezpublish.templating.extension.routing:
+        class: %ezpublish.templating.extension.routing.class%
+        arguments: [@ezpublish.route_reference.generator]
+        tags:
+            - {name: twig.extension}
+
+    ezpublish.templating.field_block_renderer.twig:
+        class: %ezpublish.templating.field_block_renderer.twig.class%
+        calls:
+            - [setTwig, [@twig]]
+            - [setBaseTemplate, [%ezpublish.content_view.viewbase_layout%]]
+            - [setFieldViewResources, ["$field_templates$"]]
+            - [setFieldEditResources, ["$field_edit_templates$"]]
+            - [setFieldDefinitionViewResources, ["$fielddefinition_settings_templates$"]]
+            - [setFieldDefinitionEditResources, ["$fielddefinition_edit_templates$"]]
+
+    ezpublish.templating.field_block_renderer:
+        alias: ezpublish.templating.field_block_renderer.twig
+
+    ezpublish.twig.extension.field_rendering:
+        class: %ezpublish.twig.extension.field_rendering.class%
+        arguments:
+            - @ezpublish.templating.field_block_renderer
+            - @ezpublish.api.service.content_type
+            - @ezpublish.fieldType.parameterProviderRegistry
+            - @ezpublish.translation_helper
+        tags:
+            - { name: twig.extension }
+
+    ezpublish.twig.extension.image:
+        class: %ezpublish.twig.extension.image.class%
+        arguments: [@ezpublish.fieldtype.ezimage.variation_service]
+        tags:
+            - { name: twig.extension }
+
+    ezpublish.twig.extension.xml_text:
+        class: %ezpublish.twig.extension.xml_text.class%
+        arguments: [@ezpublish.fieldtype.ezxmltext.converter.html5]
+        tags:
+            - { name: twig.extension }
+
+    ezpublish.twig.extension.rich_text:
+        class: %ezpublish.twig.extension.rich_text.class%
+        arguments:
+            - @ezpublish.fieldType.ezrichtext.converter.output.xhtml5
+            - @ezpublish.fieldType.ezrichtext.converter.edit.xhtml5
+        tags:
+            - { name: twig.extension }
+

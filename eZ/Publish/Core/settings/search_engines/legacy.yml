@@ -1,0 +1,90 @@
+imports:
+    - {resource: search_engines/legacy/criterion_handlers_common.yml}
+    - {resource: search_engines/legacy/criterion_handlers_content.yml}
+    - {resource: search_engines/legacy/criterion_handlers_location.yml}
+    - {resource: search_engines/legacy/services.yml}
+    - {resource: search_engines/legacy/sort_clause_handlers_common.yml}
+    - {resource: search_engines/legacy/sort_clause_handlers_content.yml}
+    - {resource: search_engines/legacy/sort_clause_handlers_location.yml}
+
+parameters:
+    ezpublish.spi.search.legacy.class: eZ\Publish\Core\Search\Legacy\Handler
+    ezpublish.spi.search.legacy.content_handler.class: eZ\Publish\Core\Search\Legacy\Content\Handler
+    ezpublish.spi.search.legacy.location_handler.class: eZ\Publish\Core\Search\Legacy\Content\Location\Handler
+    ezpublish.search.legacy.gateway.content.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\DoctrineDatabase
+    ezpublish.search.legacy.gateway.content.exception_conversion.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\ExceptionConversion
+    ezpublish.search.legacy.gateway.location.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\DoctrineDatabase
+    ezpublish.search.legacy.gateway.location.exception_conversion.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\ExceptionConversion
+
+    ezpublish.search.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
+    ezpublish.search.connection.class: Doctrine\DBAL\Driver\Connection
+
+services:
+    # Legacy Search Engine semantic configuration will override connection service to the one
+    # resolved for the current siteaccess
+    ezpublish.api.search_engine.legacy.dbhandler:
+        class: %ezpublish.search.legacy.dbhandler.class%
+        factory: [%ezpublish.search.legacy.dbhandler.class%, createFromConnection]
+        arguments:
+            - @ezpublish.api.search_engine.legacy.connection
+        lazy: true
+
+    # Aliasing storage connection in order to support sqlite://:memory:
+    # Otherwise it should be possible to use a separate database and/or database connection
+    ezpublish.api.search_engine.legacy.connection:
+        alias: ezpublish.api.storage_engine.legacy.connection
+
+    ezpublish.search.legacy.gateway.content.inner:
+        class: %ezpublish.search.legacy.gateway.content.class%
+        arguments:
+            - @ezpublish.api.search_engine.legacy.dbhandler
+            - @ezpublish.search.legacy.gateway.criteria_converter.content
+            - @ezpublish.search.legacy.gateway.sort_clause_converter.content
+
+    ezpublish.search.legacy.gateway.content.exception_conversion:
+        class: %ezpublish.search.legacy.gateway.content.exception_conversion.class%
+        arguments:
+            - @ezpublish.search.legacy.gateway.content.inner
+
+    # To disable exception conversion layer override this alias so that it points to inner gateway
+    ezpublish.search.legacy.gateway.content:
+        alias: ezpublish.search.legacy.gateway.content.exception_conversion
+
+    ezpublish.search.legacy.gateway.location.inner:
+        class: %ezpublish.search.legacy.gateway.location.class%
+        arguments:
+            - @ezpublish.api.search_engine.legacy.dbhandler
+            - @ezpublish.search.legacy.gateway.criteria_converter.location
+            - @ezpublish.search.legacy.gateway.sort_clause_converter.location
+
+    ezpublish.search.legacy.gateway.location.exception_conversion:
+        class: %ezpublish.search.legacy.gateway.location.exception_conversion.class%
+        arguments:
+            - @ezpublish.search.legacy.gateway.location.inner
+
+    # To disable exception conversion layer override this alias so that it points to inner gateway
+    ezpublish.search.legacy.gateway.location:
+        alias: ezpublish.search.legacy.gateway.location.exception_conversion
+
+    ezpublish.spi.search.legacy.content_handler:
+        class: %ezpublish.spi.search.legacy.content_handler.class%
+        arguments:
+            - @ezpublish.search.legacy.gateway.content
+            - @ezpublish.persistence.legacy.content.mapper
+        lazy: true
+
+    ezpublish.spi.search.legacy.location_handler:
+        class: %ezpublish.spi.search.legacy.location_handler.class%
+        arguments:
+            - @ezpublish.search.legacy.gateway.location
+            - @ezpublish.persistence.legacy.location.mapper
+        lazy: true
+
+    ezpublish.spi.search.legacy:
+        class: %ezpublish.spi.search.legacy.class%
+        arguments:
+            - @ezpublish.spi.search.legacy.content_handler
+            - @ezpublish.spi.search.legacy.location_handler
+        tags:
+            - {name: ezpublish.searchEngine, alias: legacy}
+        lazy: true

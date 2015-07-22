@@ -1,49 +1,48 @@
 <?php
 
 return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state(array(
-   'facets' => 
-  array (
+   'facets' =>
+  array(
   ),
-   'searchHits' => 
-  array (
+   'searchHits' =>
+  array(
       0 =>
       eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
           'valueObject' =>
-          array (
+          array(
               'id' => 13,
               'title' => 'Editors',
           ),
-          'score' => 0.57124877,
-          'index' => NULL,
-          'highlight' => NULL,
+          'score' => 1.0,
+          'index' => null,
+          'highlight' => null,
       )),
       1 =>
       eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
           'valueObject' =>
-          array (
+          array(
               'id' => 14,
               'title' => 'Administrator User',
           ),
-          'score' => 0.61530614,
-          'index' => NULL,
-          'highlight' => NULL,
+          'score' => 1.0,
+          'index' => null,
+          'highlight' => null,
       )),
       2 =>
       eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
           'valueObject' =>
-          array (
+          array(
               'id' => 41,
               'title' => 'Media',
           ),
-          'score' => 0.57124877,
-          'index' => NULL,
-          'highlight' => NULL,
+          'score' => 1.0,
+          'index' => null,
+          'highlight' => null,
       )),
   ),
-   'spellSuggestion' => NULL,
+   'spellSuggestion' => null,
    'time' => 1,
-   'timedOut' => NULL,
-   'maxScore' => 0.61530614,
+   'timedOut' => null,
+   'maxScore' => 1.0,
    'totalCount' => 3,
 ));
-

@@ -1,30 +1,28 @@
 <?php
+
 /**
- * File containing the FieldDefinition parser class
+ * File containing the FieldDefinition parser class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
-use eZ\Publish\Core\REST\Client\ContentTypeService;
-
-use eZ\Publish\Core\REST\Common\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
-
 use eZ\Publish\Core\REST\Client\Values;
-use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * Parser for Version
+ * Parser for Version.
  *
  * @todo Caching for extracted embedded objects
  */
-class FieldDefinition extends Parser
+class FieldDefinition extends BaseParser
 {
     /**
      * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
@@ -40,14 +38,14 @@ class FieldDefinition extends Parser
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      * @param \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
      */
-    public function __construct( ParserTools $parserTools, FieldTypeParser $fieldTypeParser )
+    public function __construct(ParserTools $parserTools, FieldTypeParser $fieldTypeParser)
     {
         $this->parserTools = $parserTools;
         $this->fieldTypeParser = $fieldTypeParser;
     }
 
     /**
-     * Parse input structure
+     * Parse input structure.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -56,7 +54,7 @@ class FieldDefinition extends Parser
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
         return new Values\ContentType\FieldDefinition(
             array(
@@ -65,15 +63,15 @@ class FieldDefinition extends Parser
                 'fieldTypeIdentifier' => $data['fieldType'],
                 'fieldGroup' => $data['fieldGroup'],
                 'position' => (int)$data['position'],
-                'isTranslatable' => $this->parserTools->parseBooleanValue( $data['isTranslatable'] ),
-                'isRequired' => $this->parserTools->parseBooleanValue( $data['isRequired'] ),
-                'isInfoCollector' => $this->parserTools->parseBooleanValue( $data['isInfoCollector'] ),
-                'isSearchable' => $this->parserTools->parseBooleanValue( $data['isSearchable'] ),
-                'names' => isset( $data['names'] ) ?
-                    $this->parserTools->parseTranslatableList( $data['names'] ) :
+                'isTranslatable' => $this->parserTools->parseBooleanValue($data['isTranslatable']),
+                'isRequired' => $this->parserTools->parseBooleanValue($data['isRequired']),
+                'isInfoCollector' => $this->parserTools->parseBooleanValue($data['isInfoCollector']),
+                'isSearchable' => $this->parserTools->parseBooleanValue($data['isSearchable']),
+                'names' => isset($data['names']) ?
+                    $this->parserTools->parseTranslatableList($data['names']) :
                     null,
-                'descriptions' => isset( $data['descriptions'] ) ?
-                    $this->parserTools->parseTranslatableList( $data['descriptions'] ) :
+                'descriptions' => isset($data['descriptions']) ?
+                    $this->parserTools->parseTranslatableList($data['descriptions']) :
                     null,
 
                 'defaultValue' => $this->fieldTypeParser->parseValue(

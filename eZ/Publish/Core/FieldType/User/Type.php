@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the User class
+ * File containing the User class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,6 @@ use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * The User field type.
@@ -23,13 +24,13 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 class Type extends FieldType
 {
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
     public function getFieldTypeIdentifier()
     {
-        return "ezuser";
+        return 'ezuser';
     }
 
     /**
@@ -42,7 +43,7 @@ class Type extends FieldType
      *
      * @return string
      */
-    public function getName( SPIValue $value )
+    public function getName(SPIValue $value)
     {
         return (string)$value->login;
     }
@@ -50,7 +51,7 @@ class Type extends FieldType
     /**
      * Indicates if the field definition of this type can appear only once in the same ContentType.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSingular()
     {
@@ -60,7 +61,7 @@ class Type extends FieldType
     /**
      * Indicates if the field definition of this type can be added to a ContentType with Content instances.
      *
-     * @return boolean
+     * @return bool
      */
     public function onlyEmptyInstance()
     {
@@ -75,7 +76,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value;
+        return new Value();
     }
 
     /**
@@ -85,11 +86,10 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\User\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
-        if ( is_array( $inputValue ) )
-        {
-            $inputValue = new Value( $inputValue );
+        if (is_array($inputValue)) {
+            $inputValue = new Value($inputValue);
         }
 
         return $inputValue;
@@ -101,57 +101,53 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\User\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
         // Does nothing
     }
 
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
-     *
-     * @todo: Implement.
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo(BaseValue $value)
     {
         return false;
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * @param mixed $hash
      *
      * @return \eZ\Publish\Core\FieldType\User\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        if ( $hash === null )
-        {
+        if ($hash === null) {
             return $this->getEmptyValue();
         }
-        return new Value( $hash );
+
+        return new Value($hash);
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\User\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
-        if ( $this->isEmptyValue( $value ) )
-        {
+        if ($this->isEmptyValue($value)) {
             return null;
         }
+
         return (array)$value;
     }
 
-     /**
+    /**
      * Converts a $value to a persistence value.
      *
      * In this method the field type puts the data which is stored in the field of content in the repository
@@ -173,19 +169,19 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue the value processed by the storage engine
      */
-    public function toPersistenceValue( SPIValue $value )
+    public function toPersistenceValue(SPIValue $value)
     {
         return new FieldValue(
             array(
-                "data" => null,
-                "externalData" => $this->toHash( $value ),
-                "sortKey" => null,
+                'data' => null,
+                'externalData' => $this->toHash($value),
+                'sortKey' => null,
             )
         );
     }
 
     /**
-     * Converts a persistence $fieldValue to a Value
+     * Converts a persistence $fieldValue to a Value.
      *
      * This method builds a field type value from the $data and $externalData properties.
      *
@@ -193,8 +189,8 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\User\Value
      */
-    public function fromPersistenceValue( FieldValue $fieldValue )
+    public function fromPersistenceValue(FieldValue $fieldValue)
     {
-        return $this->acceptValue( $fieldValue->externalData );
+        return $this->acceptValue($fieldValue->externalData);
     }
 }

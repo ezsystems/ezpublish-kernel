@@ -1,8 +1,8 @@
 <?php
 
-return array (
+return array(
   0 =>
-  array (
+  array(
     'ezcontentobject_id' => '11',
     'ezcontentobject_contentclass_id' => '3',
     'ezcontentobject_section_id' => '2',
@@ -37,10 +37,10 @@ return array (
     'ezcontentobject_attribute_data_text' => 'Guest accounts',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
-    'ezcontentobject_tree_main_node_id' => NULL,
+    'ezcontentobject_tree_main_node_id' => '12',
   ),
   1 =>
-  array (
+  array(
     'ezcontentobject_id' => '11',
     'ezcontentobject_contentclass_id' => '3',
     'ezcontentobject_section_id' => '2',
@@ -75,10 +75,10 @@ return array (
     'ezcontentobject_attribute_data_text' => '',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
-    'ezcontentobject_tree_main_node_id' => NULL,
+    'ezcontentobject_tree_main_node_id' => '12',
   ),
   2 =>
-  array (
+  array(
     'ezcontentobject_id' => '11',
     'ezcontentobject_contentclass_id' => '3',
     'ezcontentobject_section_id' => '2',
@@ -116,7 +116,7 @@ return array (
     'ezcontentobject_tree_main_node_id' => '12',
   ),
   3 =>
-  array (
+  array(
     'ezcontentobject_id' => '11',
     'ezcontentobject_contentclass_id' => '3',
     'ezcontentobject_section_id' => '2',

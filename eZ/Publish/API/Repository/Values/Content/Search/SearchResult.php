@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\Content\Search\SearchResult class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,19 +14,19 @@ namespace eZ\Publish\API\Repository\Values\Content\Search;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * This class represents a search result
+ * This class represents a search result.
  */
 class SearchResult extends ValueObject
 {
     /**
-     * The facets for this search
+     * The facets for this search.
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Search\Facet[]
      */
     public $facets = array();
 
     /**
-     * The value objects found for the query
+     * The value objects found for the query.
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Search\SearchHit[]
      */
@@ -39,30 +41,32 @@ class SearchResult extends ValueObject
     public $spellSuggestion;
 
     /**
-     * The duration of the search processing in ms
+     * The duration of the search processing in ms.
      *
      * @var int
      */
     public $time;
 
     /**
-     * Indicates if the search has timed out
+     * Indicates if the search has timed out.
      *
-     * @var boolean
+     * @var bool
      */
     public $timedOut;
 
     /**
-     * The maximum score of this query
+     * The maximum score of this query.
      *
      * @var float
      */
     public $maxScore;
 
     /**
-     * The total number of searchHits
+     * The total number of searchHits.
      *
-     * @var int
+     * `null` if Query->performCount was set to false and search engine avoids search lookup.
+     *
+     * @var int|null
      */
     public $totalCount;
 }

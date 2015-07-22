@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Language Handler class
+ * File containing the Language Handler class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,64 +18,65 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use LogicException;
 
 /**
- * Language Handler
+ * Language Handler.
  */
 class Handler implements BaseLanguageHandler
 {
     /**
-     * Language Gateway
+     * Language Gateway.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway
      */
     protected $languageGateway;
 
     /**
-     * Language Mapper
+     * Language Mapper.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper
      */
     protected $languageMapper;
 
     /**
-     * Creates a new Language Handler
+     * Creates a new Language Handler.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway $languageGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper $languageMapper
      */
-    public function __construct( Gateway $languageGateway, Mapper $languageMapper )
+    public function __construct(Gateway $languageGateway, Mapper $languageMapper)
     {
         $this->languageGateway = $languageGateway;
         $this->languageMapper = $languageMapper;
     }
 
     /**
-     * Create a new language
+     * Create a new language.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct $struct
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
-    public function create( CreateStruct $struct )
+    public function create(CreateStruct $struct)
     {
         $language = $this->languageMapper->createLanguageFromCreateStruct(
             $struct
         );
-        $language->id = $this->languageGateway->insertLanguage( $language );
+        $language->id = $this->languageGateway->insertLanguage($language);
+
         return $language;
     }
 
     /**
-     * Update language
+     * Update language.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Language $language
      */
-    public function update( Language $language )
+    public function update(Language $language)
     {
-        $this->languageGateway->updateLanguage( $language );
+        $this->languageGateway->updateLanguage($language);
     }
 
     /**
-     * Get language by id
+     * Get language by id.
      *
      * @param mixed $id
      *
@@ -81,21 +84,21 @@ class Handler implements BaseLanguageHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
-    public function load( $id )
+    public function load($id)
     {
         $languages = $this->languageMapper->extractLanguagesFromRows(
-            $this->languageGateway->loadLanguageData( $id )
+            $this->languageGateway->loadLanguageData($id)
         );
 
-        if ( count( $languages ) < 1 )
-        {
-            throw new NotFoundException( 'Language', $id );
+        if (count($languages) < 1) {
+            throw new NotFoundException('Language', $id);
         }
-        return reset( $languages );
+
+        return reset($languages);
     }
 
     /**
-     * Get language by Language Code (eg: eng-GB)
+     * Get language by Language Code (eg: eng-GB).
      *
      * @param string $languageCode
      *
@@ -103,21 +106,21 @@ class Handler implements BaseLanguageHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
-    public function loadByLanguageCode( $languageCode )
+    public function loadByLanguageCode($languageCode)
     {
         $languages = $this->languageMapper->extractLanguagesFromRows(
-            $this->languageGateway->loadLanguageDataByLanguageCode( $languageCode )
+            $this->languageGateway->loadLanguageDataByLanguageCode($languageCode)
         );
 
-        if ( count( $languages ) < 1 )
-        {
-            throw new NotFoundException( 'Language', $languageCode );
+        if (count($languages) < 1) {
+            throw new NotFoundException('Language', $languageCode);
         }
-        return reset( $languages );
+
+        return reset($languages);
     }
 
     /**
-     * Get all languages
+     * Get all languages.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language[]
      */
@@ -129,19 +132,18 @@ class Handler implements BaseLanguageHandler
     }
 
     /**
-     * Delete a language
+     * Delete a language.
      *
      * @param mixed $id
      *
      * @throws LogicException If language could not be deleted
      */
-    public function delete( $id )
+    public function delete($id)
     {
-        if ( !$this->languageGateway->canDeleteLanguage( $id ) )
-        {
-            throw new LogicException( "Deleting language logic error, some content still references that language and therefore it can't be deleted" );
+        if (!$this->languageGateway->canDeleteLanguage($id)) {
+            throw new LogicException("Deleting language logic error, some content still references that language and therefore it can't be deleted");
         }
 
-        $this->languageGateway->deleteLanguage( $id );
+        $this->languageGateway->deleteLanguage($id);
     }
 }

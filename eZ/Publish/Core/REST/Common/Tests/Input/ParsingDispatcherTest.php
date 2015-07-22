@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ParsingDispatcherTest class
+ * File containing the ParsingDispatcherTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,7 @@ use eZ\Publish\Core\REST\Common;
 use PHPUnit_Framework_TestCase;
 
 /**
- * ParsingDispatcher test class
+ * ParsingDispatcher test class.
  */
 class ParsingDispatcherTest extends PHPUnit_Framework_TestCase
 {
@@ -24,12 +26,12 @@ class ParsingDispatcherTest extends PHPUnit_Framework_TestCase
     {
         $dispatcher = new Common\Input\ParsingDispatcher();
 
-        $dispatcher->parse( array(), 'text/unknown' );
+        $dispatcher->parse(array(), 'text/unknown');
     }
 
     public function testParse()
     {
-        $parser     = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\Parser' );
+        $parser = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Input\\Parser');
         $dispatcher = new Common\Input\ParsingDispatcher(
             array(
                 'text/html' => $parser,
@@ -37,20 +39,20 @@ class ParsingDispatcherTest extends PHPUnit_Framework_TestCase
         );
 
         $parser
-            ->expects( $this->at( 0 ) )
-            ->method( 'parse' )
-            ->with( array( 42 ), $dispatcher )
-            ->will( $this->returnValue( 23 ) );
+            ->expects($this->at(0))
+            ->method('parse')
+            ->with(array(42), $dispatcher)
+            ->will($this->returnValue(23));
 
         $this->assertSame(
             23,
-            $dispatcher->parse( array( 42 ), 'text/html' )
+            $dispatcher->parse(array(42), 'text/html')
         );
     }
 
     public function testParseStripFormat()
     {
-        $parser     = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\Parser' );
+        $parser = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Input\\Parser');
         $dispatcher = new Common\Input\ParsingDispatcher(
             array(
                 'text/html' => $parser,
@@ -58,14 +60,14 @@ class ParsingDispatcherTest extends PHPUnit_Framework_TestCase
         );
 
         $parser
-            ->expects( $this->at( 0 ) )
-            ->method( 'parse' )
-            ->with( array( 42 ), $dispatcher )
-            ->will( $this->returnValue( 23 ) );
+            ->expects($this->at(0))
+            ->method('parse')
+            ->with(array(42), $dispatcher)
+            ->will($this->returnValue(23));
 
         $this->assertSame(
             23,
-            $dispatcher->parse( array( 42 ), 'text/html+json' )
+            $dispatcher->parse(array(42), 'text/html+json')
         );
     }
 }

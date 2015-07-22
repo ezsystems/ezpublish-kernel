@@ -1,10 +1,10 @@
 <?php
 
-return array (
-  'ezcobj_state' => 
-  array (
-    0 => 
-    array (
+return array(
+  'ezcobj_state' =>
+  array(
+    0 =>
+    array(
       'default_language_id' => '2',
       'group_id' => '2',
       'id' => '1',
@@ -12,8 +12,8 @@ return array (
       'language_mask' => '3',
       'priority' => '0',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'default_language_id' => '2',
       'group_id' => '2',
       'id' => '2',
@@ -22,20 +22,20 @@ return array (
       'priority' => '1',
     ),
   ),
-  'ezcobj_state_group' => 
-  array (
-    0 => 
-    array (
+  'ezcobj_state_group' =>
+  array(
+    0 =>
+    array(
       'default_language_id' => '2',
       'id' => '2',
       'identifier' => 'ez_lock',
       'language_mask' => '3',
     ),
   ),
-  'ezcobj_state_group_language' => 
-  array (
-    0 => 
-    array (
+  'ezcobj_state_group_language' =>
+  array(
+    0 =>
+    array(
       'contentobject_state_group_id' => '2',
       'description' => '',
       'language_id' => '3',
@@ -43,138 +43,138 @@ return array (
       'real_language_id' => '2',
     ),
   ),
-  'ezcobj_state_language' => 
-  array (
-    0 => 
-    array (
+  'ezcobj_state_language' =>
+  array(
+    0 =>
+    array(
       'contentobject_state_id' => '1',
       'description' => '',
       'language_id' => '3',
       'name' => 'Not locked',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'contentobject_state_id' => '2',
       'description' => '',
       'language_id' => '3',
       'name' => 'Locked',
     ),
   ),
-  'ezcobj_state_link' => 
-  array (
-    0 => 
-    array (
+  'ezcobj_state_link' =>
+  array(
+    0 =>
+    array(
       'contentobject_id' => '4',
       'contentobject_state_id' => '1',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'contentobject_id' => '10',
       'contentobject_state_id' => '1',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'contentobject_id' => '11',
       'contentobject_state_id' => '1',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'contentobject_id' => '12',
       'contentobject_state_id' => '1',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'contentobject_id' => '13',
       'contentobject_state_id' => '1',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'contentobject_id' => '14',
       'contentobject_state_id' => '1',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'contentobject_id' => '41',
       'contentobject_state_id' => '1',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'contentobject_id' => '42',
       'contentobject_state_id' => '1',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'contentobject_id' => '45',
       'contentobject_state_id' => '1',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'contentobject_id' => '49',
       'contentobject_state_id' => '1',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'contentobject_id' => '50',
       'contentobject_state_id' => '1',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'contentobject_id' => '51',
       'contentobject_state_id' => '1',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'contentobject_id' => '52',
       'contentobject_state_id' => '1',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'contentobject_id' => '54',
       'contentobject_state_id' => '1',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'contentobject_id' => '56',
       'contentobject_state_id' => '1',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'contentobject_id' => '57',
       'contentobject_state_id' => '1',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'contentobject_id' => '58',
       'contentobject_state_id' => '1',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'contentobject_id' => '59',
       'contentobject_state_id' => '1',
     ),
   ),
-  'ezcontent_language' => 
-  array (
-    0 => 
-    array (
+  'ezcontent_language' =>
+  array(
+    0 =>
+    array(
       'disabled' => '0',
       'id' => '2',
       'locale' => 'eng-GB',
       'name' => 'English (United Kingdom)',
     ),
   ),
-  'ezcontentbrowserecent' => 
-  array (
-    0 => 
-    array (
+  'ezcontentbrowserecent' =>
+  array(
+    0 =>
+    array(
       'created' => '1376485937',
       'id' => '1',
       'name' => 'eZ Publish',
       'node_id' => '2',
       'user_id' => '14',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'created' => '1376485938',
       'id' => '2',
       'name' => 'Users',
@@ -182,10 +182,10 @@ return array (
       'user_id' => '14',
     ),
   ),
-  'ezcontentclass' => 
-  array (
-    0 => 
-    array (
+  'ezcontentclass' =>
+  array(
+    0 =>
+    array(
       'always_available' => '1',
       'contentobject_name' => '<short_name|name>',
       'created' => '1024392098',
@@ -198,15 +198,15 @@ return array (
       'modified' => '1082454875',
       'modifier_id' => '14',
       'remote_id' => 'a3d405b81be900468eb153d774f4f0d2',
-      'serialized_description_list' => NULL,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:6:"Folder";s:16:"always-available";s:6:"eng-GB";}',
       'sort_field' => '1',
       'sort_order' => '1',
-      'url_alias_name' => NULL,
+      'url_alias_name' => null,
       'version' => '0',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'always_available' => '1',
       'contentobject_name' => '<name>',
       'created' => '1024392098',
@@ -219,15 +219,15 @@ return array (
       'modified' => '1048494743',
       'modifier_id' => '14',
       'remote_id' => '25b4268cdcd01921b808a0d854b877ef',
-      'serialized_description_list' => NULL,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:10:"User group";s:16:"always-available";s:6:"eng-GB";}',
       'sort_field' => '1',
       'sort_order' => '1',
-      'url_alias_name' => NULL,
+      'url_alias_name' => null,
       'version' => '0',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'always_available' => '1',
       'contentobject_name' => '<first_name> <last_name>',
       'created' => '1024392098',
@@ -240,15 +240,15 @@ return array (
       'modified' => '1082018364',
       'modifier_id' => '14',
       'remote_id' => '40faa822edc579b02c25f6bb7beec3ad',
-      'serialized_description_list' => NULL,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"User";s:16:"always-available";s:6:"eng-GB";}',
       'sort_field' => '1',
       'sort_order' => '1',
-      'url_alias_name' => NULL,
+      'url_alias_name' => null,
       'version' => '0',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<subject>',
       'created' => '1052385685',
@@ -261,15 +261,15 @@ return array (
       'modified' => '1082455144',
       'modifier_id' => '14',
       'remote_id' => '000c14f4f475e9f2955dedab72799941',
-      'serialized_description_list' => NULL,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Comment";s:16:"always-available";s:6:"eng-GB";}',
       'sort_field' => '1',
       'sort_order' => '1',
-      'url_alias_name' => NULL,
+      'url_alias_name' => null,
       'version' => '0',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'always_available' => '1',
       'contentobject_name' => '<name>',
       'created' => '1081858024',
@@ -282,15 +282,15 @@ return array (
       'modified' => '1081858024',
       'modifier_id' => '14',
       'remote_id' => 'ffedf2e73b1ea0c3e630e42e2db9c900',
-      'serialized_description_list' => NULL,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:19:"Common ini settings";s:16:"always-available";s:6:"eng-GB";}',
       'sort_field' => '1',
       'sort_order' => '1',
-      'url_alias_name' => NULL,
+      'url_alias_name' => null,
       'version' => '0',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'always_available' => '1',
       'contentobject_name' => '<title>',
       'created' => '1081858045',
@@ -303,15 +303,15 @@ return array (
       'modified' => '1081858045',
       'modifier_id' => '14',
       'remote_id' => '59b43cd9feaaf0e45ac974fb4bbd3f92',
-      'serialized_description_list' => NULL,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:13:"Template look";s:16:"always-available";s:6:"eng-GB";}',
       'sort_field' => '1',
       'sort_order' => '1',
-      'url_alias_name' => NULL,
+      'url_alias_name' => null,
       'version' => '0',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<short_title|title>',
       'created' => '1376485934',
@@ -331,8 +331,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1376485934',
@@ -352,8 +352,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<title>',
       'created' => '1376485934',
@@ -373,8 +373,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<title>',
       'created' => '1376485934',
@@ -394,8 +394,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<title>',
       'created' => '1376485934',
@@ -415,8 +415,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1376485934',
@@ -436,8 +436,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1376485934',
@@ -457,8 +457,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1376485935',
@@ -478,8 +478,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<title>',
       'created' => '1376485935',
@@ -499,8 +499,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1376485935',
@@ -520,8 +520,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1376485935',
@@ -541,8 +541,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1376485935',
@@ -562,8 +562,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1376485935',
@@ -583,8 +583,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    19 => 
-    array (
+    19 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1376485935',
@@ -604,8 +604,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    20 => 
-    array (
+    20 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1376485935',
@@ -625,8 +625,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    21 => 
-    array (
+    21 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<subject>',
       'created' => '1376485935',
@@ -646,8 +646,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    22 => 
-    array (
+    22 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<subject>',
       'created' => '1376485935',
@@ -667,8 +667,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    23 => 
-    array (
+    23 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<short_title|title>',
       'created' => '1376485935',
@@ -688,8 +688,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    24 => 
-    array (
+    24 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<title>',
       'created' => '1376485935',
@@ -709,8 +709,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    25 => 
-    array (
+    25 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1376485935',
@@ -730,8 +730,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    26 => 
-    array (
+    26 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<title>',
       'created' => '1376485935',
@@ -751,8 +751,8 @@ return array (
       'url_alias_name' => '',
       'version' => '0',
     ),
-    27 => 
-    array (
+    27 =>
+    array(
       'always_available' => '0',
       'contentobject_name' => '<name>',
       'created' => '1376485935',
@@ -773,10 +773,10 @@ return array (
       'version' => '0',
     ),
   ),
-  'ezcontentclass_attribute' => 
-  array (
-    0 => 
-    array (
+  'ezcontentclass_attribute' =>
+  array(
+    0 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '1',
@@ -805,8 +805,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '3',
@@ -822,7 +822,7 @@ return array (
       'data_text2' => '',
       'data_text3' => '',
       'data_text4' => '',
-      'data_text5' => NULL,
+      'data_text5' => null,
       'data_type_string' => 'ezstring',
       'id' => '6',
       'identifier' => 'name',
@@ -830,13 +830,13 @@ return array (
       'is_required' => '1',
       'is_searchable' => '1',
       'placement' => '1',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '3',
@@ -852,7 +852,7 @@ return array (
       'data_text2' => '',
       'data_text3' => '',
       'data_text4' => '',
-      'data_text5' => NULL,
+      'data_text5' => null,
       'data_type_string' => 'ezstring',
       'id' => '7',
       'identifier' => 'description',
@@ -860,13 +860,13 @@ return array (
       'is_required' => '0',
       'is_searchable' => '1',
       'placement' => '2',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '4',
@@ -890,13 +890,13 @@ return array (
       'is_required' => '1',
       'is_searchable' => '1',
       'placement' => '1',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:10:"First name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '4',
@@ -920,13 +920,13 @@ return array (
       'is_required' => '1',
       'is_searchable' => '1',
       'placement' => '2',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:9:"Last name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '4',
@@ -950,13 +950,13 @@ return array (
       'is_required' => '1',
       'is_searchable' => '1',
       'placement' => '3',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:12:"User account";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '1',
@@ -985,8 +985,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Summary";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '13',
@@ -1010,13 +1010,13 @@ return array (
       'is_required' => '1',
       'is_searchable' => '1',
       'placement' => '1',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Subject";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '13',
@@ -1040,13 +1040,13 @@ return array (
       'is_required' => '1',
       'is_searchable' => '1',
       'placement' => '2',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:6:"Author";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '13',
@@ -1070,13 +1070,13 @@ return array (
       'is_required' => '1',
       'is_searchable' => '1',
       'placement' => '3',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Message";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '1',
@@ -1105,8 +1105,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:10:"Short name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '1',
@@ -1135,8 +1135,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '1',
@@ -1165,8 +1165,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:17:"Display sub items";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '14',
@@ -1190,13 +1190,13 @@ return array (
       'is_required' => '0',
       'is_searchable' => '1',
       'placement' => '1',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '14',
@@ -1220,13 +1220,13 @@ return array (
       'is_required' => '0',
       'is_searchable' => '0',
       'placement' => '2',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:10:"Index Page";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '14',
@@ -1250,13 +1250,13 @@ return array (
       'is_required' => '0',
       'is_searchable' => '0',
       'placement' => '3',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:12:"Default Page";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '14',
@@ -1280,13 +1280,13 @@ return array (
       'is_required' => '0',
       'is_searchable' => '0',
       'placement' => '4',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:12:"Debug Output";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '14',
@@ -1310,13 +1310,13 @@ return array (
       'is_required' => '0',
       'is_searchable' => '0',
       'placement' => '5',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Debug By IP";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '14',
@@ -1340,13 +1340,13 @@ return array (
       'is_required' => '0',
       'is_searchable' => '0',
       'placement' => '6',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:13:"Debug IP List";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    19 => 
-    array (
+    19 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '14',
@@ -1370,13 +1370,13 @@ return array (
       'is_required' => '0',
       'is_searchable' => '0',
       'placement' => '7',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:17:"Debug Redirection";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    20 => 
-    array (
+    20 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '14',
@@ -1400,13 +1400,13 @@ return array (
       'is_required' => '0',
       'is_searchable' => '0',
       'placement' => '8',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:12:"View Caching";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    21 => 
-    array (
+    21 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '14',
@@ -1430,13 +1430,13 @@ return array (
       'is_required' => '0',
       'is_searchable' => '0',
       'placement' => '9',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:14:"Template Cache";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    22 => 
-    array (
+    22 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '14',
@@ -1460,13 +1460,13 @@ return array (
       'is_required' => '0',
       'is_searchable' => '0',
       'placement' => '10',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:16:"Template Compile";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    23 => 
-    array (
+    23 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '14',
@@ -1490,13 +1490,13 @@ return array (
       'is_required' => '0',
       'is_searchable' => '0',
       'placement' => '11',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:16:"Image Small Size";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    24 => 
-    array (
+    24 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '14',
@@ -1520,13 +1520,13 @@ return array (
       'is_required' => '0',
       'is_searchable' => '0',
       'placement' => '12',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:17:"Image Medium Size";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    25 => 
-    array (
+    25 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '14',
@@ -1550,13 +1550,13 @@ return array (
       'is_required' => '0',
       'is_searchable' => '0',
       'placement' => '13',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:16:"Image Large Size";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    26 => 
-    array (
+    26 =>
+    array(
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '15',
@@ -1585,8 +1585,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    27 => 
-    array (
+    27 =>
+    array(
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '15',
@@ -1615,8 +1615,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:9:"Meta data";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    28 => 
-    array (
+    28 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -1645,8 +1645,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Image";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    29 => 
-    array (
+    29 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -1675,8 +1675,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:9:"Sitestyle";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    30 => 
-    array (
+    30 =>
+    array(
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '15',
@@ -1705,8 +1705,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Email";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    31 => 
-    array (
+    31 =>
+    array(
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '15',
@@ -1735,8 +1735,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Site URL";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    32 => 
-    array (
+    32 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '4',
@@ -1760,13 +1760,13 @@ return array (
       'is_required' => '0',
       'is_searchable' => '1',
       'placement' => '4',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:9:"Signature";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    33 => 
-    array (
+    33 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '4',
@@ -1790,13 +1790,13 @@ return array (
       'is_required' => '0',
       'is_searchable' => '0',
       'placement' => '5',
-      'serialized_data_text' => NULL,
-      'serialized_description_list' => NULL,
+      'serialized_data_text' => null,
+      'serialized_description_list' => null,
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Image";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    34 => 
-    array (
+    34 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1825,8 +1825,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    35 => 
-    array (
+    35 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1855,8 +1855,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Short title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    36 => 
-    array (
+    36 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1885,8 +1885,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:6:"Author";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    37 => 
-    array (
+    37 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1915,8 +1915,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Summary";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    38 => 
-    array (
+    38 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1945,8 +1945,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Body";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    39 => 
-    array (
+    39 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -1975,8 +1975,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Image";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    40 => 
-    array (
+    40 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -2005,8 +2005,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:15:"Caption (Image)";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    41 => 
-    array (
+    41 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -2035,8 +2035,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:12:"Publish date";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    42 => 
-    array (
+    42 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -2065,8 +2065,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Star Rating";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    43 => 
-    array (
+    43 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -2095,8 +2095,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    44 => 
-    array (
+    44 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -2125,8 +2125,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Location";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    45 => 
-    array (
+    45 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '16',
@@ -2155,8 +2155,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Comments";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    46 => 
-    array (
+    46 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '17',
@@ -2185,8 +2185,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    47 => 
-    array (
+    47 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '17',
@@ -2215,8 +2215,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    48 => 
-    array (
+    48 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '17',
@@ -2245,8 +2245,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    49 => 
-    array (
+    49 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '18',
@@ -2275,8 +2275,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    50 => 
-    array (
+    50 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '18',
@@ -2305,8 +2305,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Body";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    51 => 
-    array (
+    51 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '18',
@@ -2335,8 +2335,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:16:"Publication date";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    52 => 
-    array (
+    52 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '18',
@@ -2365,8 +2365,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    53 => 
-    array (
+    53 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '18',
@@ -2395,8 +2395,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Comments";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    54 => 
-    array (
+    54 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2425,8 +2425,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    55 => 
-    array (
+    55 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2455,8 +2455,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    56 => 
-    array (
+    56 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2485,8 +2485,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:13:"Feedback Page";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    57 => 
-    array (
+    57 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2515,8 +2515,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:10:"First Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    58 => 
-    array (
+    58 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2545,8 +2545,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:9:"Last Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    59 => 
-    array (
+    59 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2575,8 +2575,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Email";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    60 => 
-    array (
+    60 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2605,8 +2605,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Country";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    61 => 
-    array (
+    61 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2635,8 +2635,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Comment";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    62 => 
-    array (
+    62 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '19',
@@ -2665,8 +2665,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:19:"Action Button Label";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    63 => 
-    array (
+    63 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '20',
@@ -2695,8 +2695,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    64 => 
-    array (
+    64 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '20',
@@ -2725,8 +2725,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    65 => 
-    array (
+    65 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '21',
@@ -2755,8 +2755,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    66 => 
-    array (
+    66 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '21',
@@ -2785,8 +2785,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:14:"Product number";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    67 => 
-    array (
+    67 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '21',
@@ -2815,8 +2815,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:17:"Short description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    68 => 
-    array (
+    68 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '21',
@@ -2845,8 +2845,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    69 => 
-    array (
+    69 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '21',
@@ -2875,8 +2875,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Price";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    70 => 
-    array (
+    70 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '21',
@@ -2905,8 +2905,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Image";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    71 => 
-    array (
+    71 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '21',
@@ -2935,8 +2935,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:15:"Caption (Image)";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    72 => 
-    array (
+    72 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '21',
@@ -2965,8 +2965,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:18:"Additional options";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    73 => 
-    array (
+    73 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '21',
@@ -2995,8 +2995,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Star Rating";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    74 => 
-    array (
+    74 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '21',
@@ -3025,8 +3025,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    75 => 
-    array (
+    75 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '21',
@@ -3055,8 +3055,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Comments";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    76 => 
-    array (
+    76 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '22',
@@ -3085,8 +3085,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    77 => 
-    array (
+    77 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '22',
@@ -3115,8 +3115,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    78 => 
-    array (
+    78 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '22',
@@ -3145,8 +3145,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:10:"First Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    79 => 
-    array (
+    79 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '22',
@@ -3175,8 +3175,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:9:"Last Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    80 => 
-    array (
+    80 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '22',
@@ -3205,8 +3205,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Subject";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    81 => 
-    array (
+    81 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '22',
@@ -3235,8 +3235,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Country";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    82 => 
-    array (
+    82 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '22',
@@ -3265,8 +3265,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Message";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    83 => 
-    array (
+    83 =>
+    array(
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '22',
@@ -3295,8 +3295,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Email";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    84 => 
-    array (
+    84 =>
+    array(
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '22',
@@ -3325,8 +3325,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:9:"Recipient";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    85 => 
-    array (
+    85 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '23',
@@ -3355,8 +3355,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    86 => 
-    array (
+    86 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '23',
@@ -3385,8 +3385,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:6:"Layout";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    87 => 
-    array (
+    87 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '24',
@@ -3415,8 +3415,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    88 => 
-    array (
+    88 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '24',
@@ -3445,8 +3445,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Body";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    89 => 
-    array (
+    89 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '24',
@@ -3475,8 +3475,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Star Rating";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    90 => 
-    array (
+    90 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '24',
@@ -3505,8 +3505,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    91 => 
-    array (
+    91 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '24',
@@ -3535,8 +3535,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Comments";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    92 => 
-    array (
+    92 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '24',
@@ -3565,8 +3565,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:17:"Display sub items";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    93 => 
-    array (
+    93 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '25',
@@ -3595,8 +3595,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    94 => 
-    array (
+    94 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '25',
@@ -3625,8 +3625,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    95 => 
-    array (
+    95 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '25',
@@ -3655,8 +3655,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Question";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    96 => 
-    array (
+    96 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '26',
@@ -3685,8 +3685,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    97 => 
-    array (
+    97 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '26',
@@ -3715,8 +3715,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    98 => 
-    array (
+    98 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '26',
@@ -3745,8 +3745,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"File";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    99 => 
-    array (
+    99 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '26',
@@ -3775,8 +3775,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Star Rating";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    100 => 
-    array (
+    100 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '26',
@@ -3805,8 +3805,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    101 => 
-    array (
+    101 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '26',
@@ -3835,8 +3835,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Comments";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    102 => 
-    array (
+    102 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '27',
@@ -3865,8 +3865,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    103 => 
-    array (
+    103 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '27',
@@ -3895,8 +3895,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Caption";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    104 => 
-    array (
+    104 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '27',
@@ -3925,8 +3925,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Image";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    105 => 
-    array (
+    105 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '27',
@@ -3955,8 +3955,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Star Rating";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    106 => 
-    array (
+    106 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '27',
@@ -3985,8 +3985,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    107 => 
-    array (
+    107 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '28',
@@ -4015,8 +4015,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    108 => 
-    array (
+    108 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '28',
@@ -4045,8 +4045,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    109 => 
-    array (
+    109 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '28',
@@ -4075,8 +4075,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Location";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    110 => 
-    array (
+    110 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '28',
@@ -4105,8 +4105,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:18:"Open in new window";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    111 => 
-    array (
+    111 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '29',
@@ -4135,8 +4135,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    112 => 
-    array (
+    112 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '29',
@@ -4165,8 +4165,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:17:"Short description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    113 => 
-    array (
+    113 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '29',
@@ -4195,8 +4195,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    114 => 
-    array (
+    114 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '29',
@@ -4225,8 +4225,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Image";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    115 => 
-    array (
+    115 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '29',
@@ -4255,8 +4255,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    116 => 
-    array (
+    116 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '30',
@@ -4285,8 +4285,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    117 => 
-    array (
+    117 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '30',
@@ -4315,8 +4315,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    118 => 
-    array (
+    118 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '31',
@@ -4345,8 +4345,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Subject";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    119 => 
-    array (
+    119 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '31',
@@ -4375,8 +4375,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Message";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    120 => 
-    array (
+    120 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '31',
@@ -4405,8 +4405,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:6:"Sticky";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    121 => 
-    array (
+    121 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '31',
@@ -4435,8 +4435,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:23:"Notify me about updates";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    122 => 
-    array (
+    122 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '32',
@@ -4465,8 +4465,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Subject";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    123 => 
-    array (
+    123 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '32',
@@ -4495,8 +4495,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Message";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    124 => 
-    array (
+    124 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '33',
@@ -4525,8 +4525,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:10:"Full title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    125 => 
-    array (
+    125 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '33',
@@ -4555,8 +4555,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Short title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    126 => 
-    array (
+    126 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '33',
@@ -4585,8 +4585,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Text";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    127 => 
-    array (
+    127 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '33',
@@ -4615,8 +4615,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Category";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    128 => 
-    array (
+    128 =>
+    array(
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '33',
@@ -4645,8 +4645,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:9:"From Time";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    129 => 
-    array (
+    129 =>
+    array(
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '33',
@@ -4675,8 +4675,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"To Time";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    130 => 
-    array (
+    130 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '33',
@@ -4705,8 +4705,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    131 => 
-    array (
+    131 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '34',
@@ -4735,8 +4735,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    132 => 
-    array (
+    132 =>
+    array(
       'can_translate' => '0',
       'category' => '',
       'contentclass_id' => '34',
@@ -4767,8 +4767,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"View";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    133 => 
-    array (
+    133 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '35',
@@ -4797,8 +4797,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    134 => 
-    array (
+    134 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '35',
@@ -4827,8 +4827,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:3:"URL";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    135 => 
-    array (
+    135 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '35',
@@ -4857,8 +4857,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Image";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    136 => 
-    array (
+    136 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '35',
@@ -4887,8 +4887,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:9:"Image map";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    137 => 
-    array (
+    137 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '35',
@@ -4917,8 +4917,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Tags";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    138 => 
-    array (
+    138 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '36',
@@ -4947,8 +4947,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:5:"Title";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    139 => 
-    array (
+    139 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '36',
@@ -4977,8 +4977,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Description";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    140 => 
-    array (
+    140 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '37',
@@ -5007,8 +5007,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"Name";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    141 => 
-    array (
+    141 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '37',
@@ -5037,8 +5037,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:7:"Caption";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    142 => 
-    array (
+    142 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '37',
@@ -5067,8 +5067,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:4:"File";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    143 => 
-    array (
+    143 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '37',
@@ -5097,8 +5097,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Star Rating";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    144 => 
-    array (
+    144 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '37',
@@ -5127,8 +5127,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"Comments";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    145 => 
-    array (
+    145 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -5157,8 +5157,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:12:"Site map URL";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    146 => 
-    array (
+    146 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -5187,8 +5187,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:13:"Tag Cloud URL";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    147 => 
-    array (
+    147 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -5217,8 +5217,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:13:"Login (label)";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    148 => 
-    array (
+    148 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -5247,8 +5247,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:14:"Logout (label)";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    149 => 
-    array (
+    149 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -5277,8 +5277,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:18:"My profile (label)";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    150 => 
-    array (
+    150 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -5307,8 +5307,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:25:"Register new user (label)";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    151 => 
-    array (
+    151 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -5337,8 +5337,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:8:"RSS feed";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    152 => 
-    array (
+    152 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -5367,8 +5367,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:23:"Shopping basket (label)";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    153 => 
-    array (
+    153 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -5397,8 +5397,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:21:"Site settings (label)";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    154 => 
-    array (
+    154 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -5427,8 +5427,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:11:"Footer text";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    155 => 
-    array (
+    155 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -5457,8 +5457,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:17:"Hide "Powered by"";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    156 => 
-    array (
+    156 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '15',
@@ -5487,8 +5487,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:17:"Footer Javascript";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    157 => 
-    array (
+    157 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '1',
@@ -5517,8 +5517,8 @@ return array (
       'serialized_name_list' => 'a:2:{s:6:"eng-GB";s:15:"Call For Action";s:16:"always-available";s:6:"eng-GB";}',
       'version' => '0',
     ),
-    158 => 
-    array (
+    158 =>
+    array(
       'can_translate' => '1',
       'category' => '',
       'contentclass_id' => '1',
@@ -5548,425 +5548,425 @@ return array (
       'version' => '0',
     ),
   ),
-  'ezcontentclass_classgroup' => 
-  array (
-    0 => 
-    array (
+  'ezcontentclass_classgroup' =>
+  array(
+    0 =>
+    array(
       'contentclass_id' => '1',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'contentclass_id' => '3',
       'contentclass_version' => '0',
       'group_id' => '2',
       'group_name' => 'Users',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'contentclass_id' => '4',
       'contentclass_version' => '0',
       'group_id' => '2',
       'group_name' => 'Users',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'contentclass_id' => '13',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'contentclass_id' => '14',
       'contentclass_version' => '0',
       'group_id' => '4',
       'group_name' => 'Setup',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'contentclass_id' => '15',
       'contentclass_version' => '0',
       'group_id' => '4',
       'group_name' => 'Setup',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'contentclass_id' => '16',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'contentclass_id' => '17',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'contentclass_id' => '18',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'contentclass_id' => '19',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'contentclass_id' => '20',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'contentclass_id' => '21',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'contentclass_id' => '22',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'contentclass_id' => '23',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'contentclass_id' => '24',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'contentclass_id' => '25',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'contentclass_id' => '26',
       'contentclass_version' => '0',
       'group_id' => '3',
       'group_name' => 'Media',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'contentclass_id' => '27',
       'contentclass_version' => '0',
       'group_id' => '3',
       'group_name' => 'Media',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'contentclass_id' => '28',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    19 => 
-    array (
+    19 =>
+    array(
       'contentclass_id' => '29',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    20 => 
-    array (
+    20 =>
+    array(
       'contentclass_id' => '30',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    21 => 
-    array (
+    21 =>
+    array(
       'contentclass_id' => '31',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    22 => 
-    array (
+    22 =>
+    array(
       'contentclass_id' => '32',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    23 => 
-    array (
+    23 =>
+    array(
       'contentclass_id' => '33',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    24 => 
-    array (
+    24 =>
+    array(
       'contentclass_id' => '34',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    25 => 
-    array (
+    25 =>
+    array(
       'contentclass_id' => '35',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    26 => 
-    array (
+    26 =>
+    array(
       'contentclass_id' => '36',
       'contentclass_version' => '0',
       'group_id' => '1',
       'group_name' => 'Content',
     ),
-    27 => 
-    array (
+    27 =>
+    array(
       'contentclass_id' => '37',
       'contentclass_version' => '0',
       'group_id' => '3',
       'group_name' => 'Media',
     ),
   ),
-  'ezcontentclass_name' => 
-  array (
-    0 => 
-    array (
+  'ezcontentclass_name' =>
+  array(
+    0 =>
+    array(
       'contentclass_id' => '1',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Folder',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'contentclass_id' => '3',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'User group',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'contentclass_id' => '4',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'User',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'contentclass_id' => '13',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Comment',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'contentclass_id' => '14',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Common ini settings',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'contentclass_id' => '15',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Template look',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'contentclass_id' => '16',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Article',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'contentclass_id' => '17',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Blog',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'contentclass_id' => '18',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Blog post',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'contentclass_id' => '19',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Call To Action',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'contentclass_id' => '20',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Call To Action Feedback',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'contentclass_id' => '21',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Product',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'contentclass_id' => '22',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Feedback form',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'contentclass_id' => '23',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Landing Page',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'contentclass_id' => '24',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Wiki Page',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'contentclass_id' => '25',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Poll',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'contentclass_id' => '26',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'File',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'contentclass_id' => '27',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Image',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'contentclass_id' => '28',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Link',
     ),
-    19 => 
-    array (
+    19 =>
+    array(
       'contentclass_id' => '29',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Gallery',
     ),
-    20 => 
-    array (
+    20 =>
+    array(
       'contentclass_id' => '30',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Forum',
     ),
-    21 => 
-    array (
+    21 =>
+    array(
       'contentclass_id' => '31',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Forum topic',
     ),
-    22 => 
-    array (
+    22 =>
+    array(
       'contentclass_id' => '32',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Forum reply',
     ),
-    23 => 
-    array (
+    23 =>
+    array(
       'contentclass_id' => '33',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Event',
     ),
-    24 => 
-    array (
+    24 =>
+    array(
       'contentclass_id' => '34',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Event calendar',
     ),
-    25 => 
-    array (
+    25 =>
+    array(
       'contentclass_id' => '35',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Banner',
     ),
-    26 => 
-    array (
+    26 =>
+    array(
       'contentclass_id' => '36',
       'contentclass_version' => '0',
       'language_id' => '3',
       'language_locale' => 'eng-GB',
       'name' => 'Forums',
     ),
-    27 => 
-    array (
+    27 =>
+    array(
       'contentclass_id' => '37',
       'contentclass_version' => '0',
       'language_id' => '3',
@@ -5974,10 +5974,10 @@ return array (
       'name' => 'Video',
     ),
   ),
-  'ezcontentclassgroup' => 
-  array (
-    0 => 
-    array (
+  'ezcontentclassgroup' =>
+  array(
+    0 =>
+    array(
       'created' => '1031216928',
       'creator_id' => '14',
       'id' => '1',
@@ -5985,8 +5985,8 @@ return array (
       'modifier_id' => '14',
       'name' => 'Content',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'created' => '1031216941',
       'creator_id' => '14',
       'id' => '2',
@@ -5994,8 +5994,8 @@ return array (
       'modifier_id' => '14',
       'name' => 'Users',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'created' => '1032009743',
       'creator_id' => '14',
       'id' => '3',
@@ -6003,8 +6003,8 @@ return array (
       'modifier_id' => '14',
       'name' => 'Media',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'created' => '1081858024',
       'creator_id' => '14',
       'id' => '4',
@@ -6013,10 +6013,10 @@ return array (
       'name' => 'Setup',
     ),
   ),
-  'ezcontentobject' => 
-  array (
-    0 => 
-    array (
+  'ezcontentobject' =>
+  array(
+    0 =>
+    array(
       'contentclass_id' => '3',
       'current_version' => '1',
       'id' => '4',
@@ -6030,8 +6030,8 @@ return array (
       'section_id' => '2',
       'status' => '1',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'contentclass_id' => '4',
       'current_version' => '2',
       'id' => '10',
@@ -6045,8 +6045,8 @@ return array (
       'section_id' => '2',
       'status' => '1',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'contentclass_id' => '3',
       'current_version' => '2',
       'id' => '11',
@@ -6060,8 +6060,8 @@ return array (
       'section_id' => '2',
       'status' => '1',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'contentclass_id' => '3',
       'current_version' => '1',
       'id' => '12',
@@ -6075,8 +6075,8 @@ return array (
       'section_id' => '2',
       'status' => '1',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'contentclass_id' => '3',
       'current_version' => '1',
       'id' => '13',
@@ -6090,8 +6090,8 @@ return array (
       'section_id' => '2',
       'status' => '1',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'contentclass_id' => '4',
       'current_version' => '4',
       'id' => '14',
@@ -6105,8 +6105,8 @@ return array (
       'section_id' => '2',
       'status' => '1',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '41',
@@ -6120,8 +6120,8 @@ return array (
       'section_id' => '3',
       'status' => '1',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'contentclass_id' => '3',
       'current_version' => '1',
       'id' => '42',
@@ -6135,8 +6135,8 @@ return array (
       'section_id' => '2',
       'status' => '1',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '45',
@@ -6150,8 +6150,8 @@ return array (
       'section_id' => '4',
       'status' => '1',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '49',
@@ -6165,8 +6165,8 @@ return array (
       'section_id' => '3',
       'status' => '1',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '50',
@@ -6180,8 +6180,8 @@ return array (
       'section_id' => '3',
       'status' => '1',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '51',
@@ -6195,8 +6195,8 @@ return array (
       'section_id' => '3',
       'status' => '1',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'contentclass_id' => '14',
       'current_version' => '1',
       'id' => '52',
@@ -6210,8 +6210,8 @@ return array (
       'section_id' => '4',
       'status' => '1',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'contentclass_id' => '15',
       'current_version' => '2',
       'id' => '54',
@@ -6225,8 +6225,8 @@ return array (
       'section_id' => '5',
       'status' => '1',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '56',
@@ -6240,8 +6240,8 @@ return array (
       'section_id' => '5',
       'status' => '1',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'contentclass_id' => '23',
       'current_version' => '1',
       'id' => '57',
@@ -6255,8 +6255,8 @@ return array (
       'section_id' => '1',
       'status' => '1',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '58',
@@ -6270,8 +6270,8 @@ return array (
       'section_id' => '1',
       'status' => '1',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'contentclass_id' => '3',
       'current_version' => '1',
       'id' => '59',
@@ -6286,15 +6286,15 @@ return array (
       'status' => '1',
     ),
   ),
-  'ezcontentobject_attribute' => 
-  array (
-    0 => 
-    array (
+  'ezcontentobject_attribute' =>
+  array(
+    0 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '4',
-      'data_float' => NULL,
-      'data_int' => NULL,
+      'data_float' => null,
+      'data_int' => null,
       'data_text' => 'Main group',
       'data_type_string' => 'ezstring',
       'id' => '7',
@@ -6304,13 +6304,13 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '4',
-      'data_float' => NULL,
-      'data_int' => NULL,
+      'data_float' => null,
+      'data_int' => null,
       'data_text' => 'Users',
       'data_type_string' => 'ezstring',
       'id' => '8',
@@ -6320,8 +6320,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '8',
       'contentobject_id' => '10',
@@ -6336,8 +6336,8 @@ return array (
       'sort_key_string' => 'anonymous',
       'version' => '2',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '9',
       'contentobject_id' => '10',
@@ -6352,8 +6352,8 @@ return array (
       'sort_key_string' => 'user',
       'version' => '2',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '12',
       'contentobject_id' => '10',
@@ -6368,8 +6368,8 @@ return array (
       'sort_key_string' => '',
       'version' => '2',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '11',
@@ -6384,8 +6384,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '11',
@@ -6400,8 +6400,8 @@ return array (
       'sort_key_string' => 'members',
       'version' => '2',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '11',
@@ -6416,8 +6416,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '11',
@@ -6432,8 +6432,8 @@ return array (
       'sort_key_string' => '',
       'version' => '2',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '12',
@@ -6448,8 +6448,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '12',
@@ -6464,8 +6464,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '13',
@@ -6480,8 +6480,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '13',
@@ -6496,8 +6496,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '8',
       'contentobject_id' => '14',
@@ -6512,8 +6512,8 @@ return array (
       'sort_key_string' => 'administrator',
       'version' => '3',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '8',
       'contentobject_id' => '14',
@@ -6528,8 +6528,8 @@ return array (
       'sort_key_string' => 'administrator',
       'version' => '4',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '9',
       'contentobject_id' => '14',
@@ -6544,8 +6544,8 @@ return array (
       'sort_key_string' => 'user',
       'version' => '3',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '9',
       'contentobject_id' => '14',
@@ -6560,8 +6560,8 @@ return array (
       'sort_key_string' => 'user',
       'version' => '4',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'attribute_original_id' => '30',
       'contentclassattribute_id' => '12',
       'contentobject_id' => '14',
@@ -6576,8 +6576,8 @@ return array (
       'sort_key_string' => '',
       'version' => '3',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'attribute_original_id' => '30',
       'contentclassattribute_id' => '12',
       'contentobject_id' => '14',
@@ -6592,8 +6592,8 @@ return array (
       'sort_key_string' => '',
       'version' => '4',
     ),
-    19 => 
-    array (
+    19 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '41',
@@ -6608,8 +6608,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    20 => 
-    array (
+    20 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '41',
@@ -6627,8 +6627,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    21 => 
-    array (
+    21 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '42',
@@ -6643,8 +6643,8 @@ return array (
       'sort_key_string' => 'anonymous users',
       'version' => '1',
     ),
-    22 => 
-    array (
+    22 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '42',
@@ -6659,8 +6659,8 @@ return array (
       'sort_key_string' => 'user group for the anonymous user',
       'version' => '1',
     ),
-    23 => 
-    array (
+    23 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '41',
@@ -6675,8 +6675,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    24 => 
-    array (
+    24 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '41',
@@ -6691,8 +6691,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    25 => 
-    array (
+    25 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '41',
@@ -6707,8 +6707,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    26 => 
-    array (
+    26 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '45',
@@ -6723,8 +6723,8 @@ return array (
       'sort_key_string' => 'setup',
       'version' => '1',
     ),
-    27 => 
-    array (
+    27 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '45',
@@ -6739,8 +6739,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    28 => 
-    array (
+    28 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '45',
@@ -6758,8 +6758,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    29 => 
-    array (
+    29 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '45',
@@ -6777,8 +6777,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    30 => 
-    array (
+    30 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '45',
@@ -6793,8 +6793,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    31 => 
-    array (
+    31 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '49',
@@ -6809,8 +6809,8 @@ return array (
       'sort_key_string' => 'images',
       'version' => '1',
     ),
-    32 => 
-    array (
+    32 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '49',
@@ -6825,8 +6825,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    33 => 
-    array (
+    33 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '49',
@@ -6844,8 +6844,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    34 => 
-    array (
+    34 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '49',
@@ -6863,8 +6863,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    35 => 
-    array (
+    35 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '49',
@@ -6879,8 +6879,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    36 => 
-    array (
+    36 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '50',
@@ -6895,8 +6895,8 @@ return array (
       'sort_key_string' => 'files',
       'version' => '1',
     ),
-    37 => 
-    array (
+    37 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '50',
@@ -6911,8 +6911,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    38 => 
-    array (
+    38 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '50',
@@ -6930,8 +6930,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    39 => 
-    array (
+    39 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '50',
@@ -6949,8 +6949,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    40 => 
-    array (
+    40 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '50',
@@ -6965,8 +6965,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    41 => 
-    array (
+    41 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '51',
@@ -6981,8 +6981,8 @@ return array (
       'sort_key_string' => 'multimedia',
       'version' => '1',
     ),
-    42 => 
-    array (
+    42 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '51',
@@ -6997,8 +6997,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    43 => 
-    array (
+    43 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '51',
@@ -7016,8 +7016,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    44 => 
-    array (
+    44 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '51',
@@ -7035,8 +7035,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    45 => 
-    array (
+    45 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '51',
@@ -7051,8 +7051,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    46 => 
-    array (
+    46 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '159',
       'contentobject_id' => '52',
@@ -7067,8 +7067,8 @@ return array (
       'sort_key_string' => 'common ini settings',
       'version' => '1',
     ),
-    47 => 
-    array (
+    47 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '160',
       'contentobject_id' => '52',
@@ -7083,8 +7083,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    48 => 
-    array (
+    48 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '161',
       'contentobject_id' => '52',
@@ -7099,8 +7099,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    49 => 
-    array (
+    49 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '162',
       'contentobject_id' => '52',
@@ -7115,8 +7115,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    50 => 
-    array (
+    50 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '163',
       'contentobject_id' => '52',
@@ -7131,8 +7131,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    51 => 
-    array (
+    51 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '164',
       'contentobject_id' => '52',
@@ -7147,8 +7147,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    52 => 
-    array (
+    52 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '165',
       'contentobject_id' => '52',
@@ -7163,8 +7163,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    53 => 
-    array (
+    53 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '166',
       'contentobject_id' => '52',
@@ -7179,8 +7179,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    54 => 
-    array (
+    54 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '167',
       'contentobject_id' => '52',
@@ -7195,8 +7195,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    55 => 
-    array (
+    55 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '168',
       'contentobject_id' => '52',
@@ -7211,8 +7211,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    56 => 
-    array (
+    56 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '169',
       'contentobject_id' => '52',
@@ -7227,8 +7227,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    57 => 
-    array (
+    57 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '170',
       'contentobject_id' => '52',
@@ -7243,8 +7243,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    58 => 
-    array (
+    58 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '171',
       'contentobject_id' => '52',
@@ -7259,8 +7259,8 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    59 => 
-    array (
+    59 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '172',
       'contentobject_id' => '54',
@@ -7275,8 +7275,8 @@ return array (
       'sort_key_string' => '',
       'version' => '2',
     ),
-    60 => 
-    array (
+    60 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '173',
       'contentobject_id' => '54',
@@ -7294,8 +7294,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    61 => 
-    array (
+    61 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '174',
       'contentobject_id' => '54',
@@ -7312,8 +7312,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    62 => 
-    array (
+    62 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '175',
       'contentobject_id' => '54',
@@ -7328,8 +7328,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '0',
       'version' => '2',
     ),
-    63 => 
-    array (
+    63 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '177',
       'contentobject_id' => '54',
@@ -7344,8 +7344,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    64 => 
-    array (
+    64 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '178',
       'contentobject_id' => '54',
@@ -7360,8 +7360,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    65 => 
-    array (
+    65 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '179',
       'contentobject_id' => '10',
@@ -7376,8 +7376,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    66 => 
-    array (
+    66 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '179',
       'contentobject_id' => '14',
@@ -7392,8 +7392,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '3',
     ),
-    67 => 
-    array (
+    67 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '179',
       'contentobject_id' => '14',
@@ -7408,8 +7408,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '4',
     ),
-    68 => 
-    array (
+    68 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '180',
       'contentobject_id' => '10',
@@ -7424,8 +7424,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    69 => 
-    array (
+    69 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '180',
       'contentobject_id' => '14',
@@ -7442,8 +7442,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '3',
     ),
-    70 => 
-    array (
+    70 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '180',
       'contentobject_id' => '14',
@@ -7460,13 +7460,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '4',
     ),
-    71 => 
-    array (
+    71 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '56',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Design',
       'data_type_string' => 'ezstring',
       'id' => '181',
@@ -7476,13 +7476,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'design',
       'version' => '1',
     ),
-    72 => 
-    array (
+    72 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '56',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '182',
@@ -7492,8 +7492,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    73 => 
-    array (
+    73 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '56',
@@ -7511,8 +7511,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    74 => 
-    array (
+    74 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '56',
@@ -7530,8 +7530,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    75 => 
-    array (
+    75 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '56',
@@ -7546,13 +7546,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    76 => 
-    array (
+    76 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '232',
       'contentobject_id' => '57',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Home',
       'data_type_string' => 'ezstring',
       'id' => '186',
@@ -7562,13 +7562,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'home',
       'version' => '1',
     ),
-    77 => 
-    array (
+    77 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '233',
       'contentobject_id' => '57',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0"?>
 <page>
   <zone_layout>2ZonesLayout1</zone_layout>
@@ -7588,13 +7588,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    78 => 
-    array (
+    78 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '58',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Footer',
       'data_type_string' => 'ezstring',
       'id' => '188',
@@ -7604,13 +7604,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'footer',
       'version' => '1',
     ),
-    79 => 
-    array (
+    79 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '58',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'footer',
       'data_type_string' => 'ezstring',
       'id' => '189',
@@ -7620,13 +7620,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'footer',
       'version' => '1',
     ),
-    80 => 
-    array (
+    80 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '58',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -7638,8 +7638,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    81 => 
-    array (
+    81 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '58',
@@ -7655,8 +7655,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    82 => 
-    array (
+    82 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '58',
@@ -7672,13 +7672,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    83 => 
-    array (
+    83 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '58',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1376485937"><original attribute_id="193" attribute_version="1" attribute_language="eng-GB"/></ezimage>
 ',
@@ -7690,8 +7690,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    84 => 
-    array (
+    84 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '58',
@@ -7706,8 +7706,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    85 => 
-    array (
+    85 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '58',
@@ -7722,8 +7722,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    86 => 
-    array (
+    86 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '58',
@@ -7738,13 +7738,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    87 => 
-    array (
+    87 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '58',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '197',
@@ -7754,8 +7754,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    88 => 
-    array (
+    88 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '58',
@@ -7770,8 +7770,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    89 => 
-    array (
+    89 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '58',
@@ -7786,8 +7786,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    90 => 
-    array (
+    90 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '292',
       'contentobject_id' => '54',
@@ -7802,8 +7802,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    91 => 
-    array (
+    91 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '293',
       'contentobject_id' => '54',
@@ -7818,13 +7818,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    92 => 
-    array (
+    92 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '294',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Login',
       'data_type_string' => 'ezstring',
       'id' => '202',
@@ -7834,13 +7834,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'login',
       'version' => '2',
     ),
-    93 => 
-    array (
+    93 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '295',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Logout',
       'data_type_string' => 'ezstring',
       'id' => '203',
@@ -7850,13 +7850,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'logout',
       'version' => '2',
     ),
-    94 => 
-    array (
+    94 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '296',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'My profile',
       'data_type_string' => 'ezstring',
       'id' => '204',
@@ -7866,13 +7866,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'my profile',
       'version' => '2',
     ),
-    95 => 
-    array (
+    95 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '297',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Register',
       'data_type_string' => 'ezstring',
       'id' => '205',
@@ -7882,13 +7882,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'register',
       'version' => '2',
     ),
-    96 => 
-    array (
+    96 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '298',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '/rss/feed/my_feed',
       'data_type_string' => 'ezstring',
       'id' => '206',
@@ -7898,13 +7898,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '/rss/feed/my_feed',
       'version' => '2',
     ),
-    97 => 
-    array (
+    97 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '299',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Shopping basket',
       'data_type_string' => 'ezstring',
       'id' => '207',
@@ -7914,13 +7914,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'shopping basket',
       'version' => '2',
     ),
-    98 => 
-    array (
+    98 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '300',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Site settings',
       'data_type_string' => 'ezstring',
       'id' => '208',
@@ -7930,13 +7930,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'site settings',
       'version' => '2',
     ),
-    99 => 
-    array (
+    99 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '301',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Copyright &#169; 2013 <a href="http://ez.no" title="eZ Systems">eZ Systems AS</a> (except where otherwise noted). All rights reserved.',
       'data_type_string' => 'eztext',
       'id' => '209',
@@ -7946,8 +7946,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    100 => 
-    array (
+    100 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '302',
       'contentobject_id' => '54',
@@ -7962,13 +7962,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    101 => 
-    array (
+    101 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '303',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'eztext',
       'id' => '211',
@@ -7978,13 +7978,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    102 => 
-    array (
+    102 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '59',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Partners',
       'data_type_string' => 'ezstring',
       'id' => '212',
@@ -7994,13 +7994,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'partners',
       'version' => '1',
     ),
-    103 => 
-    array (
+    103 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '59',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '213',
@@ -8010,13 +8010,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    104 => 
-    array (
+    104 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '304',
       'contentobject_id' => '41',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0"?>
 <page/>
 ',
@@ -8028,13 +8028,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    105 => 
-    array (
+    105 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '304',
       'contentobject_id' => '45',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0"?>
 <page/>
 ',
@@ -8046,13 +8046,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    106 => 
-    array (
+    106 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '304',
       'contentobject_id' => '49',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0"?>
 <page/>
 ',
@@ -8064,13 +8064,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    107 => 
-    array (
+    107 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '304',
       'contentobject_id' => '50',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0"?>
 <page/>
 ',
@@ -8082,13 +8082,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    108 => 
-    array (
+    108 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '304',
       'contentobject_id' => '51',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0"?>
 <page/>
 ',
@@ -8100,13 +8100,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    109 => 
-    array (
+    109 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '304',
       'contentobject_id' => '56',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0"?>
 <page/>
 ',
@@ -8118,13 +8118,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    110 => 
-    array (
+    110 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '305',
       'contentobject_id' => '41',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '220',
@@ -8134,13 +8134,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    111 => 
-    array (
+    111 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '305',
       'contentobject_id' => '45',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '221',
@@ -8150,13 +8150,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    112 => 
-    array (
+    112 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '305',
       'contentobject_id' => '49',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '222',
@@ -8166,13 +8166,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    113 => 
-    array (
+    113 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '305',
       'contentobject_id' => '50',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '223',
@@ -8182,13 +8182,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    114 => 
-    array (
+    114 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '305',
       'contentobject_id' => '51',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '224',
@@ -8198,13 +8198,13 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    115 => 
-    array (
+    115 =>
+    array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '305',
       'contentobject_id' => '56',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '225',
@@ -8215,10 +8215,10 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
     ),
   ),
-  'ezcontentobject_name' => 
-  array (
-    0 => 
-    array (
+  'ezcontentobject_name' =>
+  array(
+    0 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '1',
       'contentobject_id' => '4',
@@ -8226,8 +8226,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'Users',
       'real_translation' => 'eng-GB',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '2',
       'contentobject_id' => '10',
@@ -8235,8 +8235,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'Anonymous User',
       'real_translation' => 'eng-GB',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '1',
       'contentobject_id' => '11',
@@ -8244,8 +8244,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'Guest accounts',
       'real_translation' => 'eng-GB',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '2',
       'contentobject_id' => '11',
@@ -8253,8 +8253,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'Members',
       'real_translation' => 'eng-GB',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '1',
       'contentobject_id' => '12',
@@ -8262,8 +8262,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'Administrator users',
       'real_translation' => 'eng-GB',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '1',
       'contentobject_id' => '13',
@@ -8271,8 +8271,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'Editors',
       'real_translation' => 'eng-GB',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '3',
       'contentobject_id' => '14',
@@ -8280,8 +8280,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'Administrator User',
       'real_translation' => 'eng-GB',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '4',
       'contentobject_id' => '14',
@@ -8289,8 +8289,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'Administrator User',
       'real_translation' => 'eng-GB',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '1',
       'contentobject_id' => '41',
@@ -8298,8 +8298,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'Media',
       'real_translation' => 'eng-GB',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '1',
       'contentobject_id' => '42',
@@ -8307,8 +8307,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'Anonymous Users',
       'real_translation' => 'eng-GB',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '1',
       'contentobject_id' => '45',
@@ -8316,8 +8316,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'Setup',
       'real_translation' => 'eng-GB',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '1',
       'contentobject_id' => '49',
@@ -8325,8 +8325,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'Images',
       'real_translation' => 'eng-GB',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '1',
       'contentobject_id' => '50',
@@ -8334,8 +8334,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'Files',
       'real_translation' => 'eng-GB',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '1',
       'contentobject_id' => '51',
@@ -8343,8 +8343,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'Multimedia',
       'real_translation' => 'eng-GB',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '1',
       'contentobject_id' => '52',
@@ -8352,8 +8352,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'Common INI settings',
       'real_translation' => 'eng-GB',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '2',
       'contentobject_id' => '54',
@@ -8361,8 +8361,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'eZ Publish Demo Site (without demo content)',
       'real_translation' => 'eng-GB',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '1',
       'contentobject_id' => '56',
@@ -8370,8 +8370,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'Design',
       'real_translation' => 'eng-GB',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '1',
       'contentobject_id' => '57',
@@ -8379,8 +8379,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'Home',
       'real_translation' => 'eng-GB',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '1',
       'contentobject_id' => '58',
@@ -8388,8 +8388,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name' => 'footer',
       'real_translation' => 'eng-GB',
     ),
-    19 => 
-    array (
+    19 =>
+    array(
       'content_translation' => 'eng-GB',
       'content_version' => '1',
       'contentobject_id' => '59',
@@ -8398,10 +8398,10 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'real_translation' => 'eng-GB',
     ),
   ),
-  'ezcontentobject_tree' => 
-  array (
-    0 => 
-    array (
+  'ezcontentobject_tree' =>
+  array(
+    0 =>
+    array(
       'contentobject_id' => '0',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -8419,8 +8419,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'contentobject_id' => '57',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -8438,8 +8438,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '8',
       'sort_order' => '1',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'contentobject_id' => '4',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -8457,8 +8457,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'contentobject_id' => '11',
       'contentobject_is_published' => '1',
       'contentobject_version' => '2',
@@ -8476,8 +8476,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'contentobject_id' => '12',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -8495,8 +8495,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'contentobject_id' => '13',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -8514,8 +8514,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'contentobject_id' => '14',
       'contentobject_is_published' => '1',
       'contentobject_version' => '4',
@@ -8533,8 +8533,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'contentobject_id' => '41',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -8552,8 +8552,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'contentobject_id' => '42',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -8571,8 +8571,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'contentobject_id' => '10',
       'contentobject_is_published' => '1',
       'contentobject_version' => '2',
@@ -8590,8 +8590,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'contentobject_id' => '45',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -8609,8 +8609,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'contentobject_id' => '49',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -8628,8 +8628,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'contentobject_id' => '50',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -8647,8 +8647,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'contentobject_id' => '51',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -8666,8 +8666,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'contentobject_id' => '52',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -8685,8 +8685,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'contentobject_id' => '54',
       'contentobject_is_published' => '1',
       'contentobject_version' => '2',
@@ -8704,8 +8704,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'contentobject_id' => '56',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -8723,8 +8723,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'contentobject_id' => '58',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -8742,8 +8742,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'contentobject_id' => '59',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -8762,10 +8762,10 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_order' => '1',
     ),
   ),
-  'ezcontentobject_version' => 
-  array (
-    0 => 
-    array (
+  'ezcontentobject_version' =>
+  array(
+    0 =>
+    array(
       'contentobject_id' => '4',
       'created' => '0',
       'creator_id' => '14',
@@ -8778,8 +8778,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '1',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'contentobject_id' => '11',
       'created' => '1033920737',
       'creator_id' => '14',
@@ -8792,8 +8792,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'contentobject_id' => '12',
       'created' => '1033920760',
       'creator_id' => '14',
@@ -8806,8 +8806,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'contentobject_id' => '13',
       'created' => '1033920786',
       'creator_id' => '14',
@@ -8820,8 +8820,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'contentobject_id' => '41',
       'created' => '1060695450',
       'creator_id' => '14',
@@ -8834,8 +8834,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'contentobject_id' => '42',
       'created' => '1072180278',
       'creator_id' => '14',
@@ -8848,8 +8848,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'contentobject_id' => '10',
       'created' => '1072180337',
       'creator_id' => '14',
@@ -8862,8 +8862,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '2',
       'workflow_event_pos' => '0',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'contentobject_id' => '45',
       'created' => '1079684084',
       'creator_id' => '14',
@@ -8876,8 +8876,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'contentobject_id' => '49',
       'created' => '1080220181',
       'creator_id' => '14',
@@ -8890,8 +8890,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'contentobject_id' => '50',
       'created' => '1080220211',
       'creator_id' => '14',
@@ -8904,8 +8904,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'contentobject_id' => '51',
       'created' => '1080220225',
       'creator_id' => '14',
@@ -8918,8 +8918,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'contentobject_id' => '52',
       'created' => '1082016497',
       'creator_id' => '14',
@@ -8932,8 +8932,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'contentobject_id' => '56',
       'created' => '1103023120',
       'creator_id' => '14',
@@ -8946,8 +8946,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'contentobject_id' => '14',
       'created' => '1301061783',
       'creator_id' => '14',
@@ -8960,8 +8960,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '3',
       'workflow_event_pos' => '0',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'contentobject_id' => '54',
       'created' => '1301062300',
       'creator_id' => '14',
@@ -8974,8 +8974,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '2',
       'workflow_event_pos' => '0',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'contentobject_id' => '57',
       'created' => '1196268655',
       'creator_id' => '14',
@@ -8988,8 +8988,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'contentobject_id' => '58',
       'created' => '1352741487',
       'creator_id' => '14',
@@ -9002,8 +9002,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'contentobject_id' => '14',
       'created' => '1376485937',
       'creator_id' => '14',
@@ -9016,8 +9016,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '4',
       'workflow_event_pos' => '0',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'contentobject_id' => '59',
       'created' => '1376485938',
       'creator_id' => '14',
@@ -9030,8 +9030,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    19 => 
-    array (
+    19 =>
+    array(
       'contentobject_id' => '11',
       'created' => '1376485938',
       'creator_id' => '14',
@@ -9045,1276 +9045,1276 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'workflow_event_pos' => '0',
     ),
   ),
-  'ezimagefile' => 
-  array (
-    0 => 
-    array (
+  'ezimagefile' =>
+  array(
+    0 =>
+    array(
       'contentobject_attribute_id' => '172',
       'filepath' => 'var/ezdemo_site/storage/images/design/plain-site/172-2-eng-GB/eZ-Publish-Demo-Site-without-demo-content1.png',
       'id' => '1',
     ),
   ),
-  'ezisbn_group' => 
-  array (
-    0 => 
-    array (
+  'ezisbn_group' =>
+  array(
+    0 =>
+    array(
       'description' => 'English language',
       'group_number' => '0',
       'id' => '1',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'description' => 'English language',
       'group_number' => '1',
       'id' => '2',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'description' => 'French language',
       'group_number' => '2',
       'id' => '3',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'description' => 'German language',
       'group_number' => '3',
       'id' => '4',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'description' => 'Japan',
       'group_number' => '4',
       'id' => '5',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'description' => 'Russian Federation and former USSR',
       'group_number' => '5',
       'id' => '6',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'description' => 'Iran',
       'group_number' => '600',
       'id' => '7',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'description' => 'Kazakhstan',
       'group_number' => '601',
       'id' => '8',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'description' => 'Indonesia',
       'group_number' => '602',
       'id' => '9',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'description' => 'Saudi Arabia',
       'group_number' => '603',
       'id' => '10',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'description' => 'Vietnam',
       'group_number' => '604',
       'id' => '11',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'description' => 'Turkey',
       'group_number' => '605',
       'id' => '12',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'description' => 'Romania',
       'group_number' => '606',
       'id' => '13',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'description' => 'Mexico',
       'group_number' => '607',
       'id' => '14',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'description' => 'Macedonia',
       'group_number' => '608',
       'id' => '15',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'description' => 'Lithuania',
       'group_number' => '609',
       'id' => '16',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'description' => 'Thailand',
       'group_number' => '611',
       'id' => '17',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'description' => 'Peru',
       'group_number' => '612',
       'id' => '18',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'description' => 'Mauritius',
       'group_number' => '613',
       'id' => '19',
     ),
-    19 => 
-    array (
+    19 =>
+    array(
       'description' => 'Lebanon',
       'group_number' => '614',
       'id' => '20',
     ),
-    20 => 
-    array (
+    20 =>
+    array(
       'description' => 'Hungary',
       'group_number' => '615',
       'id' => '21',
     ),
-    21 => 
-    array (
+    21 =>
+    array(
       'description' => 'Thailand',
       'group_number' => '616',
       'id' => '22',
     ),
-    22 => 
-    array (
+    22 =>
+    array(
       'description' => 'Ukraine',
       'group_number' => '617',
       'id' => '23',
     ),
-    23 => 
-    array (
+    23 =>
+    array(
       'description' => 'China, People\'s Republic',
       'group_number' => '7',
       'id' => '24',
     ),
-    24 => 
-    array (
+    24 =>
+    array(
       'description' => 'Czech Republic and Slovakia',
       'group_number' => '80',
       'id' => '25',
     ),
-    25 => 
-    array (
+    25 =>
+    array(
       'description' => 'India',
       'group_number' => '81',
       'id' => '26',
     ),
-    26 => 
-    array (
+    26 =>
+    array(
       'description' => 'Norway',
       'group_number' => '82',
       'id' => '27',
     ),
-    27 => 
-    array (
+    27 =>
+    array(
       'description' => 'Poland',
       'group_number' => '83',
       'id' => '28',
     ),
-    28 => 
-    array (
+    28 =>
+    array(
       'description' => 'Spain',
       'group_number' => '84',
       'id' => '29',
     ),
-    29 => 
-    array (
+    29 =>
+    array(
       'description' => 'Brazil',
       'group_number' => '85',
       'id' => '30',
     ),
-    30 => 
-    array (
+    30 =>
+    array(
       'description' => 'Serbia and Montenegro',
       'group_number' => '86',
       'id' => '31',
     ),
-    31 => 
-    array (
+    31 =>
+    array(
       'description' => 'Denmark',
       'group_number' => '87',
       'id' => '32',
     ),
-    32 => 
-    array (
+    32 =>
+    array(
       'description' => 'Italy',
       'group_number' => '88',
       'id' => '33',
     ),
-    33 => 
-    array (
+    33 =>
+    array(
       'description' => 'Korea, Republic',
       'group_number' => '89',
       'id' => '34',
     ),
-    34 => 
-    array (
+    34 =>
+    array(
       'description' => 'Netherlands',
       'group_number' => '90',
       'id' => '35',
     ),
-    35 => 
-    array (
+    35 =>
+    array(
       'description' => 'Sweden',
       'group_number' => '91',
       'id' => '36',
     ),
-    36 => 
-    array (
+    36 =>
+    array(
       'description' => 'International NGO Publishers and EC Organizations',
       'group_number' => '92',
       'id' => '37',
     ),
-    37 => 
-    array (
+    37 =>
+    array(
       'description' => 'India',
       'group_number' => '93',
       'id' => '38',
     ),
-    38 => 
-    array (
+    38 =>
+    array(
       'description' => 'Netherlands',
       'group_number' => '94',
       'id' => '39',
     ),
-    39 => 
-    array (
+    39 =>
+    array(
       'description' => 'Argentina',
       'group_number' => '950',
       'id' => '40',
     ),
-    40 => 
-    array (
+    40 =>
+    array(
       'description' => 'Finland',
       'group_number' => '951',
       'id' => '41',
     ),
-    41 => 
-    array (
+    41 =>
+    array(
       'description' => 'Finland',
       'group_number' => '952',
       'id' => '42',
     ),
-    42 => 
-    array (
+    42 =>
+    array(
       'description' => 'Croatia',
       'group_number' => '953',
       'id' => '43',
     ),
-    43 => 
-    array (
+    43 =>
+    array(
       'description' => 'Bulgaria',
       'group_number' => '954',
       'id' => '44',
     ),
-    44 => 
-    array (
+    44 =>
+    array(
       'description' => 'Sri Lanka',
       'group_number' => '955',
       'id' => '45',
     ),
-    45 => 
-    array (
+    45 =>
+    array(
       'description' => 'Chile',
       'group_number' => '956',
       'id' => '46',
     ),
-    46 => 
-    array (
+    46 =>
+    array(
       'description' => 'Taiwan',
       'group_number' => '957',
       'id' => '47',
     ),
-    47 => 
-    array (
+    47 =>
+    array(
       'description' => 'Colombia',
       'group_number' => '958',
       'id' => '48',
     ),
-    48 => 
-    array (
+    48 =>
+    array(
       'description' => 'Cuba',
       'group_number' => '959',
       'id' => '49',
     ),
-    49 => 
-    array (
+    49 =>
+    array(
       'description' => 'Greece',
       'group_number' => '960',
       'id' => '50',
     ),
-    50 => 
-    array (
+    50 =>
+    array(
       'description' => 'Slovenia',
       'group_number' => '961',
       'id' => '51',
     ),
-    51 => 
-    array (
+    51 =>
+    array(
       'description' => 'Hong Kong, China',
       'group_number' => '962',
       'id' => '52',
     ),
-    52 => 
-    array (
+    52 =>
+    array(
       'description' => 'Hungary',
       'group_number' => '963',
       'id' => '53',
     ),
-    53 => 
-    array (
+    53 =>
+    array(
       'description' => 'Iran',
       'group_number' => '964',
       'id' => '54',
     ),
-    54 => 
-    array (
+    54 =>
+    array(
       'description' => 'Israel',
       'group_number' => '965',
       'id' => '55',
     ),
-    55 => 
-    array (
+    55 =>
+    array(
       'description' => 'Ukraine',
       'group_number' => '966',
       'id' => '56',
     ),
-    56 => 
-    array (
+    56 =>
+    array(
       'description' => 'Malaysia',
       'group_number' => '967',
       'id' => '57',
     ),
-    57 => 
-    array (
+    57 =>
+    array(
       'description' => 'Mexico',
       'group_number' => '968',
       'id' => '58',
     ),
-    58 => 
-    array (
+    58 =>
+    array(
       'description' => 'Pakistan',
       'group_number' => '969',
       'id' => '59',
     ),
-    59 => 
-    array (
+    59 =>
+    array(
       'description' => 'Mexico',
       'group_number' => '970',
       'id' => '60',
     ),
-    60 => 
-    array (
+    60 =>
+    array(
       'description' => 'Philippines',
       'group_number' => '971',
       'id' => '61',
     ),
-    61 => 
-    array (
+    61 =>
+    array(
       'description' => 'Portugal',
       'group_number' => '972',
       'id' => '62',
     ),
-    62 => 
-    array (
+    62 =>
+    array(
       'description' => 'Romania',
       'group_number' => '973',
       'id' => '63',
     ),
-    63 => 
-    array (
+    63 =>
+    array(
       'description' => 'Thailand',
       'group_number' => '974',
       'id' => '64',
     ),
-    64 => 
-    array (
+    64 =>
+    array(
       'description' => 'Turkey',
       'group_number' => '975',
       'id' => '65',
     ),
-    65 => 
-    array (
+    65 =>
+    array(
       'description' => 'Caribbean Community',
       'group_number' => '976',
       'id' => '66',
     ),
-    66 => 
-    array (
+    66 =>
+    array(
       'description' => 'Egypt',
       'group_number' => '977',
       'id' => '67',
     ),
-    67 => 
-    array (
+    67 =>
+    array(
       'description' => 'Nigeria',
       'group_number' => '978',
       'id' => '68',
     ),
-    68 => 
-    array (
+    68 =>
+    array(
       'description' => 'Indonesia',
       'group_number' => '979',
       'id' => '69',
     ),
-    69 => 
-    array (
+    69 =>
+    array(
       'description' => 'Venezuela',
       'group_number' => '980',
       'id' => '70',
     ),
-    70 => 
-    array (
+    70 =>
+    array(
       'description' => 'Singapore',
       'group_number' => '981',
       'id' => '71',
     ),
-    71 => 
-    array (
+    71 =>
+    array(
       'description' => 'South Pacific',
       'group_number' => '982',
       'id' => '72',
     ),
-    72 => 
-    array (
+    72 =>
+    array(
       'description' => 'Malaysia',
       'group_number' => '983',
       'id' => '73',
     ),
-    73 => 
-    array (
+    73 =>
+    array(
       'description' => 'Bangladesh',
       'group_number' => '984',
       'id' => '74',
     ),
-    74 => 
-    array (
+    74 =>
+    array(
       'description' => 'Belarus',
       'group_number' => '985',
       'id' => '75',
     ),
-    75 => 
-    array (
+    75 =>
+    array(
       'description' => 'Taiwan',
       'group_number' => '986',
       'id' => '76',
     ),
-    76 => 
-    array (
+    76 =>
+    array(
       'description' => 'Argentina',
       'group_number' => '987',
       'id' => '77',
     ),
-    77 => 
-    array (
+    77 =>
+    array(
       'description' => 'Hong Kong, China',
       'group_number' => '988',
       'id' => '78',
     ),
-    78 => 
-    array (
+    78 =>
+    array(
       'description' => 'Portugal',
       'group_number' => '989',
       'id' => '79',
     ),
-    79 => 
-    array (
+    79 =>
+    array(
       'description' => 'Qatar',
       'group_number' => '9927',
       'id' => '80',
     ),
-    80 => 
-    array (
+    80 =>
+    array(
       'description' => 'Albania',
       'group_number' => '9928',
       'id' => '81',
     ),
-    81 => 
-    array (
+    81 =>
+    array(
       'description' => 'Guatemala',
       'group_number' => '9929',
       'id' => '82',
     ),
-    82 => 
-    array (
+    82 =>
+    array(
       'description' => 'Costa Rica',
       'group_number' => '9930',
       'id' => '83',
     ),
-    83 => 
-    array (
+    83 =>
+    array(
       'description' => 'Algeria',
       'group_number' => '9931',
       'id' => '84',
     ),
-    84 => 
-    array (
+    84 =>
+    array(
       'description' => 'Lao People\'s Democratic Republic',
       'group_number' => '9932',
       'id' => '85',
     ),
-    85 => 
-    array (
+    85 =>
+    array(
       'description' => 'Syria',
       'group_number' => '9933',
       'id' => '86',
     ),
-    86 => 
-    array (
+    86 =>
+    array(
       'description' => 'Latvia',
       'group_number' => '9934',
       'id' => '87',
     ),
-    87 => 
-    array (
+    87 =>
+    array(
       'description' => 'Iceland',
       'group_number' => '9935',
       'id' => '88',
     ),
-    88 => 
-    array (
+    88 =>
+    array(
       'description' => 'Afghanistan',
       'group_number' => '9936',
       'id' => '89',
     ),
-    89 => 
-    array (
+    89 =>
+    array(
       'description' => 'Nepal',
       'group_number' => '9937',
       'id' => '90',
     ),
-    90 => 
-    array (
+    90 =>
+    array(
       'description' => 'Tunisia',
       'group_number' => '9938',
       'id' => '91',
     ),
-    91 => 
-    array (
+    91 =>
+    array(
       'description' => 'Armenia',
       'group_number' => '9939',
       'id' => '92',
     ),
-    92 => 
-    array (
+    92 =>
+    array(
       'description' => 'Montenegro',
       'group_number' => '9940',
       'id' => '93',
     ),
-    93 => 
-    array (
+    93 =>
+    array(
       'description' => 'Georgia',
       'group_number' => '9941',
       'id' => '94',
     ),
-    94 => 
-    array (
+    94 =>
+    array(
       'description' => 'Ecuador',
       'group_number' => '9942',
       'id' => '95',
     ),
-    95 => 
-    array (
+    95 =>
+    array(
       'description' => 'Uzbekistan',
       'group_number' => '9943',
       'id' => '96',
     ),
-    96 => 
-    array (
+    96 =>
+    array(
       'description' => 'Turkey',
       'group_number' => '9944',
       'id' => '97',
     ),
-    97 => 
-    array (
+    97 =>
+    array(
       'description' => 'Dominican Republic',
       'group_number' => '9945',
       'id' => '98',
     ),
-    98 => 
-    array (
+    98 =>
+    array(
       'description' => 'Korea, P.D.R.',
       'group_number' => '9946',
       'id' => '99',
     ),
-    99 => 
-    array (
+    99 =>
+    array(
       'description' => 'Algeria',
       'group_number' => '9947',
       'id' => '100',
     ),
-    100 => 
-    array (
+    100 =>
+    array(
       'description' => 'United Arab Emirates',
       'group_number' => '9948',
       'id' => '101',
     ),
-    101 => 
-    array (
+    101 =>
+    array(
       'description' => 'Estonia',
       'group_number' => '9949',
       'id' => '102',
     ),
-    102 => 
-    array (
+    102 =>
+    array(
       'description' => 'Palestine',
       'group_number' => '9950',
       'id' => '103',
     ),
-    103 => 
-    array (
+    103 =>
+    array(
       'description' => 'Kosova',
       'group_number' => '9951',
       'id' => '104',
     ),
-    104 => 
-    array (
+    104 =>
+    array(
       'description' => 'Azerbaijan',
       'group_number' => '9952',
       'id' => '105',
     ),
-    105 => 
-    array (
+    105 =>
+    array(
       'description' => 'Lebanon',
       'group_number' => '9953',
       'id' => '106',
     ),
-    106 => 
-    array (
+    106 =>
+    array(
       'description' => 'Morocco',
       'group_number' => '9954',
       'id' => '107',
     ),
-    107 => 
-    array (
+    107 =>
+    array(
       'description' => 'Lithuania',
       'group_number' => '9955',
       'id' => '108',
     ),
-    108 => 
-    array (
+    108 =>
+    array(
       'description' => 'Cameroon',
       'group_number' => '9956',
       'id' => '109',
     ),
-    109 => 
-    array (
+    109 =>
+    array(
       'description' => 'Jordan',
       'group_number' => '9957',
       'id' => '110',
     ),
-    110 => 
-    array (
+    110 =>
+    array(
       'description' => 'Bosnia and Herzegovina',
       'group_number' => '9958',
       'id' => '111',
     ),
-    111 => 
-    array (
+    111 =>
+    array(
       'description' => 'Libya',
       'group_number' => '9959',
       'id' => '112',
     ),
-    112 => 
-    array (
+    112 =>
+    array(
       'description' => 'Saudi Arabia',
       'group_number' => '9960',
       'id' => '113',
     ),
-    113 => 
-    array (
+    113 =>
+    array(
       'description' => 'Algeria',
       'group_number' => '9961',
       'id' => '114',
     ),
-    114 => 
-    array (
+    114 =>
+    array(
       'description' => 'Panama',
       'group_number' => '9962',
       'id' => '115',
     ),
-    115 => 
-    array (
+    115 =>
+    array(
       'description' => 'Cyprus',
       'group_number' => '9963',
       'id' => '116',
     ),
-    116 => 
-    array (
+    116 =>
+    array(
       'description' => 'Ghana',
       'group_number' => '9964',
       'id' => '117',
     ),
-    117 => 
-    array (
+    117 =>
+    array(
       'description' => 'Kazakhstan',
       'group_number' => '9965',
       'id' => '118',
     ),
-    118 => 
-    array (
+    118 =>
+    array(
       'description' => 'Kenya',
       'group_number' => '9966',
       'id' => '119',
     ),
-    119 => 
-    array (
+    119 =>
+    array(
       'description' => 'Kyrgyz Republic',
       'group_number' => '9967',
       'id' => '120',
     ),
-    120 => 
-    array (
+    120 =>
+    array(
       'description' => 'Costa Rica',
       'group_number' => '9968',
       'id' => '121',
     ),
-    121 => 
-    array (
+    121 =>
+    array(
       'description' => 'Uganda',
       'group_number' => '9970',
       'id' => '122',
     ),
-    122 => 
-    array (
+    122 =>
+    array(
       'description' => 'Singapore',
       'group_number' => '9971',
       'id' => '123',
     ),
-    123 => 
-    array (
+    123 =>
+    array(
       'description' => 'Peru',
       'group_number' => '9972',
       'id' => '124',
     ),
-    124 => 
-    array (
+    124 =>
+    array(
       'description' => 'Tunisia',
       'group_number' => '9973',
       'id' => '125',
     ),
-    125 => 
-    array (
+    125 =>
+    array(
       'description' => 'Uruguay',
       'group_number' => '9974',
       'id' => '126',
     ),
-    126 => 
-    array (
+    126 =>
+    array(
       'description' => 'Moldova',
       'group_number' => '9975',
       'id' => '127',
     ),
-    127 => 
-    array (
+    127 =>
+    array(
       'description' => 'Tanzania',
       'group_number' => '9976',
       'id' => '128',
     ),
-    128 => 
-    array (
+    128 =>
+    array(
       'description' => 'Costa Rica',
       'group_number' => '9977',
       'id' => '129',
     ),
-    129 => 
-    array (
+    129 =>
+    array(
       'description' => 'Ecuador',
       'group_number' => '9978',
       'id' => '130',
     ),
-    130 => 
-    array (
+    130 =>
+    array(
       'description' => 'Iceland',
       'group_number' => '9979',
       'id' => '131',
     ),
-    131 => 
-    array (
+    131 =>
+    array(
       'description' => 'Papua New Guinea',
       'group_number' => '9980',
       'id' => '132',
     ),
-    132 => 
-    array (
+    132 =>
+    array(
       'description' => 'Morocco',
       'group_number' => '9981',
       'id' => '133',
     ),
-    133 => 
-    array (
+    133 =>
+    array(
       'description' => 'Zambia',
       'group_number' => '9982',
       'id' => '134',
     ),
-    134 => 
-    array (
+    134 =>
+    array(
       'description' => 'Gambia',
       'group_number' => '9983',
       'id' => '135',
     ),
-    135 => 
-    array (
+    135 =>
+    array(
       'description' => 'Latvia',
       'group_number' => '9984',
       'id' => '136',
     ),
-    136 => 
-    array (
+    136 =>
+    array(
       'description' => 'Estonia',
       'group_number' => '9985',
       'id' => '137',
     ),
-    137 => 
-    array (
+    137 =>
+    array(
       'description' => 'Lithuania',
       'group_number' => '9986',
       'id' => '138',
     ),
-    138 => 
-    array (
+    138 =>
+    array(
       'description' => 'Tanzania',
       'group_number' => '9987',
       'id' => '139',
     ),
-    139 => 
-    array (
+    139 =>
+    array(
       'description' => 'Ghana',
       'group_number' => '9988',
       'id' => '140',
     ),
-    140 => 
-    array (
+    140 =>
+    array(
       'description' => 'Macedonia',
       'group_number' => '9989',
       'id' => '141',
     ),
-    141 => 
-    array (
+    141 =>
+    array(
       'description' => 'Bahrain',
       'group_number' => '99901',
       'id' => '142',
     ),
-    142 => 
-    array (
+    142 =>
+    array(
       'description' => 'Gabon',
       'group_number' => '99902',
       'id' => '143',
     ),
-    143 => 
-    array (
+    143 =>
+    array(
       'description' => 'Mauritius',
       'group_number' => '99903',
       'id' => '144',
     ),
-    144 => 
-    array (
+    144 =>
+    array(
       'description' => 'Netherlands Antilles and Aruba',
       'group_number' => '99904',
       'id' => '145',
     ),
-    145 => 
-    array (
+    145 =>
+    array(
       'description' => 'Bolivia',
       'group_number' => '99905',
       'id' => '146',
     ),
-    146 => 
-    array (
+    146 =>
+    array(
       'description' => 'Kuwait',
       'group_number' => '99906',
       'id' => '147',
     ),
-    147 => 
-    array (
+    147 =>
+    array(
       'description' => 'Malawi',
       'group_number' => '99908',
       'id' => '148',
     ),
-    148 => 
-    array (
+    148 =>
+    array(
       'description' => 'Malta',
       'group_number' => '99909',
       'id' => '149',
     ),
-    149 => 
-    array (
+    149 =>
+    array(
       'description' => 'Sierra Leone',
       'group_number' => '99910',
       'id' => '150',
     ),
-    150 => 
-    array (
+    150 =>
+    array(
       'description' => 'Lesotho',
       'group_number' => '99911',
       'id' => '151',
     ),
-    151 => 
-    array (
+    151 =>
+    array(
       'description' => 'Botswana',
       'group_number' => '99912',
       'id' => '152',
     ),
-    152 => 
-    array (
+    152 =>
+    array(
       'description' => 'Andorra',
       'group_number' => '99913',
       'id' => '153',
     ),
-    153 => 
-    array (
+    153 =>
+    array(
       'description' => 'Suriname',
       'group_number' => '99914',
       'id' => '154',
     ),
-    154 => 
-    array (
+    154 =>
+    array(
       'description' => 'Maldives',
       'group_number' => '99915',
       'id' => '155',
     ),
-    155 => 
-    array (
+    155 =>
+    array(
       'description' => 'Namibia',
       'group_number' => '99916',
       'id' => '156',
     ),
-    156 => 
-    array (
+    156 =>
+    array(
       'description' => 'Brunei Darussalam',
       'group_number' => '99917',
       'id' => '157',
     ),
-    157 => 
-    array (
+    157 =>
+    array(
       'description' => 'Faroe Islands',
       'group_number' => '99918',
       'id' => '158',
     ),
-    158 => 
-    array (
+    158 =>
+    array(
       'description' => 'Benin',
       'group_number' => '99919',
       'id' => '159',
     ),
-    159 => 
-    array (
+    159 =>
+    array(
       'description' => 'Andorra',
       'group_number' => '99920',
       'id' => '160',
     ),
-    160 => 
-    array (
+    160 =>
+    array(
       'description' => 'Qatar',
       'group_number' => '99921',
       'id' => '161',
     ),
-    161 => 
-    array (
+    161 =>
+    array(
       'description' => 'Guatemala',
       'group_number' => '99922',
       'id' => '162',
     ),
-    162 => 
-    array (
+    162 =>
+    array(
       'description' => 'El Salvador',
       'group_number' => '99923',
       'id' => '163',
     ),
-    163 => 
-    array (
+    163 =>
+    array(
       'description' => 'Nicaragua',
       'group_number' => '99924',
       'id' => '164',
     ),
-    164 => 
-    array (
+    164 =>
+    array(
       'description' => 'Paraguay',
       'group_number' => '99925',
       'id' => '165',
     ),
-    165 => 
-    array (
+    165 =>
+    array(
       'description' => 'Honduras',
       'group_number' => '99926',
       'id' => '166',
     ),
-    166 => 
-    array (
+    166 =>
+    array(
       'description' => 'Albania',
       'group_number' => '99927',
       'id' => '167',
     ),
-    167 => 
-    array (
+    167 =>
+    array(
       'description' => 'Georgia',
       'group_number' => '99928',
       'id' => '168',
     ),
-    168 => 
-    array (
+    168 =>
+    array(
       'description' => 'Mongolia',
       'group_number' => '99929',
       'id' => '169',
     ),
-    169 => 
-    array (
+    169 =>
+    array(
       'description' => 'Armenia',
       'group_number' => '99930',
       'id' => '170',
     ),
-    170 => 
-    array (
+    170 =>
+    array(
       'description' => 'Seychelles',
       'group_number' => '99931',
       'id' => '171',
     ),
-    171 => 
-    array (
+    171 =>
+    array(
       'description' => 'Malta',
       'group_number' => '99932',
       'id' => '172',
     ),
-    172 => 
-    array (
+    172 =>
+    array(
       'description' => 'Nepal',
       'group_number' => '99933',
       'id' => '173',
     ),
-    173 => 
-    array (
+    173 =>
+    array(
       'description' => 'Dominican Republic',
       'group_number' => '99934',
       'id' => '174',
     ),
-    174 => 
-    array (
+    174 =>
+    array(
       'description' => 'Haiti',
       'group_number' => '99935',
       'id' => '175',
     ),
-    175 => 
-    array (
+    175 =>
+    array(
       'description' => 'Bhutan',
       'group_number' => '99936',
       'id' => '176',
     ),
-    176 => 
-    array (
+    176 =>
+    array(
       'description' => 'Macau',
       'group_number' => '99937',
       'id' => '177',
     ),
-    177 => 
-    array (
+    177 =>
+    array(
       'description' => 'Srpska, Republic of',
       'group_number' => '99938',
       'id' => '178',
     ),
-    178 => 
-    array (
+    178 =>
+    array(
       'description' => 'Guatemala',
       'group_number' => '99939',
       'id' => '179',
     ),
-    179 => 
-    array (
+    179 =>
+    array(
       'description' => 'Georgia',
       'group_number' => '99940',
       'id' => '180',
     ),
-    180 => 
-    array (
+    180 =>
+    array(
       'description' => 'Armenia',
       'group_number' => '99941',
       'id' => '181',
     ),
-    181 => 
-    array (
+    181 =>
+    array(
       'description' => 'Sudan',
       'group_number' => '99942',
       'id' => '182',
     ),
-    182 => 
-    array (
+    182 =>
+    array(
       'description' => 'Albania',
       'group_number' => '99943',
       'id' => '183',
     ),
-    183 => 
-    array (
+    183 =>
+    array(
       'description' => 'Ethiopia',
       'group_number' => '99944',
       'id' => '184',
     ),
-    184 => 
-    array (
+    184 =>
+    array(
       'description' => 'Namibia',
       'group_number' => '99945',
       'id' => '185',
     ),
-    185 => 
-    array (
+    185 =>
+    array(
       'description' => 'Nepal',
       'group_number' => '99946',
       'id' => '186',
     ),
-    186 => 
-    array (
+    186 =>
+    array(
       'description' => 'Tajikistan',
       'group_number' => '99947',
       'id' => '187',
     ),
-    187 => 
-    array (
+    187 =>
+    array(
       'description' => 'Eritrea',
       'group_number' => '99948',
       'id' => '188',
     ),
-    188 => 
-    array (
+    188 =>
+    array(
       'description' => 'Mauritius',
       'group_number' => '99949',
       'id' => '189',
     ),
-    189 => 
-    array (
+    189 =>
+    array(
       'description' => 'Cambodia',
       'group_number' => '99950',
       'id' => '190',
     ),
-    190 => 
-    array (
+    190 =>
+    array(
       'description' => 'Congo',
       'group_number' => '99951',
       'id' => '191',
     ),
-    191 => 
-    array (
+    191 =>
+    array(
       'description' => 'Mali',
       'group_number' => '99952',
       'id' => '192',
     ),
-    192 => 
-    array (
+    192 =>
+    array(
       'description' => 'Paraguay',
       'group_number' => '99953',
       'id' => '193',
     ),
-    193 => 
-    array (
+    193 =>
+    array(
       'description' => 'Bolivia',
       'group_number' => '99954',
       'id' => '194',
     ),
-    194 => 
-    array (
+    194 =>
+    array(
       'description' => 'Srpska, Republic of',
       'group_number' => '99955',
       'id' => '195',
     ),
-    195 => 
-    array (
+    195 =>
+    array(
       'description' => 'Albania',
       'group_number' => '99956',
       'id' => '196',
     ),
-    196 => 
-    array (
+    196 =>
+    array(
       'description' => 'Malta',
       'group_number' => '99957',
       'id' => '197',
     ),
-    197 => 
-    array (
+    197 =>
+    array(
       'description' => 'Bahrain',
       'group_number' => '99958',
       'id' => '198',
     ),
-    198 => 
-    array (
+    198 =>
+    array(
       'description' => 'Luxembourg',
       'group_number' => '99959',
       'id' => '199',
     ),
-    199 => 
-    array (
+    199 =>
+    array(
       'description' => 'Malawi',
       'group_number' => '99960',
       'id' => '200',
     ),
-    200 => 
-    array (
+    200 =>
+    array(
       'description' => 'El Salvador',
       'group_number' => '99961',
       'id' => '201',
     ),
-    201 => 
-    array (
+    201 =>
+    array(
       'description' => 'Mongolia',
       'group_number' => '99962',
       'id' => '202',
     ),
-    202 => 
-    array (
+    202 =>
+    array(
       'description' => 'Cambodia',
       'group_number' => '99963',
       'id' => '203',
     ),
-    203 => 
-    array (
+    203 =>
+    array(
       'description' => 'Nicaragua',
       'group_number' => '99964',
       'id' => '204',
     ),
-    204 => 
-    array (
+    204 =>
+    array(
       'description' => 'Macau',
       'group_number' => '99965',
       'id' => '205',
     ),
-    205 => 
-    array (
+    205 =>
+    array(
       'description' => 'Kuwait',
       'group_number' => '99966',
       'id' => '206',
     ),
-    206 => 
-    array (
+    206 =>
+    array(
       'description' => 'Paraguay',
       'group_number' => '99967',
       'id' => '207',
     ),
-    207 => 
-    array (
+    207 =>
+    array(
       'description' => 'Botswana',
       'group_number' => '99968',
       'id' => '208',
     ),
-    208 => 
-    array (
+    208 =>
+    array(
       'description' => 'France',
       'group_number' => '10',
       'id' => '209',
     ),
   ),
-  'ezisbn_group_range' => 
-  array (
-    0 => 
-    array (
+  'ezisbn_group_range' =>
+  array(
+    0 =>
+    array(
       'from_number' => '0',
       'group_from' => '0',
       'group_length' => '1',
@@ -10322,8 +10322,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'id' => '1',
       'to_number' => '59999',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'from_number' => '60000',
       'group_from' => '600',
       'group_length' => '3',
@@ -10331,8 +10331,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'id' => '2',
       'to_number' => '64999',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'from_number' => '70000',
       'group_from' => '7',
       'group_length' => '1',
@@ -10340,8 +10340,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'id' => '3',
       'to_number' => '79999',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'from_number' => '80000',
       'group_from' => '80',
       'group_length' => '2',
@@ -10349,8 +10349,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'id' => '4',
       'to_number' => '94999',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'from_number' => '95000',
       'group_from' => '950',
       'group_length' => '3',
@@ -10358,8 +10358,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'id' => '5',
       'to_number' => '98999',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'from_number' => '99000',
       'group_from' => '9900',
       'group_length' => '4',
@@ -10367,8 +10367,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'id' => '6',
       'to_number' => '99899',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'from_number' => '99900',
       'group_from' => '99900',
       'group_length' => '5',
@@ -10376,8 +10376,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'id' => '7',
       'to_number' => '99999',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'from_number' => '10000',
       'group_from' => '10',
       'group_length' => '2',
@@ -10386,10 +10386,10 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'to_number' => '10999',
     ),
   ),
-  'ezisbn_registrant_range' => 
-  array (
-    0 => 
-    array (
+  'ezisbn_registrant_range' =>
+  array(
+    0 =>
+    array(
       'from_number' => '0',
       'id' => '1',
       'isbn_group_id' => '1',
@@ -10398,8 +10398,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'from_number' => '20000',
       'id' => '2',
       'isbn_group_id' => '1',
@@ -10408,8 +10408,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'from_number' => '70000',
       'id' => '3',
       'isbn_group_id' => '1',
@@ -10418,8 +10418,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8499',
       'to_number' => '84999',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'from_number' => '85000',
       'id' => '4',
       'isbn_group_id' => '1',
@@ -10428,8 +10428,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89999',
       'to_number' => '89999',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'from_number' => '90000',
       'id' => '5',
       'isbn_group_id' => '1',
@@ -10438,8 +10438,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '949999',
       'to_number' => '94999',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'from_number' => '95000',
       'id' => '6',
       'isbn_group_id' => '1',
@@ -10448,8 +10448,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999999',
       'to_number' => '99999',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'from_number' => '0',
       'id' => '7',
       'isbn_group_id' => '2',
@@ -10458,8 +10458,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '09',
       'to_number' => '9999',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'from_number' => '10000',
       'id' => '8',
       'isbn_group_id' => '2',
@@ -10468,8 +10468,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '399',
       'to_number' => '39999',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'from_number' => '40000',
       'id' => '9',
       'isbn_group_id' => '2',
@@ -10478,8 +10478,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '5499',
       'to_number' => '54999',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'from_number' => '55000',
       'id' => '10',
       'isbn_group_id' => '2',
@@ -10488,8 +10488,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '86979',
       'to_number' => '86979',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'from_number' => '86980',
       'id' => '11',
       'isbn_group_id' => '2',
@@ -10498,8 +10498,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '998999',
       'to_number' => '99899',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'from_number' => '99900',
       'id' => '12',
       'isbn_group_id' => '2',
@@ -10508,8 +10508,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999999',
       'to_number' => '99999',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'from_number' => '0',
       'id' => '13',
       'isbn_group_id' => '3',
@@ -10518,8 +10518,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'from_number' => '20000',
       'id' => '14',
       'isbn_group_id' => '3',
@@ -10528,8 +10528,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '349',
       'to_number' => '34999',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'from_number' => '35000',
       'id' => '15',
       'isbn_group_id' => '3',
@@ -10538,8 +10538,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39999',
       'to_number' => '39999',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'from_number' => '40000',
       'id' => '16',
       'isbn_group_id' => '3',
@@ -10548,8 +10548,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'from_number' => '70000',
       'id' => '17',
       'isbn_group_id' => '3',
@@ -10558,8 +10558,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8399',
       'to_number' => '83999',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'from_number' => '84000',
       'id' => '18',
       'isbn_group_id' => '3',
@@ -10568,8 +10568,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89999',
       'to_number' => '89999',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'from_number' => '90000',
       'id' => '19',
       'isbn_group_id' => '3',
@@ -10578,8 +10578,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '949999',
       'to_number' => '94999',
     ),
-    19 => 
-    array (
+    19 =>
+    array(
       'from_number' => '95000',
       'id' => '20',
       'isbn_group_id' => '3',
@@ -10588,8 +10588,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999999',
       'to_number' => '99999',
     ),
-    20 => 
-    array (
+    20 =>
+    array(
       'from_number' => '0',
       'id' => '21',
       'isbn_group_id' => '4',
@@ -10598,8 +10598,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '02',
       'to_number' => '2999',
     ),
-    21 => 
-    array (
+    21 =>
+    array(
       'from_number' => '3000',
       'id' => '22',
       'isbn_group_id' => '4',
@@ -10608,8 +10608,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '033',
       'to_number' => '3399',
     ),
-    22 => 
-    array (
+    22 =>
+    array(
       'from_number' => '3400',
       'id' => '23',
       'isbn_group_id' => '4',
@@ -10618,8 +10618,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0369',
       'to_number' => '3699',
     ),
-    23 => 
-    array (
+    23 =>
+    array(
       'from_number' => '3700',
       'id' => '24',
       'isbn_group_id' => '4',
@@ -10628,8 +10628,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '03999',
       'to_number' => '3999',
     ),
-    24 => 
-    array (
+    24 =>
+    array(
       'from_number' => '4000',
       'id' => '25',
       'isbn_group_id' => '4',
@@ -10638,8 +10638,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    25 => 
-    array (
+    25 =>
+    array(
       'from_number' => '20000',
       'id' => '26',
       'isbn_group_id' => '4',
@@ -10648,8 +10648,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    26 => 
-    array (
+    26 =>
+    array(
       'from_number' => '70000',
       'id' => '27',
       'isbn_group_id' => '4',
@@ -10658,8 +10658,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8499',
       'to_number' => '84999',
     ),
-    27 => 
-    array (
+    27 =>
+    array(
       'from_number' => '85000',
       'id' => '28',
       'isbn_group_id' => '4',
@@ -10668,8 +10668,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89999',
       'to_number' => '89999',
     ),
-    28 => 
-    array (
+    28 =>
+    array(
       'from_number' => '90000',
       'id' => '29',
       'isbn_group_id' => '4',
@@ -10678,8 +10678,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '949999',
       'to_number' => '94999',
     ),
-    29 => 
-    array (
+    29 =>
+    array(
       'from_number' => '95000',
       'id' => '30',
       'isbn_group_id' => '4',
@@ -10688,8 +10688,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9539999',
       'to_number' => '95399',
     ),
-    30 => 
-    array (
+    30 =>
+    array(
       'from_number' => '95400',
       'id' => '31',
       'isbn_group_id' => '4',
@@ -10698,8 +10698,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '96999',
       'to_number' => '96999',
     ),
-    31 => 
-    array (
+    31 =>
+    array(
       'from_number' => '97000',
       'id' => '32',
       'isbn_group_id' => '4',
@@ -10708,8 +10708,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9899999',
       'to_number' => '98999',
     ),
-    32 => 
-    array (
+    32 =>
+    array(
       'from_number' => '99000',
       'id' => '33',
       'isbn_group_id' => '4',
@@ -10718,8 +10718,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99499',
       'to_number' => '99499',
     ),
-    33 => 
-    array (
+    33 =>
+    array(
       'from_number' => '99500',
       'id' => '34',
       'isbn_group_id' => '4',
@@ -10728,8 +10728,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    34 => 
-    array (
+    34 =>
+    array(
       'from_number' => '0',
       'id' => '35',
       'isbn_group_id' => '5',
@@ -10738,8 +10738,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    35 => 
-    array (
+    35 =>
+    array(
       'from_number' => '20000',
       'id' => '36',
       'isbn_group_id' => '5',
@@ -10748,8 +10748,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    36 => 
-    array (
+    36 =>
+    array(
       'from_number' => '70000',
       'id' => '37',
       'isbn_group_id' => '5',
@@ -10758,8 +10758,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8499',
       'to_number' => '84999',
     ),
-    37 => 
-    array (
+    37 =>
+    array(
       'from_number' => '85000',
       'id' => '38',
       'isbn_group_id' => '5',
@@ -10768,8 +10768,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89999',
       'to_number' => '89999',
     ),
-    38 => 
-    array (
+    38 =>
+    array(
       'from_number' => '90000',
       'id' => '39',
       'isbn_group_id' => '5',
@@ -10778,8 +10778,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '949999',
       'to_number' => '94999',
     ),
-    39 => 
-    array (
+    39 =>
+    array(
       'from_number' => '95000',
       'id' => '40',
       'isbn_group_id' => '5',
@@ -10788,8 +10788,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999999',
       'to_number' => '99999',
     ),
-    40 => 
-    array (
+    40 =>
+    array(
       'from_number' => '0',
       'id' => '41',
       'isbn_group_id' => '6',
@@ -10798,8 +10798,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    41 => 
-    array (
+    41 =>
+    array(
       'from_number' => '20000',
       'id' => '42',
       'isbn_group_id' => '6',
@@ -10808,8 +10808,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '420',
       'to_number' => '42099',
     ),
-    42 => 
-    array (
+    42 =>
+    array(
       'from_number' => '42100',
       'id' => '43',
       'isbn_group_id' => '6',
@@ -10818,8 +10818,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4299',
       'to_number' => '42999',
     ),
-    43 => 
-    array (
+    43 =>
+    array(
       'from_number' => '43000',
       'id' => '44',
       'isbn_group_id' => '6',
@@ -10828,8 +10828,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '430',
       'to_number' => '43099',
     ),
-    44 => 
-    array (
+    44 =>
+    array(
       'from_number' => '43100',
       'id' => '45',
       'isbn_group_id' => '6',
@@ -10838,8 +10838,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4399',
       'to_number' => '43999',
     ),
-    45 => 
-    array (
+    45 =>
+    array(
       'from_number' => '44000',
       'id' => '46',
       'isbn_group_id' => '6',
@@ -10848,8 +10848,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '440',
       'to_number' => '44099',
     ),
-    46 => 
-    array (
+    46 =>
+    array(
       'from_number' => '44100',
       'id' => '47',
       'isbn_group_id' => '6',
@@ -10858,8 +10858,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4499',
       'to_number' => '44999',
     ),
-    47 => 
-    array (
+    47 =>
+    array(
       'from_number' => '45000',
       'id' => '48',
       'isbn_group_id' => '6',
@@ -10868,8 +10868,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    48 => 
-    array (
+    48 =>
+    array(
       'from_number' => '70000',
       'id' => '49',
       'isbn_group_id' => '6',
@@ -10878,8 +10878,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8499',
       'to_number' => '84999',
     ),
-    49 => 
-    array (
+    49 =>
+    array(
       'from_number' => '85000',
       'id' => '50',
       'isbn_group_id' => '6',
@@ -10888,8 +10888,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89999',
       'to_number' => '89999',
     ),
-    50 => 
-    array (
+    50 =>
+    array(
       'from_number' => '90000',
       'id' => '51',
       'isbn_group_id' => '6',
@@ -10898,8 +10898,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '909999',
       'to_number' => '90999',
     ),
-    51 => 
-    array (
+    51 =>
+    array(
       'from_number' => '91000',
       'id' => '52',
       'isbn_group_id' => '6',
@@ -10908,8 +10908,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '91999',
       'to_number' => '91999',
     ),
-    52 => 
-    array (
+    52 =>
+    array(
       'from_number' => '92000',
       'id' => '53',
       'isbn_group_id' => '6',
@@ -10918,8 +10918,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9299',
       'to_number' => '92999',
     ),
-    53 => 
-    array (
+    53 =>
+    array(
       'from_number' => '93000',
       'id' => '54',
       'isbn_group_id' => '6',
@@ -10928,8 +10928,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '94999',
       'to_number' => '94999',
     ),
-    54 => 
-    array (
+    54 =>
+    array(
       'from_number' => '95000',
       'id' => '55',
       'isbn_group_id' => '6',
@@ -10938,8 +10938,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9500999',
       'to_number' => '95009',
     ),
-    55 => 
-    array (
+    55 =>
+    array(
       'from_number' => '95010',
       'id' => '56',
       'isbn_group_id' => '6',
@@ -10948,8 +10948,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9799',
       'to_number' => '97999',
     ),
-    56 => 
-    array (
+    56 =>
+    array(
       'from_number' => '98000',
       'id' => '57',
       'isbn_group_id' => '6',
@@ -10958,8 +10958,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '98999',
       'to_number' => '98999',
     ),
-    57 => 
-    array (
+    57 =>
+    array(
       'from_number' => '99000',
       'id' => '58',
       'isbn_group_id' => '6',
@@ -10968,8 +10968,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9909999',
       'to_number' => '99099',
     ),
-    58 => 
-    array (
+    58 =>
+    array(
       'from_number' => '99100',
       'id' => '59',
       'isbn_group_id' => '6',
@@ -10978,8 +10978,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    59 => 
-    array (
+    59 =>
+    array(
       'from_number' => '0',
       'id' => '60',
       'isbn_group_id' => '7',
@@ -10988,8 +10988,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '09',
       'to_number' => '9999',
     ),
-    60 => 
-    array (
+    60 =>
+    array(
       'from_number' => '10000',
       'id' => '61',
       'isbn_group_id' => '7',
@@ -10998,8 +10998,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '499',
       'to_number' => '49999',
     ),
-    61 => 
-    array (
+    61 =>
+    array(
       'from_number' => '50000',
       'id' => '62',
       'isbn_group_id' => '7',
@@ -11008,8 +11008,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8999',
       'to_number' => '89999',
     ),
-    62 => 
-    array (
+    62 =>
+    array(
       'from_number' => '90000',
       'id' => '63',
       'isbn_group_id' => '7',
@@ -11018,8 +11018,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    63 => 
-    array (
+    63 =>
+    array(
       'from_number' => '0',
       'id' => '64',
       'isbn_group_id' => '8',
@@ -11028,8 +11028,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    64 => 
-    array (
+    64 =>
+    array(
       'from_number' => '20000',
       'id' => '65',
       'isbn_group_id' => '8',
@@ -11038,8 +11038,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    65 => 
-    array (
+    65 =>
+    array(
       'from_number' => '70000',
       'id' => '66',
       'isbn_group_id' => '8',
@@ -11048,8 +11048,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '7999',
       'to_number' => '79999',
     ),
-    66 => 
-    array (
+    66 =>
+    array(
       'from_number' => '80000',
       'id' => '67',
       'isbn_group_id' => '8',
@@ -11058,8 +11058,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '84999',
       'to_number' => '84999',
     ),
-    67 => 
-    array (
+    67 =>
+    array(
       'from_number' => '85000',
       'id' => '68',
       'isbn_group_id' => '8',
@@ -11068,8 +11068,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99',
       'to_number' => '99999',
     ),
-    68 => 
-    array (
+    68 =>
+    array(
       'from_number' => '0',
       'id' => '69',
       'isbn_group_id' => '9',
@@ -11078,8 +11078,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    69 => 
-    array (
+    69 =>
+    array(
       'from_number' => '20000',
       'id' => '70',
       'isbn_group_id' => '9',
@@ -11088,8 +11088,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    70 => 
-    array (
+    70 =>
+    array(
       'from_number' => '80000',
       'id' => '71',
       'isbn_group_id' => '9',
@@ -11098,8 +11098,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9499',
       'to_number' => '94999',
     ),
-    71 => 
-    array (
+    71 =>
+    array(
       'from_number' => '95000',
       'id' => '72',
       'isbn_group_id' => '9',
@@ -11108,8 +11108,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    72 => 
-    array (
+    72 =>
+    array(
       'from_number' => '0',
       'id' => '73',
       'isbn_group_id' => '10',
@@ -11118,8 +11118,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '04',
       'to_number' => '4999',
     ),
-    73 => 
-    array (
+    73 =>
+    array(
       'from_number' => '5000',
       'id' => '74',
       'isbn_group_id' => '10',
@@ -11128,8 +11128,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    74 => 
-    array (
+    74 =>
+    array(
       'from_number' => '50000',
       'id' => '75',
       'isbn_group_id' => '10',
@@ -11138,8 +11138,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    75 => 
-    array (
+    75 =>
+    array(
       'from_number' => '80000',
       'id' => '76',
       'isbn_group_id' => '10',
@@ -11148,8 +11148,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8999',
       'to_number' => '89999',
     ),
-    76 => 
-    array (
+    76 =>
+    array(
       'from_number' => '90000',
       'id' => '77',
       'isbn_group_id' => '10',
@@ -11158,8 +11158,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    77 => 
-    array (
+    77 =>
+    array(
       'from_number' => '0',
       'id' => '78',
       'isbn_group_id' => '11',
@@ -11168,8 +11168,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4',
       'to_number' => '49999',
     ),
-    78 => 
-    array (
+    78 =>
+    array(
       'from_number' => '50000',
       'id' => '79',
       'isbn_group_id' => '11',
@@ -11178,8 +11178,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    79 => 
-    array (
+    79 =>
+    array(
       'from_number' => '90000',
       'id' => '80',
       'isbn_group_id' => '11',
@@ -11188,8 +11188,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '979',
       'to_number' => '97999',
     ),
-    80 => 
-    array (
+    80 =>
+    array(
       'from_number' => '98000',
       'id' => '81',
       'isbn_group_id' => '11',
@@ -11198,8 +11198,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    81 => 
-    array (
+    81 =>
+    array(
       'from_number' => '1000',
       'id' => '82',
       'isbn_group_id' => '12',
@@ -11208,8 +11208,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '09',
       'to_number' => '9999',
     ),
-    82 => 
-    array (
+    82 =>
+    array(
       'from_number' => '10000',
       'id' => '83',
       'isbn_group_id' => '12',
@@ -11218,8 +11218,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '399',
       'to_number' => '39999',
     ),
-    83 => 
-    array (
+    83 =>
+    array(
       'from_number' => '40000',
       'id' => '84',
       'isbn_group_id' => '12',
@@ -11228,8 +11228,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '5999',
       'to_number' => '59999',
     ),
-    84 => 
-    array (
+    84 =>
+    array(
       'from_number' => '60000',
       'id' => '85',
       'isbn_group_id' => '12',
@@ -11238,8 +11238,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89999',
       'to_number' => '89999',
     ),
-    85 => 
-    array (
+    85 =>
+    array(
       'from_number' => '90000',
       'id' => '86',
       'isbn_group_id' => '12',
@@ -11248,8 +11248,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99',
       'to_number' => '99999',
     ),
-    86 => 
-    array (
+    86 =>
+    array(
       'from_number' => '0',
       'id' => '87',
       'isbn_group_id' => '13',
@@ -11258,8 +11258,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    87 => 
-    array (
+    87 =>
+    array(
       'from_number' => '10000',
       'id' => '88',
       'isbn_group_id' => '13',
@@ -11268,8 +11268,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    88 => 
-    array (
+    88 =>
+    array(
       'from_number' => '50000',
       'id' => '89',
       'isbn_group_id' => '13',
@@ -11278,8 +11278,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    89 => 
-    array (
+    89 =>
+    array(
       'from_number' => '80000',
       'id' => '90',
       'isbn_group_id' => '13',
@@ -11288,8 +11288,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9199',
       'to_number' => '91999',
     ),
-    90 => 
-    array (
+    90 =>
+    array(
       'from_number' => '92000',
       'id' => '91',
       'isbn_group_id' => '13',
@@ -11298,8 +11298,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    91 => 
-    array (
+    91 =>
+    array(
       'from_number' => '0',
       'id' => '92',
       'isbn_group_id' => '14',
@@ -11308,8 +11308,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    92 => 
-    array (
+    92 =>
+    array(
       'from_number' => '40000',
       'id' => '93',
       'isbn_group_id' => '14',
@@ -11318,8 +11318,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '749',
       'to_number' => '74999',
     ),
-    93 => 
-    array (
+    93 =>
+    array(
       'from_number' => '75000',
       'id' => '94',
       'isbn_group_id' => '14',
@@ -11328,8 +11328,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9499',
       'to_number' => '94999',
     ),
-    94 => 
-    array (
+    94 =>
+    array(
       'from_number' => '95000',
       'id' => '95',
       'isbn_group_id' => '14',
@@ -11338,8 +11338,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    95 => 
-    array (
+    95 =>
+    array(
       'from_number' => '0',
       'id' => '96',
       'isbn_group_id' => '15',
@@ -11348,8 +11348,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    96 => 
-    array (
+    96 =>
+    array(
       'from_number' => '10000',
       'id' => '97',
       'isbn_group_id' => '15',
@@ -11358,8 +11358,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    97 => 
-    array (
+    97 =>
+    array(
       'from_number' => '20000',
       'id' => '98',
       'isbn_group_id' => '15',
@@ -11368,8 +11368,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '449',
       'to_number' => '44999',
     ),
-    98 => 
-    array (
+    98 =>
+    array(
       'from_number' => '45000',
       'id' => '99',
       'isbn_group_id' => '15',
@@ -11378,8 +11378,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '6499',
       'to_number' => '64999',
     ),
-    99 => 
-    array (
+    99 =>
+    array(
       'from_number' => '65000',
       'id' => '100',
       'isbn_group_id' => '15',
@@ -11388,8 +11388,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '69999',
       'to_number' => '69999',
     ),
-    100 => 
-    array (
+    100 =>
+    array(
       'from_number' => '70000',
       'id' => '101',
       'isbn_group_id' => '15',
@@ -11398,8 +11398,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9',
       'to_number' => '99999',
     ),
-    101 => 
-    array (
+    101 =>
+    array(
       'from_number' => '0',
       'id' => '102',
       'isbn_group_id' => '16',
@@ -11408,8 +11408,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    102 => 
-    array (
+    102 =>
+    array(
       'from_number' => '40000',
       'id' => '103',
       'isbn_group_id' => '16',
@@ -11418,8 +11418,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    103 => 
-    array (
+    103 =>
+    array(
       'from_number' => '80000',
       'id' => '104',
       'isbn_group_id' => '16',
@@ -11428,8 +11428,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9499',
       'to_number' => '94999',
     ),
-    104 => 
-    array (
+    104 =>
+    array(
       'from_number' => '95000',
       'id' => '105',
       'isbn_group_id' => '16',
@@ -11438,8 +11438,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    105 => 
-    array (
+    105 =>
+    array(
       'from_number' => '0',
       'id' => '106',
       'isbn_group_id' => '18',
@@ -11448,8 +11448,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '29',
       'to_number' => '29999',
     ),
-    106 => 
-    array (
+    106 =>
+    array(
       'from_number' => '30000',
       'id' => '107',
       'isbn_group_id' => '18',
@@ -11458,8 +11458,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '399',
       'to_number' => '39999',
     ),
-    107 => 
-    array (
+    107 =>
+    array(
       'from_number' => '40000',
       'id' => '108',
       'isbn_group_id' => '18',
@@ -11468,8 +11468,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4499',
       'to_number' => '44999',
     ),
-    108 => 
-    array (
+    108 =>
+    array(
       'from_number' => '45000',
       'id' => '109',
       'isbn_group_id' => '18',
@@ -11478,8 +11478,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49999',
       'to_number' => '49999',
     ),
-    109 => 
-    array (
+    109 =>
+    array(
       'from_number' => '50000',
       'id' => '110',
       'isbn_group_id' => '18',
@@ -11488,8 +11488,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99',
       'to_number' => '99999',
     ),
-    110 => 
-    array (
+    110 =>
+    array(
       'from_number' => '0',
       'id' => '111',
       'isbn_group_id' => '19',
@@ -11498,8 +11498,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9',
       'to_number' => '99999',
     ),
-    111 => 
-    array (
+    111 =>
+    array(
       'from_number' => '0',
       'id' => '112',
       'isbn_group_id' => '20',
@@ -11508,8 +11508,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    112 => 
-    array (
+    112 =>
+    array(
       'from_number' => '40000',
       'id' => '113',
       'isbn_group_id' => '20',
@@ -11518,8 +11518,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    113 => 
-    array (
+    113 =>
+    array(
       'from_number' => '80000',
       'id' => '114',
       'isbn_group_id' => '20',
@@ -11528,8 +11528,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9499',
       'to_number' => '94999',
     ),
-    114 => 
-    array (
+    114 =>
+    array(
       'from_number' => '95000',
       'id' => '115',
       'isbn_group_id' => '20',
@@ -11538,8 +11538,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    115 => 
-    array (
+    115 =>
+    array(
       'from_number' => '0',
       'id' => '116',
       'isbn_group_id' => '21',
@@ -11548,8 +11548,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '09',
       'to_number' => '9999',
     ),
-    116 => 
-    array (
+    116 =>
+    array(
       'from_number' => '10000',
       'id' => '117',
       'isbn_group_id' => '21',
@@ -11558,8 +11558,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '499',
       'to_number' => '49999',
     ),
-    117 => 
-    array (
+    117 =>
+    array(
       'from_number' => '50000',
       'id' => '118',
       'isbn_group_id' => '21',
@@ -11568,8 +11568,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '7999',
       'to_number' => '79999',
     ),
-    118 => 
-    array (
+    118 =>
+    array(
       'from_number' => '80000',
       'id' => '119',
       'isbn_group_id' => '21',
@@ -11578,8 +11578,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89999',
       'to_number' => '89999',
     ),
-    119 => 
-    array (
+    119 =>
+    array(
       'from_number' => '0',
       'id' => '120',
       'isbn_group_id' => '22',
@@ -11588,8 +11588,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    120 => 
-    array (
+    120 =>
+    array(
       'from_number' => '20000',
       'id' => '121',
       'isbn_group_id' => '22',
@@ -11598,8 +11598,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    121 => 
-    array (
+    121 =>
+    array(
       'from_number' => '70000',
       'id' => '122',
       'isbn_group_id' => '22',
@@ -11608,8 +11608,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8999',
       'to_number' => '89999',
     ),
-    122 => 
-    array (
+    122 =>
+    array(
       'from_number' => '90000',
       'id' => '123',
       'isbn_group_id' => '22',
@@ -11618,8 +11618,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    123 => 
-    array (
+    123 =>
+    array(
       'from_number' => '0',
       'id' => '124',
       'isbn_group_id' => '23',
@@ -11628,8 +11628,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    124 => 
-    array (
+    124 =>
+    array(
       'from_number' => '50000',
       'id' => '125',
       'isbn_group_id' => '23',
@@ -11638,8 +11638,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    125 => 
-    array (
+    125 =>
+    array(
       'from_number' => '70000',
       'id' => '126',
       'isbn_group_id' => '23',
@@ -11648,8 +11648,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8999',
       'to_number' => '89999',
     ),
-    126 => 
-    array (
+    126 =>
+    array(
       'from_number' => '90000',
       'id' => '127',
       'isbn_group_id' => '23',
@@ -11658,8 +11658,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    127 => 
-    array (
+    127 =>
+    array(
       'from_number' => '0',
       'id' => '128',
       'isbn_group_id' => '24',
@@ -11668,8 +11668,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '09',
       'to_number' => '9999',
     ),
-    128 => 
-    array (
+    128 =>
+    array(
       'from_number' => '10000',
       'id' => '129',
       'isbn_group_id' => '24',
@@ -11678,8 +11678,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '499',
       'to_number' => '49999',
     ),
-    129 => 
-    array (
+    129 =>
+    array(
       'from_number' => '50000',
       'id' => '130',
       'isbn_group_id' => '24',
@@ -11688,8 +11688,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '7999',
       'to_number' => '79999',
     ),
-    130 => 
-    array (
+    130 =>
+    array(
       'from_number' => '80000',
       'id' => '131',
       'isbn_group_id' => '24',
@@ -11698,8 +11698,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89999',
       'to_number' => '89999',
     ),
-    131 => 
-    array (
+    131 =>
+    array(
       'from_number' => '90000',
       'id' => '132',
       'isbn_group_id' => '24',
@@ -11708,8 +11708,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999999',
       'to_number' => '99999',
     ),
-    132 => 
-    array (
+    132 =>
+    array(
       'from_number' => '0',
       'id' => '133',
       'isbn_group_id' => '25',
@@ -11718,8 +11718,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    133 => 
-    array (
+    133 =>
+    array(
       'from_number' => '20000',
       'id' => '134',
       'isbn_group_id' => '25',
@@ -11728,8 +11728,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    134 => 
-    array (
+    134 =>
+    array(
       'from_number' => '70000',
       'id' => '135',
       'isbn_group_id' => '25',
@@ -11738,8 +11738,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8499',
       'to_number' => '84999',
     ),
-    135 => 
-    array (
+    135 =>
+    array(
       'from_number' => '85000',
       'id' => '136',
       'isbn_group_id' => '25',
@@ -11748,8 +11748,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89999',
       'to_number' => '89999',
     ),
-    136 => 
-    array (
+    136 =>
+    array(
       'from_number' => '90000',
       'id' => '137',
       'isbn_group_id' => '25',
@@ -11758,8 +11758,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999999',
       'to_number' => '99999',
     ),
-    137 => 
-    array (
+    137 =>
+    array(
       'from_number' => '0',
       'id' => '138',
       'isbn_group_id' => '26',
@@ -11768,8 +11768,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    138 => 
-    array (
+    138 =>
+    array(
       'from_number' => '20000',
       'id' => '139',
       'isbn_group_id' => '26',
@@ -11778,8 +11778,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    139 => 
-    array (
+    139 =>
+    array(
       'from_number' => '70000',
       'id' => '140',
       'isbn_group_id' => '26',
@@ -11788,8 +11788,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8499',
       'to_number' => '84999',
     ),
-    140 => 
-    array (
+    140 =>
+    array(
       'from_number' => '85000',
       'id' => '141',
       'isbn_group_id' => '26',
@@ -11798,8 +11798,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89999',
       'to_number' => '89999',
     ),
-    141 => 
-    array (
+    141 =>
+    array(
       'from_number' => '90000',
       'id' => '142',
       'isbn_group_id' => '26',
@@ -11808,8 +11808,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999999',
       'to_number' => '99999',
     ),
-    142 => 
-    array (
+    142 =>
+    array(
       'from_number' => '0',
       'id' => '143',
       'isbn_group_id' => '27',
@@ -11818,8 +11818,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    143 => 
-    array (
+    143 =>
+    array(
       'from_number' => '20000',
       'id' => '144',
       'isbn_group_id' => '27',
@@ -11828,8 +11828,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    144 => 
-    array (
+    144 =>
+    array(
       'from_number' => '70000',
       'id' => '145',
       'isbn_group_id' => '27',
@@ -11838,8 +11838,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8999',
       'to_number' => '89999',
     ),
-    145 => 
-    array (
+    145 =>
+    array(
       'from_number' => '90000',
       'id' => '146',
       'isbn_group_id' => '27',
@@ -11848,8 +11848,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '98999',
       'to_number' => '98999',
     ),
-    146 => 
-    array (
+    146 =>
+    array(
       'from_number' => '99000',
       'id' => '147',
       'isbn_group_id' => '27',
@@ -11858,8 +11858,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999999',
       'to_number' => '99999',
     ),
-    147 => 
-    array (
+    147 =>
+    array(
       'from_number' => '0',
       'id' => '148',
       'isbn_group_id' => '28',
@@ -11868,8 +11868,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    148 => 
-    array (
+    148 =>
+    array(
       'from_number' => '20000',
       'id' => '149',
       'isbn_group_id' => '28',
@@ -11878,8 +11878,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '599',
       'to_number' => '59999',
     ),
-    149 => 
-    array (
+    149 =>
+    array(
       'from_number' => '60000',
       'id' => '150',
       'isbn_group_id' => '28',
@@ -11888,8 +11888,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '69999',
       'to_number' => '69999',
     ),
-    150 => 
-    array (
+    150 =>
+    array(
       'from_number' => '70000',
       'id' => '151',
       'isbn_group_id' => '28',
@@ -11898,8 +11898,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8499',
       'to_number' => '84999',
     ),
-    151 => 
-    array (
+    151 =>
+    array(
       'from_number' => '85000',
       'id' => '152',
       'isbn_group_id' => '28',
@@ -11908,8 +11908,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89999',
       'to_number' => '89999',
     ),
-    152 => 
-    array (
+    152 =>
+    array(
       'from_number' => '90000',
       'id' => '153',
       'isbn_group_id' => '28',
@@ -11918,8 +11918,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999999',
       'to_number' => '99999',
     ),
-    153 => 
-    array (
+    153 =>
+    array(
       'from_number' => '0',
       'id' => '154',
       'isbn_group_id' => '29',
@@ -11928,8 +11928,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '14',
       'to_number' => '14999',
     ),
-    154 => 
-    array (
+    154 =>
+    array(
       'from_number' => '15000',
       'id' => '155',
       'isbn_group_id' => '29',
@@ -11938,8 +11938,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19999',
       'to_number' => '19999',
     ),
-    155 => 
-    array (
+    155 =>
+    array(
       'from_number' => '20000',
       'id' => '156',
       'isbn_group_id' => '29',
@@ -11948,8 +11948,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    156 => 
-    array (
+    156 =>
+    array(
       'from_number' => '70000',
       'id' => '157',
       'isbn_group_id' => '29',
@@ -11958,8 +11958,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8499',
       'to_number' => '84999',
     ),
-    157 => 
-    array (
+    157 =>
+    array(
       'from_number' => '85000',
       'id' => '158',
       'isbn_group_id' => '29',
@@ -11968,8 +11968,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89999',
       'to_number' => '89999',
     ),
-    158 => 
-    array (
+    158 =>
+    array(
       'from_number' => '90000',
       'id' => '159',
       'isbn_group_id' => '29',
@@ -11978,8 +11978,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9199',
       'to_number' => '91999',
     ),
-    159 => 
-    array (
+    159 =>
+    array(
       'from_number' => '92000',
       'id' => '160',
       'isbn_group_id' => '29',
@@ -11988,8 +11988,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '923999',
       'to_number' => '92399',
     ),
-    160 => 
-    array (
+    160 =>
+    array(
       'from_number' => '92400',
       'id' => '161',
       'isbn_group_id' => '29',
@@ -11998,8 +11998,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '92999',
       'to_number' => '92999',
     ),
-    161 => 
-    array (
+    161 =>
+    array(
       'from_number' => '93000',
       'id' => '162',
       'isbn_group_id' => '29',
@@ -12008,8 +12008,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '949999',
       'to_number' => '94999',
     ),
-    162 => 
-    array (
+    162 =>
+    array(
       'from_number' => '95000',
       'id' => '163',
       'isbn_group_id' => '29',
@@ -12018,8 +12018,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '96999',
       'to_number' => '96999',
     ),
-    163 => 
-    array (
+    163 =>
+    array(
       'from_number' => '97000',
       'id' => '164',
       'isbn_group_id' => '29',
@@ -12028,8 +12028,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    164 => 
-    array (
+    164 =>
+    array(
       'from_number' => '0',
       'id' => '165',
       'isbn_group_id' => '30',
@@ -12038,8 +12038,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    165 => 
-    array (
+    165 =>
+    array(
       'from_number' => '20000',
       'id' => '166',
       'isbn_group_id' => '30',
@@ -12048,8 +12048,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '599',
       'to_number' => '59999',
     ),
-    166 => 
-    array (
+    166 =>
+    array(
       'from_number' => '60000',
       'id' => '167',
       'isbn_group_id' => '30',
@@ -12058,8 +12058,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '69999',
       'to_number' => '69999',
     ),
-    167 => 
-    array (
+    167 =>
+    array(
       'from_number' => '70000',
       'id' => '168',
       'isbn_group_id' => '30',
@@ -12068,8 +12068,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8499',
       'to_number' => '84999',
     ),
-    168 => 
-    array (
+    168 =>
+    array(
       'from_number' => '85000',
       'id' => '169',
       'isbn_group_id' => '30',
@@ -12078,8 +12078,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89999',
       'to_number' => '89999',
     ),
-    169 => 
-    array (
+    169 =>
+    array(
       'from_number' => '90000',
       'id' => '170',
       'isbn_group_id' => '30',
@@ -12088,8 +12088,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '979999',
       'to_number' => '97999',
     ),
-    170 => 
-    array (
+    170 =>
+    array(
       'from_number' => '98000',
       'id' => '171',
       'isbn_group_id' => '30',
@@ -12098,8 +12098,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    171 => 
-    array (
+    171 =>
+    array(
       'from_number' => '0',
       'id' => '172',
       'isbn_group_id' => '31',
@@ -12108,8 +12108,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '29',
       'to_number' => '29999',
     ),
-    172 => 
-    array (
+    172 =>
+    array(
       'from_number' => '30000',
       'id' => '173',
       'isbn_group_id' => '31',
@@ -12118,8 +12118,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '599',
       'to_number' => '59999',
     ),
-    173 => 
-    array (
+    173 =>
+    array(
       'from_number' => '60000',
       'id' => '174',
       'isbn_group_id' => '31',
@@ -12128,8 +12128,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '7999',
       'to_number' => '79999',
     ),
-    174 => 
-    array (
+    174 =>
+    array(
       'from_number' => '80000',
       'id' => '175',
       'isbn_group_id' => '31',
@@ -12138,8 +12138,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89999',
       'to_number' => '89999',
     ),
-    175 => 
-    array (
+    175 =>
+    array(
       'from_number' => '90000',
       'id' => '176',
       'isbn_group_id' => '31',
@@ -12148,8 +12148,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999999',
       'to_number' => '99999',
     ),
-    176 => 
-    array (
+    176 =>
+    array(
       'from_number' => '0',
       'id' => '177',
       'isbn_group_id' => '32',
@@ -12158,8 +12158,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '29',
       'to_number' => '29999',
     ),
-    177 => 
-    array (
+    177 =>
+    array(
       'from_number' => '40000',
       'id' => '178',
       'isbn_group_id' => '32',
@@ -12168,8 +12168,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '649',
       'to_number' => '64999',
     ),
-    178 => 
-    array (
+    178 =>
+    array(
       'from_number' => '70000',
       'id' => '179',
       'isbn_group_id' => '32',
@@ -12178,8 +12178,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '7999',
       'to_number' => '79999',
     ),
-    179 => 
-    array (
+    179 =>
+    array(
       'from_number' => '85000',
       'id' => '180',
       'isbn_group_id' => '32',
@@ -12188,8 +12188,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '94999',
       'to_number' => '94999',
     ),
-    180 => 
-    array (
+    180 =>
+    array(
       'from_number' => '97000',
       'id' => '181',
       'isbn_group_id' => '32',
@@ -12198,8 +12198,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999999',
       'to_number' => '99999',
     ),
-    181 => 
-    array (
+    181 =>
+    array(
       'from_number' => '0',
       'id' => '182',
       'isbn_group_id' => '33',
@@ -12208,8 +12208,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    182 => 
-    array (
+    182 =>
+    array(
       'from_number' => '20000',
       'id' => '183',
       'isbn_group_id' => '33',
@@ -12218,8 +12218,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '599',
       'to_number' => '59999',
     ),
-    183 => 
-    array (
+    183 =>
+    array(
       'from_number' => '60000',
       'id' => '184',
       'isbn_group_id' => '33',
@@ -12228,8 +12228,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8499',
       'to_number' => '84999',
     ),
-    184 => 
-    array (
+    184 =>
+    array(
       'from_number' => '85000',
       'id' => '185',
       'isbn_group_id' => '33',
@@ -12238,8 +12238,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89999',
       'to_number' => '89999',
     ),
-    185 => 
-    array (
+    185 =>
+    array(
       'from_number' => '90000',
       'id' => '186',
       'isbn_group_id' => '33',
@@ -12248,8 +12248,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '949999',
       'to_number' => '94999',
     ),
-    186 => 
-    array (
+    186 =>
+    array(
       'from_number' => '95000',
       'id' => '187',
       'isbn_group_id' => '33',
@@ -12258,8 +12258,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    187 => 
-    array (
+    187 =>
+    array(
       'from_number' => '0',
       'id' => '188',
       'isbn_group_id' => '34',
@@ -12268,8 +12268,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '24',
       'to_number' => '24999',
     ),
-    188 => 
-    array (
+    188 =>
+    array(
       'from_number' => '25000',
       'id' => '189',
       'isbn_group_id' => '34',
@@ -12278,8 +12278,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '549',
       'to_number' => '54999',
     ),
-    189 => 
-    array (
+    189 =>
+    array(
       'from_number' => '55000',
       'id' => '190',
       'isbn_group_id' => '34',
@@ -12288,8 +12288,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8499',
       'to_number' => '84999',
     ),
-    190 => 
-    array (
+    190 =>
+    array(
       'from_number' => '85000',
       'id' => '191',
       'isbn_group_id' => '34',
@@ -12298,8 +12298,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '94999',
       'to_number' => '94999',
     ),
-    191 => 
-    array (
+    191 =>
+    array(
       'from_number' => '95000',
       'id' => '192',
       'isbn_group_id' => '34',
@@ -12308,8 +12308,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '969999',
       'to_number' => '96999',
     ),
-    192 => 
-    array (
+    192 =>
+    array(
       'from_number' => '97000',
       'id' => '193',
       'isbn_group_id' => '34',
@@ -12318,8 +12318,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '98999',
       'to_number' => '98999',
     ),
-    193 => 
-    array (
+    193 =>
+    array(
       'from_number' => '99000',
       'id' => '194',
       'isbn_group_id' => '34',
@@ -12328,8 +12328,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    194 => 
-    array (
+    194 =>
+    array(
       'from_number' => '0',
       'id' => '195',
       'isbn_group_id' => '35',
@@ -12338,8 +12338,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    195 => 
-    array (
+    195 =>
+    array(
       'from_number' => '20000',
       'id' => '196',
       'isbn_group_id' => '35',
@@ -12348,8 +12348,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '499',
       'to_number' => '49999',
     ),
-    196 => 
-    array (
+    196 =>
+    array(
       'from_number' => '50000',
       'id' => '197',
       'isbn_group_id' => '35',
@@ -12358,8 +12358,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '6999',
       'to_number' => '69999',
     ),
-    197 => 
-    array (
+    197 =>
+    array(
       'from_number' => '70000',
       'id' => '198',
       'isbn_group_id' => '35',
@@ -12368,8 +12368,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79999',
       'to_number' => '79999',
     ),
-    198 => 
-    array (
+    198 =>
+    array(
       'from_number' => '80000',
       'id' => '199',
       'isbn_group_id' => '35',
@@ -12378,8 +12378,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '849999',
       'to_number' => '84999',
     ),
-    199 => 
-    array (
+    199 =>
+    array(
       'from_number' => '85000',
       'id' => '200',
       'isbn_group_id' => '35',
@@ -12388,8 +12388,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8999',
       'to_number' => '89999',
     ),
-    200 => 
-    array (
+    200 =>
+    array(
       'from_number' => '90000',
       'id' => '201',
       'isbn_group_id' => '35',
@@ -12398,8 +12398,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '90',
       'to_number' => '90999',
     ),
-    201 => 
-    array (
+    201 =>
+    array(
       'from_number' => '91000',
       'id' => '202',
       'isbn_group_id' => '35',
@@ -12408,8 +12408,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '939999',
       'to_number' => '93999',
     ),
-    202 => 
-    array (
+    202 =>
+    array(
       'from_number' => '94000',
       'id' => '203',
       'isbn_group_id' => '35',
@@ -12418,8 +12418,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '94',
       'to_number' => '94999',
     ),
-    203 => 
-    array (
+    203 =>
+    array(
       'from_number' => '95000',
       'id' => '204',
       'isbn_group_id' => '35',
@@ -12428,8 +12428,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999999',
       'to_number' => '99999',
     ),
-    204 => 
-    array (
+    204 =>
+    array(
       'from_number' => '0',
       'id' => '205',
       'isbn_group_id' => '36',
@@ -12438,8 +12438,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    205 => 
-    array (
+    205 =>
+    array(
       'from_number' => '20000',
       'id' => '206',
       'isbn_group_id' => '36',
@@ -12448,8 +12448,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    206 => 
-    array (
+    206 =>
+    array(
       'from_number' => '50000',
       'id' => '207',
       'isbn_group_id' => '36',
@@ -12458,8 +12458,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '649',
       'to_number' => '64999',
     ),
-    207 => 
-    array (
+    207 =>
+    array(
       'from_number' => '70000',
       'id' => '208',
       'isbn_group_id' => '36',
@@ -12468,8 +12468,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '7999',
       'to_number' => '79999',
     ),
-    208 => 
-    array (
+    208 =>
+    array(
       'from_number' => '85000',
       'id' => '209',
       'isbn_group_id' => '36',
@@ -12478,8 +12478,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '94999',
       'to_number' => '94999',
     ),
-    209 => 
-    array (
+    209 =>
+    array(
       'from_number' => '97000',
       'id' => '210',
       'isbn_group_id' => '36',
@@ -12488,8 +12488,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999999',
       'to_number' => '99999',
     ),
-    210 => 
-    array (
+    210 =>
+    array(
       'from_number' => '0',
       'id' => '211',
       'isbn_group_id' => '37',
@@ -12498,8 +12498,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '5',
       'to_number' => '59999',
     ),
-    211 => 
-    array (
+    211 =>
+    array(
       'from_number' => '60000',
       'id' => '212',
       'isbn_group_id' => '37',
@@ -12508,8 +12508,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    212 => 
-    array (
+    212 =>
+    array(
       'from_number' => '80000',
       'id' => '213',
       'isbn_group_id' => '37',
@@ -12518,8 +12518,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    213 => 
-    array (
+    213 =>
+    array(
       'from_number' => '90000',
       'id' => '214',
       'isbn_group_id' => '37',
@@ -12528,8 +12528,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9499',
       'to_number' => '94999',
     ),
-    214 => 
-    array (
+    214 =>
+    array(
       'from_number' => '95000',
       'id' => '215',
       'isbn_group_id' => '37',
@@ -12538,8 +12538,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '98999',
       'to_number' => '98999',
     ),
-    215 => 
-    array (
+    215 =>
+    array(
       'from_number' => '99000',
       'id' => '216',
       'isbn_group_id' => '37',
@@ -12548,8 +12548,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999999',
       'to_number' => '99999',
     ),
-    216 => 
-    array (
+    216 =>
+    array(
       'from_number' => '0',
       'id' => '217',
       'isbn_group_id' => '38',
@@ -12558,8 +12558,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '09',
       'to_number' => '9999',
     ),
-    217 => 
-    array (
+    217 =>
+    array(
       'from_number' => '10000',
       'id' => '218',
       'isbn_group_id' => '38',
@@ -12568,8 +12568,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '499',
       'to_number' => '49999',
     ),
-    218 => 
-    array (
+    218 =>
+    array(
       'from_number' => '50000',
       'id' => '219',
       'isbn_group_id' => '38',
@@ -12578,8 +12578,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '7999',
       'to_number' => '79999',
     ),
-    219 => 
-    array (
+    219 =>
+    array(
       'from_number' => '80000',
       'id' => '220',
       'isbn_group_id' => '38',
@@ -12588,8 +12588,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '94999',
       'to_number' => '94999',
     ),
-    220 => 
-    array (
+    220 =>
+    array(
       'from_number' => '95000',
       'id' => '221',
       'isbn_group_id' => '38',
@@ -12598,8 +12598,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999999',
       'to_number' => '99999',
     ),
-    221 => 
-    array (
+    221 =>
+    array(
       'from_number' => '0',
       'id' => '222',
       'isbn_group_id' => '39',
@@ -12608,8 +12608,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '599',
       'to_number' => '59999',
     ),
-    222 => 
-    array (
+    222 =>
+    array(
       'from_number' => '60000',
       'id' => '223',
       'isbn_group_id' => '39',
@@ -12618,8 +12618,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8999',
       'to_number' => '89999',
     ),
-    223 => 
-    array (
+    223 =>
+    array(
       'from_number' => '90000',
       'id' => '224',
       'isbn_group_id' => '39',
@@ -12628,8 +12628,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    224 => 
-    array (
+    224 =>
+    array(
       'from_number' => '0',
       'id' => '225',
       'isbn_group_id' => '40',
@@ -12638,8 +12638,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    225 => 
-    array (
+    225 =>
+    array(
       'from_number' => '50000',
       'id' => '226',
       'isbn_group_id' => '40',
@@ -12648,8 +12648,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    226 => 
-    array (
+    226 =>
+    array(
       'from_number' => '90000',
       'id' => '227',
       'isbn_group_id' => '40',
@@ -12658,8 +12658,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9899',
       'to_number' => '98999',
     ),
-    227 => 
-    array (
+    227 =>
+    array(
       'from_number' => '99000',
       'id' => '228',
       'isbn_group_id' => '40',
@@ -12668,8 +12668,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    228 => 
-    array (
+    228 =>
+    array(
       'from_number' => '0',
       'id' => '229',
       'isbn_group_id' => '41',
@@ -12678,8 +12678,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    229 => 
-    array (
+    229 =>
+    array(
       'from_number' => '20000',
       'id' => '230',
       'isbn_group_id' => '41',
@@ -12688,8 +12688,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '54',
       'to_number' => '54999',
     ),
-    230 => 
-    array (
+    230 =>
+    array(
       'from_number' => '55000',
       'id' => '231',
       'isbn_group_id' => '41',
@@ -12698,8 +12698,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '889',
       'to_number' => '88999',
     ),
-    231 => 
-    array (
+    231 =>
+    array(
       'from_number' => '89000',
       'id' => '232',
       'isbn_group_id' => '41',
@@ -12708,8 +12708,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9499',
       'to_number' => '94999',
     ),
-    232 => 
-    array (
+    232 =>
+    array(
       'from_number' => '95000',
       'id' => '233',
       'isbn_group_id' => '41',
@@ -12718,8 +12718,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    233 => 
-    array (
+    233 =>
+    array(
       'from_number' => '0',
       'id' => '234',
       'isbn_group_id' => '42',
@@ -12728,8 +12728,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    234 => 
-    array (
+    234 =>
+    array(
       'from_number' => '20000',
       'id' => '235',
       'isbn_group_id' => '42',
@@ -12738,8 +12738,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '499',
       'to_number' => '49999',
     ),
-    235 => 
-    array (
+    235 =>
+    array(
       'from_number' => '50000',
       'id' => '236',
       'isbn_group_id' => '42',
@@ -12748,8 +12748,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '5999',
       'to_number' => '59999',
     ),
-    236 => 
-    array (
+    236 =>
+    array(
       'from_number' => '60000',
       'id' => '237',
       'isbn_group_id' => '42',
@@ -12758,8 +12758,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '65',
       'to_number' => '65999',
     ),
-    237 => 
-    array (
+    237 =>
+    array(
       'from_number' => '66000',
       'id' => '238',
       'isbn_group_id' => '42',
@@ -12768,8 +12768,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '6699',
       'to_number' => '66999',
     ),
-    238 => 
-    array (
+    238 =>
+    array(
       'from_number' => '67000',
       'id' => '239',
       'isbn_group_id' => '42',
@@ -12778,8 +12778,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '69999',
       'to_number' => '69999',
     ),
-    239 => 
-    array (
+    239 =>
+    array(
       'from_number' => '70000',
       'id' => '240',
       'isbn_group_id' => '42',
@@ -12788,8 +12788,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '7999',
       'to_number' => '79999',
     ),
-    240 => 
-    array (
+    240 =>
+    array(
       'from_number' => '80000',
       'id' => '241',
       'isbn_group_id' => '42',
@@ -12798,8 +12798,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '94',
       'to_number' => '94999',
     ),
-    241 => 
-    array (
+    241 =>
+    array(
       'from_number' => '95000',
       'id' => '242',
       'isbn_group_id' => '42',
@@ -12808,8 +12808,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9899',
       'to_number' => '98999',
     ),
-    242 => 
-    array (
+    242 =>
+    array(
       'from_number' => '99000',
       'id' => '243',
       'isbn_group_id' => '42',
@@ -12818,8 +12818,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    243 => 
-    array (
+    243 =>
+    array(
       'from_number' => '0',
       'id' => '244',
       'isbn_group_id' => '43',
@@ -12828,8 +12828,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    244 => 
-    array (
+    244 =>
+    array(
       'from_number' => '10000',
       'id' => '245',
       'isbn_group_id' => '43',
@@ -12838,8 +12838,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '14',
       'to_number' => '14999',
     ),
-    245 => 
-    array (
+    245 =>
+    array(
       'from_number' => '15000',
       'id' => '246',
       'isbn_group_id' => '43',
@@ -12848,8 +12848,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '549',
       'to_number' => '54999',
     ),
-    246 => 
-    array (
+    246 =>
+    array(
       'from_number' => '55000',
       'id' => '247',
       'isbn_group_id' => '43',
@@ -12858,8 +12858,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59999',
       'to_number' => '59999',
     ),
-    247 => 
-    array (
+    247 =>
+    array(
       'from_number' => '60000',
       'id' => '248',
       'isbn_group_id' => '43',
@@ -12868,8 +12868,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9499',
       'to_number' => '94999',
     ),
-    248 => 
-    array (
+    248 =>
+    array(
       'from_number' => '95000',
       'id' => '249',
       'isbn_group_id' => '43',
@@ -12878,8 +12878,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    249 => 
-    array (
+    249 =>
+    array(
       'from_number' => '0',
       'id' => '250',
       'isbn_group_id' => '44',
@@ -12888,8 +12888,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '28',
       'to_number' => '28999',
     ),
-    250 => 
-    array (
+    250 =>
+    array(
       'from_number' => '29000',
       'id' => '251',
       'isbn_group_id' => '44',
@@ -12898,8 +12898,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2999',
       'to_number' => '29999',
     ),
-    251 => 
-    array (
+    251 =>
+    array(
       'from_number' => '30000',
       'id' => '252',
       'isbn_group_id' => '44',
@@ -12908,8 +12908,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    252 => 
-    array (
+    252 =>
+    array(
       'from_number' => '80000',
       'id' => '253',
       'isbn_group_id' => '44',
@@ -12918,8 +12918,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8999',
       'to_number' => '89999',
     ),
-    253 => 
-    array (
+    253 =>
+    array(
       'from_number' => '90000',
       'id' => '254',
       'isbn_group_id' => '44',
@@ -12928,8 +12928,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '92999',
       'to_number' => '92999',
     ),
-    254 => 
-    array (
+    254 =>
+    array(
       'from_number' => '93000',
       'id' => '255',
       'isbn_group_id' => '44',
@@ -12938,8 +12938,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    255 => 
-    array (
+    255 =>
+    array(
       'from_number' => '0',
       'id' => '256',
       'isbn_group_id' => '45',
@@ -12948,8 +12948,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1999',
       'to_number' => '19999',
     ),
-    256 => 
-    array (
+    256 =>
+    array(
       'from_number' => '20000',
       'id' => '257',
       'isbn_group_id' => '45',
@@ -12958,8 +12958,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    257 => 
-    array (
+    257 =>
+    array(
       'from_number' => '50000',
       'id' => '258',
       'isbn_group_id' => '45',
@@ -12968,8 +12968,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '54999',
       'to_number' => '54999',
     ),
-    258 => 
-    array (
+    258 =>
+    array(
       'from_number' => '55000',
       'id' => '259',
       'isbn_group_id' => '45',
@@ -12978,8 +12978,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    259 => 
-    array (
+    259 =>
+    array(
       'from_number' => '80000',
       'id' => '260',
       'isbn_group_id' => '45',
@@ -12988,8 +12988,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9499',
       'to_number' => '94999',
     ),
-    260 => 
-    array (
+    260 =>
+    array(
       'from_number' => '95000',
       'id' => '261',
       'isbn_group_id' => '45',
@@ -12998,8 +12998,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    261 => 
-    array (
+    261 =>
+    array(
       'from_number' => '0',
       'id' => '262',
       'isbn_group_id' => '46',
@@ -13008,8 +13008,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    262 => 
-    array (
+    262 =>
+    array(
       'from_number' => '20000',
       'id' => '263',
       'isbn_group_id' => '46',
@@ -13018,8 +13018,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    263 => 
-    array (
+    263 =>
+    array(
       'from_number' => '70000',
       'id' => '264',
       'isbn_group_id' => '46',
@@ -13028,8 +13028,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    264 => 
-    array (
+    264 =>
+    array(
       'from_number' => '0',
       'id' => '265',
       'isbn_group_id' => '47',
@@ -13038,8 +13038,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '02',
       'to_number' => '2999',
     ),
-    265 => 
-    array (
+    265 =>
+    array(
       'from_number' => '3000',
       'id' => '266',
       'isbn_group_id' => '47',
@@ -13048,8 +13048,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0499',
       'to_number' => '4999',
     ),
-    266 => 
-    array (
+    266 =>
+    array(
       'from_number' => '5000',
       'id' => '267',
       'isbn_group_id' => '47',
@@ -13058,8 +13058,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    267 => 
-    array (
+    267 =>
+    array(
       'from_number' => '20000',
       'id' => '268',
       'isbn_group_id' => '47',
@@ -13068,8 +13068,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2099',
       'to_number' => '20999',
     ),
-    268 => 
-    array (
+    268 =>
+    array(
       'from_number' => '21000',
       'id' => '269',
       'isbn_group_id' => '47',
@@ -13078,8 +13078,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '27',
       'to_number' => '27999',
     ),
-    269 => 
-    array (
+    269 =>
+    array(
       'from_number' => '28000',
       'id' => '270',
       'isbn_group_id' => '47',
@@ -13088,8 +13088,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '30999',
       'to_number' => '30999',
     ),
-    270 => 
-    array (
+    270 =>
+    array(
       'from_number' => '31000',
       'id' => '271',
       'isbn_group_id' => '47',
@@ -13098,8 +13098,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '43',
       'to_number' => '43999',
     ),
-    271 => 
-    array (
+    271 =>
+    array(
       'from_number' => '44000',
       'id' => '272',
       'isbn_group_id' => '47',
@@ -13108,8 +13108,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '819',
       'to_number' => '81999',
     ),
-    272 => 
-    array (
+    272 =>
+    array(
       'from_number' => '82000',
       'id' => '273',
       'isbn_group_id' => '47',
@@ -13118,8 +13118,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9699',
       'to_number' => '96999',
     ),
-    273 => 
-    array (
+    273 =>
+    array(
       'from_number' => '97000',
       'id' => '274',
       'isbn_group_id' => '47',
@@ -13128,8 +13128,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    274 => 
-    array (
+    274 =>
+    array(
       'from_number' => '0',
       'id' => '275',
       'isbn_group_id' => '48',
@@ -13138,8 +13138,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '56',
       'to_number' => '56999',
     ),
-    275 => 
-    array (
+    275 =>
+    array(
       'from_number' => '57000',
       'id' => '276',
       'isbn_group_id' => '48',
@@ -13148,8 +13148,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59999',
       'to_number' => '59999',
     ),
-    276 => 
-    array (
+    276 =>
+    array(
       'from_number' => '60000',
       'id' => '277',
       'isbn_group_id' => '48',
@@ -13158,8 +13158,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    277 => 
-    array (
+    277 =>
+    array(
       'from_number' => '80000',
       'id' => '278',
       'isbn_group_id' => '48',
@@ -13168,8 +13168,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9499',
       'to_number' => '94999',
     ),
-    278 => 
-    array (
+    278 =>
+    array(
       'from_number' => '95000',
       'id' => '279',
       'isbn_group_id' => '48',
@@ -13178,8 +13178,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    279 => 
-    array (
+    279 =>
+    array(
       'from_number' => '0',
       'id' => '280',
       'isbn_group_id' => '49',
@@ -13188,8 +13188,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    280 => 
-    array (
+    280 =>
+    array(
       'from_number' => '20000',
       'id' => '281',
       'isbn_group_id' => '49',
@@ -13198,8 +13198,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    281 => 
-    array (
+    281 =>
+    array(
       'from_number' => '70000',
       'id' => '282',
       'isbn_group_id' => '49',
@@ -13208,8 +13208,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8499',
       'to_number' => '84999',
     ),
-    282 => 
-    array (
+    282 =>
+    array(
       'from_number' => '85000',
       'id' => '283',
       'isbn_group_id' => '49',
@@ -13218,8 +13218,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    283 => 
-    array (
+    283 =>
+    array(
       'from_number' => '0',
       'id' => '284',
       'isbn_group_id' => '50',
@@ -13228,8 +13228,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    284 => 
-    array (
+    284 =>
+    array(
       'from_number' => '20000',
       'id' => '285',
       'isbn_group_id' => '50',
@@ -13238,8 +13238,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '659',
       'to_number' => '65999',
     ),
-    285 => 
-    array (
+    285 =>
+    array(
       'from_number' => '66000',
       'id' => '286',
       'isbn_group_id' => '50',
@@ -13248,8 +13248,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '6899',
       'to_number' => '68999',
     ),
-    286 => 
-    array (
+    286 =>
+    array(
       'from_number' => '69000',
       'id' => '287',
       'isbn_group_id' => '50',
@@ -13258,8 +13258,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    287 => 
-    array (
+    287 =>
+    array(
       'from_number' => '70000',
       'id' => '288',
       'isbn_group_id' => '50',
@@ -13268,8 +13268,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8499',
       'to_number' => '84999',
     ),
-    288 => 
-    array (
+    288 =>
+    array(
       'from_number' => '85000',
       'id' => '289',
       'isbn_group_id' => '50',
@@ -13278,8 +13278,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '92999',
       'to_number' => '92999',
     ),
-    289 => 
-    array (
+    289 =>
+    array(
       'from_number' => '93000',
       'id' => '290',
       'isbn_group_id' => '50',
@@ -13288,8 +13288,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '93',
       'to_number' => '93999',
     ),
-    290 => 
-    array (
+    290 =>
+    array(
       'from_number' => '94000',
       'id' => '291',
       'isbn_group_id' => '50',
@@ -13298,8 +13298,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9799',
       'to_number' => '97999',
     ),
-    291 => 
-    array (
+    291 =>
+    array(
       'from_number' => '98000',
       'id' => '292',
       'isbn_group_id' => '50',
@@ -13308,8 +13308,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    292 => 
-    array (
+    292 =>
+    array(
       'from_number' => '0',
       'id' => '293',
       'isbn_group_id' => '51',
@@ -13318,8 +13318,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    293 => 
-    array (
+    293 =>
+    array(
       'from_number' => '20000',
       'id' => '294',
       'isbn_group_id' => '51',
@@ -13328,8 +13328,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '599',
       'to_number' => '59999',
     ),
-    294 => 
-    array (
+    294 =>
+    array(
       'from_number' => '60000',
       'id' => '295',
       'isbn_group_id' => '51',
@@ -13338,8 +13338,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8999',
       'to_number' => '89999',
     ),
-    295 => 
-    array (
+    295 =>
+    array(
       'from_number' => '90000',
       'id' => '296',
       'isbn_group_id' => '51',
@@ -13348,8 +13348,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '94999',
       'to_number' => '94999',
     ),
-    296 => 
-    array (
+    296 =>
+    array(
       'from_number' => '0',
       'id' => '297',
       'isbn_group_id' => '52',
@@ -13358,8 +13358,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    297 => 
-    array (
+    297 =>
+    array(
       'from_number' => '20000',
       'id' => '298',
       'isbn_group_id' => '52',
@@ -13368,8 +13368,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    298 => 
-    array (
+    298 =>
+    array(
       'from_number' => '70000',
       'id' => '299',
       'isbn_group_id' => '52',
@@ -13378,8 +13378,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8499',
       'to_number' => '84999',
     ),
-    299 => 
-    array (
+    299 =>
+    array(
       'from_number' => '85000',
       'id' => '300',
       'isbn_group_id' => '52',
@@ -13388,8 +13388,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '86999',
       'to_number' => '86999',
     ),
-    300 => 
-    array (
+    300 =>
+    array(
       'from_number' => '87000',
       'id' => '301',
       'isbn_group_id' => '52',
@@ -13398,8 +13398,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8999',
       'to_number' => '89999',
     ),
-    301 => 
-    array (
+    301 =>
+    array(
       'from_number' => '90000',
       'id' => '302',
       'isbn_group_id' => '52',
@@ -13408,8 +13408,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    302 => 
-    array (
+    302 =>
+    array(
       'from_number' => '0',
       'id' => '303',
       'isbn_group_id' => '53',
@@ -13418,8 +13418,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    303 => 
-    array (
+    303 =>
+    array(
       'from_number' => '20000',
       'id' => '304',
       'isbn_group_id' => '53',
@@ -13428,8 +13428,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    304 => 
-    array (
+    304 =>
+    array(
       'from_number' => '70000',
       'id' => '305',
       'isbn_group_id' => '53',
@@ -13438,8 +13438,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8499',
       'to_number' => '84999',
     ),
-    305 => 
-    array (
+    305 =>
+    array(
       'from_number' => '85000',
       'id' => '306',
       'isbn_group_id' => '53',
@@ -13448,8 +13448,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89999',
       'to_number' => '89999',
     ),
-    306 => 
-    array (
+    306 =>
+    array(
       'from_number' => '90000',
       'id' => '307',
       'isbn_group_id' => '53',
@@ -13458,8 +13458,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    307 => 
-    array (
+    307 =>
+    array(
       'from_number' => '0',
       'id' => '308',
       'isbn_group_id' => '54',
@@ -13468,8 +13468,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '14',
       'to_number' => '14999',
     ),
-    308 => 
-    array (
+    308 =>
+    array(
       'from_number' => '15000',
       'id' => '309',
       'isbn_group_id' => '54',
@@ -13478,8 +13478,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '249',
       'to_number' => '24999',
     ),
-    309 => 
-    array (
+    309 =>
+    array(
       'from_number' => '25000',
       'id' => '310',
       'isbn_group_id' => '54',
@@ -13488,8 +13488,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2999',
       'to_number' => '29999',
     ),
-    310 => 
-    array (
+    310 =>
+    array(
       'from_number' => '30000',
       'id' => '311',
       'isbn_group_id' => '54',
@@ -13498,8 +13498,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '549',
       'to_number' => '54999',
     ),
-    311 => 
-    array (
+    311 =>
+    array(
       'from_number' => '55000',
       'id' => '312',
       'isbn_group_id' => '54',
@@ -13508,8 +13508,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8999',
       'to_number' => '89999',
     ),
-    312 => 
-    array (
+    312 =>
+    array(
       'from_number' => '90000',
       'id' => '313',
       'isbn_group_id' => '54',
@@ -13518,8 +13518,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '96999',
       'to_number' => '96999',
     ),
-    313 => 
-    array (
+    313 =>
+    array(
       'from_number' => '97000',
       'id' => '314',
       'isbn_group_id' => '54',
@@ -13528,8 +13528,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '989',
       'to_number' => '98999',
     ),
-    314 => 
-    array (
+    314 =>
+    array(
       'from_number' => '99000',
       'id' => '315',
       'isbn_group_id' => '54',
@@ -13538,8 +13538,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    315 => 
-    array (
+    315 =>
+    array(
       'from_number' => '0',
       'id' => '316',
       'isbn_group_id' => '55',
@@ -13548,8 +13548,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    316 => 
-    array (
+    316 =>
+    array(
       'from_number' => '20000',
       'id' => '317',
       'isbn_group_id' => '55',
@@ -13558,8 +13558,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '599',
       'to_number' => '59999',
     ),
-    317 => 
-    array (
+    317 =>
+    array(
       'from_number' => '70000',
       'id' => '318',
       'isbn_group_id' => '55',
@@ -13568,8 +13568,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '7999',
       'to_number' => '79999',
     ),
-    318 => 
-    array (
+    318 =>
+    array(
       'from_number' => '90000',
       'id' => '319',
       'isbn_group_id' => '55',
@@ -13578,8 +13578,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    319 => 
-    array (
+    319 =>
+    array(
       'from_number' => '0',
       'id' => '320',
       'isbn_group_id' => '56',
@@ -13588,8 +13588,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '14',
       'to_number' => '14999',
     ),
-    320 => 
-    array (
+    320 =>
+    array(
       'from_number' => '15000',
       'id' => '321',
       'isbn_group_id' => '56',
@@ -13598,8 +13598,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1699',
       'to_number' => '16999',
     ),
-    321 => 
-    array (
+    321 =>
+    array(
       'from_number' => '17000',
       'id' => '322',
       'isbn_group_id' => '56',
@@ -13608,8 +13608,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '199',
       'to_number' => '19999',
     ),
-    322 => 
-    array (
+    322 =>
+    array(
       'from_number' => '20000',
       'id' => '323',
       'isbn_group_id' => '56',
@@ -13618,8 +13618,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2999',
       'to_number' => '29999',
     ),
-    323 => 
-    array (
+    323 =>
+    array(
       'from_number' => '30000',
       'id' => '324',
       'isbn_group_id' => '56',
@@ -13628,8 +13628,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    324 => 
-    array (
+    324 =>
+    array(
       'from_number' => '70000',
       'id' => '325',
       'isbn_group_id' => '56',
@@ -13638,8 +13638,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8999',
       'to_number' => '89999',
     ),
-    325 => 
-    array (
+    325 =>
+    array(
       'from_number' => '90000',
       'id' => '326',
       'isbn_group_id' => '56',
@@ -13648,8 +13648,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    326 => 
-    array (
+    326 =>
+    array(
       'from_number' => '0',
       'id' => '327',
       'isbn_group_id' => '57',
@@ -13658,8 +13658,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '00',
       'to_number' => '999',
     ),
-    327 => 
-    array (
+    327 =>
+    array(
       'from_number' => '1000',
       'id' => '328',
       'isbn_group_id' => '57',
@@ -13668,8 +13668,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0999',
       'to_number' => '9999',
     ),
-    328 => 
-    array (
+    328 =>
+    array(
       'from_number' => '10000',
       'id' => '329',
       'isbn_group_id' => '57',
@@ -13678,8 +13678,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19999',
       'to_number' => '19999',
     ),
-    329 => 
-    array (
+    329 =>
+    array(
       'from_number' => '30000',
       'id' => '330',
       'isbn_group_id' => '57',
@@ -13688,8 +13688,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '499',
       'to_number' => '49999',
     ),
-    330 => 
-    array (
+    330 =>
+    array(
       'from_number' => '50000',
       'id' => '331',
       'isbn_group_id' => '57',
@@ -13698,8 +13698,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '5999',
       'to_number' => '59999',
     ),
-    331 => 
-    array (
+    331 =>
+    array(
       'from_number' => '60000',
       'id' => '332',
       'isbn_group_id' => '57',
@@ -13708,8 +13708,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    332 => 
-    array (
+    332 =>
+    array(
       'from_number' => '90000',
       'id' => '333',
       'isbn_group_id' => '57',
@@ -13718,8 +13718,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '989',
       'to_number' => '98999',
     ),
-    333 => 
-    array (
+    333 =>
+    array(
       'from_number' => '99000',
       'id' => '334',
       'isbn_group_id' => '57',
@@ -13728,8 +13728,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9989',
       'to_number' => '99899',
     ),
-    334 => 
-    array (
+    334 =>
+    array(
       'from_number' => '99900',
       'id' => '335',
       'isbn_group_id' => '57',
@@ -13738,8 +13738,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    335 => 
-    array (
+    335 =>
+    array(
       'from_number' => '1000',
       'id' => '336',
       'isbn_group_id' => '58',
@@ -13748,8 +13748,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    336 => 
-    array (
+    336 =>
+    array(
       'from_number' => '40000',
       'id' => '337',
       'isbn_group_id' => '58',
@@ -13758,8 +13758,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '499',
       'to_number' => '49999',
     ),
-    337 => 
-    array (
+    337 =>
+    array(
       'from_number' => '50000',
       'id' => '338',
       'isbn_group_id' => '58',
@@ -13768,8 +13768,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '7999',
       'to_number' => '79999',
     ),
-    338 => 
-    array (
+    338 =>
+    array(
       'from_number' => '80000',
       'id' => '339',
       'isbn_group_id' => '58',
@@ -13778,8 +13778,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    339 => 
-    array (
+    339 =>
+    array(
       'from_number' => '90000',
       'id' => '340',
       'isbn_group_id' => '58',
@@ -13788,8 +13788,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    340 => 
-    array (
+    340 =>
+    array(
       'from_number' => '0',
       'id' => '341',
       'isbn_group_id' => '59',
@@ -13798,8 +13798,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    341 => 
-    array (
+    341 =>
+    array(
       'from_number' => '20000',
       'id' => '342',
       'isbn_group_id' => '59',
@@ -13808,8 +13808,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    342 => 
-    array (
+    342 =>
+    array(
       'from_number' => '40000',
       'id' => '343',
       'isbn_group_id' => '59',
@@ -13818,8 +13818,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    343 => 
-    array (
+    343 =>
+    array(
       'from_number' => '80000',
       'id' => '344',
       'isbn_group_id' => '59',
@@ -13828,8 +13828,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    344 => 
-    array (
+    344 =>
+    array(
       'from_number' => '1000',
       'id' => '345',
       'isbn_group_id' => '60',
@@ -13838,8 +13838,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    345 => 
-    array (
+    345 =>
+    array(
       'from_number' => '60000',
       'id' => '346',
       'isbn_group_id' => '60',
@@ -13848,8 +13848,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    346 => 
-    array (
+    346 =>
+    array(
       'from_number' => '90000',
       'id' => '347',
       'isbn_group_id' => '60',
@@ -13858,8 +13858,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9099',
       'to_number' => '90999',
     ),
-    347 => 
-    array (
+    347 =>
+    array(
       'from_number' => '91000',
       'id' => '348',
       'isbn_group_id' => '60',
@@ -13868,8 +13868,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '96999',
       'to_number' => '96999',
     ),
-    348 => 
-    array (
+    348 =>
+    array(
       'from_number' => '97000',
       'id' => '349',
       'isbn_group_id' => '60',
@@ -13878,8 +13878,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    349 => 
-    array (
+    349 =>
+    array(
       'from_number' => '0',
       'id' => '350',
       'isbn_group_id' => '61',
@@ -13888,8 +13888,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '015',
       'to_number' => '1599',
     ),
-    350 => 
-    array (
+    350 =>
+    array(
       'from_number' => '1600',
       'id' => '351',
       'isbn_group_id' => '61',
@@ -13898,8 +13898,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0199',
       'to_number' => '1999',
     ),
-    351 => 
-    array (
+    351 =>
+    array(
       'from_number' => '2000',
       'id' => '352',
       'isbn_group_id' => '61',
@@ -13908,8 +13908,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '02',
       'to_number' => '2999',
     ),
-    352 => 
-    array (
+    352 =>
+    array(
       'from_number' => '3000',
       'id' => '353',
       'isbn_group_id' => '61',
@@ -13918,8 +13918,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0599',
       'to_number' => '5999',
     ),
-    353 => 
-    array (
+    353 =>
+    array(
       'from_number' => '6000',
       'id' => '354',
       'isbn_group_id' => '61',
@@ -13928,8 +13928,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '09',
       'to_number' => '9999',
     ),
-    354 => 
-    array (
+    354 =>
+    array(
       'from_number' => '10000',
       'id' => '355',
       'isbn_group_id' => '61',
@@ -13938,8 +13938,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    355 => 
-    array (
+    355 =>
+    array(
       'from_number' => '50000',
       'id' => '356',
       'isbn_group_id' => '61',
@@ -13948,8 +13948,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '849',
       'to_number' => '84999',
     ),
-    356 => 
-    array (
+    356 =>
+    array(
       'from_number' => '85000',
       'id' => '357',
       'isbn_group_id' => '61',
@@ -13958,8 +13958,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9099',
       'to_number' => '90999',
     ),
-    357 => 
-    array (
+    357 =>
+    array(
       'from_number' => '91000',
       'id' => '358',
       'isbn_group_id' => '61',
@@ -13968,8 +13968,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '98999',
       'to_number' => '98999',
     ),
-    358 => 
-    array (
+    358 =>
+    array(
       'from_number' => '99000',
       'id' => '359',
       'isbn_group_id' => '61',
@@ -13978,8 +13978,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    359 => 
-    array (
+    359 =>
+    array(
       'from_number' => '0',
       'id' => '360',
       'isbn_group_id' => '62',
@@ -13988,8 +13988,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    360 => 
-    array (
+    360 =>
+    array(
       'from_number' => '20000',
       'id' => '361',
       'isbn_group_id' => '62',
@@ -13998,8 +13998,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '54',
       'to_number' => '54999',
     ),
-    361 => 
-    array (
+    361 =>
+    array(
       'from_number' => '55000',
       'id' => '362',
       'isbn_group_id' => '62',
@@ -14008,8 +14008,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    362 => 
-    array (
+    362 =>
+    array(
       'from_number' => '80000',
       'id' => '363',
       'isbn_group_id' => '62',
@@ -14018,8 +14018,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9499',
       'to_number' => '94999',
     ),
-    363 => 
-    array (
+    363 =>
+    array(
       'from_number' => '95000',
       'id' => '364',
       'isbn_group_id' => '62',
@@ -14028,8 +14028,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    364 => 
-    array (
+    364 =>
+    array(
       'from_number' => '0',
       'id' => '365',
       'isbn_group_id' => '63',
@@ -14038,8 +14038,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    365 => 
-    array (
+    365 =>
+    array(
       'from_number' => '10000',
       'id' => '366',
       'isbn_group_id' => '63',
@@ -14048,8 +14048,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '169',
       'to_number' => '16999',
     ),
-    366 => 
-    array (
+    366 =>
+    array(
       'from_number' => '17000',
       'id' => '367',
       'isbn_group_id' => '63',
@@ -14058,8 +14058,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1999',
       'to_number' => '19999',
     ),
-    367 => 
-    array (
+    367 =>
+    array(
       'from_number' => '20000',
       'id' => '368',
       'isbn_group_id' => '63',
@@ -14068,8 +14068,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '54',
       'to_number' => '54999',
     ),
-    368 => 
-    array (
+    368 =>
+    array(
       'from_number' => '55000',
       'id' => '369',
       'isbn_group_id' => '63',
@@ -14078,8 +14078,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '759',
       'to_number' => '75999',
     ),
-    369 => 
-    array (
+    369 =>
+    array(
       'from_number' => '76000',
       'id' => '370',
       'isbn_group_id' => '63',
@@ -14088,8 +14088,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8499',
       'to_number' => '84999',
     ),
-    370 => 
-    array (
+    370 =>
+    array(
       'from_number' => '85000',
       'id' => '371',
       'isbn_group_id' => '63',
@@ -14098,8 +14098,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '88999',
       'to_number' => '88999',
     ),
-    371 => 
-    array (
+    371 =>
+    array(
       'from_number' => '89000',
       'id' => '372',
       'isbn_group_id' => '63',
@@ -14108,8 +14108,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9499',
       'to_number' => '94999',
     ),
-    372 => 
-    array (
+    372 =>
+    array(
       'from_number' => '95000',
       'id' => '373',
       'isbn_group_id' => '63',
@@ -14118,8 +14118,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    373 => 
-    array (
+    373 =>
+    array(
       'from_number' => '0',
       'id' => '374',
       'isbn_group_id' => '64',
@@ -14128,8 +14128,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    374 => 
-    array (
+    374 =>
+    array(
       'from_number' => '20000',
       'id' => '375',
       'isbn_group_id' => '64',
@@ -14138,8 +14138,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    375 => 
-    array (
+    375 =>
+    array(
       'from_number' => '70000',
       'id' => '376',
       'isbn_group_id' => '64',
@@ -14148,8 +14148,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8499',
       'to_number' => '84999',
     ),
-    376 => 
-    array (
+    376 =>
+    array(
       'from_number' => '85000',
       'id' => '377',
       'isbn_group_id' => '64',
@@ -14158,8 +14158,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89999',
       'to_number' => '89999',
     ),
-    377 => 
-    array (
+    377 =>
+    array(
       'from_number' => '90000',
       'id' => '378',
       'isbn_group_id' => '64',
@@ -14168,8 +14168,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '94999',
       'to_number' => '94999',
     ),
-    378 => 
-    array (
+    378 =>
+    array(
       'from_number' => '95000',
       'id' => '379',
       'isbn_group_id' => '64',
@@ -14178,8 +14178,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    379 => 
-    array (
+    379 =>
+    array(
       'from_number' => '0',
       'id' => '380',
       'isbn_group_id' => '65',
@@ -14188,8 +14188,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '01999',
       'to_number' => '1999',
     ),
-    380 => 
-    array (
+    380 =>
+    array(
       'from_number' => '2000',
       'id' => '381',
       'isbn_group_id' => '65',
@@ -14198,8 +14198,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '24',
       'to_number' => '24999',
     ),
-    381 => 
-    array (
+    381 =>
+    array(
       'from_number' => '25000',
       'id' => '382',
       'isbn_group_id' => '65',
@@ -14208,8 +14208,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '599',
       'to_number' => '59999',
     ),
-    382 => 
-    array (
+    382 =>
+    array(
       'from_number' => '60000',
       'id' => '383',
       'isbn_group_id' => '65',
@@ -14218,8 +14218,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9199',
       'to_number' => '91999',
     ),
-    383 => 
-    array (
+    383 =>
+    array(
       'from_number' => '92000',
       'id' => '384',
       'isbn_group_id' => '65',
@@ -14228,8 +14228,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '98999',
       'to_number' => '98999',
     ),
-    384 => 
-    array (
+    384 =>
+    array(
       'from_number' => '99000',
       'id' => '385',
       'isbn_group_id' => '65',
@@ -14238,8 +14238,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    385 => 
-    array (
+    385 =>
+    array(
       'from_number' => '0',
       'id' => '386',
       'isbn_group_id' => '66',
@@ -14248,8 +14248,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '3',
       'to_number' => '39999',
     ),
-    386 => 
-    array (
+    386 =>
+    array(
       'from_number' => '40000',
       'id' => '387',
       'isbn_group_id' => '66',
@@ -14258,8 +14258,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    387 => 
-    array (
+    387 =>
+    array(
       'from_number' => '60000',
       'id' => '388',
       'isbn_group_id' => '66',
@@ -14268,8 +14268,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    388 => 
-    array (
+    388 =>
+    array(
       'from_number' => '80000',
       'id' => '389',
       'isbn_group_id' => '66',
@@ -14278,8 +14278,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9499',
       'to_number' => '94999',
     ),
-    389 => 
-    array (
+    389 =>
+    array(
       'from_number' => '95000',
       'id' => '390',
       'isbn_group_id' => '66',
@@ -14288,8 +14288,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    390 => 
-    array (
+    390 =>
+    array(
       'from_number' => '0',
       'id' => '391',
       'isbn_group_id' => '67',
@@ -14298,8 +14298,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    391 => 
-    array (
+    391 =>
+    array(
       'from_number' => '20000',
       'id' => '392',
       'isbn_group_id' => '67',
@@ -14308,8 +14308,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '499',
       'to_number' => '49999',
     ),
-    392 => 
-    array (
+    392 =>
+    array(
       'from_number' => '50000',
       'id' => '393',
       'isbn_group_id' => '67',
@@ -14318,8 +14318,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '6999',
       'to_number' => '69999',
     ),
-    393 => 
-    array (
+    393 =>
+    array(
       'from_number' => '70000',
       'id' => '394',
       'isbn_group_id' => '67',
@@ -14328,8 +14328,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    394 => 
-    array (
+    394 =>
+    array(
       'from_number' => '0',
       'id' => '395',
       'isbn_group_id' => '68',
@@ -14338,8 +14338,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '199',
       'to_number' => '19999',
     ),
-    395 => 
-    array (
+    395 =>
+    array(
       'from_number' => '20000',
       'id' => '396',
       'isbn_group_id' => '68',
@@ -14348,8 +14348,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2999',
       'to_number' => '29999',
     ),
-    396 => 
-    array (
+    396 =>
+    array(
       'from_number' => '30000',
       'id' => '397',
       'isbn_group_id' => '68',
@@ -14358,8 +14358,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79999',
       'to_number' => '79999',
     ),
-    397 => 
-    array (
+    397 =>
+    array(
       'from_number' => '80000',
       'id' => '398',
       'isbn_group_id' => '68',
@@ -14368,8 +14368,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8999',
       'to_number' => '89999',
     ),
-    398 => 
-    array (
+    398 =>
+    array(
       'from_number' => '90000',
       'id' => '399',
       'isbn_group_id' => '68',
@@ -14378,8 +14378,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    399 => 
-    array (
+    399 =>
+    array(
       'from_number' => '0',
       'id' => '400',
       'isbn_group_id' => '69',
@@ -14388,8 +14388,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '099',
       'to_number' => '9999',
     ),
-    400 => 
-    array (
+    400 =>
+    array(
       'from_number' => '10000',
       'id' => '401',
       'isbn_group_id' => '69',
@@ -14398,8 +14398,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1499',
       'to_number' => '14999',
     ),
-    401 => 
-    array (
+    401 =>
+    array(
       'from_number' => '15000',
       'id' => '402',
       'isbn_group_id' => '69',
@@ -14408,8 +14408,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19999',
       'to_number' => '19999',
     ),
-    402 => 
-    array (
+    402 =>
+    array(
       'from_number' => '20000',
       'id' => '403',
       'isbn_group_id' => '69',
@@ -14418,8 +14418,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '29',
       'to_number' => '29999',
     ),
-    403 => 
-    array (
+    403 =>
+    array(
       'from_number' => '30000',
       'id' => '404',
       'isbn_group_id' => '69',
@@ -14428,8 +14428,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '3999',
       'to_number' => '39999',
     ),
-    404 => 
-    array (
+    404 =>
+    array(
       'from_number' => '40000',
       'id' => '405',
       'isbn_group_id' => '69',
@@ -14438,8 +14438,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    405 => 
-    array (
+    405 =>
+    array(
       'from_number' => '80000',
       'id' => '406',
       'isbn_group_id' => '69',
@@ -14448,8 +14448,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9499',
       'to_number' => '94999',
     ),
-    406 => 
-    array (
+    406 =>
+    array(
       'from_number' => '95000',
       'id' => '407',
       'isbn_group_id' => '69',
@@ -14458,8 +14458,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    407 => 
-    array (
+    407 =>
+    array(
       'from_number' => '0',
       'id' => '408',
       'isbn_group_id' => '70',
@@ -14468,8 +14468,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    408 => 
-    array (
+    408 =>
+    array(
       'from_number' => '20000',
       'id' => '409',
       'isbn_group_id' => '70',
@@ -14478,8 +14478,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '599',
       'to_number' => '59999',
     ),
-    409 => 
-    array (
+    409 =>
+    array(
       'from_number' => '60000',
       'id' => '410',
       'isbn_group_id' => '70',
@@ -14488,8 +14488,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    410 => 
-    array (
+    410 =>
+    array(
       'from_number' => '0',
       'id' => '411',
       'isbn_group_id' => '71',
@@ -14498,8 +14498,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '11',
       'to_number' => '11999',
     ),
-    411 => 
-    array (
+    411 =>
+    array(
       'from_number' => '12000',
       'id' => '412',
       'isbn_group_id' => '71',
@@ -14508,8 +14508,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1999',
       'to_number' => '19999',
     ),
-    412 => 
-    array (
+    412 =>
+    array(
       'from_number' => '20000',
       'id' => '413',
       'isbn_group_id' => '71',
@@ -14518,8 +14518,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '289',
       'to_number' => '28999',
     ),
-    413 => 
-    array (
+    413 =>
+    array(
       'from_number' => '29000',
       'id' => '414',
       'isbn_group_id' => '71',
@@ -14528,8 +14528,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    414 => 
-    array (
+    414 =>
+    array(
       'from_number' => '0',
       'id' => '415',
       'isbn_group_id' => '72',
@@ -14538,8 +14538,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '09',
       'to_number' => '9999',
     ),
-    415 => 
-    array (
+    415 =>
+    array(
       'from_number' => '10000',
       'id' => '416',
       'isbn_group_id' => '72',
@@ -14548,8 +14548,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    416 => 
-    array (
+    416 =>
+    array(
       'from_number' => '70000',
       'id' => '417',
       'isbn_group_id' => '72',
@@ -14558,8 +14558,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    417 => 
-    array (
+    417 =>
+    array(
       'from_number' => '90000',
       'id' => '418',
       'isbn_group_id' => '72',
@@ -14568,8 +14568,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9799',
       'to_number' => '97999',
     ),
-    418 => 
-    array (
+    418 =>
+    array(
       'from_number' => '98000',
       'id' => '419',
       'isbn_group_id' => '72',
@@ -14578,8 +14578,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    419 => 
-    array (
+    419 =>
+    array(
       'from_number' => '0',
       'id' => '420',
       'isbn_group_id' => '73',
@@ -14588,8 +14588,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '01',
       'to_number' => '1999',
     ),
-    420 => 
-    array (
+    420 =>
+    array(
       'from_number' => '2000',
       'id' => '421',
       'isbn_group_id' => '73',
@@ -14598,8 +14598,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '199',
       'to_number' => '19999',
     ),
-    421 => 
-    array (
+    421 =>
+    array(
       'from_number' => '20000',
       'id' => '422',
       'isbn_group_id' => '73',
@@ -14608,8 +14608,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '3999',
       'to_number' => '39999',
     ),
-    422 => 
-    array (
+    422 =>
+    array(
       'from_number' => '40000',
       'id' => '423',
       'isbn_group_id' => '73',
@@ -14618,8 +14618,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '44999',
       'to_number' => '44999',
     ),
-    423 => 
-    array (
+    423 =>
+    array(
       'from_number' => '45000',
       'id' => '424',
       'isbn_group_id' => '73',
@@ -14628,8 +14628,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    424 => 
-    array (
+    424 =>
+    array(
       'from_number' => '50000',
       'id' => '425',
       'isbn_group_id' => '73',
@@ -14638,8 +14638,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    425 => 
-    array (
+    425 =>
+    array(
       'from_number' => '80000',
       'id' => '426',
       'isbn_group_id' => '73',
@@ -14648,8 +14648,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    426 => 
-    array (
+    426 =>
+    array(
       'from_number' => '90000',
       'id' => '427',
       'isbn_group_id' => '73',
@@ -14658,8 +14658,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9899',
       'to_number' => '98999',
     ),
-    427 => 
-    array (
+    427 =>
+    array(
       'from_number' => '99000',
       'id' => '428',
       'isbn_group_id' => '73',
@@ -14668,8 +14668,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    428 => 
-    array (
+    428 =>
+    array(
       'from_number' => '0',
       'id' => '429',
       'isbn_group_id' => '74',
@@ -14678,8 +14678,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    429 => 
-    array (
+    429 =>
+    array(
       'from_number' => '40000',
       'id' => '430',
       'isbn_group_id' => '74',
@@ -14688,8 +14688,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    430 => 
-    array (
+    430 =>
+    array(
       'from_number' => '80000',
       'id' => '431',
       'isbn_group_id' => '74',
@@ -14698,8 +14698,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8999',
       'to_number' => '89999',
     ),
-    431 => 
-    array (
+    431 =>
+    array(
       'from_number' => '90000',
       'id' => '432',
       'isbn_group_id' => '74',
@@ -14708,8 +14708,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    432 => 
-    array (
+    432 =>
+    array(
       'from_number' => '0',
       'id' => '433',
       'isbn_group_id' => '75',
@@ -14718,8 +14718,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    433 => 
-    array (
+    433 =>
+    array(
       'from_number' => '40000',
       'id' => '434',
       'isbn_group_id' => '75',
@@ -14728,8 +14728,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '599',
       'to_number' => '59999',
     ),
-    434 => 
-    array (
+    434 =>
+    array(
       'from_number' => '60000',
       'id' => '435',
       'isbn_group_id' => '75',
@@ -14738,8 +14738,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8999',
       'to_number' => '89999',
     ),
-    435 => 
-    array (
+    435 =>
+    array(
       'from_number' => '90000',
       'id' => '436',
       'isbn_group_id' => '75',
@@ -14748,8 +14748,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    436 => 
-    array (
+    436 =>
+    array(
       'from_number' => '0',
       'id' => '437',
       'isbn_group_id' => '76',
@@ -14758,8 +14758,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '11',
       'to_number' => '11999',
     ),
-    437 => 
-    array (
+    437 =>
+    array(
       'from_number' => '12000',
       'id' => '438',
       'isbn_group_id' => '76',
@@ -14768,8 +14768,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '559',
       'to_number' => '55999',
     ),
-    438 => 
-    array (
+    438 =>
+    array(
       'from_number' => '56000',
       'id' => '439',
       'isbn_group_id' => '76',
@@ -14778,8 +14778,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '7999',
       'to_number' => '79999',
     ),
-    439 => 
-    array (
+    439 =>
+    array(
       'from_number' => '80000',
       'id' => '440',
       'isbn_group_id' => '76',
@@ -14788,8 +14788,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    440 => 
-    array (
+    440 =>
+    array(
       'from_number' => '0',
       'id' => '441',
       'isbn_group_id' => '77',
@@ -14798,8 +14798,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '09',
       'to_number' => '9999',
     ),
-    441 => 
-    array (
+    441 =>
+    array(
       'from_number' => '10000',
       'id' => '442',
       'isbn_group_id' => '77',
@@ -14808,8 +14808,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1999',
       'to_number' => '19999',
     ),
-    442 => 
-    array (
+    442 =>
+    array(
       'from_number' => '20000',
       'id' => '443',
       'isbn_group_id' => '77',
@@ -14818,8 +14818,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '29999',
       'to_number' => '29999',
     ),
-    443 => 
-    array (
+    443 =>
+    array(
       'from_number' => '30000',
       'id' => '444',
       'isbn_group_id' => '77',
@@ -14828,8 +14828,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    444 => 
-    array (
+    444 =>
+    array(
       'from_number' => '50000',
       'id' => '445',
       'isbn_group_id' => '77',
@@ -14838,8 +14838,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    445 => 
-    array (
+    445 =>
+    array(
       'from_number' => '90000',
       'id' => '446',
       'isbn_group_id' => '77',
@@ -14848,8 +14848,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9499',
       'to_number' => '94999',
     ),
-    446 => 
-    array (
+    446 =>
+    array(
       'from_number' => '95000',
       'id' => '447',
       'isbn_group_id' => '77',
@@ -14858,8 +14858,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    447 => 
-    array (
+    447 =>
+    array(
       'from_number' => '0',
       'id' => '448',
       'isbn_group_id' => '78',
@@ -14868,8 +14868,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '14',
       'to_number' => '14999',
     ),
-    448 => 
-    array (
+    448 =>
+    array(
       'from_number' => '15000',
       'id' => '449',
       'isbn_group_id' => '78',
@@ -14878,8 +14878,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '16999',
       'to_number' => '16999',
     ),
-    449 => 
-    array (
+    449 =>
+    array(
       'from_number' => '17000',
       'id' => '450',
       'isbn_group_id' => '78',
@@ -14888,8 +14888,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19999',
       'to_number' => '19999',
     ),
-    450 => 
-    array (
+    450 =>
+    array(
       'from_number' => '20000',
       'id' => '451',
       'isbn_group_id' => '78',
@@ -14898,8 +14898,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    451 => 
-    array (
+    451 =>
+    array(
       'from_number' => '80000',
       'id' => '452',
       'isbn_group_id' => '78',
@@ -14908,8 +14908,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9699',
       'to_number' => '96999',
     ),
-    452 => 
-    array (
+    452 =>
+    array(
       'from_number' => '97000',
       'id' => '453',
       'isbn_group_id' => '78',
@@ -14918,8 +14918,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    453 => 
-    array (
+    453 =>
+    array(
       'from_number' => '0',
       'id' => '454',
       'isbn_group_id' => '79',
@@ -14928,8 +14928,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    454 => 
-    array (
+    454 =>
+    array(
       'from_number' => '20000',
       'id' => '455',
       'isbn_group_id' => '79',
@@ -14938,8 +14938,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '54',
       'to_number' => '54999',
     ),
-    455 => 
-    array (
+    455 =>
+    array(
       'from_number' => '55000',
       'id' => '456',
       'isbn_group_id' => '79',
@@ -14948,8 +14948,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    456 => 
-    array (
+    456 =>
+    array(
       'from_number' => '80000',
       'id' => '457',
       'isbn_group_id' => '79',
@@ -14958,8 +14958,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9499',
       'to_number' => '94999',
     ),
-    457 => 
-    array (
+    457 =>
+    array(
       'from_number' => '95000',
       'id' => '458',
       'isbn_group_id' => '79',
@@ -14968,8 +14968,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99999',
       'to_number' => '99999',
     ),
-    458 => 
-    array (
+    458 =>
+    array(
       'from_number' => '0',
       'id' => '459',
       'isbn_group_id' => '80',
@@ -14978,8 +14978,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '09',
       'to_number' => '9999',
     ),
-    459 => 
-    array (
+    459 =>
+    array(
       'from_number' => '10000',
       'id' => '460',
       'isbn_group_id' => '80',
@@ -14988,8 +14988,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '399',
       'to_number' => '39999',
     ),
-    460 => 
-    array (
+    460 =>
+    array(
       'from_number' => '40000',
       'id' => '461',
       'isbn_group_id' => '80',
@@ -14998,8 +14998,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4999',
       'to_number' => '49999',
     ),
-    461 => 
-    array (
+    461 =>
+    array(
       'from_number' => '0',
       'id' => '462',
       'isbn_group_id' => '81',
@@ -15008,8 +15008,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '09',
       'to_number' => '9999',
     ),
-    462 => 
-    array (
+    462 =>
+    array(
       'from_number' => '10000',
       'id' => '463',
       'isbn_group_id' => '81',
@@ -15018,8 +15018,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '399',
       'to_number' => '39999',
     ),
-    463 => 
-    array (
+    463 =>
+    array(
       'from_number' => '40000',
       'id' => '464',
       'isbn_group_id' => '81',
@@ -15028,8 +15028,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4999',
       'to_number' => '49999',
     ),
-    464 => 
-    array (
+    464 =>
+    array(
       'from_number' => '0',
       'id' => '465',
       'isbn_group_id' => '82',
@@ -15038,8 +15038,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '3',
       'to_number' => '39999',
     ),
-    465 => 
-    array (
+    465 =>
+    array(
       'from_number' => '40000',
       'id' => '466',
       'isbn_group_id' => '82',
@@ -15048,8 +15048,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '54',
       'to_number' => '54999',
     ),
-    466 => 
-    array (
+    466 =>
+    array(
       'from_number' => '55000',
       'id' => '467',
       'isbn_group_id' => '82',
@@ -15058,8 +15058,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    467 => 
-    array (
+    467 =>
+    array(
       'from_number' => '80000',
       'id' => '468',
       'isbn_group_id' => '82',
@@ -15068,8 +15068,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    468 => 
-    array (
+    468 =>
+    array(
       'from_number' => '0',
       'id' => '469',
       'isbn_group_id' => '83',
@@ -15078,8 +15078,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    469 => 
-    array (
+    469 =>
+    array(
       'from_number' => '50000',
       'id' => '470',
       'isbn_group_id' => '83',
@@ -15088,8 +15088,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '939',
       'to_number' => '93999',
     ),
-    470 => 
-    array (
+    470 =>
+    array(
       'from_number' => '94000',
       'id' => '471',
       'isbn_group_id' => '83',
@@ -15098,8 +15098,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    471 => 
-    array (
+    471 =>
+    array(
       'from_number' => '0',
       'id' => '472',
       'isbn_group_id' => '84',
@@ -15108,8 +15108,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '29',
       'to_number' => '29999',
     ),
-    472 => 
-    array (
+    472 =>
+    array(
       'from_number' => '30000',
       'id' => '473',
       'isbn_group_id' => '84',
@@ -15118,8 +15118,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    473 => 
-    array (
+    473 =>
+    array(
       'from_number' => '90000',
       'id' => '474',
       'isbn_group_id' => '84',
@@ -15128,8 +15128,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    474 => 
-    array (
+    474 =>
+    array(
       'from_number' => '0',
       'id' => '475',
       'isbn_group_id' => '85',
@@ -15138,8 +15138,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    475 => 
-    array (
+    475 =>
+    array(
       'from_number' => '40000',
       'id' => '476',
       'isbn_group_id' => '85',
@@ -15148,8 +15148,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '849',
       'to_number' => '84999',
     ),
-    476 => 
-    array (
+    476 =>
+    array(
       'from_number' => '85000',
       'id' => '477',
       'isbn_group_id' => '85',
@@ -15158,8 +15158,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    477 => 
-    array (
+    477 =>
+    array(
       'from_number' => '0',
       'id' => '478',
       'isbn_group_id' => '86',
@@ -15168,8 +15168,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    478 => 
-    array (
+    478 =>
+    array(
       'from_number' => '10000',
       'id' => '479',
       'isbn_group_id' => '86',
@@ -15178,8 +15178,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    479 => 
-    array (
+    479 =>
+    array(
       'from_number' => '40000',
       'id' => '480',
       'isbn_group_id' => '86',
@@ -15188,8 +15188,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    480 => 
-    array (
+    480 =>
+    array(
       'from_number' => '90000',
       'id' => '481',
       'isbn_group_id' => '86',
@@ -15198,8 +15198,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    481 => 
-    array (
+    481 =>
+    array(
       'from_number' => '0',
       'id' => '482',
       'isbn_group_id' => '87',
@@ -15208,8 +15208,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    482 => 
-    array (
+    482 =>
+    array(
       'from_number' => '10000',
       'id' => '483',
       'isbn_group_id' => '87',
@@ -15218,8 +15218,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    483 => 
-    array (
+    483 =>
+    array(
       'from_number' => '50000',
       'id' => '484',
       'isbn_group_id' => '87',
@@ -15228,8 +15228,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    484 => 
-    array (
+    484 =>
+    array(
       'from_number' => '80000',
       'id' => '485',
       'isbn_group_id' => '87',
@@ -15238,8 +15238,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    485 => 
-    array (
+    485 =>
+    array(
       'from_number' => '0',
       'id' => '486',
       'isbn_group_id' => '88',
@@ -15248,8 +15248,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    486 => 
-    array (
+    486 =>
+    array(
       'from_number' => '10000',
       'id' => '487',
       'isbn_group_id' => '88',
@@ -15258,8 +15258,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    487 => 
-    array (
+    487 =>
+    array(
       'from_number' => '40000',
       'id' => '488',
       'isbn_group_id' => '88',
@@ -15268,8 +15268,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    488 => 
-    array (
+    488 =>
+    array(
       'from_number' => '90000',
       'id' => '489',
       'isbn_group_id' => '88',
@@ -15278,8 +15278,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    489 => 
-    array (
+    489 =>
+    array(
       'from_number' => '0',
       'id' => '490',
       'isbn_group_id' => '89',
@@ -15288,8 +15288,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    490 => 
-    array (
+    490 =>
+    array(
       'from_number' => '20000',
       'id' => '491',
       'isbn_group_id' => '89',
@@ -15298,8 +15298,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    491 => 
-    array (
+    491 =>
+    array(
       'from_number' => '40000',
       'id' => '492',
       'isbn_group_id' => '89',
@@ -15308,8 +15308,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    492 => 
-    array (
+    492 =>
+    array(
       'from_number' => '80000',
       'id' => '493',
       'isbn_group_id' => '89',
@@ -15318,8 +15318,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    493 => 
-    array (
+    493 =>
+    array(
       'from_number' => '0',
       'id' => '494',
       'isbn_group_id' => '90',
@@ -15328,8 +15328,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    494 => 
-    array (
+    494 =>
+    array(
       'from_number' => '30000',
       'id' => '495',
       'isbn_group_id' => '90',
@@ -15338,8 +15338,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    495 => 
-    array (
+    495 =>
+    array(
       'from_number' => '50000',
       'id' => '496',
       'isbn_group_id' => '90',
@@ -15348,8 +15348,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    496 => 
-    array (
+    496 =>
+    array(
       'from_number' => '80000',
       'id' => '497',
       'isbn_group_id' => '90',
@@ -15358,8 +15358,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    497 => 
-    array (
+    497 =>
+    array(
       'from_number' => '0',
       'id' => '498',
       'isbn_group_id' => '91',
@@ -15368,8 +15368,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    498 => 
-    array (
+    498 =>
+    array(
       'from_number' => '80000',
       'id' => '499',
       'isbn_group_id' => '91',
@@ -15378,8 +15378,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '949',
       'to_number' => '94999',
     ),
-    499 => 
-    array (
+    499 =>
+    array(
       'from_number' => '95000',
       'id' => '500',
       'isbn_group_id' => '91',
@@ -15388,8 +15388,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    500 => 
-    array (
+    500 =>
+    array(
       'from_number' => '0',
       'id' => '501',
       'isbn_group_id' => '92',
@@ -15398,8 +15398,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4',
       'to_number' => '49999',
     ),
-    501 => 
-    array (
+    501 =>
+    array(
       'from_number' => '50000',
       'id' => '502',
       'isbn_group_id' => '92',
@@ -15408,8 +15408,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    502 => 
-    array (
+    502 =>
+    array(
       'from_number' => '80000',
       'id' => '503',
       'isbn_group_id' => '92',
@@ -15418,8 +15418,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    503 => 
-    array (
+    503 =>
+    array(
       'from_number' => '90000',
       'id' => '504',
       'isbn_group_id' => '92',
@@ -15428,8 +15428,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    504 => 
-    array (
+    504 =>
+    array(
       'from_number' => '0',
       'id' => '505',
       'isbn_group_id' => '93',
@@ -15438,8 +15438,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    505 => 
-    array (
+    505 =>
+    array(
       'from_number' => '20000',
       'id' => '506',
       'isbn_group_id' => '93',
@@ -15448,8 +15448,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    506 => 
-    array (
+    506 =>
+    array(
       'from_number' => '50000',
       'id' => '507',
       'isbn_group_id' => '93',
@@ -15458,8 +15458,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    507 => 
-    array (
+    507 =>
+    array(
       'from_number' => '90000',
       'id' => '508',
       'isbn_group_id' => '93',
@@ -15468,8 +15468,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    508 => 
-    array (
+    508 =>
+    array(
       'from_number' => '0',
       'id' => '509',
       'isbn_group_id' => '94',
@@ -15478,8 +15478,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    509 => 
-    array (
+    509 =>
+    array(
       'from_number' => '10000',
       'id' => '510',
       'isbn_group_id' => '94',
@@ -15488,8 +15488,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    510 => 
-    array (
+    510 =>
+    array(
       'from_number' => '40000',
       'id' => '511',
       'isbn_group_id' => '94',
@@ -15498,8 +15498,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    511 => 
-    array (
+    511 =>
+    array(
       'from_number' => '90000',
       'id' => '512',
       'isbn_group_id' => '94',
@@ -15508,8 +15508,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    512 => 
-    array (
+    512 =>
+    array(
       'from_number' => '0',
       'id' => '513',
       'isbn_group_id' => '95',
@@ -15518,8 +15518,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    513 => 
-    array (
+    513 =>
+    array(
       'from_number' => '90000',
       'id' => '514',
       'isbn_group_id' => '95',
@@ -15528,8 +15528,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '984',
       'to_number' => '98499',
     ),
-    514 => 
-    array (
+    514 =>
+    array(
       'from_number' => '98500',
       'id' => '515',
       'isbn_group_id' => '95',
@@ -15538,8 +15538,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    515 => 
-    array (
+    515 =>
+    array(
       'from_number' => '0',
       'id' => '516',
       'isbn_group_id' => '96',
@@ -15548,8 +15548,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '29',
       'to_number' => '29999',
     ),
-    516 => 
-    array (
+    516 =>
+    array(
       'from_number' => '30000',
       'id' => '517',
       'isbn_group_id' => '96',
@@ -15558,8 +15558,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '399',
       'to_number' => '39999',
     ),
-    517 => 
-    array (
+    517 =>
+    array(
       'from_number' => '40000',
       'id' => '518',
       'isbn_group_id' => '96',
@@ -15568,8 +15568,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    518 => 
-    array (
+    518 =>
+    array(
       'from_number' => '0',
       'id' => '519',
       'isbn_group_id' => '97',
@@ -15578,8 +15578,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0999',
       'to_number' => '9999',
     ),
-    519 => 
-    array (
+    519 =>
+    array(
       'from_number' => '10000',
       'id' => '520',
       'isbn_group_id' => '97',
@@ -15588,8 +15588,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '499',
       'to_number' => '49999',
     ),
-    520 => 
-    array (
+    520 =>
+    array(
       'from_number' => '50000',
       'id' => '521',
       'isbn_group_id' => '97',
@@ -15598,8 +15598,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '5999',
       'to_number' => '59999',
     ),
-    521 => 
-    array (
+    521 =>
+    array(
       'from_number' => '60000',
       'id' => '522',
       'isbn_group_id' => '97',
@@ -15608,8 +15608,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '69',
       'to_number' => '69999',
     ),
-    522 => 
-    array (
+    522 =>
+    array(
       'from_number' => '70000',
       'id' => '523',
       'isbn_group_id' => '97',
@@ -15618,8 +15618,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    523 => 
-    array (
+    523 =>
+    array(
       'from_number' => '80000',
       'id' => '524',
       'isbn_group_id' => '97',
@@ -15628,8 +15628,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    524 => 
-    array (
+    524 =>
+    array(
       'from_number' => '90000',
       'id' => '525',
       'isbn_group_id' => '97',
@@ -15638,8 +15638,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    525 => 
-    array (
+    525 =>
+    array(
       'from_number' => '0',
       'id' => '526',
       'isbn_group_id' => '98',
@@ -15648,8 +15648,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '00',
       'to_number' => '999',
     ),
-    526 => 
-    array (
+    526 =>
+    array(
       'from_number' => '1000',
       'id' => '527',
       'isbn_group_id' => '98',
@@ -15658,8 +15658,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '079',
       'to_number' => '7999',
     ),
-    527 => 
-    array (
+    527 =>
+    array(
       'from_number' => '8000',
       'id' => '528',
       'isbn_group_id' => '98',
@@ -15668,8 +15668,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    528 => 
-    array (
+    528 =>
+    array(
       'from_number' => '40000',
       'id' => '529',
       'isbn_group_id' => '98',
@@ -15678,8 +15678,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '569',
       'to_number' => '56999',
     ),
-    529 => 
-    array (
+    529 =>
+    array(
       'from_number' => '57000',
       'id' => '530',
       'isbn_group_id' => '98',
@@ -15688,8 +15688,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '57',
       'to_number' => '57999',
     ),
-    530 => 
-    array (
+    530 =>
+    array(
       'from_number' => '58000',
       'id' => '531',
       'isbn_group_id' => '98',
@@ -15698,8 +15698,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '849',
       'to_number' => '84999',
     ),
-    531 => 
-    array (
+    531 =>
+    array(
       'from_number' => '85000',
       'id' => '532',
       'isbn_group_id' => '98',
@@ -15708,8 +15708,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    532 => 
-    array (
+    532 =>
+    array(
       'from_number' => '0',
       'id' => '533',
       'isbn_group_id' => '99',
@@ -15718,8 +15718,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    533 => 
-    array (
+    533 =>
+    array(
       'from_number' => '20000',
       'id' => '534',
       'isbn_group_id' => '99',
@@ -15728,8 +15728,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    534 => 
-    array (
+    534 =>
+    array(
       'from_number' => '40000',
       'id' => '535',
       'isbn_group_id' => '99',
@@ -15738,8 +15738,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    535 => 
-    array (
+    535 =>
+    array(
       'from_number' => '90000',
       'id' => '536',
       'isbn_group_id' => '99',
@@ -15748,8 +15748,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    536 => 
-    array (
+    536 =>
+    array(
       'from_number' => '0',
       'id' => '537',
       'isbn_group_id' => '100',
@@ -15758,8 +15758,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    537 => 
-    array (
+    537 =>
+    array(
       'from_number' => '20000',
       'id' => '538',
       'isbn_group_id' => '100',
@@ -15768,8 +15768,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    538 => 
-    array (
+    538 =>
+    array(
       'from_number' => '80000',
       'id' => '539',
       'isbn_group_id' => '100',
@@ -15778,8 +15778,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    539 => 
-    array (
+    539 =>
+    array(
       'from_number' => '0',
       'id' => '540',
       'isbn_group_id' => '101',
@@ -15788,8 +15788,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    540 => 
-    array (
+    540 =>
+    array(
       'from_number' => '40000',
       'id' => '541',
       'isbn_group_id' => '101',
@@ -15798,8 +15798,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '849',
       'to_number' => '84999',
     ),
-    541 => 
-    array (
+    541 =>
+    array(
       'from_number' => '85000',
       'id' => '542',
       'isbn_group_id' => '101',
@@ -15808,8 +15808,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    542 => 
-    array (
+    542 =>
+    array(
       'from_number' => '0',
       'id' => '543',
       'isbn_group_id' => '102',
@@ -15818,8 +15818,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    543 => 
-    array (
+    543 =>
+    array(
       'from_number' => '10000',
       'id' => '544',
       'isbn_group_id' => '102',
@@ -15828,8 +15828,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    544 => 
-    array (
+    544 =>
+    array(
       'from_number' => '40000',
       'id' => '545',
       'isbn_group_id' => '102',
@@ -15838,8 +15838,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    545 => 
-    array (
+    545 =>
+    array(
       'from_number' => '90000',
       'id' => '546',
       'isbn_group_id' => '102',
@@ -15848,8 +15848,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    546 => 
-    array (
+    546 =>
+    array(
       'from_number' => '0',
       'id' => '547',
       'isbn_group_id' => '103',
@@ -15858,8 +15858,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '29',
       'to_number' => '29999',
     ),
-    547 => 
-    array (
+    547 =>
+    array(
       'from_number' => '30000',
       'id' => '548',
       'isbn_group_id' => '103',
@@ -15868,8 +15868,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '849',
       'to_number' => '84999',
     ),
-    548 => 
-    array (
+    548 =>
+    array(
       'from_number' => '85000',
       'id' => '549',
       'isbn_group_id' => '103',
@@ -15878,8 +15878,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    549 => 
-    array (
+    549 =>
+    array(
       'from_number' => '0',
       'id' => '550',
       'isbn_group_id' => '104',
@@ -15888,8 +15888,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    550 => 
-    array (
+    550 =>
+    array(
       'from_number' => '40000',
       'id' => '551',
       'isbn_group_id' => '104',
@@ -15898,8 +15898,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '849',
       'to_number' => '84999',
     ),
-    551 => 
-    array (
+    551 =>
+    array(
       'from_number' => '85000',
       'id' => '552',
       'isbn_group_id' => '104',
@@ -15908,8 +15908,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    552 => 
-    array (
+    552 =>
+    array(
       'from_number' => '0',
       'id' => '553',
       'isbn_group_id' => '105',
@@ -15918,8 +15918,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    553 => 
-    array (
+    553 =>
+    array(
       'from_number' => '20000',
       'id' => '554',
       'isbn_group_id' => '105',
@@ -15928,8 +15928,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    554 => 
-    array (
+    554 =>
+    array(
       'from_number' => '40000',
       'id' => '555',
       'isbn_group_id' => '105',
@@ -15938,8 +15938,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    555 => 
-    array (
+    555 =>
+    array(
       'from_number' => '80000',
       'id' => '556',
       'isbn_group_id' => '105',
@@ -15948,8 +15948,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    556 => 
-    array (
+    556 =>
+    array(
       'from_number' => '0',
       'id' => '557',
       'isbn_group_id' => '106',
@@ -15958,8 +15958,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    557 => 
-    array (
+    557 =>
+    array(
       'from_number' => '10000',
       'id' => '558',
       'isbn_group_id' => '106',
@@ -15968,8 +15968,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    558 => 
-    array (
+    558 =>
+    array(
       'from_number' => '40000',
       'id' => '559',
       'isbn_group_id' => '106',
@@ -15978,8 +15978,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '599',
       'to_number' => '59999',
     ),
-    559 => 
-    array (
+    559 =>
+    array(
       'from_number' => '60000',
       'id' => '560',
       'isbn_group_id' => '106',
@@ -15988,8 +15988,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    560 => 
-    array (
+    560 =>
+    array(
       'from_number' => '90000',
       'id' => '561',
       'isbn_group_id' => '106',
@@ -15998,8 +15998,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    561 => 
-    array (
+    561 =>
+    array(
       'from_number' => '0',
       'id' => '562',
       'isbn_group_id' => '107',
@@ -16008,8 +16008,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    562 => 
-    array (
+    562 =>
+    array(
       'from_number' => '20000',
       'id' => '563',
       'isbn_group_id' => '107',
@@ -16018,8 +16018,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    563 => 
-    array (
+    563 =>
+    array(
       'from_number' => '40000',
       'id' => '564',
       'isbn_group_id' => '107',
@@ -16028,8 +16028,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    564 => 
-    array (
+    564 =>
+    array(
       'from_number' => '80000',
       'id' => '565',
       'isbn_group_id' => '107',
@@ -16038,8 +16038,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    565 => 
-    array (
+    565 =>
+    array(
       'from_number' => '0',
       'id' => '566',
       'isbn_group_id' => '108',
@@ -16048,8 +16048,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    566 => 
-    array (
+    566 =>
+    array(
       'from_number' => '40000',
       'id' => '567',
       'isbn_group_id' => '108',
@@ -16058,8 +16058,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '929',
       'to_number' => '92999',
     ),
-    567 => 
-    array (
+    567 =>
+    array(
       'from_number' => '93000',
       'id' => '568',
       'isbn_group_id' => '108',
@@ -16068,8 +16068,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    568 => 
-    array (
+    568 =>
+    array(
       'from_number' => '0',
       'id' => '569',
       'isbn_group_id' => '109',
@@ -16078,8 +16078,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    569 => 
-    array (
+    569 =>
+    array(
       'from_number' => '10000',
       'id' => '570',
       'isbn_group_id' => '109',
@@ -16088,8 +16088,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    570 => 
-    array (
+    570 =>
+    array(
       'from_number' => '40000',
       'id' => '571',
       'isbn_group_id' => '109',
@@ -16098,8 +16098,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    571 => 
-    array (
+    571 =>
+    array(
       'from_number' => '90000',
       'id' => '572',
       'isbn_group_id' => '109',
@@ -16108,8 +16108,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    572 => 
-    array (
+    572 =>
+    array(
       'from_number' => '0',
       'id' => '573',
       'isbn_group_id' => '110',
@@ -16118,8 +16118,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    573 => 
-    array (
+    573 =>
+    array(
       'from_number' => '40000',
       'id' => '574',
       'isbn_group_id' => '110',
@@ -16128,8 +16128,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    574 => 
-    array (
+    574 =>
+    array(
       'from_number' => '70000',
       'id' => '575',
       'isbn_group_id' => '110',
@@ -16138,8 +16138,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '84',
       'to_number' => '84999',
     ),
-    575 => 
-    array (
+    575 =>
+    array(
       'from_number' => '85000',
       'id' => '576',
       'isbn_group_id' => '110',
@@ -16148,8 +16148,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8799',
       'to_number' => '87999',
     ),
-    576 => 
-    array (
+    576 =>
+    array(
       'from_number' => '88000',
       'id' => '577',
       'isbn_group_id' => '110',
@@ -16158,8 +16158,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99',
       'to_number' => '99999',
     ),
-    577 => 
-    array (
+    577 =>
+    array(
       'from_number' => '0',
       'id' => '578',
       'isbn_group_id' => '111',
@@ -16168,8 +16168,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    578 => 
-    array (
+    578 =>
+    array(
       'from_number' => '10000',
       'id' => '579',
       'isbn_group_id' => '111',
@@ -16178,8 +16178,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '18',
       'to_number' => '18999',
     ),
-    579 => 
-    array (
+    579 =>
+    array(
       'from_number' => '19000',
       'id' => '580',
       'isbn_group_id' => '111',
@@ -16188,8 +16188,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1999',
       'to_number' => '19999',
     ),
-    580 => 
-    array (
+    580 =>
+    array(
       'from_number' => '20000',
       'id' => '581',
       'isbn_group_id' => '111',
@@ -16198,8 +16198,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    581 => 
-    array (
+    581 =>
+    array(
       'from_number' => '50000',
       'id' => '582',
       'isbn_group_id' => '111',
@@ -16208,8 +16208,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    582 => 
-    array (
+    582 =>
+    array(
       'from_number' => '90000',
       'id' => '583',
       'isbn_group_id' => '111',
@@ -16218,8 +16218,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    583 => 
-    array (
+    583 =>
+    array(
       'from_number' => '0',
       'id' => '584',
       'isbn_group_id' => '112',
@@ -16228,8 +16228,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    584 => 
-    array (
+    584 =>
+    array(
       'from_number' => '20000',
       'id' => '585',
       'isbn_group_id' => '112',
@@ -16238,8 +16238,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    585 => 
-    array (
+    585 =>
+    array(
       'from_number' => '80000',
       'id' => '586',
       'isbn_group_id' => '112',
@@ -16248,8 +16248,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '949',
       'to_number' => '94999',
     ),
-    586 => 
-    array (
+    586 =>
+    array(
       'from_number' => '95000',
       'id' => '587',
       'isbn_group_id' => '112',
@@ -16258,8 +16258,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    587 => 
-    array (
+    587 =>
+    array(
       'from_number' => '0',
       'id' => '588',
       'isbn_group_id' => '113',
@@ -16268,8 +16268,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    588 => 
-    array (
+    588 =>
+    array(
       'from_number' => '60000',
       'id' => '589',
       'isbn_group_id' => '113',
@@ -16278,8 +16278,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    589 => 
-    array (
+    589 =>
+    array(
       'from_number' => '90000',
       'id' => '590',
       'isbn_group_id' => '113',
@@ -16288,8 +16288,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    590 => 
-    array (
+    590 =>
+    array(
       'from_number' => '0',
       'id' => '591',
       'isbn_group_id' => '114',
@@ -16298,8 +16298,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    591 => 
-    array (
+    591 =>
+    array(
       'from_number' => '30000',
       'id' => '592',
       'isbn_group_id' => '114',
@@ -16308,8 +16308,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '69',
       'to_number' => '69999',
     ),
-    592 => 
-    array (
+    592 =>
+    array(
       'from_number' => '70000',
       'id' => '593',
       'isbn_group_id' => '114',
@@ -16318,8 +16318,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '949',
       'to_number' => '94999',
     ),
-    593 => 
-    array (
+    593 =>
+    array(
       'from_number' => '95000',
       'id' => '594',
       'isbn_group_id' => '114',
@@ -16328,8 +16328,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    594 => 
-    array (
+    594 =>
+    array(
       'from_number' => '0',
       'id' => '595',
       'isbn_group_id' => '115',
@@ -16338,8 +16338,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '54',
       'to_number' => '54999',
     ),
-    595 => 
-    array (
+    595 =>
+    array(
       'from_number' => '55000',
       'id' => '596',
       'isbn_group_id' => '115',
@@ -16348,8 +16348,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '5599',
       'to_number' => '55999',
     ),
-    596 => 
-    array (
+    596 =>
+    array(
       'from_number' => '56000',
       'id' => '597',
       'isbn_group_id' => '115',
@@ -16358,8 +16358,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    597 => 
-    array (
+    597 =>
+    array(
       'from_number' => '60000',
       'id' => '598',
       'isbn_group_id' => '115',
@@ -16368,8 +16368,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '849',
       'to_number' => '84999',
     ),
-    598 => 
-    array (
+    598 =>
+    array(
       'from_number' => '85000',
       'id' => '599',
       'isbn_group_id' => '115',
@@ -16378,8 +16378,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    599 => 
-    array (
+    599 =>
+    array(
       'from_number' => '0',
       'id' => '600',
       'isbn_group_id' => '116',
@@ -16388,8 +16388,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    600 => 
-    array (
+    600 =>
+    array(
       'from_number' => '30000',
       'id' => '601',
       'isbn_group_id' => '116',
@@ -16398,8 +16398,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '54',
       'to_number' => '54999',
     ),
-    601 => 
-    array (
+    601 =>
+    array(
       'from_number' => '55000',
       'id' => '602',
       'isbn_group_id' => '116',
@@ -16408,8 +16408,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '734',
       'to_number' => '73499',
     ),
-    602 => 
-    array (
+    602 =>
+    array(
       'from_number' => '73500',
       'id' => '603',
       'isbn_group_id' => '116',
@@ -16418,8 +16418,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '7499',
       'to_number' => '74999',
     ),
-    603 => 
-    array (
+    603 =>
+    array(
       'from_number' => '75000',
       'id' => '604',
       'isbn_group_id' => '116',
@@ -16428,8 +16428,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    604 => 
-    array (
+    604 =>
+    array(
       'from_number' => '0',
       'id' => '605',
       'isbn_group_id' => '117',
@@ -16438,8 +16438,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '6',
       'to_number' => '69999',
     ),
-    605 => 
-    array (
+    605 =>
+    array(
       'from_number' => '70000',
       'id' => '606',
       'isbn_group_id' => '117',
@@ -16448,8 +16448,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '94',
       'to_number' => '94999',
     ),
-    606 => 
-    array (
+    606 =>
+    array(
       'from_number' => '95000',
       'id' => '607',
       'isbn_group_id' => '117',
@@ -16458,8 +16458,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    607 => 
-    array (
+    607 =>
+    array(
       'from_number' => '0',
       'id' => '608',
       'isbn_group_id' => '118',
@@ -16468,8 +16468,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    608 => 
-    array (
+    608 =>
+    array(
       'from_number' => '40000',
       'id' => '609',
       'isbn_group_id' => '118',
@@ -16478,8 +16478,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    609 => 
-    array (
+    609 =>
+    array(
       'from_number' => '90000',
       'id' => '610',
       'isbn_group_id' => '118',
@@ -16488,8 +16488,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    610 => 
-    array (
+    610 =>
+    array(
       'from_number' => '0',
       'id' => '611',
       'isbn_group_id' => '119',
@@ -16498,8 +16498,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '149',
       'to_number' => '14999',
     ),
-    611 => 
-    array (
+    611 =>
+    array(
       'from_number' => '15000',
       'id' => '612',
       'isbn_group_id' => '119',
@@ -16508,8 +16508,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1999',
       'to_number' => '19999',
     ),
-    612 => 
-    array (
+    612 =>
+    array(
       'from_number' => '20000',
       'id' => '613',
       'isbn_group_id' => '119',
@@ -16518,8 +16518,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '69',
       'to_number' => '69999',
     ),
-    613 => 
-    array (
+    613 =>
+    array(
       'from_number' => '70000',
       'id' => '614',
       'isbn_group_id' => '119',
@@ -16528,8 +16528,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '7499',
       'to_number' => '74999',
     ),
-    614 => 
-    array (
+    614 =>
+    array(
       'from_number' => '75000',
       'id' => '615',
       'isbn_group_id' => '119',
@@ -16538,8 +16538,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '959',
       'to_number' => '95999',
     ),
-    615 => 
-    array (
+    615 =>
+    array(
       'from_number' => '96000',
       'id' => '616',
       'isbn_group_id' => '119',
@@ -16548,8 +16548,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    616 => 
-    array (
+    616 =>
+    array(
       'from_number' => '0',
       'id' => '617',
       'isbn_group_id' => '120',
@@ -16558,8 +16558,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    617 => 
-    array (
+    617 =>
+    array(
       'from_number' => '40000',
       'id' => '618',
       'isbn_group_id' => '120',
@@ -16568,8 +16568,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    618 => 
-    array (
+    618 =>
+    array(
       'from_number' => '90000',
       'id' => '619',
       'isbn_group_id' => '120',
@@ -16578,8 +16578,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    619 => 
-    array (
+    619 =>
+    array(
       'from_number' => '0',
       'id' => '620',
       'isbn_group_id' => '121',
@@ -16588,8 +16588,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    620 => 
-    array (
+    620 =>
+    array(
       'from_number' => '50000',
       'id' => '621',
       'isbn_group_id' => '121',
@@ -16598,8 +16598,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '939',
       'to_number' => '93999',
     ),
-    621 => 
-    array (
+    621 =>
+    array(
       'from_number' => '94000',
       'id' => '622',
       'isbn_group_id' => '121',
@@ -16608,8 +16608,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    622 => 
-    array (
+    622 =>
+    array(
       'from_number' => '0',
       'id' => '623',
       'isbn_group_id' => '122',
@@ -16618,8 +16618,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    623 => 
-    array (
+    623 =>
+    array(
       'from_number' => '40000',
       'id' => '624',
       'isbn_group_id' => '122',
@@ -16628,8 +16628,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    624 => 
-    array (
+    624 =>
+    array(
       'from_number' => '90000',
       'id' => '625',
       'isbn_group_id' => '122',
@@ -16638,8 +16638,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    625 => 
-    array (
+    625 =>
+    array(
       'from_number' => '0',
       'id' => '626',
       'isbn_group_id' => '123',
@@ -16648,8 +16648,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '5',
       'to_number' => '59999',
     ),
-    626 => 
-    array (
+    626 =>
+    array(
       'from_number' => '60000',
       'id' => '627',
       'isbn_group_id' => '123',
@@ -16658,8 +16658,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    627 => 
-    array (
+    627 =>
+    array(
       'from_number' => '90000',
       'id' => '628',
       'isbn_group_id' => '123',
@@ -16668,8 +16668,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '989',
       'to_number' => '98999',
     ),
-    628 => 
-    array (
+    628 =>
+    array(
       'from_number' => '99000',
       'id' => '629',
       'isbn_group_id' => '123',
@@ -16678,8 +16678,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    629 => 
-    array (
+    629 =>
+    array(
       'from_number' => '0',
       'id' => '630',
       'isbn_group_id' => '124',
@@ -16688,8 +16688,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '09',
       'to_number' => '9999',
     ),
-    630 => 
-    array (
+    630 =>
+    array(
       'from_number' => '10000',
       'id' => '631',
       'isbn_group_id' => '124',
@@ -16698,8 +16698,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    631 => 
-    array (
+    631 =>
+    array(
       'from_number' => '20000',
       'id' => '632',
       'isbn_group_id' => '124',
@@ -16708,8 +16708,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '249',
       'to_number' => '24999',
     ),
-    632 => 
-    array (
+    632 =>
+    array(
       'from_number' => '25000',
       'id' => '633',
       'isbn_group_id' => '124',
@@ -16718,8 +16718,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2999',
       'to_number' => '29999',
     ),
-    633 => 
-    array (
+    633 =>
+    array(
       'from_number' => '30000',
       'id' => '634',
       'isbn_group_id' => '124',
@@ -16728,8 +16728,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    634 => 
-    array (
+    634 =>
+    array(
       'from_number' => '60000',
       'id' => '635',
       'isbn_group_id' => '124',
@@ -16738,8 +16738,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    635 => 
-    array (
+    635 =>
+    array(
       'from_number' => '90000',
       'id' => '636',
       'isbn_group_id' => '124',
@@ -16748,8 +16748,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    636 => 
-    array (
+    636 =>
+    array(
       'from_number' => '0',
       'id' => '637',
       'isbn_group_id' => '125',
@@ -16758,8 +16758,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '05',
       'to_number' => '5999',
     ),
-    637 => 
-    array (
+    637 =>
+    array(
       'from_number' => '6000',
       'id' => '638',
       'isbn_group_id' => '125',
@@ -16768,8 +16768,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '089',
       'to_number' => '8999',
     ),
-    638 => 
-    array (
+    638 =>
+    array(
       'from_number' => '9000',
       'id' => '639',
       'isbn_group_id' => '125',
@@ -16778,8 +16778,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0999',
       'to_number' => '9999',
     ),
-    639 => 
-    array (
+    639 =>
+    array(
       'from_number' => '10000',
       'id' => '640',
       'isbn_group_id' => '125',
@@ -16788,8 +16788,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '69',
       'to_number' => '69999',
     ),
-    640 => 
-    array (
+    640 =>
+    array(
       'from_number' => '70000',
       'id' => '641',
       'isbn_group_id' => '125',
@@ -16798,8 +16798,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '969',
       'to_number' => '96999',
     ),
-    641 => 
-    array (
+    641 =>
+    array(
       'from_number' => '97000',
       'id' => '642',
       'isbn_group_id' => '125',
@@ -16808,8 +16808,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    642 => 
-    array (
+    642 =>
+    array(
       'from_number' => '0',
       'id' => '643',
       'isbn_group_id' => '126',
@@ -16818,8 +16818,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    643 => 
-    array (
+    643 =>
+    array(
       'from_number' => '30000',
       'id' => '644',
       'isbn_group_id' => '126',
@@ -16828,8 +16828,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '54',
       'to_number' => '54999',
     ),
-    644 => 
-    array (
+    644 =>
+    array(
       'from_number' => '55000',
       'id' => '645',
       'isbn_group_id' => '126',
@@ -16838,8 +16838,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '749',
       'to_number' => '74999',
     ),
-    645 => 
-    array (
+    645 =>
+    array(
       'from_number' => '75000',
       'id' => '646',
       'isbn_group_id' => '126',
@@ -16848,8 +16848,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9499',
       'to_number' => '94999',
     ),
-    646 => 
-    array (
+    646 =>
+    array(
       'from_number' => '95000',
       'id' => '647',
       'isbn_group_id' => '126',
@@ -16858,8 +16858,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99',
       'to_number' => '99999',
     ),
-    647 => 
-    array (
+    647 =>
+    array(
       'from_number' => '0',
       'id' => '648',
       'isbn_group_id' => '127',
@@ -16868,8 +16868,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    648 => 
-    array (
+    648 =>
+    array(
       'from_number' => '10000',
       'id' => '649',
       'isbn_group_id' => '127',
@@ -16878,8 +16878,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '399',
       'to_number' => '39999',
     ),
-    649 => 
-    array (
+    649 =>
+    array(
       'from_number' => '40000',
       'id' => '650',
       'isbn_group_id' => '127',
@@ -16888,8 +16888,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4499',
       'to_number' => '44999',
     ),
-    650 => 
-    array (
+    650 =>
+    array(
       'from_number' => '45000',
       'id' => '651',
       'isbn_group_id' => '127',
@@ -16898,8 +16898,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    651 => 
-    array (
+    651 =>
+    array(
       'from_number' => '90000',
       'id' => '652',
       'isbn_group_id' => '127',
@@ -16908,8 +16908,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '949',
       'to_number' => '94999',
     ),
-    652 => 
-    array (
+    652 =>
+    array(
       'from_number' => '95000',
       'id' => '653',
       'isbn_group_id' => '127',
@@ -16918,8 +16918,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    653 => 
-    array (
+    653 =>
+    array(
       'from_number' => '0',
       'id' => '654',
       'isbn_group_id' => '128',
@@ -16928,8 +16928,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '5',
       'to_number' => '59999',
     ),
-    654 => 
-    array (
+    654 =>
+    array(
       'from_number' => '60000',
       'id' => '655',
       'isbn_group_id' => '128',
@@ -16938,8 +16938,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    655 => 
-    array (
+    655 =>
+    array(
       'from_number' => '90000',
       'id' => '656',
       'isbn_group_id' => '128',
@@ -16948,8 +16948,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '989',
       'to_number' => '98999',
     ),
-    656 => 
-    array (
+    656 =>
+    array(
       'from_number' => '99000',
       'id' => '657',
       'isbn_group_id' => '128',
@@ -16958,8 +16958,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    657 => 
-    array (
+    657 =>
+    array(
       'from_number' => '0',
       'id' => '658',
       'isbn_group_id' => '129',
@@ -16968,8 +16968,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    658 => 
-    array (
+    658 =>
+    array(
       'from_number' => '90000',
       'id' => '659',
       'isbn_group_id' => '129',
@@ -16978,8 +16978,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '989',
       'to_number' => '98999',
     ),
-    659 => 
-    array (
+    659 =>
+    array(
       'from_number' => '99000',
       'id' => '660',
       'isbn_group_id' => '129',
@@ -16988,8 +16988,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    660 => 
-    array (
+    660 =>
+    array(
       'from_number' => '0',
       'id' => '661',
       'isbn_group_id' => '130',
@@ -16998,8 +16998,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '29',
       'to_number' => '29999',
     ),
-    661 => 
-    array (
+    661 =>
+    array(
       'from_number' => '30000',
       'id' => '662',
       'isbn_group_id' => '130',
@@ -17008,8 +17008,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '399',
       'to_number' => '39999',
     ),
-    662 => 
-    array (
+    662 =>
+    array(
       'from_number' => '40000',
       'id' => '663',
       'isbn_group_id' => '130',
@@ -17018,8 +17018,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '94',
       'to_number' => '94999',
     ),
-    663 => 
-    array (
+    663 =>
+    array(
       'from_number' => '95000',
       'id' => '664',
       'isbn_group_id' => '130',
@@ -17028,8 +17028,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '989',
       'to_number' => '98999',
     ),
-    664 => 
-    array (
+    664 =>
+    array(
       'from_number' => '99000',
       'id' => '665',
       'isbn_group_id' => '130',
@@ -17038,8 +17038,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    665 => 
-    array (
+    665 =>
+    array(
       'from_number' => '0',
       'id' => '666',
       'isbn_group_id' => '131',
@@ -17048,8 +17048,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4',
       'to_number' => '49999',
     ),
-    666 => 
-    array (
+    666 =>
+    array(
       'from_number' => '50000',
       'id' => '667',
       'isbn_group_id' => '131',
@@ -17058,8 +17058,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '64',
       'to_number' => '64999',
     ),
-    667 => 
-    array (
+    667 =>
+    array(
       'from_number' => '65000',
       'id' => '668',
       'isbn_group_id' => '131',
@@ -17068,8 +17068,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '659',
       'to_number' => '65999',
     ),
-    668 => 
-    array (
+    668 =>
+    array(
       'from_number' => '66000',
       'id' => '669',
       'isbn_group_id' => '131',
@@ -17078,8 +17078,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '75',
       'to_number' => '75999',
     ),
-    669 => 
-    array (
+    669 =>
+    array(
       'from_number' => '76000',
       'id' => '670',
       'isbn_group_id' => '131',
@@ -17088,8 +17088,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    670 => 
-    array (
+    670 =>
+    array(
       'from_number' => '90000',
       'id' => '671',
       'isbn_group_id' => '131',
@@ -17098,8 +17098,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    671 => 
-    array (
+    671 =>
+    array(
       'from_number' => '0',
       'id' => '672',
       'isbn_group_id' => '132',
@@ -17108,8 +17108,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '3',
       'to_number' => '39999',
     ),
-    672 => 
-    array (
+    672 =>
+    array(
       'from_number' => '40000',
       'id' => '673',
       'isbn_group_id' => '132',
@@ -17118,8 +17118,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    673 => 
-    array (
+    673 =>
+    array(
       'from_number' => '90000',
       'id' => '674',
       'isbn_group_id' => '132',
@@ -17128,8 +17128,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '989',
       'to_number' => '98999',
     ),
-    674 => 
-    array (
+    674 =>
+    array(
       'from_number' => '99000',
       'id' => '675',
       'isbn_group_id' => '132',
@@ -17138,8 +17138,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    675 => 
-    array (
+    675 =>
+    array(
       'from_number' => '0',
       'id' => '676',
       'isbn_group_id' => '133',
@@ -17148,8 +17148,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '09',
       'to_number' => '9999',
     ),
-    676 => 
-    array (
+    676 =>
+    array(
       'from_number' => '10000',
       'id' => '677',
       'isbn_group_id' => '133',
@@ -17158,8 +17158,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '159',
       'to_number' => '15999',
     ),
-    677 => 
-    array (
+    677 =>
+    array(
       'from_number' => '16000',
       'id' => '678',
       'isbn_group_id' => '133',
@@ -17168,8 +17168,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1999',
       'to_number' => '19999',
     ),
-    678 => 
-    array (
+    678 =>
+    array(
       'from_number' => '20000',
       'id' => '679',
       'isbn_group_id' => '133',
@@ -17178,8 +17178,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    679 => 
-    array (
+    679 =>
+    array(
       'from_number' => '80000',
       'id' => '680',
       'isbn_group_id' => '133',
@@ -17188,8 +17188,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '949',
       'to_number' => '94999',
     ),
-    680 => 
-    array (
+    680 =>
+    array(
       'from_number' => '95000',
       'id' => '681',
       'isbn_group_id' => '133',
@@ -17198,8 +17198,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    681 => 
-    array (
+    681 =>
+    array(
       'from_number' => '0',
       'id' => '682',
       'isbn_group_id' => '134',
@@ -17208,8 +17208,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    682 => 
-    array (
+    682 =>
+    array(
       'from_number' => '80000',
       'id' => '683',
       'isbn_group_id' => '134',
@@ -17218,8 +17218,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '989',
       'to_number' => '98999',
     ),
-    683 => 
-    array (
+    683 =>
+    array(
       'from_number' => '99000',
       'id' => '684',
       'isbn_group_id' => '134',
@@ -17228,8 +17228,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    684 => 
-    array (
+    684 =>
+    array(
       'from_number' => '80000',
       'id' => '685',
       'isbn_group_id' => '135',
@@ -17238,8 +17238,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '94',
       'to_number' => '94999',
     ),
-    685 => 
-    array (
+    685 =>
+    array(
       'from_number' => '95000',
       'id' => '686',
       'isbn_group_id' => '135',
@@ -17248,8 +17248,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '989',
       'to_number' => '98999',
     ),
-    686 => 
-    array (
+    686 =>
+    array(
       'from_number' => '99000',
       'id' => '687',
       'isbn_group_id' => '135',
@@ -17258,8 +17258,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    687 => 
-    array (
+    687 =>
+    array(
       'from_number' => '0',
       'id' => '688',
       'isbn_group_id' => '136',
@@ -17268,8 +17268,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    688 => 
-    array (
+    688 =>
+    array(
       'from_number' => '50000',
       'id' => '689',
       'isbn_group_id' => '136',
@@ -17278,8 +17278,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    689 => 
-    array (
+    689 =>
+    array(
       'from_number' => '90000',
       'id' => '690',
       'isbn_group_id' => '136',
@@ -17288,8 +17288,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    690 => 
-    array (
+    690 =>
+    array(
       'from_number' => '0',
       'id' => '691',
       'isbn_group_id' => '137',
@@ -17298,8 +17298,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4',
       'to_number' => '49999',
     ),
-    691 => 
-    array (
+    691 =>
+    array(
       'from_number' => '50000',
       'id' => '692',
       'isbn_group_id' => '137',
@@ -17308,8 +17308,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    692 => 
-    array (
+    692 =>
+    array(
       'from_number' => '80000',
       'id' => '693',
       'isbn_group_id' => '137',
@@ -17318,8 +17318,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    693 => 
-    array (
+    693 =>
+    array(
       'from_number' => '90000',
       'id' => '694',
       'isbn_group_id' => '137',
@@ -17328,8 +17328,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    694 => 
-    array (
+    694 =>
+    array(
       'from_number' => '0',
       'id' => '695',
       'isbn_group_id' => '138',
@@ -17338,8 +17338,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    695 => 
-    array (
+    695 =>
+    array(
       'from_number' => '40000',
       'id' => '696',
       'isbn_group_id' => '138',
@@ -17348,8 +17348,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    696 => 
-    array (
+    696 =>
+    array(
       'from_number' => '90000',
       'id' => '697',
       'isbn_group_id' => '138',
@@ -17358,8 +17358,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9399',
       'to_number' => '93999',
     ),
-    697 => 
-    array (
+    697 =>
+    array(
       'from_number' => '94000',
       'id' => '698',
       'isbn_group_id' => '138',
@@ -17368,8 +17368,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '969',
       'to_number' => '96999',
     ),
-    698 => 
-    array (
+    698 =>
+    array(
       'from_number' => '97000',
       'id' => '699',
       'isbn_group_id' => '138',
@@ -17378,8 +17378,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99',
       'to_number' => '99999',
     ),
-    699 => 
-    array (
+    699 =>
+    array(
       'from_number' => '0',
       'id' => '700',
       'isbn_group_id' => '139',
@@ -17388,8 +17388,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '39',
       'to_number' => '39999',
     ),
-    700 => 
-    array (
+    700 =>
+    array(
       'from_number' => '40000',
       'id' => '701',
       'isbn_group_id' => '139',
@@ -17398,8 +17398,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '879',
       'to_number' => '87999',
     ),
-    701 => 
-    array (
+    701 =>
+    array(
       'from_number' => '88000',
       'id' => '702',
       'isbn_group_id' => '139',
@@ -17408,8 +17408,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    702 => 
-    array (
+    702 =>
+    array(
       'from_number' => '0',
       'id' => '703',
       'isbn_group_id' => '140',
@@ -17418,8 +17418,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    703 => 
-    array (
+    703 =>
+    array(
       'from_number' => '30000',
       'id' => '704',
       'isbn_group_id' => '140',
@@ -17428,8 +17428,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '54',
       'to_number' => '54999',
     ),
-    704 => 
-    array (
+    704 =>
+    array(
       'from_number' => '55000',
       'id' => '705',
       'isbn_group_id' => '140',
@@ -17438,8 +17438,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '749',
       'to_number' => '74999',
     ),
-    705 => 
-    array (
+    705 =>
+    array(
       'from_number' => '75000',
       'id' => '706',
       'isbn_group_id' => '140',
@@ -17448,8 +17448,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    706 => 
-    array (
+    706 =>
+    array(
       'from_number' => '0',
       'id' => '707',
       'isbn_group_id' => '141',
@@ -17458,8 +17458,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    707 => 
-    array (
+    707 =>
+    array(
       'from_number' => '10000',
       'id' => '708',
       'isbn_group_id' => '141',
@@ -17468,8 +17468,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '199',
       'to_number' => '19999',
     ),
-    708 => 
-    array (
+    708 =>
+    array(
       'from_number' => '20000',
       'id' => '709',
       'isbn_group_id' => '141',
@@ -17478,8 +17478,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2999',
       'to_number' => '29999',
     ),
-    709 => 
-    array (
+    709 =>
+    array(
       'from_number' => '30000',
       'id' => '710',
       'isbn_group_id' => '141',
@@ -17488,8 +17488,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    710 => 
-    array (
+    710 =>
+    array(
       'from_number' => '60000',
       'id' => '711',
       'isbn_group_id' => '141',
@@ -17498,8 +17498,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '949',
       'to_number' => '94999',
     ),
-    711 => 
-    array (
+    711 =>
+    array(
       'from_number' => '95000',
       'id' => '712',
       'isbn_group_id' => '141',
@@ -17508,8 +17508,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '9999',
       'to_number' => '99999',
     ),
-    712 => 
-    array (
+    712 =>
+    array(
       'from_number' => '0',
       'id' => '713',
       'isbn_group_id' => '142',
@@ -17518,8 +17518,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    713 => 
-    array (
+    713 =>
+    array(
       'from_number' => '50000',
       'id' => '714',
       'isbn_group_id' => '142',
@@ -17528,8 +17528,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    714 => 
-    array (
+    714 =>
+    array(
       'from_number' => '80000',
       'id' => '715',
       'isbn_group_id' => '142',
@@ -17538,8 +17538,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99',
       'to_number' => '99999',
     ),
-    715 => 
-    array (
+    715 =>
+    array(
       'from_number' => '0',
       'id' => '716',
       'isbn_group_id' => '144',
@@ -17548,8 +17548,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    716 => 
-    array (
+    716 =>
+    array(
       'from_number' => '20000',
       'id' => '717',
       'isbn_group_id' => '144',
@@ -17558,8 +17558,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    717 => 
-    array (
+    717 =>
+    array(
       'from_number' => '90000',
       'id' => '718',
       'isbn_group_id' => '144',
@@ -17568,8 +17568,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    718 => 
-    array (
+    718 =>
+    array(
       'from_number' => '0',
       'id' => '719',
       'isbn_group_id' => '145',
@@ -17578,8 +17578,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '5',
       'to_number' => '59999',
     ),
-    719 => 
-    array (
+    719 =>
+    array(
       'from_number' => '60000',
       'id' => '720',
       'isbn_group_id' => '145',
@@ -17588,8 +17588,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    720 => 
-    array (
+    720 =>
+    array(
       'from_number' => '90000',
       'id' => '721',
       'isbn_group_id' => '145',
@@ -17598,8 +17598,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    721 => 
-    array (
+    721 =>
+    array(
       'from_number' => '0',
       'id' => '722',
       'isbn_group_id' => '146',
@@ -17608,8 +17608,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '3',
       'to_number' => '39999',
     ),
-    722 => 
-    array (
+    722 =>
+    array(
       'from_number' => '40000',
       'id' => '723',
       'isbn_group_id' => '146',
@@ -17618,8 +17618,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    723 => 
-    array (
+    723 =>
+    array(
       'from_number' => '80000',
       'id' => '724',
       'isbn_group_id' => '146',
@@ -17628,8 +17628,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    724 => 
-    array (
+    724 =>
+    array(
       'from_number' => '0',
       'id' => '725',
       'isbn_group_id' => '147',
@@ -17638,8 +17638,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    725 => 
-    array (
+    725 =>
+    array(
       'from_number' => '30000',
       'id' => '726',
       'isbn_group_id' => '147',
@@ -17648,8 +17648,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    726 => 
-    array (
+    726 =>
+    array(
       'from_number' => '60000',
       'id' => '727',
       'isbn_group_id' => '147',
@@ -17658,8 +17658,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    727 => 
-    array (
+    727 =>
+    array(
       'from_number' => '70000',
       'id' => '728',
       'isbn_group_id' => '147',
@@ -17668,8 +17668,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    728 => 
-    array (
+    728 =>
+    array(
       'from_number' => '90000',
       'id' => '729',
       'isbn_group_id' => '147',
@@ -17678,8 +17678,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '94',
       'to_number' => '94999',
     ),
-    729 => 
-    array (
+    729 =>
+    array(
       'from_number' => '95000',
       'id' => '730',
       'isbn_group_id' => '147',
@@ -17688,8 +17688,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    730 => 
-    array (
+    730 =>
+    array(
       'from_number' => '0',
       'id' => '731',
       'isbn_group_id' => '148',
@@ -17698,8 +17698,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    731 => 
-    array (
+    731 =>
+    array(
       'from_number' => '10000',
       'id' => '732',
       'isbn_group_id' => '148',
@@ -17708,8 +17708,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    732 => 
-    array (
+    732 =>
+    array(
       'from_number' => '90000',
       'id' => '733',
       'isbn_group_id' => '148',
@@ -17718,8 +17718,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    733 => 
-    array (
+    733 =>
+    array(
       'from_number' => '0',
       'id' => '734',
       'isbn_group_id' => '149',
@@ -17728,8 +17728,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '3',
       'to_number' => '39999',
     ),
-    734 => 
-    array (
+    734 =>
+    array(
       'from_number' => '40000',
       'id' => '735',
       'isbn_group_id' => '149',
@@ -17738,8 +17738,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '94',
       'to_number' => '94999',
     ),
-    735 => 
-    array (
+    735 =>
+    array(
       'from_number' => '95000',
       'id' => '736',
       'isbn_group_id' => '149',
@@ -17748,8 +17748,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    736 => 
-    array (
+    736 =>
+    array(
       'from_number' => '0',
       'id' => '737',
       'isbn_group_id' => '150',
@@ -17758,8 +17758,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    737 => 
-    array (
+    737 =>
+    array(
       'from_number' => '30000',
       'id' => '738',
       'isbn_group_id' => '150',
@@ -17768,8 +17768,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    738 => 
-    array (
+    738 =>
+    array(
       'from_number' => '90000',
       'id' => '739',
       'isbn_group_id' => '150',
@@ -17778,8 +17778,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    739 => 
-    array (
+    739 =>
+    array(
       'from_number' => '0',
       'id' => '740',
       'isbn_group_id' => '151',
@@ -17788,8 +17788,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    740 => 
-    array (
+    740 =>
+    array(
       'from_number' => '60000',
       'id' => '741',
       'isbn_group_id' => '151',
@@ -17798,8 +17798,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    741 => 
-    array (
+    741 =>
+    array(
       'from_number' => '0',
       'id' => '742',
       'isbn_group_id' => '152',
@@ -17808,8 +17808,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '3',
       'to_number' => '39999',
     ),
-    742 => 
-    array (
+    742 =>
+    array(
       'from_number' => '40000',
       'id' => '743',
       'isbn_group_id' => '152',
@@ -17818,8 +17818,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '599',
       'to_number' => '59999',
     ),
-    743 => 
-    array (
+    743 =>
+    array(
       'from_number' => '60000',
       'id' => '744',
       'isbn_group_id' => '152',
@@ -17828,8 +17828,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    744 => 
-    array (
+    744 =>
+    array(
       'from_number' => '90000',
       'id' => '745',
       'isbn_group_id' => '152',
@@ -17838,8 +17838,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    745 => 
-    array (
+    745 =>
+    array(
       'from_number' => '0',
       'id' => '746',
       'isbn_group_id' => '153',
@@ -17848,8 +17848,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    746 => 
-    array (
+    746 =>
+    array(
       'from_number' => '30000',
       'id' => '747',
       'isbn_group_id' => '153',
@@ -17858,8 +17858,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '35',
       'to_number' => '35999',
     ),
-    747 => 
-    array (
+    747 =>
+    array(
       'from_number' => '60000',
       'id' => '748',
       'isbn_group_id' => '153',
@@ -17868,8 +17868,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '604',
       'to_number' => '60499',
     ),
-    748 => 
-    array (
+    748 =>
+    array(
       'from_number' => '0',
       'id' => '749',
       'isbn_group_id' => '154',
@@ -17878,8 +17878,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4',
       'to_number' => '49999',
     ),
-    749 => 
-    array (
+    749 =>
+    array(
       'from_number' => '50000',
       'id' => '750',
       'isbn_group_id' => '154',
@@ -17888,8 +17888,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    750 => 
-    array (
+    750 =>
+    array(
       'from_number' => '90000',
       'id' => '751',
       'isbn_group_id' => '154',
@@ -17898,8 +17898,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    751 => 
-    array (
+    751 =>
+    array(
       'from_number' => '0',
       'id' => '752',
       'isbn_group_id' => '155',
@@ -17908,8 +17908,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4',
       'to_number' => '49999',
     ),
-    752 => 
-    array (
+    752 =>
+    array(
       'from_number' => '50000',
       'id' => '753',
       'isbn_group_id' => '155',
@@ -17918,8 +17918,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    753 => 
-    array (
+    753 =>
+    array(
       'from_number' => '80000',
       'id' => '754',
       'isbn_group_id' => '155',
@@ -17928,8 +17928,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    754 => 
-    array (
+    754 =>
+    array(
       'from_number' => '0',
       'id' => '755',
       'isbn_group_id' => '156',
@@ -17938,8 +17938,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    755 => 
-    array (
+    755 =>
+    array(
       'from_number' => '30000',
       'id' => '756',
       'isbn_group_id' => '156',
@@ -17948,8 +17948,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '69',
       'to_number' => '69999',
     ),
-    756 => 
-    array (
+    756 =>
+    array(
       'from_number' => '70000',
       'id' => '757',
       'isbn_group_id' => '156',
@@ -17958,8 +17958,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    757 => 
-    array (
+    757 =>
+    array(
       'from_number' => '0',
       'id' => '758',
       'isbn_group_id' => '157',
@@ -17968,8 +17968,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    758 => 
-    array (
+    758 =>
+    array(
       'from_number' => '30000',
       'id' => '759',
       'isbn_group_id' => '157',
@@ -17978,8 +17978,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    759 => 
-    array (
+    759 =>
+    array(
       'from_number' => '90000',
       'id' => '760',
       'isbn_group_id' => '157',
@@ -17988,8 +17988,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    760 => 
-    array (
+    760 =>
+    array(
       'from_number' => '0',
       'id' => '761',
       'isbn_group_id' => '158',
@@ -17998,8 +17998,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '3',
       'to_number' => '39999',
     ),
-    761 => 
-    array (
+    761 =>
+    array(
       'from_number' => '40000',
       'id' => '762',
       'isbn_group_id' => '158',
@@ -18008,8 +18008,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    762 => 
-    array (
+    762 =>
+    array(
       'from_number' => '80000',
       'id' => '763',
       'isbn_group_id' => '158',
@@ -18018,8 +18018,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    763 => 
-    array (
+    763 =>
+    array(
       'from_number' => '0',
       'id' => '764',
       'isbn_group_id' => '159',
@@ -18028,8 +18028,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    764 => 
-    array (
+    764 =>
+    array(
       'from_number' => '30000',
       'id' => '765',
       'isbn_group_id' => '159',
@@ -18038,8 +18038,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '399',
       'to_number' => '39999',
     ),
-    765 => 
-    array (
+    765 =>
+    array(
       'from_number' => '40000',
       'id' => '766',
       'isbn_group_id' => '159',
@@ -18048,8 +18048,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '69',
       'to_number' => '69999',
     ),
-    766 => 
-    array (
+    766 =>
+    array(
       'from_number' => '90000',
       'id' => '767',
       'isbn_group_id' => '159',
@@ -18058,8 +18058,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    767 => 
-    array (
+    767 =>
+    array(
       'from_number' => '0',
       'id' => '768',
       'isbn_group_id' => '160',
@@ -18068,8 +18068,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4',
       'to_number' => '49999',
     ),
-    768 => 
-    array (
+    768 =>
+    array(
       'from_number' => '50000',
       'id' => '769',
       'isbn_group_id' => '160',
@@ -18078,8 +18078,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    769 => 
-    array (
+    769 =>
+    array(
       'from_number' => '90000',
       'id' => '770',
       'isbn_group_id' => '160',
@@ -18088,8 +18088,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    770 => 
-    array (
+    770 =>
+    array(
       'from_number' => '0',
       'id' => '771',
       'isbn_group_id' => '161',
@@ -18098,8 +18098,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    771 => 
-    array (
+    771 =>
+    array(
       'from_number' => '20000',
       'id' => '772',
       'isbn_group_id' => '161',
@@ -18108,8 +18108,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '69',
       'to_number' => '69999',
     ),
-    772 => 
-    array (
+    772 =>
+    array(
       'from_number' => '70000',
       'id' => '773',
       'isbn_group_id' => '161',
@@ -18118,8 +18118,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    773 => 
-    array (
+    773 =>
+    array(
       'from_number' => '80000',
       'id' => '774',
       'isbn_group_id' => '161',
@@ -18128,8 +18128,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8',
       'to_number' => '89999',
     ),
-    774 => 
-    array (
+    774 =>
+    array(
       'from_number' => '90000',
       'id' => '775',
       'isbn_group_id' => '161',
@@ -18138,8 +18138,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99',
       'to_number' => '99999',
     ),
-    775 => 
-    array (
+    775 =>
+    array(
       'from_number' => '0',
       'id' => '776',
       'isbn_group_id' => '162',
@@ -18148,8 +18148,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '3',
       'to_number' => '39999',
     ),
-    776 => 
-    array (
+    776 =>
+    array(
       'from_number' => '40000',
       'id' => '777',
       'isbn_group_id' => '162',
@@ -18158,8 +18158,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '69',
       'to_number' => '69999',
     ),
-    777 => 
-    array (
+    777 =>
+    array(
       'from_number' => '70000',
       'id' => '778',
       'isbn_group_id' => '162',
@@ -18168,8 +18168,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    778 => 
-    array (
+    778 =>
+    array(
       'from_number' => '0',
       'id' => '779',
       'isbn_group_id' => '163',
@@ -18178,8 +18178,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    779 => 
-    array (
+    779 =>
+    array(
       'from_number' => '20000',
       'id' => '780',
       'isbn_group_id' => '163',
@@ -18188,8 +18188,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    780 => 
-    array (
+    780 =>
+    array(
       'from_number' => '80000',
       'id' => '781',
       'isbn_group_id' => '163',
@@ -18198,8 +18198,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    781 => 
-    array (
+    781 =>
+    array(
       'from_number' => '0',
       'id' => '782',
       'isbn_group_id' => '164',
@@ -18208,8 +18208,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    782 => 
-    array (
+    782 =>
+    array(
       'from_number' => '20000',
       'id' => '783',
       'isbn_group_id' => '164',
@@ -18218,8 +18218,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    783 => 
-    array (
+    783 =>
+    array(
       'from_number' => '80000',
       'id' => '784',
       'isbn_group_id' => '164',
@@ -18228,8 +18228,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    784 => 
-    array (
+    784 =>
+    array(
       'from_number' => '0',
       'id' => '785',
       'isbn_group_id' => '165',
@@ -18238,8 +18238,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '3',
       'to_number' => '39999',
     ),
-    785 => 
-    array (
+    785 =>
+    array(
       'from_number' => '40000',
       'id' => '786',
       'isbn_group_id' => '165',
@@ -18248,8 +18248,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    786 => 
-    array (
+    786 =>
+    array(
       'from_number' => '80000',
       'id' => '787',
       'isbn_group_id' => '165',
@@ -18258,8 +18258,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    787 => 
-    array (
+    787 =>
+    array(
       'from_number' => '0',
       'id' => '788',
       'isbn_group_id' => '166',
@@ -18268,8 +18268,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    788 => 
-    array (
+    788 =>
+    array(
       'from_number' => '10000',
       'id' => '789',
       'isbn_group_id' => '166',
@@ -18278,8 +18278,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    789 => 
-    array (
+    789 =>
+    array(
       'from_number' => '60000',
       'id' => '790',
       'isbn_group_id' => '166',
@@ -18288,8 +18288,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    790 => 
-    array (
+    790 =>
+    array(
       'from_number' => '0',
       'id' => '791',
       'isbn_group_id' => '167',
@@ -18298,8 +18298,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    791 => 
-    array (
+    791 =>
+    array(
       'from_number' => '30000',
       'id' => '792',
       'isbn_group_id' => '167',
@@ -18308,8 +18308,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    792 => 
-    array (
+    792 =>
+    array(
       'from_number' => '60000',
       'id' => '793',
       'isbn_group_id' => '167',
@@ -18318,8 +18318,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    793 => 
-    array (
+    793 =>
+    array(
       'from_number' => '0',
       'id' => '794',
       'isbn_group_id' => '168',
@@ -18328,8 +18328,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    794 => 
-    array (
+    794 =>
+    array(
       'from_number' => '10000',
       'id' => '795',
       'isbn_group_id' => '168',
@@ -18338,8 +18338,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    795 => 
-    array (
+    795 =>
+    array(
       'from_number' => '80000',
       'id' => '796',
       'isbn_group_id' => '168',
@@ -18348,8 +18348,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    796 => 
-    array (
+    796 =>
+    array(
       'from_number' => '0',
       'id' => '797',
       'isbn_group_id' => '169',
@@ -18358,8 +18358,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4',
       'to_number' => '49999',
     ),
-    797 => 
-    array (
+    797 =>
+    array(
       'from_number' => '50000',
       'id' => '798',
       'isbn_group_id' => '169',
@@ -18368,8 +18368,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    798 => 
-    array (
+    798 =>
+    array(
       'from_number' => '80000',
       'id' => '799',
       'isbn_group_id' => '169',
@@ -18378,8 +18378,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    799 => 
-    array (
+    799 =>
+    array(
       'from_number' => '0',
       'id' => '800',
       'isbn_group_id' => '170',
@@ -18388,8 +18388,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4',
       'to_number' => '49999',
     ),
-    800 => 
-    array (
+    800 =>
+    array(
       'from_number' => '50000',
       'id' => '801',
       'isbn_group_id' => '170',
@@ -18398,8 +18398,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    801 => 
-    array (
+    801 =>
+    array(
       'from_number' => '80000',
       'id' => '802',
       'isbn_group_id' => '170',
@@ -18408,8 +18408,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    802 => 
-    array (
+    802 =>
+    array(
       'from_number' => '0',
       'id' => '803',
       'isbn_group_id' => '171',
@@ -18418,8 +18418,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4',
       'to_number' => '49999',
     ),
-    803 => 
-    array (
+    803 =>
+    array(
       'from_number' => '50000',
       'id' => '804',
       'isbn_group_id' => '171',
@@ -18428,8 +18428,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    804 => 
-    array (
+    804 =>
+    array(
       'from_number' => '80000',
       'id' => '805',
       'isbn_group_id' => '171',
@@ -18438,8 +18438,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    805 => 
-    array (
+    805 =>
+    array(
       'from_number' => '0',
       'id' => '806',
       'isbn_group_id' => '172',
@@ -18448,8 +18448,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    806 => 
-    array (
+    806 =>
+    array(
       'from_number' => '10000',
       'id' => '807',
       'isbn_group_id' => '172',
@@ -18458,8 +18458,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    807 => 
-    array (
+    807 =>
+    array(
       'from_number' => '60000',
       'id' => '808',
       'isbn_group_id' => '172',
@@ -18468,8 +18468,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    808 => 
-    array (
+    808 =>
+    array(
       'from_number' => '70000',
       'id' => '809',
       'isbn_group_id' => '172',
@@ -18478,8 +18478,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '7',
       'to_number' => '79999',
     ),
-    809 => 
-    array (
+    809 =>
+    array(
       'from_number' => '80000',
       'id' => '810',
       'isbn_group_id' => '172',
@@ -18488,8 +18488,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99',
       'to_number' => '99999',
     ),
-    810 => 
-    array (
+    810 =>
+    array(
       'from_number' => '0',
       'id' => '811',
       'isbn_group_id' => '173',
@@ -18498,8 +18498,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    811 => 
-    array (
+    811 =>
+    array(
       'from_number' => '30000',
       'id' => '812',
       'isbn_group_id' => '173',
@@ -18508,8 +18508,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    812 => 
-    array (
+    812 =>
+    array(
       'from_number' => '60000',
       'id' => '813',
       'isbn_group_id' => '173',
@@ -18518,8 +18518,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    813 => 
-    array (
+    813 =>
+    array(
       'from_number' => '0',
       'id' => '814',
       'isbn_group_id' => '174',
@@ -18528,8 +18528,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    814 => 
-    array (
+    814 =>
+    array(
       'from_number' => '20000',
       'id' => '815',
       'isbn_group_id' => '174',
@@ -18538,8 +18538,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    815 => 
-    array (
+    815 =>
+    array(
       'from_number' => '80000',
       'id' => '816',
       'isbn_group_id' => '174',
@@ -18548,8 +18548,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    816 => 
-    array (
+    816 =>
+    array(
       'from_number' => '0',
       'id' => '817',
       'isbn_group_id' => '175',
@@ -18558,8 +18558,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    817 => 
-    array (
+    817 =>
+    array(
       'from_number' => '30000',
       'id' => '818',
       'isbn_group_id' => '175',
@@ -18568,8 +18568,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    818 => 
-    array (
+    818 =>
+    array(
       'from_number' => '60000',
       'id' => '819',
       'isbn_group_id' => '175',
@@ -18578,8 +18578,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    819 => 
-    array (
+    819 =>
+    array(
       'from_number' => '70000',
       'id' => '820',
       'isbn_group_id' => '175',
@@ -18588,8 +18588,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8',
       'to_number' => '89999',
     ),
-    820 => 
-    array (
+    820 =>
+    array(
       'from_number' => '90000',
       'id' => '821',
       'isbn_group_id' => '175',
@@ -18598,8 +18598,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99',
       'to_number' => '99999',
     ),
-    821 => 
-    array (
+    821 =>
+    array(
       'from_number' => '0',
       'id' => '822',
       'isbn_group_id' => '176',
@@ -18608,8 +18608,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    822 => 
-    array (
+    822 =>
+    array(
       'from_number' => '10000',
       'id' => '823',
       'isbn_group_id' => '176',
@@ -18618,8 +18618,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    823 => 
-    array (
+    823 =>
+    array(
       'from_number' => '60000',
       'id' => '824',
       'isbn_group_id' => '176',
@@ -18628,8 +18628,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    824 => 
-    array (
+    824 =>
+    array(
       'from_number' => '0',
       'id' => '825',
       'isbn_group_id' => '177',
@@ -18638,8 +18638,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    825 => 
-    array (
+    825 =>
+    array(
       'from_number' => '20000',
       'id' => '826',
       'isbn_group_id' => '177',
@@ -18648,8 +18648,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    826 => 
-    array (
+    826 =>
+    array(
       'from_number' => '60000',
       'id' => '827',
       'isbn_group_id' => '177',
@@ -18658,8 +18658,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    827 => 
-    array (
+    827 =>
+    array(
       'from_number' => '0',
       'id' => '828',
       'isbn_group_id' => '178',
@@ -18668,8 +18668,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    828 => 
-    array (
+    828 =>
+    array(
       'from_number' => '20000',
       'id' => '829',
       'isbn_group_id' => '178',
@@ -18678,8 +18678,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    829 => 
-    array (
+    829 =>
+    array(
       'from_number' => '60000',
       'id' => '830',
       'isbn_group_id' => '178',
@@ -18688,8 +18688,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    830 => 
-    array (
+    830 =>
+    array(
       'from_number' => '90000',
       'id' => '831',
       'isbn_group_id' => '178',
@@ -18698,8 +18698,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99',
       'to_number' => '99999',
     ),
-    831 => 
-    array (
+    831 =>
+    array(
       'from_number' => '0',
       'id' => '832',
       'isbn_group_id' => '179',
@@ -18708,8 +18708,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '5',
       'to_number' => '59999',
     ),
-    832 => 
-    array (
+    832 =>
+    array(
       'from_number' => '60000',
       'id' => '833',
       'isbn_group_id' => '179',
@@ -18718,8 +18718,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    833 => 
-    array (
+    833 =>
+    array(
       'from_number' => '90000',
       'id' => '834',
       'isbn_group_id' => '179',
@@ -18728,8 +18728,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    834 => 
-    array (
+    834 =>
+    array(
       'from_number' => '0',
       'id' => '835',
       'isbn_group_id' => '180',
@@ -18738,8 +18738,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    835 => 
-    array (
+    835 =>
+    array(
       'from_number' => '10000',
       'id' => '836',
       'isbn_group_id' => '180',
@@ -18748,8 +18748,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '69',
       'to_number' => '69999',
     ),
-    836 => 
-    array (
+    836 =>
+    array(
       'from_number' => '70000',
       'id' => '837',
       'isbn_group_id' => '180',
@@ -18758,8 +18758,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    837 => 
-    array (
+    837 =>
+    array(
       'from_number' => '0',
       'id' => '838',
       'isbn_group_id' => '181',
@@ -18768,8 +18768,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    838 => 
-    array (
+    838 =>
+    array(
       'from_number' => '30000',
       'id' => '839',
       'isbn_group_id' => '181',
@@ -18778,8 +18778,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    839 => 
-    array (
+    839 =>
+    array(
       'from_number' => '80000',
       'id' => '840',
       'isbn_group_id' => '181',
@@ -18788,8 +18788,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    840 => 
-    array (
+    840 =>
+    array(
       'from_number' => '0',
       'id' => '841',
       'isbn_group_id' => '182',
@@ -18798,8 +18798,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4',
       'to_number' => '49999',
     ),
-    841 => 
-    array (
+    841 =>
+    array(
       'from_number' => '50000',
       'id' => '842',
       'isbn_group_id' => '182',
@@ -18808,8 +18808,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    842 => 
-    array (
+    842 =>
+    array(
       'from_number' => '80000',
       'id' => '843',
       'isbn_group_id' => '182',
@@ -18818,8 +18818,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    843 => 
-    array (
+    843 =>
+    array(
       'from_number' => '0',
       'id' => '844',
       'isbn_group_id' => '183',
@@ -18828,8 +18828,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    844 => 
-    array (
+    844 =>
+    array(
       'from_number' => '30000',
       'id' => '845',
       'isbn_group_id' => '183',
@@ -18838,8 +18838,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    845 => 
-    array (
+    845 =>
+    array(
       'from_number' => '60000',
       'id' => '846',
       'isbn_group_id' => '183',
@@ -18848,8 +18848,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    846 => 
-    array (
+    846 =>
+    array(
       'from_number' => '0',
       'id' => '847',
       'isbn_group_id' => '184',
@@ -18858,8 +18858,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4',
       'to_number' => '49999',
     ),
-    847 => 
-    array (
+    847 =>
+    array(
       'from_number' => '50000',
       'id' => '848',
       'isbn_group_id' => '184',
@@ -18868,8 +18868,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    848 => 
-    array (
+    848 =>
+    array(
       'from_number' => '80000',
       'id' => '849',
       'isbn_group_id' => '184',
@@ -18878,8 +18878,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    849 => 
-    array (
+    849 =>
+    array(
       'from_number' => '0',
       'id' => '850',
       'isbn_group_id' => '185',
@@ -18888,8 +18888,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '5',
       'to_number' => '59999',
     ),
-    850 => 
-    array (
+    850 =>
+    array(
       'from_number' => '60000',
       'id' => '851',
       'isbn_group_id' => '185',
@@ -18898,8 +18898,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    851 => 
-    array (
+    851 =>
+    array(
       'from_number' => '90000',
       'id' => '852',
       'isbn_group_id' => '185',
@@ -18908,8 +18908,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    852 => 
-    array (
+    852 =>
+    array(
       'from_number' => '0',
       'id' => '853',
       'isbn_group_id' => '186',
@@ -18918,8 +18918,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    853 => 
-    array (
+    853 =>
+    array(
       'from_number' => '30000',
       'id' => '854',
       'isbn_group_id' => '186',
@@ -18928,8 +18928,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    854 => 
-    array (
+    854 =>
+    array(
       'from_number' => '60000',
       'id' => '855',
       'isbn_group_id' => '186',
@@ -18938,8 +18938,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    855 => 
-    array (
+    855 =>
+    array(
       'from_number' => '0',
       'id' => '856',
       'isbn_group_id' => '187',
@@ -18948,8 +18948,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    856 => 
-    array (
+    856 =>
+    array(
       'from_number' => '30000',
       'id' => '857',
       'isbn_group_id' => '187',
@@ -18958,8 +18958,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '69',
       'to_number' => '69999',
     ),
-    857 => 
-    array (
+    857 =>
+    array(
       'from_number' => '70000',
       'id' => '858',
       'isbn_group_id' => '187',
@@ -18968,8 +18968,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    858 => 
-    array (
+    858 =>
+    array(
       'from_number' => '0',
       'id' => '859',
       'isbn_group_id' => '188',
@@ -18978,8 +18978,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4',
       'to_number' => '49999',
     ),
-    859 => 
-    array (
+    859 =>
+    array(
       'from_number' => '50000',
       'id' => '860',
       'isbn_group_id' => '188',
@@ -18988,8 +18988,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    860 => 
-    array (
+    860 =>
+    array(
       'from_number' => '80000',
       'id' => '861',
       'isbn_group_id' => '188',
@@ -18998,8 +18998,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    861 => 
-    array (
+    861 =>
+    array(
       'from_number' => '0',
       'id' => '862',
       'isbn_group_id' => '189',
@@ -19008,8 +19008,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    862 => 
-    array (
+    862 =>
+    array(
       'from_number' => '20000',
       'id' => '863',
       'isbn_group_id' => '189',
@@ -19018,8 +19018,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    863 => 
-    array (
+    863 =>
+    array(
       'from_number' => '90000',
       'id' => '864',
       'isbn_group_id' => '189',
@@ -19028,8 +19028,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    864 => 
-    array (
+    864 =>
+    array(
       'from_number' => '0',
       'id' => '865',
       'isbn_group_id' => '190',
@@ -19038,8 +19038,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4',
       'to_number' => '49999',
     ),
-    865 => 
-    array (
+    865 =>
+    array(
       'from_number' => '50000',
       'id' => '866',
       'isbn_group_id' => '190',
@@ -19048,8 +19048,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    866 => 
-    array (
+    866 =>
+    array(
       'from_number' => '80000',
       'id' => '867',
       'isbn_group_id' => '190',
@@ -19058,8 +19058,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    867 => 
-    array (
+    867 =>
+    array(
       'from_number' => '0',
       'id' => '868',
       'isbn_group_id' => '192',
@@ -19068,8 +19068,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4',
       'to_number' => '49999',
     ),
-    868 => 
-    array (
+    868 =>
+    array(
       'from_number' => '50000',
       'id' => '869',
       'isbn_group_id' => '192',
@@ -19078,8 +19078,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    869 => 
-    array (
+    869 =>
+    array(
       'from_number' => '80000',
       'id' => '870',
       'isbn_group_id' => '192',
@@ -19088,8 +19088,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    870 => 
-    array (
+    870 =>
+    array(
       'from_number' => '0',
       'id' => '871',
       'isbn_group_id' => '193',
@@ -19098,8 +19098,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    871 => 
-    array (
+    871 =>
+    array(
       'from_number' => '30000',
       'id' => '872',
       'isbn_group_id' => '193',
@@ -19108,8 +19108,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    872 => 
-    array (
+    872 =>
+    array(
       'from_number' => '80000',
       'id' => '873',
       'isbn_group_id' => '193',
@@ -19118,8 +19118,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '939',
       'to_number' => '93999',
     ),
-    873 => 
-    array (
+    873 =>
+    array(
       'from_number' => '94000',
       'id' => '874',
       'isbn_group_id' => '193',
@@ -19128,8 +19128,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99',
       'to_number' => '99999',
     ),
-    874 => 
-    array (
+    874 =>
+    array(
       'from_number' => '0',
       'id' => '875',
       'isbn_group_id' => '194',
@@ -19138,8 +19138,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    875 => 
-    array (
+    875 =>
+    array(
       'from_number' => '30000',
       'id' => '876',
       'isbn_group_id' => '194',
@@ -19148,8 +19148,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '69',
       'to_number' => '69999',
     ),
-    876 => 
-    array (
+    876 =>
+    array(
       'from_number' => '70000',
       'id' => '877',
       'isbn_group_id' => '194',
@@ -19158,8 +19158,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    877 => 
-    array (
+    877 =>
+    array(
       'from_number' => '0',
       'id' => '878',
       'isbn_group_id' => '195',
@@ -19168,8 +19168,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    878 => 
-    array (
+    878 =>
+    array(
       'from_number' => '20000',
       'id' => '879',
       'isbn_group_id' => '195',
@@ -19178,8 +19178,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    879 => 
-    array (
+    879 =>
+    array(
       'from_number' => '60000',
       'id' => '880',
       'isbn_group_id' => '195',
@@ -19188,8 +19188,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    880 => 
-    array (
+    880 =>
+    array(
       'from_number' => '80000',
       'id' => '881',
       'isbn_group_id' => '195',
@@ -19198,8 +19198,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    881 => 
-    array (
+    881 =>
+    array(
       'from_number' => '90000',
       'id' => '882',
       'isbn_group_id' => '195',
@@ -19208,8 +19208,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99',
       'to_number' => '99999',
     ),
-    882 => 
-    array (
+    882 =>
+    array(
       'from_number' => '0',
       'id' => '883',
       'isbn_group_id' => '196',
@@ -19218,8 +19218,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    883 => 
-    array (
+    883 =>
+    array(
       'from_number' => '60000',
       'id' => '884',
       'isbn_group_id' => '196',
@@ -19228,8 +19228,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '859',
       'to_number' => '85999',
     ),
-    884 => 
-    array (
+    884 =>
+    array(
       'from_number' => '86000',
       'id' => '885',
       'isbn_group_id' => '196',
@@ -19238,8 +19238,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '99',
       'to_number' => '99999',
     ),
-    885 => 
-    array (
+    885 =>
+    array(
       'from_number' => '0',
       'id' => '886',
       'isbn_group_id' => '197',
@@ -19248,8 +19248,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    886 => 
-    array (
+    886 =>
+    array(
       'from_number' => '20000',
       'id' => '887',
       'isbn_group_id' => '197',
@@ -19258,8 +19258,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    887 => 
-    array (
+    887 =>
+    array(
       'from_number' => '80000',
       'id' => '888',
       'isbn_group_id' => '197',
@@ -19268,8 +19268,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    888 => 
-    array (
+    888 =>
+    array(
       'from_number' => '0',
       'id' => '889',
       'isbn_group_id' => '198',
@@ -19278,8 +19278,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4',
       'to_number' => '49999',
     ),
-    889 => 
-    array (
+    889 =>
+    array(
       'from_number' => '50000',
       'id' => '890',
       'isbn_group_id' => '198',
@@ -19288,8 +19288,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '94',
       'to_number' => '94999',
     ),
-    890 => 
-    array (
+    890 =>
+    array(
       'from_number' => '95000',
       'id' => '891',
       'isbn_group_id' => '198',
@@ -19298,8 +19298,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    891 => 
-    array (
+    891 =>
+    array(
       'from_number' => '0',
       'id' => '892',
       'isbn_group_id' => '199',
@@ -19308,8 +19308,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    892 => 
-    array (
+    892 =>
+    array(
       'from_number' => '30000',
       'id' => '893',
       'isbn_group_id' => '199',
@@ -19318,8 +19318,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    893 => 
-    array (
+    893 =>
+    array(
       'from_number' => '60000',
       'id' => '894',
       'isbn_group_id' => '199',
@@ -19328,8 +19328,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    894 => 
-    array (
+    894 =>
+    array(
       'from_number' => '0',
       'id' => '895',
       'isbn_group_id' => '200',
@@ -19338,8 +19338,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '0',
       'to_number' => '9999',
     ),
-    895 => 
-    array (
+    895 =>
+    array(
       'from_number' => '10000',
       'id' => '896',
       'isbn_group_id' => '200',
@@ -19348,8 +19348,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '94',
       'to_number' => '94999',
     ),
-    896 => 
-    array (
+    896 =>
+    array(
       'from_number' => '95000',
       'id' => '897',
       'isbn_group_id' => '200',
@@ -19358,8 +19358,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    897 => 
-    array (
+    897 =>
+    array(
       'from_number' => '0',
       'id' => '898',
       'isbn_group_id' => '201',
@@ -19368,8 +19368,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '3',
       'to_number' => '39999',
     ),
-    898 => 
-    array (
+    898 =>
+    array(
       'from_number' => '40000',
       'id' => '899',
       'isbn_group_id' => '201',
@@ -19378,8 +19378,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    899 => 
-    array (
+    899 =>
+    array(
       'from_number' => '90000',
       'id' => '900',
       'isbn_group_id' => '201',
@@ -19388,8 +19388,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    900 => 
-    array (
+    900 =>
+    array(
       'from_number' => '0',
       'id' => '901',
       'isbn_group_id' => '202',
@@ -19398,8 +19398,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '4',
       'to_number' => '49999',
     ),
-    901 => 
-    array (
+    901 =>
+    array(
       'from_number' => '50000',
       'id' => '902',
       'isbn_group_id' => '202',
@@ -19408,8 +19408,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    902 => 
-    array (
+    902 =>
+    array(
       'from_number' => '80000',
       'id' => '903',
       'isbn_group_id' => '202',
@@ -19418,8 +19418,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    903 => 
-    array (
+    903 =>
+    array(
       'from_number' => '0',
       'id' => '904',
       'isbn_group_id' => '203',
@@ -19428,8 +19428,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '49',
       'to_number' => '49999',
     ),
-    904 => 
-    array (
+    904 =>
+    array(
       'from_number' => '50000',
       'id' => '905',
       'isbn_group_id' => '203',
@@ -19438,8 +19438,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    905 => 
-    array (
+    905 =>
+    array(
       'from_number' => '0',
       'id' => '906',
       'isbn_group_id' => '204',
@@ -19448,8 +19448,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    906 => 
-    array (
+    906 =>
+    array(
       'from_number' => '20000',
       'id' => '907',
       'isbn_group_id' => '204',
@@ -19458,8 +19458,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    907 => 
-    array (
+    907 =>
+    array(
       'from_number' => '80000',
       'id' => '908',
       'isbn_group_id' => '204',
@@ -19468,8 +19468,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    908 => 
-    array (
+    908 =>
+    array(
       'from_number' => '0',
       'id' => '909',
       'isbn_group_id' => '205',
@@ -19478,8 +19478,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '3',
       'to_number' => '39999',
     ),
-    909 => 
-    array (
+    909 =>
+    array(
       'from_number' => '40000',
       'id' => '910',
       'isbn_group_id' => '205',
@@ -19488,8 +19488,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '79',
       'to_number' => '79999',
     ),
-    910 => 
-    array (
+    910 =>
+    array(
       'from_number' => '80000',
       'id' => '911',
       'isbn_group_id' => '205',
@@ -19498,8 +19498,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    911 => 
-    array (
+    911 =>
+    array(
       'from_number' => '0',
       'id' => '912',
       'isbn_group_id' => '206',
@@ -19508,8 +19508,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '2',
       'to_number' => '29999',
     ),
-    912 => 
-    array (
+    912 =>
+    array(
       'from_number' => '30000',
       'id' => '913',
       'isbn_group_id' => '206',
@@ -19518,8 +19518,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '69',
       'to_number' => '69999',
     ),
-    913 => 
-    array (
+    913 =>
+    array(
       'from_number' => '70000',
       'id' => '914',
       'isbn_group_id' => '206',
@@ -19528,8 +19528,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '799',
       'to_number' => '79999',
     ),
-    914 => 
-    array (
+    914 =>
+    array(
       'from_number' => '0',
       'id' => '915',
       'isbn_group_id' => '207',
@@ -19538,8 +19538,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '1',
       'to_number' => '19999',
     ),
-    915 => 
-    array (
+    915 =>
+    array(
       'from_number' => '20000',
       'id' => '916',
       'isbn_group_id' => '207',
@@ -19548,8 +19548,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '59',
       'to_number' => '59999',
     ),
-    916 => 
-    array (
+    916 =>
+    array(
       'from_number' => '60000',
       'id' => '917',
       'isbn_group_id' => '207',
@@ -19558,8 +19558,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '899',
       'to_number' => '89999',
     ),
-    917 => 
-    array (
+    917 =>
+    array(
       'from_number' => '0',
       'id' => '918',
       'isbn_group_id' => '208',
@@ -19568,8 +19568,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '3',
       'to_number' => '39999',
     ),
-    918 => 
-    array (
+    918 =>
+    array(
       'from_number' => '40000',
       'id' => '919',
       'isbn_group_id' => '208',
@@ -19578,8 +19578,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '599',
       'to_number' => '59999',
     ),
-    919 => 
-    array (
+    919 =>
+    array(
       'from_number' => '60000',
       'id' => '920',
       'isbn_group_id' => '208',
@@ -19588,8 +19588,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '89',
       'to_number' => '89999',
     ),
-    920 => 
-    array (
+    920 =>
+    array(
       'from_number' => '90000',
       'id' => '921',
       'isbn_group_id' => '208',
@@ -19598,8 +19598,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '999',
       'to_number' => '99999',
     ),
-    921 => 
-    array (
+    921 =>
+    array(
       'from_number' => '0',
       'id' => '922',
       'isbn_group_id' => '209',
@@ -19608,8 +19608,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '19',
       'to_number' => '19999',
     ),
-    922 => 
-    array (
+    922 =>
+    array(
       'from_number' => '20000',
       'id' => '923',
       'isbn_group_id' => '209',
@@ -19618,8 +19618,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '699',
       'to_number' => '69999',
     ),
-    923 => 
-    array (
+    923 =>
+    array(
       'from_number' => '70000',
       'id' => '924',
       'isbn_group_id' => '209',
@@ -19628,8 +19628,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '8999',
       'to_number' => '89999',
     ),
-    924 => 
-    array (
+    924 =>
+    array(
       'from_number' => '90000',
       'id' => '925',
       'isbn_group_id' => '209',
@@ -19638,8 +19638,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'registrant_to' => '97599',
       'to_number' => '97599',
     ),
-    925 => 
-    array (
+    925 =>
+    array(
       'from_number' => '97600',
       'id' => '926',
       'isbn_group_id' => '209',
@@ -19649,10 +19649,10 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'to_number' => '99999',
     ),
   ),
-  'eznode_assignment' => 
-  array (
-    0 => 
-    array (
+  'eznode_assignment' =>
+  array(
+    0 =>
+    array(
       'contentobject_id' => '8',
       'contentobject_version' => '2',
       'from_node_id' => '0',
@@ -19665,8 +19665,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'contentobject_id' => '42',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -19679,8 +19679,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'contentobject_id' => '10',
       'contentobject_version' => '2',
       'from_node_id' => '-1',
@@ -19693,8 +19693,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'contentobject_id' => '4',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -19707,8 +19707,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'contentobject_id' => '12',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -19721,8 +19721,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'contentobject_id' => '13',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -19735,8 +19735,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'contentobject_id' => '41',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -19749,8 +19749,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'contentobject_id' => '11',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -19763,8 +19763,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'contentobject_id' => '45',
       'contentobject_version' => '1',
       'from_node_id' => '-1',
@@ -19777,8 +19777,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'contentobject_id' => '49',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -19791,8 +19791,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'contentobject_id' => '50',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -19805,8 +19805,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'contentobject_id' => '51',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -19819,8 +19819,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'contentobject_id' => '52',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -19833,8 +19833,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'contentobject_id' => '56',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -19847,8 +19847,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'contentobject_id' => '14',
       'contentobject_version' => '3',
       'from_node_id' => '-1',
@@ -19861,8 +19861,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'contentobject_id' => '54',
       'contentobject_version' => '2',
       'from_node_id' => '-1',
@@ -19875,8 +19875,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'contentobject_id' => '57',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -19889,8 +19889,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '8',
       'sort_order' => '1',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'contentobject_id' => '58',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -19903,8 +19903,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'contentobject_id' => '14',
       'contentobject_version' => '4',
       'from_node_id' => '-1',
@@ -19917,8 +19917,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    19 => 
-    array (
+    19 =>
+    array(
       'contentobject_id' => '59',
       'contentobject_version' => '1',
       'from_node_id' => '0',
@@ -19931,8 +19931,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    20 => 
-    array (
+    20 =>
+    array(
       'contentobject_id' => '11',
       'contentobject_version' => '2',
       'from_node_id' => '-1',
@@ -19946,10 +19946,10 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_order' => '1',
     ),
   ),
-  'eznotificationevent' => 
-  array (
-    0 => 
-    array (
+  'eznotificationevent' =>
+  array(
+    0 =>
+    array(
       'data_int1' => '57',
       'data_int2' => '1',
       'data_int3' => '0',
@@ -19962,8 +19962,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'id' => '1',
       'status' => '0',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'data_int1' => '58',
       'data_int2' => '1',
       'data_int3' => '0',
@@ -19976,8 +19976,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'id' => '2',
       'status' => '0',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'data_int1' => '14',
       'data_int2' => '4',
       'data_int3' => '0',
@@ -19990,8 +19990,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'id' => '3',
       'status' => '0',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'data_int1' => '59',
       'data_int2' => '1',
       'data_int3' => '0',
@@ -20004,8 +20004,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'id' => '4',
       'status' => '0',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'data_int1' => '11',
       'data_int2' => '2',
       'data_int3' => '0',
@@ -20019,492 +20019,492 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'status' => '0',
     ),
   ),
-  'ezorder_status' => 
-  array (
-    0 => 
-    array (
+  'ezorder_status' =>
+  array(
+    0 =>
+    array(
       'id' => '1',
       'is_active' => '1',
       'name' => 'Pending',
       'status_id' => '1',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'id' => '2',
       'is_active' => '1',
       'name' => 'Processing',
       'status_id' => '2',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'id' => '3',
       'is_active' => '1',
       'name' => 'Delivered',
       'status_id' => '3',
     ),
   ),
-  'ezpackage' => 
-  array (
-    0 => 
-    array (
+  'ezpackage' =>
+  array(
+    0 =>
+    array(
       'id' => '1',
       'install_date' => '1301057838',
       'name' => 'plain_site_data',
       'version' => '1.0-1',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'id' => '2',
       'install_date' => '1376485932',
       'name' => 'ezwt_extension',
       'version' => '5.1-0',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'id' => '3',
       'install_date' => '1376485933',
       'name' => 'ezstarrating_extension',
       'version' => '5.1-0',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'id' => '4',
       'install_date' => '1376485933',
       'name' => 'ezgmaplocation_extension',
       'version' => '5.1-0',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'id' => '5',
       'install_date' => '1376485933',
       'name' => 'ezdemo_extension',
       'version' => '5.1-0',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'id' => '6',
       'install_date' => '1376485934',
       'name' => 'ezflow_extension',
       'version' => '5.1-0',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'id' => '7',
       'install_date' => '1376485934',
       'name' => 'ezcomments_extension',
       'version' => '5.1-0',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'id' => '8',
       'install_date' => '1376485935',
       'name' => 'ezdemo_classes',
       'version' => '5.1-0',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'id' => '9',
       'install_date' => '1376485937',
       'name' => 'ezdemo_democontent_clean',
       'version' => '5.1-0',
     ),
   ),
-  'ezpolicy' => 
-  array (
-    0 => 
-    array (
+  'ezpolicy' =>
+  array(
+    0 =>
+    array(
       'function_name' => '*',
       'id' => '308',
       'module_name' => '*',
       'original_id' => '0',
       'role_id' => '2',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'function_name' => 'login',
       'id' => '319',
       'module_name' => 'user',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'function_name' => 'read',
       'id' => '328',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '1',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'function_name' => 'pdf',
       'id' => '329',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '1',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'function_name' => '*',
       'id' => '330',
       'module_name' => 'ezoe',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'function_name' => '*',
       'id' => '332',
       'module_name' => 'ezoe',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'function_name' => 'feed',
       'id' => '333',
       'module_name' => 'rss',
       'original_id' => '0',
       'role_id' => '1',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'function_name' => 'login',
       'id' => '334',
       'module_name' => 'user',
       'original_id' => '0',
       'role_id' => '1',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'function_name' => 'login',
       'id' => '335',
       'module_name' => 'user',
       'original_id' => '0',
       'role_id' => '1',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'function_name' => 'read',
       'id' => '336',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '1',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'function_name' => 'view_embed',
       'id' => '337',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '1',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'function_name' => 'create',
       'id' => '338',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'function_name' => 'create',
       'id' => '339',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'function_name' => 'create',
       'id' => '340',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'function_name' => 'create',
       'id' => '341',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'function_name' => 'create',
       'id' => '342',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'function_name' => 'create',
       'id' => '343',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'function_name' => 'use',
       'id' => '344',
       'module_name' => 'websitetoolbar',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'function_name' => 'edit',
       'id' => '345',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    19 => 
-    array (
+    19 =>
+    array(
       'function_name' => 'read',
       'id' => '346',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    20 => 
-    array (
+    20 =>
+    array(
       'function_name' => 'use',
       'id' => '347',
       'module_name' => 'notification',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    21 => 
-    array (
+    21 =>
+    array(
       'function_name' => 'manage_locations',
       'id' => '348',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    22 => 
-    array (
+    22 =>
+    array(
       'function_name' => '*',
       'id' => '349',
       'module_name' => 'ezodf',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    23 => 
-    array (
+    23 =>
+    array(
       'function_name' => '*',
       'id' => '350',
       'module_name' => 'ezflow',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    24 => 
-    array (
+    24 =>
+    array(
       'function_name' => '*',
       'id' => '351',
       'module_name' => 'ezajax',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    25 => 
-    array (
+    25 =>
+    array(
       'function_name' => 'diff',
       'id' => '352',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    26 => 
-    array (
+    26 =>
+    array(
       'function_name' => 'versionread',
       'id' => '353',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    27 => 
-    array (
+    27 =>
+    array(
       'function_name' => 'versionremove',
       'id' => '354',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    28 => 
-    array (
+    28 =>
+    array(
       'function_name' => 'remove',
       'id' => '355',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    29 => 
-    array (
+    29 =>
+    array(
       'function_name' => 'translate',
       'id' => '356',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    30 => 
-    array (
+    30 =>
+    array(
       'function_name' => 'feed',
       'id' => '357',
       'module_name' => 'rss',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    31 => 
-    array (
+    31 =>
+    array(
       'function_name' => 'bookmark',
       'id' => '358',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    32 => 
-    array (
+    32 =>
+    array(
       'function_name' => 'pendinglist',
       'id' => '359',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    33 => 
-    array (
+    33 =>
+    array(
       'function_name' => 'dashboard',
       'id' => '360',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    34 => 
-    array (
+    34 =>
+    array(
       'function_name' => 'view_embed',
       'id' => '361',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '3',
     ),
-    35 => 
-    array (
+    35 =>
+    array(
       'function_name' => 'read',
       'id' => '362',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '4',
     ),
-    36 => 
-    array (
+    36 =>
+    array(
       'function_name' => 'create',
       'id' => '363',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '4',
     ),
-    37 => 
-    array (
+    37 =>
+    array(
       'function_name' => 'create',
       'id' => '364',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '4',
     ),
-    38 => 
-    array (
+    38 =>
+    array(
       'function_name' => 'create',
       'id' => '365',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '4',
     ),
-    39 => 
-    array (
+    39 =>
+    array(
       'function_name' => 'edit',
       'id' => '366',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '4',
     ),
-    40 => 
-    array (
+    40 =>
+    array(
       'function_name' => 'selfedit',
       'id' => '367',
       'module_name' => 'user',
       'original_id' => '0',
       'role_id' => '4',
     ),
-    41 => 
-    array (
+    41 =>
+    array(
       'function_name' => 'use',
       'id' => '368',
       'module_name' => 'notification',
       'original_id' => '0',
       'role_id' => '4',
     ),
-    42 => 
-    array (
+    42 =>
+    array(
       'function_name' => 'create',
       'id' => '369',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '5',
     ),
-    43 => 
-    array (
+    43 =>
+    array(
       'function_name' => 'create',
       'id' => '370',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '5',
     ),
-    44 => 
-    array (
+    44 =>
+    array(
       'function_name' => 'create',
       'id' => '371',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '5',
     ),
-    45 => 
-    array (
+    45 =>
+    array(
       'function_name' => 'edit',
       'id' => '372',
       'module_name' => 'content',
       'original_id' => '0',
       'role_id' => '5',
     ),
-    46 => 
-    array (
+    46 =>
+    array(
       'function_name' => 'selfedit',
       'id' => '373',
       'module_name' => 'user',
       'original_id' => '0',
       'role_id' => '5',
     ),
-    47 => 
-    array (
+    47 =>
+    array(
       'function_name' => 'use',
       'id' => '374',
       'module_name' => 'notification',
       'original_id' => '0',
       'role_id' => '5',
     ),
-    48 => 
-    array (
+    48 =>
+    array(
       'function_name' => 'password',
       'id' => '375',
       'module_name' => 'user',
       'original_id' => '0',
       'role_id' => '5',
     ),
-    49 => 
-    array (
+    49 =>
+    array(
       'function_name' => 'call',
       'id' => '376',
       'module_name' => 'ezjscore',
@@ -20512,932 +20512,932 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'role_id' => '5',
     ),
   ),
-  'ezpolicy_limitation' => 
-  array (
-    0 => 
-    array (
+  'ezpolicy_limitation' =>
+  array(
+    0 =>
+    array(
       'id' => '251',
       'identifier' => 'Section',
       'policy_id' => '328',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'id' => '252',
       'identifier' => 'Section',
       'policy_id' => '329',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'id' => '254',
       'identifier' => 'SiteAccess',
       'policy_id' => '334',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'id' => '255',
       'identifier' => 'SiteAccess',
       'policy_id' => '335',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'id' => '256',
       'identifier' => 'Class',
       'policy_id' => '336',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'id' => '257',
       'identifier' => 'Section',
       'policy_id' => '336',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'id' => '258',
       'identifier' => 'Class',
       'policy_id' => '338',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'id' => '259',
       'identifier' => 'ParentClass',
       'policy_id' => '338',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'id' => '260',
       'identifier' => 'Class',
       'policy_id' => '339',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'id' => '261',
       'identifier' => 'ParentClass',
       'policy_id' => '339',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'id' => '262',
       'identifier' => 'Class',
       'policy_id' => '340',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'id' => '263',
       'identifier' => 'ParentClass',
       'policy_id' => '340',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'id' => '264',
       'identifier' => 'Class',
       'policy_id' => '341',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'id' => '265',
       'identifier' => 'ParentClass',
       'policy_id' => '341',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'id' => '266',
       'identifier' => 'Class',
       'policy_id' => '342',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'id' => '267',
       'identifier' => 'ParentClass',
       'policy_id' => '342',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'id' => '268',
       'identifier' => 'Class',
       'policy_id' => '343',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'id' => '269',
       'identifier' => 'ParentClass',
       'policy_id' => '343',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'id' => '270',
       'identifier' => 'Class',
       'policy_id' => '344',
     ),
-    19 => 
-    array (
+    19 =>
+    array(
       'id' => '271',
       'identifier' => 'Section',
       'policy_id' => '346',
     ),
-    20 => 
-    array (
+    20 =>
+    array(
       'id' => '272',
       'identifier' => 'Section',
       'policy_id' => '362',
     ),
-    21 => 
-    array (
+    21 =>
+    array(
       'id' => '273',
       'identifier' => 'Class',
       'policy_id' => '363',
     ),
-    22 => 
-    array (
+    22 =>
+    array(
       'id' => '274',
       'identifier' => 'Section',
       'policy_id' => '363',
     ),
-    23 => 
-    array (
+    23 =>
+    array(
       'id' => '275',
       'identifier' => 'ParentClass',
       'policy_id' => '363',
     ),
-    24 => 
-    array (
+    24 =>
+    array(
       'id' => '276',
       'identifier' => 'Class',
       'policy_id' => '364',
     ),
-    25 => 
-    array (
+    25 =>
+    array(
       'id' => '277',
       'identifier' => 'Section',
       'policy_id' => '364',
     ),
-    26 => 
-    array (
+    26 =>
+    array(
       'id' => '278',
       'identifier' => 'ParentClass',
       'policy_id' => '364',
     ),
-    27 => 
-    array (
+    27 =>
+    array(
       'id' => '279',
       'identifier' => 'Class',
       'policy_id' => '365',
     ),
-    28 => 
-    array (
+    28 =>
+    array(
       'id' => '280',
       'identifier' => 'Section',
       'policy_id' => '365',
     ),
-    29 => 
-    array (
+    29 =>
+    array(
       'id' => '281',
       'identifier' => 'ParentClass',
       'policy_id' => '365',
     ),
-    30 => 
-    array (
+    30 =>
+    array(
       'id' => '282',
       'identifier' => 'Class',
       'policy_id' => '366',
     ),
-    31 => 
-    array (
+    31 =>
+    array(
       'id' => '283',
       'identifier' => 'Section',
       'policy_id' => '366',
     ),
-    32 => 
-    array (
+    32 =>
+    array(
       'id' => '284',
       'identifier' => 'Owner',
       'policy_id' => '366',
     ),
-    33 => 
-    array (
+    33 =>
+    array(
       'id' => '285',
       'identifier' => 'Class',
       'policy_id' => '369',
     ),
-    34 => 
-    array (
+    34 =>
+    array(
       'id' => '286',
       'identifier' => 'Section',
       'policy_id' => '369',
     ),
-    35 => 
-    array (
+    35 =>
+    array(
       'id' => '287',
       'identifier' => 'ParentClass',
       'policy_id' => '369',
     ),
-    36 => 
-    array (
+    36 =>
+    array(
       'id' => '288',
       'identifier' => 'Class',
       'policy_id' => '370',
     ),
-    37 => 
-    array (
+    37 =>
+    array(
       'id' => '289',
       'identifier' => 'Section',
       'policy_id' => '370',
     ),
-    38 => 
-    array (
+    38 =>
+    array(
       'id' => '290',
       'identifier' => 'ParentClass',
       'policy_id' => '370',
     ),
-    39 => 
-    array (
+    39 =>
+    array(
       'id' => '291',
       'identifier' => 'Class',
       'policy_id' => '371',
     ),
-    40 => 
-    array (
+    40 =>
+    array(
       'id' => '292',
       'identifier' => 'Section',
       'policy_id' => '371',
     ),
-    41 => 
-    array (
+    41 =>
+    array(
       'id' => '293',
       'identifier' => 'ParentClass',
       'policy_id' => '371',
     ),
-    42 => 
-    array (
+    42 =>
+    array(
       'id' => '294',
       'identifier' => 'Class',
       'policy_id' => '372',
     ),
-    43 => 
-    array (
+    43 =>
+    array(
       'id' => '295',
       'identifier' => 'Section',
       'policy_id' => '372',
     ),
-    44 => 
-    array (
+    44 =>
+    array(
       'id' => '296',
       'identifier' => 'Owner',
       'policy_id' => '372',
     ),
   ),
-  'ezpolicy_limitation_value' => 
-  array (
-    0 => 
-    array (
+  'ezpolicy_limitation_value' =>
+  array(
+    0 =>
+    array(
       'id' => '477',
       'limitation_id' => '251',
       'value' => '1',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'id' => '478',
       'limitation_id' => '252',
       'value' => '1',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'id' => '480',
       'limitation_id' => '254',
       'value' => '2339567439',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'id' => '481',
       'limitation_id' => '254',
       'value' => '2582995467',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'id' => '482',
       'limitation_id' => '256',
       'value' => '27',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'id' => '483',
       'limitation_id' => '256',
       'value' => '35',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'id' => '484',
       'limitation_id' => '256',
       'value' => '26',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'id' => '485',
       'limitation_id' => '257',
       'value' => '3',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'id' => '486',
       'limitation_id' => '258',
       'value' => '1',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'id' => '487',
       'limitation_id' => '258',
       'value' => '28',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'id' => '488',
       'limitation_id' => '258',
       'value' => '26',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'id' => '489',
       'limitation_id' => '258',
       'value' => '21',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'id' => '490',
       'limitation_id' => '258',
       'value' => '22',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'id' => '491',
       'limitation_id' => '258',
       'value' => '23',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'id' => '492',
       'limitation_id' => '258',
       'value' => '16',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'id' => '493',
       'limitation_id' => '258',
       'value' => '17',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'id' => '494',
       'limitation_id' => '258',
       'value' => '25',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'id' => '495',
       'limitation_id' => '258',
       'value' => '24',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'id' => '496',
       'limitation_id' => '258',
       'value' => '29',
     ),
-    19 => 
-    array (
+    19 =>
+    array(
       'id' => '497',
       'limitation_id' => '258',
       'value' => '30',
     ),
-    20 => 
-    array (
+    20 =>
+    array(
       'id' => '498',
       'limitation_id' => '258',
       'value' => '36',
     ),
-    21 => 
-    array (
+    21 =>
+    array(
       'id' => '499',
       'limitation_id' => '258',
       'value' => '34',
     ),
-    22 => 
-    array (
+    22 =>
+    array(
       'id' => '500',
       'limitation_id' => '258',
       'value' => '35',
     ),
-    23 => 
-    array (
+    23 =>
+    array(
       'id' => '501',
       'limitation_id' => '258',
       'value' => '27',
     ),
-    24 => 
-    array (
+    24 =>
+    array(
       'id' => '502',
       'limitation_id' => '259',
       'value' => '1',
     ),
-    25 => 
-    array (
+    25 =>
+    array(
       'id' => '503',
       'limitation_id' => '260',
       'value' => '18',
     ),
-    26 => 
-    array (
+    26 =>
+    array(
       'id' => '504',
       'limitation_id' => '261',
       'value' => '17',
     ),
-    27 => 
-    array (
+    27 =>
+    array(
       'id' => '505',
       'limitation_id' => '262',
       'value' => '31',
     ),
-    28 => 
-    array (
+    28 =>
+    array(
       'id' => '506',
       'limitation_id' => '263',
       'value' => '30',
     ),
-    29 => 
-    array (
+    29 =>
+    array(
       'id' => '507',
       'limitation_id' => '264',
       'value' => '33',
     ),
-    30 => 
-    array (
+    30 =>
+    array(
       'id' => '508',
       'limitation_id' => '265',
       'value' => '34',
     ),
-    31 => 
-    array (
+    31 =>
+    array(
       'id' => '509',
       'limitation_id' => '266',
       'value' => '27',
     ),
-    32 => 
-    array (
+    32 =>
+    array(
       'id' => '510',
       'limitation_id' => '267',
       'value' => '29',
     ),
-    33 => 
-    array (
+    33 =>
+    array(
       'id' => '511',
       'limitation_id' => '268',
       'value' => '1',
     ),
-    34 => 
-    array (
+    34 =>
+    array(
       'id' => '512',
       'limitation_id' => '268',
       'value' => '28',
     ),
-    35 => 
-    array (
+    35 =>
+    array(
       'id' => '513',
       'limitation_id' => '268',
       'value' => '22',
     ),
-    36 => 
-    array (
+    36 =>
+    array(
       'id' => '514',
       'limitation_id' => '268',
       'value' => '23',
     ),
-    37 => 
-    array (
+    37 =>
+    array(
       'id' => '515',
       'limitation_id' => '268',
       'value' => '24',
     ),
-    38 => 
-    array (
+    38 =>
+    array(
       'id' => '516',
       'limitation_id' => '268',
       'value' => '29',
     ),
-    39 => 
-    array (
+    39 =>
+    array(
       'id' => '517',
       'limitation_id' => '268',
       'value' => '34',
     ),
-    40 => 
-    array (
+    40 =>
+    array(
       'id' => '518',
       'limitation_id' => '268',
       'value' => '36',
     ),
-    41 => 
-    array (
+    41 =>
+    array(
       'id' => '519',
       'limitation_id' => '269',
       'value' => '23',
     ),
-    42 => 
-    array (
+    42 =>
+    array(
       'id' => '520',
       'limitation_id' => '270',
       'value' => '1',
     ),
-    43 => 
-    array (
+    43 =>
+    array(
       'id' => '521',
       'limitation_id' => '270',
       'value' => '28',
     ),
-    44 => 
-    array (
+    44 =>
+    array(
       'id' => '522',
       'limitation_id' => '270',
       'value' => '16',
     ),
-    45 => 
-    array (
+    45 =>
+    array(
       'id' => '523',
       'limitation_id' => '270',
       'value' => '17',
     ),
-    46 => 
-    array (
+    46 =>
+    array(
       'id' => '524',
       'limitation_id' => '270',
       'value' => '18',
     ),
-    47 => 
-    array (
+    47 =>
+    array(
       'id' => '525',
       'limitation_id' => '270',
       'value' => '21',
     ),
-    48 => 
-    array (
+    48 =>
+    array(
       'id' => '526',
       'limitation_id' => '270',
       'value' => '22',
     ),
-    49 => 
-    array (
+    49 =>
+    array(
       'id' => '527',
       'limitation_id' => '270',
       'value' => '23',
     ),
-    50 => 
-    array (
+    50 =>
+    array(
       'id' => '528',
       'limitation_id' => '270',
       'value' => '24',
     ),
-    51 => 
-    array (
+    51 =>
+    array(
       'id' => '529',
       'limitation_id' => '270',
       'value' => '25',
     ),
-    52 => 
-    array (
+    52 =>
+    array(
       'id' => '530',
       'limitation_id' => '270',
       'value' => '26',
     ),
-    53 => 
-    array (
+    53 =>
+    array(
       'id' => '531',
       'limitation_id' => '270',
       'value' => '27',
     ),
-    54 => 
-    array (
+    54 =>
+    array(
       'id' => '532',
       'limitation_id' => '270',
       'value' => '29',
     ),
-    55 => 
-    array (
+    55 =>
+    array(
       'id' => '533',
       'limitation_id' => '270',
       'value' => '30',
     ),
-    56 => 
-    array (
+    56 =>
+    array(
       'id' => '534',
       'limitation_id' => '270',
       'value' => '33',
     ),
-    57 => 
-    array (
+    57 =>
+    array(
       'id' => '535',
       'limitation_id' => '270',
       'value' => '34',
     ),
-    58 => 
-    array (
+    58 =>
+    array(
       'id' => '536',
       'limitation_id' => '270',
       'value' => '36',
     ),
-    59 => 
-    array (
+    59 =>
+    array(
       'id' => '537',
       'limitation_id' => '271',
       'value' => '1',
     ),
-    60 => 
-    array (
+    60 =>
+    array(
       'id' => '538',
       'limitation_id' => '271',
       'value' => '6',
     ),
-    61 => 
-    array (
+    61 =>
+    array(
       'id' => '539',
       'limitation_id' => '271',
       'value' => '3',
     ),
-    62 => 
-    array (
+    62 =>
+    array(
       'id' => '540',
       'limitation_id' => '272',
       'value' => '6',
     ),
-    63 => 
-    array (
+    63 =>
+    array(
       'id' => '541',
       'limitation_id' => '273',
       'value' => '31',
     ),
-    64 => 
-    array (
+    64 =>
+    array(
       'id' => '542',
       'limitation_id' => '274',
       'value' => '6',
     ),
-    65 => 
-    array (
+    65 =>
+    array(
       'id' => '543',
       'limitation_id' => '275',
       'value' => '30',
     ),
-    66 => 
-    array (
+    66 =>
+    array(
       'id' => '544',
       'limitation_id' => '276',
       'value' => '32',
     ),
-    67 => 
-    array (
+    67 =>
+    array(
       'id' => '545',
       'limitation_id' => '277',
       'value' => '6',
     ),
-    68 => 
-    array (
+    68 =>
+    array(
       'id' => '546',
       'limitation_id' => '278',
       'value' => '31',
     ),
-    69 => 
-    array (
+    69 =>
+    array(
       'id' => '547',
       'limitation_id' => '279',
       'value' => '13',
     ),
-    70 => 
-    array (
+    70 =>
+    array(
       'id' => '548',
       'limitation_id' => '280',
       'value' => '6',
     ),
-    71 => 
-    array (
+    71 =>
+    array(
       'id' => '549',
       'limitation_id' => '281',
       'value' => '16',
     ),
-    72 => 
-    array (
+    72 =>
+    array(
       'id' => '550',
       'limitation_id' => '282',
       'value' => '13',
     ),
-    73 => 
-    array (
+    73 =>
+    array(
       'id' => '551',
       'limitation_id' => '282',
       'value' => '31',
     ),
-    74 => 
-    array (
+    74 =>
+    array(
       'id' => '552',
       'limitation_id' => '282',
       'value' => '32',
     ),
-    75 => 
-    array (
+    75 =>
+    array(
       'id' => '553',
       'limitation_id' => '283',
       'value' => '6',
     ),
-    76 => 
-    array (
+    76 =>
+    array(
       'id' => '554',
       'limitation_id' => '284',
       'value' => '1',
     ),
-    77 => 
-    array (
+    77 =>
+    array(
       'id' => '555',
       'limitation_id' => '285',
       'value' => '31',
     ),
-    78 => 
-    array (
+    78 =>
+    array(
       'id' => '556',
       'limitation_id' => '286',
       'value' => '1',
     ),
-    79 => 
-    array (
+    79 =>
+    array(
       'id' => '557',
       'limitation_id' => '287',
       'value' => '30',
     ),
-    80 => 
-    array (
+    80 =>
+    array(
       'id' => '558',
       'limitation_id' => '288',
       'value' => '32',
     ),
-    81 => 
-    array (
+    81 =>
+    array(
       'id' => '559',
       'limitation_id' => '289',
       'value' => '1',
     ),
-    82 => 
-    array (
+    82 =>
+    array(
       'id' => '560',
       'limitation_id' => '290',
       'value' => '31',
     ),
-    83 => 
-    array (
+    83 =>
+    array(
       'id' => '561',
       'limitation_id' => '291',
       'value' => '13',
     ),
-    84 => 
-    array (
+    84 =>
+    array(
       'id' => '562',
       'limitation_id' => '292',
       'value' => '1',
     ),
-    85 => 
-    array (
+    85 =>
+    array(
       'id' => '563',
       'limitation_id' => '293',
       'value' => '16',
     ),
-    86 => 
-    array (
+    86 =>
+    array(
       'id' => '564',
       'limitation_id' => '293',
       'value' => '18',
     ),
-    87 => 
-    array (
+    87 =>
+    array(
       'id' => '565',
       'limitation_id' => '294',
       'value' => '13',
     ),
-    88 => 
-    array (
+    88 =>
+    array(
       'id' => '566',
       'limitation_id' => '294',
       'value' => '31',
     ),
-    89 => 
-    array (
+    89 =>
+    array(
       'id' => '567',
       'limitation_id' => '294',
       'value' => '32',
     ),
-    90 => 
-    array (
+    90 =>
+    array(
       'id' => '568',
       'limitation_id' => '295',
       'value' => '1',
     ),
-    91 => 
-    array (
+    91 =>
+    array(
       'id' => '569',
       'limitation_id' => '296',
       'value' => '1',
     ),
     92 =>
-    array (
+    array(
        'id' => '570',
        'limitation_id' => '255',
        'value' => '1817462202',
     ),
   ),
-  'ezpreferences' => 
-  array (
-    0 => 
-    array (
+  'ezpreferences' =>
+  array(
+    0 =>
+    array(
       'id' => '1',
       'name' => 'admin_navigation_content',
       'user_id' => '14',
       'value' => '1',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'id' => '2',
       'name' => 'admin_navigation_roles',
       'user_id' => '14',
       'value' => '1',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'id' => '3',
       'name' => 'admin_navigation_policies',
       'user_id' => '14',
       'value' => '1',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'id' => '4',
       'name' => 'admin_list_limit',
       'user_id' => '14',
       'value' => '2',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'id' => '5',
       'name' => 'admin_treemenu',
       'user_id' => '14',
       'value' => '1',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'id' => '6',
       'name' => 'admin_bookmark_menu',
       'user_id' => '14',
       'value' => '1',
     ),
   ),
-  'ezrole' => 
-  array (
-    0 => 
-    array (
+  'ezrole' =>
+  array(
+    0 =>
+    array(
       'id' => '1',
       'is_new' => '0',
       'name' => 'Anonymous',
       'value' => '',
       'version' => '0',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'id' => '2',
       'is_new' => '0',
       'name' => 'Administrator',
       'value' => '*',
       'version' => '0',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'id' => '3',
       'is_new' => '0',
       'name' => 'Editor',
       'value' => '',
       'version' => '0',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'id' => '4',
       'is_new' => '0',
       'name' => 'Partner',
-      'value' => NULL,
+      'value' => null,
       'version' => '0',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'id' => '5',
       'is_new' => '0',
       'name' => 'Member',
-      'value' => NULL,
+      'value' => null,
       'version' => '0',
     ),
   ),
-  'ezrss_export' => 
-  array (
-    0 => 
-    array (
+  'ezrss_export' =>
+  array(
+    0 =>
+    array(
       'access_url' => 'my_feed',
       'active' => '1',
       'created' => '1376485939',
@@ -21457,10 +21457,10 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'url' => 'http://example.com',
     ),
   ),
-  'ezrss_export_item' => 
-  array (
-    0 => 
-    array (
+  'ezrss_export_item' =>
+  array(
+    0 =>
+    array(
       'category' => '',
       'class_id' => '16',
       'description' => 'intro',
@@ -21473,10 +21473,10 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'title' => 'title',
     ),
   ),
-  'ezsearch_object_word_link' => 
-  array (
-    0 => 
-    array (
+  'ezsearch_object_word_link' =>
+  array(
+    0 =>
+    array(
       'contentclass_attribute_id' => '6',
       'contentclass_id' => '3',
       'contentobject_id' => '4',
@@ -21491,8 +21491,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '930',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'contentclass_attribute_id' => '7',
       'contentclass_id' => '3',
       'contentobject_id' => '4',
@@ -21507,8 +21507,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '951',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'contentclass_attribute_id' => '7',
       'contentclass_id' => '3',
       'contentobject_id' => '4',
@@ -21523,8 +21523,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '952',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'contentclass_attribute_id' => '8',
       'contentclass_id' => '4',
       'contentobject_id' => '10',
@@ -21539,8 +21539,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '953',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'contentclass_attribute_id' => '9',
       'contentclass_id' => '4',
       'contentobject_id' => '10',
@@ -21555,8 +21555,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '954',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'contentclass_attribute_id' => '12',
       'contentclass_id' => '4',
       'contentobject_id' => '10',
@@ -21571,8 +21571,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '953',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'contentclass_attribute_id' => '12',
       'contentclass_id' => '4',
       'contentobject_id' => '10',
@@ -21587,8 +21587,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '955',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'contentclass_attribute_id' => '12',
       'contentclass_id' => '4',
       'contentobject_id' => '10',
@@ -21603,8 +21603,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '927',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'contentclass_attribute_id' => '6',
       'contentclass_id' => '3',
       'contentobject_id' => '12',
@@ -21619,8 +21619,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '958',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'contentclass_attribute_id' => '6',
       'contentclass_id' => '3',
       'contentobject_id' => '12',
@@ -21635,8 +21635,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '930',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'contentclass_attribute_id' => '6',
       'contentclass_id' => '3',
       'contentobject_id' => '13',
@@ -21651,8 +21651,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '959',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'contentclass_attribute_id' => '4',
       'contentclass_id' => '1',
       'contentobject_id' => '41',
@@ -21667,8 +21667,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'word_id' => '961',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'contentclass_attribute_id' => '6',
       'contentclass_id' => '3',
       'contentobject_id' => '42',
@@ -21683,8 +21683,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '953',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'contentclass_attribute_id' => '6',
       'contentclass_id' => '3',
       'contentobject_id' => '42',
@@ -21699,8 +21699,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '930',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'contentclass_attribute_id' => '7',
       'contentclass_id' => '3',
       'contentobject_id' => '42',
@@ -21715,8 +21715,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '954',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'contentclass_attribute_id' => '7',
       'contentclass_id' => '3',
       'contentobject_id' => '42',
@@ -21731,8 +21731,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '952',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'contentclass_attribute_id' => '7',
       'contentclass_id' => '3',
       'contentobject_id' => '42',
@@ -21747,8 +21747,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '816',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'contentclass_attribute_id' => '7',
       'contentclass_id' => '3',
       'contentobject_id' => '42',
@@ -21763,8 +21763,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '814',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'contentclass_attribute_id' => '7',
       'contentclass_id' => '3',
       'contentobject_id' => '42',
@@ -21779,8 +21779,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '953',
     ),
-    19 => 
-    array (
+    19 =>
+    array(
       'contentclass_attribute_id' => '7',
       'contentclass_id' => '3',
       'contentobject_id' => '42',
@@ -21795,8 +21795,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '954',
     ),
-    20 => 
-    array (
+    20 =>
+    array(
       'contentclass_attribute_id' => '4',
       'contentclass_id' => '1',
       'contentobject_id' => '45',
@@ -21811,8 +21811,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '4',
       'word_id' => '812',
     ),
-    21 => 
-    array (
+    21 =>
+    array(
       'contentclass_attribute_id' => '4',
       'contentclass_id' => '1',
       'contentobject_id' => '49',
@@ -21827,8 +21827,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'word_id' => '962',
     ),
-    22 => 
-    array (
+    22 =>
+    array(
       'contentclass_attribute_id' => '4',
       'contentclass_id' => '1',
       'contentobject_id' => '50',
@@ -21843,8 +21843,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'word_id' => '963',
     ),
-    23 => 
-    array (
+    23 =>
+    array(
       'contentclass_attribute_id' => '4',
       'contentclass_id' => '1',
       'contentobject_id' => '51',
@@ -21859,8 +21859,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'word_id' => '964',
     ),
-    24 => 
-    array (
+    24 =>
+    array(
       'contentclass_attribute_id' => '159',
       'contentclass_id' => '14',
       'contentobject_id' => '52',
@@ -21875,8 +21875,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '4',
       'word_id' => '877',
     ),
-    25 => 
-    array (
+    25 =>
+    array(
       'contentclass_attribute_id' => '159',
       'contentclass_id' => '14',
       'contentobject_id' => '52',
@@ -21891,8 +21891,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '4',
       'word_id' => '965',
     ),
-    26 => 
-    array (
+    26 =>
+    array(
       'contentclass_attribute_id' => '159',
       'contentclass_id' => '14',
       'contentobject_id' => '52',
@@ -21907,8 +21907,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '4',
       'word_id' => '966',
     ),
-    27 => 
-    array (
+    27 =>
+    array(
       'contentclass_attribute_id' => '176',
       'contentclass_id' => '15',
       'contentobject_id' => '54',
@@ -21923,8 +21923,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '5',
       'word_id' => '967',
     ),
-    28 => 
-    array (
+    28 =>
+    array(
       'contentclass_attribute_id' => '4',
       'contentclass_id' => '1',
       'contentobject_id' => '56',
@@ -21939,8 +21939,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '5',
       'word_id' => '968',
     ),
-    29 => 
-    array (
+    29 =>
+    array(
       'contentclass_attribute_id' => '232',
       'contentclass_id' => '23',
       'contentobject_id' => '57',
@@ -21955,8 +21955,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '969',
     ),
-    30 => 
-    array (
+    30 =>
+    array(
       'contentclass_attribute_id' => '181',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -21971,8 +21971,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '970',
     ),
-    31 => 
-    array (
+    31 =>
+    array(
       'contentclass_attribute_id' => '182',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -21987,8 +21987,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '970',
     ),
-    32 => 
-    array (
+    32 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22003,8 +22003,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '802',
     ),
-    33 => 
-    array (
+    33 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22019,8 +22019,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '805',
     ),
-    34 => 
-    array (
+    34 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22035,8 +22035,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '810',
     ),
-    35 => 
-    array (
+    35 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22051,8 +22051,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '971',
     ),
-    36 => 
-    array (
+    36 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22067,8 +22067,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '972',
     ),
-    37 => 
-    array (
+    37 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22083,8 +22083,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '809',
     ),
-    38 => 
-    array (
+    38 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22099,8 +22099,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '973',
     ),
-    39 => 
-    array (
+    39 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22115,8 +22115,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '974',
     ),
-    40 => 
-    array (
+    40 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22131,8 +22131,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '814',
     ),
-    41 => 
-    array (
+    41 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22147,8 +22147,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '975',
     ),
-    42 => 
-    array (
+    42 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22163,8 +22163,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '976',
     ),
-    43 => 
-    array (
+    43 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22179,8 +22179,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '977',
     ),
-    44 => 
-    array (
+    44 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22195,8 +22195,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '978',
     ),
-    45 => 
-    array (
+    45 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22211,8 +22211,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '929',
     ),
-    46 => 
-    array (
+    46 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22227,8 +22227,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '979',
     ),
-    47 => 
-    array (
+    47 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22243,8 +22243,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '980',
     ),
-    48 => 
-    array (
+    48 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22259,8 +22259,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '981',
     ),
-    49 => 
-    array (
+    49 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22275,8 +22275,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '978',
     ),
-    50 => 
-    array (
+    50 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22291,8 +22291,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '982',
     ),
-    51 => 
-    array (
+    51 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22307,8 +22307,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '983',
     ),
-    52 => 
-    array (
+    52 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22323,8 +22323,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '984',
     ),
-    53 => 
-    array (
+    53 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22339,8 +22339,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '985',
     ),
-    54 => 
-    array (
+    54 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22355,8 +22355,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '986',
     ),
-    55 => 
-    array (
+    55 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22371,8 +22371,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '985',
     ),
-    56 => 
-    array (
+    56 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22387,8 +22387,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '987',
     ),
-    57 => 
-    array (
+    57 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22403,8 +22403,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '988',
     ),
-    58 => 
-    array (
+    58 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22419,8 +22419,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '989',
     ),
-    59 => 
-    array (
+    59 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22435,8 +22435,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '990',
     ),
-    60 => 
-    array (
+    60 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22451,8 +22451,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '991',
     ),
-    61 => 
-    array (
+    61 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22467,8 +22467,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '992',
     ),
-    62 => 
-    array (
+    62 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22483,8 +22483,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '993',
     ),
-    63 => 
-    array (
+    63 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22499,8 +22499,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '994',
     ),
-    64 => 
-    array (
+    64 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22515,8 +22515,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '995',
     ),
-    65 => 
-    array (
+    65 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22531,8 +22531,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '816',
     ),
-    66 => 
-    array (
+    66 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22547,8 +22547,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '921',
     ),
-    67 => 
-    array (
+    67 =>
+    array(
       'contentclass_attribute_id' => '184',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22563,8 +22563,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '922',
     ),
-    68 => 
-    array (
+    68 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22579,8 +22579,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '802',
     ),
-    69 => 
-    array (
+    69 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22595,8 +22595,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '907',
     ),
-    70 => 
-    array (
+    70 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22611,8 +22611,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '807',
     ),
-    71 => 
-    array (
+    71 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22627,8 +22627,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '996',
     ),
-    72 => 
-    array (
+    72 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22643,8 +22643,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '927',
     ),
-    73 => 
-    array (
+    73 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22659,8 +22659,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '802',
     ),
-    74 => 
-    array (
+    74 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22675,8 +22675,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '997',
     ),
-    75 => 
-    array (
+    75 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22691,8 +22691,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '807',
     ),
-    76 => 
-    array (
+    76 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22707,8 +22707,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '996',
     ),
-    77 => 
-    array (
+    77 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22723,8 +22723,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '998',
     ),
-    78 => 
-    array (
+    78 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22739,8 +22739,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '874',
     ),
-    79 => 
-    array (
+    79 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22755,8 +22755,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '996',
     ),
-    80 => 
-    array (
+    80 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22771,8 +22771,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '999',
     ),
-    81 => 
-    array (
+    81 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22787,8 +22787,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '1000',
     ),
-    82 => 
-    array (
+    82 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22803,8 +22803,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '995',
     ),
-    83 => 
-    array (
+    83 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22819,8 +22819,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '1001',
     ),
-    84 => 
-    array (
+    84 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22835,8 +22835,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '1002',
     ),
-    85 => 
-    array (
+    85 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22851,8 +22851,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '1003',
     ),
-    86 => 
-    array (
+    86 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22867,8 +22867,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '833',
     ),
-    87 => 
-    array (
+    87 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22883,8 +22883,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '1004',
     ),
-    88 => 
-    array (
+    88 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22899,8 +22899,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '1005',
     ),
-    89 => 
-    array (
+    89 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22915,8 +22915,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '1006',
     ),
-    90 => 
-    array (
+    90 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22931,8 +22931,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '1007',
     ),
-    91 => 
-    array (
+    91 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22947,8 +22947,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '802',
     ),
-    92 => 
-    array (
+    92 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22963,8 +22963,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '925',
     ),
-    93 => 
-    array (
+    93 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22979,8 +22979,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '1008',
     ),
-    94 => 
-    array (
+    94 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -22995,8 +22995,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '1009',
     ),
-    95 => 
-    array (
+    95 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -23011,8 +23011,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '1010',
     ),
-    96 => 
-    array (
+    96 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -23027,8 +23027,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '1011',
     ),
-    97 => 
-    array (
+    97 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -23043,8 +23043,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '1012',
     ),
-    98 => 
-    array (
+    98 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -23059,8 +23059,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '1013',
     ),
-    99 => 
-    array (
+    99 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -23075,8 +23075,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '1014',
     ),
-    100 => 
-    array (
+    100 =>
+    array(
       'contentclass_attribute_id' => '185',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -23091,8 +23091,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '1015',
     ),
-    101 => 
-    array (
+    101 =>
+    array(
       'contentclass_attribute_id' => '188',
       'contentclass_id' => '16',
       'contentobject_id' => '58',
@@ -23107,8 +23107,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'word_id' => '1016',
     ),
-    102 => 
-    array (
+    102 =>
+    array(
       'contentclass_attribute_id' => '8',
       'contentclass_id' => '4',
       'contentobject_id' => '14',
@@ -23123,8 +23123,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '958',
     ),
-    103 => 
-    array (
+    103 =>
+    array(
       'contentclass_attribute_id' => '9',
       'contentclass_id' => '4',
       'contentobject_id' => '14',
@@ -23139,8 +23139,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '954',
     ),
-    104 => 
-    array (
+    104 =>
+    array(
       'contentclass_attribute_id' => '12',
       'contentclass_id' => '4',
       'contentobject_id' => '14',
@@ -23155,8 +23155,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '1017',
     ),
-    105 => 
-    array (
+    105 =>
+    array(
       'contentclass_attribute_id' => '12',
       'contentclass_id' => '4',
       'contentobject_id' => '14',
@@ -23171,8 +23171,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '1018',
     ),
-    106 => 
-    array (
+    106 =>
+    array(
       'contentclass_attribute_id' => '12',
       'contentclass_id' => '4',
       'contentobject_id' => '14',
@@ -23187,8 +23187,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '1019',
     ),
-    107 => 
-    array (
+    107 =>
+    array(
       'contentclass_attribute_id' => '6',
       'contentclass_id' => '3',
       'contentobject_id' => '59',
@@ -23203,8 +23203,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'word_id' => '1020',
     ),
-    108 => 
-    array (
+    108 =>
+    array(
       'contentclass_attribute_id' => '6',
       'contentclass_id' => '3',
       'contentobject_id' => '11',
@@ -23220,569 +23220,569 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'word_id' => '1021',
     ),
   ),
-  'ezsearch_word' => 
-  array (
-    0 => 
-    array (
+  'ezsearch_word' =>
+  array(
+    0 =>
+    array(
       'id' => '802',
       'object_count' => '1',
       'word' => 'ez',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'id' => '805',
       'object_count' => '1',
       'word' => 'is',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'id' => '807',
       'object_count' => '1',
       'word' => 'site',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'id' => '809',
       'object_count' => '1',
       'word' => 'with',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'id' => '810',
       'object_count' => '1',
       'word' => 'a',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'id' => '812',
       'object_count' => '1',
       'word' => 'setup',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'id' => '814',
       'object_count' => '2',
       'word' => 'the',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'id' => '816',
       'object_count' => '2',
       'word' => 'for',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'id' => '833',
       'object_count' => '1',
       'word' => 'and',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'id' => '874',
       'object_count' => '1',
       'word' => 'documentation',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'id' => '877',
       'object_count' => '1',
       'word' => 'common',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'id' => '907',
       'object_count' => '1',
       'word' => 'official',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'id' => '921',
       'object_count' => '1',
       'word' => 'more',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'id' => '922',
       'object_count' => '1',
       'word' => 'information',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'id' => '925',
       'object_count' => '1',
       'word' => 'systems',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'id' => '927',
       'object_count' => '2',
       'word' => 'ez.no',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'id' => '929',
       'object_count' => '1',
       'word' => 'new',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'id' => '930',
       'object_count' => '3',
       'word' => 'users',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'id' => '951',
       'object_count' => '1',
       'word' => 'main',
     ),
-    19 => 
-    array (
+    19 =>
+    array(
       'id' => '952',
       'object_count' => '2',
       'word' => 'group',
     ),
-    20 => 
-    array (
+    20 =>
+    array(
       'id' => '953',
       'object_count' => '2',
       'word' => 'anonymous',
     ),
-    21 => 
-    array (
+    21 =>
+    array(
       'id' => '954',
       'object_count' => '3',
       'word' => 'user',
     ),
-    22 => 
-    array (
+    22 =>
+    array(
       'id' => '955',
       'object_count' => '1',
       'word' => 'nospam',
     ),
-    23 => 
-    array (
+    23 =>
+    array(
       'id' => '958',
       'object_count' => '2',
       'word' => 'administrator',
     ),
-    24 => 
-    array (
+    24 =>
+    array(
       'id' => '959',
       'object_count' => '1',
       'word' => 'editors',
     ),
-    25 => 
-    array (
+    25 =>
+    array(
       'id' => '961',
       'object_count' => '1',
       'word' => 'media',
     ),
-    26 => 
-    array (
+    26 =>
+    array(
       'id' => '962',
       'object_count' => '1',
       'word' => 'images',
     ),
-    27 => 
-    array (
+    27 =>
+    array(
       'id' => '963',
       'object_count' => '1',
       'word' => 'files',
     ),
-    28 => 
-    array (
+    28 =>
+    array(
       'id' => '964',
       'object_count' => '1',
       'word' => 'multimedia',
     ),
-    29 => 
-    array (
+    29 =>
+    array(
       'id' => '965',
       'object_count' => '1',
       'word' => 'ini',
     ),
-    30 => 
-    array (
+    30 =>
+    array(
       'id' => '966',
       'object_count' => '1',
       'word' => 'settings',
     ),
-    31 => 
-    array (
+    31 =>
+    array(
       'id' => '967',
       'object_count' => '1',
       'word' => 'sitestyle_identifier',
     ),
-    32 => 
-    array (
+    32 =>
+    array(
       'id' => '968',
       'object_count' => '1',
       'word' => 'design',
     ),
-    33 => 
-    array (
+    33 =>
+    array(
       'id' => '969',
       'object_count' => '1',
       'word' => 'home',
     ),
-    34 => 
-    array (
+    34 =>
+    array(
       'id' => '970',
       'object_count' => '1',
       'word' => 'footer',
     ),
-    35 => 
-    array (
+    35 =>
+    array(
       'id' => '971',
       'object_count' => '1',
       'word' => 'global',
     ),
-    36 => 
-    array (
+    36 =>
+    array(
       'id' => '972',
       'object_count' => '1',
       'word' => 'company',
     ),
-    37 => 
-    array (
+    37 =>
+    array(
       'id' => '973',
       'object_count' => '1',
       'word' => 'offices',
     ),
-    38 => 
-    array (
+    38 =>
+    array(
       'id' => '974',
       'object_count' => '1',
       'word' => 'around',
     ),
-    39 => 
-    array (
+    39 =>
+    array(
       'id' => '975',
       'object_count' => '1',
       'word' => 'world',
     ),
-    40 => 
-    array (
+    40 =>
+    array(
       'id' => '976',
       'object_count' => '1',
       'word' => 'including',
     ),
-    41 => 
-    array (
+    41 =>
+    array(
       'id' => '977',
       'object_count' => '1',
       'word' => 'skien',
     ),
-    42 => 
-    array (
+    42 =>
+    array(
       'id' => '978',
       'object_count' => '1',
       'word' => 'norway',
     ),
-    43 => 
-    array (
+    43 =>
+    array(
       'id' => '979',
       'object_count' => '1',
       'word' => 'york',
     ),
-    44 => 
-    array (
+    44 =>
+    array(
       'id' => '980',
       'object_count' => '1',
       'word' => 'usa',
     ),
-    45 => 
-    array (
+    45 =>
+    array(
       'id' => '981',
       'object_count' => '1',
       'word' => 'oslo',
     ),
-    46 => 
-    array (
+    46 =>
+    array(
       'id' => '982',
       'object_count' => '1',
       'word' => 'cologne',
     ),
-    47 => 
-    array (
+    47 =>
+    array(
       'id' => '983',
       'object_count' => '1',
       'word' => 'germany',
     ),
-    48 => 
-    array (
+    48 =>
+    array(
       'id' => '984',
       'object_count' => '1',
       'word' => 'paris',
     ),
-    49 => 
-    array (
+    49 =>
+    array(
       'id' => '985',
       'object_count' => '1',
       'word' => 'france',
     ),
-    50 => 
-    array (
+    50 =>
+    array(
       'id' => '986',
       'object_count' => '1',
       'word' => 'lyon',
     ),
-    51 => 
-    array (
+    51 =>
+    array(
       'id' => '987',
       'object_count' => '1',
       'word' => 'beijing',
     ),
-    52 => 
-    array (
+    52 =>
+    array(
       'id' => '988',
       'object_count' => '1',
       'word' => 'china',
     ),
-    53 => 
-    array (
+    53 =>
+    array(
       'id' => '989',
       'object_count' => '1',
       'word' => 'tokyo',
     ),
-    54 => 
-    array (
+    54 =>
+    array(
       'id' => '990',
       'object_count' => '1',
       'word' => 'japan',
     ),
-    55 => 
-    array (
+    55 =>
+    array(
       'id' => '991',
       'object_count' => '1',
       'word' => 'singapore',
     ),
-    56 => 
-    array (
+    56 =>
+    array(
       'id' => '992',
       'object_count' => '1',
       'word' => 'london',
     ),
-    57 => 
-    array (
+    57 =>
+    array(
       'id' => '993',
       'object_count' => '1',
       'word' => 'uk',
     ),
-    58 => 
-    array (
+    58 =>
+    array(
       'id' => '994',
       'object_count' => '1',
       'word' => 'contact',
     ),
-    59 => 
-    array (
+    59 =>
+    array(
       'id' => '995',
       'object_count' => '1',
       'word' => 'us',
     ),
-    60 => 
-    array (
+    60 =>
+    array(
       'id' => '996',
       'object_count' => '1',
       'word' => 'http',
     ),
-    61 => 
-    array (
+    61 =>
+    array(
       'id' => '997',
       'object_count' => '1',
       'word' => 'community',
     ),
-    62 => 
-    array (
+    62 =>
+    array(
       'id' => '998',
       'object_count' => '1',
       'word' => 'share.ez.no',
     ),
-    63 => 
-    array (
+    63 =>
+    array(
       'id' => '999',
       'object_count' => '1',
       'word' => 'doc.ez.no',
     ),
-    64 => 
-    array (
+    64 =>
+    array(
       'id' => '1000',
       'object_count' => '1',
       'word' => 'follow',
     ),
-    65 => 
-    array (
+    65 =>
+    array(
       'id' => '1001',
       'object_count' => '1',
       'word' => 'on',
     ),
-    66 => 
-    array (
+    66 =>
+    array(
       'id' => '1002',
       'object_count' => '1',
       'word' => 'twitter',
     ),
-    67 => 
-    array (
+    67 =>
+    array(
       'id' => '1003',
       'object_count' => '1',
       'word' => 'facebook',
     ),
-    68 => 
-    array (
+    68 =>
+    array(
       'id' => '1004',
       'object_count' => '1',
       'word' => 'linkedin',
     ),
-    69 => 
-    array (
+    69 =>
+    array(
       'id' => '1005',
       'object_count' => '1',
       'word' => 'copyright',
     ),
-    70 => 
-    array (
+    70 =>
+    array(
       'id' => '1006',
       'object_count' => '1',
       'word' => 'c',
     ),
-    71 => 
-    array (
+    71 =>
+    array(
       'id' => '1007',
       'object_count' => '1',
       'word' => '2012',
     ),
-    72 => 
-    array (
+    72 =>
+    array(
       'id' => '1008',
       'object_count' => '1',
       'word' => 'as',
     ),
-    73 => 
-    array (
+    73 =>
+    array(
       'id' => '1009',
       'object_count' => '1',
       'word' => 'except',
     ),
-    74 => 
-    array (
+    74 =>
+    array(
       'id' => '1010',
       'object_count' => '1',
       'word' => 'where',
     ),
-    75 => 
-    array (
+    75 =>
+    array(
       'id' => '1011',
       'object_count' => '1',
       'word' => 'otherwise',
     ),
-    76 => 
-    array (
+    76 =>
+    array(
       'id' => '1012',
       'object_count' => '1',
       'word' => 'noted',
     ),
-    77 => 
-    array (
+    77 =>
+    array(
       'id' => '1013',
       'object_count' => '1',
       'word' => 'all',
     ),
-    78 => 
-    array (
+    78 =>
+    array(
       'id' => '1014',
       'object_count' => '1',
       'word' => 'rights',
     ),
-    79 => 
-    array (
+    79 =>
+    array(
       'id' => '1015',
       'object_count' => '1',
       'word' => 'reserved',
     ),
-    80 => 
-    array (
+    80 =>
+    array(
       'id' => '1016',
       'object_count' => '1',
       'word' => '1341417600',
     ),
-    81 => 
-    array (
+    81 =>
+    array(
       'id' => '1017',
       'object_count' => '1',
       'word' => 'admin',
     ),
-    82 => 
-    array (
+    82 =>
+    array(
       'id' => '1018',
       'object_count' => '1',
       'word' => 'foo',
     ),
-    83 => 
-    array (
+    83 =>
+    array(
       'id' => '1019',
       'object_count' => '1',
       'word' => 'example.com',
     ),
-    84 => 
-    array (
+    84 =>
+    array(
       'id' => '1020',
       'object_count' => '1',
       'word' => 'partners',
     ),
-    85 => 
-    array (
+    85 =>
+    array(
       'id' => '1021',
       'object_count' => '1',
       'word' => 'members',
     ),
   ),
-  'ezsection' => 
-  array (
-    0 => 
-    array (
+  'ezsection' =>
+  array(
+    0 =>
+    array(
       'id' => '1',
       'identifier' => 'standard',
       'locale' => '',
       'name' => 'Standard',
       'navigation_part_identifier' => 'ezcontentnavigationpart',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'id' => '2',
       'identifier' => 'users',
       'locale' => '',
       'name' => 'Users',
       'navigation_part_identifier' => 'ezusernavigationpart',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'id' => '3',
       'identifier' => 'media',
       'locale' => '',
       'name' => 'Media',
       'navigation_part_identifier' => 'ezmedianavigationpart',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'id' => '4',
       'identifier' => 'setup',
       'locale' => '',
       'name' => 'Setup',
       'navigation_part_identifier' => 'ezsetupnavigationpart',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'id' => '5',
       'identifier' => 'design',
       'locale' => '',
       'name' => 'Design',
       'navigation_part_identifier' => 'ezvisualnavigationpart',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'id' => '6',
       'identifier' => '',
       'locale' => '',
@@ -23790,28 +23790,28 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'navigation_part_identifier' => 'ezcontentnavigationpart',
     ),
   ),
-  'ezsite_data' => 
-  array (
-    0 => 
-    array (
+  'ezsite_data' =>
+  array(
+    0 =>
+    array(
       'name' => 'ezdemo',
       'value' => '2.0',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'name' => 'ezpublish-release',
       'value' => '1',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'name' => 'ezpublish-version',
       'value' => '5.2.0alpha1',
     ),
   ),
-  'ezurl' => 
-  array (
-    0 => 
-    array (
+  'ezurl' =>
+  array(
+    0 =>
+    array(
       'created' => '1082368571',
       'id' => '8',
       'is_valid' => '1',
@@ -23820,8 +23820,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'original_url_md5' => 'dfcdb471b240d964dc3f57b998eb0533',
       'url' => 'http://ez.no',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'created' => '1376485937',
       'id' => '23',
       'is_valid' => '1',
@@ -23830,8 +23830,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'original_url_md5' => 'a99e0cbe4aa82974daa427a121c1bd32',
       'url' => 'http://ez.no/About-eZ/Contact-Us',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'created' => '1376485937',
       'id' => '24',
       'is_valid' => '1',
@@ -23840,8 +23840,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'original_url_md5' => '265d537bfba0e5ed4e85fbcd7f30ea84',
       'url' => 'http://share.ez.no',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'created' => '1376485937',
       'id' => '25',
       'is_valid' => '1',
@@ -23850,8 +23850,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'original_url_md5' => 'ba55ac8a1ebe1cd6eedbb5fc073feb4e',
       'url' => 'http://doc.ez.no',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'created' => '1376485937',
       'id' => '26',
       'is_valid' => '1',
@@ -23860,8 +23860,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'original_url_md5' => 'aaea21dc8d911e7b5dbcde30028e5232',
       'url' => 'https://twitter.com/eZSystems',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'created' => '1376485937',
       'id' => '27',
       'is_valid' => '1',
@@ -23870,8 +23870,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'original_url_md5' => 'ec8180e4dbb06b25b58150922546d389',
       'url' => 'http://www.facebook.com/eZPublishEnterprise',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'created' => '1376485937',
       'id' => '28',
       'is_valid' => '1',
@@ -23880,8 +23880,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'original_url_md5' => 'f010a7745c13a177f06df0afadb91ed9',
       'url' => 'https://www.linkedin.com/company/ez-systems',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'created' => '1376485938',
       'id' => '29',
       'is_valid' => '1',
@@ -23890,8 +23890,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'original_url_md5' => '9b492048041e95b32de08bafc86d759b',
       'url' => '/content/view/sitemap/2',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'created' => '1376485938',
       'id' => '30',
       'is_valid' => '1',
@@ -23901,67 +23901,67 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'url' => '/content/view/tagcloud/2',
     ),
   ),
-  'ezurl_object_link' => 
-  array (
-    0 => 
-    array (
+  'ezurl_object_link' =>
+  array(
+    0 =>
+    array(
       'contentobject_attribute_id' => '191',
       'contentobject_attribute_version' => '1',
       'url_id' => '23',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'contentobject_attribute_id' => '192',
       'contentobject_attribute_version' => '1',
       'url_id' => '8',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'contentobject_attribute_id' => '192',
       'contentobject_attribute_version' => '1',
       'url_id' => '24',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'contentobject_attribute_id' => '192',
       'contentobject_attribute_version' => '1',
       'url_id' => '25',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'contentobject_attribute_id' => '192',
       'contentobject_attribute_version' => '1',
       'url_id' => '26',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'contentobject_attribute_id' => '192',
       'contentobject_attribute_version' => '1',
       'url_id' => '27',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'contentobject_attribute_id' => '192',
       'contentobject_attribute_version' => '1',
       'url_id' => '28',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'contentobject_attribute_id' => '200',
       'contentobject_attribute_version' => '2',
       'url_id' => '29',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'contentobject_attribute_id' => '201',
       'contentobject_attribute_version' => '2',
       'url_id' => '30',
     ),
   ),
-  'ezurlalias' => 
-  array (
-    0 => 
-    array (
+  'ezurlalias' =>
+  array(
+    0 =>
+    array(
       'destination_url' => 'content/view/full/2',
       'forward_to_id' => '0',
       'id' => '12',
@@ -23971,8 +23971,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'source_md5' => 'd41d8cd98f00b204e9800998ecf8427e',
       'source_url' => '',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'destination_url' => 'content/view/full/5',
       'forward_to_id' => '0',
       'id' => '13',
@@ -23982,8 +23982,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'source_md5' => '9bc65c2abec141778ffaa729489f3e87',
       'source_url' => 'users',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'destination_url' => 'content/view/full/12',
       'forward_to_id' => '0',
       'id' => '15',
@@ -23993,8 +23993,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'source_md5' => '02d4e844e3a660857a3f81585995ffe1',
       'source_url' => 'users/guest_accounts',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'destination_url' => 'content/view/full/13',
       'forward_to_id' => '0',
       'id' => '16',
@@ -24004,8 +24004,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'source_md5' => '1b1d79c16700fd6003ea7be233e754ba',
       'source_url' => 'users/administrator_users',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'destination_url' => 'content/view/full/14',
       'forward_to_id' => '0',
       'id' => '17',
@@ -24015,8 +24015,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'source_md5' => '0bb9dd665c96bbc1cf36b79180786dea',
       'source_url' => 'users/editors',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'destination_url' => 'content/view/full/15',
       'forward_to_id' => '0',
       'id' => '18',
@@ -24026,8 +24026,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'source_md5' => 'f1305ac5f327a19b451d82719e0c3f5d',
       'source_url' => 'users/administrator_users/administrator_user',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'destination_url' => 'content/view/full/43',
       'forward_to_id' => '0',
       'id' => '20',
@@ -24037,8 +24037,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'source_md5' => '62933a2951ef01f4eafd9bdf4d3cd2f0',
       'source_url' => 'media',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'destination_url' => 'content/view/full/44',
       'forward_to_id' => '0',
       'id' => '21',
@@ -24048,8 +24048,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'source_md5' => '3ae1aac958e1c82013689d917d34967a',
       'source_url' => 'users/anonymous_users',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'destination_url' => 'content/view/full/45',
       'forward_to_id' => '0',
       'id' => '22',
@@ -24059,8 +24059,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'source_md5' => 'aad93975f09371695ba08292fd9698db',
       'source_url' => 'users/anonymous_users/anonymous_user',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'destination_url' => 'content/view/full/48',
       'forward_to_id' => '0',
       'id' => '25',
@@ -24070,8 +24070,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'source_md5' => 'a0f848942ce863cf53c0fa6cc684007d',
       'source_url' => 'setup',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'destination_url' => 'content/view/full/50',
       'forward_to_id' => '0',
       'id' => '27',
@@ -24081,8 +24081,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'source_md5' => 'c60212835de76414f9bfd21eecb8f221',
       'source_url' => 'foo_bar_folder/images/vbanner',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'destination_url' => 'content/view/full/51',
       'forward_to_id' => '0',
       'id' => '28',
@@ -24092,8 +24092,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'source_md5' => '38985339d4a5aadfc41ab292b4527046',
       'source_url' => 'media/images',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'destination_url' => 'content/view/full/52',
       'forward_to_id' => '0',
       'id' => '29',
@@ -24103,8 +24103,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'source_md5' => 'ad5a8c6f6aac3b1b9df267fe22e7aef6',
       'source_url' => 'media/files',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'destination_url' => 'content/view/full/53',
       'forward_to_id' => '0',
       'id' => '30',
@@ -24114,8 +24114,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'source_md5' => '562a0ac498571c6c3529173184a2657c',
       'source_url' => 'media/multimedia',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'destination_url' => 'content/view/full/54',
       'forward_to_id' => '0',
       'id' => '31',
@@ -24125,8 +24125,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'source_md5' => 'e501fe6c81ed14a5af2b322d248102d8',
       'source_url' => 'setup/common_ini_settings',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'destination_url' => 'content/view/full/56',
       'forward_to_id' => '0',
       'id' => '32',
@@ -24136,8 +24136,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'source_md5' => '2dd3db5dc7122ea5f3ee539bb18fe97d',
       'source_url' => 'design/ez_publish',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'destination_url' => 'content/view/full/58',
       'forward_to_id' => '0',
       'id' => '33',
@@ -24148,10 +24148,10 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'source_url' => 'design',
     ),
   ),
-  'ezurlalias_ml' => 
-  array (
-    0 => 
-    array (
+  'ezurlalias_ml' =>
+  array(
+    0 =>
+    array(
       'action' => 'nop:',
       'action_type' => 'nop',
       'alias_redirects' => '1',
@@ -24164,8 +24164,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'foo_bar_folder',
       'text_md5' => '0288b6883046492fa92e4a84eb67acc9',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'action' => 'eznode:59',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24178,8 +24178,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'Home',
       'text_md5' => '106a6c241b8797f52e1e77317b96a201',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'action' => 'eznode:59',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24192,8 +24192,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'eZ-Publish',
       'text_md5' => '10e4c3cb527fb9963258469986c16240',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'action' => 'eznode:60',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24206,8 +24206,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'footer',
       'text_md5' => '251d164643533a527361dbe1a7b9235d',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'action' => 'eznode:58',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24220,8 +24220,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'Design',
       'text_md5' => '31c13f47ad87dd7baa2d558a91e0fbb9',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'action' => 'eznode:48',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24234,8 +24234,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'Setup2',
       'text_md5' => '475e97c0146bfb1c490339546d9e72ee',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'action' => 'nop:',
       'action_type' => 'nop',
       'alias_redirects' => '1',
@@ -24248,8 +24248,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'media2',
       'text_md5' => '50e2736330de124f6edea9b008556fe6',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'action' => 'eznode:43',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24262,8 +24262,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'Media',
       'text_md5' => '62933a2951ef01f4eafd9bdf4d3cd2f0',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'action' => 'nop:',
       'action_type' => 'nop',
       'alias_redirects' => '1',
@@ -24276,8 +24276,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'setup3',
       'text_md5' => '732cefcf28bf4547540609fb1a786a30',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'action' => 'nop:',
       'action_type' => 'nop',
       'alias_redirects' => '1',
@@ -24290,8 +24290,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'users2',
       'text_md5' => '86425c35a33507d479f71ade53a669aa',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'action' => 'eznode:5',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24304,8 +24304,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'Users',
       'text_md5' => '9bc65c2abec141778ffaa729489f3e87',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'action' => 'eznode:2',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24318,8 +24318,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => '',
       'text_md5' => 'd41d8cd98f00b204e9800998ecf8427e',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'action' => 'eznode:61',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24332,8 +24332,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'Partners',
       'text_md5' => '7896f8fa69398c56d86a65357615c41f',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'action' => 'eznode:14',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24346,8 +24346,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'Editors',
       'text_md5' => 'a147e136bfa717592f2bd70bd4b53b17',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'action' => 'eznode:44',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24360,8 +24360,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'Anonymous-Users',
       'text_md5' => 'c2803c3fa1b0b5423237b4e018cae755',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'action' => 'eznode:12',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24374,8 +24374,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'Members',
       'text_md5' => 'd2e3083420929d8bfae81f58fa4594cb',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'action' => 'eznode:12',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24388,8 +24388,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'Guest-accounts',
       'text_md5' => 'e57843d836e3af8ab611fde9e2139b3a',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'action' => 'eznode:13',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24402,8 +24402,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'Administrator-users',
       'text_md5' => 'f89fad7f8a3abc8c09e1deb46a420007',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'action' => 'nop:',
       'action_type' => 'nop',
       'alias_redirects' => '1',
@@ -24416,8 +24416,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'anonymous_users2',
       'text_md5' => '505e93077a6dde9034ad97a14ab022b1',
     ),
-    19 => 
-    array (
+    19 =>
+    array(
       'action' => 'eznode:12',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24430,8 +24430,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'guest_accounts',
       'text_md5' => '70bb992820e73638731aa8de79b3329e',
     ),
-    20 => 
-    array (
+    20 =>
+    array(
       'action' => 'eznode:14',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24444,8 +24444,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'editors',
       'text_md5' => 'a147e136bfa717592f2bd70bd4b53b17',
     ),
-    21 => 
-    array (
+    21 =>
+    array(
       'action' => 'nop:',
       'action_type' => 'nop',
       'alias_redirects' => '1',
@@ -24458,8 +24458,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'administrator_users2',
       'text_md5' => 'a7da338c20bf65f9f789c87296379c2a',
     ),
-    22 => 
-    array (
+    22 =>
+    array(
       'action' => 'eznode:13',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24472,8 +24472,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'administrator_users',
       'text_md5' => 'aeb8609aa933b0899aa012c71139c58c',
     ),
-    23 => 
-    array (
+    23 =>
+    array(
       'action' => 'eznode:44',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24486,8 +24486,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'anonymous_users',
       'text_md5' => 'e9e5ad0c05ee1a43715572e5cc545926',
     ),
-    24 => 
-    array (
+    24 =>
+    array(
       'action' => 'eznode:15',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24500,8 +24500,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'Administrator-User',
       'text_md5' => '5a9d7b0ec93173ef4fedee023209cb61',
     ),
-    25 => 
-    array (
+    25 =>
+    array(
       'action' => 'eznode:15',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24514,8 +24514,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'administrator_user',
       'text_md5' => 'a3cca2de936df1e2f805710399989971',
     ),
-    26 => 
-    array (
+    26 =>
+    array(
       'action' => 'eznode:53',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24528,8 +24528,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'Multimedia',
       'text_md5' => '2e5bc8831f7ae6a29530e7f1bbf2de9c',
     ),
-    27 => 
-    array (
+    27 =>
+    array(
       'action' => 'eznode:52',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24542,8 +24542,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'Files',
       'text_md5' => '45b963397aa40d4a0063e0d85e4fe7a1',
     ),
-    28 => 
-    array (
+    28 =>
+    array(
       'action' => 'eznode:51',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24556,8 +24556,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'Images',
       'text_md5' => '59b514174bffe4ae402b3d63aad79fe0',
     ),
-    29 => 
-    array (
+    29 =>
+    array(
       'action' => 'eznode:45',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24570,8 +24570,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'Anonymous-User',
       'text_md5' => 'ccb62ebca03a31272430bc414bd5cd5b',
     ),
-    30 => 
-    array (
+    30 =>
+    array(
       'action' => 'eznode:45',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24584,8 +24584,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'anonymous_user',
       'text_md5' => 'c593ec85293ecb0e02d50d4c5c6c20eb',
     ),
-    31 => 
-    array (
+    31 =>
+    array(
       'action' => 'eznode:54',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24598,8 +24598,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'Common-INI-settings',
       'text_md5' => '4434993ac013ae4d54bb1f51034d6401',
     ),
-    32 => 
-    array (
+    32 =>
+    array(
       'action' => 'nop:',
       'action_type' => 'nop',
       'alias_redirects' => '1',
@@ -24612,8 +24612,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'images',
       'text_md5' => '59b514174bffe4ae402b3d63aad79fe0',
     ),
-    33 => 
-    array (
+    33 =>
+    array(
       'action' => 'eznode:50',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24626,8 +24626,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'vbanner',
       'text_md5' => 'c54e2d1b93642e280bdc5d99eab2827d',
     ),
-    34 => 
-    array (
+    34 =>
+    array(
       'action' => 'eznode:53',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24640,8 +24640,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'multimedia',
       'text_md5' => '2e5bc8831f7ae6a29530e7f1bbf2de9c',
     ),
-    35 => 
-    array (
+    35 =>
+    array(
       'action' => 'eznode:52',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24654,8 +24654,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'files',
       'text_md5' => '45b963397aa40d4a0063e0d85e4fe7a1',
     ),
-    36 => 
-    array (
+    36 =>
+    array(
       'action' => 'eznode:51',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24668,8 +24668,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'images',
       'text_md5' => '59b514174bffe4ae402b3d63aad79fe0',
     ),
-    37 => 
-    array (
+    37 =>
+    array(
       'action' => 'eznode:54',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24682,8 +24682,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'common_ini_settings',
       'text_md5' => 'e59d6834e86cee752ed841f9cd8d5baf',
     ),
-    38 => 
-    array (
+    38 =>
+    array(
       'action' => 'eznode:56',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24696,8 +24696,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text' => 'eZ-publish',
       'text_md5' => '10e4c3cb527fb9963258469986c16240',
     ),
-    39 => 
-    array (
+    39 =>
+    array(
       'action' => 'eznode:56',
       'action_type' => 'eznode',
       'alias_redirects' => '1',
@@ -24711,185 +24711,185 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'text_md5' => '49a39d99a955d95aa5d636275656a07a',
     ),
   ),
-  'ezurlalias_ml_incr' => 
-  array (
-    0 => 
-    array (
+  'ezurlalias_ml_incr' =>
+  array(
+    0 =>
+    array(
       'id' => '1',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'id' => '2',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'id' => '3',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'id' => '4',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'id' => '5',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'id' => '6',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'id' => '7',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'id' => '8',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'id' => '9',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'id' => '10',
     ),
-    10 => 
-    array (
+    10 =>
+    array(
       'id' => '11',
     ),
-    11 => 
-    array (
+    11 =>
+    array(
       'id' => '12',
     ),
-    12 => 
-    array (
+    12 =>
+    array(
       'id' => '13',
     ),
-    13 => 
-    array (
+    13 =>
+    array(
       'id' => '14',
     ),
-    14 => 
-    array (
+    14 =>
+    array(
       'id' => '15',
     ),
-    15 => 
-    array (
+    15 =>
+    array(
       'id' => '16',
     ),
-    16 => 
-    array (
+    16 =>
+    array(
       'id' => '17',
     ),
-    17 => 
-    array (
+    17 =>
+    array(
       'id' => '18',
     ),
-    18 => 
-    array (
+    18 =>
+    array(
       'id' => '19',
     ),
-    19 => 
-    array (
+    19 =>
+    array(
       'id' => '20',
     ),
-    20 => 
-    array (
+    20 =>
+    array(
       'id' => '21',
     ),
-    21 => 
-    array (
+    21 =>
+    array(
       'id' => '22',
     ),
-    22 => 
-    array (
+    22 =>
+    array(
       'id' => '24',
     ),
-    23 => 
-    array (
+    23 =>
+    array(
       'id' => '25',
     ),
-    24 => 
-    array (
+    24 =>
+    array(
       'id' => '26',
     ),
-    25 => 
-    array (
+    25 =>
+    array(
       'id' => '27',
     ),
-    26 => 
-    array (
+    26 =>
+    array(
       'id' => '28',
     ),
-    27 => 
-    array (
+    27 =>
+    array(
       'id' => '29',
     ),
-    28 => 
-    array (
+    28 =>
+    array(
       'id' => '30',
     ),
-    29 => 
-    array (
+    29 =>
+    array(
       'id' => '31',
     ),
-    30 => 
-    array (
+    30 =>
+    array(
       'id' => '32',
     ),
-    31 => 
-    array (
+    31 =>
+    array(
       'id' => '33',
     ),
-    32 => 
-    array (
+    32 =>
+    array(
       'id' => '34',
     ),
-    33 => 
-    array (
+    33 =>
+    array(
       'id' => '35',
     ),
-    34 => 
-    array (
+    34 =>
+    array(
       'id' => '36',
     ),
-    35 => 
-    array (
+    35 =>
+    array(
       'id' => '37',
     ),
-    36 => 
-    array (
+    36 =>
+    array(
       'id' => '38',
     ),
-    37 => 
-    array (
+    37 =>
+    array(
       'id' => '39',
     ),
-    38 => 
-    array (
+    38 =>
+    array(
       'id' => '40',
     ),
-    39 => 
-    array (
+    39 =>
+    array(
       'id' => '41',
     ),
-    40 => 
-    array (
+    40 =>
+    array(
       'id' => '42',
     ),
   ),
-  'ezuser' => 
-  array (
-    0 => 
-    array (
+  'ezuser' =>
+  array(
+    0 =>
+    array(
       'contentobject_id' => '10',
       'email' => 'nospam@ez.no',
       'login' => 'anonymous',
       'password_hash' => '4e6f6184135228ccd45f8233d72a0363',
       'password_hash_type' => '2',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'contentobject_id' => '14',
       'email' => 'foo@example.com',
       'login' => 'admin',
@@ -24897,82 +24897,82 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'password_hash_type' => '5',
     ),
   ),
-  'ezuser_role' => 
-  array (
-    0 => 
-    array (
+  'ezuser_role' =>
+  array(
+    0 =>
+    array(
       'contentobject_id' => '12',
       'id' => '25',
       'limit_identifier' => '',
       'limit_value' => '',
       'role_id' => '2',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'contentobject_id' => '11',
       'id' => '28',
       'limit_identifier' => '',
       'limit_value' => '',
       'role_id' => '1',
     ),
-    2 => 
-    array (
+    2 =>
+    array(
       'contentobject_id' => '42',
       'id' => '31',
       'limit_identifier' => '',
       'limit_value' => '',
       'role_id' => '1',
     ),
-    3 => 
-    array (
+    3 =>
+    array(
       'contentobject_id' => '13',
       'id' => '32',
       'limit_identifier' => 'Subtree',
       'limit_value' => '/1/2/',
       'role_id' => '3',
     ),
-    4 => 
-    array (
+    4 =>
+    array(
       'contentobject_id' => '13',
       'id' => '33',
       'limit_identifier' => 'Subtree',
       'limit_value' => '/1/43/',
       'role_id' => '3',
     ),
-    5 => 
-    array (
+    5 =>
+    array(
       'contentobject_id' => '11',
       'id' => '34',
       'limit_identifier' => '',
       'limit_value' => '',
       'role_id' => '5',
     ),
-    6 => 
-    array (
+    6 =>
+    array(
       'contentobject_id' => '59',
       'id' => '35',
       'limit_identifier' => '',
       'limit_value' => '',
       'role_id' => '4',
     ),
-    7 => 
-    array (
+    7 =>
+    array(
       'contentobject_id' => '59',
       'id' => '36',
       'limit_identifier' => '',
       'limit_value' => '',
       'role_id' => '5',
     ),
-    8 => 
-    array (
+    8 =>
+    array(
       'contentobject_id' => '59',
       'id' => '37',
       'limit_identifier' => '',
       'limit_value' => '',
       'role_id' => '1',
     ),
-    9 => 
-    array (
+    9 =>
+    array(
       'contentobject_id' => '13',
       'id' => '38',
       'limit_identifier' => '',
@@ -24980,25 +24980,25 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'role_id' => '5',
     ),
   ),
-  'ezuser_setting' => 
-  array (
-    0 => 
-    array (
+  'ezuser_setting' =>
+  array(
+    0 =>
+    array(
       'is_enabled' => '1',
       'max_login' => '1000',
       'user_id' => '10',
     ),
-    1 => 
-    array (
+    1 =>
+    array(
       'is_enabled' => '1',
       'max_login' => '10',
       'user_id' => '14',
     ),
   ),
-  'ezuservisit' => 
-  array (
-    0 => 
-    array (
+  'ezuservisit' =>
+  array(
+    0 =>
+    array(
       'current_visit_timestamp' => '1376486067',
       'failed_login_attempts' => '0',
       'last_visit_timestamp' => '1376485932',
@@ -25006,19 +25006,19 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'user_id' => '14',
     ),
   ),
-  'ezvattype' => 
-  array (
-    0 => 
-    array (
+  'ezvattype' =>
+  array(
+    0 =>
+    array(
       'id' => '1',
       'name' => 'Std',
       'percentage' => '0',
     ),
   ),
-  'ezworkflow_group' => 
-  array (
-    0 => 
-    array (
+  'ezworkflow_group' =>
+  array(
+    0 =>
+    array(
       'created' => '1024392098',
       'creator_id' => '14',
       'id' => '1',
@@ -25028,4 +25028,3 @@ keywords=cms, publish, e-commerce, content management, development framework',
     ),
   ),
 );
-

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ImageProcessorTest class
+ * File containing the ImageProcessorTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,26 +28,25 @@ class ImageProcessorTest extends BinaryInputProcessorTest
 
         $inputHash = array(
             'path' => 'var/some_site/223-1-eng-US/Cool-File.jpg',
-            'imageId' => '223-12345'
+            'imageId' => '223-12345',
         );
 
         $routerMock = $this->getRouterMock();
-        foreach ( $this->getVariations() as $iteration => $variationIdentifier )
-        {
+        foreach ($this->getVariations() as $iteration => $variationIdentifier) {
             $expectedVariations[$variationIdentifier]['href'] = "/content/binary/images/{$inputHash['imageId']}/variations/{$variationIdentifier}";
             $routerMock
-                ->expects( $this->at( $iteration ) )
-                ->method( 'generate' )
+                ->expects($this->at($iteration))
+                ->method('generate')
                 ->with(
                     'ezpublish_rest_binaryContent_getImageVariation',
-                    array( 'imageId' => $inputHash['imageId'], 'variationIdentifier' => $variationIdentifier )
+                    array('imageId' => $inputHash['imageId'], 'variationIdentifier' => $variationIdentifier)
                 )
                 ->will(
-                    $this->returnValue( $expectedVariations[$variationIdentifier]['href'] )
+                    $this->returnValue($expectedVariations[$variationIdentifier]['href'])
                 );
         }
 
-        $outputHash = $processor->postProcessValueHash( $inputHash );
+        $outputHash = $processor->postProcessValueHash($inputHash);
 
         $this->assertEquals(
             array(
@@ -58,7 +59,7 @@ class ImageProcessorTest extends BinaryInputProcessorTest
     }
 
     /**
-     * Returns the processor under test
+     * Returns the processor under test.
      *
      * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor
      */
@@ -76,15 +77,15 @@ class ImageProcessorTest extends BinaryInputProcessorTest
      */
     protected function getRouterMock()
     {
-        if ( !isset( $this->requestParser ) )
-        {
-            $this->requestParser = $this->getMock( 'Symfony\\Component\\Routing\\RouterInterface' );
+        if (!isset($this->requestParser)) {
+            $this->requestParser = $this->getMock('Symfony\\Component\\Routing\\RouterInterface');
         }
+
         return $this->requestParser;
     }
 
     protected function getVariations()
     {
-        return array( 'small', 'medium', 'large' );
+        return array('small', 'medium', 'large');
     }
 }

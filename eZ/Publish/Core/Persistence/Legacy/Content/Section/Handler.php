@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Section Handler class
+ * File containing the Section Handler class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,49 +17,49 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use RuntimeException;
 
 /**
- * Section Handler
+ * Section Handler.
  */
 class Handler implements BaseSectionHandler
 {
     /**
-     * Section Gateway
+     * Section Gateway.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway
      */
     protected $sectionGateway;
 
     /**
-     * Creates a new Section Handler
+     * Creates a new Section Handler.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway $sectionGateway
      */
-    public function __construct( Gateway $sectionGateway  )
+    public function __construct(Gateway $sectionGateway)
     {
         $this->sectionGateway = $sectionGateway;
     }
 
     /**
-     * Create a new section
+     * Create a new section.
      *
      * @param string $name
      * @param string $identifier
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
-    public function create( $name, $identifier )
+    public function create($name, $identifier)
     {
         $section = new Section();
 
         $section->name = $name;
         $section->identifier = $identifier;
 
-        $section->id = $this->sectionGateway->insertSection( $name, $identifier );
+        $section->id = $this->sectionGateway->insertSection($name, $identifier);
 
         return $section;
     }
 
     /**
-     * Update name and identifier of a section
+     * Update name and identifier of a section.
      *
      * @param mixed $id
      * @param string $name
@@ -65,9 +67,9 @@ class Handler implements BaseSectionHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
-    public function update( $id, $name, $identifier )
+    public function update($id, $name, $identifier)
     {
-        $this->sectionGateway->updateSection( $id, $name, $identifier );
+        $this->sectionGateway->updateSection($id, $name, $identifier);
 
         $section = new Section();
         $section->id = $id;
@@ -78,7 +80,7 @@ class Handler implements BaseSectionHandler
     }
 
     /**
-     * Get section data
+     * Get section data.
      *
      * @param mixed $id
      *
@@ -86,30 +88,31 @@ class Handler implements BaseSectionHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
-    public function load( $id )
+    public function load($id)
     {
-        $rows = $this->sectionGateway->loadSectionData( $id );
+        $rows = $this->sectionGateway->loadSectionData($id);
 
-        if ( empty( $rows ) )
-        {
-            throw new NotFound( "Section", $id );
+        if (empty($rows)) {
+            throw new NotFound('Section', $id);
         }
-        return $this->createSectionFromArray( reset( $rows ) );
+
+        return $this->createSectionFromArray(reset($rows));
     }
 
     /**
-     * Get all section data
+     * Get all section data.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Section[]
      */
     public function loadAll()
     {
         $rows = $this->sectionGateway->loadAllSectionData();
-        return $this->createSectionsFromArray( $rows );
+
+        return $this->createSectionsFromArray($rows);
     }
 
     /**
-     * Get section data by identifier
+     * Get section data by identifier.
      *
      * @param string $identifier
      *
@@ -117,25 +120,25 @@ class Handler implements BaseSectionHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
-    public function loadByIdentifier( $identifier )
+    public function loadByIdentifier($identifier)
     {
-        $rows = $this->sectionGateway->loadSectionDataByIdentifier( $identifier );
+        $rows = $this->sectionGateway->loadSectionDataByIdentifier($identifier);
 
-        if ( empty( $rows ) )
-        {
-            throw new NotFound( "Section", $identifier );
+        if (empty($rows)) {
+            throw new NotFound('Section', $identifier);
         }
-        return $this->createSectionFromArray( reset( $rows ) );
+
+        return $this->createSectionFromArray(reset($rows));
     }
 
     /**
-     * Creates a Section from the given $data
+     * Creates a Section from the given $data.
      *
      * @param array $data
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
-    protected function createSectionFromArray( array $data )
+    protected function createSectionFromArray(array $data)
     {
         $section = new Section();
 
@@ -147,24 +150,24 @@ class Handler implements BaseSectionHandler
     }
 
     /**
-     * Creates a Section from the given $data
+     * Creates a Section from the given $data.
      *
      * @param array $data
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Section[]
      */
-    protected function createSectionsFromArray( array $data )
+    protected function createSectionsFromArray(array $data)
     {
         $sections = array();
-        foreach ( $data as $sectionData )
-        {
-            $sections[] = $this->createSectionFromArray( $sectionData );
+        foreach ($data as $sectionData) {
+            $sections[] = $this->createSectionFromArray($sectionData);
         }
+
         return $sections;
     }
 
     /**
-     * Delete a section
+     * Delete a section.
      *
      * Might throw an exception if the section is still associated with some
      * content objects. Make sure that no content objects are associated with
@@ -172,39 +175,38 @@ class Handler implements BaseSectionHandler
      *
      * @param mixed $id
      */
-    public function delete( $id )
+    public function delete($id)
     {
-        $contentCount = $this->sectionGateway->countContentObjectsInSection( $id );
+        $contentCount = $this->sectionGateway->countContentObjectsInSection($id);
 
-        if ( $contentCount > 0 )
-        {
+        if ($contentCount > 0) {
             throw new RuntimeException(
                 "Section with ID '{$id}' still has content assigned."
             );
         }
-        $this->sectionGateway->deleteSection( $id );
+        $this->sectionGateway->deleteSection($id);
     }
 
     /**
-     * Assigns section to single content object
+     * Assigns section to single content object.
      *
      * @param mixed $sectionId
      * @param mixed $contentId
      */
-    public function assign( $sectionId, $contentId )
+    public function assign($sectionId, $contentId)
     {
-        $this->sectionGateway->assignSectionToContent( $sectionId, $contentId );
+        $this->sectionGateway->assignSectionToContent($sectionId, $contentId);
     }
 
     /**
-     * Number of content assignments a Section has
+     * Number of content assignments a Section has.
      *
      * @param mixed $sectionId
      *
      * @return int
      */
-    public function assignmentsCount( $sectionId )
+    public function assignmentsCount($sectionId)
     {
-        return $this->sectionGateway->countContentObjectsInSection( $sectionId );
+        return $this->sectionGateway->countContentObjectsInSection($sectionId);
     }
 }

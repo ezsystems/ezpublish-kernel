@@ -1,21 +1,23 @@
 <?php
+
 /**
  * File containing the FieldTypeProcessorRegistry class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Common;
 
 /**
- * FieldTypeProcessorRegistry
+ * FieldTypeProcessorRegistry.
  */
 class FieldTypeProcessorRegistry
 {
     /**
-     * Registered processors
+     * Registered processors.
      *
      * @var \eZ\Publish\Core\REST\Common\FieldTypeProcessor[]
      */
@@ -24,39 +26,38 @@ class FieldTypeProcessorRegistry
     /**
      * @param \eZ\Publish\Core\REST\Common\FieldTypeProcessor[] $processors
      */
-    public function __construct( array $processors = array() )
+    public function __construct(array $processors = array())
     {
-        foreach ( $processors as $fieldTypeIdentifier => $processor )
-        {
-            $this->registerProcessor( $fieldTypeIdentifier, $processor );
+        foreach ($processors as $fieldTypeIdentifier => $processor) {
+            $this->registerProcessor($fieldTypeIdentifier, $processor);
         }
     }
 
     /**
-     * Registers $processor for $fieldTypeIdentifier
+     * Registers $processor for $fieldTypeIdentifier.
      *
      * @param string $fieldTypeIdentifier
      * @param \eZ\Publish\Core\REST\Common\FieldTypeProcessor $processor
      */
-    public function registerProcessor( $fieldTypeIdentifier, FieldTypeProcessor $processor )
+    public function registerProcessor($fieldTypeIdentifier, FieldTypeProcessor $processor)
     {
         $this->processors[$fieldTypeIdentifier] = $processor;
     }
 
     /**
-     * Returns if a processor is registered for $fieldTypeIdentifier
+     * Returns if a processor is registered for $fieldTypeIdentifier.
      *
      * @param string $fieldTypeIdentifier
      *
-     * @return boolean
+     * @return bool
      */
-    public function hasProcessor( $fieldTypeIdentifier )
+    public function hasProcessor($fieldTypeIdentifier)
     {
-        return ( isset( $this->processors[$fieldTypeIdentifier] ) );
+        return (isset($this->processors[$fieldTypeIdentifier]));
     }
 
     /**
-     * Returns the processor for $fieldTypeIdentifier
+     * Returns the processor for $fieldTypeIdentifier.
      *
      * @param string $fieldTypeIdentifier
      *
@@ -64,14 +65,14 @@ class FieldTypeProcessorRegistry
      *
      * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor
      */
-    public function getProcessor( $fieldTypeIdentifier )
+    public function getProcessor($fieldTypeIdentifier)
     {
-        if ( !$this->hasProcessor( $fieldTypeIdentifier ) )
-        {
+        if (!$this->hasProcessor($fieldTypeIdentifier)) {
             throw new \RuntimeException(
                 "No field type processor for '{$fieldTypeIdentifier}' found."
             );
         }
+
         return $this->processors[$fieldTypeIdentifier];
     }
 }

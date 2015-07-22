@@ -1,8 +1,8 @@
 <?php
 
-return array (
-    'ezurlalias_ml' => array (
-        0 => array (
+return array(
+    'ezurlalias_ml' => array(
+        0 => array(
             'action' => 'eznode:2',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -15,7 +15,7 @@ return array (
             'text' => '',
             'text_md5' => 'd41d8cd98f00b204e9800998ecf8427e',
         ),
-        1 => array (
+        1 => array(
             'action' => 'eznode:314',
             'action_type' => 'eznode',
             'alias_redirects' => '0',
@@ -28,7 +28,7 @@ return array (
             'text' => 'jedan',
             'text_md5' => '6896260129051a949051c3847c34466f',
         ),
-        2 => array (
+        2 => array(
             'action' => 'eznode:315',
             'action_type' => 'eznode',
             'alias_redirects' => '0',
@@ -41,7 +41,7 @@ return array (
             'text' => 'two',
             'text_md5' => 'b8a9f715dbb64fd5c56e7783c6820a61',
         ),
-        3 => array (
+        3 => array(
             'action' => 'eznode:315',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -54,7 +54,7 @@ return array (
             'text' => 'dva',
             'text_md5' => 'c67ed9a09ab136fae610b6a087d82e21',
         ),
-        4 => array (
+        4 => array(
             'action' => 'eznode:316',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -67,7 +67,7 @@ return array (
             'text' => 'drei',
             'text_md5' => '1d8d2fd0a99802b89eb356a86e029d25',
         ),
-        5 => array (
+        5 => array(
             'action' => 'eznode:316',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -80,7 +80,7 @@ return array (
             'text' => 'three',
             'text_md5' => '35d6d33467aae9a2e3dccb4b6b027878',
         ),
-        6 => array (
+        6 => array(
             'action' => 'eznode:316',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -93,7 +93,7 @@ return array (
             'text' => 'tri',
             'text_md5' => 'd2cfe69af2d64330670e08efb2c86df7',
         ),
-        7 => array (
+        7 => array(
             'action' => 'eznode:316',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -107,7 +107,7 @@ return array (
             'text_md5' => '5f46413bb0ba5998caef84ab1ea590e1',
         ),
     ),
-    'ezcontent_language' => array (
+    'ezcontent_language' => array(
         0 => array(
             'disabled' => 0,
             'id' => 2,
@@ -133,22 +133,21 @@ return array (
             'name' => 'Klingon (Kronos)'
         ),
     ),
-    'ezurlalias_ml_incr' => array (
-        0 => array (
+    'ezurlalias_ml_incr' => array(
+        0 => array(
             'id' => '1',
         ),
-        1 => array (
+        1 => array(
             'id' => '2',
         ),
-        2 => array (
+        2 => array(
             'id' => '3',
         ),
-        3 => array (
+        3 => array(
             'id' => '4',
         ),
-        4 => array (
+        4 => array(
             'id' => '5',
         ),
     ),
 );
-

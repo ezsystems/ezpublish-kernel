@@ -1,16 +1,17 @@
 <?php
+
 /**
- * File containing the ObjectCacheTest class
+ * File containing the ObjectCacheTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests;
 
 use eZ\Publish\Core\REST\Client\ObjectCache;
-use eZ\Publish\API\Repository\Values\ValueObject;
 use PHPUnit_Framework_TestCase;
 
 class ObjectCacheTest extends PHPUnit_Framework_TestCase
@@ -21,11 +22,11 @@ class ObjectCacheTest extends PHPUnit_Framework_TestCase
 
         $object = new TestValueObject();
 
-        $cache->store( 'some-key', $object );
+        $cache->store('some-key', $object);
 
         $this->assertSame(
             $object,
-            $cache->restore( 'some-key' )
+            $cache->restore('some-key')
         );
     }
 
@@ -36,16 +37,16 @@ class ObjectCacheTest extends PHPUnit_Framework_TestCase
         $firstObject = new TestValueObject();
         $secondObject = new TestValueObject();
 
-        $cache->store( 'some-key', $firstObject );
-        $cache->store( 'some-key', $secondObject );
+        $cache->store('some-key', $firstObject);
+        $cache->store('some-key', $secondObject);
 
         $this->assertSame(
             $secondObject,
-            $cache->restore( 'some-key' )
+            $cache->restore('some-key')
         );
         $this->assertNotSame(
             $firstObject,
-            $cache->restore( 'some-key' )
+            $cache->restore('some-key')
         );
     }
 
@@ -53,7 +54,7 @@ class ObjectCacheTest extends PHPUnit_Framework_TestCase
     {
         $cache = $this->getCache();
 
-        $this->assertNull( $cache->restore( 'non-existent' ) );
+        $this->assertNull($cache->restore('non-existent'));
     }
 
     public function testClear()
@@ -62,10 +63,10 @@ class ObjectCacheTest extends PHPUnit_Framework_TestCase
 
         $object = new TestValueObject();
 
-        $cache->store( 'some-key', $object );
-        $cache->clear( 'some-key' );
+        $cache->store('some-key', $object);
+        $cache->clear('some-key');
 
-        $this->assertNull( $cache->restore( 'some-key' ) );
+        $this->assertNull($cache->restore('some-key'));
     }
 
     public function testClearAll()
@@ -74,13 +75,13 @@ class ObjectCacheTest extends PHPUnit_Framework_TestCase
 
         $object = new TestValueObject();
 
-        $cache->store( 'some-key', $object );
-        $cache->store( 'other-key', $object );
+        $cache->store('some-key', $object);
+        $cache->store('other-key', $object);
 
         $cache->clearAll();
 
-        $this->assertNull( $cache->restore( 'some-key' ) );
-        $this->assertNull( $cache->restore( 'other-key' ) );
+        $this->assertNull($cache->restore('some-key'));
+        $this->assertNull($cache->restore('other-key'));
     }
 
     protected function getCache()

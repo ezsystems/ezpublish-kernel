@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContentTypeTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,7 +25,7 @@ class ContentTypeTest extends BaseTest
     protected function setUp()
     {
         parent::setUp();
-        $this->matcher = new ContentTypeIdentifierMatcher;
+        $this->matcher = new ContentTypeIdentifierMatcher();
     }
 
     /**
@@ -33,16 +35,16 @@ class ContentTypeTest extends BaseTest
      *
      * @param string|string[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param boolean $expectedResult
+     * @param bool $expectedResult
      */
-    public function testMatchLocation( $matchingConfig, Repository $repository, $expectedResult )
+    public function testMatchLocation($matchingConfig, Repository $repository, $expectedResult)
     {
-        $this->matcher->setRepository( $repository );
-        $this->matcher->setMatchingConfig( $matchingConfig );
+        $this->matcher->setRepository($repository);
+        $this->matcher->setMatchingConfig($matchingConfig);
 
         $this->assertSame(
             $expectedResult,
-            $this->matcher->matchLocation( $this->generateLocationMock() )
+            $this->matcher->matchLocation($this->generateLocationMock())
         );
     }
 
@@ -52,33 +54,33 @@ class ContentTypeTest extends BaseTest
 
         $data[] = array(
             'foo',
-            $this->generateRepositoryMockForContentTypeIdentifier( 'foo' ),
-            true
+            $this->generateRepositoryMockForContentTypeIdentifier('foo'),
+            true,
         );
 
         $data[] = array(
             'foo',
-            $this->generateRepositoryMockForContentTypeIdentifier( 'bar' ),
-            false
+            $this->generateRepositoryMockForContentTypeIdentifier('bar'),
+            false,
         );
 
         $data[] = array(
-            array( 'foo', 'baz' ),
-            $this->generateRepositoryMockForContentTypeIdentifier( 'bar' ),
-            false
+            array('foo', 'baz'),
+            $this->generateRepositoryMockForContentTypeIdentifier('bar'),
+            false,
         );
 
         $data[] = array(
-            array( 'foo', 'baz' ),
-            $this->generateRepositoryMockForContentTypeIdentifier( 'baz' ),
-            true
+            array('foo', 'baz'),
+            $this->generateRepositoryMockForContentTypeIdentifier('baz'),
+            true,
         );
 
         return $data;
     }
 
     /**
-     * Generates a Location object in respect of a given content type identifier
+     * Generates a Location object in respect of a given content type identifier.
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
@@ -86,11 +88,11 @@ class ContentTypeTest extends BaseTest
     {
         $location = $this->getLocationMock();
         $location
-            ->expects( $this->any() )
-            ->method( 'getContentInfo' )
+            ->expects($this->any())
+            ->method('getContentInfo')
             ->will(
                 $this->returnValue(
-                    $this->getContentInfoMock( array( 'contentTypeId' => 42 ) )
+                    $this->getContentInfoMock(array('contentTypeId' => 42))
                 )
             );
 
@@ -104,17 +106,17 @@ class ContentTypeTest extends BaseTest
      *
      * @param string|string[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param boolean $expectedResult
+     * @param bool $expectedResult
      */
-    public function testMatchContentInfo( $matchingConfig, Repository $repository, $expectedResult )
+    public function testMatchContentInfo($matchingConfig, Repository $repository, $expectedResult)
     {
-        $this->matcher->setRepository( $repository );
-        $this->matcher->setMatchingConfig( $matchingConfig );
+        $this->matcher->setRepository($repository);
+        $this->matcher->setMatchingConfig($matchingConfig);
 
         $this->assertSame(
             $expectedResult,
             $this->matcher->matchContentInfo(
-                $this->getContentInfoMock( array( 'contentTypeId' => 42 ) )
+                $this->getContentInfoMock(array('contentTypeId' => 42))
             )
         );
     }
@@ -125,26 +127,26 @@ class ContentTypeTest extends BaseTest
 
         $data[] = array(
             'foo',
-            $this->generateRepositoryMockForContentTypeIdentifier( 'foo' ),
-            true
+            $this->generateRepositoryMockForContentTypeIdentifier('foo'),
+            true,
         );
 
         $data[] = array(
             'foo',
-            $this->generateRepositoryMockForContentTypeIdentifier( 'bar' ),
-            false
+            $this->generateRepositoryMockForContentTypeIdentifier('bar'),
+            false,
         );
 
         $data[] = array(
-            array( 'foo', 'baz' ),
-            $this->generateRepositoryMockForContentTypeIdentifier( 'bar' ),
-            false
+            array('foo', 'baz'),
+            $this->generateRepositoryMockForContentTypeIdentifier('bar'),
+            false,
         );
 
         $data[] = array(
-            array( 'foo', 'baz' ),
-            $this->generateRepositoryMockForContentTypeIdentifier( 'baz' ),
-            true
+            array('foo', 'baz'),
+            $this->generateRepositoryMockForContentTypeIdentifier('baz'),
+            true,
         );
 
         return $data;
@@ -157,30 +159,30 @@ class ContentTypeTest extends BaseTest
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function generateRepositoryMockForContentTypeIdentifier( $contentTypeIdentifier )
+    private function generateRepositoryMockForContentTypeIdentifier($contentTypeIdentifier)
     {
         $contentTypeMock = $this
-            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType' )
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType')
             ->setConstructorArgs(
-                array( array( 'identifier' => $contentTypeIdentifier ) )
+                array(array('identifier' => $contentTypeIdentifier))
             )
             ->getMockForAbstractClass();
         $contentTypeServiceMock = $this
-            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\ContentTypeService' )
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\ContentTypeService')
             ->disableOriginalConstructor()
             ->getMock();
-        $contentTypeServiceMock->expects( $this->once() )
-            ->method( 'loadContentType' )
-            ->with( 42 )
+        $contentTypeServiceMock->expects($this->once())
+            ->method('loadContentType')
+            ->with(42)
             ->will(
-                $this->returnValue( $contentTypeMock )
+                $this->returnValue($contentTypeMock)
             );
 
         $repository = $this->getRepositoryMock();
         $repository
-            ->expects( $this->any() )
-            ->method( 'getContentTypeService' )
-            ->will( $this->returnValue( $contentTypeServiceMock ) );
+            ->expects($this->any())
+            ->method('getContentTypeService')
+            ->will($this->returnValue($contentTypeServiceMock));
 
         return $repository;
     }

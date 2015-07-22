@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the TextLine Value class
+ * File containing the TextLine Value class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,23 +14,23 @@ namespace eZ\Publish\Core\FieldType\TextLine;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
- * Value for TextLine field type
+ * Value for TextLine field type.
  */
 class Value extends BaseValue
 {
     /**
-     * Text content
+     * Text content.
      *
      * @var string
      */
     public $text;
 
     /**
-     * Construct a new Value object and initialize it $text
+     * Construct a new Value object and initialize it $text.
      *
      * @param string $text
      */
-    public function __construct( $text = '' )
+    public function __construct($text = '')
     {
         $this->text = $text;
     }

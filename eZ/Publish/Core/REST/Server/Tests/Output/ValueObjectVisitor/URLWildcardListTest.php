@@ -1,36 +1,36 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\URLWildcardList;
 use eZ\Publish\API\Repository\Values\Content;
-use eZ\Publish\Core\REST\Common;
 
 class URLWildcardListTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the URLWildcardList visitor
+     * Test the URLWildcardList visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
-        $urlWildcardList = new URLWildcardList( array() );
+        $urlWildcardList = new URLWildcardList(array());
 
         $this->addRouteExpectation(
             'ezpublish_rest_listURLWildcards',
@@ -44,25 +44,25 @@ class URLWildcardListTest extends ValueObjectVisitorBaseTest
             $urlWildcardList
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains UrlWildcardList element
+     * Test if result contains UrlWildcardList element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsUrlWildcardListElement( $result )
+    public function testResultContainsUrlWildcardListElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'UrlWildcardList',
+                'tag' => 'UrlWildcardList',
             ),
             $result,
             'Invalid <UrlWildcardList> element.',
@@ -71,21 +71,21 @@ class URLWildcardListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains UrlWildcardList element attributes
+     * Test if result contains UrlWildcardList element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsUrlWildcardListAttributes( $result )
+    public function testResultContainsUrlWildcardListAttributes($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'UrlWildcardList',
+                'tag' => 'UrlWildcardList',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.UrlWildcardList+xml',
-                    'href'       => '/content/urlwildcards',
-                )
+                    'href' => '/content/urlwildcards',
+                ),
             ),
             $result,
             'Invalid <UrlWildcardList> attributes.',
@@ -94,14 +94,14 @@ class URLWildcardListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if URLWildcardList visitor visits the children
+     * Test if URLWildcardList visitor visits the children.
      */
     public function testURLWildcardListVisitsChildren()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $urlWildcardList = new URLWildcardList(
             array(
@@ -110,9 +110,9 @@ class URLWildcardListTest extends ValueObjectVisitorBaseTest
             )
         );
 
-        $this->getVisitorMock()->expects( $this->exactly( 2 ) )
-            ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\URLWildcard' ) );
+        $this->getVisitorMock()->expects($this->exactly(2))
+            ->method('visitValueObject')
+            ->with($this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\URLWildcard'));
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -122,12 +122,12 @@ class URLWildcardListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the URLWildcardList visitor
+     * Get the URLWildcardList visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\URLWildcardList
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\URLWildcardList;
+        return new ValueObjectVisitor\URLWildcardList();
     }
 }

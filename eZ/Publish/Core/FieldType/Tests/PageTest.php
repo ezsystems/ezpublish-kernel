@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the AuthorTest class
+ * File containing the AuthorTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,11 +25,12 @@ use DateTime;
 class PageTest extends FieldTypeTest
 {
     /**
-      * Page service mock.
-      *
-      * @see getPageServiceMock()
-      * @var \PHPUnit_Framework_MockObject_MockObject
-      */
+     * Page service mock.
+     *
+     * @see getPageServiceMock()
+     *
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $pageServiceMock;
 
     /**
@@ -39,16 +42,16 @@ class PageTest extends FieldTypeTest
 
     private function getPageServiceMock()
     {
-        if ( !isset( $this->pageServiceMock ) )
-        {
+        if (!isset($this->pageServiceMock)) {
             $this->pageServiceMock = $this
-                ->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\Page\\PageService' )
+                ->getMockBuilder('eZ\\Publish\\Core\\FieldType\\Page\\PageService')
                 ->disableOriginalConstructor()
                 ->getMock();
-            $this->pageServiceMock->expects( $this->any() )
-                ->method( "getAvailableZoneLayouts" )
-                ->will( $this->returnValue( array( "2ZonesLayout1", "2ZonesLayout2" ) ) );
+            $this->pageServiceMock->expects($this->any())
+                ->method('getAvailableZoneLayouts')
+                ->will($this->returnValue(array('2ZonesLayout1', '2ZonesLayout2')));
         }
+
         return $this->pageServiceMock;
     }
 
@@ -65,57 +68,60 @@ class PageTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new PageType(
+        $fieldType = new PageType(
             $this->getPageServiceMock(),
-            new HashConverter
+            new HashConverter()
         );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
+
+        return $fieldType;
     }
 
     protected function getPageReference()
     {
         return new Parts\Page(
             array(
-                "layout" => "2ZonesLayout1",
-                "zones" => array(
+                'layout' => '2ZonesLayout1',
+                'zones' => array(
                     new Parts\Zone(
                         array(
-                            "id" => "6c7f907b831a819ed8562e3ddce5b264",
-                            "identifier" => "left",
-                            "blocks" => array(
+                            'id' => '6c7f907b831a819ed8562e3ddce5b264',
+                            'identifier' => 'left',
+                            'blocks' => array(
                                 new Parts\Block(
                                     array(
-                                        "id" => "1e1e355c8da3c92e80354f243c6dd37b",
-                                        "name" => "Campaign",
-                                        "type" => "Campaign",
-                                        "view" => "default",
-                                        "overflowId" => "",
-                                        "zoneId" => "6c7f907b831a819ed8562e3ddce5b264",
-                                        "items" => array(
+                                        'id' => '1e1e355c8da3c92e80354f243c6dd37b',
+                                        'name' => 'Campaign',
+                                        'type' => 'Campaign',
+                                        'view' => 'default',
+                                        'overflowId' => '',
+                                        'zoneId' => '6c7f907b831a819ed8562e3ddce5b264',
+                                        'items' => array(
                                             new Parts\Item(
                                                 array(
-                                                    "contentId" => 10,
-                                                    "locationId" => 20,
-                                                    "priority" => 30,
-                                                    "publicationDate" => new DateTime( "@1" ),
-                                                    "visibilityDate" => new DateTime( "@2" ),
-                                                    "hiddenDate" => new DateTime( "@3" ),
-                                                    "rotationUntilDate" => new DateTime( "@4" ),
-                                                    "movedTo" => "67dd4d9b898d89733e776c714039ae33",
-                                                    "action" => "modify",
-                                                    "blockId" => "594491ab539125dc271807a83724e608",
-                                                    "attributes" => array( "name" => "value" ),
+                                                    'contentId' => 10,
+                                                    'locationId' => 20,
+                                                    'priority' => 30,
+                                                    'publicationDate' => new DateTime('@1'),
+                                                    'visibilityDate' => new DateTime('@2'),
+                                                    'hiddenDate' => new DateTime('@3'),
+                                                    'rotationUntilDate' => new DateTime('@4'),
+                                                    'movedTo' => '67dd4d9b898d89733e776c714039ae33',
+                                                    'action' => 'modify',
+                                                    'blockId' => '594491ab539125dc271807a83724e608',
+                                                    'attributes' => array('name' => 'value'),
                                                 )
-                                            )
+                                            ),
                                         ),
-                                        "attributes" => array( "name2" => "value2" )
+                                        'attributes' => array('name2' => 'value2'),
                                     )
                                 ),
                             ),
-                            "attributes" => array( "name3" => "value3" )
+                            'attributes' => array('name3' => 'value3'),
                         )
                     ),
                 ),
-                "attributes" => array( "name4" => "value4" )
+                'attributes' => array('name4' => 'value4'),
             )
         );
     }
@@ -123,41 +129,41 @@ class PageTest extends FieldTypeTest
     protected function getHashReference()
     {
         return array(
-            "layout" => "2ZonesLayout1",
-            "zones" => array(
+            'layout' => '2ZonesLayout1',
+            'zones' => array(
                 array(
-                    "id" => "6c7f907b831a819ed8562e3ddce5b264",
-                    "identifier" => "left",
-                    "blocks" => array(
+                    'id' => '6c7f907b831a819ed8562e3ddce5b264',
+                    'identifier' => 'left',
+                    'blocks' => array(
                         array(
-                            "id" => "1e1e355c8da3c92e80354f243c6dd37b",
-                            "name" => "Campaign",
-                            "type" => "Campaign",
-                            "view" => "default",
-                            "overflowId" => "",
-                            "zoneId" => "6c7f907b831a819ed8562e3ddce5b264",
-                            "items" => array(
+                            'id' => '1e1e355c8da3c92e80354f243c6dd37b',
+                            'name' => 'Campaign',
+                            'type' => 'Campaign',
+                            'view' => 'default',
+                            'overflowId' => '',
+                            'zoneId' => '6c7f907b831a819ed8562e3ddce5b264',
+                            'items' => array(
                                 array(
-                                    "contentId" => 10,
-                                    "locationId" => 20,
-                                    "priority" => 30,
-                                    "publicationDate" => "Thursday, 01-Jan-70 00:00:01 GMT+0000",
-                                    "visibilityDate" => "Thursday, 01-Jan-70 00:00:02 GMT+0000",
-                                    "hiddenDate" => "Thursday, 01-Jan-70 00:00:03 GMT+0000",
-                                    "rotationUntilDate" => "Thursday, 01-Jan-70 00:00:04 GMT+0000",
-                                    "movedTo" => "67dd4d9b898d89733e776c714039ae33",
-                                    "action" => "modify",
-                                    "blockId" => "594491ab539125dc271807a83724e608",
-                                    "attributes" => array( "name" => "value" ),
-                                )
+                                    'contentId' => 10,
+                                    'locationId' => 20,
+                                    'priority' => 30,
+                                    'publicationDate' => 'Thursday, 01-Jan-70 00:00:01 GMT+0000',
+                                    'visibilityDate' => 'Thursday, 01-Jan-70 00:00:02 GMT+0000',
+                                    'hiddenDate' => 'Thursday, 01-Jan-70 00:00:03 GMT+0000',
+                                    'rotationUntilDate' => 'Thursday, 01-Jan-70 00:00:04 GMT+0000',
+                                    'movedTo' => '67dd4d9b898d89733e776c714039ae33',
+                                    'action' => 'modify',
+                                    'blockId' => '594491ab539125dc271807a83724e608',
+                                    'attributes' => array('name' => 'value'),
+                                ),
                             ),
-                            "attributes" => array( "name2" => "value2" ),
+                            'attributes' => array('name2' => 'value2'),
                         ),
                     ),
-                    "attributes" => array( "name3" => "value3" ),
+                    'attributes' => array('name3' => 'value3'),
                 ),
             ),
-            "attributes" => array( "name4" => "value4" ),
+            'attributes' => array('name4' => 'value4'),
         );
     }
 
@@ -182,14 +188,12 @@ class PageTest extends FieldTypeTest
             'defaultLayout' => array(
                 'type' => 'string',
                 'default' => '',
-            )
+            ),
         );
     }
 
     /**
      * Returns the empty value expected from the field type.
-     *
-     * @return void
      */
     protected function getEmptyValueExpectation()
     {
@@ -224,7 +228,7 @@ class PageTest extends FieldTypeTest
         return array(
             array(
                 new \stdClass(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException'
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
     }
@@ -263,21 +267,21 @@ class PageTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new PageValue()
+                new PageValue(),
             ),
             array(
                 new PageValue(),
-                new PageValue()
+                new PageValue(),
             ),
             array(
-                new PageValue( new Page() ),
-                new PageValue( new Page() )
-            )
+                new PageValue(new Page()),
+                new PageValue(),
+            ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -316,17 +320,17 @@ class PageTest extends FieldTypeTest
         return array(
             array(
                 new PageValue(),
-                null
+                null,
             ),
             array(
-                new PageValue( $this->getPageReference() ),
+                new PageValue($this->getPageReference()),
                 $this->getHashReference(),
-            )
+            ),
         );
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -369,8 +373,8 @@ class PageTest extends FieldTypeTest
             ),
             array(
                 $this->getHashReference(),
-                new PageValue( $this->getPageReference() )
-            )
+                new PageValue($this->getPageReference()),
+            ),
         );
     }
 
@@ -403,10 +407,10 @@ class PageTest extends FieldTypeTest
     {
         return array(
             array(
-                array()
+                array(),
             ),
             array(
-                array( "defaultLayout" => "2ZonesLayout1" )
+                array('defaultLayout' => '2ZonesLayout1'),
             ),
         );
     }
@@ -442,12 +446,73 @@ class PageTest extends FieldTypeTest
         return array(
             array(
                 // non-existent setting
-                array( 'isMultiple' => true )
+                array('isMultiple' => true),
             ),
             array(
                 // non-available layout
-                array( "defaultLayout" => "2ZonesLayout3" )
+                array('defaultLayout' => '2ZonesLayout3'),
             ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezpage';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array($this->getEmptyValueExpectation(), ''),
+            array(new PageValue($this->getPageReference()), ''),
+        );
+    }
+
+    /**
+     * Data provider for valid input to isEmptyValue().
+     *
+     * Returns an array of data provider sets with 2 arguments:
+     *
+     * 1. The valid input to isEmptyValue()
+     * 2. The expected return value from isEmptyValue()
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          new PageValue(),
+     *          true
+     *      ),
+     *      array(
+     *          new PageValue( $this->getPageReference() ),
+     *          false
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array(new PageValue(), true),
+            array(new PageValue($this->getPageReference()), false),
+        );
+    }
+
+    /**
+     * @dataProvider providerForTestIsEmptyValue
+     */
+    public function testIsEmptyValue($value, $state)
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $this->assertEquals(
+            $state,
+            $fieldType->isEmptyValue($value),
+            'Value did not evaluate as ' . ($state ? '' : 'non-') . 'empty'
         );
     }
 }

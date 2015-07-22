@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RestLocationUpdateStruct class
+ * File containing the RestLocationUpdateStruct class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,31 +15,31 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
- * RestLocationUpdateStruct view model
+ * RestLocationUpdateStruct view model.
  */
 class RestLocationUpdateStruct extends RestValue
 {
     /**
-     * Location update struct
+     * Location update struct.
      *
      * @var \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct
      */
     public $locationUpdateStruct;
 
     /**
-     * If set, the location is hidden ( == true ) or unhidden ( == false )
+     * If set, the location is hidden ( == true ) or unhidden ( == false ).
      *
-     * @var boolean
+     * @var bool
      */
     public $hidden;
 
     /**
-     * Construct
+     * Construct.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct $locationUpdateStruct
-     * @param boolean $hidden
+     * @param bool $hidden
      */
-    public function __construct( LocationUpdateStruct $locationUpdateStruct, $hidden = null )
+    public function __construct(LocationUpdateStruct $locationUpdateStruct, $hidden = null)
     {
         $this->locationUpdateStruct = $locationUpdateStruct;
         $this->hidden = $hidden;

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentInfo class
+ * File containing the ContentInfo class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,28 +25,28 @@ class ContentInfo extends ValueObject
     const STATUS_ARCHIVED = 2;
 
     /**
-     * Content's unique ID
+     * Content's unique ID.
      *
      * @var mixed
      */
     public $id;
 
     /**
-     * Computed name (via name schema) in the main language
+     * Computed name (via name schema) in the main language.
      *
      * @var string
      */
     public $name;
 
     /**
-     * Content type Id
+     * Content type Id.
      *
      * @var int
      */
     public $contentTypeId;
 
     /**
-     * Section id the content is assigned to
+     * Section id the content is assigned to.
      *
      * @var int
      */
@@ -52,49 +54,49 @@ class ContentInfo extends ValueObject
 
     /**
      * Version number of the current published version.
-     * If the content is not published yet (newly created draft), will be 1
+     * If the content is not published yet (newly created draft), will be 1.
      *
      * @var int
      */
     public $currentVersionNo;
 
     /**
-     * Flag indicating if content is currently published
+     * Flag indicating if content is currently published.
      *
-     * @var boolean
+     * @var bool
      */
     public $isPublished;
 
     /**
-     * Content owner's id
+     * Content owner's id.
      *
      * @var int
      */
     public $ownerId;
 
     /**
-     * Content modification date, as a UNIX timestamp
+     * Content modification date, as a UNIX timestamp.
      *
      * @var int
      */
     public $modificationDate;
 
     /**
-     * Content publication date, as a UNIX timestamp
+     * Content publication date, as a UNIX timestamp.
      *
      * @var int
      */
     public $publicationDate;
 
     /**
-     * Indicates if the content is shown in the main language if its not present in an other requested language
+     * Indicates if the content is shown in the main language if its not present in an other requested language.
      *
-     * @var boolean
+     * @var bool
      */
     public $alwaysAvailable;
 
     /**
-     * Remote identifier used as a custom identifier for the object
+     * Remote identifier used as a custom identifier for the object.
      *
      * @var string
      */

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the XmlTextConverterPass class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,17 +21,42 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class XmlTextConverterPass implements CompilerPassInterface
 {
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
-        if ( !$container->hasDefinition( 'ezpublish.fieldType.ezxmltext.converter.html5' ) )
-        {
+        if (!$container->hasDefinition('ezpublish.fieldType.ezxmltext.converter.html5')) {
             return;
         }
 
-        $html5ConverterDef = $container->getDefinition( 'ezpublish.fieldType.ezxmltext.converter.html5' );
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.ezxml.converter' ) as $id => $attributes )
-        {
-            $html5ConverterDef->addMethodCall( 'addPreConverter', array( new Reference( $id ) ) );
+        $html5ConverterDef = $container->getDefinition('ezpublish.fieldType.ezxmltext.converter.html5');
+        $taggedServiceIds = $container->findTaggedServiceIds('ezpublish.ezxml.converter');
+
+        $converterIdsByPriority = array();
+        foreach ($taggedServiceIds as $id => $tags) {
+            foreach ($tags as $tag) {
+                $priority = isset($tag['priority']) ? (int)$tag['priority'] : 0;
+                $converterIdsByPriority[$priority][] = $id;
+            }
         }
+
+        $converterIdsByPriority = $this->sortConverterIds($converterIdsByPriority);
+
+        foreach ($converterIdsByPriority as $referenceId) {
+            $html5ConverterDef->addMethodCall('addPreConverter', array(new Reference($referenceId)));
+        }
+    }
+
+    /**
+     * Transforms a two-dimensional array of converters, indexed by priority,
+     * into a flat array of Reference objects.
+     *
+     * @param array $converterIdsByPriority
+     *
+     * @return \Symfony\Component\DependencyInjection\Reference[]
+     */
+    protected function sortConverterIds(array $converterIdsByPriority)
+    {
+        krsort($converterIdsByPriority, SORT_NUMERIC);
+
+        return call_user_func_array('array_merge', $converterIdsByPriority);
     }
 }

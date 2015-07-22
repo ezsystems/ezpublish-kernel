@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the TrashServiceAuthorizationTest class
+ * File containing the TrashServiceAuthorizationTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,7 +23,6 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
     /**
      * Test for the loadTrashItem() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\TrashService::loadTrashItem()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testLoadTrashItem
@@ -32,24 +33,25 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
 
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user
         $trashItem = $this->createTrashItem();
 
         // Load user service
         $userService = $repository->getUserService();
 
         // Set "Anonymous" as current user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will fail with an "UnauthorizedException"
-        $trashService->loadTrashItem( $trashItem->id );
+        $trashService->loadTrashItem($trashItem->id);
         /* END: Use Case */
     }
 
     /**
      * Test for the trash() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\TrashService::trash()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
@@ -59,7 +61,9 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Inline */
+        // $anonymousUserId is the ID of the "Anonymous" user
         // remoteId of the "Media" page main location
         $mediaRemoteId = '75c715a51699d2d309a924eca6a95145';
 
@@ -73,17 +77,16 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         );
 
         // Set "Anonymous" as current user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will fail with an "UnauthorizedException"
-        $trashService->trash( $mediaLocation );
+        $trashService->trash($mediaLocation);
         /* END: Inline */
     }
 
     /**
      * Test for the recover() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\TrashService::recover()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
@@ -94,24 +97,25 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
 
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user
         $trashItem = $this->createTrashItem();
 
         // Load user service
         $userService = $repository->getUserService();
 
         // Set "Anonymous" as current user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will fail with an "UnauthorizedException"
-        $trashService->recover( $trashItem );
+        $trashService->recover($trashItem);
         /* END: Use Case */
     }
 
     /**
      * Test for the recover() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\TrashService::recover($trashItem, $newParentLocation)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testRecover
@@ -123,31 +127,32 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
 
-        $homeLocationId = $this->generateId( 'location', 2 );
+        $homeLocationId = $this->generateId('location', 2);
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user
         // $homeLocationId is the ID of the "Home" location in an eZ Publish
         // demo installation
 
         $trashItem = $this->createTrashItem();
 
         // Get the new parent location
-        $newParentLocation = $locationService->loadLocation( $homeLocationId );
+        $newParentLocation = $locationService->loadLocation($homeLocationId);
 
         // Load user service
         $userService = $repository->getUserService();
 
         // Set "Anonymous" as current user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will fail with an "UnauthorizedException"
-        $trashService->recover( $trashItem, $newParentLocation );
+        $trashService->recover($trashItem, $newParentLocation);
         /* END: Use Case */
     }
 
     /**
      * Test for the emptyTrash() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\TrashService::emptyTrash()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testEmptyTrash
@@ -158,14 +163,16 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
 
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user
         $this->createTrashItem();
 
         // Load user service
         $userService = $repository->getUserService();
 
         // Set "Anonymous" as current user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will fail with an "UnauthorizedException"
         $trashService->emptyTrash();
@@ -175,7 +182,6 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
     /**
      * Test for the deleteTrashItem() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\TrashService::deleteTrashItem()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testDeleteTrashItem
@@ -186,17 +192,19 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
 
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user
         $trashItem = $this->createTrashItem();
 
         // Load user service
         $userService = $repository->getUserService();
 
         // Set "Anonymous" as current user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will fail with an "UnauthorizedException"
-        $trashService->deleteTrashItem( $trashItem );
+        $trashService->deleteTrashItem($trashItem);
         /* END: Use Case */
     }
 }

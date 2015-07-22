@@ -1,15 +1,16 @@
 <?php
+
 /**
  * File containing the UrlAlias matcher class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased;
 
-use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
@@ -20,22 +21,19 @@ class UrlAlias extends MultipleValued
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchLocation( Location $location )
+    public function matchLocation(Location $location)
     {
         $urlAliasService = $this->repository->getURLAliasService();
         $locationUrls = array_merge(
-            $urlAliasService->listLocationAliases( $location ),
-            $urlAliasService->listLocationAliases( $location, false )
+            $urlAliasService->listLocationAliases($location),
+            $urlAliasService->listLocationAliases($location, false)
         );
 
-        foreach ( $this->values as $pattern => $val )
-        {
-            foreach ( $locationUrls as $urlAlias )
-            {
-                if ( strpos( $urlAlias->path, "/$pattern" ) === 0 )
-                {
+        foreach ($this->values as $pattern => $val) {
+            foreach ($locationUrls as $urlAlias) {
+                if (strpos($urlAlias->path, "/$pattern") === 0) {
                     return true;
                 }
             }
@@ -51,27 +49,26 @@ class UrlAlias extends MultipleValued
      *
      * @throws \RuntimeException
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchContentInfo( ContentInfo $contentInfo )
+    public function matchContentInfo(ContentInfo $contentInfo)
     {
-        throw new \RuntimeException( 'matchContentInfo() is not supported by UrlAlias matcher' );
+        throw new \RuntimeException('matchContentInfo() is not supported by UrlAlias matcher');
     }
 
-    public function setMatchingConfig( $matchingConfig )
+    public function setMatchingConfig($matchingConfig)
     {
-        if ( !is_array( $matchingConfig ) )
-        {
-            $matchingConfig = array( $matchingConfig );
+        if (!is_array($matchingConfig)) {
+            $matchingConfig = array($matchingConfig);
         }
 
         array_walk(
             $matchingConfig,
-            function ( &$item, $key ) {
-                $item = trim( $item, '/ ' );
+            function (&$item) {
+                $item = trim($item, '/ ');
             }
         );
 
-        parent::setMatchingConfig( $matchingConfig );
+        parent::setMatchingConfig($matchingConfig);
     }
 }

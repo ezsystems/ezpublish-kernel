@@ -1,39 +1,39 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\UserList;
 use eZ\Publish\Core\REST\Server\Values\RestUser;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use eZ\Publish\Core\REST\Common;
 
 class UserListTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the UserList visitor
+     * Test the UserList visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
-        $userList = new UserList( array(), '/some/path' );
+        $userList = new UserList(array(), '/some/path');
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -41,25 +41,25 @@ class UserListTest extends ValueObjectVisitorBaseTest
             $userList
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains UserList element
+     * Test if result contains UserList element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsUserListElement( $result )
+    public function testResultContainsUserListElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'UserList',
+                'tag' => 'UserList',
             ),
             $result,
             'Invalid <UserList> element.',
@@ -68,21 +68,21 @@ class UserListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains UserList element attributes
+     * Test if result contains UserList element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsUserListAttributes( $result )
+    public function testResultContainsUserListAttributes($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'UserList',
+                'tag' => 'UserList',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.UserList+xml',
-                    'href'       => '/some/path',
-                )
+                    'href' => '/some/path',
+                ),
             ),
             $result,
             'Invalid <UserList> attributes.',
@@ -91,24 +91,24 @@ class UserListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if UserList visitor visits the children
+     * Test if UserList visitor visits the children.
      */
     public function testUserListVisitsChildren()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $userList = new UserList(
             array(
                 new RestUser(
                     new Content(
                         array(
-                            'internalFields' => array()
+                            'internalFields' => array(),
                         )
                     ),
-                    $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
+                    $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'),
                     new ContentInfo(),
                     new Location(),
                     array()
@@ -116,10 +116,10 @@ class UserListTest extends ValueObjectVisitorBaseTest
                 new RestUser(
                     new Content(
                         array(
-                            'internalFields' => array()
+                            'internalFields' => array(),
                         )
                     ),
-                    $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" ),
+                    $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'),
                     new ContentInfo(),
                     new Location(),
                     array()
@@ -128,9 +128,9 @@ class UserListTest extends ValueObjectVisitorBaseTest
             '/some/path'
         );
 
-        $this->getVisitorMock()->expects( $this->exactly( 2 ) )
-            ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Server\\Values\\RestUser' ) );
+        $this->getVisitorMock()->expects($this->exactly(2))
+            ->method('visitValueObject')
+            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\RestUser'));
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -140,12 +140,12 @@ class UserListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the UserList visitor
+     * Get the UserList visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\UserList
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\UserList;
+        return new ValueObjectVisitor\UserList();
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Validator base class
+ * File containing the Validator base class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,7 +19,7 @@ use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNo
 abstract class Validator
 {
     /**
-     * The errors collected during validation
+     * The errors collected during validation.
      *
      * @var \eZ\Publish\SPI\FieldType\ValidationError[]
      */
@@ -47,7 +49,7 @@ abstract class Validator
     protected $constraints = array();
 
     /**
-     * A one dimensional map with validator parameters
+     * A one dimensional map with validator parameters.
      *
      * @var mixed
      */
@@ -86,7 +88,7 @@ abstract class Validator
      *
      * @return mixed
      */
-    abstract public function validateConstraints( $constraints );
+    abstract public function validateConstraints($constraints);
 
     /**
      * Perform validation on $value.
@@ -99,9 +101,9 @@ abstract class Validator
      *
      * @param \eZ\Publish\Core\FieldType\Value $value
      *
-     * @return boolean
+     * @return bool
      */
-    abstract public function validate( Value $value );
+    abstract public function validate(Value $value);
 
     /**
      * Returns array of messages on performed validations.
@@ -119,26 +121,23 @@ abstract class Validator
      * Initialized an instance of Validator, with earlier configured constraints.
      *
      * @internal
-     * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
-     * @param array $constraints
      *
-     * @return void
+     * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
+     *
+     * @param array $constraints
      */
-    public function initializeWithConstraints( array $constraints )
+    public function initializeWithConstraints(array $constraints)
     {
         // Reset errors
         $this->errors = array();
         // Set existing constraint values to false
-        foreach ( $this->constraints as $constraint => $value )
-        {
+        foreach ($this->constraints as $constraint => $value) {
             $this->constraints[$constraint] = false;
         }
         // Initialize constraints with new values
-        foreach ( $constraints as $constraint => $value )
-        {
-            if ( !isset( $this->constraints[$constraint] ) )
-            {
-                throw new PropertyNotFound( "The constraint '{$constraint}' is not valid for this validator." );
+        foreach ($constraints as $constraint => $value) {
+            if (!isset($this->constraints[$constraint])) {
+                throw new PropertyNotFound("The constraint '{$constraint}' is not valid for this validator.");
             }
 
             $this->constraints[$constraint] = $value;
@@ -147,7 +146,7 @@ abstract class Validator
 
     /**
      * Magic getter.
-     * Returns constraint value, from its $name
+     * Returns constraint value, from its $name.
      *
      * @param string $name
      *
@@ -155,11 +154,10 @@ abstract class Validator
      *
      * @return mixed
      */
-    public function __get( $name )
+    public function __get($name)
     {
-        if ( !isset( $this->constraints[$name] ) )
-        {
-            throw new PropertyNotFound( "The constraint '{$name}' is not valid for this validator." );
+        if (!isset($this->constraints[$name])) {
+            throw new PropertyNotFound("The constraint '{$name}' is not valid for this validator.");
         }
 
         return $this->constraints[$name];
@@ -167,18 +165,17 @@ abstract class Validator
 
     /**
      * Magic setter.
-     * Sets $value to constraint, identified by $name
+     * Sets $value to constraint, identified by $name.
      *
      * @param string $name
      * @param mixed $value
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
-    public function __set( $name, $value )
+    public function __set($name, $value)
     {
-        if ( !isset( $this->constraints[$name] ) )
-        {
-            throw new PropertyNotFound( "The constraint '{$name}' is not valid for this validator." );
+        if (!array_key_exists($name, $this->constraints)) {
+            throw new PropertyNotFound("The constraint '{$name}' is not valid for this validator.");
         }
 
         $this->constraints[$name] = $value;

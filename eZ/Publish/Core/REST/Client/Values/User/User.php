@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the User class
+ * File containing the User class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,7 +27,7 @@ class User extends APIUser
     protected $content;
 
     /**
-     * Returns the VersionInfo for this version
+     * Returns the VersionInfo for this version.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
@@ -46,13 +48,13 @@ class User extends APIUser
      *
      * @return mixed a primitive type or a field type Value object depending on the field type.
      */
-    public function getFieldValue( $fieldDefIdentifier, $languageCode = null )
+    public function getFieldValue($fieldDefIdentifier, $languageCode = null)
     {
-        return $this->content->getFieldValue( $fieldDefIdentifier, $languageCode );
+        return $this->content->getFieldValue($fieldDefIdentifier, $languageCode);
     }
 
     /**
-     * This method returns the complete fields collection
+     * This method returns the complete fields collection.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[]
      */
@@ -62,7 +64,7 @@ class User extends APIUser
     }
 
     /**
-     * This method returns the fields for a given language and non translatable fields
+     * This method returns the fields for a given language and non translatable fields.
      *
      * If note set the initialLanguage of the content version is used.
      *
@@ -70,15 +72,14 @@ class User extends APIUser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[] With field identifier as keys
      */
-    public function getFieldsByLanguage( $languageCode = null )
+    public function getFieldsByLanguage($languageCode = null)
     {
-        return $this->content->getFieldsByLanguage( $languageCode );
+        return $this->content->getFieldsByLanguage($languageCode);
     }
 
-    public function __get( $property )
+    public function __get($property)
     {
-        switch ( $property )
-        {
+        switch ($property) {
             case 'contentInfo':
                 return $this->content->contentInfo;
 
@@ -92,6 +93,6 @@ class User extends APIUser
                 return $this->getFields();
         }
 
-        return parent::__get( $property );
+        return parent::__get($property);
     }
 }

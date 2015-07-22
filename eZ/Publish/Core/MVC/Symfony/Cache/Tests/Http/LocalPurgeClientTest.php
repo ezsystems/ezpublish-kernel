@@ -1,47 +1,58 @@
 <?php
+
 /**
  * File containing the LocalPurgeClientTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
+
+namespace Symfony\Component\HttpFoundation;
+
+/**
+ * Avoid test failure caused by time passing between generating expected & actual object.
+ *
+ * @return int
+ */
+function time()
+{
+    return 1417624982;
+}
 
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 class LocalPurgeClientTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient::purge
-     */
     public function testPurge()
     {
-        $cacheStore = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\Cache\\Http\\ContentPurger' );
-        $cacheStore
-            ->expects( $this->once() )
-            ->method( 'purgeByRequest' )
-            ->with( $this->isInstanceOf( 'Symfony\\Component\\HttpFoundation\\Request' ) );
+        $locationIds = array(123, 456, 789);
+        $expectedBanRequest = Request::create('http://localhost', 'BAN');
+        $expectedBanRequest->headers->set('X-Location-Id', '(' . implode('|', $locationIds) . ')');
 
-        $purgeClient = new LocalPurgeClient( $cacheStore );
-        $purgeClient->purge( array( 123, 456, 789 ) );
+        $cacheStore = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\Cache\\Http\\ContentPurger');
+        $cacheStore
+            ->expects($this->once())
+            ->method('purgeByRequest')
+            ->with($this->equalTo($expectedBanRequest));
+
+        $purgeClient = new LocalPurgeClient($cacheStore);
+        $purgeClient->purge($locationIds);
     }
 
-    /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient::purgeAll
-     */
     public function testPurgeAll()
     {
-        $cacheStore = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\Cache\\Http\\ContentPurger' );
+        $cacheStore = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\Cache\\Http\\ContentPurger');
         $cacheStore
-            ->expects( $this->once() )
-            ->method( 'purgeAllContent' );
+            ->expects($this->once())
+            ->method('purgeAllContent');
 
-        $purgeClient = new LocalPurgeClient( $cacheStore );
+        $purgeClient = new LocalPurgeClient($cacheStore);
         $purgeClient->purgeAll();
     }
 }

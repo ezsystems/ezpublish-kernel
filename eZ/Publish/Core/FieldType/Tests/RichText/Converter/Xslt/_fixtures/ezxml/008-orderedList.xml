@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+  <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+    <ol class="orderedListClass">
+      <li class="listItemClass">
+        <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">This is a list item.</paragraph>
+      </li>
+    </ol>
+  </paragraph>
+</section>

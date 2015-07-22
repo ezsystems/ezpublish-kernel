@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the InputParser CompilerPass class.
  *
- * @copyright Copyright (C) 2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,29 +23,26 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class InputHandlerPass implements CompilerPassInterface
 {
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
-        if ( !$container->hasDefinition( 'ezpublish_rest.input.dispatcher' ) )
-        {
+        if (!$container->hasDefinition('ezpublish_rest.input.dispatcher')) {
             return;
         }
 
-        $definition = $container->getDefinition( 'ezpublish_rest.input.dispatcher' );
+        $definition = $container->getDefinition('ezpublish_rest.input.dispatcher');
 
         // @todo rethink the relationships between registries. Rename if required.
-        foreach ( $container->findTaggedServiceIds( 'ezpublish_rest.input.handler' ) as $id => $attributes )
-        {
-            foreach ( $attributes as $attribute )
-            {
-                if ( !isset( $attribute['format'] ) )
-                    throw new \LogicException( 'ezpublish_rest.input.handler service tag needs a "format" attribute to identify the input handler. None given.' );
+        foreach ($container->findTaggedServiceIds('ezpublish_rest.input.handler') as $id => $attributes) {
+            foreach ($attributes as $attribute) {
+                if (!isset($attribute['format'])) {
+                    throw new \LogicException('ezpublish_rest.input.handler service tag needs a "format" attribute to identify the input handler. None given.');
+                }
 
                 $definition->addMethodCall(
                     'addHandler',
-                    array( $attribute["format"], new Reference( $id ) )
+                    array($attribute['format'], new Reference($id))
                 );
             }
         }
-
     }
 }

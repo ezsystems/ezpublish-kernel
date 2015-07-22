@@ -1,21 +1,25 @@
 <?php
+
 /**
  * File containing the SiteAccess class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\MVC\Symfony;
 
+use eZ\Publish\API\Repository\Values\ValueObject;
+
 /**
- * Base struct for a siteaccess representation
+ * Base struct for a siteaccess representation.
  */
-class SiteAccess
+class SiteAccess extends ValueObject
 {
     /**
-     * Name of the siteaccess
+     * Name of the siteaccess.
      *
      * @var string
      */
@@ -36,7 +40,7 @@ class SiteAccess
      */
     public $matcher;
 
-    public function __construct( $name = null, $matchingType = null, $matcher = null )
+    public function __construct($name = null, $matchingType = null, $matcher = null)
     {
         $this->name = $name;
         $this->matchingType = $matchingType;

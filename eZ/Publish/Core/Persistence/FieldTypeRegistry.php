@@ -1,16 +1,18 @@
 <?php
+
 /**
- * File containing the FieldTypeRegistry class
+ * File containing the FieldTypeRegistry class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\Persistence;
 
+use eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException;
 use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
-use eZ\Publish\Core\Persistence\FieldType;
 use RuntimeException;
 
 /**
@@ -43,7 +45,7 @@ class FieldTypeRegistry
      * @param array $fieldTypeMap A map where key is field type identifier and value is
      *              a callable factory to get FieldType OR FieldType object.
      */
-    public function __construct( array $fieldTypeMap )
+    public function __construct(array $fieldTypeMap)
     {
         $this->coreFieldTypeMap = $fieldTypeMap;
     }
@@ -53,16 +55,15 @@ class FieldTypeRegistry
      *
      * @param string $identifier
      *
-     * @throws \RuntimeException If field type for given $identifier is not found.
+     * @throws FieldTypeNotFoundException If field type for given $identifier is not found.
      * @throws \RuntimeException If field type for given $identifier is not instance or callable.
      *
      * @return \eZ\Publish\SPI\Persistence\FieldType
      */
-    public function getFieldType( $identifier )
+    public function getFieldType($identifier)
     {
-        if ( !isset( $this->fieldTypeMap[$identifier] ) )
-        {
-            $this->fieldTypeMap[$identifier] = new FieldType( $this->getCoreFieldType( $identifier ) );
+        if (!isset($this->fieldTypeMap[$identifier])) {
+            $this->fieldTypeMap[$identifier] = new FieldType($this->getCoreFieldType($identifier));
         }
 
         return $this->fieldTypeMap[$identifier];
@@ -77,10 +78,8 @@ class FieldTypeRegistry
      *
      * @param $identifier
      * @param mixed $fieldType Callable or FieldType instance.
-     *
-     * @return void
      */
-    public function register( $identifier, $fieldType )
+    public function register($identifier, $fieldType)
     {
         $this->coreFieldTypeMap[$identifier] = $fieldType;
     }
@@ -88,30 +87,24 @@ class FieldTypeRegistry
     /**
      * Instantiates a FieldType object.
      *
-     * @throws \RuntimeException If field type for given $identifier is not found.
+     * @throws FieldTypeNotFoundException If field type for given $identifier is not found.
      * @throws \RuntimeException If field type for given $identifier is not instance or callable.
      *
      * @param string $identifier
      *
      * @return \eZ\Publish\SPI\FieldType\FieldType
      */
-    protected function getCoreFieldType( $identifier )
+    protected function getCoreFieldType($identifier)
     {
-        if ( !isset( $this->coreFieldTypeMap[$identifier] ) )
-        {
-            throw new RuntimeException(
-                "Provided \$identifier is unknown: '{$identifier}', have: "
-                . var_export( array_keys( $this->coreFieldTypeMap ), true )
-            );
+        if (!isset($this->coreFieldTypeMap[$identifier])) {
+            throw new FieldTypeNotFoundException($identifier);
         }
 
         $fieldType = $this->coreFieldTypeMap[$identifier];
 
-        if ( !$this->coreFieldTypeMap[$identifier] instanceof FieldTypeInterface )
-        {
-            if ( !is_callable( $this->coreFieldTypeMap[$identifier] ) )
-            {
-                throw new RuntimeException( "FieldType '$identifier' is not callable or instance" );
+        if (!$this->coreFieldTypeMap[$identifier] instanceof FieldTypeInterface) {
+            if (!is_callable($this->coreFieldTypeMap[$identifier])) {
+                throw new RuntimeException("FieldType '$identifier' is not callable or instance");
             }
 
             /** @var $fieldType \Closure */

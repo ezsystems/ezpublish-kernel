@@ -1,41 +1,40 @@
 <?php
+
 /**
- * File containing a ObjectStateCreateStructTest class
+ * File containing a ObjectStateCreateStructTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\API\Repository\Values\ObjectState;
-
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Common;
 
 class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Tests the ObjectStateCreateStruct visitor
+     * Tests the ObjectStateCreateStruct visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $objectStateCreateStruct = new ObjectState\ObjectStateCreateStruct();
         $objectStateCreateStruct->identifier = 'some-state';
         $objectStateCreateStruct->priority = 0;
         $objectStateCreateStruct->defaultLanguageCode = 'eng-GB';
-        $objectStateCreateStruct->names = array( 'eng-GB' => 'Some state EN', 'fre-FR' => 'Some state FR' );
-        $objectStateCreateStruct->descriptions = array( 'eng-GB' => 'Description EN', 'fre-FR' => 'Description FR' );
+        $objectStateCreateStruct->names = array('eng-GB' => 'Some state EN', 'fre-FR' => 'Some state FR');
+        $objectStateCreateStruct->descriptions = array('eng-GB' => 'Description EN', 'fre-FR' => 'Description FR');
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -43,28 +42,28 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
             $objectStateCreateStruct
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Tests that the result contains names element
+     * Tests that the result contains names element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsNamesElement( $result )
+    public function testResultContainsNamesElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'names',
+                'tag' => 'names',
                 'children' => array(
-                    'count' => 2
-                )
+                    'count' => 2,
+                ),
             ),
             $result,
             'Invalid <names> element.',
@@ -73,20 +72,20 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains descriptions element
+     * Tests that the result contains descriptions element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsDescriptionsElement( $result )
+    public function testResultContainsDescriptionsElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'descriptions',
+                'tag' => 'descriptions',
                 'children' => array(
-                    'count' => 2
-                )
+                    'count' => 2,
+                ),
             ),
             $result,
             'Invalid <descriptions> element.',
@@ -95,18 +94,18 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains identifier value element
+     * Tests that the result contains identifier value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsIdentifierValueElement( $result )
+    public function testResultContainsIdentifierValueElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'identifier',
-                'content'  => 'some-state',
+                'tag' => 'identifier',
+                'content' => 'some-state',
             ),
             $result,
             'Invalid or non-existing <ObjectStateCreate> identifier value element.',
@@ -115,18 +114,18 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains priority value element
+     * Tests that the result contains priority value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsPriorityValueElement( $result )
+    public function testResultContainsPriorityValueElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'priority',
-                'content'  => '0',
+                'tag' => 'priority',
+                'content' => '0',
             ),
             $result,
             'Invalid or non-existing <ObjectStateCreate> priority value element.',
@@ -135,18 +134,18 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains defaultLanguageCode value element
+     * Tests that the result contains defaultLanguageCode value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsDefaultLanguageCodeValueElement( $result )
+    public function testResultContainsDefaultLanguageCodeValueElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'defaultLanguageCode',
-                'content'  => 'eng-GB',
+                'tag' => 'defaultLanguageCode',
+                'content' => 'eng-GB',
             ),
             $result,
             'Invalid or non-existing <ObjectStateCreate> defaultLanguageCode value element.',
@@ -155,12 +154,12 @@ class ObjectStateCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Gets the ObjectStateCreateStruct visitor
+     * Gets the ObjectStateCreateStruct visitor.
      *
      * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\ObjectStateCreateStruct
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\ObjectStateCreateStruct;
+        return new ValueObjectVisitor\ObjectStateCreateStruct();
     }
 }

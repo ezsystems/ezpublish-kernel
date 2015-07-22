@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5/edit">
+  <h1 class="titleClass">This is a heading.</h1>
+  <h2 class="titleClass2" style="text-align:left;">This is a left aligned heading.</h2>
+  <h3 style="text-align:center;">This is a centered heading.</h3>
+  <h3 style="text-align:right;">This is a right aligned heading.</h3>
+  <h3 style="text-align:justify;">This is a justified heading.</h3>
+</section>

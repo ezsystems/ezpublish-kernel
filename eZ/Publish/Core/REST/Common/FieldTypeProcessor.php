@@ -1,21 +1,23 @@
 <?php
+
 /**
  * File containing the FieldTypeProcessor base class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Common;
 
 /**
- * FieldTypeProcessor
+ * FieldTypeProcessor.
  */
 abstract class FieldTypeProcessor
 {
     /**
-     * Perform manipulations on a received $incomingValueHash
+     * Perform manipulations on a received $incomingValueHash.
      *
      * This method is called by the REST input parsers to allow a field
      * type to pre process the given $incomingValueHash before it is handled by
@@ -30,13 +32,13 @@ abstract class FieldTypeProcessor
      *
      * @return mixed Pre processed hash
      */
-    public function preProcessValueHash( $incomingValueHash )
+    public function preProcessValueHash($incomingValueHash)
     {
         return $incomingValueHash;
     }
 
     /**
-     * Perform manipulations on an a generated $outgoingValueHash
+     * Perform manipulations on an a generated $outgoingValueHash.
      *
      * This method is called by the REST output visitors to allow a field type to
      * post process the given $outgoingValueHash, which was previously generated
@@ -51,13 +53,13 @@ abstract class FieldTypeProcessor
      *
      * @return mixed Post processed hash
      */
-    public function postProcessValueHash( $outgoingValueHash )
+    public function postProcessValueHash($outgoingValueHash)
     {
         return $outgoingValueHash;
     }
 
     /**
-     * Perform manipulations on a received $incomingSettingsHash
+     * Perform manipulations on a received $incomingSettingsHash.
      *
      * This method is called by the REST input parsers to allow a field type to
      * pre process the given $incomingSettingsHash before it is handled by
@@ -72,13 +74,13 @@ abstract class FieldTypeProcessor
      *
      * @return mixed Pre processed hash
      */
-    public function preProcessFieldSettingsHash( $incomingSettingsHash )
+    public function preProcessFieldSettingsHash($incomingSettingsHash)
     {
         return $incomingSettingsHash;
     }
 
     /**
-     * Perform manipulations on a received $outgoingSettingsHash
+     * Perform manipulations on a received $outgoingSettingsHash.
      *
      * This method is called by the REST output visitors to allow a field type to post
      * process the given $outgoingSettingsHash, which was previously generated
@@ -93,13 +95,13 @@ abstract class FieldTypeProcessor
      *
      * @return mixed Post processed hash
      */
-    public function postProcessFieldSettingsHash( $outgoingSettingsHash )
+    public function postProcessFieldSettingsHash($outgoingSettingsHash)
     {
         return $outgoingSettingsHash;
     }
 
     /**
-     * Perform manipulations on a received $incomingValidatorConfigurationHash
+     * Perform manipulations on a received $incomingValidatorConfigurationHash.
      *
      * This method is called by the REST input parsers to allow a field type to pre
      * process the given $incomingValidatorConfigurationHash before it is handled
@@ -114,13 +116,13 @@ abstract class FieldTypeProcessor
      *
      * @return mixed Pre processed hash
      */
-    public function preProcessValidatorConfigurationHash( $incomingValidatorConfigurationHash )
+    public function preProcessValidatorConfigurationHash($incomingValidatorConfigurationHash)
     {
         return $incomingValidatorConfigurationHash;
     }
 
     /**
-     * Perform manipulations on a received $outgoingValidatorConfigurationHash
+     * Perform manipulations on a received $outgoingValidatorConfigurationHash.
      *
      * This method is called by the REST output visitors to allow a field type to post
      * process the given $outgoingValidatorConfigurationHash, which was previously generated
@@ -135,7 +137,7 @@ abstract class FieldTypeProcessor
      *
      * @return mixed Post processed hash
      */
-    public function postProcessValidatorConfigurationHash( $outgoingValidatorConfigurationHash )
+    public function postProcessValidatorConfigurationHash($outgoingValidatorConfigurationHash)
     {
         return $outgoingValidatorConfigurationHash;
     }

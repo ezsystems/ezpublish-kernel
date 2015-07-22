@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the FloatValueValidator class
+ * File containing the FloatValueValidator class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,38 +27,35 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 class FloatValueValidator extends Validator
 {
     protected $constraints = array(
-        'minFloatValue' => false,
-        'maxFloatValue' => false
+        'minFloatValue' => null,
+        'maxFloatValue' => null,
     );
 
     protected $constraintsSchema = array(
-        "minFloatValue" => array(
-            "type" => "float",
-            "default" => false
+        'minFloatValue' => array(
+            'type' => 'float',
+            'default' => null,
         ),
-        "maxFloatValue" => array(
-            "type" => "float",
-            "default" => false
-        )
+        'maxFloatValue' => array(
+            'type' => 'float',
+            'default' => null,
+        ),
     );
 
-    public function validateConstraints( $constraints )
+    public function validateConstraints($constraints)
     {
         $validationErrors = array();
 
-        foreach ( $constraints as $name => $value )
-        {
-            switch ( $name )
-            {
-                case "minFloatValue":
-                case "maxFloatValue":
-                    if ( $value !== false && !is_numeric( $value ) )
-                    {
+        foreach ($constraints as $name => $value) {
+            switch ($name) {
+                case 'minFloatValue':
+                case 'maxFloatValue':
+                    if ($value !== null && !is_numeric($value)) {
                         $validationErrors[] = new ValidationError(
                             "Validator parameter '%parameter%' value must be of numeric type",
                             null,
                             array(
-                                "parameter" => $name
+                                'parameter' => $name,
                             )
                         );
                     }
@@ -66,7 +65,7 @@ class FloatValueValidator extends Validator
                         "Validator parameter '%parameter%' is unknown",
                         null,
                         array(
-                            "parameter" => $name
+                            'parameter' => $name,
                         )
                     );
             }
@@ -86,31 +85,29 @@ class FloatValueValidator extends Validator
      *
      * @param \eZ\Publish\Core\FieldType\Float\Value $value
      *
-     * @return boolean
+     * @return bool
      */
-    public function validate( BaseValue $value )
+    public function validate(BaseValue $value)
     {
         $isValid = true;
 
-        if ( $this->constraints['maxFloatValue'] !== false && $value->value > $this->constraints['maxFloatValue'] )
-        {
+        if ($this->constraints['maxFloatValue'] !== null && $value->value > $this->constraints['maxFloatValue']) {
             $this->errors[] = new ValidationError(
-                "The value can not be higher than %size%.",
+                'The value can not be higher than %size%.',
                 null,
                 array(
-                    "size" => $this->constraints['maxFloatValue']
+                    'size' => $this->constraints['maxFloatValue'],
                 )
             );
             $isValid = false;
         }
 
-        if ( $this->constraints['minFloatValue'] !== false && $value->value < $this->constraints['minFloatValue'] )
-        {
+        if ($this->constraints['minFloatValue'] !== null && $value->value < $this->constraints['minFloatValue']) {
             $this->errors[] = new ValidationError(
-                "The value can not be lower than %size%.",
+                'The value can not be lower than %size%.',
                 null,
                 array(
-                    "size" => $this->constraints['minFloatValue']
+                    'size' => $this->constraints['minFloatValue'],
                 )
             );
             $isValid = false;

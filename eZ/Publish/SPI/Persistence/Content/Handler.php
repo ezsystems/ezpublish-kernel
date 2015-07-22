@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Content Handler interface
+ * File containing the Content Handler interface.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -33,7 +35,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
-    public function create( CreateStruct $content );
+    public function create(CreateStruct $content);
 
     /**
      * Creates a new draft version from $contentId in $srcVersion number.
@@ -47,7 +49,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function createDraftFromVersion( $contentId, $srcVersion, $userId );
+    public function createDraftFromVersion($contentId, $srcVersion, $userId);
 
     /**
      * Returns the raw data of a content object identified by $id, in a struct.
@@ -66,7 +68,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
-    public function load( $id, $version, $translations = null );
+    public function load($id, $version, array $translations = null);
 
     /**
      * Returns the metadata object for a content identified by $contentId.
@@ -75,10 +77,19 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
-    public function loadContentInfo( $contentId );
+    public function loadContentInfo($contentId);
 
     /**
-     * Returns the version object for a content/version identified by $contentId and $versionNo
+     * Returns the metadata object for a content identified by $remoteId.
+     *
+     * @param mixed $remoteId
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
+     */
+    public function loadContentInfoByRemoteId($remoteId);
+
+    /**
+     * Returns the version object for a content/version identified by $contentId and $versionNo.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If version is not found
      *
@@ -87,16 +98,16 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      */
-    public function loadVersionInfo( $contentId, $versionNo );
+    public function loadVersionInfo($contentId, $versionNo);
 
     /**
-     * Returns all versions with draft status created by the given $userId
+     * Returns all versions with draft status created by the given $userId.
      *
      * @param int $userId
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
-    public function loadDraftsForUser( $userId );
+    public function loadDraftsForUser($userId);
 
     /**
      * Sets the status of object identified by $contentId and $version to $status.
@@ -108,22 +119,22 @@ interface Handler
      * @param int $status
      * @param int $version
      *
-     * @return boolean
+     * @return bool
      */
-    public function setStatus( $contentId, $status, $version );
+    public function setStatus($contentId, $status, $version);
 
     /**
-     * Updates a content object meta data, identified by $contentId
+     * Updates a content object meta data, identified by $contentId.
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $content
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
-    public function updateMetadata( $contentId, MetadataUpdateStruct $content );
+    public function updateMetadata($contentId, MetadataUpdateStruct $content);
 
     /**
-     * Updates a content version, identified by $contentId and $versionNo
+     * Updates a content version, identified by $contentId and $versionNo.
      *
      * @param int $contentId
      * @param int $versionNo
@@ -131,7 +142,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function updateContent( $contentId, $versionNo, UpdateStruct $content );
+    public function updateContent($contentId, $versionNo, UpdateStruct $content);
 
     /**
      * Deletes all versions and fields, all locations (subtree), and all relations.
@@ -141,9 +152,9 @@ interface Handler
      *
      * @param int $contentId
      *
-     * @return boolean
+     * @return bool
      */
-    public function deleteContent( $contentId );
+    public function deleteContent($contentId);
 
     /**
      * Deletes given version, its fields, node assignment, relations and names.
@@ -153,18 +164,18 @@ interface Handler
      * @param int $contentId
      * @param int $versionNo
      *
-     * @return boolean
+     * @return bool
      */
-    public function deleteVersion( $contentId, $versionNo );
+    public function deleteVersion($contentId, $versionNo);
 
     /**
-     * Returns the versions for $contentId
+     * Returns the versions for $contentId.
      *
      * @param int $contentId
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
-    public function listVersions( $contentId );
+    public function listVersions($contentId);
 
     /**
      * Copy Content with Fields and Versions from $contentId in $version.
@@ -179,7 +190,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function copy( $contentId, $versionNo = null );
+    public function copy($contentId, $versionNo = null);
 
     /**
      * Creates a relation between $sourceContentId in $sourceContentVersionNo
@@ -191,7 +202,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation
      */
-    public function addRelation( RelationCreateStruct $createStruct );
+    public function addRelation(RelationCreateStruct $createStruct);
 
     /**
      * Removes a relation by relation Id.
@@ -203,10 +214,8 @@ interface Handler
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
-     *
-     * @return void
      */
-    public function removeRelation( $relationId, $type );
+    public function removeRelation($relationId, $type);
 
     /**
      * Loads relations from $sourceContentId. Optionally, loads only those with $type and $sourceContentVersionNo.
@@ -217,9 +226,10 @@ interface Handler
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
-    public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null );
+    public function loadRelations($sourceContentId, $sourceContentVersionNo = null, $type = null);
 
     /**
      * Loads relations from $contentId. Optionally, loads only those with $type.
@@ -231,9 +241,10 @@ interface Handler
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
      *                 \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
-    public function loadReverseRelations( $destinationContentId, $type = null );
+    public function loadReverseRelations($destinationContentId, $type = null);
 
     /**
      * Performs the publishing operations required to set the version identified by $updateStruct->versionNo and
@@ -245,5 +256,5 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
-    public function publish( $contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct );
+    public function publish($contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct);
 }

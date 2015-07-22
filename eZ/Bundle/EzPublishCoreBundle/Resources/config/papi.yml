@@ -1,149 +1,75 @@
 parameters:
+    ezpublish.kernel.root_dir: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel
+
     # API
     ezpublish.api.repository.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryFactory
     ezpublish.api.repository.lazy_factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\LazyRepositoryFactory
-    ezpublish.api.inner_repository.class: eZ\Publish\Core\Repository\Repository
     ezpublish.api.storage_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory
+    ezpublish.api.search_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\SearchEngineFactory
 
-    # Signal Slot API wrapper
-    ezpublish.signalslot.repository.class: eZ\Publish\Core\SignalSlot\Repository
-    ezpublish.signalslot.slot_factory.class: eZ\Publish\Core\SignalSlot\SlotFactory\ContainerSlotFactory
-    ezpublish.signalslot.signal_dispatcher.class: eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher
+    # Symfony event converter Slot
     ezpublish.signalslot.event_converter_slot.class: eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot\SymfonyEventConverterSlot
 
     # Using legacy storage engine for data compatibility with 4.x
     ezpublish.api.storage_engine.default: legacy
+    ezpublish.api.search_engine.default: legacy
 
     ezpublish.api.content.class: eZ\Publish\Core\Repository\Values\Content\Content
     ezpublish.api.location.class: eZ\Publish\Core\Repository\Values\Content\Location
+    ezpublish.api.version.class: eZ\Publish\Core\Repository\Values\Content\VersionInfo
 
 services:
     # API
-    ezpublish.api.repository:
-        alias: ezpublish.signalslot.repository
-
     ezpublish.api.repository.factory:
         class: %ezpublish.api.repository.factory.class%
-        arguments: [@service_container]
+        arguments:
+            - @ezpublish.config.resolver
+            - @ezpublish.field_type_collection.factory
+            - %ezpublish.api.inner_repository.class%
+        calls:
+            - [setContainer, [@service_container]]
 
+    # Deprecated
     ezpublish.api.repository.lazy_factory:
         class: %ezpublish.api.repository.lazy_factory.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.api.repository]
 
-    ezpublish.api.inner_repository:
-        class: %ezpublish.api.inner_repository.class%
-        factory_service: ezpublish.api.repository.factory
-        factory_method: buildRepository
-        arguments:
-            - @ezpublish.api.persistence_handler
-
+    # Deprecated
+    # Use ezpublish.api.repository lazy service instead
     ezpublish.api.repository.lazy:
         class: Closure
-        factory_service: ezpublish.api.repository.lazy_factory
-        factory_method: buildRepository
+        factory: ["@ezpublish.api.repository.lazy_factory", buildRepository]
 
     ezpublish.api.storage_engine.factory:
         class: %ezpublish.api.storage_engine.factory.class%
-        arguments: [@service_container]
+        arguments:
+            - @ezpublish.api.repository_configuration_provider
 
     ezpublish.api.persistence_handler:
         #To disable cache, switch alias to ezpublish.api.storage_engine
         alias: ezpublish.spi.persistence.cache
 
     ezpublish.api.storage_engine:
-        class: eZ\Publish\SPI\Persistence\Handler
-        factory_service: ezpublish.api.storage_engine.factory
-        factory_method: buildStorageEngine
-        arguments: [%ezpublish.api.storage_engine.default%]
+        class: %ezpublish.api.storage_engine.class%
+        factory: ["@ezpublish.api.storage_engine.factory", buildStorageEngine]
         public: false
 
-    ezpublish.api.service.content:
-        class: eZ\Publish\API\Repository\ContentService
-        factory_service: ezpublish.api.repository.factory
-        factory_method: buildService
-        arguments: [@ezpublish.api.repository, Content]
+    ezpublish.api.search_engine.factory:
+        class: %ezpublish.api.search_engine.factory.class%
+        arguments:
+            - @ezpublish.api.repository_configuration_provider
 
-    ezpublish.api.service.content_type:
-        class: eZ\Publish\API\Repository\ContentTypeService
-        factory_service: ezpublish.api.repository.factory
-        factory_method: buildService
-        arguments: [@ezpublish.api.repository, ContentType]
+    ezpublish.spi.search:
+        alias: ezpublish.spi.search_engine
 
-    ezpublish.api.service.field_type:
-        class: eZ\Publish\API\Repository\ContentTypeService
-        factory_service: ezpublish.api.repository.factory
-        factory_method: buildService
-        arguments: [@ezpublish.api.repository, FieldType]
-
-    ezpublish.api.service.role:
-        class: eZ\Publish\API\Repository\RoleService
-        factory_service: ezpublish.api.repository.factory
-        factory_method: buildService
-        arguments: [@ezpublish.api.repository, Role]
-
-    ezpublish.api.service.object_state:
-        class: eZ\Publish\API\Repository\ObjectStateService
-        factory_service: ezpublish.api.repository.factory
-        factory_method: buildService
-        arguments: [@ezpublish.api.repository, ObjectState]
-
-    ezpublish.api.service.url_wildcard:
-        class: eZ\Publish\API\Repository\URLWildcardService
-        factory_service: ezpublish.api.repository.factory
-        factory_method: buildService
-        arguments: [@ezpublish.api.repository, URLWildcard]
-
-    ezpublish.api.service.url_alias:
-        class: eZ\Publish\API\Repository\URLAliasService
-        factory_service: ezpublish.api.repository.factory
-        factory_method: buildService
-        arguments: [@ezpublish.api.repository, URLAlias]
-
-    ezpublish.api.service.user:
-        class: eZ\Publish\API\Repository\UserService
-        factory_service: ezpublish.api.repository.factory
-        factory_method: buildService
-        arguments: [@ezpublish.api.repository, User]
-
-    ezpublish.api.service.search:
-        class: eZ\Publish\API\Repository\SearchService
-        factory_service: ezpublish.api.repository.factory
-        factory_method: buildService
-        arguments: [@ezpublish.api.repository, Search]
-
-    ezpublish.api.service.section:
-        class: eZ\Publish\API\Repository\SectionService
-        factory_service: ezpublish.api.repository.factory
-        factory_method: buildService
-        arguments: [@ezpublish.api.repository, Section]
-
-    ezpublish.api.service.trash:
-        class: eZ\Publish\API\Repository\TrashService
-        factory_service: ezpublish.api.repository.factory
-        factory_method: buildService
-        arguments: [@ezpublish.api.repository, Trash]
-
-    ezpublish.api.service.location:
-        class: eZ\Publish\API\Repository\LocationService
-        factory_service: ezpublish.api.repository.factory
-        factory_method: buildService
-        arguments: [@ezpublish.api.repository, Location]
+    ezpublish.spi.search_engine:
+        class: %ezpublish.api.search_engine.class%
+        factory: ["@ezpublish.api.search_engine.factory", buildSearchEngine]
+        public: false
 
     # Signal Slot API wrapper
-    ezpublish.signalslot.repository:
-        class: %ezpublish.signalslot.repository.class%
-        arguments: [@ezpublish.api.inner_repository, @ezpublish.signalslot.signal_dispatcher]
-
-    ezpublish.signalslot.signal_dispatcher:
-        class: %ezpublish.signalslot.signal_dispatcher.class%
-        arguments: [@ezpublish.signalslot.slot_factory]
-
-    ezpublish.signalslot.slot_factory:
-        class: %ezpublish.signalslot.slot_factory.class%
-        arguments: [@service_container]
-
     ezpublish.signalslot.event_converter_slot:
         class: %ezpublish.signalslot.event_converter_slot.class%
         arguments: [@event_dispatcher]
         tags:
-            - { name: ezpublish.api.slot, signal: * }
+            - { name: ezpublish.api.slot, signal: '*' }

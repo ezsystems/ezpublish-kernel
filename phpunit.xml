@@ -26,11 +26,23 @@
     <testsuite name="eZ\Publish\Core\Persistence\Cache">
       <directory>eZ/Publish/Core/Persistence/Cache/Tests</directory>
     </testsuite>
-    <testsuite name="eZ\Publish\Core\Persistence\InMemory">
-      <directory>eZ/Publish/Core/Persistence/InMemory/Tests</directory>
-    </testsuite>
     <testsuite name="eZ\Publish\Core\Persistence\Legacy">
       <directory>eZ/Publish/Core/Persistence/Legacy/Tests</directory>
+    </testsuite>
+    <testsuite name="eZ\Publish\Core\Search\Legacy">
+      <directory>eZ/Publish/Core/Search/Legacy/Tests</directory>
+    </testsuite>
+    <testsuite name="eZ\Publish\Core\Persistence\Doctrine">
+      <directory>eZ/Publish/Core/Persistence/Doctrine/Tests</directory>
+    </testsuite>
+    <testsuite name="eZ\Publish\Core\Search">
+      <directory>eZ/Publish/Core/Search/Tests</directory>
+    </testsuite>
+    <testsuite name="eZ\Publish\Core\Search\Solr">
+      <directory>eZ/Publish/Core/Search/Solr/Tests</directory>
+    </testsuite>
+    <testsuite name="eZ\Publish\Core\Search\Elasticsearch">
+      <directory>eZ/Publish/Core/Search/Elasticsearch/Tests</directory>
     </testsuite>
     <testsuite name="eZ\Publish\Core\IO">
       <directory>eZ/Publish/Core/IO/Tests</directory>
@@ -50,6 +62,12 @@
     </testsuite>
     <testsuite name="eZ Publish SignalSlot test suite">
         <directory>eZ/Publish/Core/SignalSlot</directory>
+    </testsuite>
+    <testsuite name="eZ\Publish\Core\Pagination">
+        <directory>eZ/Publish/Core/Pagination</directory>
+    </testsuite>
+    <testsuite name="eZ\Publish\Core\Helper">
+        <directory>eZ/Publish/Core/Helper</directory>
     </testsuite>
   </testsuites>
   <filter>
@@ -71,4 +89,7 @@
       </exclude>
     </whitelist>
   </filter>
+  <listeners>
+    <listener class="\Mockery\Adapter\Phpunit\TestListener"></listener>
+  </listeners>
 </phpunit>

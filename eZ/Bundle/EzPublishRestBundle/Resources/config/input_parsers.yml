@@ -1,8 +1,10 @@
 parameters:
-    ezpublish_rest.input.parser.class: eZ\Publish\Core\REST\Server\Input\Parser
+    ezpublish_rest.input.parser.class: eZ\Publish\Core\REST\Server\Common\Parser
+    ezpublish_rest.input.parser.ContentObjectStates.class: eZ\Publish\Core\REST\Common\Input\Parser\ContentObjectStates
+
+    # REST server
     ezpublish_rest.input.parser.ContentCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\ContentCreate
     ezpublish_rest.input.parser.ContentUpdate.class: eZ\Publish\Core\REST\Server\Input\Parser\ContentUpdate
-    ezpublish_rest.input.parser.ContentObjectStates.class: eZ\Publish\Core\REST\Server\Input\Parser\ContentObjectStates
     ezpublish_rest.input.parser.ContentTypeGroupInput.class: eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeGroupInput
     ezpublish_rest.input.parser.ContentTypeCreate.class: eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeCreate
     ezpublish_rest.input.parser.ContentTypeUpdate.class: eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeUpdate
@@ -52,11 +54,40 @@ parameters:
     ezpublish_rest.input.parser.internal.criterion.ParentLocationRemoteId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\ParentLocationRemoteId
     ezpublish_rest.input.parser.internal.criterion.SectionIdentifier.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\SectionIdentifier
     ezpublish_rest.input.parser.internal.criterion.SectionId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\SectionId
-    ezpublish_rest.input.parser.internal.criterion.Status.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Status
     ezpublish_rest.input.parser.internal.criterion.Subtree.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Subtree
-    ezpublish_rest.input.parser.internal.criterion.UrlAlias.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\UrlAlias
     ezpublish_rest.input.parser.internal.criterion.UserMetadata.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\UserMetadata
     ezpublish_rest.input.parser.internal.criterion.Visibility.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Visibility
+
+    # REST client
+    ezpublish_rest.input.parser.Content.class: eZ\Publish\Core\REST\Client\Input\Parser\Content
+    ezpublish_rest.input.parser.ContentInfo.class: eZ\Publish\Core\REST\Client\Input\Parser\ContentInfo
+    ezpublish_rest.input.parser.ContentList.class: eZ\Publish\Core\REST\Client\Input\Parser\ContentList
+    ezpublish_rest.input.parser.ContentType.class: eZ\Publish\Core\REST\Client\Input\Parser\ContentType
+    ezpublish_rest.input.parser.ContentTypeGroup.class: eZ\Publish\Core\REST\Client\Input\Parser\ContentTypeGroup
+    ezpublish_rest.input.parser.ContentTypeGroupList.class: eZ\Publish\Core\REST\Client\Input\Parser\ContentTypeGroupList
+    ezpublish_rest.input.parser.ContentTypeGroupRefList.class: eZ\Publish\Core\REST\Client\Input\Parser\ContentTypeGroupRefList
+    ezpublish_rest.input.parser.ContentTypeList.class: eZ\Publish\Core\REST\Client\Input\Parser\ContentTypeList
+    ezpublish_rest.input.parser.ErrorMessage.class: eZ\Publish\Core\REST\Client\Input\Parser\ErrorMessage
+    ezpublish_rest.input.parser.FieldDefinition.class: eZ\Publish\Core\REST\Client\Input\Parser\FieldDefinition
+    ezpublish_rest.input.parser.FieldDefinitionList.class: eZ\Publish\Core\REST\Client\Input\Parser\FieldDefinitionList
+    ezpublish_rest.input.parser.Limitation.class: eZ\Publish\Core\REST\Client\Input\Parser\Limitation
+    ezpublish_rest.input.parser.Location.class: eZ\Publish\Core\REST\Client\Input\Parser\Location
+    ezpublish_rest.input.parser.ObjectState.class: eZ\Publish\Core\REST\Client\Input\Parser\ObjectState
+    ezpublish_rest.input.parser.ObjectStateList.class: eZ\Publish\Core\REST\Client\Input\Parser\ObjectStateList
+    ezpublish_rest.input.parser.ObjectStateGroup.class: eZ\Publish\Core\REST\Client\Input\Parser\ObjectStateGroup
+    ezpublish_rest.input.parser.ObjectStateGroupList.class: eZ\Publish\Core\REST\Client\Input\Parser\ObjectStateGroupList
+    ezpublish_rest.input.parser.Policy.class: eZ\Publish\Core\REST\Client\Input\Parser\Policy
+    ezpublish_rest.input.parser.PolicyList.class: eZ\Publish\Core\REST\Client\Input\Parser\PolicyList
+    ezpublish_rest.input.parser.Relation.class: eZ\Publish\Core\REST\Client\Input\Parser\Relation
+    ezpublish_rest.input.parser.RelationList.class: eZ\Publish\Core\REST\Client\Input\Parser\RelationList
+    ezpublish_rest.input.parser.Role.class: eZ\Publish\Core\REST\Client\Input\Parser\Role
+    ezpublish_rest.input.parser.RoleList.class: eZ\Publish\Core\REST\Client\Input\Parser\RoleList
+    ezpublish_rest.input.parser.RoleAssignment.class: eZ\Publish\Core\REST\Client\Input\Parser\RoleAssignment
+    ezpublish_rest.input.parser.RoleAssignmentList.class: eZ\Publish\Core\REST\Client\Input\Parser\RoleAssignmentList
+    ezpublish_rest.input.parser.Section.class: eZ\Publish\Core\REST\Client\Input\Parser\Section
+    ezpublish_rest.input.parser.SectionList.class: eZ\Publish\Core\REST\Client\Input\Parser\SectionList
+    ezpublish_rest.input.parser.VersionInfo.class: eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo
+    ezpublish_rest.input.parser.Session.class: eZ\Publish\Core\REST\Client\Input\Parser\Session
 
 services:
     ezpublish_rest.input.parser:
@@ -64,6 +95,14 @@ services:
         abstract: true
         calls:
             - [ setRequestParser, [ @ezpublish_rest.request_parser ] ]
+
+    ezpublish_rest.input.parser.ContentObjectStates:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.ContentObjectStates.class%
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ContentObjectStates }
+
+    # Rest server
 
     ezpublish_rest.input.parser.ContentCreate:
         parent: ezpublish_rest.input.parser
@@ -82,12 +121,6 @@ services:
         class: %ezpublish_rest.input.parser.ContentUpdate.class%
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ContentUpdate }
-
-    ezpublish_rest.input.parser.ContentObjectStates:
-        parent: ezpublish_rest.input.parser
-        class: %ezpublish_rest.input.parser.ContentObjectStates.class%
-        tags:
-            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ContentObjectStates }
 
     ezpublish_rest.input.parser.ContentTypeCreate:
         parent: ezpublish_rest.input.parser
@@ -454,23 +487,11 @@ services:
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.SectionId }
 
-    ezpublish_rest.input.parser.internal.criterion.Status:
-        parent: ezpublish_rest.input.parser
-        class: %ezpublish_rest.input.parser.internal.criterion.Status.class%
-        tags:
-            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.Status }
-
     ezpublish_rest.input.parser.internal.criterion.Subtree:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.Subtree.class%
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.Subtree }
-
-    ezpublish_rest.input.parser.internal.criterion.UrlmediaType:
-        parent: ezpublish_rest.input.parser
-        class: %ezpublish_rest.input.parser.internal.criterion.UrlAlias.class%
-        tags:
-            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.UrlAlias }
 
     ezpublish_rest.input.parser.internal.criterion.UserMetadata:
         parent: ezpublish_rest.input.parser
@@ -489,3 +510,247 @@ services:
         class: %ezpublish_rest.input.parser.internal.criterion.Visibility.class%
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.Visibility }
+
+    # Rest client
+
+    ezpublish_rest.input.parser.Content:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.Content.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+            - @ezpublish.api.service.content
+            - @ezpublish_rest.input.parser.versioninfo
+            - @ezpublish_rest.field_type_parser
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.Content }
+
+    ezpublish_rest.input.parser.ContentInfo:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.ContentInfo.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+            - @ezpublish.api.service.content_type
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ContentInfo }
+
+    ezpublish_rest.input.parser.ContentList:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.ContentList.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ContentList }
+
+    ezpublish_rest.input.parser.ContentType:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.ContentType.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+            - @ezpublish.api.service.content_type
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ContentType }
+
+    ezpublish_rest.input.parser.ContentTypeList:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.ContentTypeList.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ContentTypeList }
+
+    ezpublish_rest.input.parser.ContentTypeGroup:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.ContentTypeGroup.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ContentTypeGroup }
+
+    ezpublish_rest.input.parser.ContentTypeGroupList:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.ContentTypeGroupList.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ContentTypeGroupList }
+
+    ezpublish_rest.input.parser.ContentTypeGroupRefList:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.ContentTypeGroupRefList.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+            - @ezpublish.api.service.content_type
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ContentTypeGroupRefList }
+
+    ezpublish_rest.input.parser.ErrorMessage:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.ErrorMessage.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ErrorMessage }
+
+    ezpublish_rest.input.parser.FieldDefinition:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.FieldDefinition.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+            - @ezpublish_rest.field_type_parser
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.FieldDefinition }
+
+    ezpublish_rest.input.parser.FieldDefinitionList:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.FieldDefinitionList.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+            - @ezpublish.api.service.content_type
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.FieldDefinitionList }
+
+    ezpublish_rest.input.parser.Limitation:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.Limitation.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.Limitation }
+
+    ezpublish_rest.input.parser.Location:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.Location.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.Location }
+
+    ezpublish_rest.input.parser.ObjectState:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.ObjectState.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ObjectState }
+
+    ezpublish_rest.input.parser.ObjectStateList:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.ObjectStateList.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ObjectStateList }
+
+    ezpublish_rest.input.parser.ObjectStateGroup:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.ObjectStateGroup.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ObjectStateGroup }
+
+    ezpublish_rest.input.parser.ObjectStateGroupList:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.ObjectStateGroupList.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ObjectStateGroupList }
+
+    ezpublish_rest.input.parser.Policy:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.Policy.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.Policy }
+
+    ezpublish_rest.input.parser.PolicyList:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.PolicyList.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.PolicyList }
+
+    ezpublish_rest.input.parser.Relation:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.Relation.class%
+        arguments:
+            - @ezpublish.api.service.content
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.Relation }
+
+    ezpublish_rest.input.parser.RelationList:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.RelationList.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.RelationList }
+
+    ezpublish_rest.input.parser.Role:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.Role.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.Role }
+
+    ezpublish_rest.input.parser.RoleAssignment:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.RoleAssignment.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.RoleAssignment }
+
+    ezpublish_rest.input.parser.RoleAssignmentList:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.RoleAssignmentList.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.RoleAssignmentList }
+
+    ezpublish_rest.input.parser.RoleList:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.RoleList.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.RoleList }
+
+    ezpublish_rest.input.parser.Section:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.Section.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.Section }
+
+    ezpublish_rest.input.parser.SectionList:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.SectionList.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.SectionList }
+
+    ezpublish_rest.input.parser.VersionInfo:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.VersionInfo.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+            - @ezpublish.api.service.content
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.VersionInfo }
+
+    ezpublish_rest.input.parser.Session:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.Session.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+            - @ezpublish.api.service.user
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.Session }

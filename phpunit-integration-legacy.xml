@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version = '1.0' encoding = 'utf-8'?>
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
          bootstrap="bootstrap.php"
@@ -18,6 +18,7 @@
             <file>eZ/Publish/API/Repository/Tests/RepositoryTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SectionServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LanguageServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/LanguageServiceMaximumSupportedLanguagesTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/ContentTypeServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/ContentServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/NonRedundantFieldSetTest.php</file>
@@ -39,8 +40,11 @@
             <file>eZ/Publish/API/Repository/Tests/URLWildcardServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/ObjectStateServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/SearchServiceFieldFiltersTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/SearchServiceLocationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LimitationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/FieldTypeServiceTest.php</file>
             <directory>eZ/Publish/API/Repository/Tests/Values/User/Limitation</directory>
             <directory>eZ/Publish/API/Repository/Tests/FieldType/</directory>
         </testsuite>
@@ -50,7 +54,7 @@
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">eZ/Publish/API/Repository/</directory>
+            <directory suffix=".php">eZ/Publish/API/Repository</directory>
             <exclude>
                 <directory>eZ/Publish/API/Repository/Tests</directory>
                 <directory>eZ/Publish/API/Repository/Tutorials</directory>

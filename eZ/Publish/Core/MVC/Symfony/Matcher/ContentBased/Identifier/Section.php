@@ -1,15 +1,18 @@
 <?php
+
 /**
  * File containing the Section identifier matcher class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
@@ -20,20 +23,19 @@ class Section extends MultipleValued
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchLocation( Location $location )
+    public function matchLocation(Location $location)
     {
         $section = $this->repository->sudo(
-            function ( $repository ) use ( $location )
-            {
+            function (Repository $repository) use ($location) {
                 return $repository->getSectionService()->loadSection(
                     $location->getContentInfo()->sectionId
                 );
             }
         );
 
-        return isset( $this->values[$section->identifier] );
+        return isset($this->values[$section->identifier]);
     }
 
     /**
@@ -41,19 +43,18 @@ class Section extends MultipleValued
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchContentInfo( ContentInfo $contentInfo )
+    public function matchContentInfo(ContentInfo $contentInfo)
     {
         $section = $this->repository->sudo(
-            function ( $repository ) use ( $contentInfo )
-            {
+            function (Repository $repository) use ($contentInfo) {
                 return $repository->getSectionService()->loadSection(
                     $contentInfo->sectionId
                 );
             }
         );
 
-        return isset( $this->values[$section->identifier] );
+        return isset($this->values[$section->identifier]);
     }
 }

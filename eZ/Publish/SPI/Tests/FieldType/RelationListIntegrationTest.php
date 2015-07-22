@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,10 +15,9 @@ use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
-use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 
 /**
- * Integration test for legacy storage field types
+ * Integration test for legacy storage field types.
  *
  * This abstract base test case is supposed to be the base for field type
  * integration tests. It basically calls all involved methods in the field type
@@ -38,7 +39,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 class RelationListIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -48,28 +49,21 @@ class RelationListIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get handler with required custom field types registered
+     * Get handler with required custom field types registered.
      *
      * @return Handler
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
+        $fieldType = new FieldType\RelationList\Type();
+        $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
-        $handler->getFieldTypeRegistry()->register(
+        return $this->getHandler(
             'ezobjectrelationlist',
-            new FieldType\RelationList\Type()
-        );
-        $handler->getStorageRegistry()->register(
-            'ezobjectrelationlist',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\RelationListConverter($this->handler),
             new FieldType\NullStorage()
         );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezobjectrelationlist',
-            new Legacy\Content\FieldValue\Converter\RelationList( $this->handler )
-        );
-
-        return $handler;
     }
 
     /**
@@ -86,13 +80,13 @@ class RelationListIntegrationTest extends BaseIntegrationTest
                     'selectionMethod' => 0,
                     'selectionDefaultLocation' => '',
                     'selectionContentTypes' => array(),
-                )
+                ),
             )
         );
     }
 
     /**
-     * Get field definition data values
+     * Get field definition data values.
      *
      * This is a PHPUnit data provider
      *
@@ -107,13 +101,13 @@ class RelationListIntegrationTest extends BaseIntegrationTest
         );
 
         return array(
-            array( 'fieldType', 'ezobjectrelationlist' ),
-            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints( array( 'fieldSettings' => $fieldSettings ) ) ),
+            array('fieldType', 'ezobjectrelationlist'),
+            array('fieldTypeConstraints', new Content\FieldTypeConstraints(array('fieldSettings' => $fieldSettings))),
         );
     }
 
     /**
-     * Get initial field value
+     * Get initial field value.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -121,15 +115,15 @@ class RelationListIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => array( 'destinationContentIds' => array( 4 ) ),
+                'data' => array('destinationContentIds' => array(4)),
                 'externalData' => null,
-                'sortKey'      => null,
+                'sortKey' => null,
             )
         );
     }
 
     /**
-     * Asserts that the loaded field data is correct
+     * Asserts that the loaded field data is correct.
      *
      * Performs assertions on the loaded field, mainly checking that the
      * $field->value->externalData is loaded correctly. If the loading of
@@ -137,7 +131,7 @@ class RelationListIntegrationTest extends BaseIntegrationTest
      * also needs to be asserted. Make sure you implement this method agnostic
      * to the used SPI\Persistence implementation!
      */
-    public function assertLoadedFieldDataCorrect( Field $field )
+    public function assertLoadedFieldDataCorrect(Field $field)
     {
         $expected = $this->getInitialValue();
         $this->assertEquals(
@@ -165,15 +159,15 @@ class RelationListIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => array( 'destinationContentIds' => array( 11 ) ),
+                'data' => array('destinationContentIds' => array(11)),
                 'externalData' => null,
-                'sortKey'      => null,
+                'sortKey' => null,
             )
         );
     }
 
     /**
-     * Asserts that the updated field data is loaded correct
+     * Asserts that the updated field data is loaded correct.
      *
      * Performs assertions on the loaded field after it has been updated,
      * mainly checking that the $field->value->externalData is loaded
@@ -181,10 +175,8 @@ class RelationListIntegrationTest extends BaseIntegrationTest
      * $field, their correctness also needs to be asserted. Make sure you
      * implement this method agnostic to the used SPI\Persistence
      * implementation!
-     *
-     * @return void
      */
-    public function assertUpdatedFieldDataCorrect( Field $field )
+    public function assertUpdatedFieldDataCorrect(Field $field)
     {
         $expected = $this->getUpdatedValue();
         $this->assertEquals(

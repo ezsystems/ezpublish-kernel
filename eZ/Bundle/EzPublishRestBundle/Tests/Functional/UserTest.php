@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Functional\UserTest class
+ * File containing the Functional\UserTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,19 +21,20 @@ class UserTest extends RESTFunctionalTestCase
     public function loadRootUserGroup()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "/api/ezp/v2/user/groups/root" )
+            $this->createHttpRequest('GET', '/api/ezp/v2/user/groups/root')
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @covers POST /user/groups/{groupPath}/subgroups
+     *
      * @return string the created user group href
      */
     public function testCreateUserGroup()
     {
-        $text = $this->addTestSuffix( __FUNCTION__ );
+        $text = $this->addTestSuffix(__FUNCTION__);
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <UserGroupCreate>
@@ -52,19 +55,20 @@ class UserTest extends RESTFunctionalTestCase
 </UserGroupCreate>
 XML;
         $request = $this->createHttpRequest(
-            "POST",
-            "/api/ezp/v2/user/groups/1/5/subgroups",
+            'POST',
+            '/api/ezp/v2/user/groups/1/5/subgroups',
             'UserGroupCreate+xml',
             'UserGroup+json'
         );
-        $request->setContent( $xml );
+        $request->setContent($xml);
 
-        $response = $this->sendHttpRequest( $request );
-        self::assertHttpResponseCodeEquals( $response, 201 );
-        self::assertHttpResponseHasHeader( $response, 'Location' );
+        $response = $this->sendHttpRequest($request);
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader( 'Location' );
-        $this->addCreatedElement( $href );
+        $href = $response->getHeader('Location');
+        $this->addCreatedElement($href);
+
         return $href;
     }
 
@@ -73,22 +77,22 @@ XML;
      * @covers GET /user/groups/{groupId}
      * @depends testCreateUserGroup
      */
-    public function testLoadUserGroup( $groupId )
+    public function testLoadUserGroup($groupId)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", $groupId )
+            $this->createHttpRequest('GET', $groupId)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @covers PATCH /user/groups/{groupPath}
      * @depends testCreateUserGroup
      */
-    public function testUpdateUserGroup( $groupHref )
+    public function testUpdateUserGroup($groupHref)
     {
-        $text = $this->addTestSuffix( __FUNCTION__ );
+        $text = $this->addTestSuffix(__FUNCTION__);
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <UserGroupUpdate>
@@ -102,26 +106,27 @@ XML;
 </UserGroupUpdate>
 XML;
         $request = $this->createHttpRequest(
-            "PATCH",
+            'PATCH',
             $groupHref,
             'UserGroupUpdate+xml',
             'UserGroup+json'
         );
-        $request->setContent( $xml );
+        $request->setContent($xml);
 
-        $response = $this->sendHttpRequest( $request );
+        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @depends testCreateUserGroup
      * @covers POST /user/groups/{groupPath}/users
+     *
      * @return string The created user  href
      */
-    public function testCreateUser( $userGroupHref )
+    public function testCreateUser($userGroupHref)
     {
-        $text = $this->addTestSuffix( __FUNCTION__ );
+        $text = $this->addTestSuffix(__FUNCTION__);
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <UserCreate>
@@ -145,19 +150,20 @@ XML;
 </UserCreate>
 XML;
         $request = $this->createHttpRequest(
-            "POST",
+            'POST',
             "{$userGroupHref}/users",
             'UserCreate+xml',
             'User+json'
         );
-        $request->setContent( $xml );
+        $request->setContent($xml);
 
-        $response = $this->sendHttpRequest( $request );
-        self::assertHttpResponseCodeEquals( $response, 201 );
-        self::assertHttpResponseHasHeader( $response, 'Location' );
+        $response = $this->sendHttpRequest($request);
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader( 'Location' );
-        $this->addCreatedElement( $href );
+        $href = $response->getHeader('Location');
+        $this->addCreatedElement($href);
+
         return $href;
     }
 
@@ -166,22 +172,22 @@ XML;
      * @covers GET /user/users/{userId}
      * @depends testCreateUser
      */
-    public function testLoadUser( $userHref )
+    public function testLoadUser($userHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", $userHref )
+            $this->createHttpRequest('GET', $userHref)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @depends testCreateUser
      * @covers PATCH /user/users/{userId}
      */
-    public function testUpdateUser( $userHref )
+    public function testUpdateUser($userHref)
     {
-        $text = $this->addTestSuffix( __FUNCTION__ );
+        $text = $this->addTestSuffix(__FUNCTION__);
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <UserUpdate>
@@ -195,16 +201,16 @@ XML;
 </UserUpdate>
 XML;
         $request = $this->createHttpRequest(
-            "PATCH",
+            'PATCH',
             $userHref,
             'UserUpdate+xml',
             'User+json'
         );
-        $request->setContent( $xml );
+        $request->setContent($xml);
 
-        $response = $this->sendHttpRequest( $request );
+        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
@@ -213,10 +219,10 @@ XML;
     public function testLoadUsers()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "/api/ezp/v2/user/users" )
+            $this->createHttpRequest('GET', '/api/ezp/v2/user/users')
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
@@ -225,12 +231,12 @@ XML;
      */
     public function testLoadUserByRemoteId()
     {
-        $remoteId = $this->addTestSuffix( "testCreateUser" );
+        $remoteId = $this->addTestSuffix('testCreateUser');
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "/api/ezp/v2/user/users?remoteId=$remoteId" )
+            $this->createHttpRequest('GET', "/api/ezp/v2/user/users?remoteId=$remoteId")
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
@@ -239,91 +245,92 @@ XML;
     public function testLoadUserGroups()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "/api/ezp/v2/user/groups" )
+            $this->createHttpRequest('GET', '/api/ezp/v2/user/groups')
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @depends testCreateUserGroup
      * @covers GET /user/groups?remoteId={groupRemoteId}
      */
-    public function testLoadUserGroupByRemoteId( $groupHref )
+    public function testLoadUserGroupByRemoteId($groupHref)
     {
-        $remoteId = $this->addTestSuffix( "testCreateUserGroup" );
+        $remoteId = $this->addTestSuffix('testCreateUserGroup');
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "/api/ezp/v2/user/groups?remoteId=$remoteId" )
+            $this->createHttpRequest('GET', "/api/ezp/v2/user/groups?remoteId=$remoteId")
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @covers GET /user/users/{userId}/drafts
      * @depends testCreateUser
      */
-    public function testLoadUserDrafts( $userHref )
+    public function testLoadUserDrafts($userHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "$userHref/drafts" )
+            $this->createHttpRequest('GET', "$userHref/drafts")
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @depends testCreateGroup
      * @covers GET /user/groups/{groupPath}/subgroups
      */
-    public function testLoadSubUserGroups( $groupHref )
+    public function testLoadSubUserGroups($groupHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "$groupHref/subgroups" )
+            $this->createHttpRequest('GET', "$groupHref/subgroups")
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @covers GET /user/users/{userId}/groups
      * @depends testCreateUser
      */
-    public function testLoadUserGroupsOfUser( $userHref )
+    public function testLoadUserGroupsOfUser($userHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "$userHref/groups" )
+            $this->createHttpRequest('GET', "$userHref/groups")
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @covers GET /user/groups/<groupPath>/users
      * @depends testCreateUserGroup
      */
-    public function testLoadUsersFromGroup( $groupHref )
+    public function testLoadUsersFromGroup($groupHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "$groupHref/users" )
+            $this->createHttpRequest('GET', "$groupHref/users")
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @covers POST /user/users/{userId}/groups
      * @depends testCreateUser
+     *
      * @return string $userHref
      */
-    public function testAssignUserToUserGroup( $userHref )
+    public function testAssignUserToUserGroup($userHref)
     {
         // /1/5/12 is Members
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "POST", "$userHref/groups?group=/user/groups/1/5/12" )
+            $this->createHttpRequest('POST', "$userHref/groups?group=/user/groups/1/5/12")
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
 
         return $userHref;
     }
@@ -332,37 +339,38 @@ XML;
      * @covers DELETE /user/users/{userId}/groups/{groupPath}
      * @depends testAssignUserToUserGroup
      */
-    public function testUnassignUserFromUserGroup( $userHref )
+    public function testUnassignUserFromUserGroup($userHref)
     {
         // /1/5/12 is Members
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "DELETE", "$userHref/groups/12" )
+            $this->createHttpRequest('DELETE', "$userHref/groups/12")
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @covers MOVE /user/groups/{groupPath}
      * @depends testCreateUserGroup
      */
-    public function testMoveUserGroup( $groupHref )
+    public function testMoveUserGroup($groupHref)
     {
-        $request = $this->createHttpRequest( "MOVE", $groupHref );
-        $request->addHeader( 'Destination: /api/ezp/v2/user/groups/1/5/12' );
+        $request = $this->createHttpRequest('MOVE', $groupHref);
+        $request->addHeader('Destination: /api/ezp/v2/user/groups/1/5/12');
 
-        $response = $this->sendHttpRequest( $request );
-        self::assertHttpResponseCodeEquals( $response, 201 );
+        $response = $this->sendHttpRequest($request);
+        self::assertHttpResponseCodeEquals($response, 201);
     }
 
     /**
      * @depends testCreateUser
      * @covers POST /user/sessions
+     *
      * @return string The created session href
      */
     public function testCreateSession()
     {
-        $text = $this->addTestSuffix( 'testCreateUser' );
+        $text = $this->addTestSuffix('testCreateUser');
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <SessionInput>
@@ -371,19 +379,20 @@ XML;
 </SessionInput>
 XML;
         $request = $this->createHttpRequest(
-            "POST",
-            "/api/ezp/v2/user/sessions",
-            "SessionInput+xml",
-            "Session+json"
+            'POST',
+            '/api/ezp/v2/user/sessions',
+            'SessionInput+xml',
+            'Session+json'
         );
-        $request->setContent( $xml );
-        $response = $this->sendHttpRequest( $request );
+        $request->setContent($xml);
+        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals( $response, 201 );
-        self::assertHttpResponseHasHeader( $response, 'Location' );
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader( 'Location' );
-        $this->addCreatedElement( $href );
+        $href = $response->getHeader('Location');
+        $this->addCreatedElement($href);
+
         return $href;
     }
 
@@ -391,39 +400,39 @@ XML;
      * @depends testCreateSession
      * @covers DELETE /user/sessions/{sessionId}
      */
-    public function testDeleteSession( $sessionHref )
+    public function testDeleteSession($sessionHref)
     {
-        self::markTestSkipped( "@todo improve. The session can only be deleted if started !" );
+        self::markTestSkipped('@todo improve. The session can only be deleted if started !');
         $response = $this->sendHttpRequest(
-            $request = $this->createHttpRequest( "DELETE", $sessionHref )
+            $request = $this->createHttpRequest('DELETE', $sessionHref)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 204 );
+        self::assertHttpResponseCodeEquals($response, 204);
     }
 
     /**
      * @depends testCreateUser
      * @covers DELETE /users/user/{userId}
      */
-    public function testDeleteUser( $userHref )
+    public function testDeleteUser($userHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "DELETE", $userHref )
+            $this->createHttpRequest('DELETE', $userHref)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 204 );
+        self::assertHttpResponseCodeEquals($response, 204);
     }
 
     /**
      * @depends testCreateUserGroup
      * @covers testCreateUserGroup
      */
-    public function testDeleteUserGroup( $groupHref )
+    public function testDeleteUserGroup($groupHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "DELETE", $groupHref )
+            $this->createHttpRequest('DELETE', $groupHref)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 204 );
+        self::assertHttpResponseCodeEquals($response, 204);
     }
 }

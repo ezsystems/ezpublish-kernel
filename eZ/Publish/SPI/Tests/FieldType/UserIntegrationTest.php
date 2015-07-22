@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\SPI\Tests\FieldType\UserIntegrationTest class
+ * File contains: eZ\Publish\SPI\Tests\FieldType\UserIntegrationTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,7 +19,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use eZ\Publish\SPI\Persistence\User;
 
 /**
- * Integration test for legacy storage field types
+ * Integration test for legacy storage field types.
  *
  * This abstract base test case is supposed to be the base for field type
  * integration tests. It basically calls all involved methods in the field type
@@ -39,7 +41,7 @@ use eZ\Publish\SPI\Persistence\User;
 class UserIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -49,32 +51,25 @@ class UserIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get handler with required custom field types registered
+     * Get handler with required custom field types registered.
      *
      * @return Handler
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
+        $fieldType = new FieldType\User\Type();
+        $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
-        $handler->getFieldTypeRegistry()->register(
+        return $this->getHandler(
             'ezuser',
-            new FieldType\User\Type()
-        );
-        $handler->getStorageRegistry()->register(
-            'ezuser',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\NullConverter(),
             new FieldType\User\UserStorage(
                 array(
                     'LegacyStorage' => new FieldType\User\UserStorage\Gateway\LegacyStorage(),
                 )
             )
         );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezuser',
-            new Legacy\Content\FieldValue\Converter\Null()
-        );
-
-        return $handler;
     }
 
     /**
@@ -89,7 +84,7 @@ class UserIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field definition data values
+     * Get field definition data values.
      *
      * This is a PHPUnit data provider
      *
@@ -100,13 +95,13 @@ class UserIntegrationTest extends BaseIntegrationTest
         return array(
             // The user field type does not have any special field definition
             // properties
-            array( 'fieldType', 'ezuser' ),
-            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints() ),
+            array('fieldType', 'ezuser'),
+            array('fieldTypeConstraints', new Content\FieldTypeConstraints()),
         );
     }
 
     /**
-     * Get initial field value
+     * Get initial field value.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -114,15 +109,15 @@ class UserIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => null,
+                'data' => null,
                 'externalData' => array(),
-                'sortKey'      => 'user',
+                'sortKey' => 'user',
             )
         );
     }
 
     /**
-     * Asserts that the loaded field data is correct
+     * Asserts that the loaded field data is correct.
      *
      * Performs assertions on the loaded field, mainly checking that the
      * $field->value->externalData is loaded correctly. If the loading of
@@ -130,7 +125,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      * also needs to be asserted. Make sure you implement this method agnostic
      * to the used SPI\Persistence implementation!
      */
-    public function assertLoadedFieldDataCorrect( Field $field )
+    public function assertLoadedFieldDataCorrect(Field $field)
     {
         $expectedValues = array(
             'hasStoredLogin' => true,
@@ -143,9 +138,8 @@ class UserIntegrationTest extends BaseIntegrationTest
             'maxLogin' => 1000,
         );
 
-        foreach ( $expectedValues as $key => $value )
-        {
-            $this->assertEquals( $value, $field->value->externalData[$key] );
+        foreach ($expectedValues as $key => $value) {
+            $this->assertEquals($value, $field->value->externalData[$key]);
         }
     }
 
@@ -160,22 +154,22 @@ class UserIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => null,
+                'data' => null,
                 'externalData' => array(
-                    'login'            => 'change', // Change is intended to not get through
-                    'email'            => 'change', // Change is intended to not get through
-                    'passwordHash'     => 'change', // Change is intended to not get through
+                    'login' => 'change', // Change is intended to not get through
+                    'email' => 'change', // Change is intended to not get through
+                    'passwordHash' => 'change', // Change is intended to not get through
                     'passwordHashType' => 'change', // Change is intended to not get through
-                    'enabled'          => 'changed', // Change is intended to not get through
-                    'maxLogin'         => 'changed', // Change is intended to not get through
+                    'enabled' => 'changed', // Change is intended to not get through
+                    'maxLogin' => 'changed', // Change is intended to not get through
                 ),
-                'sortKey'      => 'user',
+                'sortKey' => 'user',
             )
         );
     }
 
     /**
-     * Asserts that the updated field data is loaded correct
+     * Asserts that the updated field data is loaded correct.
      *
      * Performs assertions on the loaded field after it has been updated,
      * mainly checking that the $field->value->externalData is loaded
@@ -183,39 +177,34 @@ class UserIntegrationTest extends BaseIntegrationTest
      * $field, their correctness also needs to be asserted. Make sure you
      * implement this method agnostic to the used SPI\Persistence
      * implementation!
-     *
-     * @return void
      */
-    public function assertUpdatedFieldDataCorrect( Field $field )
+    public function assertUpdatedFieldDataCorrect(Field $field)
     {
         // No update of user data possible through field type
-        $this->assertLoadedFieldDataCorrect( $field );
+        $this->assertLoadedFieldDataCorrect($field);
     }
 
     /**
-     * Method called after content creation
+     * Method called after content creation.
      *
      * Useful, if additional stuff should be executed (like creating the actual
      * user).
      *
      * @param Legacy\Handler $handler
      * @param Content $content
-     *
-     * @return void
      */
-    public function postCreationHook( Legacy\Handler $handler, Content $content )
+    public function postCreationHook(Legacy\Handler $handler, Content $content)
     {
         $user = new User();
-        $user->id            = $content->versionInfo->contentInfo->id;
-        $user->login         = 'hans';
-        $user->email         = 'hans@example.com';
-        $user->passwordHash  = '*';
+        $user->id = $content->versionInfo->contentInfo->id;
+        $user->login = 'hans';
+        $user->email = 'hans@example.com';
+        $user->passwordHash = '*';
         $user->hashAlgorithm = 0;
-        $user->isEnabled     = true;
-        $user->maxLogin      = 1000;
+        $user->isEnabled = true;
+        $user->maxLogin = 1000;
 
         $userHandler = $handler->userHandler();
-        $userHandler->create( $user );
+        $userHandler->create($user);
     }
 }
-

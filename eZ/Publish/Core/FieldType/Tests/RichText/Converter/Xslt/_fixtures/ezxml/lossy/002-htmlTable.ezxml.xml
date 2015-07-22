@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+Covers cases:
+
+ 018-htmlTable.lossy.xml
+
+-->
+<section xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+  <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+    <table class="tableClass" width="24%" border="0" custom:summary="tableTitle" custom:caption="Table caption.">
+      <tr class="rowClass1">
+        <th class="headingClass1" xhtml:width="102" custom:valign="top" xhtml:colspan="1" xhtml:rowspan="5" custom:abbr="XSLT" custom:scope="col">
+          <paragraph>11</paragraph>
+        </th>
+        <th class="headingClass2" xhtml:width="37%" custom:valign="middle" xhtml:colspan="2" xhtml:rowspan="6" custom:abbr="XSD" custom:scope="row">
+          <paragraph>12</paragraph>
+        </th>
+      </tr>
+      <tr class="rowClass2">
+        <td class="cellClass1" xhtml:width="74%" custom:valign="bottom" xhtml:colspan="3" xhtml:rowspan="7">
+          <paragraph>21</paragraph>
+        </td>
+        <td class="cellClass2" xhtml:width="38" custom:valign="baseline" xhtml:colspan="4" xhtml:rowspan="8">
+          <paragraph>22</paragraph>
+        </td>
+      </tr>
+    </table>
+  </paragraph>
+</section>

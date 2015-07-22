@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+  <paragraph>Some <embed-inline xhtml:id="id3" object_id="601" view="embed-inline-custom" class="embedClass" align="left"/> for the otherwise unremarkable paragraph.</paragraph>
+  <paragraph>This paragraph is just showing off its <embed-inline xhtml:id="id5" object_id="501" view="embed-inline" size="medium" class="embedClass2" align="right"/> content.</paragraph>
+</section>

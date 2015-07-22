@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ObjectState Handler class
+ * File containing the ObjectState Handler class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,53 +16,53 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
- * The Object State Handler class provides managing of object states and groups
+ * The Object State Handler class provides managing of object states and groups.
  */
 class Handler implements BaseObjectStateHandler
 {
     /**
-     * ObjectState Gateway
+     * ObjectState Gateway.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway
      */
     protected $objectStateGateway;
 
     /**
-     * ObjectState Mapper
+     * ObjectState Mapper.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper
      */
     protected $objectStateMapper;
 
     /**
-     * Creates a new ObjectState Handler
+     * Creates a new ObjectState Handler.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway $objectStateGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper $objectStateMapper
      */
-    public function __construct( Gateway $objectStateGateway, Mapper $objectStateMapper )
+    public function __construct(Gateway $objectStateGateway, Mapper $objectStateMapper)
     {
         $this->objectStateGateway = $objectStateGateway;
         $this->objectStateMapper = $objectStateMapper;
     }
 
     /**
-     * Creates a new object state group
+     * Creates a new object state group.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
      */
-    public function createGroup( InputStruct $input )
+    public function createGroup(InputStruct $input)
     {
-        $objectStateGroup = $this->objectStateMapper->createObjectStateGroupFromInputStruct( $input );
-        $this->objectStateGateway->insertObjectStateGroup( $objectStateGroup );
+        $objectStateGroup = $this->objectStateMapper->createObjectStateGroupFromInputStruct($input);
+        $this->objectStateGateway->insertObjectStateGroup($objectStateGroup);
 
         return $objectStateGroup;
     }
 
     /**
-     * Loads an object state group
+     * Loads an object state group.
      *
      * @param mixed $groupId
      *
@@ -68,20 +70,19 @@ class Handler implements BaseObjectStateHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
      */
-    public function loadGroup( $groupId )
+    public function loadGroup($groupId)
     {
-        $data = $this->objectStateGateway->loadObjectStateGroupData( $groupId );
+        $data = $this->objectStateGateway->loadObjectStateGroupData($groupId);
 
-        if ( empty( $data ) )
-        {
-            throw new NotFoundException( "ObjectStateGroup", $groupId );
+        if (empty($data)) {
+            throw new NotFoundException('ObjectStateGroup', $groupId);
         }
 
-        return $this->objectStateMapper->createObjectStateGroupFromData( $data );
+        return $this->objectStateMapper->createObjectStateGroupFromData($data);
     }
 
     /**
-     * Loads a object state group by identifier
+     * Loads a object state group by identifier.
      *
      * @param string $identifier
      *
@@ -89,78 +90,78 @@ class Handler implements BaseObjectStateHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
      */
-    public function loadGroupByIdentifier( $identifier )
+    public function loadGroupByIdentifier($identifier)
     {
-        $data = $this->objectStateGateway->loadObjectStateGroupDataByIdentifier( $identifier );
+        $data = $this->objectStateGateway->loadObjectStateGroupDataByIdentifier($identifier);
 
-        if ( empty( $data ) )
-        {
-            throw new NotFoundException( "ObjectStateGroup", $identifier );
+        if (empty($data)) {
+            throw new NotFoundException('ObjectStateGroup', $identifier);
         }
 
-        return $this->objectStateMapper->createObjectStateGroupFromData( $data );
+        return $this->objectStateMapper->createObjectStateGroupFromData($data);
     }
 
     /**
-     * Loads all object state groups
+     * Loads all object state groups.
      *
      * @param int $offset
      * @param int $limit
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group[]
      */
-    public function loadAllGroups( $offset = 0, $limit = -1 )
+    public function loadAllGroups($offset = 0, $limit = -1)
     {
-        $data = $this->objectStateGateway->loadObjectStateGroupListData( $offset, $limit );
-        return $this->objectStateMapper->createObjectStateGroupListFromData( $data );
+        $data = $this->objectStateGateway->loadObjectStateGroupListData($offset, $limit);
+
+        return $this->objectStateMapper->createObjectStateGroupListFromData($data);
     }
 
     /**
-     * This method returns the ordered list of object states of a group
+     * This method returns the ordered list of object states of a group.
      *
      * @param mixed $groupId
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState[]
      */
-    public function loadObjectStates( $groupId )
+    public function loadObjectStates($groupId)
     {
-        $data = $this->objectStateGateway->loadObjectStateListData( $groupId );
-        return $this->objectStateMapper->createObjectStateListFromData( $data );
+        $data = $this->objectStateGateway->loadObjectStateListData($groupId);
+
+        return $this->objectStateMapper->createObjectStateListFromData($data);
     }
 
     /**
-     * Updates an object state group
+     * Updates an object state group.
      *
      * @param mixed $groupId
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Group
      */
-    public function updateGroup( $groupId, InputStruct $input )
+    public function updateGroup($groupId, InputStruct $input)
     {
-        $objectStateGroup = $this->objectStateMapper->createObjectStateGroupFromInputStruct( $input );
+        $objectStateGroup = $this->objectStateMapper->createObjectStateGroupFromInputStruct($input);
         $objectStateGroup->id = (int)$groupId;
 
-        $this->objectStateGateway->updateObjectStateGroup( $objectStateGroup );
+        $this->objectStateGateway->updateObjectStateGroup($objectStateGroup);
 
-        return $this->loadGroup( $objectStateGroup->id );
+        return $this->loadGroup($objectStateGroup->id);
     }
 
     /**
-     * Deletes a object state group including all states and links to content
+     * Deletes a object state group including all states and links to content.
      *
      * @param mixed $groupId
      */
-    public function deleteGroup( $groupId )
+    public function deleteGroup($groupId)
     {
-        $objectStates = $this->loadObjectStates( $groupId );
-        foreach ( $objectStates as $objectState )
-        {
-            $this->objectStateGateway->deleteObjectStateLinks( $objectState->id );
-            $this->objectStateGateway->deleteObjectState( $objectState->id );
+        $objectStates = $this->loadObjectStates($groupId);
+        foreach ($objectStates as $objectState) {
+            $this->objectStateGateway->deleteObjectStateLinks($objectState->id);
+            $this->objectStateGateway->deleteObjectState($objectState->id);
         }
 
-        $this->objectStateGateway->deleteObjectStateGroup( $groupId );
+        $this->objectStateGateway->deleteObjectStateGroup($groupId);
     }
 
     /**
@@ -174,16 +175,16 @@ class Handler implements BaseObjectStateHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
-    public function create( $groupId, InputStruct $input )
+    public function create($groupId, InputStruct $input)
     {
-        $objectState = $this->objectStateMapper->createObjectStateFromInputStruct( $input );
-        $this->objectStateGateway->insertObjectState( $objectState, $groupId );
+        $objectState = $this->objectStateMapper->createObjectStateFromInputStruct($input);
+        $this->objectStateGateway->insertObjectState($objectState, $groupId);
 
         return $objectState;
     }
 
     /**
-     * Loads an object state
+     * Loads an object state.
      *
      * @param mixed $stateId
      *
@@ -191,20 +192,19 @@ class Handler implements BaseObjectStateHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
-    public function load( $stateId )
+    public function load($stateId)
     {
-        $data = $this->objectStateGateway->loadObjectStateData( $stateId );
+        $data = $this->objectStateGateway->loadObjectStateData($stateId);
 
-        if ( empty( $data ) )
-        {
-            throw new NotFoundException( "ObjectState", $stateId );
+        if (empty($data)) {
+            throw new NotFoundException('ObjectState', $stateId);
         }
 
-        return $this->objectStateMapper->createObjectStateFromData( $data );
+        return $this->objectStateMapper->createObjectStateFromData($data);
     }
 
     /**
-     * Loads an object state by identifier and group it belongs to
+     * Loads an object state by identifier and group it belongs to.
      *
      * @param string $identifier
      * @param mixed $groupId
@@ -213,59 +213,60 @@ class Handler implements BaseObjectStateHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
-    public function loadByIdentifier( $identifier, $groupId )
+    public function loadByIdentifier($identifier, $groupId)
     {
-        $data = $this->objectStateGateway->loadObjectStateDataByIdentifier( $identifier, $groupId );
+        $data = $this->objectStateGateway->loadObjectStateDataByIdentifier($identifier, $groupId);
 
-        if ( empty( $data ) )
-        {
-            throw new NotFoundException( "ObjectState", array( 'identifier' => $identifier, 'groupId' => $groupId ) );
+        if (empty($data)) {
+            throw new NotFoundException('ObjectState', array('identifier' => $identifier, 'groupId' => $groupId));
         }
 
-        return $this->objectStateMapper->createObjectStateFromData( $data );
+        return $this->objectStateMapper->createObjectStateFromData($data);
     }
 
     /**
-     * Updates an object state
+     * Updates an object state.
      *
      * @param mixed $stateId
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct $input
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
-    public function update( $stateId, InputStruct $input )
+    public function update($stateId, InputStruct $input)
     {
-        $objectState = $this->objectStateMapper->createObjectStateFromInputStruct( $input );
+        $objectState = $this->objectStateMapper->createObjectStateFromInputStruct($input);
         $objectState->id = (int)$stateId;
 
-        $this->objectStateGateway->updateObjectState( $objectState );
+        $this->objectStateGateway->updateObjectState($objectState);
 
-        return $this->load( $objectState->id );
+        return $this->load($objectState->id);
     }
 
     /**
-     * Changes the priority of the state
+     * Changes the priority of the state.
      *
      * @param mixed $stateId
      * @param int $priority
      */
-    public function setPriority( $stateId, $priority )
+    public function setPriority($stateId, $priority)
     {
-        $objectState = $this->load( $stateId );
-        $groupStates = $this->loadObjectStates( $objectState->groupId );
+        $objectState = $this->load($stateId);
+        $groupObjectStates = $this->loadObjectStates($objectState->groupId);
 
         $priorityList = array();
-        foreach ( $groupStates as $index => $groupState )
-        {
-            $priorityList[$groupState->id] = $index;
+        foreach ($groupObjectStates as $index => $groupObjectState) {
+            // Update given state and push all other states with same or higher priority down
+            if ($objectState->id === $groupObjectState->id) {
+                $priorityList[$groupObjectState->id] = (int)$priority;
+            } else {
+                $priorityList[$groupObjectState->id] = ($index < $priority ? $index : $index + 1);
+            }
         }
 
-        $priorityList[$objectState->id] = (int)$priority;
-        asort( $priorityList );
+        asort($priorityList, SORT_NUMERIC);
 
-        foreach ( array_keys( $priorityList ) as $objectStatePriority => $objectStateId )
-        {
-            $this->objectStateGateway->updateObjectStatePriority( $objectStateId, $objectStatePriority );
+        foreach (array_keys($priorityList) as $objectStatePriority => $objectStateId) {
+            $this->objectStateGateway->updateObjectStatePriority($objectStateId, $objectStatePriority);
         }
     }
 
@@ -277,31 +278,30 @@ class Handler implements BaseObjectStateHandler
      *
      * @param mixed $stateId
      */
-    public function delete( $stateId )
+    public function delete($stateId)
     {
         // Get the object state first as we need group ID
         // to reorder the priorities and reassign content to another state in the group
-        $objectState = $this->load( $stateId );
+        $objectState = $this->load($stateId);
 
-        $this->objectStateGateway->deleteObjectState( $objectState->id );
+        $this->objectStateGateway->deleteObjectState($objectState->id);
 
-        $remainingStates = $this->loadObjectStates( $objectState->groupId );
-        if ( empty( $remainingStates ) )
-        {
+        $remainingStates = $this->loadObjectStates($objectState->groupId);
+        if (empty($remainingStates)) {
             // If there are no more states in the group, just remove the state links
-            $this->objectStateGateway->deleteObjectStateLinks( $objectState->id );
+            $this->objectStateGateway->deleteObjectStateLinks($objectState->id);
+
             return;
         }
 
         $priority = 0;
-        foreach ( $remainingStates as $remainingState )
-        {
-            $this->objectStateGateway->updateObjectStatePriority( $remainingState->id, $priority );
-            $priority++;
+        foreach ($remainingStates as $remainingState) {
+            $this->objectStateGateway->updateObjectStatePriority($remainingState->id, $priority);
+            ++$priority;
         }
 
-        $remainingStates = $this->loadObjectStates( $objectState->groupId );
-        $this->objectStateGateway->updateObjectStateLinks( $objectState->id, current( $remainingStates )->id );
+        $remainingStates = $this->loadObjectStates($objectState->groupId);
+        $this->objectStateGateway->updateObjectStateLinks($objectState->id, current($remainingStates)->id);
     }
 
     /**
@@ -311,11 +311,12 @@ class Handler implements BaseObjectStateHandler
      * @param mixed $groupId
      * @param mixed $stateId
      *
-     * @return boolean
+     * @return bool
      */
-    public function setContentState( $contentId, $groupId, $stateId )
+    public function setContentState($contentId, $groupId, $stateId)
     {
-        $this->objectStateGateway->setContentState( $contentId, $groupId, $stateId );
+        $this->objectStateGateway->setContentState($contentId, $groupId, $stateId);
+
         return true;
     }
 
@@ -331,27 +332,26 @@ class Handler implements BaseObjectStateHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState
      */
-    public function getContentState( $contentId, $stateGroupId )
+    public function getContentState($contentId, $stateGroupId)
     {
-        $data = $this->objectStateGateway->loadObjectStateDataForContent( $contentId, $stateGroupId );
+        $data = $this->objectStateGateway->loadObjectStateDataForContent($contentId, $stateGroupId);
 
-        if ( empty( $data ) )
-        {
-            throw new NotFoundException( "ObjectState", array( "groupId" => $stateGroupId ) );
+        if (empty($data)) {
+            throw new NotFoundException('ObjectState', array('groupId' => $stateGroupId));
         }
 
-        return $this->objectStateMapper->createObjectStateFromData( $data );
+        return $this->objectStateMapper->createObjectStateFromData($data);
     }
 
     /**
-     * Returns the number of objects which are in this state
+     * Returns the number of objects which are in this state.
      *
      * @param mixed $stateId
      *
      * @return int
      */
-    public function getContentCount( $stateId )
+    public function getContentCount($stateId)
     {
-        return $this->objectStateGateway->getContentCount( $stateId );
+        return $this->objectStateGateway->getContentCount($stateId);
     }
 }

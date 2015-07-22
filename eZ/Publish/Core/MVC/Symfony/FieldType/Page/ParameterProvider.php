@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the Page ParameterProvider class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,15 +25,15 @@ class ParameterProvider implements ParameterProviderInterface
      */
     protected $pageService;
 
-    public function __construct( PageService $pageService )
+    public function __construct(PageService $pageService)
     {
         $this->pageService = $pageService;
     }
 
-    public function getViewParameters( Field $field )
+    public function getViewParameters(Field $field)
     {
         return array(
-            'pageService'   => $this->pageService
+            'pageService' => $this->pageService,
         );
     }
 }

@@ -1,120 +1,134 @@
 <?php
+
 /**
- * File containing the Content controller class
+ * File containing the Content controller class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Controller;
 
-use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Message;
-use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
-
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Exceptions\ContentValidationException;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Content controller
+ * Content controller.
  */
 class Content extends RestController
 {
     /**
-     * Loads a content info by remote ID
+     * Loads a content info by remote ID.
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException
      *
      * @return \eZ\Publish\Core\REST\Server\Values\TemporaryRedirect
      */
-    public function redirectContent()
+    public function redirectContent(Request $request)
     {
-        if ( !$this->request->query->has( 'remoteId' ) )
-        {
-            throw new BadRequestException( "'remoteId' parameter is required." );
+        if (!$request->query->has('remoteId')) {
+            throw new BadRequestException("'remoteId' parameter is required.");
         }
 
         $contentInfo = $this->repository->getContentService()->loadContentInfoByRemoteId(
-            $this->request->query->get( 'remoteId' )
+            $request->query->get('remoteId')
         );
 
         return new Values\TemporaryRedirect(
             $this->router->generate(
                 'ezpublish_rest_loadContent',
                 array(
-                    'contentId' => $contentInfo->id
+                    'contentId' => $contentInfo->id,
                 )
             )
         );
     }
 
     /**
-     * Loads a content info, potentially with the current version embedded
+     * Loads a content info, potentially with the current version embedded.
      *
      * @param mixed $contentId
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\RestContent
      */
-    public function loadContent( $contentId )
+    public function loadContent($contentId, Request $request)
     {
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( $contentId );
-        $mainLocation = $this->repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
-        $contentType = $this->repository->getContentTypeService()->loadContentType( $contentInfo->contentTypeId );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
+
+        $mainLocation = null;
+        if (!empty($contentInfo->mainLocationId)) {
+            $mainLocation = $this->repository->getLocationService()->loadLocation($contentInfo->mainLocationId);
+        }
+
+        $contentType = $this->repository->getContentTypeService()->loadContentType($contentInfo->contentTypeId);
 
         $contentVersion = null;
         $relations = null;
-        if ( $this->getMediaType() === 'application/vnd.ez.api.content' )
-        {
+        if ($this->getMediaType($request) === 'application/vnd.ez.api.content') {
             $languages = null;
-            if ( $this->request->query->has( 'languages' ) )
-            {
-                $languages = explode( ',', $this->request->query->get( 'languages' ) );
+            if ($request->query->has('languages')) {
+                $languages = explode(',', $request->query->get('languages'));
             }
 
-            $contentVersion = $this->repository->getContentService()->loadContent( $contentId, $languages );
-            $relations = $this->repository->getContentService()->loadRelations( $contentVersion->getVersionInfo() );
+            $contentVersion = $this->repository->getContentService()->loadContent($contentId, $languages);
+            $relations = $this->repository->getContentService()->loadRelations($contentVersion->getVersionInfo());
         }
 
-        return new Values\RestContent(
+        $restContent = new Values\RestContent(
             $contentInfo,
             $mainLocation,
             $contentVersion,
             $contentType,
             $relations,
-            $this->request->getPathInfo()
+            $request->getPathInfo()
+        );
+
+        if ($contentInfo->mainLocationId === null) {
+            return $restContent;
+        }
+
+        return new Values\CachedValue(
+            $restContent,
+            array('locationId' => $contentInfo->mainLocationId)
         );
     }
 
     /**
-     * Updates a content's metadata
+     * Updates a content's metadata.
      *
      * @param mixed $contentId
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\RestContent
      */
-    public function updateContentMetadata( $contentId )
+    public function updateContentMetadata($contentId, Request $request)
     {
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                $this->request->getContent()
+                array('Content-Type' => $request->headers->get('Content-Type')),
+                $request->getContent()
             )
         );
 
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( $contentId );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
 
         // update section
-        if ( $updateStruct->sectionId !== null )
-        {
-            $section = $this->repository->getSectionService->loadSection( $updateStruct->sectionId );
-            $this->repository->getSectionService->assignSection( $contentInfo, $section );
+        if ($updateStruct->sectionId !== null) {
+            $section = $this->repository->getSectionService()->loadSection($updateStruct->sectionId);
+            $this->repository->getSectionService()->assignSection($contentInfo, $section);
             $updateStruct->sectionId = null;
         }
 
@@ -122,23 +136,18 @@ class Content extends RestController
         // in case the updateStruct is empty and if remoteId already exists. Since REST version of update struct
         // includes section ID in addition to other fields, we cannot throw exception if only sectionId property
         // is set, so we must skip updating content in that case instead of allowing propagation of the exception.
-        foreach ( $updateStruct as $propertyName => $propertyValue )
-        {
-            if ( $propertyName !== 'sectionId' && $propertyValue !== null )
-            {
+        foreach ($updateStruct as $propertyName => $propertyValue) {
+            if ($propertyName !== 'sectionId' && $propertyValue !== null) {
                 // update content
-                $this->repository->getContentService()->updateContentMetadata( $contentInfo, $updateStruct );
-                $contentInfo = $this->repository->getContentService()->loadContentInfo( $contentId );
+                $this->repository->getContentService()->updateContentMetadata($contentInfo, $updateStruct);
+                $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
                 break;
             }
         }
 
-        try
-        {
-            $locationInfo = $this->repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
-        }
-        catch ( NotFoundException $e )
-        {
+        try {
+            $locationInfo = $this->repository->getLocationService()->loadLocation($contentInfo->mainLocationId);
+        } catch (NotFoundException $e) {
             $locationInfo = null;
         }
 
@@ -149,44 +158,40 @@ class Content extends RestController
     }
 
     /**
-     * Loads a specific version of a given content object
+     * Loads a specific version of a given content object.
      *
      * @param mixed $contentId
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\TemporaryRedirect
      */
-    public function redirectCurrentVersion( $contentId )
+    public function redirectCurrentVersion($contentId)
     {
-        $versionInfo = $this->repository->getContentService()->loadVersionInfo(
-            $this->repository->getContentService()->loadContentInfo( $contentId )
-        );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
 
         return new Values\TemporaryRedirect(
             $this->router->generate(
                 'ezpublish_rest_loadContentInVersion',
                 array(
                     'contentId' => $contentId,
-                    'versionNumber' => $versionInfo->versionNo
+                    'versionNumber' => $contentInfo->currentVersionNo,
                 )
             )
         );
     }
 
     /**
-     * Loads a specific version of a given content object
+     * Loads a specific version of a given content object.
      *
      * @param mixed $contentId
      * @param int $versionNumber
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\Version
      */
-    public function loadContentInVersion( $contentId, $versionNumber )
+    public function loadContentInVersion($contentId, $versionNumber, Request $request)
     {
-        $questionMark = strpos( $this->request->getPathInfo(), '?' );
-        $requestPath = $questionMark !== false ? substr( $this->request->getPathInfo(), 0, $questionMark ) : $this->request->getPathInfo();
-
         $languages = null;
-        if ( $this->request->query->has( 'languages' ) )
-        {
-            $languages = explode( ',', $this->request->query->get( 'languages' ) );
+        if ($request->query->has('languages')) {
+            $languages = explode(',', $request->query->get('languages'));
         }
 
         $content = $this->repository->getContentService()->loadContent(
@@ -198,11 +203,20 @@ class Content extends RestController
             $content->getVersionInfo()->getContentInfo()->contentTypeId
         );
 
-        return new Values\Version(
+        $versionValue = new Values\Version(
             $content,
             $contentType,
-            $this->repository->getContentService()->loadRelations( $content->getVersionInfo() ),
-            $this->request->getPathInfo()
+            $this->repository->getContentService()->loadRelations($content->getVersionInfo()),
+            $request->getPathInfo()
+        );
+
+        if ($content->contentInfo->mainLocationId === null) {
+            return $versionValue;
+        }
+
+        return new Values\CachedValue(
+            $versionValue,
+            array('locationId' => $content->contentInfo->mainLocationId)
         );
     }
 
@@ -217,41 +231,35 @@ class Content extends RestController
      *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedContent
      */
-    public function createContent()
+    public function createContent(Request $request)
     {
         $contentCreate = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                $this->request->getContent()
+                array('Content-Type' => $request->headers->get('Content-Type')),
+                $request->getContent()
             )
         );
 
-        try
-        {
+        try {
             $content = $this->repository->getContentService()->createContent(
                 $contentCreate->contentCreateStruct,
-                array( $contentCreate->locationCreateStruct )
+                array($contentCreate->locationCreateStruct)
             );
-        }
-        catch ( ContentValidationException $e )
-        {
-            throw new BadRequestException( $e->getMessage() );
-        }
-        catch ( ContentFieldValidationException $e )
-        {
-            throw new BadRequestException( $e->getMessage() );
+        } catch (ContentValidationException $e) {
+            throw new BadRequestException($e->getMessage());
+        } catch (ContentFieldValidationException $e) {
+            throw new BadRequestException($e->getMessage());
         }
 
         $contentValue = null;
         $contentType = null;
         $relations = null;
-        if ( $this->getMediaType() === 'application/vnd.ez.api.content' )
-        {
+        if ($this->getMediaType($request) === 'application/vnd.ez.api.content') {
             $contentValue = $content;
             $contentType = $this->repository->getContentTypeService()->loadContentType(
                 $content->getVersionInfo()->getContentInfo()->contentTypeId
             );
-            $relations = $this->repository->getContentService()->loadRelations( $contentValue->getVersionInfo() );
+            $relations = $this->repository->getContentService()->loadRelations($contentValue->getVersionInfo());
         }
 
         return new Values\CreatedContent(
@@ -262,7 +270,7 @@ class Content extends RestController
                     $contentValue,
                     $contentType,
                     $relations
-                )
+                ),
             )
         );
     }
@@ -272,12 +280,13 @@ class Content extends RestController
      * on delete all locations assigned the content object are deleted via delete subtree.
      *
      * @param mixed $contentId
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function deleteContent( $contentId )
+    public function deleteContent($contentId)
     {
         $this->repository->getContentService()->deleteContent(
-            $this->repository->getContentService()->loadContentInfo( $contentId )
+            $this->repository->getContentService()->loadContentInfo($contentId)
         );
 
         return new Values\NoContent();
@@ -286,24 +295,24 @@ class Content extends RestController
     /**
      * Creates a new content object as copy under the given parent location given in the destination header.
      *
-     * @param $contentId
+     * @param mixed $contentId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
-    public function copyContent( $contentId )
+    public function copyContent($contentId, Request $request)
     {
-        $destination = $this->request->headers->get( 'Destination' );
+        $destination = $request->headers->get('Destination');
 
-        $parentLocationParts = explode( '/', $destination );
+        $parentLocationParts = explode('/', $destination);
         $copiedContent = $this->repository->getContentService()->copyContent(
-            $this->repository->getContentService()->loadContentInfo( $contentId ),
-            $this->repository->getLocationService()->newLocationCreateStruct( array_pop( $parentLocationParts ) )
+            $this->repository->getContentService()->loadContentInfo($contentId),
+            $this->repository->getLocationService()->newLocationCreateStruct(array_pop($parentLocationParts))
         );
 
         return new Values\ResourceCreated(
             $this->router->generate(
                 'ezpublish_rest_loadContent',
-                array( 'contentId' => $copiedContent->id )
+                array('contentId' => $copiedContent->id)
             )
         );
     }
@@ -313,37 +322,47 @@ class Content extends RestController
      * include fields and relations in the Version elements of the response.
      *
      * @param mixed $contentId
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\VersionList
      */
-    public function loadContentVersions( $contentId )
+    public function loadContentVersions($contentId, Request $request)
     {
-        return new Values\VersionList(
-            $this->repository->getContentService()->loadVersions(
-                $this->repository->getContentService()->loadContentInfo( $contentId )
-            ),
-            $this->request->getPathInfo()
+        $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
+
+        $versionList = new Values\VersionList(
+            $this->repository->getContentService()->loadVersions($contentInfo),
+            $request->getPathInfo()
+        );
+
+        if ($contentInfo->mainLocationId === null) {
+            return $versionList;
+        }
+
+        return new Values\CachedValue(
+            $versionList,
+            array('locationId' => $contentInfo->mainLocationId)
         );
     }
 
     /**
-     * The version is deleted
+     * The version is deleted.
      *
      * @param mixed $contentId
      * @param mixed $versionNumber
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function deleteContentVersion( $contentId, $versionNumber )
+    public function deleteContentVersion($contentId, $versionNumber)
     {
         $versionInfo = $this->repository->getContentService()->loadVersionInfo(
-            $this->repository->getContentService()->loadContentInfo( $contentId ),
+            $this->repository->getContentService()->loadContentInfo($contentId),
             $versionNumber
         );
 
-        if ( $versionInfo->status === VersionInfo::STATUS_PUBLISHED )
-        {
-            throw new ForbiddenException( 'Version in status PUBLISHED cannot be deleted' );
+        if ($versionInfo->status === VersionInfo::STATUS_PUBLISHED) {
+            throw new ForbiddenException('Version in status PUBLISHED cannot be deleted');
         }
 
         $this->repository->getContentService()->deleteVersion(
@@ -354,22 +373,20 @@ class Content extends RestController
     }
 
     /**
-     * The system creates a new draft version as a copy from the given version
+     * The system creates a new draft version as a copy from the given version.
      *
      * @param mixed $contentId
      * @param mixed $versionNumber
      *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedVersion
      */
-    public function createDraftFromVersion( $contentId, $versionNumber )
+    public function createDraftFromVersion($contentId, $versionNumber)
     {
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( $contentId );
-        $contentType = $this->repository->getContentTypeService()->loadContentType( $contentInfo->contentTypeId );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
+        $contentType = $this->repository->getContentTypeService()->loadContentType($contentInfo->contentTypeId);
         $contentDraft = $this->repository->getContentService()->createContentDraft(
             $contentInfo,
-            $this->repository->getContentService()->loadVersionInfo(
-                $contentInfo, $versionNumber
-            )
+            $this->repository->getContentService()->loadVersionInfo($contentInfo, $versionNumber)
         );
 
         return new Values\CreatedVersion(
@@ -377,42 +394,42 @@ class Content extends RestController
                 'version' => new Values\Version(
                     $contentDraft,
                     $contentType,
-                    $this->repository->getContentService()->loadRelations( $contentDraft->getVersionInfo() )
-                )
+                    $this->repository->getContentService()->loadRelations($contentDraft->getVersionInfo())
+                ),
             )
         );
     }
 
     /**
-     * The system creates a new draft version as a copy from the current version
+     * The system creates a new draft version as a copy from the current version.
      *
      * @param mixed $contentId
      *
      * @throws ForbiddenException if the current version is already a draft
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedVersion
      */
-    public function createDraftFromCurrentVersion( $contentId )
+    public function createDraftFromCurrentVersion($contentId)
     {
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( $contentId  );
-        $contentType = $this->repository->getContentTypeService()->loadContentType( $contentInfo->contentTypeId );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
+        $contentType = $this->repository->getContentTypeService()->loadContentType($contentInfo->contentTypeId);
         $versionInfo = $this->repository->getContentService()->loadVersionInfo(
             $contentInfo
         );
 
-        if ( $versionInfo->status === VersionInfo::STATUS_DRAFT )
-        {
-            throw new ForbiddenException( 'Current version is already in status DRAFT' );
+        if ($versionInfo->status === VersionInfo::STATUS_DRAFT) {
+            throw new ForbiddenException('Current version is already in status DRAFT');
         }
 
-        $contentDraft = $this->repository->getContentService()->createContentDraft( $contentInfo );
+        $contentDraft = $this->repository->getContentService()->createContentDraft($contentInfo);
 
         return new Values\CreatedVersion(
             array(
                 'version' => new Values\Version(
                     $contentDraft,
                     $contentType,
-                    $this->repository->getContentService()->loadRelations( $contentDraft->getVersionInfo() )
-                )
+                    $this->repository->getContentService()->loadRelations($contentDraft->getVersionInfo())
+                ),
             )
         );
     }
@@ -425,52 +442,47 @@ class Content extends RestController
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\Version
      */
-    public function updateVersion( $contentId, $versionNumber )
+    public function updateVersion($contentId, $versionNumber, Request $request)
     {
         $contentUpdateStruct = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $this->request->headers->get( 'Content-Type' ),
+                    'Content-Type' => $request->headers->get('Content-Type'),
                     'Url' => $this->router->generate(
-                        'ezpublish_rest_updateVersion', array(
+                        'ezpublish_rest_updateVersion',
+                        array(
                             'contentId' => $contentId,
-                            'versionNumber' => $versionNumber
+                            'versionNumber' => $versionNumber,
                         )
-                    )
+                    ),
                 ),
-                $this->request->getContent()
+                $request->getContent()
             )
         );
 
         $versionInfo = $this->repository->getContentService()->loadVersionInfo(
-            $this->repository->getContentService()->loadContentInfo( $contentId ),
+            $this->repository->getContentService()->loadContentInfo($contentId),
             $versionNumber
         );
 
-        if ( $versionInfo->status !== VersionInfo::STATUS_DRAFT )
-        {
-            throw new ForbiddenException( 'Only version in status DRAFT can be updated' );
+        if ($versionInfo->status !== VersionInfo::STATUS_DRAFT) {
+            throw new ForbiddenException('Only version in status DRAFT can be updated');
         }
 
-        try
-        {
-            $this->repository->getContentService()->updateContent( $versionInfo, $contentUpdateStruct );
-        }
-        catch ( ContentValidationException $e )
-        {
-            throw new BadRequestException( $e->getMessage() );
-        }
-        catch ( ContentFieldValidationException $e )
-        {
-            throw new BadRequestException( $e->getMessage() );
+        try {
+            $this->repository->getContentService()->updateContent($versionInfo, $contentUpdateStruct);
+        } catch (ContentValidationException $e) {
+            throw new BadRequestException($e->getMessage());
+        } catch (ContentFieldValidationException $e) {
+            throw new BadRequestException($e->getMessage());
         }
 
         $languages = null;
-        if ( $this->request->query->has( 'languages' ) )
-        {
-            $languages = explode( ',', $this->request->query->get( 'languages' ) );
+        if ($request->query->has('languages')) {
+            $languages = explode(',', $request->query->get('languages'));
         }
 
         // Reload the content to handle languages GET parameter
@@ -486,30 +498,30 @@ class Content extends RestController
         return new Values\Version(
             $content,
             $contentType,
-            $this->repository->getContentService()->loadRelations( $content->getVersionInfo() ),
-            $this->request->getPathInfo()
+            $this->repository->getContentService()->loadRelations($content->getVersionInfo()),
+            $request->getPathInfo()
         );
     }
 
     /**
-     * The content version is published
+     * The content version is published.
      *
      * @param mixed $contentId
      * @param mixed $versionNumber
      *
      * @throws ForbiddenException if version $versionNumber isn't a draft
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function publishVersion( $contentId, $versionNumber )
+    public function publishVersion($contentId, $versionNumber)
     {
         $versionInfo = $this->repository->getContentService()->loadVersionInfo(
-            $this->repository->getContentService()->loadContentInfo( $contentId ),
+            $this->repository->getContentService()->loadContentInfo($contentId),
             $versionNumber
         );
 
-        if ( $versionInfo->status !== VersionInfo::STATUS_DRAFT )
-        {
-            throw new ForbiddenException( 'Only version in status DRAFT can be published' );
+        if ($versionInfo->status !== VersionInfo::STATUS_DRAFT) {
+            throw new ForbiddenException('Only version in status DRAFT can be published');
         }
 
         $this->repository->getContentService()->publishVersion(
@@ -520,44 +532,43 @@ class Content extends RestController
     }
 
     /**
-     * Redirects to the relations of the current version
+     * Redirects to the relations of the current version.
      *
      * @param mixed $contentId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\TemporaryRedirect
      */
-    public function redirectCurrentVersionRelations( $contentId )
+    public function redirectCurrentVersionRelations($contentId)
     {
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( $contentId );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
+
         return new Values\TemporaryRedirect(
             $this->router->generate(
                 'ezpublish_rest_redirectCurrentVersionRelations',
                 array(
                     'contentId' => $contentId,
-                    'versionNumber' => $contentInfo->currentVersionNo
+                    'versionNumber' => $contentInfo->currentVersionNo,
                 )
             )
         );
     }
 
     /**
-     * Loads the relations of the given version
+     * Loads the relations of the given version.
      *
      * @param mixed $contentId
      * @param mixed $versionNumber
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RelationList
      */
-    public function loadVersionRelations( $contentId, $versionNumber )
+    public function loadVersionRelations($contentId, $versionNumber, Request $request)
     {
-        $offset = $this->request->query->has( 'offset' ) ? (int)$this->request->query->get( 'offset' ) : 0;
-        $limit = $this->request->query->has( 'limit' ) ? (int)$this->request->query->get( 'limit' ) : -1;
+        $offset = $request->query->has('offset') ? (int)$request->query->get('offset') : 0;
+        $limit = $request->query->has('limit') ? (int)$request->query->get('limit') : -1;
 
+        $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
         $relationList = $this->repository->getContentService()->loadRelations(
-            $this->repository->getContentService()->loadVersionInfo(
-                $this->repository->getContentService()->loadContentInfo( $contentId ),
-                $versionNumber
-            )
+            $this->repository->getContentService()->loadVersionInfo($contentInfo, $versionNumber)
         );
 
         $relationList = array_slice(
@@ -566,42 +577,57 @@ class Content extends RestController
             $limit >= 0 ? $limit : null
         );
 
-        return new Values\RelationList(
+        $relationListValue = new Values\RelationList(
             $relationList,
             $contentId,
             $versionNumber,
-            $this->request->getPathInfo()
+            $request->getPathInfo()
+        );
+
+        if ($contentInfo->mainLocationId === null) {
+            return $relationListValue;
+        }
+
+        return new Values\CachedValue(
+            $relationListValue,
+            array('locationId' => $contentInfo->mainLocationId)
         );
     }
 
     /**
-     * Loads a relation for the given content object and version
+     * Loads a relation for the given content object and version.
      *
      * @param mixed $contentId
-     * @param int   $versionNumber
+     * @param int $versionNumber
      * @param mixed $relationId
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\RestRelation
      */
-    public function loadVersionRelation( $contentId, $versionNumber, $relationId )
+    public function loadVersionRelation($contentId, $versionNumber, $relationId, Request $request)
     {
+        $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
         $relationList = $this->repository->getContentService()->loadRelations(
-            $this->repository->getContentService()->loadVersionInfo(
-                $this->repository->getContentService()->loadContentInfo( $contentId ),
-                $versionNumber
-            )
+            $this->repository->getContentService()->loadVersionInfo($contentInfo, $versionNumber)
         );
 
-        foreach ( $relationList as $relation )
-        {
-            if ( $relation->id == $relationId )
-            {
-                return new Values\RestRelation( $relation, $contentId, $versionNumber );
+        foreach ($relationList as $relation) {
+            if ($relation->id == $relationId) {
+                $relation = new Values\RestRelation($relation, $contentId, $versionNumber);
+
+                if ($contentInfo->mainLocationId === null) {
+                    return $relation;
+                }
+
+                return new Values\CachedValue(
+                    new Values\LocationList($relation, $request->getPathInfo()),
+                    array('locationId' => $contentInfo->mainLocationId)
+                );
             }
         }
 
-        throw new Exceptions\NotFoundException( "Relation not found: '{$this->request->getPathInfo()}'." );
+        throw new Exceptions\NotFoundException("Relation not found: '{$request->getPathInfo()}'.");
     }
 
     /**
@@ -613,36 +639,34 @@ class Content extends RestController
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function removeRelation( $contentId, $versionNumber, $relationId )
+    public function removeRelation($contentId, $versionNumber, $relationId, Request $request)
     {
         $versionInfo = $this->repository->getContentService()->loadVersionInfo(
-            $this->repository->getContentService()->loadContentInfo( $contentId ),
+            $this->repository->getContentService()->loadContentInfo($contentId),
             $versionNumber
         );
 
-        $versionRelations = $this->repository->getContentService()->loadRelations( $versionInfo );
-        foreach ( $versionRelations as $relation )
-        {
-            if ( $relation->id == $relationId )
-            {
-                if ( $relation->type !== Relation::COMMON )
-                {
-                    throw new ForbiddenException( "Relation is not of type COMMON" );
+        $versionRelations = $this->repository->getContentService()->loadRelations($versionInfo);
+        foreach ($versionRelations as $relation) {
+            if ($relation->id == $relationId) {
+                if ($relation->type !== Relation::COMMON) {
+                    throw new ForbiddenException('Relation is not of type COMMON');
                 }
 
-                if ( $versionInfo->status !== VersionInfo::STATUS_DRAFT )
-                {
-                    throw new ForbiddenException( "Relation of type COMMON can only be removed from drafts" );
+                if ($versionInfo->status !== VersionInfo::STATUS_DRAFT) {
+                    throw new ForbiddenException('Relation of type COMMON can only be removed from drafts');
                 }
 
-                $this->repository->getContentService()->deleteRelation( $versionInfo, $relation->getDestinationContentInfo() );
+                $this->repository->getContentService()->deleteRelation($versionInfo, $relation->getDestinationContentInfo());
+
                 return new Values\NoContent();
             }
         }
 
-        throw new Exceptions\NotFoundException( "Relation not found: '{$this->request->getPathInfo()}'." );
+        throw new Exceptions\NotFoundException("Relation not found: '{$request->getPathInfo()}'.");
     }
 
     /**
@@ -653,68 +677,95 @@ class Content extends RestController
      *
      * @throws ForbiddenException if version $versionNumber isn't a draft
      * @throws ForbiddenException if a relation to the same content already exists
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedRelation
      */
-    public function createRelation( $contentId, $versionNumber )
+    public function createRelation($contentId, $versionNumber, Request $request)
     {
         $destinationContentId = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                $this->request->getContent()
+                array('Content-Type' => $request->headers->get('Content-Type')),
+                $request->getContent()
             )
         );
 
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( $contentId );
-        $versionInfo = $this->repository->getContentService()->loadVersionInfo( $contentInfo, $versionNumber );
-        if ( $versionInfo->status !== VersionInfo::STATUS_DRAFT )
-        {
-            throw new ForbiddenException( "Relation of type COMMON can only be added to drafts" );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
+        $versionInfo = $this->repository->getContentService()->loadVersionInfo($contentInfo, $versionNumber);
+        if ($versionInfo->status !== VersionInfo::STATUS_DRAFT) {
+            throw new ForbiddenException('Relation of type COMMON can only be added to drafts');
         }
 
-        try
-        {
-            $destinationContentInfo = $this->repository->getContentService()->loadContentInfo( $destinationContentId );
-        }
-        catch ( NotFoundException $e )
-        {
-            throw new ForbiddenException( $e->getMessage() );
+        try {
+            $destinationContentInfo = $this->repository->getContentService()->loadContentInfo($destinationContentId);
+        } catch (NotFoundException $e) {
+            throw new ForbiddenException($e->getMessage());
         }
 
-        $existingRelations = $this->repository->getContentService()->loadRelations( $versionInfo );
-        foreach ( $existingRelations as $existingRelation )
-        {
-            if ( $existingRelation->getDestinationContentInfo()->id == $destinationContentId )
-            {
-                throw new ForbiddenException( "Relation of type COMMON to selected destination content ID already exists" );
+        $existingRelations = $this->repository->getContentService()->loadRelations($versionInfo);
+        foreach ($existingRelations as $existingRelation) {
+            if ($existingRelation->getDestinationContentInfo()->id == $destinationContentId) {
+                throw new ForbiddenException('Relation of type COMMON to selected destination content ID already exists');
             }
         }
 
-        $relation = $this->repository->getContentService()->addRelation( $versionInfo, $destinationContentInfo );
+        $relation = $this->repository->getContentService()->addRelation($versionInfo, $destinationContentInfo);
+
         return new Values\CreatedRelation(
             array(
-                'relation' => new Values\RestRelation( $relation, $contentId, $versionNumber )
+                'relation' => new Values\RestRelation($relation, $contentId, $versionNumber),
             )
         );
     }
 
     /**
-     * Creates and executes a content view
+     * Creates and executes a content view.
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RestExecutedView
      */
-    public function createView()
+    public function createView(Request $request)
     {
         $viewInput = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                $this->request->getContent()
+                array('Content-Type' => $request->headers->get('Content-Type')),
+                $request->getContent()
             )
         );
+
         return new Values\RestExecutedView(
             array(
-                'identifier'    => $viewInput->identifier,
-                'searchResults' => $this->repository->getSearchService()->findContent( $viewInput->query ),
+                'identifier' => $viewInput->identifier,
+                'searchResults' => $this->repository->getSearchService()->findContent($viewInput->query),
             )
         );
+    }
+
+    /**
+     * List content views.
+     *
+     * @return NotImplementedException;
+     */
+    public function listView()
+    {
+        return new NotImplementedException('ezpublish_rest.controller.content:listView');
+    }
+
+    /**
+     * Get a content view.
+     *
+     * @return NotImplementedException;
+     */
+    public function getView()
+    {
+        return new NotImplementedException('ezpublish_rest.controller.content:getView');
+    }
+
+    /**
+     * Get a content view results.
+     *
+     * @return NotImplementedException;
+     */
+    public function loadViewResults()
+    {
+        return new NotImplementedException('ezpublish_rest.controller.content:loadViewResults');
     }
 }

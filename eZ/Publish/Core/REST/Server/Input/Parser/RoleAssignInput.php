@@ -1,79 +1,74 @@
 <?php
+
 /**
- * File containing the RoleAssignInput parser class
+ * File containing the RoleAssignInput parser class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Exceptions;
-
 use eZ\Publish\Core\REST\Server\Values\RoleAssignment;
 
 /**
- * Parser for RoleAssignInput
+ * Parser for RoleAssignInput.
  */
-class RoleAssignInput extends Base
+class RoleAssignInput extends BaseParser
 {
     /**
-     * Parser tools
+     * Parser tools.
      *
      * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
      */
     protected $parserTools;
 
     /**
-     * Construct
+     * Construct.
      *
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( ParserTools $parserTools )
+    public function __construct(ParserTools $parserTools)
     {
         $this->parserTools = $parserTools;
     }
 
     /**
-     * Parse input structure
+     * Parse input structure.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RoleAssignment
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        if ( !array_key_exists( 'Role', $data ) )
-        {
-            throw new Exceptions\Parser( "Missing 'Role' element for RoleAssignInput." );
+        if (!array_key_exists('Role', $data)) {
+            throw new Exceptions\Parser("Missing 'Role' element for RoleAssignInput.");
         }
 
-        if ( !is_array( $data['Role'] ) || !array_key_exists( '_href', $data['Role'] ) )
-        {
-            throw new Exceptions\Parser( "Invalid 'Role' element for RoleAssignInput." );
+        if (!is_array($data['Role']) || !array_key_exists('_href', $data['Role'])) {
+            throw new Exceptions\Parser("Invalid 'Role' element for RoleAssignInput.");
         }
 
-        try
-        {
-            $roleId = $this->requestParser->parseHref( $data['Role']['_href'], 'roleId' );
-        }
-        catch ( Exceptions\InvalidArgumentException $e )
-        {
-            throw new Exceptions\Parser( 'Invalid format for <Role> reference in <RoleAssignInput>.' );
+        try {
+            $roleId = $this->requestParser->parseHref($data['Role']['_href'], 'roleId');
+        } catch (Exceptions\InvalidArgumentException $e) {
+            throw new Exceptions\Parser('Invalid format for <Role> reference in <RoleAssignInput>.');
         }
 
         // @todo XSD says that limitation is mandatory, but roles can be assigned without limitations
         $limitation = null;
-        if ( array_key_exists( 'limitation', $data ) && is_array( $data['limitation'] ) )
-        {
-            $limitation = $this->parserTools->parseLimitation( $data['limitation'] );
+        if (array_key_exists('limitation', $data) && is_array($data['limitation'])) {
+            $limitation = $this->parserTools->parseLimitation($data['limitation']);
         }
 
-        return new RoleAssignment( $roleId, $limitation );
+        return new RoleAssignment($roleId, $limitation);
     }
 }

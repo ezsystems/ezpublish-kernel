@@ -1,35 +1,35 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Values\ContentObjectStates;
-use eZ\Publish\Core\REST\Common;
 
 class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the ContentObjectStates visitor
+     * Test the ContentObjectStates visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
-        $stateList = new ContentObjectStates( array() );
+        $stateList = new ContentObjectStates(array());
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -37,23 +37,23 @@ class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
             $stateList
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains ContentObjectStates element
+     * Test if result contains ContentObjectStates element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsContentObjectStatesElement( $result )
+    public function testResultContainsContentObjectStatesElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'ContentObjectStates',
             ),
@@ -64,20 +64,20 @@ class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains ContentObjectStates element attributes
+     * Test if result contains ContentObjectStates element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsContentObjectStatesAttributes( $result )
+    public function testResultContainsContentObjectStatesAttributes($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'ContentObjectStates',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ContentObjectStates+xml',
-                )
+                ),
             ),
             $result,
             'Invalid <ContentObjectStates> attributes.',
@@ -86,12 +86,12 @@ class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the ContentObjectStates visitor
+     * Get the ContentObjectStates visitor.
      *
      * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\ContentObjectStates
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\ContentObjectStates;
+        return new ValueObjectVisitor\ContentObjectStates();
     }
 }

@@ -1,24 +1,26 @@
 <?php
+
 /**
- * File containing the ContentTypeGroupList parser class
+ * File containing the ContentTypeGroupList parser class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
 /**
- * Parser for ContentTypeGroupList
+ * Parser for ContentTypeGroupList.
  */
-class ContentTypeGroupList extends Parser
+class ContentTypeGroupList extends BaseParser
 {
     /**
-     * Parse input structure
+     * Parse input structure.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -27,16 +29,16 @@ class ContentTypeGroupList extends Parser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section[]
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
         $contentTypeGroups = array();
-        foreach ( $data['ContentTypeGroup'] as $rawContentTypeGroupData )
-        {
+        foreach ($data['ContentTypeGroup'] as $rawContentTypeGroupData) {
             $contentTypeGroups[] = $parsingDispatcher->parse(
                 $rawContentTypeGroupData,
                 $rawContentTypeGroupData['_media-type']
             );
         }
+
         return $contentTypeGroups;
     }
 }

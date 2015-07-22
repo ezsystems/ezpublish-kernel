@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ObjectStateGroup class
+ * File containing the ObjectStateGroup class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,7 @@ namespace eZ\Publish\API\Repository\Values\ObjectState;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * This class represents an object state group value
+ * This class represents an object state group value.
  *
  * @property-read mixed $id the id of the content type group
  * @property-read string $identifier the identifier of the content type group
@@ -22,28 +24,28 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 abstract class ObjectStateGroup extends ValueObject
 {
     /**
-     * Primary key
+     * Primary key.
      *
      * @var mixed
      */
     protected $id;
 
     /**
-     * Readable string identifier of a group
+     * Readable string identifier of a group.
      *
      * @var string
      */
     protected $identifier;
 
     /**
-     * The default language code
+     * The default language code.
      *
      * @var string
      */
     protected $defaultLanguageCode;
 
     /**
-     * The available language codes for names an descriptions
+     * The available language codes for names an descriptions.
      *
      * @var string[]
      */
@@ -51,7 +53,7 @@ abstract class ObjectStateGroup extends ValueObject
 
     /**
      * This method returns the human readable name in all provided languages
-     * of the content type
+     * of the content type.
      *
      * The structure of the return value is:
      * <code>
@@ -63,16 +65,16 @@ abstract class ObjectStateGroup extends ValueObject
     abstract public function getNames();
 
     /**
-     * This method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language.
      *
      * @param string $languageCode
      *
      * @return string the name for the given language or null if none exists.
      */
-    abstract public function getName( $languageCode );
+    abstract public function getName($languageCode);
 
     /**
-     * This method returns the human readable description of the content type
+     * This method returns the human readable description of the content type.
      *
      * The structure of this field is:
      * <code>
@@ -84,12 +86,11 @@ abstract class ObjectStateGroup extends ValueObject
     abstract public function getDescriptions();
 
     /**
-     * This method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language.
      *
      * @param string $languageCode
      *
      * @return string the description for the given language or null if none exists.
      */
-    abstract public function getDescription( $languageCode );
-
+    abstract public function getDescription($languageCode);
 }

@@ -1,39 +1,31 @@
 <?php
+
 /**
  * File containing the CoreVoter class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter;
 
+use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
-use eZ\Publish\Core\MVC\Symfony\Security\User;
 
 class CoreVoter implements VoterInterface
 {
     /**
-     * @var \Closure
+     * @var \eZ\Publish\API\Repository\Repository
      */
-    private $lazyRepository;
+    private $repository;
 
-    public function __construct( \Closure $lazyRepository )
+    public function __construct(Repository $repository)
     {
-        $this->lazyRepository = $lazyRepository;
-    }
-
-    /**
-     * @return \eZ\Publish\API\Repository\Repository
-     */
-    protected function getRepository()
-    {
-        $lazyRepository = $this->lazyRepository;
-        return $lazyRepository();
+        $this->repository = $repository;
     }
 
     /**
@@ -43,9 +35,9 @@ class CoreVoter implements VoterInterface
      *
      * @return Boolean true if this Voter supports the attribute, false otherwise
      */
-    public function supportsAttribute( $attribute )
+    public function supportsAttribute($attribute)
     {
-        return $attribute instanceof AuthorizationAttribute;
+        return $attribute instanceof AuthorizationAttribute && empty($attribute->limitations);
     }
 
     /**
@@ -55,7 +47,7 @@ class CoreVoter implements VoterInterface
      *
      * @return true if this Voter can process the class
      */
-    public function supportsClass( $class )
+    public function supportsClass($class)
     {
         return true;
     }
@@ -70,23 +62,17 @@ class CoreVoter implements VoterInterface
      * @param object $object The object to secure
      * @param array $attributes An array of attributes associated with the method being invoked
      *
-     * @return integer either ACCESS_GRANTED, ACCESS_ABSTAIN, or ACCESS_DENIED
+     * @return int either ACCESS_GRANTED, ACCESS_ABSTAIN, or ACCESS_DENIED
      */
-    public function vote( TokenInterface $token, $object, array $attributes )
+    public function vote(TokenInterface $token, $object, array $attributes)
     {
-        $user = $token->getUser();
-        if ( $user instanceof User )
-        {
-            foreach ( $attributes as $attribute )
-            {
-                if ( $this->supportsAttribute( $attribute ) )
-                {
-                    // @todo: add limitation when available in the repository
-                    if ( $this->getRepository()->hasAccess( $attribute->module, $attribute->function ) === false )
-                        return VoterInterface::ACCESS_DENIED;
-
-                    return VoterInterface::ACCESS_GRANTED;
+        foreach ($attributes as $attribute) {
+            if ($this->supportsAttribute($attribute)) {
+                if ($this->repository->hasAccess($attribute->module, $attribute->function) === false) {
+                    return VoterInterface::ACCESS_DENIED;
                 }
+
+                return VoterInterface::ACCESS_GRANTED;
             }
         }
 

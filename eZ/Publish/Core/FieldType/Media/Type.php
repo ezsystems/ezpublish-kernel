@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Media Type class
+ * File containing the Media Type class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,6 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\SPI\fieldType\Value as SPIValue;
-use eZ\Publish\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
 
 /**
  * The TextLine field type.
@@ -25,7 +26,7 @@ use eZ\Publish\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
 class Type extends BaseType
 {
     /**
-     * List of possible media type settings
+     * List of possible media type settings.
      */
     const TYPE_FLASH = 'flash',
           TYPE_QUICKTIME = 'quick_time',
@@ -45,7 +46,7 @@ class Type extends BaseType
         self::TYPE_SILVERLIGHT,
         self::TYPE_WINDOWSMEDIA,
         self::TYPE_HTML5_VIDEO,
-        self::TYPE_HTML5_AUDIO
+        self::TYPE_HTML5_AUDIO,
     );
 
     /**
@@ -55,17 +56,17 @@ class Type extends BaseType
         'mediaType' => array(
             'type' => 'choice',
             'default' => self::TYPE_HTML5_VIDEO,
-        )
+        ),
     );
 
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
     public function getFieldTypeIdentifier()
     {
-        return "ezmedia";
+        return 'ezmedia';
     }
 
     /**
@@ -76,48 +77,44 @@ class Type extends BaseType
      */
     public function getEmptyValue()
     {
-        return new Value;
+        return new Value();
     }
 
     /**
-     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
      * @param mixed $fieldSettings
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateFieldSettings( $fieldSettings )
+    public function validateFieldSettings($fieldSettings)
     {
         $validationErrors = array();
 
-        foreach ( $fieldSettings as $name => $value )
-        {
-            if ( isset( $this->settingsSchema[$name] ) )
-            {
-                switch ( $name )
-                {
-                    case "mediaType":
-                        if ( !in_array( $value, self::$availableTypes ) )
-                        {
+        foreach ($fieldSettings as $name => $value) {
+            if (isset($this->settingsSchema[$name])) {
+                switch ($name) {
+                    case 'mediaType':
+                        if (!in_array($value, self::$availableTypes)) {
                             $validationErrors[] = new ValidationError(
                                 "Setting '%setting%' is of unknown type",
                                 null,
                                 array(
-                                    "setting" => $name
-                                )
+                                    'setting' => $name,
+                                ),
+                                "[$name]"
                             );
                         }
                         break;
                 }
-            }
-            else
-            {
+            } else {
                 $validationErrors[] = new ValidationError(
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        "setting" => $name
-                    )
+                        'setting' => $name,
+                    ),
+                    "[$name]"
                 );
             }
         }
@@ -126,15 +123,15 @@ class Type extends BaseType
     }
 
     /**
-     * Creates a specific value of the derived class from $inputValue
+     * Creates a specific value of the derived class from $inputValue.
      *
      * @param array $inputValue
      *
      * @return Value
      */
-    protected function createValue( array $inputValue )
+    protected function createValue(array $inputValue)
     {
-        return new Value( $inputValue );
+        return new Value($inputValue);
     }
 
     /**
@@ -143,31 +140,26 @@ class Type extends BaseType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\Media\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
-        parent::checkValueStructure( $value );
+        parent::checkValueStructure($value);
 
-        if ( !is_bool( $value->hasController ) )
-        {
+        if (!is_bool($value->hasController)) {
             throw new InvalidArgumentType(
                 '$value->hasController',
                 'bool',
                 $value->hasController
             );
         }
-        if ( !is_bool( $value->autoplay ) )
-        {
+        if (!is_bool($value->autoplay)) {
             throw new InvalidArgumentType(
                 '$value->autoplay',
                 'bool',
                 $value->autoplay
             );
         }
-        if ( !is_bool( $value->loop ) )
-        {
+        if (!is_bool($value->loop)) {
             throw new InvalidArgumentType(
                 '$value->loop',
                 'bool',
@@ -175,16 +167,14 @@ class Type extends BaseType
             );
         }
 
-        if ( !is_int( $value->height ) )
-        {
+        if (!is_int($value->height)) {
             throw new InvalidArgumentType(
                 '$value->height',
                 'int',
                 $value->height
             );
         }
-        if ( !is_int( $value->width ) )
-        {
+        if (!is_int($value->width)) {
             throw new InvalidArgumentType(
                 '$value->width',
                 'int',
@@ -194,54 +184,46 @@ class Type extends BaseType
     }
 
     /**
-     * Attempts to complete the data in $value
+     * Attempts to complete the data in $value.
      *
-     * @param mixed $value
-     *
-     * @return void
+     * @param \eZ\Publish\Core\FieldType\Media\Value|\eZ\Publish\Core\FieldType\Value $value
      */
-    protected function completeValue( $value )
+    protected function completeValue(BaseValue $value)
     {
-        parent::completeValue( $value );
+        parent::completeValue($value);
 
-        if ( !isset( $value->hasController ) )
-        {
+        if (isset($value->hasController) && $value->hasController === null) {
             $value->hasController = false;
         }
-        if ( !isset( $value->autoplay ) )
-        {
+        if (isset($value->autoplay) && $value->autoplay === null) {
             $value->autoplay = false;
         }
-        if ( !isset( $value->loop ) )
-        {
+        if (isset($value->loop) && $value->loop === null) {
             $value->loop = false;
         }
 
-        if ( !isset( $value->height ) )
-        {
+        if (isset($value->height) && $value->height === null) {
             $value->height = 0;
         }
-        if ( !isset( $value->width ) )
-        {
+        if (isset($value->width) && $value->width === null) {
             $value->width = 0;
         }
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\Media\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
-        if ( $this->isEmptyValue( $value ) )
-        {
+        if ($this->isEmptyValue($value)) {
             return null;
         }
 
-        $hash = parent::toHash( $value );
+        $hash = parent::toHash($value);
 
         $hash['hasController'] = $value->hasController;
         $hash['autoplay'] = $value->autoplay;
@@ -253,7 +235,7 @@ class Type extends BaseType
     }
 
     /**
-     * Converts a persistence $fieldValue to a Value
+     * Converts a persistence $fieldValue to a Value.
      *
      * This method builds a field type value from the $data and $externalData properties.
      *
@@ -261,31 +243,40 @@ class Type extends BaseType
      *
      * @return \eZ\Publish\Core\FieldType\Media\Value
      */
-    public function fromPersistenceValue( FieldValue $fieldValue )
+    public function fromPersistenceValue(FieldValue $fieldValue)
     {
-        if ( $fieldValue->externalData === null )
-        {
+        if ($fieldValue->externalData === null) {
             return $this->getEmptyValue();
         }
 
-        $result = parent::fromPersistenceValue( $fieldValue );
+        $result = parent::fromPersistenceValue($fieldValue);
 
-        $result->hasController = ( isset( $fieldValue->externalData['hasController'] )
+        $result->hasController = (isset($fieldValue->externalData['hasController'])
             ? $fieldValue->externalData['hasController']
-            : false );
-        $result->autoplay = ( isset( $fieldValue->externalData['autoplay'] )
+            : false);
+        $result->autoplay = (isset($fieldValue->externalData['autoplay'])
             ? $fieldValue->externalData['autoplay']
-            : false );
-        $result->loop = ( isset( $fieldValue->externalData['loop'] )
+            : false);
+        $result->loop = (isset($fieldValue->externalData['loop'])
             ? $fieldValue->externalData['loop']
-            : false );
-        $result->height = ( isset( $fieldValue->externalData['height'] )
+            : false);
+        $result->height = (isset($fieldValue->externalData['height'])
             ? $fieldValue->externalData['height']
-            : 0 );
-        $result->width = ( isset( $fieldValue->externalData['width'] )
+            : 0);
+        $result->width = (isset($fieldValue->externalData['width'])
             ? $fieldValue->externalData['width']
-            : 0 );
+            : 0);
 
         return $result;
+    }
+
+    /**
+     * Returns whether the field type is searchable.
+     *
+     * @return bool
+     */
+    public function isSearchable()
+    {
+        return false;
     }
 }

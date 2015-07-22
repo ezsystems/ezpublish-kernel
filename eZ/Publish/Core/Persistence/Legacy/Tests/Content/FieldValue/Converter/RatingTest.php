@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RatingTest class
+ * File containing the RatingTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,105 +14,105 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating as RatingConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Test case for Rating converter in Legacy storage
+ * Test case for Rating converter in Legacy storage.
  */
 class RatingTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter
      */
     protected $converter;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->converter = new RatingConverter;
+        $this->converter = new RatingConverter();
     }
 
     /**
      * @group fieldType
      * @group rating
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter::toStorageValue
      */
     public function testToStorageValue()
     {
-        $value = new FieldValue;
+        $value = new FieldValue();
         $value->data = false;
         $value->sortKey = false;
-        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue = new StorageFieldValue();
 
-        $this->converter->toStorageValue( $value, $storageFieldValue );
-        self::assertSame( null, $storageFieldValue->dataInt );
+        $this->converter->toStorageValue($value, $storageFieldValue);
+        self::assertSame(null, $storageFieldValue->dataInt);
     }
 
     /**
      * @group fieldType
      * @group rating
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter::toStorageValue
      */
     public function testToStorageValueDisabled()
     {
-        $value = new FieldValue;
+        $value = new FieldValue();
         $value->data = true;
         $value->sortKey = false;
-        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue = new StorageFieldValue();
 
-        $this->converter->toStorageValue( $value, $storageFieldValue );
-        self::assertSame( 1, $storageFieldValue->dataInt );
+        $this->converter->toStorageValue($value, $storageFieldValue);
+        self::assertSame(1, $storageFieldValue->dataInt);
     }
 
     /**
      * @group fieldType
      * @group rating
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter::toFieldValue
      */
     public function testToFieldValue()
     {
-        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue = new StorageFieldValue();
         $storageFieldValue->dataInt = null;
-        $fieldValue = new FieldValue;
+        $fieldValue = new FieldValue();
 
-        $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertSame( false, $fieldValue->data );
+        $this->converter->toFieldValue($storageFieldValue, $fieldValue);
+        self::assertSame(false, $fieldValue->data);
     }
 
     /**
      * @group fieldType
      * @group rating
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter::toFieldValue
      */
     public function testToFieldValueDisabled()
     {
-        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue = new StorageFieldValue();
         $storageFieldValue->dataInt = 1;
-        $fieldValue = new FieldValue;
+        $fieldValue = new FieldValue();
 
-        $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertSame( true, $fieldValue->data );
+        $this->converter->toFieldValue($storageFieldValue, $fieldValue);
+        self::assertSame(true, $fieldValue->data);
     }
 
     /**
      * @group fieldType
      * @group rating
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinition()
     {
-        $this->converter->toStorageFieldDefinition( new PersistenceFieldDefinition, new StorageFieldDefinition );
+        $this->converter->toStorageFieldDefinition(new PersistenceFieldDefinition(), new StorageFieldDefinition());
     }
 
     /**
      * @group fieldType
      * @group rating
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter::toFieldDefinition
      */
     public function testToFieldDefinition()
     {
-        $this->converter->toFieldDefinition( new StorageFieldDefinition, new PersistenceFieldDefinition );
+        $this->converter->toFieldDefinition(new StorageFieldDefinition(), new PersistenceFieldDefinition());
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\MapperTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\MapperTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,14 +17,12 @@ use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 
 /**
- * Test case for Mapper
+ * Test case for Mapper.
  */
 class MapperTest extends TestCase
 {
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper::createLanguageFromCreateStruct
-     *
-     * @return void
      */
     public function testCreateLanguageFromCreateStruct()
     {
@@ -30,19 +30,17 @@ class MapperTest extends TestCase
 
         $createStruct = $this->getCreateStructFixture();
 
-        $result = $mapper->createLanguageFromCreateStruct( $createStruct );
+        $result = $mapper->createLanguageFromCreateStruct($createStruct);
 
         $this->assertStructsEqual(
             $this->getLanguageFixture(),
             $result,
-            array( 'languageCode', 'name', 'isEnabled' )
+            array('languageCode', 'name', 'isEnabled')
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper::extractLanguagesFromRows
-     *
-     * @return void
      */
     public function testExtractLanguagesFromRows()
     {
@@ -50,7 +48,7 @@ class MapperTest extends TestCase
 
         $rows = $this->getRowsFixture();
 
-        $result = $mapper->extractLanguagesFromRows( $rows );
+        $result = $mapper->extractLanguagesFromRows($rows);
 
         $this->assertEquals(
             $this->getExtractReference(),
@@ -59,20 +57,20 @@ class MapperTest extends TestCase
     }
 
     /**
-     * Returns a result rows fixture
+     * Returns a result rows fixture.
      *
      * @return string[][]
      */
     protected function getRowsFixture()
     {
         return array(
-            array( 'disabled' => '0', 'id' => '2', 'locale' => 'eng-US', 'name' => 'English (American)' ),
-            array( 'disabled' => '0', 'id' => '4', 'locale' => 'eng-GB', 'name' => 'English (United Kingdom)' )
+            array('disabled' => '0', 'id' => '2', 'locale' => 'eng-US', 'name' => 'English (American)'),
+            array('disabled' => '0', 'id' => '4', 'locale' => 'eng-GB', 'name' => 'English (United Kingdom)'),
         );
     }
 
     /**
-     * Returns reference for the extraction from rows
+     * Returns reference for the extraction from rows.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language[]
      */
@@ -90,11 +88,11 @@ class MapperTest extends TestCase
         $langGb->name = 'English (United Kingdom)';
         $langGb->isEnabled = true;
 
-        return array( 'eng-US' => $langUs, 'eng-GB' => $langGb );
+        return array('eng-US' => $langUs, 'eng-GB' => $langGb);
     }
 
     /**
-     * Returns a Language CreateStruct fixture
+     * Returns a Language CreateStruct fixture.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct
      */
@@ -110,7 +108,7 @@ class MapperTest extends TestCase
     }
 
     /**
-     * Returns a Language fixture
+     * Returns a Language fixture.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the TypeStillHasContent class
+ * File containing the TypeStillHasContent class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,12 +19,12 @@ use eZ\Publish\Core\Base\Exceptions\BadStateException;
 class TypeStillHasContent extends BadStateException
 {
     /**
-     * Creates a new exception for $typeId in $status;
+     * Creates a new exception for $typeId in $status;.
      *
      * @param mixed $typeId
      * @param mixed $status
      */
-    public function __construct( $typeId, $status )
+    public function __construct($typeId, $status)
     {
         parent::__construct(
             '$typeId',

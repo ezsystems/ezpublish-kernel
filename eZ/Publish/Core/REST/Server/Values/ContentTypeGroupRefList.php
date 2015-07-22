@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentTypeGroupRefList class
+ * File containing the ContentTypeGroupRefList class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,31 +15,31 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
- * ContentTypeGroup list view model
+ * ContentTypeGroup list view model.
  */
 class ContentTypeGroupRefList extends RestValue
 {
     /**
-     * Content type
+     * Content type.
      *
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     public $contentType;
 
     /**
-     * Content type groups of the content type
+     * Content type groups of the content type.
      *
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
     public $contentTypeGroups;
 
     /**
-     * Construct
+     * Construct.
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups
      */
-    public function __construct( ContentType $contentType, array $contentTypeGroups )
+    public function __construct(ContentType $contentType, array $contentTypeGroups)
     {
         $this->contentType = $contentType;
         $this->contentTypeGroups = $contentTypeGroups;

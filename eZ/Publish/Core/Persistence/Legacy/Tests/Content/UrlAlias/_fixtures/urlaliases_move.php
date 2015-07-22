@@ -1,8 +1,8 @@
 <?php
 
-return array (
-    'ezurlalias_ml' => array (
-        0 => array (
+return array(
+    'ezurlalias_ml' => array(
+        0 => array(
             'action' => 'eznode:2',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -15,7 +15,7 @@ return array (
             'text' => '',
             'text_md5' => 'd41d8cd98f00b204e9800998ecf8427e',
         ),
-        1 => array (
+        1 => array(
             'action' => 'eznode:3',
             'action_type' => 'eznode',
             'alias_redirects' => '0',
@@ -28,7 +28,7 @@ return array (
             'text' => 'move-here',
             'text_md5' => '8c09d75fa9c06724b51b2f837107a5ca',
         ),
-        2 => array (
+        2 => array(
             'action' => 'eznode:4',
             'action_type' => 'eznode',
             'alias_redirects' => '0',
@@ -41,7 +41,7 @@ return array (
             'text' => 'move-this',
             'text_md5' => '93dc83851ede7c440fe00c29e7487d1b',
         ),
-        4 => array (
+        4 => array(
             'action' => 'eznode:4',
             'action_type' => 'eznode',
             'alias_redirects' => '0',
@@ -54,7 +54,7 @@ return array (
             'text' => 'move-this-history',
             'text_md5' => '869f933f715cc635b70923256fa04033',
         ),
-        5 => array (
+        5 => array(
             'action' => 'eznode:5',
             'action_type' => 'eznode',
             'alias_redirects' => '0',
@@ -67,7 +67,7 @@ return array (
             'text' => 'sub1',
             'text_md5' => '1b52eb8ef2c1875cfdf3ffbe9e3c05da',
         ),
-        6 => array (
+        6 => array(
             'action' => 'eznode:6',
             'action_type' => 'eznode',
             'alias_redirects' => '0',
@@ -80,7 +80,7 @@ return array (
             'text' => 'sub2-history',
             'text_md5' => 'be302a8ff37091d2b3bc31f2b8f95207',
         ),
-        7 => array (
+        7 => array(
             'action' => 'eznode:6',
             'action_type' => 'eznode',
             'alias_redirects' => '0',
@@ -94,33 +94,33 @@ return array (
             'text_md5' => '5fbef65269a99bddc2106251dd89b1dc',
         ),
     ),
-    'ezurlalias_ml_incr' => array (
-        0 => array (
+    'ezurlalias_ml_incr' => array(
+        0 => array(
             'id' => '1',
         ),
-        1 => array (
+        1 => array(
             'id' => '2',
         ),
-        2 => array (
+        2 => array(
             'id' => '3',
         ),
-        3 => array (
+        3 => array(
             'id' => '4',
         ),
-        4 => array (
+        4 => array(
             'id' => '5',
         ),
-        5 => array (
+        5 => array(
             'id' => '6',
         ),
-        6 => array (
+        6 => array(
             'id' => '7',
         ),
-        7 => array (
+        7 => array(
             'id' => '8',
         ),
     ),
-    'ezcontent_language' => array (
+    'ezcontent_language' => array(
         0 => array(
             'disabled' => 0,
             'id' => 2,

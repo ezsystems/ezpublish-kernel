@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\API\Repository\Tests\FieldType\ImageIntegrationTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\ImageIntegrationTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,12 +15,12 @@ use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
  */
-class ImageIntegrationTest extends FileBaseIntegrationTest
+class ImageIntegrationTest extends FileSearchBaseIntegrationTest
 {
     /**
      * Stores the loaded image path for copy test.
@@ -26,42 +28,42 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     protected static $loadedImagePath;
 
     /**
-     * IOService storage prefix for the tested Type's files
+     * IOService storage prefix for the tested Type's files.
+     *
      * @var string
      */
     protected static $storagePrefixConfigKey = 'image_storage_prefix';
 
     protected function getStoragePrefix()
     {
-        return $this->getConfigValue( self::$storagePrefixConfigKey );
+        return $this->getConfigValue(self::$storagePrefixConfigKey);
     }
 
     /**
      * Sets up fixture data.
      *
-     * @return void
+     * @return array
      */
     protected function getFixtureData()
     {
         return array(
             'create' => array(
                 'fileName' => 'Icy-Night-Flower.jpg',
-                'id' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
                 'alternativeText' => 'My icy flower at night',
-                'fileSize' => filesize( $path ),
-                'imageId' => null,
+                'fileSize' => filesize($path),
             ),
             'update' => array(
                 'fileName' => 'Blue-Blue-Blue.png',
-                'id' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
                 'alternativeText' => 'Such a blue …',
-                'fileSize' => filesize( $path ),
+                'fileSize' => filesize($path),
             ),
         );
     }
 
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -71,7 +73,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get expected settings schema
+     * Get expected settings schema.
      *
      * @return array
      */
@@ -81,7 +83,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get a valid $fieldSettings value.
      *
      * @return mixed
      */
@@ -91,7 +93,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get $fieldSettings value not accepted by the field type
+     * Get $fieldSettings value not accepted by the field type.
      *
      * @return mixed
      */
@@ -103,7 +105,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get expected validator schema
+     * Get expected validator schema.
      *
      * @return array
      */
@@ -112,15 +114,15 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         return array(
             'FileSizeValidator' => array(
                 'maxFileSize' => array(
-                    'type'    => 'int',
+                    'type' => 'int',
                     'default' => false,
                 ),
-            )
+            ),
         );
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $validatorConfiguration.
      *
      * @return mixed
      */
@@ -134,7 +136,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get $validatorConfiguration not accepted by the field type
+     * Get $validatorConfiguration not accepted by the field type.
      *
      * @return mixed
      */
@@ -143,19 +145,20 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         return array(
             'StringLengthValidator' => array(
                 'minStringLength' => new \stdClass(),
-            )
+            ),
         );
     }
 
     /**
-     * Get initial field data for valid object creation
+     * Get initial field data for valid object creation.
      *
      * @return mixed
      */
     public function getValidCreationFieldData()
     {
         $fixtureData = $this->getFixtureData();
-        return new ImageValue( $fixtureData['create'] );
+
+        return new ImageValue($fixtureData['create']);
     }
 
     /**
@@ -165,10 +168,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field )
+    public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Image\\Value',
@@ -178,8 +179,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $fixtureData = $this->getFixtureData();
         $expectedData = $fixtureData['create'];
 
-        // Will change during storage
-        unset( $expectedData['id'], $expectedData['imageId'] );
+        // Will be nullified by external storage
+        $expectedData['inputUri'] = null;
 
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -187,15 +188,15 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            $exists = file_exists( $path = $this->getInstallDir() . '/' . $field->value->id ),
-            "Asserting that $path exists."
+            $this->uriExistsOnIO($field->value->uri),
+            "Asserting that {$field->value->uri} exists."
         );
 
         self::$loadedImagePath = $field->value->id;
     }
 
     /**
-     * Get field data which will result in errors during creation
+     * Get field data which will result in errors during creation.
      *
      * This is a PHPUnit data provider.
      *
@@ -218,19 +219,11 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function provideInvalidCreationFieldData()
     {
         return array(
+            // will fail because the provided file doesn't exist, and fileSize/fileName won't be set
             array(
                 new ImageValue(
                     array(
-                        'id' => __DIR__ . '/_fixtures/image.jpg',
-                    )
-                ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                new ImageValue(
-                    array(
-                        'id' => __DIR__ . '/_fixtures/image.jpg',
-                        'fileName' => __DIR__ . '/_fixtures/image.jpg',
+                        'inputUri' => __DIR__ . '/_fixtures/nofile.png',
                     )
                 ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
@@ -239,24 +232,25 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get update field externals data
+     * Get update field externals data.
      *
      * @return array
      */
     public function getValidUpdateFieldData()
     {
         $fixtureData = $this->getFixtureData();
-        return new ImageValue( $fixtureData['update'] );
+
+        return new ImageValue($fixtureData['update']);
     }
 
     /**
-     * Get externals updated field data values
+     * Get externals updated field data values.
      *
      * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Image\\Value',
@@ -265,10 +259,10 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
 
         $fixtureData = $this->getFixtureData();
         $expectedData = $fixtureData['update'];
-        // Will change during storage
-        unset( $expectedData['id'] );
 
-        self::assertEquals( $field->value->uri, $field->value->id );
+        // Will change during storage
+        $expectedData['inputUri'] = null;
+
         $expectedData['uri'] = $field->value->uri;
 
         $this->assertPropertiesCorrect(
@@ -277,13 +271,13 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( $path = $this->getInstallDir() . '/' . $field->value->id ),
-            "Asserting that file $path exists"
+            $this->uriExistsOnIO($field->value->uri),
+            "Asserting that file {$field->value->uri} exists"
         );
     }
 
     /**
-     * Get field data which will result in errors during update
+     * Get field data which will result in errors during update.
      *
      * This is a PHPUnit data provider.
      *
@@ -316,9 +310,9 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      *
      * @param Field $field
      */
-    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
-        $this->assertFieldDataLoadedCorrect( $field );
+        $this->assertFieldDataLoadedCorrect($field);
 
         $this->assertEquals(
             self::$loadedImagePath,
@@ -327,7 +321,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get data to test to hash method
+     * Get data to test to hash method.
      *
      * This is a PHPUnit data provider
      *
@@ -348,25 +342,59 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      */
     public function provideToHashData()
     {
-        $fixture = $this->getFixtureData();
-
-        // the URI is generated by the FieldType storage
-        $fixture['create']['uri'] = $fixture['create']['id'];
-        $fixture['create']['path'] = $fixture['create']['id'];
-
-        $fieldValue = $this->getValidCreationFieldData();
-        $fieldValue->uri = $fixture['create']['uri'];
-
         return array(
             array(
-                $fieldValue,
-                $fixture['create'],
+                new ImageValue(
+                    array(
+                        'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
+                        'fileName' => 'Icy-Night-Flower.jpg',
+                        'alternativeText' => 'My icy flower at night',
+                    )
+                ),
+                array(
+                    'inputUri' => $path,
+                    'path' => $path,
+                    'fileName' => 'Icy-Night-Flower.jpg',
+                    'alternativeText' => 'My icy flower at night',
+                    'fileSize' => null,
+                    'id' => null,
+                    'imageId' => null,
+                    'uri' => null,
+                    'width' => null,
+                    'height' => null,
+                ),
+            ),
+            array(
+                new ImageValue(
+                    array(
+                        'id' => $path = 'var/test/storage/images/file.png',
+                        'fileName' => 'Icy-Night-Flower.jpg',
+                        'alternativeText' => 'My icy flower at night',
+                        'fileSize' => 23,
+                        'imageId' => '1-2',
+                        'uri' => "/$path",
+                        'width' => 123,
+                        'height' => 456,
+                    )
+                ),
+                array(
+                    'id' => $path,
+                    'path' => $path,
+                    'fileName' => 'Icy-Night-Flower.jpg',
+                    'alternativeText' => 'My icy flower at night',
+                    'fileSize' => 23,
+                    'inputUri' => null,
+                    'imageId' => '1-2',
+                    'uri' => "/$path",
+                    'width' => 123,
+                    'height' => 456,
+                ),
             ),
         );
     }
 
     /**
-     * Get expectations for the fromHash call on our field value
+     * Get expectations for the fromHash call on our field value.
      *
      * This is a PHPUnit data provider
      *
@@ -375,10 +403,11 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function provideFromHashData()
     {
         $fixture = $this->getFixtureData();
+
         return array(
             array(
                 $fixture['create'],
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
             ),
         );
     }
@@ -394,30 +423,28 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             array(),
             // Causes a copy of the image value for each language in legacy
             // storage
-            array( 'isTranslatable' => false )
+            array('isTranslatable' => false)
         );
 
-        $draft = $this->createContent( $this->getValidCreationFieldData(), $type );
+        $draft = $this->createContent($this->getValidCreationFieldData(), $type);
 
         $updateStruct = $contentService->newContentUpdateStruct();
         $updateStruct->initialLanguageCode = 'ger-DE';
-        $updateStruct->setField( 'name', 'Sindelfingen' );
+        $updateStruct->setField('name', 'Sindelfingen');
 
         // Automatically creates a copy of the image field in the back ground
-        $updatedDraft = $contentService->updateContent( $draft->versionInfo, $updateStruct );
+        $updatedDraft = $contentService->updateContent($draft->versionInfo, $updateStruct);
 
         $paths = array();
-        foreach ( $updatedDraft->getFields() as $field )
-        {
-            if ( $field->fieldDefIdentifier === 'data' )
-            {
-                $paths[$field->languageCode] = $field->value->id;
+        foreach ($updatedDraft->getFields() as $field) {
+            if ($field->fieldDefIdentifier === 'data') {
+                $paths[$field->languageCode] = $field->value->uri;
             }
         }
 
         $this->assertTrue(
-            isset( $paths['eng-US'] ) && isset( $paths['ger-DE'] ),
-            "Failed asserting that file path for all languages were found in draft"
+            isset($paths['eng-US']) && isset($paths['ger-DE']),
+            'Failed asserting that file path for all languages were found in draft'
         );
 
         $this->assertEquals(
@@ -425,13 +452,20 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             $paths['ger-DE']
         );
 
-        $contentService->deleteContent( $updatedDraft->contentInfo );
+        $contentService->deleteContent($updatedDraft->contentInfo);
+
+        foreach ($paths as $uri) {
+            self::assertFalse(
+                $this->uriExistsOnIO($uri),
+                "$uri has not been removed"
+            );
+        }
     }
 
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new ImageValue ),
+            array(new ImageValue()),
         );
     }
 
@@ -439,7 +473,194 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     {
         return array(
             array(
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
+            ),
+        );
+    }
+
+    /**
+     * Covers EZP-23080.
+     */
+    public function testUpdatingImageMetadataOnlyWorks()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $type = $this->createContentType(
+            $this->getValidFieldSettings(),
+            $this->getValidValidatorConfiguration(),
+            array()
+        );
+
+        $draft = $this->createContent($this->getValidCreationFieldData(), $type);
+
+        /** @var ImageValue $imageFieldValue */
+        $imageFieldValue = $draft->getFieldValue('data');
+        $initialValueImageUri = $imageFieldValue->uri;
+
+        // update alternative text
+        $imageFieldValue->alternativeText = __METHOD__;
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $updateStruct->setField('data', $imageFieldValue);
+        $updatedDraft = $contentService->updateContent($draft->versionInfo, $updateStruct);
+
+        /** @var ImageValue $updatedImageValue */
+        $updatedImageValue = $updatedDraft->getFieldValue('data');
+
+        self::assertEquals($initialValueImageUri, $updatedImageValue->uri);
+        self::assertEquals(__METHOD__, $updatedImageValue->alternativeText);
+    }
+
+    /**
+     * covers EZP-23152.
+     */
+    public function testThatRemovingDraftDoesntRemovePublishedImages()
+    {
+        $repository = $this->getRepository();
+
+        // Load services
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+
+        // create content and publish image
+        $contentCreateStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier('image'),
+            'eng-GB'
+        );
+        $contentCreateStruct->setField('name', 'EZP23152_1');
+        $contentCreateStruct->setField('image', $this->getValidCreationFieldData());
+
+        $locationCreateStruct = $locationService->newLocationCreateStruct(2);
+        $content = $contentService->createContent($contentCreateStruct, array($locationCreateStruct));
+        $content = $contentService->publishVersion($content->getVersionInfo());
+
+        $originalFileUri = $content->fields['image']['eng-GB']->uri;
+
+        $this->assertTrue(
+            $this->uriExistsOnIO($originalFileUri),
+            "Asserting image file $originalFileUri exists."
+        );
+
+        // Create a new draft and update it
+        $updatedDraft = $contentService->createContentDraft($content->contentInfo);
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
+        $contentUpdateStruct->setField('name', 'EZP23152_2');
+        $updatedDraft = $contentService->updateContent($updatedDraft->versionInfo, $contentUpdateStruct);
+
+        // remove the newly published content version, verify that the original file exists
+        $contentService->deleteVersion($updatedDraft->versionInfo, 2);
+        $this->assertTrue(
+            $this->uriExistsOnIO($originalFileUri),
+            "Asserting original image file $originalFileUri exists."
+        );
+
+        // delete content
+        $contentService->deleteContent($content->contentInfo);
+        $this->assertFalse(
+            $this->uriExistsOnIO($originalFileUri),
+            "Asserting image file $originalFileUri has been removed."
+        );
+    }
+
+    public function testUpdateImageAltTextOnly()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('image');
+        $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+
+        $createStruct->setField('name', __METHOD__);
+        $createStruct->setField(
+            'image',
+            new ImageValue(
+                [
+                    'inputUri' => __DIR__ . '/_fixtures/image.jpg',
+                    'fileName' => 'image.jpg',
+                    'fileSize' => filesize(__DIR__ . '/_fixtures/image.jpg'),
+                    'alternativeText' => 'Initial alternative text',
+                ]
+            )
+        );
+
+        $content = $contentService->createContent(
+            $createStruct,
+            [$locationService->newLocationCreateStruct(2)]
+        );
+
+        $imageField = $content->getFieldValue('image');
+        $imageField->alternativeText = 'Updated alternative text';
+
+        $contentService->publishVersion($content->getVersionInfo());
+
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $updateStruct->setField('image', $imageField);
+
+        $newVersion = $contentService->createContentDraft($content->contentInfo);
+        $contentService->updateContent($newVersion->versionInfo, $updateStruct);
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return new ImageValue(
+            array(
+                'fileName' => 'cafe-terrace-at-night.jpg',
+                'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
+                'alternativeText' => 'café terrace at night, also known as the cafe terrace on the place du forum',
+                'fileSize' => filesize($path),
+            )
+        );
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return new ImageValue(
+            array(
+                'fileName' => 'thatched-cottages-at-cordeville.png',
+                'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
+                'alternativeText' => 'chaumes de cordeville à auvers-sur-oise',
+                'fileSize' => filesize($path),
+            )
+        );
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        $value = $this->getValidSearchValueOne();
+        // ensure case-insensitivity
+        return strtoupper($value->fileName);
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        $value = $this->getValidSearchValueTwo();
+        // ensure case-insensitivity
+        return strtoupper($value->fileName);
+    }
+
+    protected function getAdditionallyIndexedFieldData()
+    {
+        return array(
+            array(
+                'alternative_text',
+                $this->getValidSearchValueOne()->alternativeText,
+                $this->getValidSearchValueTwo()->alternativeText,
+            ),
+            array(
+                'file_size',
+                $this->getValidSearchValueOne()->fileSize,
+                $this->getValidSearchValueTwo()->fileSize,
+            ),
+            array(
+                'mime_type',
+                // ensure case-insensitivity
+                'IMAGE/JPEG',
+                'IMAGE/PNG',
             ),
         );
     }

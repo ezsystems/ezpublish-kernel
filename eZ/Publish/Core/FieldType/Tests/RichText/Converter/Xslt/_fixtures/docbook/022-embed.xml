@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
+         xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
+         version="5.0-variant ezpublish-1.0">
+  <ezembed xlink:href="ezcontent://106" view="embed" xml:id="embed-id-1" ezxhtml:class="embed-class" ezxhtml:align="left">
+    <ezconfig>
+      <ezvalue key="size">medium</ezvalue>
+      <ezvalue key="offset">10</ezvalue>
+      <ezvalue key="limit">5</ezvalue>
+    </ezconfig>
+  </ezembed>
+  <ezembed xlink:href="ezlocation://601" view="line" xml:id="embed-id-2" ezxhtml:class="embedClass2" ezxhtml:align="right"/>
+</section>

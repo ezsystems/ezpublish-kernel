@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://ez.no/namespaces/ezpublish5/xhtml5"
+    targetNamespace="http://ez.no/namespaces/ezpublish5/xhtml5"
+    elementFormDefault="qualified">
+
+  <xs:redefine schemaLocation="../../../../../../../../RichText/Resources/schemas/ezxhtml5/output/ezxhtml5.xsd">
+    <xs:complexType name="iframeType">
+      <xs:complexContent>
+        <xs:extension base="iframeType">
+          <xs:attribute name="frameborder" type="nonNegativeInteger"/>
+          <xs:attribute name="allowfullscreen" type="string"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:redefine>
+
+</xs:schema>

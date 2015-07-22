@@ -1,37 +1,37 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\User;
-use eZ\Publish\Core\REST\Common;
 
 class RoleTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the Role visitor
+     * Test the Role visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $role = new User\Role(
             array(
-                'id'         => 42,
+                'id' => 42,
                 'identifier' => 'some-role',
                 /* @todo uncomment when support for multilingual names and descriptions is added
                 'mainLanguageCode' => 'eng-GB',
@@ -47,8 +47,8 @@ class RoleTest extends ValueObjectVisitorBaseTest
             )
         );
 
-        $this->addRouteExpectation( 'ezpublish_rest_loadRole', array( 'roleId' => $role->id ), "/user/roles/{$role->id}" );
-        $this->addRouteExpectation( 'ezpublish_rest_loadPolicies', array( 'roleId' => $role->id ), "/user/roles/{$role->id}/policies" );
+        $this->addRouteExpectation('ezpublish_rest_loadRole', array('roleId' => $role->id), "/user/roles/{$role->id}");
+        $this->addRouteExpectation('ezpublish_rest_loadPolicies', array('roleId' => $role->id), "/user/roles/{$role->id}/policies");
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -56,28 +56,28 @@ class RoleTest extends ValueObjectVisitorBaseTest
             $role
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains Role element
+     * Test if result contains Role element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsRoleElement( $result )
+    public function testResultContainsRoleElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'Role',
+                'tag' => 'Role',
                 'children' => array(
-                    'count' => 2
-                )
+                    'count' => 2,
+                ),
             ),
             $result,
             'Invalid <Role> element.',
@@ -86,21 +86,21 @@ class RoleTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains Role element attributes
+     * Test if result contains Role element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsRoleAttributes( $result )
+    public function testResultContainsRoleAttributes($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'Role',
+                'tag' => 'Role',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Role+xml',
-                    'href'       => '/user/roles/42',
-                )
+                    'href' => '/user/roles/42',
+                ),
             ),
             $result,
             'Invalid <Role> attributes.',
@@ -109,18 +109,18 @@ class RoleTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains identifier value element
+     * Test if result contains identifier value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsIdentifierValueElement( $result )
+    public function testResultContainsIdentifierValueElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'identifier',
-                'content'  => 'some-role'
+                'tag' => 'identifier',
+                'content' => 'some-role',
             ),
             $result,
             'Invalid or non-existing <Role> identifier value element.',
@@ -129,19 +129,19 @@ class RoleTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains mainLanguageCode value element
+     * Test if result contains mainLanguageCode value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsMainLanguageCodeValueElement( $result )
+    public function testResultContainsMainLanguageCodeValueElement($result)
     {
-        $this->markTestSkipped( '@todo uncomment when support for multilingual names and descriptions is added' );
-        $this->assertTag(
+        $this->markTestSkipped('@todo uncomment when support for multilingual names and descriptions is added');
+        $this->assertXMLTag(
             array(
-                'tag'      => 'mainLanguageCode',
-                'content'  => 'eng-GB'
+                'tag' => 'mainLanguageCode',
+                'content' => 'eng-GB',
             ),
             $result,
             'Invalid or non-existing <Role> mainLanguageCode value element.',
@@ -150,21 +150,21 @@ class RoleTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains names element
+     * Test if result contains names element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsNamesElement( $result )
+    public function testResultContainsNamesElement($result)
     {
-        $this->markTestSkipped( '@todo uncomment when support for multilingual names and descriptions is added' );
-        $this->assertTag(
+        $this->markTestSkipped('@todo uncomment when support for multilingual names and descriptions is added');
+        $this->assertXMLTag(
             array(
-                'tag'      => 'names',
+                'tag' => 'names',
                 'children' => array(
-                    'count' => 2
-                )
+                    'count' => 2,
+                ),
             ),
             $result,
             'Invalid <names> element.',
@@ -173,21 +173,21 @@ class RoleTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains descriptions element
+     * Test if result contains descriptions element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsDescriptionsElement( $result )
+    public function testResultContainsDescriptionsElement($result)
     {
-        $this->markTestSkipped( '@todo uncomment when support for multilingual names and descriptions is added' );
-        $this->assertTag(
+        $this->markTestSkipped('@todo uncomment when support for multilingual names and descriptions is added');
+        $this->assertXMLTag(
             array(
-                'tag'      => 'descriptions',
+                'tag' => 'descriptions',
                 'children' => array(
-                    'count' => 2
-                )
+                    'count' => 2,
+                ),
             ),
             $result,
             'Invalid <descriptions> element.',
@@ -196,17 +196,17 @@ class RoleTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains Policies element
+     * Test if result contains Policies element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsPoliciesElement( $result )
+    public function testResultContainsPoliciesElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'Policies'
+                'tag' => 'Policies',
             ),
             $result,
             'Invalid <Policies> element.',
@@ -215,21 +215,21 @@ class RoleTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains Policies element attributes
+     * Test if result contains Policies element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsPoliciesAttributes( $result )
+    public function testResultContainsPoliciesAttributes($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'Policies',
+                'tag' => 'Policies',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.PolicyList+xml',
-                    'href'       => '/user/roles/42/policies',
-                )
+                    'href' => '/user/roles/42/policies',
+                ),
             ),
             $result,
             'Invalid <Policies> attributes.',
@@ -238,12 +238,12 @@ class RoleTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the Role visitor
+     * Get the Role visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Role
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Role;
+        return new ValueObjectVisitor\Role();
     }
 }

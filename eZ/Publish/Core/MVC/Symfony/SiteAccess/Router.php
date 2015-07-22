@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Router class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,11 +16,12 @@ use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException;
 use Psr\Log\LoggerInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\CompoundInterface;
+use InvalidArgumentException;
 
-class Router
+class Router implements SiteAccessRouterInterface, SiteAccessAware
 {
     /**
-     * Name of the default siteaccess
+     * Name of the default siteaccess.
      *
      * @var string
      */
@@ -49,6 +52,7 @@ class Router
      *     )
      * )
      * </code>
+     *
      * @var array
      */
     protected $siteAccessesConfiguration;
@@ -79,6 +83,11 @@ class Router
     protected $matcherBuilder;
 
     /**
+     * @var \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
+     */
+    protected $request;
+
+    /**
      * Constructor.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface $matcherBuilder
@@ -88,14 +97,23 @@ class Router
      * @param array $siteAccessList
      * @param string|null $siteAccessClass
      */
-    public function __construct( MatcherBuilderInterface $matcherBuilder, LoggerInterface $logger, $defaultSiteAccess, array $siteAccessesConfiguration, array $siteAccessList, $siteAccessClass = null )
+    public function __construct(MatcherBuilderInterface $matcherBuilder, LoggerInterface $logger, $defaultSiteAccess, array $siteAccessesConfiguration, array $siteAccessList, $siteAccessClass = null)
     {
         $this->matcherBuilder = $matcherBuilder;
         $this->logger = $logger;
         $this->defaultSiteAccess = $defaultSiteAccess;
         $this->siteAccessesConfiguration = $siteAccessesConfiguration;
-        $this->siteAccessList = array_fill_keys( $siteAccessList, true );
-        $this->siteAccessClass = $siteAccessClass;
+        $this->siteAccessList = array_fill_keys($siteAccessList, true);
+        $this->siteAccessClass = $siteAccessClass ?: 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess';
+        $this->request = new SimplifiedRequest();
+    }
+
+    /**
+     * @return \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
+     */
+    public function getRequest()
+    {
+        return $this->request;
     }
 
     /**
@@ -107,45 +125,47 @@ class Router
      *
      * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess
      */
-    public function match( SimplifiedRequest $request )
+    public function match(SimplifiedRequest $request)
     {
-        if ( isset( $this->siteAccess ) )
-            return $this->siteAccess;
+        $this->request = $request;
 
-        $siteAccessClass = $this->siteAccessClass ?: 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess';
+        if (isset($this->siteAccess)) {
+            return $this->siteAccess;
+        }
+
+        $siteAccessClass = $this->siteAccessClass;
         $this->siteAccess = new $siteAccessClass();
 
         // Request header always have precedence
-        if ( isset( $request->headers['X-Siteaccess'] ) )
-        {
-            $siteaccessName = $request->headers['X-Siteaccess'];
-            if ( !isset( $this->siteAccessList[$siteaccessName] ) )
-            {
-                unset( $this->siteAccess );
-                throw new InvalidSiteAccessException( $siteaccessName, array_keys( $this->siteAccessList ), 'X-Siteaccess request header' );
+        // @note: request headers are always in lower cased.
+        if (!empty($request->headers['x-siteaccess'])) {
+            $siteaccessName = $request->headers['x-siteaccess'][0];
+            if (!isset($this->siteAccessList[$siteaccessName])) {
+                unset($this->siteAccess);
+                throw new InvalidSiteAccessException($siteaccessName, array_keys($this->siteAccessList), 'X-Siteaccess request header');
             }
 
-            $this->siteAccess->name = $request->headers['X-Siteaccess'];
+            $this->siteAccess->name = $siteaccessName;
             $this->siteAccess->matchingType = 'header';
+
             return $this->siteAccess;
         }
 
         // Then check environment variable
-        $siteaccessEnvName = getenv( 'EZPUBLISH_SITEACCESS' );
-        if ( $siteaccessEnvName !== false )
-        {
-            if ( !isset( $this->siteAccessList[$siteaccessEnvName] ) )
-            {
-                unset( $this->siteAccess );
-                throw new InvalidSiteAccessException( $siteaccessEnvName, array_keys( $this->siteAccessList ), 'EZPUBLISH_SITEACCESS Environment variable' );
+        $siteaccessEnvName = getenv('EZPUBLISH_SITEACCESS');
+        if ($siteaccessEnvName !== false) {
+            if (!isset($this->siteAccessList[$siteaccessEnvName])) {
+                unset($this->siteAccess);
+                throw new InvalidSiteAccessException($siteaccessEnvName, array_keys($this->siteAccessList), 'EZPUBLISH_SITEACCESS Environment variable');
             }
 
             $this->siteAccess->name = $siteaccessEnvName;
             $this->siteAccess->matchingType = 'env';
+
             return $this->siteAccess;
         }
 
-        return $this->doMatch( $request );
+        return $this->doMatch($request);
     }
 
     /**
@@ -156,30 +176,84 @@ class Router
      *
      * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess
      */
-    private function doMatch( SimplifiedRequest $request )
+    private function doMatch(SimplifiedRequest $request)
     {
-        foreach ( $this->siteAccessesConfiguration as $matchingClass => $matchingConfiguration )
-        {
-            $matcher = $this->matcherBuilder->buildMatcher( $matchingClass, $matchingConfiguration, $request );
-            if ( $matcher instanceof CompoundInterface )
-                $matcher->setMatcherBuilder( $this->matcherBuilder );
+        foreach ($this->siteAccessesConfiguration as $matchingClass => $matchingConfiguration) {
+            $matcher = $this->matcherBuilder->buildMatcher($matchingClass, $matchingConfiguration, $request);
+            if ($matcher instanceof CompoundInterface) {
+                $matcher->setMatcherBuilder($this->matcherBuilder);
+            }
 
-            if ( ( $siteaccessName = $matcher->match() ) !== false )
-            {
-                if ( isset( $this->siteAccessList[$siteaccessName] ) )
-                {
+            if (($siteaccessName = $matcher->match()) !== false) {
+                if (isset($this->siteAccessList[$siteaccessName])) {
                     $this->siteAccess->name = $siteaccessName;
                     $this->siteAccess->matchingType = $matcher->getName();
                     $this->siteAccess->matcher = $matcher;
+
                     return $this->siteAccess;
                 }
             }
         }
 
-        $this->logger->notice( 'Siteaccess not matched against configuration, returning default siteaccess.' );
+        $this->logger->notice('Siteaccess not matched against configuration, returning default siteaccess.');
         $this->siteAccess->name = $this->defaultSiteAccess;
         $this->siteAccess->matchingType = 'default';
+
         return $this->siteAccess;
+    }
+
+    /**
+     * Matches a SiteAccess by name.
+     * Returns corresponding SiteAccess object, according to configuration, with corresponding matcher.
+     * Returns null if no matcher can be found (e.g. non versatile).
+     *
+     * @param string $siteAccessName
+     *
+     * @throws \InvalidArgumentException If $siteAccessName is invalid (i.e. not present in configured list).
+     *
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess|null
+     */
+    public function matchByName($siteAccessName)
+    {
+        if (!isset($this->siteAccessList[$siteAccessName])) {
+            throw new InvalidArgumentException("Invalid SiteAccess name provided for reverse matching: $siteAccessName");
+        }
+
+        $request = clone $this->request;
+        // Be sure to have a clean pathinfo, without SiteAccess part in it.
+        if ($this->siteAccess->matcher instanceof URILexer) {
+            $request->setPathinfo($this->siteAccess->matcher->analyseURI($request->pathinfo));
+        }
+
+        foreach ($this->siteAccessesConfiguration as $matchingClass => $matchingConfiguration) {
+            $matcher = $this->matcherBuilder->buildMatcher($matchingClass, $matchingConfiguration, $request);
+            if (!$matcher instanceof VersatileMatcher) {
+                continue;
+            }
+
+            if ($matcher instanceof CompoundInterface) {
+                $matcher->setMatcherBuilder($this->matcherBuilder);
+            }
+
+            $reverseMatcher = $matcher->reverseMatch($siteAccessName);
+            if (!$reverseMatcher instanceof Matcher) {
+                continue;
+            }
+
+            $siteAccessClass = $this->siteAccessClass;
+            /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess */
+            $siteAccess = new $siteAccessClass();
+            $siteAccess->name = $siteAccessName;
+            $siteAccess->matcher = $reverseMatcher;
+            $siteAccess->matchingType = $reverseMatcher->getName();
+
+            return $siteAccess;
+        }
+
+        // No VersatileMatcher configured for $siteAccessName.
+        $this->logger->notice("Siteaccess '$siteAccessName' could not be reverse-matched against configuration. No VersatileMatcher found.");
+
+        return null;
     }
 
     /**
@@ -192,10 +266,8 @@ class Router
 
     /**
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
-     *
-     * @access private Only for unit tests use
      */
-    public function setSiteAccess( SiteAccess $siteAccess = null )
+    public function setSiteAccess(SiteAccess $siteAccess = null)
     {
         $this->siteAccess = $siteAccess;
     }

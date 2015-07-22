@@ -1,16 +1,17 @@
 <?php
+
 /**
  * File containing the LocalPurgeClient class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
-use eZ\Publish\Core\MVC\Symfony\Cache\Http\RequestAwarePurger;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -24,7 +25,7 @@ class LocalPurgeClient implements PurgeClientInterface
      */
     protected $cacheStore;
 
-    public function __construct( RequestAwarePurger $cacheStore )
+    public function __construct(RequestAwarePurger $cacheStore)
     {
         $this->cacheStore = $cacheStore;
     }
@@ -33,26 +34,24 @@ class LocalPurgeClient implements PurgeClientInterface
      * Triggers the cache purge $cacheElements.
      *
      * @param mixed $locationIds Cache resource(s) to purge (e.g. array of URI to purge in a reverse proxy)
-     *
-     * @return void
      */
-    public function purge( $locationIds )
+    public function purge($locationIds)
     {
-        if ( empty( $locationIds ) )
+        if (empty($locationIds)) {
             return;
+        }
 
-        if ( !is_array( $locationIds ) )
-            $locationIds = array( $locationIds );
+        if (!is_array($locationIds)) {
+            $locationIds = array($locationIds);
+        }
 
-        $purgeRequest = Request::create( 'http://localhost/', 'PURGE' );
-        $purgeRequest->headers->set( 'X-Group-Location-Id', implode( '; ', $locationIds ) );
-        $this->cacheStore->purgeByRequest( $purgeRequest );
+        $purgeRequest = Request::create('http://localhost/', 'BAN');
+        $purgeRequest->headers->set('X-Location-Id', '(' . implode('|', $locationIds) . ')');
+        $this->cacheStore->purgeByRequest($purgeRequest);
     }
 
     /**
      * Purges all content elements currently in cache.
-     *
-     * @return void
      */
     public function purgeAll()
     {

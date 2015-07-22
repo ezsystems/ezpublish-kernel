@@ -1,0 +1,49 @@
+parameters:
+    ezpublish.spi.persistence.legacy.language.handler.class: eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
+    ezpublish.spi.persistence.legacy.language.handler.caching.class: eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
+    ezpublish.persistence.legacy.language.cache.class: eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
+    ezpublish.persistence.legacy.language.mapper.class: eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper
+    ezpublish.persistence.legacy.language.gateway.class: eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase
+    ezpublish.persistence.legacy.language.gateway.exception_conversion.class: eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\ExceptionConversion
+    ezpublish.persistence.legacy.language.mask_generator.class: eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
+
+services:
+    ezpublish.persistence.legacy.language.gateway.inner:
+        class: %ezpublish.persistence.legacy.language.gateway.class%
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+
+    ezpublish.persistence.legacy.language.gateway.exception_conversion:
+        class: %ezpublish.persistence.legacy.language.gateway.exception_conversion.class%
+        arguments:
+            - @ezpublish.persistence.legacy.language.gateway.inner
+
+    # To disable exception conversion layer override this alias so that it points to inner gateway
+    ezpublish.persistence.legacy.language.gateway:
+        alias: ezpublish.persistence.legacy.language.gateway.exception_conversion
+
+    ezpublish.persistence.legacy.language.mapper:
+        class: %ezpublish.persistence.legacy.language.mapper.class%
+
+    ezpublish.spi.persistence.legacy.language.handler.inner:
+        class: %ezpublish.spi.persistence.legacy.language.handler.class%
+        arguments:
+            - @ezpublish.persistence.legacy.language.gateway
+            - @ezpublish.persistence.legacy.language.mapper
+
+    ezpublish.persistence.legacy.language.cache:
+        class: %ezpublish.persistence.legacy.language.cache.class%
+
+    ezpublish.spi.persistence.legacy.language.handler.caching:
+        class: %ezpublish.spi.persistence.legacy.language.handler.caching.class%
+        arguments:
+            - @ezpublish.spi.persistence.legacy.language.handler.inner
+            - @ezpublish.persistence.legacy.language.cache
+
+    ezpublish.spi.persistence.legacy.language.handler:
+        alias: ezpublish.spi.persistence.legacy.language.handler.caching
+        lazy: true
+
+    ezpublish.persistence.legacy.language.mask_generator:
+        class: %ezpublish.persistence.legacy.language.mask_generator.class%
+        arguments: [@ezpublish.spi.persistence.legacy.language.handler]

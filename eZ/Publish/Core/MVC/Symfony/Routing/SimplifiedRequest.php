@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the SimplifiedRequest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -74,7 +76,63 @@ class SimplifiedRequest extends ValueObject
     protected $headers;
 
     /**
-     * Constructs a SimplifiedRequest object from a standard URL (http://www.example.com/foo/bar?queryParam=value)
+     * @param array $headers
+     */
+    public function setHeaders(array $headers)
+    {
+        $this->headers = $headers;
+    }
+
+    /**
+     * @param string $host
+     */
+    public function setHost($host)
+    {
+        $this->host = $host;
+    }
+
+    /**
+     * @param array $languages
+     */
+    public function setLanguages(array $languages)
+    {
+        $this->languages = $languages;
+    }
+
+    /**
+     * @param string $pathinfo
+     */
+    public function setPathinfo($pathinfo)
+    {
+        $this->pathinfo = $pathinfo;
+    }
+
+    /**
+     * @param string $port
+     */
+    public function setPort($port)
+    {
+        $this->port = $port;
+    }
+
+    /**
+     * @param array $queryParams
+     */
+    public function setQueryParams(array $queryParams)
+    {
+        $this->queryParams = $queryParams;
+    }
+
+    /**
+     * @param string $scheme
+     */
+    public function setScheme($scheme)
+    {
+        $this->scheme = $scheme;
+    }
+
+    /**
+     * Constructs a SimplifiedRequest object from a standard URL (http://www.example.com/foo/bar?queryParam=value).
      *
      * @param string $url
      *
@@ -82,26 +140,27 @@ class SimplifiedRequest extends ValueObject
      *
      * @return \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
      */
-    public static function fromUrl( $url )
+    public static function fromUrl($url)
     {
-        $elements = parse_url( $url );
-        $elements['pathinfo'] = isset( $elements['path'] ) ? $elements['path'] : '';
+        $elements = parse_url($url);
+        $elements['pathinfo'] = isset($elements['path']) ? $elements['path'] : '';
 
-        if ( isset( $elements['query'] ) )
-        {
-            parse_str( $elements['query'], $queryParams );
+        if (isset($elements['query'])) {
+            parse_str($elements['query'], $queryParams);
             $elements['queryParams'] = $queryParams;
         }
 
         // Remove unwanted keys returned by parse_url() so that we don't have them as properties.
-        unset( $elements['path'], $elements['query'], $elements['user'], $elements['pass'], $elements['fragment'] );
-        return new static( $elements );
+        unset($elements['path'], $elements['query'], $elements['user'], $elements['pass'], $elements['fragment']);
+
+        return new static($elements);
     }
 
     public function __sleep()
     {
         // Clean up headers for serialization not have a too heavy string (i.e. for ESI/Hinclude tags).
         $this->headers = array();
-        return array( 'scheme', 'host', 'port', 'pathinfo', 'queryParams', 'languages', 'headers' );
+
+        return array('scheme', 'host', 'port', 'pathinfo', 'queryParams', 'languages', 'headers');
     }
 }

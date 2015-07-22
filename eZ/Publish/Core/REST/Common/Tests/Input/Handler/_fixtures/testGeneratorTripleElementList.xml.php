@@ -1,24 +1,23 @@
 <?php
 
-return array (
-  'elementList' => 
-  array (
+return array(
+  'elementList' =>
+  array(
     '_media-type' => 'application/vnd.ez.api.elementList+xml',
-    'element' => 
-    array (
-      0 => 
-      array (
+    'element' =>
+    array(
+      0 =>
+      array(
         '_media-type' => 'application/vnd.ez.api.element+xml',
       ),
-      1 => 
-      array (
+      1 =>
+      array(
         '_media-type' => 'application/vnd.ez.api.element+xml',
       ),
-      2 => 
-      array (
+      2 =>
+      array(
         '_media-type' => 'application/vnd.ez.api.element+xml',
       ),
     ),
   ),
 );
-

@@ -1,0 +1,139 @@
+parameters:
+    ezpublish.api.role.limitation_type.blocking.class: eZ\Publish\Core\Limitation\BlockingLimitationType
+    ezpublish.api.role.limitation_type.content_type.class: eZ\Publish\Core\Limitation\ContentTypeLimitationType
+    ezpublish.api.role.limitation_type.language.class: eZ\Publish\Core\Limitation\LanguageLimitationType
+    ezpublish.api.role.limitation_type.location.class: eZ\Publish\Core\Limitation\LocationLimitationType
+    ezpublish.api.role.limitation_type.owner.class: eZ\Publish\Core\Limitation\OwnerLimitationType
+    ezpublish.api.role.limitation_type.parent_content_type.class: eZ\Publish\Core\Limitation\ParentContentTypeLimitationType
+    ezpublish.api.role.limitation_type.parent_depth.class: eZ\Publish\Core\Limitation\ParentDepthLimitationType
+    ezpublish.api.role.limitation_type.parent_owner.class: eZ\Publish\Core\Limitation\ParentOwnerLimitationType
+    ezpublish.api.role.limitation_type.parent_group.class: eZ\Publish\Core\Limitation\ParentUserGroupLimitationType
+    ezpublish.api.role.limitation_type.section.class: eZ\Publish\Core\Limitation\SectionLimitationType
+    ezpublish.api.role.limitation_type.new_section.class: eZ\Publish\Core\Limitation\NewSectionLimitationType
+    ezpublish.api.role.limitation_type.siteaccess.class: eZ\Publish\Core\Limitation\SiteAccessLimitationType
+    ezpublish.api.role.limitation_type.state.class: eZ\Publish\Core\Limitation\ObjectStateLimitationType
+    ezpublish.api.role.limitation_type.new_state.class: eZ\Publish\Core\Limitation\NewObjectStateLimitationType
+    ezpublish.api.role.limitation_type.subtree.class: eZ\Publish\Core\Limitation\SubtreeLimitationType
+    ezpublish.api.role.limitation_type.user_group.class: eZ\Publish\Core\Limitation\UserGroupLimitationType
+    ezpublish.api.role.limitation_type.status.class: eZ\Publish\Core\Limitation\StatusLimitationType
+
+services:
+    ## Implemented Limitations
+    ezpublish.api.role.limitation_type.content_type:
+        class: %ezpublish.api.role.limitation_type.content_type.class%
+        arguments: [@ezpublish.api.persistence_handler]
+        tags:
+            - {name: ezpublish.limitationType, alias: Class}
+
+    ezpublish.api.role.limitation_type.language:
+        class: %ezpublish.api.role.limitation_type.language.class%
+        arguments: [@ezpublish.api.persistence_handler]
+        tags:
+            - {name: ezpublish.limitationType, alias: Language}
+
+    ezpublish.api.role.limitation_type.location:
+        class: %ezpublish.api.role.limitation_type.location.class%
+        arguments: [@ezpublish.api.persistence_handler]
+        tags:
+            - {name: ezpublish.limitationType, alias: Node}
+
+    ezpublish.api.role.limitation_type.owner:
+        class: %ezpublish.api.role.limitation_type.owner.class%
+        arguments: [@ezpublish.api.persistence_handler]
+        tags:
+            - {name: ezpublish.limitationType, alias: Owner}
+
+    ezpublish.api.role.limitation_type.parent_content_type:
+        class: %ezpublish.api.role.limitation_type.parent_content_type.class%
+        arguments: [@ezpublish.api.persistence_handler]
+        tags:
+            - {name: ezpublish.limitationType, alias: ParentClass}
+
+    ezpublish.api.role.limitation_type.parent_depth:
+        class: %ezpublish.api.role.limitation_type.parent_depth.class%
+        arguments: [@ezpublish.api.persistence_handler]
+        tags:
+            - {name: ezpublish.limitationType, alias: ParentDepth}
+
+    ezpublish.api.role.limitation_type.parent_owner:
+        class: %ezpublish.api.role.limitation_type.parent_owner.class%
+        arguments: [@ezpublish.api.persistence_handler]
+        tags:
+            - {name: ezpublish.limitationType, alias: ParentOwner}
+
+    ezpublish.api.role.limitation_type.parent_group:
+        class: %ezpublish.api.role.limitation_type.parent_group.class%
+        arguments: [@ezpublish.api.persistence_handler]
+        tags:
+            - {name: ezpublish.limitationType, alias: ParentGroup}
+
+    ezpublish.api.role.limitation_type.section:
+        class: %ezpublish.api.role.limitation_type.section.class%
+        arguments: [@ezpublish.api.persistence_handler]
+        tags:
+            - {name: ezpublish.limitationType, alias: Section}
+
+    ezpublish.api.role.limitation_type.new_section:
+        class: %ezpublish.api.role.limitation_type.new_section.class%
+        arguments: [@ezpublish.api.persistence_handler]
+        tags:
+            - {name: ezpublish.limitationType, alias: NewSection}
+
+    ezpublish.api.role.limitation_type.siteaccess:
+        class: %ezpublish.api.role.limitation_type.siteaccess.class%
+        tags:
+            - {name: ezpublish.limitationType, alias: SiteAccess}
+
+    ezpublish.api.role.limitation_type.state:
+        class: %ezpublish.api.role.limitation_type.state.class%
+        arguments: [@ezpublish.api.persistence_handler]
+        tags:
+            - {name: ezpublish.limitationType, alias: State}
+
+    ezpublish.api.role.limitation_type.new_state:
+        class: %ezpublish.api.role.limitation_type.new_state.class%
+        arguments: [@ezpublish.api.persistence_handler]
+        tags:
+            - {name: ezpublish.limitationType, alias: NewState}
+
+    ezpublish.api.role.limitation_type.subtree:
+        class: %ezpublish.api.role.limitation_type.subtree.class%
+        arguments: [@ezpublish.api.persistence_handler]
+        tags:
+            - {name: ezpublish.limitationType, alias: Subtree}
+
+    ezpublish.api.role.limitation_type.user_group:
+        class: %ezpublish.api.role.limitation_type.user_group.class%
+        arguments: [@ezpublish.api.persistence_handler]
+        tags:
+            - {name: ezpublish.limitationType, alias: Group}
+
+    ezpublish.api.role.limitation_type.status:
+        class: %ezpublish.api.role.limitation_type.status.class%
+        tags:
+            - {name: ezpublish.limitationType, alias: Status}
+
+    ## Non implemented Limitations
+    # Configured to use "blocking" limitation (as they are not implemented) to avoid LimitationNotFoundException
+
+    # ezjscore limitations, not applicable by API/Platform stack, users are adviced to use Symfony for ajax controllers
+    ezpublish.api.role.limitation_type.function_list:
+        class: %ezpublish.api.role.limitation_type.blocking.class%
+        arguments: ['FunctionList']
+        tags: [{name: ezpublish.limitationType, alias: FunctionList}]
+
+    # Misc limitations used by ezcomments, not applicable to Platform replacement: EzCommentsBundle
+    ezpublish.api.role.limitation_type.ezcomments.content_section:
+        class: %ezpublish.api.role.limitation_type.blocking.class%
+        arguments: ['ContentSection']
+        tags: [{name: ezpublish.limitationType, alias: ContentSection}]
+
+    ezpublish.api.role.limitation_type.ezcomments.comment_creator:
+        class: %ezpublish.api.role.limitation_type.blocking.class%
+        arguments: ['CommentCreator']
+        tags: [{name: ezpublish.limitationType, alias: CommentCreator}]
+
+    ezpublish.api.role.limitation_type.ezcomments.anti_spam:
+        class: %ezpublish.api.role.limitation_type.blocking.class%
+        arguments: ['AntiSpam']
+        tags: [{name: ezpublish.limitationType, alias: AntiSpam}]

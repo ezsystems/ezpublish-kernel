@@ -1,0 +1,428 @@
+<?php
+
+/**
+ * File containing the eZ\Publish\Core\FieldType\RichText\Type class.
+ *
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
+ * @version //autogentag//
+ */
+
+namespace eZ\Publish\Core\FieldType\RichText;
+
+use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
+use eZ\Publish\API\Repository\Values\Content\Relation;
+use DOMDocument;
+use RuntimeException;
+
+/**
+ * RichText field type.
+ */
+class Type extends FieldType
+{
+    /**
+     * List of settings available for this FieldType.
+     *
+     * The key is the setting name, and the value is the default value for this setting
+     *
+     * @var array
+     */
+    protected $settingsSchema = array(
+        'numRows' => array(
+            'type' => 'int',
+            'default' => 10,
+        ),
+    );
+
+    /**
+     * @var \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher
+     */
+    protected $inputConverterDispatcher;
+
+    /**
+     * @var \eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
+     */
+    protected $validatorDispatcher;
+
+    /**
+     * @param \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher $inputConverterDispatcher
+     * @param \eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher $validatorDispatcher
+     */
+    public function __construct(ConverterDispatcher $inputConverterDispatcher, ValidatorDispatcher $validatorDispatcher)
+    {
+        $this->inputConverterDispatcher = $inputConverterDispatcher;
+        $this->validatorDispatcher = $validatorDispatcher;
+    }
+
+    /**
+     * Returns the field type identifier for this field type.
+     *
+     * @return string
+     */
+    public function getFieldTypeIdentifier()
+    {
+        return 'ezrichtext';
+    }
+
+    /**
+     * Returns the name of the given field value.
+     *
+     * It will be used to generate content name and url alias if current field is designated
+     * to be used in the content name/urlAlias pattern.
+     *
+     * @param \eZ\Publish\Core\FieldType\RichText\Value $value
+     *
+     * @return string
+     */
+    public function getName(SPIValue $value)
+    {
+        $result = null;
+        if ($section = $value->xml->documentElement->firstChild) {
+            $textDom = $section->firstChild;
+
+            if ($textDom && $textDom->hasChildNodes()) {
+                $result = $textDom->firstChild->textContent;
+            } elseif ($textDom) {
+                $result = $textDom->textContent;
+            }
+        }
+
+        if ($result === null) {
+            $result = $value->xml->documentElement->textContent;
+        }
+
+        return trim($result);
+    }
+
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \eZ\Publish\Core\FieldType\RichText\Value
+     */
+    public function getEmptyValue()
+    {
+        return new Value();
+    }
+
+    /**
+     * Returns if the given $value is considered empty by the field type.
+     *
+     * @param \eZ\Publish\Core\FieldType\RichText\Value $value
+     *
+     * @return bool
+     */
+    public function isEmptyValue(SPIValue $value)
+    {
+        if ($value->xml === null) {
+            return true;
+        }
+
+        return !$value->xml->documentElement->hasChildNodes();
+    }
+
+    /**
+     * Inspects given $inputValue and potentially converts it into a dedicated value object.
+     *
+     * @param \eZ\Publish\Core\FieldType\RichText\Value|\DOMDocument|string $inputValue
+     *
+     * @return \eZ\Publish\Core\FieldType\RichText\Value The potentially converted and structurally plausible value.
+     */
+    protected function createValueFromInput($inputValue)
+    {
+        if (is_string($inputValue)) {
+            if (empty($inputValue)) {
+                $inputValue = Value::EMPTY_VALUE;
+            }
+
+            $inputValue = $this->loadXMLString($inputValue);
+        }
+
+        if ($inputValue instanceof DOMDocument) {
+            $errors = $this->validatorDispatcher->dispatch($inputValue);
+            if (!empty($errors)) {
+                throw new InvalidArgumentException(
+                    "\$inputValue",
+                    'Validation of XML content failed: ' . implode("\n", $errors)
+                );
+            }
+
+            $inputValue = $this->inputConverterDispatcher->dispatch($inputValue);
+
+            $errors = $this->validatorDispatcher->dispatch($inputValue);
+            if (!empty($errors)) {
+                throw new InvalidArgumentException(
+                    "\$inputValue",
+                    'Validation of XML content failed: ' . implode("\n", $errors)
+                );
+            }
+
+            $inputValue = new Value($inputValue);
+        }
+
+        return $inputValue;
+    }
+
+    /**
+     * Creates \DOMDocument from given $xmlString.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param $xmlString
+     *
+     * @return \DOMDocument
+     */
+    protected function loadXMLString($xmlString)
+    {
+        $document = new DOMDocument();
+
+        libxml_use_internal_errors(true);
+        libxml_clear_errors();
+
+        $success = $document->loadXML($xmlString);
+
+        if (!$success) {
+            $messages = array();
+
+            foreach (libxml_get_errors() as $error) {
+                $messages[] = trim($error->message);
+            }
+
+            throw new InvalidArgumentException(
+                "\$inputValue",
+                'Could not create XML document: ' . implode("\n", $messages)
+            );
+        }
+
+        return $document;
+    }
+
+    /**
+     * Throws an exception if value structure is not of expected format.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     *
+     * @param \eZ\Publish\Core\FieldType\RichText\Value $value
+     */
+    protected function checkValueStructure(BaseValue $value)
+    {
+        if (!$value->xml instanceof DOMDocument) {
+            throw new InvalidArgumentType(
+                '$value->xml',
+                'DOMDocument',
+                $value
+            );
+        }
+    }
+
+    /**
+     * Returns sortKey information.
+     *
+     * @see \eZ\Publish\Core\FieldType
+     *
+     * @param \eZ\Publish\Core\FieldType\RichText\Value $value
+     *
+     * @return array|bool
+     */
+    protected function getSortInfo(BaseValue $value)
+    {
+        return false;
+    }
+
+    /**
+     * Converts an $hash to the Value defined by the field type.
+     * $hash accepts the following keys:
+     *  - xml (XML string which complies internal format).
+     *
+     * @param mixed $hash
+     *
+     * @return \eZ\Publish\Core\FieldType\RichText\Value $value
+     */
+    public function fromHash($hash)
+    {
+        if (!isset($hash['xml'])) {
+            throw new RuntimeException("'xml' index is missing in hash.");
+        }
+
+        return $this->acceptValue($hash['xml']);
+    }
+
+    /**
+     * Converts a $Value to a hash.
+     *
+     * @param \eZ\Publish\Core\FieldType\RichText\Value $value
+     *
+     * @return mixed
+     */
+    public function toHash(SPIValue $value)
+    {
+        return array('xml' => (string)$value);
+    }
+
+    /**
+     * Creates a new Value object from persistence data.
+     * $fieldValue->data is supposed to be a string.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
+     *
+     * @return \eZ\Publish\Core\FieldType\RichText\Value
+     */
+    public function fromPersistenceValue(FieldValue $fieldValue)
+    {
+        return new Value($fieldValue->data);
+    }
+
+    /**
+     * @param \eZ\Publish\Core\FieldType\RichText\Value $value
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
+     */
+    public function toPersistenceValue(SPIValue $value)
+    {
+        return new FieldValue(
+            array(
+                'data' => $value->xml->saveXML(),
+                'externalData' => null,
+                'sortKey' => $this->getSortInfo($value),
+            )
+        );
+    }
+
+    /**
+     * Returns whether the field type is searchable.
+     *
+     * @return bool
+     */
+    public function isSearchable()
+    {
+        return true;
+    }
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings($fieldSettings)
+    {
+        $validationErrors = array();
+
+        foreach ($fieldSettings as $name => $value) {
+            if (isset($this->settingsSchema[$name])) {
+                switch ($name) {
+                    case 'numRows':
+                        if (!is_integer($value)) {
+                            $validationErrors[] = new ValidationError(
+                                "Setting '%setting%' value must be of integer type",
+                                null,
+                                array(
+                                    'setting' => $name,
+                                ),
+                                "[$name]"
+                            );
+                        }
+                        break;
+                }
+            } else {
+                $validationErrors[] = new ValidationError(
+                    "Setting '%setting%' is unknown",
+                    null,
+                    array(
+                        'setting' => $name,
+                    ),
+                    "[$name]"
+                );
+            }
+        }
+
+        return $validationErrors;
+    }
+
+    /**
+     * Returns relation data extracted from value.
+     *
+     * Not intended for \eZ\Publish\API\Repository\Values\Content\Relation::COMMON type relations,
+     * there is a service API for handling those.
+     *
+     * @param \eZ\Publish\Core\FieldType\RichText\Value $fieldValue
+     *
+     * @return array Hash with relation type as key and array of destination content ids as value.
+     *
+     * Example:
+     * <code>
+     *  array(
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::LINK => array(
+     *          "contentIds" => array( 12, 13, 14 ),
+     *          "locationIds" => array( 24 )
+     *      ),
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::EMBED => array(
+     *          "contentIds" => array( 12 ),
+     *          "locationIds" => array( 24, 45 )
+     *      ),
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::ATTRIBUTE => array( 12 )
+     *  )
+     * </code>
+     */
+    public function getRelations(SPIValue $value)
+    {
+        $relations = array();
+
+        /** @var \eZ\Publish\Core\FieldType\RichText\Value $value */
+        if ($value->xml instanceof DOMDocument) {
+            $relations = array(
+                Relation::LINK => $this->getRelatedObjectIds($value, Relation::LINK),
+                Relation::EMBED => $this->getRelatedObjectIds($value, Relation::EMBED),
+            );
+        }
+
+        return $relations;
+    }
+
+    /**
+     * @todo handle embeds when implemented
+     */
+    protected function getRelatedObjectIds(Value $fieldValue, $relationType)
+    {
+        if ($relationType === Relation::EMBED) {
+            $tagName = 'embed';
+        } else {
+            $tagName = 'link';
+        }
+
+        $contentIds = array();
+        $locationIds = array();
+        $xpath = new \DOMXPath($fieldValue->xml);
+        $xpath->registerNamespace('docbook', 'http://docbook.org/ns/docbook');
+        $xpathExpression = "//docbook:{$tagName}[starts-with( @xlink:href, 'ezcontent://' ) or starts-with( @xlink:href, 'ezlocation://' )]";
+
+        /** @var \DOMElement $link */
+        foreach ($xpath->query($xpathExpression) as $link) {
+            preg_match('~^(.+)://([^#]*)?(#.*|\\s*)?$~', $link->getAttribute('xlink:href'), $matches);
+            list(, $scheme, $id) = $matches;
+
+            if (empty($id)) {
+                continue;
+            }
+
+            if ($scheme === 'ezcontent') {
+                $contentIds[] = $id;
+            } elseif ($scheme === 'ezlocation') {
+                $locationIds[] = $id;
+            }
+        }
+
+        return array(
+            'locationIds' => array_unique($locationIds),
+            'contentIds' => array_unique($contentIds),
+        );
+    }
+}

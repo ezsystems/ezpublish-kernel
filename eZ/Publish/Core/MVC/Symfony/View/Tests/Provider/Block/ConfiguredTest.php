@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ConfiguredTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,7 +24,7 @@ class ConfiguredTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->matcherFactoryMock = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\MatcherFactoryInterface' );
+        $this->matcherFactoryMock = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\MatcherFactoryInterface');
     }
 
     /**
@@ -31,7 +33,7 @@ class ConfiguredTest extends PHPUnit_Framework_TestCase
     private function getBlockMock()
     {
         return $this
-            ->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Block' )
+            ->getMockBuilder('eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Block')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -43,11 +45,11 @@ class ConfiguredTest extends PHPUnit_Framework_TestCase
     public function testGetViewContentFail()
     {
         $this->matcherFactoryMock
-            ->expects( $this->once() )
-            ->method( 'match' )
-            ->will( $this->returnValue( null ) );
+            ->expects($this->once())
+            ->method('match')
+            ->will($this->returnValue(null));
 
-        $cvp = new BlockViewProvider( $this->matcherFactoryMock );
+        $cvp = new BlockViewProvider($this->matcherFactoryMock);
         $this->assertNull(
             $cvp->getView(
                 $this->getBlockMock(),
@@ -66,11 +68,11 @@ class ConfiguredTest extends PHPUnit_Framework_TestCase
     public function testGetViewContentNoTemplate()
     {
         $this->matcherFactoryMock
-            ->expects( $this->once() )
-            ->method( 'match' )
-            ->will( $this->returnValue( array( 'match' => array() ) ) );
+            ->expects($this->once())
+            ->method('match')
+            ->will($this->returnValue(array('match' => array())));
 
-        $cvp = new BlockViewProvider( $this->matcherFactoryMock );
+        $cvp = new BlockViewProvider($this->matcherFactoryMock);
         $this->assertNull(
             $cvp->getView(
                 $this->getBlockMock(),
@@ -89,21 +91,21 @@ class ConfiguredTest extends PHPUnit_Framework_TestCase
         $template = 'my_template.html.twig';
         $configHash = array(
             'match' => array(),
-            'template' => $template
+            'template' => $template,
         );
         $this->matcherFactoryMock
-            ->expects( $this->once() )
-            ->method( 'match' )
-            ->will( $this->returnValue( $configHash ) );
+            ->expects($this->once())
+            ->method('match')
+            ->will($this->returnValue($configHash));
 
-        $cvp = new BlockViewProvider( $this->matcherFactoryMock );
+        $cvp = new BlockViewProvider($this->matcherFactoryMock);
         $view = $cvp->getView(
             $this->getBlockMock(),
             'full'
         );
-        $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentView', $view );
-        $this->assertSame( $configHash, $view->getConfigHash() );
-        $this->assertSame( $template, $view->getTemplateIdentifier() );
-        $this->assertSame( array(), $view->getParameters() );
+        $this->assertInstanceOf('eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentView', $view);
+        $this->assertSame($configHash, $view->getConfigHash());
+        $this->assertSame($template, $view->getTemplateIdentifier());
+        $this->assertSame(array(), $view->getParameters());
     }
 }

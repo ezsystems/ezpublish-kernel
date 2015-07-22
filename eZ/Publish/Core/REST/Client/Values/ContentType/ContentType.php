@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentType class
+ * File containing the ContentType class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,7 @@ use eZ\Publish\Core\REST\Client\ContentTypeService;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
 
 /**
- * this class represents a content type value
+ * this class represents a content type value.
  *
  * @property-read array $names calls getNames() or on access getName($language)
  * @property-read array $descriptions calls getDescriptions() or on access getDescription($language)
@@ -29,9 +31,10 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
  * @property-read string $remoteId a global unique id of the content object
  * @property-read string $urlAliasSchema URL alias schema. If nothing is provided, $nameSchema will be used instead.
  * @property-read string $nameSchema  The name schema.
- * @property-read boolean $isContainer Determines if the type is allowd to have children
+ * @property-read boolean $isContainer Determines if the type is allowed to have children
  * @property-read string $mainLanguageCode the main language of the content type names and description used for fallback.
- * @property-read boolean $defaultAlwaysAvailable if an instance of acontent type is created the always available flag is set by default this this value.
+ * @property-read boolean $defaultAlwaysAvailable if an instance of a content type is created the always available flag is set by default this this value.
+ *
  * @property-read int $defaultSortField Specifies which property the child locations should be sorted on by default when created. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $defaultSortOrder Specifies whether the sort order should be ascending or descending by default when created. Valid values are {@link Location::SORT_ORDER_*}
  *
@@ -41,7 +44,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
 class ContentType extends APIContentType
 {
     /**
-     * Content type service to fetch additional information from
+     * Content type service to fetch additional information from.
      *
      * @var \eZ\Publish\Core\REST\Client\ContentTypeService
      */
@@ -49,21 +52,21 @@ class ContentType extends APIContentType
 
     /**
      * Contains the human readable name in all provided languages of the
-     * content type
+     * content type.
      *
      * @var string[]
      */
     protected $names;
 
     /**
-     * Contains the human readable description of the content type
+     * Contains the human readable description of the content type.
      *
      * @var string[]
      */
     protected $descriptions;
 
     /**
-     * Carries the URL for the list of FieldDefinitions for the type
+     * Carries the URL for the list of FieldDefinitions for the type.
      *
      * @var string
      */
@@ -80,19 +83,18 @@ class ContentType extends APIContentType
      * @param ContentTypeService $contentTypeService
      * @param array $data
      */
-    public function __construct( ContentTypeService $contentTypeService, array $data = array() )
+    public function __construct(ContentTypeService $contentTypeService, array $data = array())
     {
         $this->contentTypeService = $contentTypeService;
 
-        foreach ( $data as $propertyName => $propertyValue )
-        {
+        foreach ($data as $propertyName => $propertyValue) {
             $this->$propertyName = $propertyValue;
         }
     }
 
     /**
      * This method returns the human readable name in all provided languages
-     * of the content type
+     * of the content type.
      *
      * The structure of the return value is:
      * <code>
@@ -107,19 +109,19 @@ class ContentType extends APIContentType
     }
 
     /**
-     * This method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language.
      *
      * @param string $languageCode
      *
-     * @return string the name for the given language or null if none existis.
+     * @return string the name for the given language or null if none exists.
      */
-    public function getName( $languageCode )
+    public function getName($languageCode)
     {
         return $this->names[$languageCode];
     }
 
     /**
-     * This method returns the human readable description of the content type
+     * This method returns the human readable description of the content type.
      *
      * The structure of this field is:
      * <code>
@@ -134,19 +136,19 @@ class ContentType extends APIContentType
     }
 
     /**
-     * This method returns the name of the content type in the given language
+     * This method returns the name of the content type in the given language.
      *
      * @param string $languageCode
      *
-     * @return string the description for the given language or null if none existis.
+     * @return string the description for the given language or null if none exists.
      */
-    public function getDescription( $languageCode )
+    public function getDescription($languageCode)
     {
         return $this->descriptions[$languageCode];
     }
 
     /**
-     * This method returns the content type groups this content type is assigned to
+     * This method returns the content type groups this content type is assigned to.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
@@ -155,11 +157,12 @@ class ContentType extends APIContentType
         $contentTypeGroupList = $this->contentTypeService->loadContentTypeGroupList(
             $this->contentTypeGroupListReference
         );
+
         return $contentTypeGroupList->getContentTypeGroups();
     }
 
     /**
-     * This method returns the content type field definitions from this type
+     * This method returns the content type field definitions from this type.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
      */
@@ -168,59 +171,59 @@ class ContentType extends APIContentType
         $fieldDefinitionList = $this->contentTypeService->loadFieldDefinitionList(
             $this->fieldDefinitionListReference
         );
+
         return $fieldDefinitionList->getFieldDefinitions();
     }
 
     /**
-     * This method returns the field definition for the given identifier
+     * This method returns the field definition for the given identifier.
      *
      * @param string $fieldDefinitionIdentifier
      *
      * @return FieldDefinition
      */
-    public function getFieldDefinition( $fieldDefinitionIdentifier )
+    public function getFieldDefinition($fieldDefinitionIdentifier)
     {
         $fieldDefinitions = $this->getFieldDefinitions();
-        foreach ( $fieldDefinitions as $fieldDefinition )
-        {
-            if ( $fieldDefinition->identifier === $fieldDefinitionIdentifier )
-            {
+        foreach ($fieldDefinitions as $fieldDefinition) {
+            if ($fieldDefinition->identifier === $fieldDefinitionIdentifier) {
                 return $fieldDefinition;
             }
         }
+
         return null;
     }
 
     /**
-     * Magic getter for retrieving convenience properties
+     * Magic getter for retrieving convenience properties.
      *
      * @param string $property The name of the property to retrieve
      *
      * @return mixed
      */
-    public function __get( $property )
+    public function __get($property)
     {
-        switch ( $property )
-        {
-            case "contentTypeGroups":
+        switch ($property) {
+            case 'contentTypeGroups':
                 return $this->getContentTypeGroups();
         }
 
-        return parent::__get( $property );
+        return parent::__get($property);
     }
 
     /**
-     * Magic isset for singaling existence of convenience properties
+     * Magic isset for signaling existence of convenience properties.
      *
      * @param string $property
      *
-     * @return boolean
+     * @return bool
      */
-    public function __isset( $property )
+    public function __isset($property)
     {
-        if ( $property === "contentTypeGroups" )
+        if ($property === 'contentTypeGroups') {
             return true;
+        }
 
-        return parent::__isset( $property );
+        return parent::__isset($property);
     }
 }

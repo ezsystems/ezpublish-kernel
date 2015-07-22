@@ -1,56 +1,75 @@
 language: php
 
-# run tests on php misc php versions
-php:
-  - 5.3.3
-  - 5.3
-  - 5.4
-  - 5.5
-
 # execute unit tests, integration test stubs and integration tests using legacy storage engine
 env:
-  - TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
-  - TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
-  - TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Asia/Calcutta"
-#  - TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
+  global:
+    - DB_NAME="testdb"
 
 matrix:
+  # mark as finished before allow_failures are run
+  fast_finish: true
+  # misc nighlty tests we keep an eye on and aim to fix closer to stable versions
   allow_failures:
-    - php: 5.3.3
-      env: TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
-  exclude:
-    - php: 5.3.3
-      env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
-    - php: 5.3
-      env: TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
-    - php: 5.3
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Asia/Calcutta"
-#    - php: 5.3
-#      env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
+    - php: hhvm
+      env: TEST_CONFIG="phpunit.xml"
+    - php: 7.0
+      env: TEST_CONFIG="phpunit.xml"
+  include:
+# 5.4
     - php: 5.4
-      env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
+      env: TEST_CONFIG="phpunit.xml"
+    - php: 5.4
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME"
+    - php: 5.4
+      env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CORES_SETUP="dedicated" SOLR_CORES="core0 core1 core2 core3 core4 core5 core6 core7" SOLR_CONFS="eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
+    - php: 5.4
+      env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CORES_SETUP="shared" SOLR_CORES="core0 core1 core2 core3 core4" SOLR_CONFS="eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
+    - php: 5.4
+      env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CORES_SETUP="single" SOLR_CONFS="eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
+# 5.5
     - php: 5.5
-      env: TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
-#    - php: 5.5
-#      env: TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
+      env: TEST_CONFIG="phpunit.xml"
+    - php: 5.5
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME"
+    - php: 5.5
+      env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
+# 5.6
+    - php: 5.6
+      env: TEST_CONFIG="phpunit.xml"
+    - php: 5.6
+      env: TEST_CONFIG="phpunit-integration-legacy.xml"
+    - php: 5.6
+      env: BEHAT_PROFILE="demo" TEST="clean"
+# 7.0
+    - php: 7.0
+      env: TEST_CONFIG="phpunit.xml"
+# hhvm - disabled, no need ot enable before travis has newer versions avaiable
+#    - php: hhvm
+#      env: TEST_CONFIG="phpunit.xml"
+
 
 # test only master (+ Pull requests)
 branches:
   only:
     - master
 
-# setup requirements for running unit tests
+# setup requirements for running unit/integration/behat tests
 before_script:
-  - cp config.php-DEVELOPMENT config.php
-  - ./composer_install_github_key.sh
-  - composer install --dev --prefer-source
-#  - "if [ \"$TEST_CONFIG\" = \"phpunit-integration-legacy-solr.xml\" ] ; then curl https://raw.github.com/patrickallaert/travis-solr/master/travis-solr.sh | SOLR_VERSION=3.6.2 SOLR_CONFS=eZ/Publish/Core/Persistence/Solr/Content/Search/schema.xml bash ; fi"
+  # Prepare system
+  - if [ "$TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_unittest.sh ; fi
+  - if [ "$BEHAT_PROFILE" != "" ] ; then ./bin/.travis/prepare_behat.sh ; fi
+  # Detecting timezone issues by testing on random timezone
+  - TEST_TIMEZONES=("America/New_York" "Asia/Calcutta" "UTC")
+  - TEST_TIMEZONE=${TEST_TIMEZONES["`shuf -i 0-2 -n 1`"]}
+  - echo "$TEST_TIMEZONE"
 
-# execute phpunit as the script command
-script: "phpunit -d date.timezone=$TIMEZONE -d memory_limit=-1 -c $TEST_CONFIG"
+# execute phpunit or behat as the script command
+script:
+  - if [ "$TEST_CONFIG" != "" ] ; then php -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 vendor/bin/phpunit -c $TEST_CONFIG ; fi
+  - if [ "$BEHAT_PROFILE" != "" ] ; then cd "$HOME/build/ezplatform" && php bin/behat -vv --profile $BEHAT_PROFILE --suite $TEST ; fi
 
 # disable mail notifications
-notification:
+notifications:
   email: false
 
 # reduce depth (history) of git checkout

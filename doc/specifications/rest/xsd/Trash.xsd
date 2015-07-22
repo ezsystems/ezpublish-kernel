@@ -68,7 +68,7 @@
           <xsd:element name="childCount" type="xsd:int">
             <xsd:annotation>
               <xsd:documentation>
-                the number of chidren visible to the
+                the number of children visible to the
                 authenticated user which has
                 loaded this instance.
               </xsd:documentation>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version = '1.0' encoding = 'utf-8'?>
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
          bootstrap="bootstrap.php"
@@ -17,6 +17,7 @@
             <file>eZ/Publish/API/Repository/Tests/RepositoryTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SectionServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LanguageServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/LanguageServiceMaximumSupportedLanguagesTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/ContentTypeServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/ContentServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LocationServiceTest.php</file>

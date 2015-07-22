@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Language class
+ * File containing the Language class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,23 +26,23 @@ class Language extends ValueObject
     public $id;
 
     /**
-     * Language Code (eg: eng-GB)
+     * Language Code (eg: eng-GB).
      *
      * @var string
      */
     public $languageCode;
 
     /**
-     * Human readable language name
+     * Human readable language name.
      *
      * @var string
      */
     public $name;
 
     /**
-     * Indicates if language is enabled or not
+     * Indicates if language is enabled or not.
      *
-     * @var boolean
+     * @var bool
      */
     public $isEnabled = true;
 }

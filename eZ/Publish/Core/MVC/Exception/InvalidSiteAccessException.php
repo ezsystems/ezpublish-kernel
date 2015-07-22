@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the InvalidSiteAccessException class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,8 +23,8 @@ class InvalidSiteAccessException extends RuntimeException
      * @param array $siteAccessList All valid siteaccesses, as a regular array
      * @param string $matchType How $siteAccess was matched
      */
-    public function __construct( $siteAccess, array $siteAccessList, $matchType )
+    public function __construct($siteAccess, array $siteAccessList, $matchType)
     {
-        parent::__construct( "Invalid siteaccess '$siteAccess', matched by $matchType. Valid siteaccesses are " . implode( ', ', $siteAccessList ) );
+        parent::__construct("Invalid siteaccess '$siteAccess', matched by $matchType. Valid siteaccesses are " . implode(', ', $siteAccessList));
     }
 }

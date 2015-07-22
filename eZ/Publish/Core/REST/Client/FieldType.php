@@ -1,16 +1,20 @@
 <?php
+
 /**
- * File containing the FieldType class
+ * File containing the FieldType class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\FieldType as APIFieldType;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\SPI;
+use eZ\Publish\SPI\FieldType\Value;
 
 class FieldType implements APIFieldType
 {
@@ -24,13 +28,13 @@ class FieldType implements APIFieldType
     /**
      * @param \eZ\Publish\SPI\FieldType\FieldType $innerFieldType
      */
-    public function __construct( SPI\FieldType\FieldType $innerFieldType )
+    public function __construct(SPI\FieldType\FieldType $innerFieldType)
     {
         $this->innerFieldType = $innerFieldType;
     }
 
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
@@ -40,7 +44,7 @@ class FieldType implements APIFieldType
     }
 
     /**
-     * Returns a schema for the settings expected by the FieldType
+     * Returns a schema for the settings expected by the FieldType.
      *
      * Returns an arbitrary value, representing a schema for the settings of
      * the FieldType.
@@ -64,7 +68,7 @@ class FieldType implements APIFieldType
     }
 
     /**
-     * Returns a schema for the validator configuration expected by the FieldType
+     * Returns a schema for the validator configuration expected by the FieldType.
      *
      * Returns an arbitrary value, representing a schema for the validator
      * configuration of the FieldType.
@@ -104,18 +108,18 @@ class FieldType implements APIFieldType
      */
     public function getValidatorConfigurationSchema()
     {
-        return $third->innerFieldType->getValidatorConfigurationSchema();
+        return $this->innerFieldType->getValidatorConfigurationSchema();
     }
 
-    public function getName( $value )
+    public function getName($value)
     {
-        return $third->innerFieldType->getName( $value );
+        return $this->innerFieldType->getName($value);
     }
 
     /**
-     * Indicates if the field type supports indexing and sort keys for searching
+     * Indicates if the field type supports indexing and sort keys for searching.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSearchable()
     {
@@ -125,7 +129,7 @@ class FieldType implements APIFieldType
     /**
      * Indicates if the field definition of this type can appear only once in the same ContentType.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSingular()
     {
@@ -135,7 +139,7 @@ class FieldType implements APIFieldType
     /**
      * Indicates if the field definition of this type can be added to a ContentType with Content instances.
      *
-     * @return boolean
+     * @return bool
      */
     public function onlyEmptyInstance()
     {
@@ -154,7 +158,7 @@ class FieldType implements APIFieldType
     }
 
     /**
-     * Returns if the given $value is considered empty by the field type
+     * Returns if the given $value is considered empty by the field type.
      *
      * Usually, only the value returned by {@link getEmptyValue()} is
      * considered empty but that is not always the case.
@@ -164,51 +168,51 @@ class FieldType implements APIFieldType
      *
      * @param mixed $value
      *
-     * @return boolean
+     * @return bool
      */
-    public function isEmptyValue( $value )
+    public function isEmptyValue($value)
     {
-        return $this->innerFieldType->isEmptyValue( $value );
+        return $this->innerFieldType->isEmptyValue($value);
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * @param mixed $hash
      *
      * @return mixed
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        return $this->innerFieldType->fromHash( $hash );
+        return $this->innerFieldType->fromHash($hash);
     }
 
     /**
-     * Converts a Value to a hash
+     * Converts a Value to a hash.
      *
      * @param mixed $value
      *
      * @return mixed
      */
-    public function toHash( $value )
+    public function toHash($value)
     {
-        return $this->innerFieldType->toHash( $value );
+        return $this->innerFieldType->toHash($value);
     }
 
     /**
-     * Converts the given $fieldSettings to a simple hash format
+     * Converts the given $fieldSettings to a simple hash format.
      *
      * @param mixed $fieldSettings
      *
      * @return array|hash|scalar|null
      */
-    public function fieldSettingsToHash( $fieldSettings )
+    public function fieldSettingsToHash($fieldSettings)
     {
-        return $this->innerFieldType->fieldSettingsToHash( $fieldSettings );
+        return $this->innerFieldType->fieldSettingsToHash($fieldSettings);
     }
 
     /**
-     * Converts the given $fieldSettingsHash to field settings of the type
+     * Converts the given $fieldSettingsHash to field settings of the type.
      *
      * This is the reverse operation of {@link fieldSettingsToHash()}.
      *
@@ -216,33 +220,76 @@ class FieldType implements APIFieldType
      *
      * @return mixed
      */
-    public function fieldSettingsFromHash( $fieldSettingsHash )
+    public function fieldSettingsFromHash($fieldSettingsHash)
     {
-        return $this->innerFieldType->fieldSettingsFromHash( $fieldSettingsHash );
+        return $this->innerFieldType->fieldSettingsFromHash($fieldSettingsHash);
     }
 
     /**
-     * Converts the given $validatorConfiguration to a simple hash format
+     * Converts the given $validatorConfiguration to a simple hash format.
      *
      * @param mixed $validatorConfiguration
      *
      * @return array|hash|scalar|null
      */
-    public function validatorConfigurationToHash( $validatorConfiguration )
+    public function validatorConfigurationToHash($validatorConfiguration)
     {
-        return $this->innerFieldType->validatorConfigurationToHash( $validatorConfiguration );
+        return $this->innerFieldType->validatorConfigurationToHash($validatorConfiguration);
     }
 
     /**
      * Converts the given $validatorConfigurationHash to a validator
-     * configuration of the type
+     * configuration of the type.
      *
      * @param array|hash|scalar|null $validatorConfigurationHash
      *
      * @return mixed
      */
-    public function validatorConfigurationFromHash( $validatorConfigurationHash )
+    public function validatorConfigurationFromHash($validatorConfigurationHash)
     {
-        return $this->innerFieldType->validatorConfigurationFromHash( $validatorConfigurationHash );
+        return $this->innerFieldType->validatorConfigurationFromHash($validatorConfigurationHash);
+    }
+
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
+     *
+     * This methods determines if the given $validatorConfiguration is
+     * structurally correct and complies to the validator configuration schema as defined in FieldType.
+     *
+     * @param mixed $validatorConfiguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValidatorConfiguration($validatorConfiguration)
+    {
+        return $this->innerFieldType->validateValidatorConfiguration($validatorConfiguration);
+    }
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
+     *
+     * This methods determines if the given $fieldSettings are structurally
+     * correct and comply to the settings schema as defined in FieldType.
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings($fieldSettings)
+    {
+        return $this->innerFieldType->validateFieldSettings($fieldSettings);
+    }
+
+    /**
+     * Validates a field value based on the validator configuration in the field definition.
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
+     * @param \eZ\Publish\SPI\FieldType\Value $value The field value for which an action is performed
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValue(FieldDefinition $fieldDef, Value $value)
+    {
+        return $this->innerFieldType->validate($fieldDef, $value);
     }
 }

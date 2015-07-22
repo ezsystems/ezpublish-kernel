@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the CheckboxTest class
+ * File containing the CheckboxTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,7 +13,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Checkbox\Type as Checkbox;
 use eZ\Publish\Core\FieldType\Checkbox\Value as CheckboxValue;
-use ReflectionObject;
 
 /**
  * @group fieldType
@@ -19,7 +20,6 @@ use ReflectionObject;
  */
 class CheckboxTest extends FieldTypeTest
 {
-
     /**
      * Returns the field type under test.
      *
@@ -29,11 +29,14 @@ class CheckboxTest extends FieldTypeTest
      * NOT take care for test case wide caching of the field type, just return
      * a new instance from this method!
      *
-     * @return FieldType
+     * @return \eZ\Publish\SPI\FieldType\FieldType
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Checkbox();
+        $fieldType = new Checkbox();
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
+
+        return $fieldType;
     }
 
     /**
@@ -63,7 +66,7 @@ class CheckboxTest extends FieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return new CheckboxValue( false );
+        return new CheckboxValue(false);
     }
 
     /**
@@ -97,7 +100,7 @@ class CheckboxTest extends FieldTypeTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                new CheckboxValue( 42 ),
+                new CheckboxValue(42),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
@@ -137,17 +140,17 @@ class CheckboxTest extends FieldTypeTest
         return array(
             array(
                 false,
-                new CheckboxValue( false )
+                new CheckboxValue(false),
             ),
             array(
                 true,
-                new CheckboxValue( true )
-            )
+                new CheckboxValue(true),
+            ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -185,18 +188,18 @@ class CheckboxTest extends FieldTypeTest
     {
         return array(
             array(
-                new CheckboxValue( true ),
+                new CheckboxValue(true),
                 true,
             ),
             array(
-                new CheckboxValue( false ),
+                new CheckboxValue(false),
                 false,
             ),
         );
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -235,11 +238,11 @@ class CheckboxTest extends FieldTypeTest
         return array(
             array(
                 true,
-                new CheckboxValue( true ),
+                new CheckboxValue(true),
             ),
             array(
                 false,
-                new CheckboxValue( false ),
+                new CheckboxValue(false),
             ),
         );
     }
@@ -249,11 +252,11 @@ class CheckboxTest extends FieldTypeTest
      */
     public function testToPersistenceValue()
     {
-        $ft = new Checkbox();
-        $fieldValue = $ft->toPersistenceValue( new CheckboxValue( true ) );
+        $ft = $this->createFieldTypeUnderTest();
+        $fieldValue = $ft->toPersistenceValue(new CheckboxValue(true));
 
-        self::assertSame( true, $fieldValue->data );
-        self::assertSame( 1, $fieldValue->sortKey );
+        self::assertSame(true, $fieldValue->data);
+        self::assertSame(1, $fieldValue->sortKey);
     }
 
     /**
@@ -262,8 +265,8 @@ class CheckboxTest extends FieldTypeTest
     public function testBuildFieldValueWithParam()
     {
         $bool = true;
-        $value = new CheckboxValue( $bool );
-        self::assertSame( $bool, $value->bool );
+        $value = new CheckboxValue($bool);
+        self::assertSame($bool, $value->bool);
     }
 
     /**
@@ -271,8 +274,8 @@ class CheckboxTest extends FieldTypeTest
      */
     public function testBuildFieldValueWithoutParam()
     {
-        $value = new CheckboxValue;
-        self::assertSame( false, $value->bool );
+        $value = new CheckboxValue();
+        self::assertSame(false, $value->bool);
     }
 
     /**
@@ -280,9 +283,28 @@ class CheckboxTest extends FieldTypeTest
      */
     public function testFieldValueToString()
     {
-        $valueTrue = new CheckboxValue( true );
-        $valueFalse = new CheckboxValue( false );
-        self::assertSame( '1', (string)$valueTrue );
-        self::assertSame( '0', (string)$valueFalse );
+        $valueTrue = new CheckboxValue(true);
+        $valueFalse = new CheckboxValue(false);
+        self::assertSame('1', (string)$valueTrue);
+        self::assertSame('0', (string)$valueFalse);
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezboolean';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array(
+                new CheckboxValue(true),
+                '1',
+            ),
+            array(
+                new CheckboxValue(false),
+                '0',
+            ),
+        );
     }
 }

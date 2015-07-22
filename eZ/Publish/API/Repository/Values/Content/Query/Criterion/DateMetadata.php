@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\DateMetadata class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use InvalidArgumentException;
 
 /**
- * A criterion that matches content based on one of the date metadata (created or modified)
+ * A criterion that matches content based on one of the date metadata (created or modified).
  *
  * Supported Operators:
  * EQ, IN: matches content whose date is or belongs to a list of timestamps
@@ -35,17 +37,17 @@ use InvalidArgumentException;
 class DateMetadata extends Criterion implements CriterionInterface
 {
     /**
-     * DateMetadata target: modification date
+     * DateMetadata target: modification date.
      */
     const MODIFIED = 'modified';
 
     /**
-     * DateMetadata target: creation date
+     * DateMetadata target: creation date.
      */
     const CREATED = 'created';
 
     /**
-     * Creates a new DateMetadata criterion on $metadata
+     * Creates a new DateMetadata criterion on $metadata.
      *
      * @throws \InvalidArgumentException If target is unknown
      *
@@ -53,39 +55,24 @@ class DateMetadata extends Criterion implements CriterionInterface
      * @param string $operator One of the Operator constants
      * @param mixed $value The match value, either as an array of as a single value, depending on the operator
      */
-    public function __construct( $target, $operator, $value )
+    public function __construct($target, $operator, $value)
     {
-        if ( $target != self::MODIFIED && $target != self::CREATED )
-        {
-            throw new InvalidArgumentException( "Unknown DateMetadata $target" );
+        if ($target != self::MODIFIED && $target != self::CREATED) {
+            throw new InvalidArgumentException("Unknown DateMetadata $target");
         }
-        parent::__construct( $target, $operator, $value );
+        parent::__construct($target, $operator, $value);
     }
 
     public function getSpecifications()
     {
         return array(
-            new Specifications(
-                Operator::EQ, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER
-            ),
-            new Specifications(
-                Operator::GT, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER
-            ),
-            new Specifications(
-                Operator::GTE, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER
-            ),
-            new Specifications(
-                Operator::LT, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER
-            ),
-            new Specifications(
-                Operator::LTE, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER
-            ),
-            new Specifications(
-                Operator::IN, Specifications::FORMAT_ARRAY, Specifications::TYPE_INTEGER
-            ),
-            new Specifications(
-                Operator::BETWEEN, Specifications::FORMAT_ARRAY, Specifications::TYPE_INTEGER, 2
-            ),
+            new Specifications(Operator::EQ, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER),
+            new Specifications(Operator::GT, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER),
+            new Specifications(Operator::GTE, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER),
+            new Specifications(Operator::LT, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER),
+            new Specifications(Operator::LTE, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER),
+            new Specifications(Operator::IN, Specifications::FORMAT_ARRAY, Specifications::TYPE_INTEGER),
+            new Specifications(Operator::BETWEEN, Specifications::FORMAT_ARRAY, Specifications::TYPE_INTEGER, 2),
         );
     }
 }

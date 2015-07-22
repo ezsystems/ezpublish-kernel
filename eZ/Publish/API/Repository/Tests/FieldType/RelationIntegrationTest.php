@@ -1,30 +1,31 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\RepositoryTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\RepositoryTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
-use eZ\Publish\API\Repository;
 use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\Content;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
  */
-class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
+class RelationIntegrationTest extends RelationSearchBaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -38,17 +39,17 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
      *
      * @return array|\eZ\Publish\API\Repository\Values\Content\Relation[]
      */
-    public function getCreateExpectedRelations( Content $content )
+    public function getCreateExpectedRelations(Content $content)
     {
         $contentService = $this->getRepository()->getContentService();
 
         return array(
             new Relation(
                 array(
-                    "sourceFieldDefinitionIdentifier" => "data",
-                    "type" => Relation::FIELD,
-                    "sourceContentInfo" => $content->contentInfo,
-                    "destinationContentInfo" => $contentService->loadContentInfo( 4 )
+                    'sourceFieldDefinitionIdentifier' => 'data',
+                    'type' => Relation::FIELD,
+                    'sourceContentInfo' => $content->contentInfo,
+                    'destinationContentInfo' => $contentService->loadContentInfo(4),
                 )
             ),
         );
@@ -59,17 +60,17 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
      *
      * @return array|\eZ\Publish\API\Repository\Values\Content\Relation[]
      */
-    public function getUpdateExpectedRelations( Content $content )
+    public function getUpdateExpectedRelations(Content $content)
     {
         $contentService = $this->getRepository()->getContentService();
 
         return array(
             new Relation(
                 array(
-                    "sourceFieldDefinitionIdentifier" => "data",
-                    "type" => Relation::FIELD,
-                    "sourceContentInfo" => $content->contentInfo,
-                    "destinationContentInfo" => $contentService->loadContentInfo( 49 )
+                    'sourceFieldDefinitionIdentifier' => 'data',
+                    'type' => Relation::FIELD,
+                    'sourceContentInfo' => $content->contentInfo,
+                    'destinationContentInfo' => $contentService->loadContentInfo(49),
                 )
             ),
         );
@@ -83,12 +84,12 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
         return array(
             'selectionMethod' => array(
                 'type' => 'int',
-                'default' => 0
+                'default' => 0,
             ),
             'selectionRoot' => array(
                 'type' => 'string',
                 'default' => '',
-            )
+            ),
         );
     }
 
@@ -101,7 +102,7 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get a valid $fieldSettings value.
      *
      * @todo Implement correctly
      *
@@ -109,11 +110,11 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array( 'selectionMethod' => 0, 'selectionRoot' => '1' );
+        return array('selectionMethod' => 0, 'selectionRoot' => '1');
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $validatorConfiguration.
      *
      * @todo Implement correctly
      *
@@ -125,7 +126,7 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
     }
 
     /**
-     * Get $fieldSettings value not accepted by the field type
+     * Get $fieldSettings value not accepted by the field type.
      *
      * @todo Implement correctly
      *
@@ -133,11 +134,11 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array( 'selectionMethod' => 'a', 'selectionRoot' => true, 'unknownSetting' => false );
+        return array('selectionMethod' => 'a', 'selectionRoot' => true, 'unknownSetting' => false);
     }
 
     /**
-     * Get $validatorConfiguration not accepted by the field type
+     * Get $validatorConfiguration not accepted by the field type.
      *
      * @todo Implement correctly
      *
@@ -145,17 +146,17 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array( 'noValidator' => true );
+        return array('noValidator' => true);
     }
 
     /**
-     * Get initial field data for valid object creation
+     * Get initial field data for valid object creation.
      *
      * @return mixed
      */
     public function getValidCreationFieldData()
     {
-        return new RelationValue( 4 );
+        return new RelationValue(4);
     }
 
     /**
@@ -165,10 +166,8 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field )
+    public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Relation\\Value',
@@ -185,7 +184,7 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during creation
+     * Get field data which will result in errors during creation.
      *
      * This is a PHPUnit data provider.
      *
@@ -209,30 +208,30 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
     {
         return array(
             array(
-                new RelationValue( array() ),
+                new RelationValue(array()),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
         );
     }
 
     /**
-     * Get update field externals data
+     * Get update field externals data.
      *
      * @return array
      */
     public function getValidUpdateFieldData()
     {
-        return new RelationValue( 49 );
+        return new RelationValue(49);
     }
 
     /**
-     * Get externals updated field data values
+     * Get externals updated field data values.
      *
      * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Relation\\Value',
@@ -249,7 +248,7 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during update
+     * Get field data which will result in errors during update.
      *
      * This is a PHPUnit data provider.
      *
@@ -282,7 +281,7 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
      *
      * @param Field $field
      */
-    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Relation\\Value',
@@ -290,7 +289,7 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
         );
 
         $expectedData = array(
-            'destinationContentId' => 4
+            'destinationContentId' => 4,
         );
 
         $this->assertPropertiesCorrect(
@@ -300,7 +299,7 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
     }
 
     /**
-     * Get data to test to hash method
+     * Get data to test to hash method.
      *
      * This is a PHPUnit data provider
      *
@@ -323,16 +322,16 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
     {
         return array(
             array(
-                new RelationValue( 4 ),
+                new RelationValue(4),
                 array(
                     'destinationContentId' => 4,
-                )
+                ),
             ),
         );
     }
 
     /**
-     * Get expectations for the fromHash call on our field value
+     * Get expectations for the fromHash call on our field value.
      *
      * This is a PHPUnit data provider
      *
@@ -342,8 +341,8 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
     {
         return array(
             array(
-                array( 'destinationContentId' => 4 ),
-                new RelationValue( 4 )
+                array('destinationContentId' => 4),
+                new RelationValue(4),
             ),
         );
     }
@@ -351,7 +350,7 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new RelationValue ),
+            array(new RelationValue()),
         );
     }
 
@@ -359,8 +358,32 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
     {
         return array(
             array(
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
             ),
         );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        // Using different values for Legacy Search Engine, in order to demonstrate that sort will
+        // depend on how search engine stores field type's value. Legacy stores it as integer, while
+        // other engines (Solr and Elasticsearch) store it as string.
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
+            return 4;
+        }
+
+        return 10;
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        // Using different values for Legacy Search Engine, in order to demonstrate that sort will
+        // depend on how search engine stores field type's value. Legacy stores it as integer, while
+        // other engines (Solr and Elasticsearch) store it as string.
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
+            return 49;
+        }
+
+        return 4;
     }
 }

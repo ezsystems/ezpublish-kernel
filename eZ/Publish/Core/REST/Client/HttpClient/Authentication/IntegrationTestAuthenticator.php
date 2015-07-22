@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the IntegrationTestAuthenticator authentication HttpClient
+ * File containing the IntegrationTestAuthenticator authentication HttpClient.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -35,26 +37,26 @@ class IntegrationTestAuthenticator implements HttpClient, Sessionable
     protected $userId;
 
     /**
-     * Session ID
+     * Session ID.
      *
      * @var string
      */
     protected $sessionId;
 
     /**
-     * Creates a new Integration Test Authenticator
+     * Creates a new Integration Test Authenticator.
      *
      * @param \eZ\Publish\Core\REST\Client\HttpClient $innerClient
      * @param mixed $userId
      */
-    public function __construct( HttpClient $innerClient, $userId = 14 )
+    public function __construct(HttpClient $innerClient, $userId = 14)
     {
         $this->innerClient = $innerClient;
-        $this->userId      = $userId;
+        $this->userId = $userId;
     }
 
     /**
-     * Execute a HTTP request to the remote server
+     * Execute a HTTP request to the remote server.
      *
      * Returns the result from the remote server. The client sets the correct
      * headers for Basic Auth into the $message transmitted to the inner
@@ -66,18 +68,17 @@ class IntegrationTestAuthenticator implements HttpClient, Sessionable
      *
      * @return \eZ\Publish\Core\REST\Common\Message
      */
-    public function request( $method, $path, Message $message = null )
+    public function request($method, $path, Message $message = null)
     {
         $message = $message ?: new Message();
 
         $message->headers['X-Test-User'] = $this->userId;
 
-        if ( $this->sessionId !== null && !isset( $message->headers['X-Test-Session'] ) )
-        {
+        if ($this->sessionId !== null && !isset($message->headers['X-Test-Session'])) {
             $message->headers['X-Test-Session'] = $this->sessionId;
         }
 
-        return $this->innerClient->request( $method, $path, $message );
+        return $this->innerClient->request($method, $path, $message);
     }
 
     /**
@@ -85,17 +86,17 @@ class IntegrationTestAuthenticator implements HttpClient, Sessionable
      *
      * @param mixed $userId
      */
-    public function setUserId( $userId )
+    public function setUserId($userId)
     {
         $this->userId = $userId;
     }
 
     /**
-     * Set the session ID to use
+     * Set the session ID to use.
      *
      * @param string $id
      */
-    public function setSession( $id )
+    public function setSession($id)
     {
         $this->sessionId = $id;
     }

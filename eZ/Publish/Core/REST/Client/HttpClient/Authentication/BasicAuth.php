@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the BasicAuth authentication HttpClient
+ * File containing the BasicAuth authentication HttpClient.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,7 @@ use eZ\Publish\Core\REST\Client\HttpClient;
 use eZ\Publish\Core\REST\Common\Message;
 
 /**
- * Interface for Http Client implementations
+ * Interface for Http Client implementations.
  */
 class BasicAuth implements HttpClient
 {
@@ -25,35 +27,35 @@ class BasicAuth implements HttpClient
     protected $innerClient;
 
     /**
-     * User name for Basic Auth
+     * User name for Basic Auth.
      *
      * @var string
      */
     protected $username;
 
     /**
-     * Password for Basic Auth
+     * Password for Basic Auth.
      *
      * @var string
      */
     protected $password;
 
     /**
-     * Creates a new Basic Auth HTTP client
+     * Creates a new Basic Auth HTTP client.
      *
      * @param \eZ\Publish\Core\REST\Client\HttpClient $innerClient
      * @param string $username
      * @param string $password
      */
-    public function __construct( HttpClient $innerClient, $username, $password )
+    public function __construct(HttpClient $innerClient, $username, $password)
     {
         $this->innerClient = $innerClient;
-        $this->username    = $username;
-        $this->password    = $password;
+        $this->username = $username;
+        $this->password = $password;
     }
 
     /**
-     * Execute a HTTP request to the remote server
+     * Execute a HTTP request to the remote server.
      *
      * Returns the result from the remote server. The client sets the correct
      * headers for Basic Auth into the $message transmitted to the inner
@@ -65,10 +67,9 @@ class BasicAuth implements HttpClient
      *
      * @return \eZ\Publish\Core\REST\Common\Message
      */
-    public function request( $method, $path, Message $message = null )
+    public function request($method, $path, Message $message = null)
     {
-        if ( $message === null )
-        {
+        if ($message === null) {
             $message = new Message();
         }
         $message->headers['Authorization'] = sprintf(
@@ -81,6 +82,7 @@ class BasicAuth implements HttpClient
                 )
             )
         );
-        return $this->innerClient->request( $method, $path, $message );
+
+        return $this->innerClient->request($method, $path, $message);
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ValidationError class
+ * File containing the ValidationError class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -29,43 +31,61 @@ class ValidationError implements ValidationErrorInterface
     protected $plural;
 
     /**
-     * @var string
+     * @var array
      */
     protected $values;
+
+    /**
+     * Element on which the error occurred
+     * e.g. property name or property path compatible with Symfony PropertyAccess component.
+     *
+     * Example: StringLengthValidator[minStringLength]
+     *
+     * @var string
+     */
+    protected $target;
 
     /**
      * @param string $singular
      * @param string $plural
      * @param array $values
      */
-    public function __construct( $singular, $plural = null, array $values = array() )
+    public function __construct($singular, $plural = null, array $values = array(), $target = null)
     {
         $this->singular = $singular;
         $this->plural = $plural;
         $this->values = $values;
+        $this->target = $target;
     }
 
     /**
-     * Returns a translatable Message
+     * Returns a translatable Message.
      *
      * @return \eZ\Publish\API\Repository\Values\Translation
      */
     public function getTranslatableMessage()
     {
-        if ( isset( $this->plural ) )
-        {
+        if (isset($this->plural)) {
             return new Plural(
                 $this->singular,
                 $this->plural,
                 $this->values
             );
-        }
-        else
-        {
+        } else {
             return new Message(
                 $this->singular,
                 $this->values
             );
         }
+    }
+
+    public function setTarget($target)
+    {
+        $this->target = $target;
+    }
+
+    public function getTarget()
+    {
+        return $this->target;
     }
 }

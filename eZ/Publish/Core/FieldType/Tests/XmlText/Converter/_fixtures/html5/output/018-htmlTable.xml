@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5">
+  <table border="0" cellpadding="2" cellspacing="0" class="tableClass" style="width:24%;" summary="tableTitle" width="24%">
+    <tr class="rowClass1">
+      <th class="headingClass1" colspan="1" rowspan="5" style="vertical-align: top;" valign="top" width="102">
+        <p>11</p>
+      </th>
+      <th class="headingClass2" colspan="2" rowspan="6" style="vertical-align: middle;" valign="middle" width="37%">
+        <p>12</p>
+      </th>
+    </tr>
+    <tr class="rowClass2">
+      <td class="cellClass1" colspan="3" rowspan="7" style="vertical-align: bottom;" valign="bottom" width="74%">
+        <p>21</p>
+      </td>
+      <td class="cellClass2" colspan="4" rowspan="8" style="vertical-align: baseline;" valign="baseline" width="38">
+        <p>22</p>
+      </td>
+    </tr>
+  </table>
+</section>

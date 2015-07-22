@@ -1,15 +1,16 @@
 <?php
+
 /**
  * File containing the View block matcher class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Block;
 
-use eZ\Publish\Core\MVC\Symfony\Matcher\Block\MultipleValued;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 
 class View extends MultipleValued
@@ -19,10 +20,10 @@ class View extends MultipleValued
      *
      * @param \eZ\Publish\Core\FieldType\Page\Parts\Block $block
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchBlock( Block $block )
+    public function matchBlock(Block $block)
     {
-        return isset( $this->values[$block->view] );
+        return isset($this->values[$block->view]);
     }
 }

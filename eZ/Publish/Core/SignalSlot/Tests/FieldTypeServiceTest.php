@@ -1,18 +1,19 @@
 <?php
+
 /**
  * File containing the FieldTypeServiceTest class.
  *
- * @copyright Copyright (C) 2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
+
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
 use eZ\Publish\Core\FieldType\TextLine\Type;
-
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\FieldTypeService;
-use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class FieldTypeServiceTest extends ServiceTest
 {
@@ -23,34 +24,46 @@ class FieldTypeServiceTest extends ServiceTest
         );
     }
 
-    protected function getSignalSlotService( $coreService, SignalDispatcher $dispatcher )
+    protected function getSignalSlotService($coreService, SignalDispatcher $dispatcher)
     {
-        return new FieldTypeService( $coreService, $dispatcher );
+        return new FieldTypeService($coreService, $dispatcher);
+    }
+
+    protected function getTransformationProcessorMock()
+    {
+        return $this->getMockForAbstractClass(
+            'eZ\\Publish\\Core\\Persistence\\TransformationProcessor',
+            array(),
+            '',
+            false,
+            true,
+            true
+        );
     }
 
     public function serviceProvider()
     {
-        $fieldType = new Type();
+        $fieldType = new Type($this->getTransformationProcessorMock());
 
         return array(
             array(
                 'getFieldTypes',
                 array(),
-                array( $fieldType ),
-                0
+                array($fieldType),
+                0,
             ),
             array(
                 'getFieldType',
-                array( 'ezstring' ),
+                array('ezstring'),
                 $fieldType,
-                0
+                0,
             ),
             array(
                 'hasFieldType',
-                array( 'ezstring' ),
+                array('ezstring'),
                 true,
-                0
-            )
+                0,
+            ),
         );
     }
 }

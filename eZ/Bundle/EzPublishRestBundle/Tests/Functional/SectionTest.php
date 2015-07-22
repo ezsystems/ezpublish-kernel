@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Functional\SectionTest class
+ * File containing the Functional\SectionTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,14 +21,15 @@ class SectionTest extends RESTFunctionalTestCase
     public function testListSections()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "/api/ezp/v2/content/sections" )
+            $this->createHttpRequest('GET', '/api/ezp/v2/content/sections')
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @covers POST /content/sections
+     *
      * @return string The created section href
      */
     public function testCreateSection()
@@ -37,15 +40,16 @@ class SectionTest extends RESTFunctionalTestCase
   <name>testCreateSection</name>
 </SectionInput>
 XML;
-        $request = $this->createHttpRequest( "POST", "/api/ezp/v2/content/sections", "SectionInput+xml", "Section+json" );
-        $request->setContent( $xml );
-        $response = $this->sendHttpRequest( $request );
+        $request = $this->createHttpRequest('POST', '/api/ezp/v2/content/sections', 'SectionInput+xml', 'Section+json');
+        $request->setContent($xml);
+        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals( $response, 201 );
-        self::assertHttpResponseHasHeader( $response, 'Location' );
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader( 'Location' );
-        $this->addCreatedElement( $href );
+        $href = $response->getHeader('Location');
+        $this->addCreatedElement($href);
+
         return $href;
     }
 
@@ -54,7 +58,7 @@ XML;
      * @depends testCreateSection
      * @covers PATCH /content/sections/{sectionId}
      */
-    public function testUpdateSection( $sectionHref )
+    public function testUpdateSection($sectionHref)
     {
         $xml = <<< XML
 <SectionInput>
@@ -62,49 +66,49 @@ XML;
   <name>testUpdateSection</name>
 </SectionInput>
 XML;
-        $request = $this->createHttpRequest( "PATCH", $sectionHref, "SectionInput+xml", "Section+json" );
-        $request->setContent( $xml );
-        $response = $this->sendHttpRequest( $request );
+        $request = $this->createHttpRequest('PATCH', $sectionHref, 'SectionInput+xml', 'Section+json');
+        $request->setContent($xml);
+        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @covers GET /content/sections/{sectionId}
      * @depends testCreateSection
      */
-    public function testLoadSection( $sectionHref )
+    public function testLoadSection($sectionHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", $sectionHref )
+            $this->createHttpRequest('GET', $sectionHref)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @depends testCreateSection
      * @covers GET /content/sections?identifier={sectionIdentifier}
      */
-    public function testLoadSectionByIdentifier( $sectionHref )
+    public function testLoadSectionByIdentifier($sectionHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "/api/ezp/v2/content/sections?identifier=testUpdateSection" )
+            $this->createHttpRequest('GET', '/api/ezp/v2/content/sections?identifier=testUpdateSection')
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @depends testCreateSection
      * @covers DELETE /content/sections/{sectionId}
      */
-    public function testDeleteSection( $sectionHref )
+    public function testDeleteSection($sectionHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "DELETE", $sectionHref )
+            $this->createHttpRequest('DELETE', $sectionHref)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 204 );
+        self::assertHttpResponseCodeEquals($response, 204);
     }
 }

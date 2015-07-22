@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\API\Repository\Tests\FieldType\AuthorIntegrationTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\AuthorIntegrationTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\Core\FieldType\Author\Value as AuthorValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
@@ -23,7 +25,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class AuthorIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -33,7 +35,7 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expected settings schema
+     * Get expected settings schema.
      *
      * @return array
      */
@@ -43,7 +45,7 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get a valid $fieldSettings value.
      *
      * @return mixed
      */
@@ -53,7 +55,7 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get $fieldSettings value not accepted by the field type
+     * Get $fieldSettings value not accepted by the field type.
      *
      * @return mixed
      */
@@ -65,7 +67,7 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expected validator schema
+     * Get expected validator schema.
      *
      * @return array
      */
@@ -75,7 +77,7 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $validatorConfiguration.
      *
      * @return mixed
      */
@@ -85,19 +87,19 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get $validatorConfiguration not accepted by the field type
+     * Get $validatorConfiguration not accepted by the field type.
      *
      * @return mixed
      */
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            'unknown' => array( 'value' => 42 ),
+            'unknown' => array('value' => 42),
         );
     }
 
     /**
-     * Get initial field data for valid object creation
+     * Get initial field data for valid object creation.
      *
      * @return mixed
      */
@@ -109,8 +111,8 @@ class AuthorIntegrationTest extends BaseIntegrationTest
             array(
                 new Author(
                     array(
-                        'id'    => 23,
-                        'name'  => 'Hans Mueller',
+                        'id' => 23,
+                        'name' => 'Hans Mueller',
                         'email' => 'hans@example.com',
                     )
                 ),
@@ -125,10 +127,8 @@ class AuthorIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field )
+    public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Author\\Value',
@@ -140,13 +140,13 @@ class AuthorIntegrationTest extends BaseIntegrationTest
                 array(
                     new Author(
                         array(
-                            'id'    => 23,
-                            'name'  => 'Hans Mueller',
+                            'id' => 23,
+                            'name' => 'Hans Mueller',
                             'email' => 'hans@example.com',
                         )
                     ),
                 )
-            )
+            ),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -155,7 +155,7 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during creation
+     * Get field data which will result in errors during creation.
      *
      * This is a PHPUnit data provider.
      *
@@ -178,12 +178,12 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     public function provideInvalidCreationFieldData()
     {
         return array(
-            array( 'Sindelfingen', 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException' ),
+            array('Sindelfingen', 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'),
         );
     }
 
     /**
-     * Get update field externals data
+     * Get update field externals data.
      *
      * @return array
      */
@@ -193,8 +193,8 @@ class AuthorIntegrationTest extends BaseIntegrationTest
             array(
                 new Author(
                     array(
-                        'id'    => 42,
-                        'name'  => 'Lieschen Mueller',
+                        'id' => 42,
+                        'name' => 'Lieschen Mueller',
                         'email' => 'lieschen@example.com',
                     )
                 ),
@@ -203,13 +203,13 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get externals updated field data values
+     * Get externals updated field data values.
      *
      * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Author\\Value',
@@ -221,13 +221,13 @@ class AuthorIntegrationTest extends BaseIntegrationTest
                 array(
                     new Author(
                         array(
-                            'id'    => 42,
-                            'name'  => 'Lieschen Mueller',
+                            'id' => 42,
+                            'name' => 'Lieschen Mueller',
                             'email' => 'lieschen@example.com',
                         )
                     ),
                 )
-            )
+            ),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -236,7 +236,7 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during update
+     * Get field data which will result in errors during update.
      *
      * This is a PHPUnit data provider.
      *
@@ -269,7 +269,7 @@ class AuthorIntegrationTest extends BaseIntegrationTest
      *
      * @param Field $field
      */
-    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Author\\Value',
@@ -281,13 +281,13 @@ class AuthorIntegrationTest extends BaseIntegrationTest
                 array(
                     new Author(
                         array(
-                            'id'    => 23,
-                            'name'  => 'Hans Mueller',
+                            'id' => 23,
+                            'name' => 'Hans Mueller',
                             'email' => 'hans@example.com',
                         )
                     ),
                 )
-            )
+            ),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -296,7 +296,7 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get data to test to hash method
+     * Get data to test to hash method.
      *
      * This is a PHPUnit data provider
      *
@@ -323,8 +323,8 @@ class AuthorIntegrationTest extends BaseIntegrationTest
                     array(
                         new Author(
                             array(
-                                'id'    => 23,
-                                'name'  => 'Hans Mueller',
+                                'id' => 23,
+                                'name' => 'Hans Mueller',
                                 'email' => 'hans@example.com',
                             )
                         ),
@@ -332,8 +332,8 @@ class AuthorIntegrationTest extends BaseIntegrationTest
                 ),
                 array(
                     array(
-                        'id'    => 23,
-                        'name'  => 'Hans Mueller',
+                        'id' => 23,
+                        'name' => 'Hans Mueller',
                         'email' => 'hans@example.com',
                     ),
                 ),
@@ -342,7 +342,7 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expectations for the fromHash call on our field value
+     * Get expectations for the fromHash call on our field value.
      *
      * This is a PHPUnit data provider
      *
@@ -354,8 +354,8 @@ class AuthorIntegrationTest extends BaseIntegrationTest
             array(
                 array(
                     array(
-                        'id'    => 23,
-                        'name'  => 'Hans Mueller',
+                        'id' => 23,
+                        'name' => 'Hans Mueller',
                         'email' => 'hans@example.com',
                     ),
                 ),
@@ -363,8 +363,8 @@ class AuthorIntegrationTest extends BaseIntegrationTest
                     array(
                         new Author(
                             array(
-                                'id'    => 23,
-                                'name'  => 'Hans Mueller',
+                                'id' => 23,
+                                'name' => 'Hans Mueller',
                                 'email' => 'hans@example.com',
                             )
                         ),
@@ -377,8 +377,8 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new AuthorValue ),
-            array( new AuthorValue( array() ) ),
+            array(new AuthorValue()),
+            array(new AuthorValue(array())),
         );
     }
 
@@ -386,20 +386,20 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
             ),
             array(
                 new AuthorValue(
                     array(
                         new Author(
                             array(
-                                "id"    => 23,
-                                "name"  => "Hans Mueller",
-                                "email" => "hans@example.com",
+                                'id' => 23,
+                                'name' => 'Hans Mueller',
+                                'email' => 'hans@example.com',
                             )
-                        )
+                        ),
                     )
-                )
+                ),
             ),
         );
     }

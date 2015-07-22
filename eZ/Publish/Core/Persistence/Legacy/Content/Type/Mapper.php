@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Mapper class
+ * File containing the Mapper class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,18 +27,18 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as C
 class Mapper
 {
     /**
-     * Converter registry
+     * Converter registry.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $converterRegistry;
 
     /**
-     * Creates a new content type mapper
+     * Creates a new content type mapper.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry
      */
-    public function __construct( ConverterRegistry $converterRegistry )
+    public function __construct(ConverterRegistry $converterRegistry)
     {
         $this->converterRegistry = $converterRegistry;
     }
@@ -50,14 +52,13 @@ class Mapper
      *
      * @return Group
      */
-    public function createGroupFromCreateStruct( GroupCreateStruct $struct )
+    public function createGroupFromCreateStruct(GroupCreateStruct $struct)
     {
         $group = new Group();
 
         $group->name = $struct->name;
 
-        // Intentionally left out, since DB structure does not support it, yet
-        // $group->description = $struct->description;
+        // $group->description is intentionally left out, since DB structure does not support it, yet
 
         $group->identifier = $struct->identifier;
         $group->created = $struct->created;
@@ -75,12 +76,11 @@ class Mapper
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group[]
      */
-    public function extractGroupsFromRows( array $rows )
+    public function extractGroupsFromRows(array $rows)
     {
         $groups = array();
 
-        foreach ( $rows as $row )
-        {
+        foreach ($rows as $row) {
             $group = new Group();
             $group->id = (int)$row['id'];
             $group->created = (int)$row['created'];
@@ -102,34 +102,30 @@ class Mapper
      *
      * @return array(Type)
      */
-    public function extractTypesFromRows( array $rows )
+    public function extractTypesFromRows(array $rows)
     {
         $types = array();
         $fields = array();
 
-        foreach ( $rows as $row )
-        {
+        foreach ($rows as $row) {
             $typeId = (int)$row['ezcontentclass_id'];
-            if ( !isset( $types[$typeId] ) )
-            {
-                $types[$typeId] = $this->extractTypeFromRow( $row );
+            if (!isset($types[$typeId])) {
+                $types[$typeId] = $this->extractTypeFromRow($row);
             }
 
             $fieldId = (int)$row['ezcontentclass_attribute_id'];
-            if ( !isset( $fields[$fieldId] ) )
-            {
-                $types[$typeId]->fieldDefinitions[] = $fields[$fieldId] = $this->extractFieldFromRow( $row );
+            if ($fieldId && !isset($fields[$fieldId])) {
+                $types[$typeId]->fieldDefinitions[] = $fields[$fieldId] = $this->extractFieldFromRow($row);
             }
 
             $groupId = (int)$row['ezcontentclass_classgroup_group_id'];
-            if ( !in_array( $groupId, $types[$typeId]->groupIds ) )
-            {
+            if (!in_array($groupId, $types[$typeId]->groupIds)) {
                 $types[$typeId]->groupIds[] = $groupId;
             }
         }
 
         // Re-index $types to avoid people relying on ID keys
-        return array_values( $types );
+        return array_values($types);
     }
 
     /**
@@ -139,19 +135,19 @@ class Mapper
      *
      * @return Type
      */
-    protected function extractTypeFromRow( array $row )
+    protected function extractTypeFromRow(array $row)
     {
         $type = new Type();
 
         $type->id = (int)$row['ezcontentclass_id'];
         $type->status = (int)$row['ezcontentclass_version'];
-        $type->name = unserialize( $row['ezcontentclass_serialized_name_list'] );
-        $type->description = unserialize( $row['ezcontentclass_serialized_description_list'] );
+        $type->name = unserialize($row['ezcontentclass_serialized_name_list']);
+        $type->description = unserialize($row['ezcontentclass_serialized_description_list']);
         // Unset redundant data
         unset(
-            $type->name["always-available"],
+            $type->name['always-available'],
             $type->name[0],
-            $type->description["always-available"],
+            $type->description['always-available'],
             $type->description[0]
         );
         $type->identifier = $row['ezcontentclass_identifier'];
@@ -162,9 +158,9 @@ class Mapper
         $type->remoteId = $row['ezcontentclass_remote_id'];
         $type->urlAliasSchema = $row['ezcontentclass_url_alias_name'];
         $type->nameSchema = $row['ezcontentclass_contentobject_name'];
-        $type->isContainer = ( $row['ezcontentclass_is_container'] == 1 );
+        $type->isContainer = ($row['ezcontentclass_is_container'] == 1);
         $type->initialLanguageId = (int)$row['ezcontentclass_initial_language_id'];
-        $type->defaultAlwaysAvailable = ( $row['ezcontentclass_always_available'] == 1 );
+        $type->defaultAlwaysAvailable = ($row['ezcontentclass_always_available'] == 1);
         $type->sortField = (int)$row['ezcontentclass_sort_field'];
         $type->sortOrder = (int)$row['ezcontentclass_sort_order'];
 
@@ -181,70 +177,70 @@ class Mapper
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      */
-    public function extractFieldFromRow( array $row )
+    public function extractFieldFromRow(array $row)
     {
-        $storageFieldDef = $this->extractStorageFieldFromRow( $row );
+        $storageFieldDef = $this->extractStorageFieldFromRow($row);
 
         $field = new FieldDefinition();
 
         $field->id = (int)$row['ezcontentclass_attribute_id'];
-        $field->name = unserialize( $row['ezcontentclass_attribute_serialized_name_list'] );
-        $field->description = unserialize( $row['ezcontentclass_attribute_serialized_description_list'] );
+        $field->name = unserialize($row['ezcontentclass_attribute_serialized_name_list']);
+        $field->description = unserialize($row['ezcontentclass_attribute_serialized_description_list']);
         // Unset redundant data
         unset(
-            $field->name["always-available"],
+            $field->name['always-available'],
             $field->name[0],
-            $field->description["always-available"],
+            $field->description['always-available'],
             $field->description[0]
         );
         $field->identifier = $row['ezcontentclass_attribute_identifier'];
         $field->fieldGroup = $row['ezcontentclass_attribute_category'];
         $field->fieldType = $row['ezcontentclass_attribute_data_type_string'];
-        $field->isTranslatable = ( $row['ezcontentclass_attribute_can_translate'] == 1 );
+        $field->isTranslatable = ($row['ezcontentclass_attribute_can_translate'] == 1);
         $field->isRequired = $row['ezcontentclass_attribute_is_required'] == 1;
         $field->isInfoCollector = $row['ezcontentclass_attribute_is_information_collector'] == 1;
 
         $field->isSearchable = (bool)$row['ezcontentclass_attribute_is_searchable'];
         $field->position = (int)$row['ezcontentclass_attribute_placement'];
 
-        $this->toFieldDefinition( $storageFieldDef, $field );
+        $this->toFieldDefinition($storageFieldDef, $field);
 
         return $field;
     }
 
     /**
-     * Extracts a StorageFieldDefinition from $row
+     * Extracts a StorageFieldDefinition from $row.
      *
      * @param array $row
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition
      */
-    protected function extractStorageFieldFromRow( array $row )
+    protected function extractStorageFieldFromRow(array $row)
     {
         $storageFieldDef = new StorageFieldDefinition();
 
-        $storageFieldDef->dataFloat1 = isset( $row['ezcontentclass_attribute_data_float1'] )
+        $storageFieldDef->dataFloat1 = isset($row['ezcontentclass_attribute_data_float1'])
             ? (float)$row['ezcontentclass_attribute_data_float1']
             : null;
-        $storageFieldDef->dataFloat2 = isset( $row['ezcontentclass_attribute_data_float2'] )
+        $storageFieldDef->dataFloat2 = isset($row['ezcontentclass_attribute_data_float2'])
             ? (float)$row['ezcontentclass_attribute_data_float2']
             : null;
-        $storageFieldDef->dataFloat3 = isset( $row['ezcontentclass_attribute_data_float3'] )
+        $storageFieldDef->dataFloat3 = isset($row['ezcontentclass_attribute_data_float3'])
             ? (float)$row['ezcontentclass_attribute_data_float3']
             : null;
-        $storageFieldDef->dataFloat4 = isset( $row['ezcontentclass_attribute_data_float4'] )
+        $storageFieldDef->dataFloat4 = isset($row['ezcontentclass_attribute_data_float4'])
             ? (float)$row['ezcontentclass_attribute_data_float4']
             : null;
-        $storageFieldDef->dataInt1 = isset( $row['ezcontentclass_attribute_data_int1'] )
+        $storageFieldDef->dataInt1 = isset($row['ezcontentclass_attribute_data_int1'])
             ? (int)$row['ezcontentclass_attribute_data_int1']
             : null;
-        $storageFieldDef->dataInt2 = isset( $row['ezcontentclass_attribute_data_int2'] )
+        $storageFieldDef->dataInt2 = isset($row['ezcontentclass_attribute_data_int2'])
             ? (int)$row['ezcontentclass_attribute_data_int2']
             : null;
-        $storageFieldDef->dataInt3 = isset( $row['ezcontentclass_attribute_data_int3'] )
+        $storageFieldDef->dataInt3 = isset($row['ezcontentclass_attribute_data_int3'])
             ? (int)$row['ezcontentclass_attribute_data_int3']
             : null;
-        $storageFieldDef->dataInt4 = isset( $row['ezcontentclass_attribute_data_int4'] )
+        $storageFieldDef->dataInt4 = isset($row['ezcontentclass_attribute_data_int4'])
             ? (int)$row['ezcontentclass_attribute_data_int4']
             : null;
         $storageFieldDef->dataText1 = $row['ezcontentclass_attribute_data_text1'];
@@ -264,7 +260,7 @@ class Mapper
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
-    public function createTypeFromCreateStruct( CreateStruct $createStruct )
+    public function createTypeFromCreateStruct(CreateStruct $createStruct)
     {
         $type = new Type();
 
@@ -297,7 +293,7 @@ class Mapper
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct
      */
-    public function createCreateStructFromType( Type $type )
+    public function createCreateStructFromType(Type $type)
     {
         $createStruct = new CreateStruct();
 
@@ -324,16 +320,15 @@ class Mapper
     }
 
     /**
-     * Maps $fieldDef to the legacy storage specific StorageFieldDefinition
+     * Maps $fieldDef to the legacy storage specific StorageFieldDefinition.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
-     *
-     * @return void
      */
     public function toStorageFieldDefinition(
-        FieldDefinition $fieldDef, StorageFieldDefinition $storageFieldDef )
-    {
+        FieldDefinition $fieldDef,
+        StorageFieldDefinition $storageFieldDef
+    ) {
         $converter = $this->converterRegistry->getConverter(
             $fieldDef->fieldType
         );
@@ -344,16 +339,15 @@ class Mapper
     }
 
     /**
-     * Maps a FieldDefinition from the given $storageFieldDef
+     * Maps a FieldDefinition from the given $storageFieldDef.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
-     *
-     * @return void
      */
     public function toFieldDefinition(
-        StorageFieldDefinition $storageFieldDef, FieldDefinition $fieldDef )
-    {
+        StorageFieldDefinition $storageFieldDef,
+        FieldDefinition $fieldDef
+    ) {
         $converter = $this->converterRegistry->getConverter(
             $fieldDef->fieldType
         );

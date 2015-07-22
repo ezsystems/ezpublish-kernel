@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RemoteTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,7 +26,7 @@ class RemoteTest extends BaseTest
     protected function setUp()
     {
         parent::setUp();
-        $this->matcher = new RemoteIdMatcher;
+        $this->matcher = new RemoteIdMatcher();
     }
 
     /**
@@ -34,12 +36,12 @@ class RemoteTest extends BaseTest
      *
      * @param string|string[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param boolean $expectedResult
+     * @param bool $expectedResult
      */
-    public function testMatchLocation( $matchingConfig, Location $location, $expectedResult )
+    public function testMatchLocation($matchingConfig, Location $location, $expectedResult)
     {
-        $this->matcher->setMatchingConfig( $matchingConfig );
-        $this->assertSame( $expectedResult, $this->matcher->matchLocation( $location ) );
+        $this->matcher->setMatchingConfig($matchingConfig);
+        $this->assertSame($expectedResult, $this->matcher->matchLocation($location));
     }
 
     public function matchLocationProvider()
@@ -47,24 +49,24 @@ class RemoteTest extends BaseTest
         return array(
             array(
                 'foo',
-                $this->getLocationMock( array( 'remoteId' => 'foo' ) ),
-                true
+                $this->getLocationMock(array('remoteId' => 'foo')),
+                true,
             ),
             array(
                 'foo',
-                $this->getLocationMock( array( 'remoteId' => 'bar' ) ),
-                false
+                $this->getLocationMock(array('remoteId' => 'bar')),
+                false,
             ),
             array(
-                array( 'foo', 'baz' ),
-                $this->getLocationMock( array( 'remoteId' => 'bar' ) ),
-                false
+                array('foo', 'baz'),
+                $this->getLocationMock(array('remoteId' => 'bar')),
+                false,
             ),
             array(
-                array( 'foo', 'baz' ),
-                $this->getLocationMock( array( 'remoteId' => 'baz' ) ),
-                true
-            )
+                array('foo', 'baz'),
+                $this->getLocationMock(array('remoteId' => 'baz')),
+                true,
+            ),
         );
     }
 
@@ -75,12 +77,12 @@ class RemoteTest extends BaseTest
      *
      * @param string|string[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param boolean $expectedResult
+     * @param bool $expectedResult
      */
-    public function testMatchContentInfo( $matchingConfig, ContentInfo $contentInfo, $expectedResult )
+    public function testMatchContentInfo($matchingConfig, ContentInfo $contentInfo, $expectedResult)
     {
-        $this->matcher->setMatchingConfig( $matchingConfig );
-        $this->assertSame( $expectedResult, $this->matcher->matchContentInfo( $contentInfo ) );
+        $this->matcher->setMatchingConfig($matchingConfig);
+        $this->assertSame($expectedResult, $this->matcher->matchContentInfo($contentInfo));
     }
 
     public function matchContentInfoProvider()
@@ -88,24 +90,24 @@ class RemoteTest extends BaseTest
         return array(
             array(
                 'foo',
-                $this->getContentInfoMock( array( 'remoteId' => 'foo' ) ),
-                true
+                $this->getContentInfoMock(array('remoteId' => 'foo')),
+                true,
             ),
             array(
                 'foo',
-                $this->getContentInfoMock( array( 'remoteId' => 'bar' ) ),
-                false
+                $this->getContentInfoMock(array('remoteId' => 'bar')),
+                false,
             ),
             array(
-                array( 'foo', 'baz' ),
-                $this->getContentInfoMock( array( 'remoteId' => 'bar' ) ),
-                false
+                array('foo', 'baz'),
+                $this->getContentInfoMock(array('remoteId' => 'bar')),
+                false,
             ),
             array(
-                array( 'foo', 'baz' ),
-                $this->getContentInfoMock( array( 'remoteId' => 'baz' ) ),
-                true
-            )
+                array('foo', 'baz'),
+                $this->getContentInfoMock(array('remoteId' => 'baz')),
+                true,
+            ),
         );
     }
 }

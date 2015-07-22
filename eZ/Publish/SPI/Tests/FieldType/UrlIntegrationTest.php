@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\SPI\Tests\FieldType\UrlIntegrationTest class
+ * File contains: eZ\Publish\SPI\Tests\FieldType\UrlIntegrationTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
- * Integration test for legacy storage field types
+ * Integration test for legacy storage field types.
  *
  * This abstract base test case is supposed to be the base for field type
  * integration tests. It basically calls all involved methods in the field type
@@ -37,7 +39,7 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 class UrlIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -47,32 +49,25 @@ class UrlIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get handler with required custom field types registered
+     * Get handler with required custom field types registered.
      *
      * @return Handler
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
+        $fieldType = new FieldType\Url\Type();
+        $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
-        $handler->getFieldTypeRegistry()->register(
+        return $this->getHandler(
             'ezurl',
-            new FieldType\Url\Type()
-        );
-        $handler->getStorageRegistry()->register(
-            'ezurl',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\UrlConverter(),
             new FieldType\Url\UrlStorage(
                 array(
                     'LegacyStorage' => new FieldType\Url\UrlStorage\Gateway\LegacyStorage(),
                 )
             )
         );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezurl',
-            new Legacy\Content\FieldValue\Converter\Url()
-        );
-
-        return $handler;
     }
 
     /**
@@ -87,7 +82,7 @@ class UrlIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field definition data values
+     * Get field definition data values.
      *
      * This is a PHPUnit data provider
      *
@@ -98,13 +93,13 @@ class UrlIntegrationTest extends BaseIntegrationTest
         return array(
             // The ezurl field type does not have any special field definition
             // properties
-            array( 'fieldType', 'ezurl' ),
-            array( 'fieldTypeConstraints', new Content\FieldTypeConstraints() ),
+            array('fieldType', 'ezurl'),
+            array('fieldTypeConstraints', new Content\FieldTypeConstraints()),
         );
     }
 
     /**
-     * Get initial field value
+     * Get initial field value.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -112,18 +107,18 @@ class UrlIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => array(
+                'data' => array(
                     'urlId' => null,
-                    'text'  => 'Some awesome website',
+                    'text' => 'Some awesome website',
                 ),
                 'externalData' => 'http://example.com/sindelfingen',
-                'sortKey'      => null,
+                'sortKey' => null,
             )
         );
     }
 
     /**
-     * Asserts that the loaded field data is correct
+     * Asserts that the loaded field data is correct.
      *
      * Performs assertions on the loaded field, mainly checking that the
      * $field->value->externalData is loaded correctly. If the loading of
@@ -131,7 +126,7 @@ class UrlIntegrationTest extends BaseIntegrationTest
      * also needs to be asserted. Make sure you implement this method agnostic
      * to the used SPI\Persistence implementation!
      */
-    public function assertLoadedFieldDataCorrect( Field $field )
+    public function assertLoadedFieldDataCorrect(Field $field)
     {
         $expected = $this->getInitialValue();
         $this->assertEquals(
@@ -159,18 +154,18 @@ class UrlIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => array(
+                'data' => array(
                     'urlId' => null,
                     'text' => 'An even more awesome website',
                 ),
                 'externalData' => 'http://example.com/hubba',
-                'sortKey'      => null,
+                'sortKey' => null,
             )
         );
     }
 
     /**
-     * Asserts that the updated field data is loaded correct
+     * Asserts that the updated field data is loaded correct.
      *
      * Performs assertions on the loaded field after it has been updated,
      * mainly checking that the $field->value->externalData is loaded
@@ -178,10 +173,8 @@ class UrlIntegrationTest extends BaseIntegrationTest
      * $field, their correctness also needs to be asserted. Make sure you
      * implement this method agnostic to the used SPI\Persistence
      * implementation!
-     *
-     * @return void
      */
-    public function assertUpdatedFieldDataCorrect( Field $field )
+    public function assertUpdatedFieldDataCorrect(Field $field)
     {
         $expected = $this->getUpdatedValue();
         $this->assertEquals(

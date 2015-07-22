@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContentMatcherFactoryTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,24 +17,24 @@ class ContentMatcherFactoryTest extends ContentBasedMatcherFactoryTest
 
     /**
      * Returns a valid ValueObject (supported by current MatcherFactory), that will match the test rules.
-     * i.e. Should return eZ\Publish\API\Repository\Values\Content\Location for LocationMatcherFactory
+     * i.e. Should return eZ\Publish\API\Repository\Values\Content\Location for LocationMatcherFactory.
      *
      * @return \eZ\Publish\API\Repository\Values\ValueObject
      */
     protected function getMatchableValueObject()
     {
-        return $this->getContentInfoMock( array( 'id' => 456 ) );
+        return $this->getContentInfoMock(array('id' => 456));
     }
 
     /**
      * Returns a valid ValueObject (supported by current MatcherFactory), that won't match the test rules.
-     * i.e. Should return eZ\Publish\API\Repository\Values\Content\Location for LocationMatcherFactory
+     * i.e. Should return eZ\Publish\API\Repository\Values\Content\Location for LocationMatcherFactory.
      *
      * @return \eZ\Publish\API\Repository\Values\ValueObject
      */
     protected function getNonMatchableValueObject()
     {
-        return $this->getContentInfoMock( array( 'id' => 123456789 ) );
+        return $this->getContentInfoMock(array('id' => 123456789));
     }
 
     protected function getMatcherClass()

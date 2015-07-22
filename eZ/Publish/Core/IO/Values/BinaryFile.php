@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\IO\Values\BinaryFile class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,32 +27,40 @@ class BinaryFile extends ValueObject
 {
     /**
      * Unique ID
-     * Ex: media/images/ez-logo/209-1-eng-GB/eZ-Logo.gif, or application/2b042138835bb5f48beb9c9df6e86de4.pdf
+     * Ex: media/images/ez-logo/209-1-eng-GB/eZ-Logo.gif, or application/2b042138835bb5f48beb9c9df6e86de4.pdf.
+     *
      * @var mixed
      */
     protected $id;
 
     /**
-     * File size, in bytes
+     * File size, in bytes.
+     *
      * @var int
      */
     protected $size;
 
     /**
-     * File modification time
+     * File modification time.
+     *
      * @var \DateTime
      */
     protected $mtime;
 
     /**
-     * URI to the binary file
+     * URI to the binary file.
+     *
      * @var string
      */
     protected $uri;
 
     /**
-     * The file's mime type
+     * The file's mime type.
+     *
      * Example: text/xml
+     *
+     * @deprecated Since 5.3.3, use IOService::getMimeType() if you want to be 6.0 compatible as opposed to < 5.3.3
+     *
      * @var string
      */
     public $mimeType;

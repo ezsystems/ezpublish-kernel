@@ -1,9 +1,11 @@
 <?php
+
 /**
- * Contains BadState Exception implementation
+ * Contains BadState Exception implementation.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,20 +15,20 @@ use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateExcepti
 use Exception;
 
 /**
- * BadState Exception implementation
+ * BadState Exception implementation.
  *
  * @use: throw new BadState( 'nodes', 'array' );
  */
 class BadStateException extends APIBadStateException
 {
     /**
-     * Generates: "Argument '{$argumentName}' has a bad state: {$whatIsWrong}"
+     * Generates: "Argument '{$argumentName}' has a bad state: {$whatIsWrong}".
      *
      * @param string $argumentName
      * @param string $whatIsWrong
      * @param \Exception|null $previous
      */
-    public function __construct( $argumentName, $whatIsWrong, Exception $previous = null )
+    public function __construct($argumentName, $whatIsWrong, Exception $previous = null)
     {
         parent::__construct(
             "Argument '{$argumentName}' has a bad state: {$whatIsWrong}",

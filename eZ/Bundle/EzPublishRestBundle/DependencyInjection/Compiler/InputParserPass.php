@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the InputParser CompilerPass class.
  *
- * @copyright Copyright (C) 2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,25 +23,23 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class InputParserPass implements CompilerPassInterface
 {
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
-        if ( !$container->hasDefinition( 'ezpublish_rest.input.parsing_dispatcher' ) )
-        {
+        if (!$container->hasDefinition('ezpublish_rest.input.parsing_dispatcher')) {
             return;
         }
 
-        $definition = $container->getDefinition( 'ezpublish_rest.input.parsing_dispatcher' );
+        $definition = $container->getDefinition('ezpublish_rest.input.parsing_dispatcher');
 
-        foreach ( $container->findTaggedServiceIds( 'ezpublish_rest.input.parser' ) as $id => $attributes )
-        {
-            foreach ( $attributes as $attribute )
-            {
-                if ( !isset( $attribute['mediaType'] ) )
-                    throw new \LogicException( 'ezpublish_rest.input.parser service tag needs a "mediaType" attribute to identify the input parser. None given.' );
+        foreach ($container->findTaggedServiceIds('ezpublish_rest.input.parser') as $id => $attributes) {
+            foreach ($attributes as $attribute) {
+                if (!isset($attribute['mediaType'])) {
+                    throw new \LogicException('ezpublish_rest.input.parser service tag needs a "mediaType" attribute to identify the input parser. None given.');
+                }
 
                 $definition->addMethodCall(
                     'addParser',
-                    array( $attribute["mediaType"], new Reference( $id ) )
+                    array($attribute['mediaType'], new Reference($id))
                 );
             }
         }

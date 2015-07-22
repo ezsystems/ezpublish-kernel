@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
+         xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
+         version="5.0-variant ezpublish-1.0">
+  <title ezxhtml:level="2">Assorted array of links</title>
+  <para>
+    <link xlink:href="#anchor" xlink:show="new" xml:id="id1" xlink:title="Anchor link title" ezxhtml:class="linkClass1">Jump to content</link>
+  </para>
+  <para>
+    <link xlink:href="ezurl://95#fragment1" xlink:show="new" xml:id="id2" xlink:title="Link title" ezxhtml:class="linkClass2">Link text</link>
+  </para>
+  <para>
+    <link xlink:href="ezlocation://111" xlink:show="new" xml:id="id3" xlink:title="Location title" ezxhtml:class="linkClass3">Location content name</link>
+  </para>
+  <para>
+    <link xlink:href="ezlocation://222#fragment2" xlink:show="new" xml:id="id4" xlink:title="Location title 2" ezxhtml:class="linkClass4">Location content name 2</link>
+  </para>
+  <para>
+    <link xlink:href="ezcontent://333" xlink:show="none" xml:id="id5" xlink:title="Content title" ezxhtml:class="linkClass5">Content name</link>
+  </para>
+  <para><anchor xml:id="anchor"/>Some anchored content.</para>
+</section>

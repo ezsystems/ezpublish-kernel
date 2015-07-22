@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5">
+  <a id="eztoc_1_1"/>
+  <h2>Heading 2</h2>
+  <a id="eztoc_2_1"/>
+  <h2>Heading 2</h2>
+  <a id="eztoc_3_1_1"/>
+  <h3>Heading 3</h3>
+  <table border="1" cellpadding="2" cellspacing="0" class="class1" style="width:100%;" summary="summary1" width="100%">
+    <tr>
+      <td style="vertical-align: top;" valign="top">
+        <a id="eztoc_1_1"/>
+        <h2>Heading 2</h2>
+        <a id="eztoc_2_1"/>
+        <h2>Heading 2</h2>
+        <a id="eztoc_3_1_1"/>
+        <h3>Heading 3</h3>
+        <a id="eztoc_4_1_1"/>
+        <h3>Heading 3</h3>
+        <table border="1" cellpadding="2" cellspacing="0" class="class2" style="width:100%;" summary="summary2" width="100%">
+          <tr>
+            <td style="vertical-align: top;" valign="top">
+              <a id="eztoc_1_1"/>
+              <h2>Heading 2</h2>
+              <a id="eztoc_2_1_1"/>
+              <h3>Heading 3</h3>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</section>

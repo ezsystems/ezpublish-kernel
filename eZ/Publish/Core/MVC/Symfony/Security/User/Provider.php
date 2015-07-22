@@ -1,84 +1,64 @@
 <?php
+
 /**
  * File containing the user Provider class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\User;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
-use eZ\Publish\Core\MVC\Symfony\Security\User\APIUserProviderInterface;
+use eZ\Publish\Core\MVC\Symfony\Security\UserInterface;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\UserInterface as CoreUserInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class Provider implements APIUserProviderInterface
 {
     /**
-     * @var \eZ\Publish\API\Repository\UserService
+     * @var \eZ\Publish\API\Repository\Repository
      */
-    protected $userService;
+    protected $repository;
 
     /**
-     * @var \Closure
+     * @param \eZ\Publish\API\Repository\Repository $repository
      */
-    private $lazyRepository;
-
-    public function __construct( \Closure $lazyRepository )
+    public function __construct(Repository $repository)
     {
-        $this->lazyRepository = $lazyRepository;
-    }
-
-    /**
-     * @return \eZ\Publish\API\Repository\Repository
-     */
-    protected function getRepository()
-    {
-        $lazyRepository = $this->lazyRepository;
-        return $lazyRepository();
-    }
-
-    /**
-     * @return \eZ\Publish\API\Repository\UserService
-     */
-    protected function getUserService()
-    {
-        return $this->getRepository()->getUserService();
+        $this->repository = $repository;
     }
 
     /**
      * Loads the user for the given user ID.
      * $user can be either the user ID or an instance of \eZ\Publish\Core\MVC\Symfony\Security\User
-     * (anonymous user we try to check access via SecurityContext::isGranted())
+     * (anonymous user we try to check access via SecurityContext::isGranted()).
      *
      * @param string|\eZ\Publish\Core\MVC\Symfony\Security\User $user Either the user ID to load an instance of User object. A value of -1 represents an anonymous user.
      *
-     * @return \Symfony\Component\Security\Core\User\UserInterface
-     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException if the user is not found
+     * @return \eZ\Publish\Core\MVC\Symfony\Security\UserInterface
      *
+     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException if the user is not found
      */
-    public function loadUserByUsername( $user )
+    public function loadUserByUsername($user)
     {
-        try
-        {
+        try {
             // SecurityContext always tries to authenticate anonymous users when checking granted access.
             // In that case $user is an instance of \eZ\Publish\Core\MVC\Symfony\Security\User.
             // We don't need to reload the user here.
-            if ( $user instanceof User )
+            if ($user instanceof UserInterface) {
                 return $user;
+            }
 
-            $isLoggedIn = $user != -1;
-            $apiUser = $isLoggedIn ? $this->getUserService()->loadUser( $user ) : $this->getUserService()->loadAnonymousUser();
-            $roles = $isLoggedIn ? array( 'ROLE_USER' ) : array();
-            return new User( $apiUser, $roles );
-        }
-        catch ( NotFoundException $e )
-        {
-            throw new UsernameNotFoundException( $e->getMessage(), 0, $e );
+            return new User($this->repository->getUserService()->loadUserByLogin($user), array('ROLE_USER'));
+        } catch (NotFoundException $e) {
+            throw new UsernameNotFoundException($e->getMessage(), 0, $e);
         }
     }
 
@@ -89,39 +69,53 @@ class Provider implements APIUserProviderInterface
      * totally reloaded (e.g. from the database), or if the UserInterface
      * object can just be merged into some internal array of users / identity
      * map.
-     * @param UserInterface $user
      *
-     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
+     * @param \Symfony\Component\Security\Core\User\UserInterface $user
      *
-     * @return UserInterface
+     * @throws \Symfony\Component\Security\Core\Exception\UnsupportedUserException
+     *
+     * @return \Symfony\Component\Security\Core\User\UserInterface
      */
-    public function refreshUser( UserInterface $user )
+    public function refreshUser(CoreUserInterface $user)
     {
-        return $user;
+        if (!$user instanceof UserInterface) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
+        }
+
+        try {
+            $refreshedAPIUser = $this->repository->getUserService()->loadUser($user->getAPIUser()->id);
+            $user->setAPIUser($refreshedAPIUser);
+            $this->repository->setCurrentUser($refreshedAPIUser);
+
+            return $user;
+        } catch (NotFoundException $e) {
+            throw new UsernameNotFoundException($e->getMessage(), 0, $e);
+        }
     }
 
     /**
-     * Whether this provider supports the given user class
+     * Whether this provider supports the given user class.
      *
      * @param string $class
      *
      * @return Boolean
      */
-    public function supportsClass( $class )
+    public function supportsClass($class)
     {
         $supportedClass = 'eZ\\Publish\\Core\\MVC\\Symfony\\Security\\User';
-        return $class === $supportedClass || is_subclass_of( $class, $supportedClass );
+
+        return $class === $supportedClass || is_subclass_of($class, $supportedClass);
     }
 
     /**
-     * Loads a regular user object, usable by Symfony Security component, from a user object returned by Public API
+     * Loads a regular user object, usable by Symfony Security component, from a user object returned by Public API.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $apiUser
      *
      * @return \eZ\Publish\Core\MVC\Symfony\Security\User
      */
-    public function loadUserByAPIUser( APIUser $apiUser )
+    public function loadUserByAPIUser(APIUser $apiUser)
     {
-        return new User( $apiUser );
+        return new User($apiUser);
     }
 }

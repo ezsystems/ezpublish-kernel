@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the CreatedUser ValueObjectVisitor class
+ * File containing the CreatedUser ValueObjectVisitor class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,28 +15,29 @@ use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
- * CreatedUser value object visitor
+ * CreatedUser value object visitor.
+ *
  * @todo coverage add unit test
  */
 class CreatedUser extends RestUser
 {
     /**
-     * Visit struct returned by controllers
+     * Visit struct returned by controllers.
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
      * @param \eZ\Publish\Core\REST\Server\Values\CreatedUser $data
      */
-    public function visit( Visitor $visitor, Generator $generator, $data )
+    public function visit(Visitor $visitor, Generator $generator, $data)
     {
-        parent::visit( $visitor, $generator, $data->user );
+        parent::visit($visitor, $generator, $data->user);
         $visitor->setHeader(
             'Location',
             $this->router->generate(
                 'ezpublish_rest_loadUser',
-                array( 'userId' => $data->user->contentInfo->id )
+                array('userId' => $data->user->contentInfo->id)
             )
         );
-        $visitor->setStatus( 201 );
+        $visitor->setStatus(201);
     }
 }

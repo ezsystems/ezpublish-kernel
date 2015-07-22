@@ -1,36 +1,36 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\SectionList;
 use eZ\Publish\API\Repository\Values\Content;
-use eZ\Publish\Core\REST\Common;
 
 class SectionListTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the SectionList visitor
+     * Test the SectionList visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
-        $sectionList = new SectionList( array(), '/content/sections' );
+        $sectionList = new SectionList(array(), '/content/sections');
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -38,25 +38,25 @@ class SectionListTest extends ValueObjectVisitorBaseTest
             $sectionList
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains SectionList element
+     * Test if result contains SectionList element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsSectionListElement( $result )
+    public function testResultContainsSectionListElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'SectionList',
+                'tag' => 'SectionList',
             ),
             $result,
             'Invalid <SectionList> element.',
@@ -65,21 +65,21 @@ class SectionListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains SectionList element attributes
+     * Test if result contains SectionList element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsSectionListAttributes( $result )
+    public function testResultContainsSectionListAttributes($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'SectionList',
+                'tag' => 'SectionList',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.SectionList+xml',
-                    'href'       => '/content/sections',
-                )
+                    'href' => '/content/sections',
+                ),
             ),
             $result,
             'Invalid <SectionList> attributes.',
@@ -88,14 +88,14 @@ class SectionListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if SectionList visitor visits the children
+     * Test if SectionList visitor visits the children.
      */
     public function testSectionListVisitsChildren()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $sectionList = new SectionList(
             array(
@@ -105,9 +105,9 @@ class SectionListTest extends ValueObjectVisitorBaseTest
             '/content/sections'
         );
 
-        $this->getVisitorMock()->expects( $this->exactly( 2 ) )
-            ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Section' ) );
+        $this->getVisitorMock()->expects($this->exactly(2))
+            ->method('visitValueObject')
+            ->with($this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Section'));
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -117,12 +117,12 @@ class SectionListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the SectionList visitor
+     * Get the SectionList visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\SectionList
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\SectionList;
+        return new ValueObjectVisitor\SectionList();
     }
 }

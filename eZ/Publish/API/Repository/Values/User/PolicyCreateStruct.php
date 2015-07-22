@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\User\PolicyCreateStruct class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,12 +14,12 @@ namespace eZ\Publish\API\Repository\Values\User;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * This class is used to create a policy
+ * This class is used to create a policy.
  */
 abstract class PolicyCreateStruct extends ValueObject
 {
     /**
-     * Name of module, associated with the Policy
+     * Name of module, associated with the Policy.
      *
      * Eg: content
      *
@@ -26,7 +28,7 @@ abstract class PolicyCreateStruct extends ValueObject
     public $module;
 
     /**
-     * Name of the module function Or all functions with '*'
+     * Name of the module function Or all functions with '*'.
      *
      * Eg: read
      *
@@ -35,15 +37,16 @@ abstract class PolicyCreateStruct extends ValueObject
     public $function;
 
     /**
-     * Returns list of limitations added to policy
+     * Returns list of limitations added to policy.
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
     abstract public function getLimitations();
 
     /**
-     * Adds a limitation with the given identifier and list of values
+     * Adds a limitation with the given identifier and list of values.
+     *
      * @param Limitation $limitation
      */
-    abstract public function addLimitation( Limitation $limitation );
+    abstract public function addLimitation(Limitation $limitation);
 }

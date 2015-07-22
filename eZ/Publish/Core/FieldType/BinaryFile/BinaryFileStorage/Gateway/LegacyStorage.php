@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the BinaryFileStorage Gateway
+ * File containing the BinaryFileStorage Gateway.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,6 +14,8 @@ namespace eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage\Gateway;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway\LegacyStorage as BaseLegacyStorage;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use eZ\Publish\Core\Persistence\Database\InsertQuery;
 
 class LegacyStorage extends BaseLegacyStorage
 {
@@ -28,7 +32,7 @@ class LegacyStorage extends BaseLegacyStorage
     /**
      * Returns a column to property mapping for the storage table.
      *
-     * @return void
+     * @return array
      */
     protected function getPropertyMapping()
     {
@@ -37,29 +41,28 @@ class LegacyStorage extends BaseLegacyStorage
             'name' => 'downloadCount',
             'cast' => 'intval',
         );
+
         return $propertyMap;
     }
 
     /**
-     * Set columns to be fetched from the database
+     * Set columns to be fetched from the database.
      *
      * This method is intended to be overwritten by derived classes in order to
      * add additional columns to be fetched from the database. Please do not
      * forget to call the parent when overwriting this method.
      *
-     * @param \ezcQuerySelect $selectQuery
+     * @param eZ\Publish\Core\Persistence\Database\SelectQuery $selectQuery
      * @param int $fieldId
      * @param int $versionNo
-     *
-     * @return void
      */
-    protected function setFetchColumns( \ezcQuerySelect $selectQuery, $fieldId, $versionNo )
+    protected function setFetchColumns(SelectQuery $selectQuery, $fieldId, $versionNo)
     {
         $connection = $this->getConnection();
 
-        parent::setFetchColumns( $selectQuery, $fieldId, $versionNo );
+        parent::setFetchColumns($selectQuery, $fieldId, $versionNo);
         $selectQuery->select(
-            $connection->quoteColumn( 'download_count' )
+            $connection->quoteColumn('download_count')
         );
     }
 
@@ -73,18 +76,15 @@ class LegacyStorage extends BaseLegacyStorage
      * @param \ezcQueryInsert $insertQuery
      * @param VersionInfo $versionInfo
      * @param Field $field
-     *
-     * @return void
      */
-    protected function setInsertColumns( \ezcQueryInsert $insertQuery, VersionInfo $versionInfo, Field $field )
+    protected function setInsertColumns(InsertQuery $insertQuery, VersionInfo $versionInfo, Field $field)
     {
         $connection = $this->getConnection();
 
-        parent::setInsertColumns( $insertQuery, $versionInfo, $field );
+        parent::setInsertColumns($insertQuery, $versionInfo, $field);
         $insertQuery->set(
-            $connection->quoteColumn( 'download_count' ),
-            $insertQuery->bindValue( $field->value->externalData['downloadCount'], null, \PDO::PARAM_INT )
+            $connection->quoteColumn('download_count'),
+            $insertQuery->bindValue($field->value->externalData['downloadCount'], null, \PDO::PARAM_INT)
         );
     }
 }
-

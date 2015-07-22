@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\ContentHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\ContentHandlerTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,77 +28,82 @@ use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateSt
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
- * Test case for Content Handler
+ * Test case for Content Handler.
  */
 class ContentHandlerTest extends TestCase
 {
     /**
-     * Content handler to test
+     * Content handler to test.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Handler
      */
     protected $contentHandler;
 
     /**
-     * Gateway mock
+     * Gateway mock.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected $gatewayMock;
 
     /**
-     * Location gateway mock
+     * Location gateway mock.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected $locationGatewayMock;
 
     /**
-     * Type gateway mock
+     * Type gateway mock.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
     protected $typeGatewayMock;
 
     /**
-     * Mapper mock
+     * Mapper mock.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected $mapperMock;
 
     /**
-     * Field handler mock
+     * Field handler mock.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
      */
     protected $fieldHandlerMock;
 
     /**
-     * Location handler mock
+     * Location handler mock.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler
      */
-    protected $locationHandlerMock;
+    protected $treeHandlerMock;
 
     /**
-     * Slug converter mock
+     * Slug converter mock.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter
      */
     protected $slugConverterMock;
 
     /**
-     * Location handler mock
+     * Location handler mock.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway
      */
     protected $urlAliasGatewayMock;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::__construct
+     * ContentType handler mock.
      *
-     * @return void
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler
+     */
+    protected $contentTypeHandlerMock;
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::__construct
      */
     public function testCtor()
     {
@@ -121,8 +128,8 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::create
+     *
      * @todo Current method way to complex to test, refactor!
      */
     public function testCreate()
@@ -133,9 +140,17 @@ class ContentHandlerTest extends TestCase
         $gatewayMock = $this->getGatewayMock();
         $fieldHandlerMock = $this->getFieldHandlerMock();
         $locationMock = $this->getLocationGatewayMock();
+        $contentTypeHandlerMock = $this->getContentTypeHandlerMock();
+        $contentTypeMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Type');
+        $createStruct = $this->getCreateStructFixture();
 
-        $mapperMock->expects( $this->once() )
-            ->method( 'createVersionInfoFromCreateStruct' )
+        $contentTypeHandlerMock->expects($this->once())
+            ->method('load')
+            ->with($createStruct->typeId)
+            ->will($this->returnValue($contentTypeMock));
+
+        $mapperMock->expects($this->once())
+            ->method('createVersionInfoFromCreateStruct')
             ->with(
                 $this->isInstanceOf(
                     'eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct'
@@ -144,41 +159,44 @@ class ContentHandlerTest extends TestCase
                 $this->returnValue(
                     new VersionInfo(
                         array(
-                            "names" => array(),
-                            "contentInfo" => new ContentInfo
+                            'names' => array(),
+                            'contentInfo' => new ContentInfo(),
                         )
                     )
                 )
             );
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'insertContentObject' )
+        $gatewayMock->expects($this->once())
+            ->method('insertContentObject')
             ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct' )
-            )->will( $this->returnValue( 23 ) );
+                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct')
+            )->will($this->returnValue(23));
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'insertVersion' )
+        $gatewayMock->expects($this->once())
+            ->method('insertVersion')
             ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
-                $this->isType( 'array' )
-            )->will( $this->returnValue( 1 ) );
+                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'),
+                $this->isType('array')
+            )->will($this->returnValue(1));
 
-        $fieldHandlerMock->expects( $this->once() )
-            ->method( 'createNewFields' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ) );
+        $fieldHandlerMock->expects($this->once())
+            ->method('createNewFields')
+            ->with(
+                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'),
+                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Type')
+            );
 
-        $locationMock->expects( $this->once() )
-            ->method( 'createNodeAssignment' )
+        $locationMock->expects($this->once())
+            ->method('createNodeAssignment')
             ->with(
                 $this->isInstanceOf(
                     'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\CreateStruct'
                 ),
-                $this->equalTo( 42 ),
-                $this->equalTo( 3 ) // Location\Gateway::NODE_ASSIGNMENT_OP_CODE_CREATE
+                $this->equalTo(42),
+                $this->equalTo(3) // Location\Gateway::NODE_ASSIGNMENT_OP_CODE_CREATE
             );
 
-        $res = $handler->create( $this->getCreateStructFixture() );
+        $res = $handler->create($createStruct);
 
         // @todo Make subsequent tests
 
@@ -204,19 +222,17 @@ class ContentHandlerTest extends TestCase
         );
         $this->assertEquals(
             2,
-            count( $res->fields ),
+            count($res->fields),
             'Fields not set correctly in version'
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::publish
-     *
-     * @return void
      */
     public function testPublishFirstVersion()
     {
-        $handler = $this->getPartlyMockedHandler( array( 'loadVersionInfo', 'setStatus' ) );
+        $handler = $this->getPartlyMockedHandler(array('loadVersionInfo', 'setStatus'));
 
         $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMapperMock();
@@ -224,65 +240,63 @@ class ContentHandlerTest extends TestCase
         $fieldHandlerMock = $this->getFieldHandlerMock();
         $metadataUpdateStruct = new MetadataUpdateStruct();
 
-        $handler->expects( $this->at( 0 ) )
-            ->method( 'loadVersionInfo' )
-            ->with( 23, 1 )
+        $handler->expects($this->at(0))
+            ->method('loadVersionInfo')
+            ->with(23, 1)
             ->will(
                 $this->returnValue(
-                    new VersionInfo( array( "contentInfo" => new ContentInfo( array( "currentVersionNo" => 1 ) ) ) )
+                    new VersionInfo(array('contentInfo' => new ContentInfo(array('currentVersionNo' => 1))))
                 )
             );
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'load' )
+        $gatewayMock->expects($this->once())
+            ->method('load')
             ->with(
-                $this->equalTo( 23 ),
-                $this->equalTo( 1 ),
-                $this->equalTo( null )
+                $this->equalTo(23),
+                $this->equalTo(1),
+                $this->equalTo(null)
             )->will(
-                $this->returnValue( array( 42 ) )
+                $this->returnValue(array(42))
             );
 
-        $mapperMock->expects( $this->once() )
-            ->method( 'extractContentFromRows' )
-            ->with( $this->equalTo( array( 42 ) ) )
-            ->will( $this->returnValue( array( $this->getContentFixtureForDraft() ) ) );
+        $mapperMock->expects($this->once())
+            ->method('extractContentFromRows')
+            ->with($this->equalTo(array(42)))
+            ->will($this->returnValue(array($this->getContentFixtureForDraft())));
 
-        $fieldHandlerMock->expects( $this->once() )
-            ->method( 'loadExternalFieldData' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ) );
+        $fieldHandlerMock->expects($this->once())
+            ->method('loadExternalFieldData')
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'));
 
         $gatewayMock
-            ->expects( $this->once() )
-            ->method( 'updateContent' )
-            ->with( 23, $metadataUpdateStruct );
+            ->expects($this->once())
+            ->method('updateContent')
+            ->with(23, $metadataUpdateStruct);
 
         $locationMock
-            ->expects( $this->once() )
-            ->method( 'createLocationsFromNodeAssignments' )
-            ->with( 23, 1 );
+            ->expects($this->once())
+            ->method('createLocationsFromNodeAssignments')
+            ->with(23, 1);
 
         $locationMock
-            ->expects( $this->once() )
-            ->method( 'updateLocationsContentVersionNo' )
-            ->with( 23, 1 );
+            ->expects($this->once())
+            ->method('updateLocationsContentVersionNo')
+            ->with(23, 1);
 
         $handler
-            ->expects( $this->once() )
-            ->method( 'setStatus' )
-            ->with( 23, VersionInfo::STATUS_PUBLISHED, 1 );
+            ->expects($this->once())
+            ->method('setStatus')
+            ->with(23, VersionInfo::STATUS_PUBLISHED, 1);
 
-        $handler->publish( 23, 1, $metadataUpdateStruct );
+        $handler->publish(23, 1, $metadataUpdateStruct);
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::publish
-     *
-     * @return void
      */
     public function testPublish()
     {
-        $handler = $this->getPartlyMockedHandler( array( 'loadVersionInfo', 'setStatus' ) );
+        $handler = $this->getPartlyMockedHandler(array('loadVersionInfo', 'setStatus'));
 
         $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMapperMock();
@@ -290,143 +304,141 @@ class ContentHandlerTest extends TestCase
         $fieldHandlerMock = $this->getFieldHandlerMock();
         $metadataUpdateStruct = new MetadataUpdateStruct();
 
-        $handler->expects( $this->at( 0 ) )
-            ->method( 'loadVersionInfo' )
-            ->with( 23, 2 )
+        $handler->expects($this->at(0))
+            ->method('loadVersionInfo')
+            ->with(23, 2)
             ->will(
                 $this->returnValue(
-                    new VersionInfo( array( "contentInfo" => new ContentInfo( array( "currentVersionNo" => 1 ) ) ) )
+                    new VersionInfo(array('contentInfo' => new ContentInfo(array('currentVersionNo' => 1))))
                 )
             );
 
         $handler
-            ->expects( $this->at( 1 ) )
-            ->method( 'setStatus' )
-            ->with( 23, VersionInfo::STATUS_ARCHIVED, 1 );
+            ->expects($this->at(1))
+            ->method('setStatus')
+            ->with(23, VersionInfo::STATUS_ARCHIVED, 1);
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'load' )
+        $gatewayMock->expects($this->once())
+            ->method('load')
             ->with(
-                $this->equalTo( 23 ),
-                $this->equalTo( 2 ),
-                $this->equalTo( null )
+                $this->equalTo(23),
+                $this->equalTo(2),
+                $this->equalTo(null)
             )
-            ->will( $this->returnValue( array( 42 ) ) );
+            ->will($this->returnValue(array(42)));
 
-        $mapperMock->expects( $this->once() )
-            ->method( 'extractContentFromRows' )
-            ->with( $this->equalTo( array( 42 ) ) )
-            ->will( $this->returnValue( array( $this->getContentFixtureForDraft() ) ) );
+        $mapperMock->expects($this->once())
+            ->method('extractContentFromRows')
+            ->with($this->equalTo(array(42)))
+            ->will($this->returnValue(array($this->getContentFixtureForDraft())));
 
-        $fieldHandlerMock->expects( $this->once() )
-            ->method( 'loadExternalFieldData' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ) );
+        $fieldHandlerMock->expects($this->once())
+            ->method('loadExternalFieldData')
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'));
 
         $gatewayMock
-            ->expects( $this->once() )
-            ->method( 'updateContent' )
-            ->with( 23, $metadataUpdateStruct, $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ) );
+            ->expects($this->once())
+            ->method('updateContent')
+            ->with(23, $metadataUpdateStruct, $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'));
 
         $locationMock
-            ->expects( $this->once() )
-            ->method( 'createLocationsFromNodeAssignments' )
-            ->with( 23, 2 );
+            ->expects($this->once())
+            ->method('createLocationsFromNodeAssignments')
+            ->with(23, 2);
 
         $locationMock
-            ->expects( $this->once() )
-            ->method( 'updateLocationsContentVersionNo' )
-            ->with( 23, 2 );
+            ->expects($this->once())
+            ->method('updateLocationsContentVersionNo')
+            ->with(23, 2);
 
         $handler
-            ->expects( $this->at( 2 ) )
-            ->method( 'setStatus' )
-            ->with( 23, VersionInfo::STATUS_PUBLISHED, 2 );
+            ->expects($this->at(2))
+            ->method('setStatus')
+            ->with(23, VersionInfo::STATUS_PUBLISHED, 2);
 
-        $handler->publish( 23, 2, $metadataUpdateStruct );
+        $handler->publish(23, 2, $metadataUpdateStruct);
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::createDraftFromVersion
-     *
-     * @return void
      */
     public function testCreateDraftFromVersion()
     {
-        $handler = $this->getPartlyMockedHandler( array( 'load' ) );
+        $handler = $this->getPartlyMockedHandler(array('load'));
 
         $mapperMock = $this->getMapperMock();
         $gatewayMock = $this->getGatewayMock();
         $fieldHandlerMock = $this->getFieldHandlerMock();
 
-        $handler->expects( $this->once() )
-            ->method( 'load' )
-            ->with( 23, 2 )
-            ->will( $this->returnValue( $this->getContentFixtureForDraft() ) );
+        $handler->expects($this->once())
+            ->method('load')
+            ->with(23, 2)
+            ->will($this->returnValue($this->getContentFixtureForDraft()));
 
-        $mapperMock->expects( $this->once() )
-            ->method( 'createVersionInfoForContent' )
+        $mapperMock->expects($this->once())
+            ->method('createVersionInfoForContent')
             ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ),
-                $this->equalTo( 3 ),
-                $this->equalTo( 14 )
+                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'),
+                $this->equalTo(3),
+                $this->equalTo(14)
             )->will(
                 $this->returnValue(
                     new VersionInfo(
                         array(
-                            "names" => array(),
-                            "versionNo" => 3
+                            'names' => array(),
+                            'versionNo' => 3,
                         )
                     )
                 )
             );
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'insertVersion' )
+        $gatewayMock->expects($this->once())
+            ->method('insertVersion')
             ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ),
+                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo'),
                 $this->getContentFixtureForDraft()->fields
-            )->will( $this->returnValue( 42 ) );
+            )->will($this->returnValue(42));
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'getLastVersionNumber' )
-            ->with( $this->equalTo( 23 ) )
-            ->will( $this->returnValue( 2 ) );
+        $gatewayMock->expects($this->once())
+            ->method('getLastVersionNumber')
+            ->with($this->equalTo(23))
+            ->will($this->returnValue(2));
 
-        $fieldHandlerMock->expects( $this->once() )
-            ->method( 'createExistingFieldsInNewVersion' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ) );
+        $fieldHandlerMock->expects($this->once())
+            ->method('createExistingFieldsInNewVersion')
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'));
 
         $relationData = array(
             array(
-                "ezcontentobject_link_contentclassattribute_id" => 0,
-                "ezcontentobject_link_to_contentobject_id" => 42,
-                "ezcontentobject_link_relation_type" => 1
-            )
+                'ezcontentobject_link_contentclassattribute_id' => 0,
+                'ezcontentobject_link_to_contentobject_id' => 42,
+                'ezcontentobject_link_relation_type' => 1,
+            ),
         );
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'loadRelations' )
+        $gatewayMock->expects($this->once())
+            ->method('loadRelations')
             ->with(
-                $this->equalTo( 23 ),
-                $this->equalTo( 2 )
+                $this->equalTo(23),
+                $this->equalTo(2)
             )
-            ->will( $this->returnValue( $relationData ) );
+            ->will($this->returnValue($relationData));
 
         $relationStruct = new RelationCreateStruct(
             array(
-                "sourceContentId" => 23,
-                "sourceContentVersionNo" => 3,
-                "sourceFieldDefinitionId" => 0,
-                "destinationContentId" => 42,
-                "type" => 1
+                'sourceContentId' => 23,
+                'sourceContentVersionNo' => 3,
+                'sourceFieldDefinitionId' => 0,
+                'destinationContentId' => 42,
+                'type' => 1,
             )
         );
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'insertRelation' )
-            ->with( $this->equalTo( $relationStruct ) );
+        $gatewayMock->expects($this->once())
+            ->method('insertRelation')
+            ->with($this->equalTo($relationStruct));
 
-        $result = $handler->createDraftFromVersion( 23, 2, 14 );
+        $result = $handler->createDraftFromVersion(23, 2, 14);
 
         $this->assertInstanceOf(
             'eZ\\Publish\\SPI\\Persistence\\Content',
@@ -440,8 +452,6 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::load
-     *
-     * @return void
      */
     public function testLoad()
     {
@@ -451,26 +461,26 @@ class ContentHandlerTest extends TestCase
         $mapperMock = $this->getMapperMock();
         $fieldHandlerMock = $this->getFieldHandlerMock();
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'load' )
+        $gatewayMock->expects($this->once())
+            ->method('load')
             ->with(
-                $this->equalTo( 23 ),
-                $this->equalTo( 2 ),
-                $this->equalTo( array( 'eng-GB' ) )
+                $this->equalTo(23),
+                $this->equalTo(2),
+                $this->equalTo(array('eng-GB'))
             )->will(
-                $this->returnValue( array( 42 ) )
+                $this->returnValue(array(42))
             );
 
-        $mapperMock->expects( $this->once() )
-            ->method( 'extractContentFromRows' )
-            ->with( $this->equalTo( array( 42 ) ) )
-            ->will( $this->returnValue( array( $this->getContentFixtureForDraft() ) ) );
+        $mapperMock->expects($this->once())
+            ->method('extractContentFromRows')
+            ->with($this->equalTo(array(42)))
+            ->will($this->returnValue(array($this->getContentFixtureForDraft())));
 
-        $fieldHandlerMock->expects( $this->once() )
-            ->method( 'loadExternalFieldData' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ) );
+        $fieldHandlerMock->expects($this->once())
+            ->method('loadExternalFieldData')
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'));
 
-        $result = $handler->load( 23, 2, array( 'eng-GB' ) );
+        $result = $handler->load(23, 2, array('eng-GB'));
 
         $this->assertEquals(
             $result,
@@ -479,7 +489,31 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadContentInfoByRemoteId
+     */
+    public function testLoadContentInfoByRemoteId()
+    {
+        $contentInfoData = array(new ContentInfo());
+        $this->getGatewayMock()->expects($this->once())
+            ->method('loadContentInfoByRemoteId')
+            ->with(
+                $this->equalTo('15b256dbea2ae72418ff5facc999e8f9')
+            )->will(
+                $this->returnValue(array(42))
+            );
+
+        $this->getMapperMock()->expects($this->once())
+            ->method('extractContentInfoFromRow')
+            ->with($this->equalTo(array(42)))
+            ->will($this->returnValue($contentInfoData));
+
+        $this->assertSame(
+            $contentInfoData,
+            $this->getContentHandler()->loadContentInfoByRemoteId('15b256dbea2ae72418ff5facc999e8f9')
+        );
+    }
+
+    /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::load
      * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
@@ -489,74 +523,93 @@ class ContentHandlerTest extends TestCase
 
         $gatewayMock = $this->getGatewayMock();
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'load' )
+        $gatewayMock->expects($this->once())
+            ->method('load')
             ->will(
-                $this->returnValue( array() )
+                $this->returnValue(array())
             );
 
-        $result = $handler->load( 23, 2, array( 'eng-GB' ) );
+        $result = $handler->load(23, 2, array('eng-GB'));
     }
 
     /**
-     * Returns a Content for {@link testCreateDraftFromVersion()}
+     * Returns a Content for {@link testCreateDraftFromVersion()}.
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
     protected function getContentFixtureForDraft()
     {
-        $content = new Content;
-        $content->versionInfo = new VersionInfo;
+        $content = new Content();
+        $content->versionInfo = new VersionInfo();
         $content->versionInfo->versionNo = 2;
 
-        $content->versionInfo->contentInfo = new ContentInfo;
+        $content->versionInfo->contentInfo = new ContentInfo();
 
-        $field = new Field;
+        $field = new Field();
         $field->versionNo = 2;
 
-        $content->fields = array( $field );
+        $content->fields = array($field);
 
         return $content;
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::updateContent
-     *
-     * @return void
      */
     public function testUpdateContent()
     {
-        $handler = $this->getPartlyMockedHandler( array( 'load', 'loadContentInfo' ) );
+        $handler = $this->getPartlyMockedHandler(array('load', 'loadContentInfo'));
 
         $gatewayMock = $this->getGatewayMock();
         $fieldHandlerMock = $this->getFieldHandlerMock();
+        $contentTypeHandlerMock = $this->getContentTypeHandlerMock();
+        $contentTypeMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Type');
+        $contentStub = new Content(
+            array(
+                'versionInfo' => new VersionInfo(
+                    array(
+                        'contentInfo' => new ContentInfo(
+                            array(
+                                'contentTypeId' => 4242,
+                            )
+                        ),
+                    )
+                ),
+            )
+        );
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'updateContent' )
-            ->with( 14, $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\MetadataUpdateStruct' ) );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'updateVersion' )
-            ->with( 14, 4, $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UpdateStruct' ) );
+        $contentTypeHandlerMock->expects($this->once())
+            ->method('load')
+            ->with($contentStub->versionInfo->contentInfo->contentTypeId)
+            ->will($this->returnValue($contentTypeMock));
 
-        $fieldHandlerMock->expects( $this->once() )
-            ->method( 'updateFields' )
+        $gatewayMock->expects($this->once())
+            ->method('updateContent')
+            ->with(14, $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\MetadataUpdateStruct'));
+        $gatewayMock->expects($this->once())
+            ->method('updateVersion')
+            ->with(14, 4, $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UpdateStruct'));
+
+        $fieldHandlerMock->expects($this->once())
+            ->method('updateFields')
             ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ),
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UpdateStruct' )
+                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'),
+                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UpdateStruct'),
+                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Type')
             );
 
-        $handler->expects( $this->at( 0 ) )
-            ->method( 'load' )
-            ->with( 14, 4 )
-            ->will( $this->returnValue( new Content() ) );
+        $handler->expects($this->at(0))
+            ->method('load')
+            ->with(14, 4)
+            ->will($this->returnValue($contentStub));
 
-        $handler->expects( $this->at( 1 ) )
-            ->method( 'load' )
-            ->with( 14, 4 );
+        $handler->expects($this->at(1))
+            ->method('load')
+            ->with(14, 4);
 
-        $handler->expects( $this->at( 2 ) )
-            ->method( 'loadContentInfo' )
-            ->with( 14 );
+        $handler->expects($this->at(2))
+            ->method('loadContentInfo')
+            ->with(14);
 
         $resultContent = $handler->updateContent(
             14, // ContentId
@@ -583,7 +636,7 @@ class ContentHandlerTest extends TestCase
                                 'value' => new FieldValue(),
                             )
                         ),
-                    )
+                    ),
                 )
             )
         );
@@ -595,7 +648,7 @@ class ContentHandlerTest extends TestCase
                     'ownerId' => 14,
                     'name' => 'Some name',
                     'modificationDate' => time(),
-                    'alwaysAvailable' => true
+                    'alwaysAvailable' => true,
                 )
             )
         );
@@ -606,7 +659,7 @@ class ContentHandlerTest extends TestCase
      */
     public function testUpdateMetadata()
     {
-        $handler = $this->getPartlyMockedHandler( array( 'load', 'loadContentInfo' ) );
+        $handler = $this->getPartlyMockedHandler(array('load', 'loadContentInfo'));
 
         $gatewayMock = $this->getGatewayMock();
         $fieldHandlerMock = $this->getFieldHandlerMock();
@@ -615,20 +668,20 @@ class ContentHandlerTest extends TestCase
                 'ownerId' => 14,
                 'name' => 'Some name',
                 'modificationDate' => time(),
-                'alwaysAvailable' => true
+                'alwaysAvailable' => true,
             )
         );
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'updateContent' )
-            ->with( 14, $updateStruct );
+        $gatewayMock->expects($this->once())
+            ->method('updateContent')
+            ->with(14, $updateStruct);
 
-        $handler->expects( $this->once() )
-            ->method( 'loadContentInfo' )
-            ->with( 14 )
+        $handler->expects($this->once())
+            ->method('loadContentInfo')
+            ->with(14)
             ->will(
                 $this->returnValue(
-                    $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo' )
+                    $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo')
                 )
             );
 
@@ -636,7 +689,7 @@ class ContentHandlerTest extends TestCase
             14, // ContentId
             $updateStruct
         );
-        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo', $resultContentInfo );
+        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo', $resultContentInfo);
     }
 
     /**
@@ -644,59 +697,59 @@ class ContentHandlerTest extends TestCase
      */
     public function testUpdateMetadataUpdatesPathIdentificationString()
     {
-        $handler = $this->getPartlyMockedHandler( array( 'load', 'loadContentInfo' ) );
+        $handler = $this->getPartlyMockedHandler(array('load', 'loadContentInfo'));
         $locationGatewayMock = $this->getLocationGatewayMock();
         $slugConverterMock = $this->getSlugConverterMock();
         $urlAliasGatewayMock = $this->getUrlAliasGatewayMock();
         $gatewayMock = $this->getGatewayMock();
-        $updateStruct = new MetadataUpdateStruct( array( 'mainLanguageId' => 2 ) );
+        $updateStruct = new MetadataUpdateStruct(array('mainLanguageId' => 2));
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'updateContent' )
-            ->with( 14, $updateStruct );
+        $gatewayMock->expects($this->once())
+            ->method('updateContent')
+            ->with(14, $updateStruct);
 
-        $locationGatewayMock->expects( $this->once() )
-            ->method( "loadLocationDataByContent" )
-            ->with( 14 )
+        $locationGatewayMock->expects($this->once())
+            ->method('loadLocationDataByContent')
+            ->with(14)
             ->will(
                 $this->returnValue(
                     array(
                         array(
-                            "node_id" => 100,
-                            "parent_node_id" => 200,
-                        )
+                            'node_id' => 100,
+                            'parent_node_id' => 200,
+                        ),
                     )
                 )
             );
 
-        $urlAliasGatewayMock->expects( $this->once() )
-            ->method( "loadLocationEntries" )
-            ->with( 100, false, 2 )
+        $urlAliasGatewayMock->expects($this->once())
+            ->method('loadLocationEntries')
+            ->with(100, false, 2)
             ->will(
                 $this->returnValue(
                     array(
                         array(
-                            "text" => "slug",
-                        )
+                            'text' => 'slug',
+                        ),
                     )
                 )
             );
 
-        $slugConverterMock->expects( $this->once() )
-            ->method( "convert" )
-            ->with( "slug", "node_100", "urlalias_compat" )
-            ->will( $this->returnValue( "transformed_slug" ) );
+        $slugConverterMock->expects($this->once())
+            ->method('convert')
+            ->with('slug', 'node_100', 'urlalias_compat')
+            ->will($this->returnValue('transformed_slug'));
 
-        $locationGatewayMock->expects( $this->once() )
-            ->method( "updatePathIdentificationString" )
-            ->with( 100, 200, "transformed_slug" );
+        $locationGatewayMock->expects($this->once())
+            ->method('updatePathIdentificationString')
+            ->with(100, 200, 'transformed_slug');
 
-        $handler->expects( $this->once() )
-            ->method( 'loadContentInfo' )
-            ->with( 14 )
+        $handler->expects($this->once())
+            ->method('loadContentInfo')
+            ->with(14)
             ->will(
                 $this->returnValue(
-                    $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo' )
+                    $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo')
                 )
             );
 
@@ -716,22 +769,22 @@ class ContentHandlerTest extends TestCase
         $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMapperMock();
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'loadRelations' )
+        $gatewayMock->expects($this->once())
+            ->method('loadRelations')
             ->with(
-                $this->equalTo( 23 ),
-                $this->equalTo( null ),
-                $this->equalTo( null )
+                $this->equalTo(23),
+                $this->equalTo(null),
+                $this->equalTo(null)
             )->will(
-                $this->returnValue( array( 42 ) )
+                $this->returnValue(array(42))
             );
 
-        $mapperMock->expects( $this->once() )
-            ->method( 'extractRelationsFromRows' )
-            ->with( $this->equalTo( array( 42 ) ) )
-            ->will( $this->returnValue( $this->getRelationFixture() ) );
+        $mapperMock->expects($this->once())
+            ->method('extractRelationsFromRows')
+            ->with($this->equalTo(array(42)))
+            ->will($this->returnValue($this->getRelationFixture()));
 
-        $result = $handler->loadRelations( 23 );
+        $result = $handler->loadRelations(23);
 
         $this->assertEquals(
             $result,
@@ -749,21 +802,21 @@ class ContentHandlerTest extends TestCase
         $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMapperMock();
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'loadReverseRelations' )
+        $gatewayMock->expects($this->once())
+            ->method('loadReverseRelations')
             ->with(
-                $this->equalTo( 23 ),
-                $this->equalTo( null )
+                $this->equalTo(23),
+                $this->equalTo(null)
             )->will(
-                $this->returnValue( array( 42 ) )
+                $this->returnValue(array(42))
             );
 
-        $mapperMock->expects( $this->once() )
-            ->method( 'extractRelationsFromRows' )
-            ->with( $this->equalTo( array( 42 ) ) )
-            ->will( $this->returnValue( $this->getRelationFixture() ) );
+        $mapperMock->expects($this->once())
+            ->method('extractRelationsFromRows')
+            ->with($this->equalTo(array(42)))
+            ->will($this->returnValue($this->getRelationFixture()));
 
-        $result = $handler->loadReverseRelations( 23 );
+        $result = $handler->loadReverseRelations(23);
 
         $this->assertEquals(
             $result,
@@ -793,21 +846,21 @@ class ContentHandlerTest extends TestCase
         $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMapperMock();
 
-        $mapperMock->expects( $this->once() )
-            ->method( 'createRelationFromCreateStruct' )
+        $mapperMock->expects($this->once())
+            ->method('createRelationFromCreateStruct')
             // @todo Connected with the todo above
-            ->with( $this->equalTo( $relationCreateStruct ) )
-            ->will( $this->returnValue( $expectedRelationObject ) );
+            ->with($this->equalTo($relationCreateStruct))
+            ->will($this->returnValue($expectedRelationObject));
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'insertRelation' )
-            ->with( $this->equalTo( $relationCreateStruct ) )
+        $gatewayMock->expects($this->once())
+            ->method('insertRelation')
+            ->with($this->equalTo($relationCreateStruct))
             ->will(
                 // @todo Should this return a row as if it was selected from the database, the id... ? Check with other, similar create methods
-                $this->returnValue( 42 )
+                $this->returnValue(42)
             );
 
-        $result = $handler->addRelation( $relationCreateStruct );
+        $result = $handler->addRelation($relationCreateStruct);
 
         $this->assertEquals(
             $result,
@@ -822,11 +875,11 @@ class ContentHandlerTest extends TestCase
     {
         $gatewayMock = $this->getGatewayMock();
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'deleteRelation' )
-            ->with( $this->equalTo( 1, RelationValue::COMMON ) );
+        $gatewayMock->expects($this->once())
+            ->method('deleteRelation')
+            ->with($this->equalTo(1, RelationValue::COMMON));
 
-        $this->getContentHandler()->removeRelation( 1, RelationValue::COMMON );
+        $this->getContentHandler()->removeRelation(1, RelationValue::COMMON);
     }
 
     protected function getRelationFixture()
@@ -848,6 +901,8 @@ class ContentHandlerTest extends TestCase
     {
         $struct = new CreateStruct();
 
+        $struct->typeId = 4242;
+
         $firstField = new Field();
         $firstField->type = 'some-type';
         $firstField->value = new FieldValue();
@@ -855,17 +910,17 @@ class ContentHandlerTest extends TestCase
         $secondField = clone $firstField;
 
         $struct->fields = array(
-            $firstField, $secondField
+            $firstField, $secondField,
         );
 
         $struct->locations = array(
             new LocationCreateStruct(
-                array( 'parentId' => 42 )
-            )
+                array('parentId' => 42)
+            ),
         );
 
         $struct->name = array(
-            'eng-GB' => 'This is a test name'
+            'eng-GB' => 'This is a test name',
         );
 
         return $struct;
@@ -881,163 +936,107 @@ class ContentHandlerTest extends TestCase
         $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMapperMock();
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'listVersionsForUser' )
-            ->with( $this->equalTo( 23 ) )
-            ->will( $this->returnValue( array() ) );
+        $gatewayMock->expects($this->once())
+            ->method('listVersionsForUser')
+            ->with($this->equalTo(23))
+            ->will($this->returnValue(array()));
 
-        $mapperMock->expects( $this->once() )
-            ->method( 'extractVersionInfoListFromRows' )
-            ->with( $this->equalTo( array() ) )
-            ->will( $this->returnValue( array( new VersionInfo() ) ) );
+        $mapperMock->expects($this->once())
+            ->method('extractVersionInfoListFromRows')
+            ->with($this->equalTo(array()))
+            ->will($this->returnValue(array(new VersionInfo())));
 
-        $res = $handler->loadDraftsForUser( 23 );
+        $res = $handler->loadDraftsForUser(23);
 
         $this->assertEquals(
-            array( new VersionInfo() ),
+            array(new VersionInfo()),
             $res
         );
     }
 
-    /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::listVersions
-     *
-     * @return void
-     */
     public function testListVersions()
     {
         $handler = $this->getContentHandler();
 
-        $gatewayMock = $this->getGatewayMock();
-        $mapperMock = $this->getMapperMock();
+        $treeHandlerMock = $this->getTreeHandlerMock();
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'listVersions' )
-            ->with( $this->equalTo( 23 ) )
-            ->will( $this->returnValue( array() ) );
+        $treeHandlerMock
+            ->expects($this->once())
+            ->method('listVersions')
+            ->with(23)
+            ->will($this->returnValue(array(new VersionInfo())));
 
-        $mapperMock->expects( $this->once() )
-            ->method( 'extractVersionInfoListFromRows' )
-            ->with( $this->equalTo( array() ) )
-            ->will( $this->returnValue( array( new VersionInfo() ) ) );
-
-        $res = $handler->listVersions( 23 );
+        $versions = $handler->listVersions(23);
 
         $this->assertEquals(
-            array( new VersionInfo() ),
-            $res
+            array(new VersionInfo()),
+            $versions
         );
     }
 
-    /**
-     * Test for the removeRawContent() method.
-     *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::removeRawContent
-     */
     public function testRemoveRawContent()
     {
-        $handler = $this->getPartlyMockedHandler( array( "loadContentInfo" ) );
+        $handler = $this->getContentHandler();
+        $treeHandlerMock = $this->getTreeHandlerMock();
 
-        $gatewayMock = $this->getGatewayMock();
-        $mapperMock = $this->getMapperMock();
-        $fieldHandlerMock = $this->getFieldHandlerMock();
-        $locationGatewayMock = $this->getLocationGatewayMock();
+        $treeHandlerMock
+            ->expects($this->once())
+            ->method('removeRawContent')
+            ->with(23);
 
-        // Method needs to list versions
-        $mapperMock->expects( $this->once() )
-            ->method( 'extractVersionInfoListFromRows' )
-            ->will( $this->returnValue( array( new VersionInfo(), new VersionInfo() ) ) );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'listVersions' )
-            ->will( $this->returnValue( array() ) );
-
-        // Normal delete process
-        $fieldHandlerMock->expects( $this->exactly( 2 ) )
-            ->method( "deleteFields" )
-            ->with(
-                $this->equalTo( 23 ),
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' )
-            );
-        $gatewayMock->expects( $this->once() )
-            ->method( "deleteRelations" )
-            ->with( $this->equalTo( 23 ) );
-        $gatewayMock->expects( $this->once() )
-            ->method( "deleteVersions" )
-            ->with( $this->equalTo( 23 ) );
-        $gatewayMock->expects( $this->once() )
-            ->method( "deleteNames" )
-            ->with( $this->equalTo( 23 ) );
-        $gatewayMock->expects( $this->once() )
-            ->method( "deleteContent" )
-            ->with( $this->equalTo( 23 ) );
-
-        $handler->expects( $this->once() )
-            ->method( 'loadContentInfo' )
-            ->with( 23 )
-            ->will( $this->returnValue( new ContentInfo( array( "mainLocationId" => 42 ) ) ) );
-        $locationGatewayMock->expects( $this->once() )
-            ->method( "removeElementFromTrash" )
-            ->with( $this->equalTo( 42 ) );
-
-        $handler->removeRawContent( 23 );
+        $handler->removeRawContent(23);
     }
 
     /**
      * Test for the deleteContent() method.
      *
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::deleteContent
-     *
-     * @return void
      */
     public function testDeleteContentWithLocations()
     {
-        $handlerMock = $this->getPartlyMockedHandler( array( "getAllLocationIds" ) );
+        $handlerMock = $this->getPartlyMockedHandler(array('getAllLocationIds'));
         $gatewayMock = $this->getGatewayMock();
-        $locationHandlerMock = $this->getLocationHandlerMock();
+        $treeHandlerMock = $this->getTreeHandlerMock();
 
-        $gatewayMock->expects( $this->once() )
-            ->method( "getAllLocationIds" )
-            ->with( $this->equalTo( 23 ) )
-            ->will( $this->returnValue( array( 42, 24 ) ) );
-        $locationHandlerMock->expects( $this->exactly( 2 ) )
-            ->method( "removeSubtree" )
+        $gatewayMock->expects($this->once())
+            ->method('getAllLocationIds')
+            ->with($this->equalTo(23))
+            ->will($this->returnValue(array(42, 24)));
+        $treeHandlerMock->expects($this->exactly(2))
+            ->method('removeSubtree')
             ->with(
                 $this->logicalOr(
-                    $this->equalTo( 42 ),
-                    $this->equalTo( 24 )
+                    $this->equalTo(42),
+                    $this->equalTo(24)
                 )
             );
 
-        $handlerMock->deleteContent( 23 );
+        $handlerMock->deleteContent(23);
     }
 
     /**
      * Test for the deleteContent() method.
      *
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::deleteContent
-     *
-     * @return void
      */
     public function testDeleteContentWithoutLocations()
     {
-        $handlerMock = $this->getPartlyMockedHandler( array( "removeRawContent" ) );
+        $handlerMock = $this->getPartlyMockedHandler(array('removeRawContent'));
         $gatewayMock = $this->getGatewayMock();
 
-        $gatewayMock->expects( $this->once() )
-            ->method( "getAllLocationIds" )
-            ->with( $this->equalTo( 23 ) )
-            ->will( $this->returnValue( array() ) );
-        $handlerMock->expects( $this->once() )
-            ->method( "removeRawContent" )
-            ->with(  $this->equalTo( 23 ) );
+        $gatewayMock->expects($this->once())
+            ->method('getAllLocationIds')
+            ->with($this->equalTo(23))
+            ->will($this->returnValue(array()));
+        $handlerMock->expects($this->once())
+            ->method('removeRawContent')
+            ->with($this->equalTo(23));
 
-        $handlerMock->deleteContent( 23 );
+        $handlerMock->deleteContent(23);
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::deleteVersion
-     *
-     * @return void
      */
     public function testDeleteVersion()
     {
@@ -1049,188 +1048,195 @@ class ContentHandlerTest extends TestCase
         $fieldHandlerMock = $this->getFieldHandlerMock();
 
         // Load VersionInfo to delete fields
-        $mapperMock->expects( $this->once() )
-            ->method( 'extractVersionInfoListFromRows' )
-            ->will( $this->returnValue( array( new VersionInfo() ) ) );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'loadVersionInfo' )
-            ->will( $this->returnValue( array( 42 ) ) );
+        $mapperMock->expects($this->once())
+            ->method('extractVersionInfoListFromRows')
+            ->will($this->returnValue(array(new VersionInfo())));
+        $gatewayMock->expects($this->once())
+            ->method('loadVersionInfo')
+            ->will($this->returnValue(array(42)));
 
-        $locationHandlerMock->expects( $this->once() )
-            ->method( 'deleteNodeAssignment' )
+        $locationHandlerMock->expects($this->once())
+            ->method('deleteNodeAssignment')
             ->with(
-                $this->equalTo( 225 ),
-                $this->equalTo( 2 )
-            );
-
-        $fieldHandlerMock->expects( $this->once() )
-            ->method( 'deleteFields' )
-            ->with(
-                $this->equalTo( 225 ),
-                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' )
-            );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'deleteRelations' )
-            ->with(
-                $this->equalTo( 225 ),
-                $this->equalTo( 2 )
-            );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'deleteVersions' )
-            ->with(
-                $this->equalTo( 225 ),
-                $this->equalTo( 2 )
-            );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'deleteNames' )
-            ->with(
-                $this->equalTo( 225 ),
-                $this->equalTo( 2 )
+                $this->equalTo(225),
+                $this->equalTo(2)
             );
 
-        $handler->deleteVersion( 225, 2 );
+        $fieldHandlerMock->expects($this->once())
+            ->method('deleteFields')
+            ->with(
+                $this->equalTo(225),
+                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo')
+            );
+        $gatewayMock->expects($this->once())
+            ->method('deleteRelations')
+            ->with(
+                $this->equalTo(225),
+                $this->equalTo(2)
+            );
+        $gatewayMock->expects($this->once())
+            ->method('deleteVersions')
+            ->with(
+                $this->equalTo(225),
+                $this->equalTo(2)
+            );
+        $gatewayMock->expects($this->once())
+            ->method('deleteNames')
+            ->with(
+                $this->equalTo(225),
+                $this->equalTo(2)
+            );
+
+        $handler->deleteVersion(225, 2);
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::copy
-     *
-     * @return void
      */
     public function testCopySingleVersion()
     {
-        $handler = $this->getPartlyMockedHandler( array( "load", "internalCreate" ) );
+        $handler = $this->getPartlyMockedHandler(array('load', 'internalCreate'));
         $mapperMock = $this->getMapperMock();
 
         $handler->expects(
             $this->once()
         )->method(
-            "load"
+            'load'
         )->with(
-            $this->equalTo( 23 ),
-            $this->equalTo( 32 )
+            $this->equalTo(23),
+            $this->equalTo(32)
         )->will(
-            $this->returnValue( new Content() )
+            $this->returnValue(new Content())
         );
 
         $mapperMock->expects(
             $this->once()
         )->method(
-            "createCreateStructFromContent"
+            'createCreateStructFromContent'
         )->with(
-            $this->isInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content" )
+            $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content')
         )->will(
-            $this->returnValue( new CreateStruct() )
+            $this->returnValue(new CreateStruct())
         );
 
         $handler->expects(
             $this->once()
         )->method(
-            "internalCreate"
+            'internalCreate'
         )->with(
-            $this->isInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct" ),
-            $this->equalTo( 32 )
+            $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct'),
+            $this->equalTo(32)
         )->will(
-            $this->returnValue( new Content() )
+            $this->returnValue(new Content())
         );
 
-        $result = $handler->copy( 23, 32 );
+        $result = $handler->copy(23, 32);
 
         $this->assertInstanceOf(
-            "eZ\\Publish\\SPI\\Persistence\\Content",
+            'eZ\\Publish\\SPI\\Persistence\\Content',
             $result
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::copy
-     *
-     * @return void
      */
     public function testCopyAllVersions()
     {
         $handler = $this->getPartlyMockedHandler(
             array(
-                "loadContentInfo",
-                "load",
-                "internalCreate",
-                "listVersions"
+                'loadContentInfo',
+                'load',
+                'internalCreate',
+                'listVersions',
             )
         );
         $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMapperMock();
         $fieldHandlerMock = $this->getFieldHandlerMock();
-
-        $handler->expects( $this->once() )
-            ->method( "loadContentInfo" )
-            ->with( $this->equalTo( 23 ) )
-            ->will( $this->returnValue( new ContentInfo( array( "currentVersionNo" => 2 ) ) ) );
-
-        $handler->expects( $this->at( 1 ) )
-            ->method( "load" )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 2 ) )
-            ->will( $this->returnValue( new Content() ) );
-
+        $contentTypeHandlerMock = $this->getContentTypeHandlerMock();
+        $contentTypeMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Type');
         $time = time();
-        $mapperMock->expects( $this->once() )
-            ->method( "createCreateStructFromContent" )
-            ->with( $this->isInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content" ) )
+        $createStructStub = new CreateStruct(
+            array(
+                'modified' => $time,
+                'typeId' => 4242,
+            )
+        );
+
+        $contentTypeHandlerMock->expects($this->once())
+            ->method('load')
+            ->with($createStructStub->typeId)
+            ->will($this->returnValue($contentTypeMock));
+
+        $handler->expects($this->once())
+            ->method('loadContentInfo')
+            ->with($this->equalTo(23))
+            ->will($this->returnValue(new ContentInfo(array('currentVersionNo' => 2))));
+
+        $handler->expects($this->at(1))
+            ->method('load')
+            ->with($this->equalTo(23), $this->equalTo(2))
+            ->will($this->returnValue(new Content()));
+
+        $mapperMock->expects($this->once())
+            ->method('createCreateStructFromContent')
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'))
             ->will(
-                $this->returnValue(
-                    new CreateStruct( array( "modified" => $time ) )
-                )
+                $this->returnValue($createStructStub)
             );
 
-        $handler->expects( $this->once() )
-            ->method( "internalCreate" )
+        $handler->expects($this->once())
+            ->method('internalCreate')
             ->with(
-                $this->isInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct" ),
-                $this->equalTo( 2 )
+                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct'),
+                $this->equalTo(2)
             )->will(
                 $this->returnValue(
                     new Content(
                         array(
-                            "versionInfo" => new VersionInfo(
+                            'versionInfo' => new VersionInfo(
                                 array(
-                                    "contentInfo" => new ContentInfo( array( "id" => 24 ) )
+                                    'contentInfo' => new ContentInfo(array('id' => 24)),
                                 )
-                            )
+                            ),
                         )
                     )
                 )
             );
 
-        $handler->expects( $this->once() )
-            ->method( "listVersions" )
-            ->with( $this->equalTo( 23 ) )
+        $handler->expects($this->once())
+            ->method('listVersions')
+            ->with($this->equalTo(23))
             ->will(
                 $this->returnValue(
                     array(
-                        new VersionInfo( array( "versionNo" => 1 ) ),
-                        new VersionInfo( array( "versionNo" => 2 ) )
+                        new VersionInfo(array('versionNo' => 1)),
+                        new VersionInfo(array('versionNo' => 2)),
                     )
                 )
             );
 
         $versionInfo = new VersionInfo(
             array(
-                "names" => array( "eng-US" => "Test" ),
-                "contentInfo" => new ContentInfo(
+                'names' => array('eng-US' => 'Test'),
+                'contentInfo' => new ContentInfo(
                     array(
-                        "id" => 24,
-                        "alwaysAvailable" => true
+                        'id' => 24,
+                        'alwaysAvailable' => true,
                     )
                 ),
             )
         );
-        $handler->expects( $this->at( 4 ) )
-            ->method( "load" )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 1 ) )
+        $handler->expects($this->at(4))
+            ->method('load')
+            ->with($this->equalTo(23), $this->equalTo(1))
             ->will(
                 $this->returnValue(
                     new Content(
                         array(
-                            "versionInfo" => $versionInfo,
-                            "fields" => array()
+                            'versionInfo' => $versionInfo,
+                            'fields' => array(),
                         )
                     )
                 )
@@ -1238,67 +1244,66 @@ class ContentHandlerTest extends TestCase
 
         $versionInfo->creationDate = $time;
         $versionInfo->modificationDate = $time;
-        $gatewayMock->expects( $this->once() )
-            ->method( "insertVersion" )
+        $gatewayMock->expects($this->once())
+            ->method('insertVersion')
             ->with(
-                $this->equalTo( $versionInfo ),
-                $this->isType( "array" )
-            )->will( $this->returnValue( 42 ) );
+                $this->equalTo($versionInfo),
+                $this->isType('array')
+            )->will($this->returnValue(42));
 
         $versionInfo = clone $versionInfo;
         $versionInfo->id = 42;
-        $fieldHandlerMock->expects( $this->once() )
-            ->method( "createNewFields" )
+        $fieldHandlerMock->expects($this->once())
+            ->method('createNewFields')
             ->with(
                 $this->equalTo(
                     new Content(
                         array(
-                            "versionInfo" => $versionInfo,
-                            "fields" => array()
+                            'versionInfo' => $versionInfo,
+                            'fields' => array(),
                         )
                     )
-                )
+                ),
+                $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Type')
             );
 
-        $gatewayMock->expects( $this->once() )
-            ->method( "setName" )
+        $gatewayMock->expects($this->once())
+            ->method('setName')
             ->with(
-                $this->equalTo( 24 ),
-                $this->equalTo( 1 ),
-                $this->equalTo( "Test" ),
-                $this->equalTo( "eng-US" )
+                $this->equalTo(24),
+                $this->equalTo(1),
+                $this->equalTo('Test'),
+                $this->equalTo('eng-US')
             );
 
-        $result = $handler->copy( 23 );
+        $result = $handler->copy(23);
 
         $this->assertInstanceOf(
-            "eZ\\Publish\\SPI\\Persistence\\Content",
+            'eZ\\Publish\\SPI\\Persistence\\Content',
             $result
         );
     }
 
     /**
-     * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::copy
      * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testCopyThrowsNotFoundExceptionContentNotFound()
     {
         $handler = $this->getContentHandler();
 
-        $gatewayMock = $this->getGatewayMock();
-        $gatewayMock->expects( $this->once() )
-            ->method( "loadContentInfo" )
-            ->with( $this->equalTo( 23 ) )
+        $treeHandlerMock = $this->getTreeHandlerMock();
+        $treeHandlerMock
+            ->expects($this->once())
+            ->method('loadContentInfo')
+            ->with($this->equalTo(23))
             ->will(
-                $this->throwException( new NotFoundException( "ContentInfo", 23 ) )
+                $this->throwException(new NotFoundException('ContentInfo', 23))
             );
 
-        $result = $handler->copy( 23 );
+        $handler->copy(23);
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::copy
      * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
@@ -1307,18 +1312,16 @@ class ContentHandlerTest extends TestCase
         $handler = $this->getContentHandler();
 
         $gatewayMock = $this->getGatewayMock();
-        $gatewayMock->expects( $this->once() )
-            ->method( "load" )
-            ->with( $this->equalTo( 23, 32 ) )
-            ->will( $this->returnValue( array() ) );
+        $gatewayMock->expects($this->once())
+            ->method('load')
+            ->with($this->equalTo(23, 32))
+            ->will($this->returnValue(array()));
 
-        $result = $handler->copy( 23, 32 );
+        $result = $handler->copy(23, 32);
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::setStatus
-     *
-     * @return void
      */
     public function testSetStatus()
     {
@@ -1327,46 +1330,47 @@ class ContentHandlerTest extends TestCase
         $mapperMock = $this->getMapperMock();
         $gatewayMock = $this->getGatewayMock();
 
-        $gatewayMock->expects( $this->once() )
-            ->method( 'setStatus' )
-            ->with( 23, 5, 2 )
-            ->will( $this->returnValue( true ) );
+        $gatewayMock->expects($this->once())
+            ->method('setStatus')
+            ->with(23, 5, 2)
+            ->will($this->returnValue(true));
 
         $this->assertTrue(
-            $handler->setStatus( 23, 2, 5 )
+            $handler->setStatus(23, 2, 5)
         );
     }
 
     /**
-     * Returns the handler to test
+     * Returns the handler to test.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Handler
      */
     protected function getContentHandler()
     {
-        if ( !isset( $this->contentHandler ) )
-        {
+        if (!isset($this->contentHandler)) {
             $this->contentHandler = new Handler(
                 $this->getGatewayMock(),
                 $this->getLocationGatewayMock(),
                 $this->getMapperMock(),
                 $this->getFieldHandlerMock(),
                 $this->getSlugConverterMock(),
-                $this->getUrlAliasGatewayMock()
+                $this->getUrlAliasGatewayMock(),
+                $this->getContentTypeHandlerMock(),
+                $this->getTreeHandlerMock()
             );
-            $this->contentHandler->locationHandler = $this->getLocationHandlerMock();
         }
+
         return $this->contentHandler;
     }
 
     /**
-     * Returns the handler to test with $methods mocked
+     * Returns the handler to test with $methods mocked.
      *
      * @param string[] $methods
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Handler
      */
-    protected function getPartlyMockedHandler( array $methods )
+    protected function getPartlyMockedHandler(array $methods)
     {
         $mock = $this->getMock(
             '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler',
@@ -1377,31 +1381,53 @@ class ContentHandlerTest extends TestCase
                 $this->getMapperMock(),
                 $this->getFieldHandlerMock(),
                 $this->getSlugConverterMock(),
-                $this->getUrlAliasGatewayMock()
+                $this->getUrlAliasGatewayMock(),
+                $this->getContentTypeHandlerMock(),
+                $this->getTreeHandlerMock(),
             )
         );
-        $mock->locationHandler = $this->getLocationHandlerMock();
+
         return $mock;
     }
 
     /**
-     * Returns a LocationHandler mock.
+     * Returns a TreeHandler mock.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler
      */
-    protected function getLocationHandlerMock()
+    protected function getTreeHandlerMock()
     {
-        if ( !isset( $this->locationHandlerMock ) )
-        {
-            $this->locationHandlerMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Handler',
+        if (!isset($this->treeHandlerMock)) {
+            $this->treeHandlerMock = $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\TreeHandler',
                 array(),
                 array(),
                 '',
                 false
             );
         }
-        return $this->locationHandlerMock;
+
+        return $this->treeHandlerMock;
+    }
+
+    /**
+     * Returns a ContentTypeHandler mock.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler
+     */
+    protected function getContentTypeHandlerMock()
+    {
+        if (!isset($this->contentTypeHandlerMock)) {
+            $this->contentTypeHandlerMock = $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Handler',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+
+        return $this->contentTypeHandlerMock;
     }
 
     /**
@@ -1411,8 +1437,7 @@ class ContentHandlerTest extends TestCase
      */
     protected function getFieldHandlerMock()
     {
-        if ( !isset( $this->fieldHandlerMock ) )
-        {
+        if (!isset($this->fieldHandlerMock)) {
             $this->fieldHandlerMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldHandler',
                 array(),
@@ -1421,6 +1446,7 @@ class ContentHandlerTest extends TestCase
                 false
             );
         }
+
         return $this->fieldHandlerMock;
     }
 
@@ -1431,8 +1457,7 @@ class ContentHandlerTest extends TestCase
      */
     protected function getMapperMock()
     {
-        if ( !isset( $this->mapperMock ) )
-        {
+        if (!isset($this->mapperMock)) {
             $this->mapperMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
                 array(),
@@ -1441,38 +1466,39 @@ class ContentHandlerTest extends TestCase
                 false
             );
         }
+
         return $this->mapperMock;
     }
 
     /**
-     * Returns a Location Gateway mock
+     * Returns a Location Gateway mock.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected function getLocationGatewayMock()
     {
-        if ( !isset( $this->locationGatewayMock ) )
-        {
+        if (!isset($this->locationGatewayMock)) {
             $this->locationGatewayMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway'
             );
         }
+
         return $this->locationGatewayMock;
     }
 
     /**
-     * Returns a Content Type gateway mock
+     * Returns a Content Type gateway mock.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
     protected function getTypeGatewayMock()
     {
-        if ( !isset( $this->typeGatewayMock ) )
-        {
+        if (!isset($this->typeGatewayMock)) {
             $this->typeGatewayMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Gateway'
             );
         }
+
         return $this->typeGatewayMock;
     }
 
@@ -1483,12 +1509,12 @@ class ContentHandlerTest extends TestCase
      */
     protected function getGatewayMock()
     {
-        if ( !isset( $this->gatewayMock ) )
-        {
+        if (!isset($this->gatewayMock)) {
             $this->gatewayMock = $this->getMockForAbstractClass(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Gateway'
             );
         }
+
         return $this->gatewayMock;
     }
 
@@ -1499,8 +1525,7 @@ class ContentHandlerTest extends TestCase
      */
     protected function getSlugConverterMock()
     {
-        if ( !isset( $this->slugConverterMock ) )
-        {
+        if (!isset($this->slugConverterMock)) {
             $this->slugConverterMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\SlugConverter',
                 array(),
@@ -1509,6 +1534,7 @@ class ContentHandlerTest extends TestCase
                 false
             );
         }
+
         return $this->slugConverterMock;
     }
 
@@ -1519,12 +1545,12 @@ class ContentHandlerTest extends TestCase
      */
     protected function getUrlAliasGatewayMock()
     {
-        if ( !isset( $this->urlAliasGatewayMock ) )
-        {
+        if (!isset($this->urlAliasGatewayMock)) {
             $this->urlAliasGatewayMock = $this->getMockForAbstractClass(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\Gateway'
             );
         }
+
         return $this->urlAliasGatewayMock;
     }
 }

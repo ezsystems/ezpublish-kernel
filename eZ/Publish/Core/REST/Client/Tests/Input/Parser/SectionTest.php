@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a SectionTest class
+ * File containing a SectionTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\Core\REST\Client\Input\Parser;
 class SectionTest extends BaseTest
 {
     /**
-     * Tests the section parser
+     * Tests the section parser.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
@@ -23,26 +25,26 @@ class SectionTest extends BaseTest
         $sectionParser = $this->getParser();
 
         $inputArray = array(
-            '_href'      => '/content/sections/23',
+            '_href' => '/content/sections/23',
             'identifier' => 'some-section',
-            'name'       => 'Some Section',
+            'name' => 'Some Section',
         );
 
-        $result = $sectionParser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $sectionParser->parse($inputArray, $this->getParsingDispatcherMock());
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Tests that the resulting role is in fact an instance of Section class
+     * Tests that the resulting role is in fact an instance of Section class.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $result
      *
      * @depends testParse
      */
-    public function testResultIsSection( $result )
+    public function testResultIsSection($result)
     {
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Section',
@@ -51,13 +53,13 @@ class SectionTest extends BaseTest
     }
 
     /**
-     * Tests if resulting section contains the ID
+     * Tests if resulting section contains the ID.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $result
      *
      * @depends testParse
      */
-    public function testResultContainsId( $result )
+    public function testResultContainsId($result)
     {
         $this->assertEquals(
             '/content/sections/23',
@@ -66,13 +68,13 @@ class SectionTest extends BaseTest
     }
 
     /**
-     * Tests if resulting section contains the identifier
+     * Tests if resulting section contains the identifier.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $result
      *
      * @depends testParse
      */
-    public function testResultContainsIdentifier( $result )
+    public function testResultContainsIdentifier($result)
     {
         $this->assertEquals(
             'some-section',
@@ -81,13 +83,13 @@ class SectionTest extends BaseTest
     }
 
     /**
-     * Tests if resulting section contains the name
+     * Tests if resulting section contains the name.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $result
      *
      * @depends testParse
      */
-    public function testResultContainsName( $result )
+    public function testResultContainsName($result)
     {
         $this->assertEquals(
             'Some Section',
@@ -96,7 +98,7 @@ class SectionTest extends BaseTest
     }
 
     /**
-     * Gets the section parser
+     * Gets the section parser.
      *
      * @return \eZ\Publish\Core\REST\Client\Input\Parser\Section;
      */

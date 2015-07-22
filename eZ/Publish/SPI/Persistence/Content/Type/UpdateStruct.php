@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentType class
+ * File containing the ContentType class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,7 +18,7 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class UpdateStruct extends ValueObject
 {
     /**
-     * Human readable name of the content type
+     * Human readable name of the content type.
      *
      * The structure of this field is:
      * <code>
@@ -28,7 +30,7 @@ class UpdateStruct extends ValueObject
     public $name;
 
     /**
-     * Human readable description of the content type
+     * Human readable description of the content type.
      *
      * The structure of this field is:
      * <code>
@@ -40,64 +42,63 @@ class UpdateStruct extends ValueObject
     public $description = array();
 
     /**
-     * String identifier of a type
+     * String identifier of a type.
      *
      * @var string
      */
     public $identifier;
 
     /**
-     * Modification date (timestamp)
+     * Modification date (timestamp).
      *
      * @var int
      */
     public $modified;
 
     /**
-     * Modifier user id
+     * Modifier user id.
      *
      * @var mixed
-     *
      */
     public $modifierId;
 
     /**
-     * Unique remote ID
+     * Unique remote ID.
      *
      * @var string
      */
     public $remoteId;
 
     /**
-     * URL alias schema
+     * URL alias schema.
      *
      * @var string
      */
     public $urlAliasSchema;
 
     /**
-     * Name schema
+     * Name schema.
      *
      * @var string
      */
     public $nameSchema;
 
     /**
-     * Determines if the type is a container
+     * Determines if the type is a container.
      *
-     * @var boolean
+     * @var bool
      */
     public $isContainer;
 
     /**
-     * Initial language
+     * Initial language.
      *
      * @var mixed
      */
     public $initialLanguageId;
 
     /**
-     * Specifies which property the child locations should be sorted on by default when created
+     * Specifies which property the child locations should be sorted on by default when created.
      *
      * Valid values are found at {@link Location::SORT_FIELD_*}
      *
@@ -106,7 +107,7 @@ class UpdateStruct extends ValueObject
     public $sortField;
 
     /**
-     * Specifies whether the sort order should be ascending or descending by default when created
+     * Specifies whether the sort order should be ascending or descending by default when created.
      *
      * Valid values are {@link Location::SORT_ORDER_*}
      *
@@ -117,7 +118,7 @@ class UpdateStruct extends ValueObject
     /**
      * @todo: Document.
      *
-     * @var boolean
+     * @var bool
      */
     public $defaultAlwaysAvailable;
 }

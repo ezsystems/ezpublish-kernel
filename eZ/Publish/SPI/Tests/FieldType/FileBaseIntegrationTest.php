@@ -2,78 +2,65 @@
 
 namespace eZ\Publish\SPI\Tests\FieldType;
 
-use eZ\Publish\Core\FieldType;
-use eZ\Publish\Core\IO\IOService;
-use eZ\Publish\Core\IO\Handler\Filesystem as IOHandler;
-use eZ\Publish\Core\IO\MimeTypeDetector\FileInfo as MimeTypeDetector;
+use eZ\Publish\Core\IO\IOServiceInterface;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use FileSystemIterator;
+use Symfony\Component\Filesystem\Filesystem as FilesystemComponent;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 abstract class FileBaseIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * If the temporary directory should be removed after the tests.
-     *
-     * @var boolean
-     */
-    protected static $removeTmpDir = false;
-
-    /**
-     * Temporary storage directory
+     * Temporary storage directory.
      *
      * @var string
      */
-    protected static $storageDir;
+    protected static $tmpDir;
+
+    /** @var IOServiceInterface */
+    protected $ioService;
 
     /**
-     * Returns the storage dir used by the IOHandler
-     *
-     * @return string
+     * @see EZP-23534
      */
-    abstract protected function getStorageDir();
+    public function testLoadingContentWithMissingFileWorks()
+    {
+        $contentType = $this->createContentType();
+        $content = $this->createContent($contentType, $this->getInitialValue());
+
+        // delete the binary file object
+        $this->deleteStoredFile($content);
+
+        // try loading the content again. It should work even though the image isn't physically here
+        $this->getCustomHandler()->contentHandler()->load($content->versionInfo->contentInfo->id, 1);
+    }
 
     /**
-     * Returns prefix used by the IOService
+     * Deletes the binary file stored in the field.
+     *
+     * @param $content
+     *
+     * @return mixed
+     */
+    protected function deleteStoredFile($content)
+    {
+        return $this->ioService->deleteBinaryFile(
+            $this->ioService->loadBinaryFile($content->fields[1]->value->externalData['id'])
+        );
+    }
+
+    /**
+     * Returns prefix used by the IOService.
      *
      * @return string
      */
     abstract protected function getStoragePrefix();
 
     /**
-     * @return \eZ\Publish\Core\IO\IOService
-     */
-    public function getIOService()
-    {
-        return new IOService(
-            $this->getIOHandler(),
-            $this->getMimeTypeDetector(),
-            array( 'prefix' => $this->getStoragePrefix() )
-        );
-    }
-
-    /**
-     * @return IOHandler
-     */
-    protected function getIOHandler()
-    {
-        return new IOHandler( $this->getStorageDir() );
-    }
-
-    /**
-     * Returns MIME type detector to be used.
-     *
-     * @return \eZ\Publish\SPI\IO\MimeTypeDetector
-     */
-    protected function getMimeTypeDetector()
-    {
-        return new MimeTypeDetector;
-    }
-
-    /**
-     * Sets up a temporary directory and stores its path in self::$tmpDir
-     *
-     * @return void
+     * Sets up a temporary directory and stores its path in self::$tmpDir.
      */
     public static function setUpBeforeClass()
     {
@@ -81,37 +68,41 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
 
         $tmpFile = tempnam(
             sys_get_temp_dir(),
-            'eZ_' . substr( $calledClass, strrpos( $calledClass, '\\' ) + 1 )
+            'eZ_' . substr($calledClass, strrpos($calledClass, '\\') + 1)
         );
 
         // Convert file into directory
-        unlink( $tmpFile );
-        mkdir( $tmpFile );
+        unlink($tmpFile);
+        mkdir($tmpFile);
 
-        self::$storageDir = $tmpFile;
+        self::$tmpDir = $tmpFile;
+
+        $storageDir = self::$tmpDir . '/var/ezdemo_site/storage';
+        if (!file_exists($storageDir)) {
+            $fs = new FilesystemComponent();
+            $fs->mkdir($storageDir);
+        }
+
+        self::$setUp = false;
+
+        parent::setUpBeforeClass();
     }
 
     /**
-     * Removes the temp dir, if self::$removeTmpDir is true
-     *
-     * @return void
+     * Removes the temp dir.
      */
     public static function tearDownAfterClass()
     {
-        if ( self::$removeTmpDir )
-        {
-            self::removeRecursive( self::$storageDir );
-        }
+        self::removeRecursive(self::$tmpDir);
+        parent::tearDownAfterClass();
     }
 
     /**
-     * Removes the given directory path recursively
+     * Removes the given directory path recursively.
      *
      * @param string $dir
-     *
-     * @return void
      */
-    protected static function removeRecursive( $dir )
+    protected static function removeRecursive($dir)
     {
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
@@ -121,18 +112,98 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
             RecursiveIteratorIterator::CHILD_FIRST
         );
 
-        foreach ( $iterator as $path => $fileInfo )
-        {
-            if ( $fileInfo->isDir() )
-            {
-                rmdir( $path );
-            }
-            else
-            {
-                unlink( $path );
+        foreach ($iterator as $path => $fileInfo) {
+            if ($fileInfo->isDir()) {
+                rmdir($path);
+            } else {
+                unlink($path);
             }
         }
 
-        rmdir( $dir );
+        rmdir($dir);
+    }
+
+    protected function getContainer()
+    {
+        $config = include __DIR__ . '/../../../../../config.php';
+        $installDir = $config['install_dir'];
+
+        $containerBuilder = new ContainerBuilder();
+        $settingsPath = $installDir . '/eZ/Publish/Core/settings/';
+        $loader = new YamlFileLoader($containerBuilder, new FileLocator($settingsPath));
+
+        $loader->load('fieldtypes.yml');
+        $loader->load('io.yml');
+        $loader->load('repository.yml');
+        $loader->load('fieldtype_external_storages.yml');
+        $loader->load('storage_engines/common.yml');
+        $loader->load('storage_engines/shortcuts.yml');
+        $loader->load('storage_engines/legacy.yml');
+        $loader->load('search_engines/legacy.yml');
+        $loader->load('search_engines/shortcuts.yml');
+        $loader->load('storage_engines/cache.yml');
+        $loader->load('settings.yml');
+        $loader->load('fieldtype_services.yml');
+        $loader->load('utils.yml');
+
+        $containerBuilder->setParameter('ezpublish.kernel.root_dir', $installDir);
+
+        $containerBuilder->setParameter(
+            'legacy_dsn',
+            $this->getDsn()
+        );
+        $containerBuilder->setParameter(
+            'io_root_dir',
+            self::$tmpDir . '/var/ezdemo_site/storage'
+        );
+
+        $containerBuilder->compile();
+
+        return $containerBuilder;
+    }
+
+    /**
+     * Asserts that the IO File with uri $uri exists.
+     *
+     * @param string $uri
+     */
+    protected function assertIOUriExists($uri)
+    {
+        $this->assertTrue(
+            file_exists(self::$tmpDir . '/' . $uri),
+            "Stored file uri $uri does not exist"
+        );
+    }
+
+    /**
+     * Asserts that the IO File with id $id exists.
+     *
+     * @param string $id
+     */
+    protected function assertIOIdExists($id)
+    {
+        $path = $this->getPathFromId($id);
+        $this->assertTrue(
+            file_exists($path),
+            "Stored file $path does not exists"
+        );
+    }
+
+    /**
+     * Returns the physical path to the file with id $id.
+     */
+    protected function getPathFromId($id)
+    {
+        return $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $id;
+    }
+
+    protected function getStorageDir()
+    {
+        return (self::$tmpDir ? self::$tmpDir . '/' : '') . self::$container->getParameter('storage_dir');
+    }
+
+    protected function getFilesize($binaryFileId)
+    {
+        return filesize($this->getPathFromId($binaryFileId));
     }
 }

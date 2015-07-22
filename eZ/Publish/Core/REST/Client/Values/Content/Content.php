@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Content class
+ * File containing the Content class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -28,7 +30,7 @@ use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 class Content extends APIContent
 {
     /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Field[][] Array of array of field values like $fields[$fieldDefIdentifier][$languageCode]
+     * @var \eZ\Publish\API\Repository\Values\Content\Field[][] Array of array of field values like[$fieldDefIdentifier][$languageCode]
      */
     protected $fields;
 
@@ -48,28 +50,24 @@ class Content extends APIContent
     protected $contentService;
 
     /**
-     * Creates a new struct from the given $data array
+     * Creates a new struct from the given $data array.
      *
      * @param ContentService $contentService
      * @param array $data
-     *
-     * @access protected
      */
-    function __construct( ContentService $contentService, array $data = array() )
+    public function __construct(ContentService $contentService, array $data = array())
     {
         $this->contentService = $contentService;
-        foreach ( $data as $propertyName => $propertyValue )
-        {
+        foreach ($data as $propertyName => $propertyValue) {
             $this->$propertyName = $propertyValue;
         }
-        foreach ( $this->internalFields as $field )
-        {
+        foreach ($this->internalFields as $field) {
             $this->fields[$field->fieldDefIdentifier][$field->languageCode] = $field;
         }
     }
 
     /**
-     * Returns the VersionInfo for this version
+     * Returns the VersionInfo for this version.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
@@ -90,15 +88,13 @@ class Content extends APIContent
      *
      * @return mixed a primitive type or a field type Value object depending on the field type.
      */
-    public function getFieldValue( $fieldDefIdentifier, $languageCode = null )
+    public function getFieldValue($fieldDefIdentifier, $languageCode = null)
     {
-        if ( null === $languageCode )
-        {
+        if (null === $languageCode) {
             $languageCode = $this->versionInfo->contentInfo->mainLanguageCode;
         }
 
-        if ( isset( $this->fields[$fieldDefIdentifier][$languageCode] ) )
-        {
+        if (isset($this->fields[$fieldDefIdentifier][$languageCode])) {
             return $this->fields[$fieldDefIdentifier][$languageCode]->value;
         }
 
@@ -106,7 +102,7 @@ class Content extends APIContent
     }
 
     /**
-     * This method returns the complete fields collection
+     * This method returns the complete fields collection.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field}
      */
@@ -116,7 +112,7 @@ class Content extends APIContent
     }
 
     /**
-     * This method returns the fields for a given language and non translatable fields
+     * This method returns the fields for a given language and non translatable fields.
      *
      * If not set the initialLanguage of the content version is used.
      *
@@ -124,19 +120,16 @@ class Content extends APIContent
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field} with field identifier as keys
      */
-    public function getFieldsByLanguage( $languageCode = null )
+    public function getFieldsByLanguage($languageCode = null)
     {
         $fields = array();
 
-        if ( null === $languageCode )
-        {
+        if (null === $languageCode) {
             $languageCode = $this->versionInfo->contentInfo->mainLanguageCode;
         }
 
-        foreach ( $this->getFields() as $field )
-        {
-            if ( $field->languageCode === $languageCode )
-            {
+        foreach ($this->getFields() as $field) {
+            if ($field->languageCode === $languageCode) {
                 $fields[$field->fieldDefIdentifier] = $field;
             }
         }
@@ -145,7 +138,7 @@ class Content extends APIContent
     }
 
     /**
-     * This method returns the field for a given field definition identifier and language
+     * This method returns the field for a given field definition identifier and language.
      *
      * If not set the initialLanguage of the content version is used.
      *
@@ -154,15 +147,13 @@ class Content extends APIContent
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field|null A {@link Field} or null if nothing is found
      */
-    public function getField( $fieldDefIdentifier, $languageCode = null )
+    public function getField($fieldDefIdentifier, $languageCode = null)
     {
-        if ( null === $languageCode )
-        {
+        if (null === $languageCode) {
             $languageCode = $this->versionInfo->contentInfo->mainLanguageCode;
         }
 
-        if ( isset( $this->fields[$fieldDefIdentifier][$languageCode] ) )
-        {
+        if (isset($this->fields[$fieldDefIdentifier][$languageCode])) {
             return $this->fields[$fieldDefIdentifier][$languageCode];
         }
 

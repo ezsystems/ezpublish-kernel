@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the UrlAliasTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,7 +25,7 @@ class UrlAliasTest extends BaseTest
     protected function setUp()
     {
         parent::setUp();
-        $this->matcher = new UrlAliasMatcher;
+        $this->matcher = new UrlAliasMatcher();
     }
 
     /**
@@ -34,9 +36,9 @@ class UrlAliasTest extends BaseTest
      * @param string $matchingConfig
      * @param string[] $expectedValues
      */
-    public function testSetMatchingConfig( $matchingConfig, $expectedValues )
+    public function testSetMatchingConfig($matchingConfig, $expectedValues)
     {
-        $this->matcher->setMatchingConfig( $matchingConfig );
+        $this->matcher->setMatchingConfig($matchingConfig);
         $this->assertSame(
             $this->matcher->getValues(),
             $expectedValues
@@ -46,57 +48,57 @@ class UrlAliasTest extends BaseTest
     public function setMatchingConfigProvider()
     {
         return array(
-            array( '/foo/bar/', array( 'foo/bar' ) ),
-            array( '/foo/bar/', array( 'foo/bar' ) ),
-            array( '/foo/bar', array( 'foo/bar' ) ),
-            array( array( '/foo/bar/', 'baz/biz/' ), array( 'foo/bar', 'baz/biz' ) ),
-            array( array( 'foo/bar', 'baz/biz' ), array( 'foo/bar', 'baz/biz' ) ),
+            array('/foo/bar/', array('foo/bar')),
+            array('/foo/bar/', array('foo/bar')),
+            array('/foo/bar', array('foo/bar')),
+            array(array('/foo/bar/', 'baz/biz/'), array('foo/bar', 'baz/biz')),
+            array(array('foo/bar', 'baz/biz'), array('foo/bar', 'baz/biz')),
         );
     }
 
     /**
-     * Returns a Repository mock configured to return the appropriate Section object with given section identifier
+     * Returns a Repository mock configured to return the appropriate Section object with given section identifier.
      *
      * @param string $path
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function generateRepositoryMockForUrlAlias( $path )
+    private function generateRepositoryMockForUrlAlias($path)
     {
         // First an url alias that will never match, then the right url alias.
         // This ensures to test even if the location has several url aliases.
         $urlAliasList = array(
-            $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias' ),
+            $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias'),
             $this
-                ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias' )
-                ->setConstructorArgs( array( array( 'path' => $path ) ) )
-                ->getMockForAbstractClass()
+                ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias')
+                ->setConstructorArgs(array(array('path' => $path)))
+                ->getMockForAbstractClass(),
         );
 
         $urlAliasServiceMock = $this
-            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\URLAliasService' )
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\URLAliasService')
             ->disableOriginalConstructor()
             ->getMock();
-        $urlAliasServiceMock->expects( $this->at( 0 ) )
-            ->method( 'listLocationAliases' )
+        $urlAliasServiceMock->expects($this->at(0))
+            ->method('listLocationAliases')
             ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ),
+                $this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Location'),
                 true
             )
-            ->will( $this->returnValue( array() ) );
-        $urlAliasServiceMock->expects( $this->at( 1 ) )
-            ->method( 'listLocationAliases' )
+            ->will($this->returnValue(array()));
+        $urlAliasServiceMock->expects($this->at(1))
+            ->method('listLocationAliases')
             ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' ),
+                $this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Location'),
                 false
             )
-            ->will( $this->returnValue( $urlAliasList ) );
+            ->will($this->returnValue($urlAliasList));
 
         $repository = $this->getRepositoryMock();
         $repository
-            ->expects( $this->once() )
-            ->method( 'getUrlAliasService' )
-            ->will( $this->returnValue( $urlAliasServiceMock ) );
+            ->expects($this->once())
+            ->method('getURLAliasService')
+            ->will($this->returnValue($urlAliasServiceMock));
 
         return $repository;
     }
@@ -109,17 +111,15 @@ class UrlAliasTest extends BaseTest
      *
      * @param string|string[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param boolean $expectedResult
-     *
-     * @return void
+     * @param bool $expectedResult
      */
-    public function testMatchLocation( $matchingConfig, Repository $repository, $expectedResult )
+    public function testMatchLocation($matchingConfig, Repository $repository, $expectedResult)
     {
-        $this->matcher->setRepository( $repository );
-        $this->matcher->setMatchingConfig( $matchingConfig );
+        $this->matcher->setRepository($repository);
+        $this->matcher->setMatchingConfig($matchingConfig);
         $this->assertSame(
             $expectedResult,
-            $this->matcher->matchLocation( $this->getLocationMock() )
+            $this->matcher->matchLocation($this->getLocationMock())
         );
     }
 
@@ -128,29 +128,29 @@ class UrlAliasTest extends BaseTest
         return array(
             array(
                 'foo/url',
-                $this->generateRepositoryMockForUrlAlias( '/foo/url' ),
-                true
+                $this->generateRepositoryMockForUrlAlias('/foo/url'),
+                true,
             ),
             array(
                 '/foo/url',
-                $this->generateRepositoryMockForUrlAlias( '/foo/url' ),
-                true
+                $this->generateRepositoryMockForUrlAlias('/foo/url'),
+                true,
             ),
             array(
                 'foo/url',
-                $this->generateRepositoryMockForUrlAlias( '/bar/url' ),
-                false
+                $this->generateRepositoryMockForUrlAlias('/bar/url'),
+                false,
             ),
             array(
-                array( 'foo/url', 'baz' ),
-                $this->generateRepositoryMockForUrlAlias( '/bar/url' ),
-                false
+                array('foo/url', 'baz'),
+                $this->generateRepositoryMockForUrlAlias('/bar/url'),
+                false,
             ),
             array(
-                array( 'foo/url   ', 'baz   ' ),
-                $this->generateRepositoryMockForUrlAlias( '/baz' ),
-                true
-            )
+                array('foo/url   ', 'baz   '),
+                $this->generateRepositoryMockForUrlAlias('/baz'),
+                true,
+            ),
         );
     }
 
@@ -161,7 +161,7 @@ class UrlAliasTest extends BaseTest
      */
     public function testMatchContentInfo()
     {
-        $this->matcher->setMatchingConfig( 'foo/bar' );
-        $this->matcher->matchContentInfo( $this->getContentInfoMock() );
+        $this->matcher->setMatchingConfig('foo/bar');
+        $this->matcher->matchContentInfo($this->getContentInfoMock());
     }
 }

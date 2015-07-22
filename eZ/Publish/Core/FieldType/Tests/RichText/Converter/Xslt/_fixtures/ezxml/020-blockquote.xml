@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+@todo support author attribute
+
+-->
+<section xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+  <section>
+    <header>Example of blockquote</header>
+  </section>
+  <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+    <custom name="quote">
+      <paragraph>Don't wake me for the end of the world unless it has very good special effects.</paragraph>
+    </custom>
+  </paragraph>
+</section>

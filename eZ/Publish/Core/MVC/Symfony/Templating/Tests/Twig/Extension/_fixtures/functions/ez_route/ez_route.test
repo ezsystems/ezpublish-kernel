@@ -1,0 +1,21 @@
+--TEST--
+"twig" filter
+--TEMPLATE--
+{% set route_ref1 = ez_route( "foo_route" ) %}
+{% set route_ref2 = ez_route( "bar_route", {"some": "thing"} ) %}
+{% set route_ref3 = ez_route( "route_66", {"direction": "highway to hell"} ) %}
+{{ route_ref1.route }}
+{{ route_ref1.get( "param", "test" ) }}
+{{ route_ref2.route }}
+{{ route_ref2.get( "some" ) }}
+{{ route_ref3.route }}
+{{ route_ref3.get( "direction", "highway to hell" ) }}
+--DATA--
+return array();
+--EXPECT--
+foo_route
+test
+bar_route
+thing
+route_66
+highway to hell

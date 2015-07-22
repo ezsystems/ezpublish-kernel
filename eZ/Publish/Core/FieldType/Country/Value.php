@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Country Value class
+ * File containing the Country Value class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,7 @@ namespace eZ\Publish\Core\FieldType\Country;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
- * Value for Country field type
+ * Value for Country field type.
  */
 class Value extends BaseValue
 {
@@ -36,11 +38,11 @@ class Value extends BaseValue
     public $countries = array();
 
     /**
-     * Construct a new Value object and initialize it with given $data
+     * Construct a new Value object and initialize it with given $data.
      *
      * @param array[] $countries
      */
-    public function __construct( array $countries = array() )
+    public function __construct(array $countries = array())
     {
         $this->countries = $countries;
     }
@@ -51,11 +53,10 @@ class Value extends BaseValue
     public function __toString()
     {
         return implode(
-            ", ",
+            ', ',
             array_map(
-                function ( $country )
-                {
-                    return $country["Name"];
+                function ($country) {
+                    return $country['Name'];
                 },
                 $this->countries
             )

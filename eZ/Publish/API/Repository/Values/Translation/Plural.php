@@ -1,11 +1,12 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\Plural class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
- * @package eZ\Publish\API\Repository\Values
  */
 
 namespace eZ\Publish\API\Repository\Values\Translation;
@@ -32,8 +33,6 @@ use eZ\Publish\API\Repository\Values\Translation;
  * The singular / plural string could, for Symfony2, for example be converted
  * to "$singular|$plural", and you would call gettext like: ngettext(
  * $singular, $plural, $count ).
- *
- * @package eZ\Publish\API\Repository\Values
  */
 class Plural extends Translation
 {
@@ -62,18 +61,16 @@ class Plural extends Translation
     protected $values;
 
     /**
-     * Construct plural message from singular, plural and value array
+     * Construct plural message from singular, plural and value array.
      *
      * @param string $singular
      * @param string $plural
      * @param array $values
-     *
-     * @return void
      */
-    public function __construct( $singular, $plural, array $values )
+    public function __construct($singular, $plural, array $values)
     {
         $this->singular = $singular;
-        $this->plural   = $plural;
-        $this->values   = $values;
+        $this->plural = $plural;
+        $this->values = $values;
     }
 }

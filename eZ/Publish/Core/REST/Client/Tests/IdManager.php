@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the IdManager base class
+ * File containing the IdManager base class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,23 +14,23 @@ namespace eZ\Publish\Core\REST\Client\Tests;
 use eZ\Publish\Core\REST\Common;
 
 /**
- * Base class for ID manager used in the tests suite
+ * Base class for ID manager used in the tests suite.
  */
 class IdManager
 {
     /**
-     * URL handler
+     * URL handler.
      *
      * @var \eZ\Publish\Core\REST\Common\RequestParser
      */
     protected $requestParser;
 
     /**
-     * Creates a new ID manager based on $requestParser
+     * Creates a new ID manager based on $requestParser.
      *
      * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      */
-    public function __construct( Common\RequestParser $requestParser )
+    public function __construct(Common\RequestParser $requestParser)
     {
         $this->requestParser = $requestParser;
     }
@@ -44,7 +46,7 @@ class IdManager
      *
      * @return mixed
      */
-    public function generateId( $type, $rawId )
+    public function generateId($type, $rawId)
     {
         return $this->requestParser->generate(
             $type,
@@ -65,9 +67,10 @@ class IdManager
      *
      * @return mixed
      */
-    public function parseId( $type, $id )
+    public function parseId($type, $id)
     {
-        $values = $this->requestParser->parse( $type, $id );
+        $values = $this->requestParser->parse($type, $id);
+
         return $values[$type];
     }
 }

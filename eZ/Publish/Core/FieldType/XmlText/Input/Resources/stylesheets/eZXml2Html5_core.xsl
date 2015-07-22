@@ -13,29 +13,38 @@
     </xsl:template>
 
     <xsl:template match="header">
-        <xsl:variable name="level" select="count(ancestor-or-self::section)"/>
+        <xsl:variable name="level">
+            <xsl:choose>
+                <xsl:when test="ancestor::table">
+                    <xsl:value-of select="count(ancestor::section[ancestor::table[1]]) + 1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="count(ancestor::section)"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:variable name="name">
-            <xsl:number count="section" level="multiple"/>
+            <xsl:number count="section[ancestor::section] | header" level="multiple"/>
         </xsl:variable>
 
-        <a name="eztoc{translate($name, '.', '_')}" id="eztoc{translate($name, '.', '_')}"/>
+        <a id="eztoc_{translate($name, '.', '_')}"/>
         <xsl:element name="h{$level}">
+            <xsl:copy-of select="@class"/>
+            <xsl:copy-of select="@align"/>
             <xsl:apply-templates/>
         </xsl:element>
     </xsl:template>
 
+    <xsl:template match="paragraph[@ez-temporary]">
+        <xsl:apply-templates/>
+    </xsl:template>
+
     <xsl:template match="paragraph">
-        <xsl:choose>
-            <!-- "inline" attribute is dynamically added by CustomTags pre-converter -->
-            <xsl:when test="( ul | ol | table | embed | literal | custom[@inline='false'] ) or (name(..)='li')">
-                <xsl:apply-templates/>
-            </xsl:when>
-            <xsl:otherwise>
-                <p>
-                    <xsl:apply-templates/>
-                </p>
-            </xsl:otherwise>
-        </xsl:choose>
+        <p>
+            <xsl:copy-of select="@class"/>
+            <xsl:copy-of select="@align"/>
+            <xsl:apply-templates/>
+        </p>
     </xsl:template>
 
     <xsl:template match="line">
@@ -77,7 +86,8 @@
         <xsl:attribute name="width">
             <xsl:value-of select="@width"/>
         </xsl:attribute>
-        <xsl:attribute name="style">width: <xsl:value-of select="@width"/>;
+        <xsl:attribute name="style">
+            <xsl:value-of select="concat( 'width:', @width, ';' )"/>
         </xsl:attribute>
         <xsl:attribute name="summary">
             <xsl:value-of select="@custom:summary"/>
@@ -94,12 +104,9 @@
     <xsl:template match="td | th">
         <xsl:copy>
             <xsl:choose>
-                <xsl:when test="@valign">
-                    <xsl:attribute name="valign">
-                        <xsl:value-of select="@valign"/>
-                    </xsl:attribute>
-                    <xsl:attribute name="style">vertical-align: <xsl:value-of select="@valign"/>;
-                    </xsl:attribute>
+                <xsl:when test="@custom:valign">
+                    <xsl:attribute name="valign"><xsl:value-of select="@custom:valign"/></xsl:attribute>
+                    <xsl:attribute name="style">vertical-align: <xsl:value-of select="@custom:valign"/>;</xsl:attribute>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:attribute name="valign">top</xsl:attribute>
@@ -121,26 +128,29 @@
                     <xsl:value-of select="@xhtml:width"/>
                 </xsl:attribute>
             </xsl:if>
+            <xsl:copy-of select="@class"/>
+            <xsl:copy-of select="@align"/>
             <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
 
     <xsl:template match="strong">
-        <b>
+        <strong>
             <xsl:copy-of select="@*"/>
             <xsl:apply-templates/>
-        </b>
+        </strong>
     </xsl:template>
 
     <xsl:template match="emphasize">
-        <i>
+        <em>
             <xsl:copy-of select="@*"/>
             <xsl:apply-templates/>
-        </i>
+        </em>
     </xsl:template>
 
     <xsl:template match="ol | ul | li">
         <xsl:copy>
+            <xsl:copy-of select="@class"/>
             <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
@@ -158,11 +168,12 @@
                     <xsl:otherwise>_self</xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
-            <xsl:if test="@title">
+            <xsl:if test="@xhtml:title">
                 <xsl:attribute name="title">
-                    <xsl:value-of select="@title"/>
+                    <xsl:value-of select="@xhtml:title"/>
                 </xsl:attribute>
             </xsl:if>
+            <xsl:copy-of select="@class"/>
             <xsl:apply-templates/>
         </a>
     </xsl:template>
@@ -179,11 +190,22 @@
         </div>
     </xsl:template>
 
+    <xsl:template match="embed-inline">
+        <xsl:value-of select="text()" disable-output-escaping="yes"/>
+    </xsl:template>
+
     <xsl:template match="literal">
-        <pre>
-            <xsl:copy-of select="@*"/>
-            <xsl:apply-templates/>
-        </pre>
+        <xsl:choose>
+            <xsl:when test="@class='html'">
+                <xsl:value-of select="." disable-output-escaping="yes"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <pre>
+                    <xsl:copy-of select="@*"/>
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="anchor">

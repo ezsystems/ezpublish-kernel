@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5">
+  <a id="eztoc_1_1"/>
+  <h2>This is a first level heading.</h2>
+  <a id="eztoc_2_1"/>
+  <h2>This is a second level heading.</h2>
+  <a id="eztoc_3_1_1"/>
+  <h3>This is a third level heading.</h3>
+  <a id="eztoc_4_1_1_1"/>
+  <h4>This is a fourth level heading.</h4>
+  <a id="eztoc_5_1_1_1_1"/>
+  <h5>This is a fifth level heading.</h5>
+  <a id="eztoc_6_1_1_1_1_1"/>
+  <h6>This is a sixth level heading.</h6>
+  <a id="eztoc_7_1_1_1_1_1"/>
+  <h6>This is a seventh level heading.</h6>
+</section>

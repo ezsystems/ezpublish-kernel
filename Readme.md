@@ -1,99 +1,81 @@
-# eZ Publish 5.x Kernel
+# eZ Platform Kernel / eZ Publish 5.x Platform Kernel
 [![Build Status](https://travis-ci.org/ezsystems/ezpublish-kernel.png?branch=master)](https://travis-ci.org/ezsystems/ezpublish-kernel)
 
-Welcome to the new eZ Publish 5.x Kernel, this code repository contains several layers of API's and implementation of them.
-However it does not contain all parts that make up the eZ Publish 5 install, for the full eZ Publish 5 package including
-bundles, Legacy Stack, install doc and more; please see our [ezpublish-community](https://github.com/ezsystems/ezpublish-community) repository.
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/0885c0ce-4b9f-4b89-aa9c-e8f9f7a315e0/big.png)](https://insight.sensiolabs.com/projects/0885c0ce-4b9f-4b89-aa9c-e8f9f7a315e0)
 
-## Legacy Stack (LS)
+Welcome to the *eZ Platform Kernel* (also known as *eZ Publish 5.x Platform Kernel*), the hearth of eZ Platform, a modern
+CMS built on top of Symfony (Full Stack) Framework. Containing an advance Content Model it allows you to structure any
+kind of content, or content like data in a future proof Content Repository. It furthermore aims to provide additional
+features for the MVC layer (Symfony), to increase  your productivity.
 
-Legacy Stack: Legacy kernel (4.x) + extensions
+This code repository contains several layers of API's and implementation of them. *Kernel* refers to this being the core,
+and not the *Full Stack* with bundles, user interfaces and installers all configured to make the full application.
 
-eZ Publish 5.x is a bottom up rewrite of eZ Publish, so a conservative approach where taken on backwards compatibility
-by bundling both Legacy Stack (4.x) and 5.x Stack together in one integrated package (ref ezpublish-community repository above).
+*In other words this repo is for core development, for fixes, features and documentation of the Platform kernel itself.*
 
-In addition to the BC reason, the second reason is that eZ Publish 5.x does not yet provide own UI's, editor and admin
-gui is for the time being still provided by Legacy Stack.
+## eZ Platform?
 
-The legacy integrations are done in many parts of the systems, making it possible to use both kernels in the same request,
-hence being able to do a smooth transition from existing 4.x installation to 5.x installation going forward.
+eZ Platform is a bottom up rewrite of eZ Publish, so a conservative approach where taken on backwards compatibility
+by first introducing it in 2012 in *eZ Publish Platform 5.0* by bundling both *Legacy* ("4.x") Stack & *Platform* (formerly 5.x, or "new")
+Stack together. Starting 2015 with *eZ Platform* this is no longer the case, the *Platform* has matured to become its own
+fully modern CMS/CMF, and can be used to solve your needs without having to also learn *Legacy*.
 
-However for performance reasons we recommend trying to use either legacy with "legacy\_mode" turned on or pure 5.x Stack
-on a siteaccess case by case basis. This will still make sure cache and other integrations work together (something that
-is not the case if you point Apache directly to eZ Publish Legacy), but will avoid duplicate lookups ("fallbacks").
+### Getting a full install (*Full Stack*)
 
+Reflecting what is said above there is several options to get a full install of this Kernel, see:
 
-## 5.x Stack
+- [eZ Platform](https://github.com/ezsystems/ezplatform): For the new eZ Platform install.
+- eZ Studio: *Coming soon* A commercial product extending eZ Platform to provide features and services aimed as Editors, Editorial teams and larger organizations.
+- [eZ Publish 5.x](https://github.com/ezsystems/ezpublish-community): If you are upgrading from eZ Publish 4.x or 5.x and still require *legacy* functionality.
 
-5.x Stack: 5.x kernel + Bundles (former extensions)
+## Overview of the Kernel
 
-### Bundles
-The highest level in the eZ Publish 5 architecture are bundles that builds on top of everything bellow, this is where
-most eZ Publish 5 Bundles  will be written. They will exist in separate git repositories, and optionally
-defined as dependencies in your project composer.json file (see ezpublish-community repository).
+eZ Platform is aimed at being a set of reusable components, and mix of decoupled and specific bundles putting it all together.
+From a high level it contains a Front End / UI Layer, Mid/MVC layer and a Backend, all layers containing further
+sub-layers consisting of smaller components.
 
-### 5.x Kernel
-
-#### Kernel Bundles: REST, Core & Legacy
-These bundles are important parts of the eZ Publish 5.x kernel.
-
-* Core Bundle: Provide additional features to a standard Symfony2 distribution like multilingual UrlAlias routing,
-  siteaccess matching, permissions and helpers for Public API use.
-* Legacy Bundle: Integrations with Legacy kernel, like fallbacks and code reuse across 5.x/Legacy Stack.
-* REST Bundle: Integration of REST API to 5.x (Symfony) Stack
-
-You can find these in [eZ/Bundle](eZ/Bundle/) and their lower level parts in:
-* [eZ/Publish/Core/REST](eZ/Publish/Core/REST/)  *The REST API implementation*
-* [eZ/Publish/Core/MVC](eZ/Publish/Core/MVC/)  *MVC implementation that integrate with Symfony and Legacy*
+This repository contains the main parts of the MVC and Backend layers, with underlying components planned to be provided
+as separate *(sub-tree split)* packages for re-usability.
 
 
-#### Public API
-Public API currently provides access to the Content Repository of eZ Publish, exposing Content, Locations
-(former Nodes), Sections, Content Types (former Content Classes), User Groups, Users and Roles.
-It also provides a new clear interface for plugging in custom field types (former Datatypes).
+### Current organization
 
-Public API is built on top of a set of SPI's abstracting storage/file/\* functionality.
-By using Public API your code will be forward compatible to future releases based on enhanced, more scalable and more
-performant storage engines. It is also fully backwards compatible by using the included "Legacy" storage engine, which
-stores data in the way legacy kernel is used to finding it.
+In doc folder you'll find for instance  [Specifications](doc/specifications/) for most features, including REST API.
 
-Important parts of this layer is:
-* [eZ/Publish/API](eZ/Publish/API/)  *Public API Interfaces*
-* [eZ/Publish/Core/Repository](eZ/Publish/Core/Repository/)  *Public API Repository implementation*
+MVC layer:
+- [eZ/Bundle](eZ/Bundle/) is where you'll find bundles are that are important to expose the functionality of the Backend and MVC layer to Symfony.
+- [eZ/Publish/Core/MVC](eZ/Publish/Core/MVC/) contains the parts that will make up the different components extending Symfony.
+- [eZ/Publish/Core/Pagination](eZ/Publish/Core/Pagination/) component extending PagerFanta for pagination of eZ Platform search queries.
+- [eZ/Publish/Core/REST](eZ/Publish/Core/REST/) component providing REST server and *prototype* of a REST Client.
 
-#### (Private) SPI(Service Provider Interface)
-
-Service Provider Interfaces are interfaces that can contain one or several implementations, in some cases Public API
-will only be able to use one at a time; Persistence (database), IO (file system). In other cases it expects several
-implementations; FieldTypes (former DataTypes), Limitations (permissions system).
-
-SPI layer is currently considered "private" as it will still undergo changes, it will be made "final" by the time we
-have a fully working NoSQL implementation of Persistence and scalable IO storage implementation like S3.
-Meaning you can make your own implementation if you want, but we don't guarantee that it will work across versions.
-
-Currently SPI consists of:
-* [eZ/Publish/SPI](eZ/Publish/SPI/)  *Service provider interfaces*
-* [eZ/Publish/Core/Persistence/Legacy](eZ/Publish/Core/Persistence/Legacy/)  *Legacy Storage-Engine (Persistence-handler)*
-* [eZ/Publish/Core/Persistence/InMemory](eZ/Publish/Core/Persistence/InMemory/)  *InMemory Storage-Engine (for unit testing)*
-* [eZ/Publish/Core/IO](eZ/Publish/Core/IO/)  *IO (file) Handlers; Legacy, Dispatcher and InMemory (for unit testing)*
-
-
-## Dependencies
-* **Composer**: Just run `curl -s http://getcomposer.org/installer | php` to get **composer.phar**
-* **PHPUnit 3.6+**
-* **PHP 5 Modules**: php5\_sqlite php5\_intl php5\_xsl
-* **Database**: sqlite3 if not installed by above stage
+Backend:
+- [eZ/Publish/API](eZ/Publish/API/) is where you'll find the stable interfaces for the PHP *Public* API, mainly Content *Repository API*.
+- [eZ/Publish/SPI](eZ/Publish/SPI/)  SPI's are *Service provider interfaces*, *not yet frozen*.
+- [eZ/Publish/Core](eZ/Publish/Core/) is where you'll find implementations of API and SPI's, naming aims to map to name of interface they implement, example Search/<implementation>.
 
 ## How to run tests
-* Clone this repo
-* Install dependencies with **Composer**: `php composer.phar install --prefer-dist --dev`
-* Copy config.php-DEVELOPMENT to config.php
-* Execute `phpunit -vc phpunit*.xml` with one of:
-  * phpunit.xml  *unit test xml configuration*
+
+### Dependencies
+* **PHP 5 Modules**: php5\_intl php5\_xsl php5\_gd php5\_sqlite
+* **Database**: sqlite3
+
+You can also run tests (slower) on mysql or postgres, see [.travis.yml](.travis.yml) for how.
+
+### Installation
+* Clone this repo `git clone https://github.com/ezsystems/ezpublish-kernel.git`
+* Enter directory `cd ezpublish-kernel`
+* Get [Composer](http://getcomposer.org/download/) using curl `curl -s http://getcomposer.org/installer | php`
+* Install dev dependencies: `php composer.phar install --prefer-dist --dev`
+* Execute `php vendor/bin/phpunit -vc phpunit*.xml` with one of the phpunit configuration files, mainly:
+  * phpunit.xml  *unit test xml configuration*, default one if -c is omitted from the phpunit command.
   * phpunit-integration-legacy.xml  *integration test xml configuration for running integration tests with Legacy Storage engine*
 
+This should produce similar result as [travis](https://travis-ci.org/ezsystems/ezpublish-kernel).
+If it doesn't, double check [.travis.yml](.travis.yml) for up-to-date info on how travis is setup.
+
 ## Issue tracker
-Submitting bugs, improvements and stories is possible on https://jira.ez.no/browse/EZP
+Submitting bugs, improvements and stories is possible on https://jira.ez.no/browse/EZP.
+If you discover a security issue, please see how to responsibly report such issues on https://doc.ez.no/Security.
 
 ## Contributing
 eZ Publish 5.x is a fully open source, community-driven project, and code contributions are simply done via github pull requests.
@@ -105,19 +87,19 @@ Short:
   "Implement EZP-201xx: Add support for X in Y"
 * If you want to contribute implementation specification proposals, place them in [doc/](doc/) folder.
 * Keep different changes in different commits in case cherry-pick is preferred instead of a merge later.
-  * A Pull Request should only cover one issue
-  * A commit should not contain code changes at the some time as doing coding standards/whitespace/typo fixes
-* TDD: Write/Change the test(s) for the change you do and commit it before you do the actual code change
+  * A Pull Request should only cover one issue.
+  * A commit should not contain code changes at the same time as doing coding standards/whitespace/typo fixes.
+* TDD: Write/Change the test(s) for the change you do and commit it before you do the actual code change.
   * If a bug affects Public API, write or enhance a integration test to make sure the bug is covered.
   * Unit tests should only use mocks/stubs and never test the full stack like integrations tests does.
 * Please test/check your commits before pushing even if we have automated checks in place on pull requests:
   * Run unit tests and integration test before commits
   * Make sure you follow our [coding standards](https://github.com/ezsystems/ezcs)
 
-For further information please have a look at the [related guidance page](http://share.ez.no/get-involved/develop). You will, amongst other, learn how to make pull-requests. More on this here : ["How to contribute to eZ Publish using GIT"](http://share.ez.no/learn/ez-publish/how-to-contribute-to-ez-publish-using-git).
+For further information please have a look at the [related guidance page](http://share.ez.no/get-involved/develop). You will, amongst other, learn how to make pull-requests. More on this here: ["How to contribute to eZ Publish using GIT"](http://share.ez.no/learn/ez-publish/how-to-contribute-to-ez-publish-using-git).
 
 ## Discussing/Exchanging
 A dedicated forum has been set-up to discuss all PHP API-related topics : http://share.ez.no/forums/new-php-api
 
 ## Copyright & license
-eZ Systems AS & GPL 2.0
+Copyright eZ Systems AS, for copyright and license details see provided LICENSE file.

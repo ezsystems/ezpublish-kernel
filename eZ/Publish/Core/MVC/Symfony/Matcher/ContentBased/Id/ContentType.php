@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContentType Id matcher class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,11 +22,11 @@ class ContentType extends MultipleValued
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchLocation( APILocation $location )
+    public function matchLocation(APILocation $location)
     {
-        return isset( $this->values[$location->getContentInfo()->contentTypeId] );
+        return isset($this->values[$location->getContentInfo()->contentTypeId]);
     }
 
     /**
@@ -32,10 +34,10 @@ class ContentType extends MultipleValued
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchContentInfo( ContentInfo $contentInfo )
+    public function matchContentInfo(ContentInfo $contentInfo)
     {
-        return isset( $this->values[$contentInfo->contentTypeId] );
+        return isset($this->values[$contentInfo->contentTypeId]);
     }
 }

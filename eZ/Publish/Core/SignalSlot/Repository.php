@@ -1,9 +1,11 @@
 <?php
+
 /**
- * Repository class
+ * Repository class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,127 +14,127 @@ namespace eZ\Publish\Core\SignalSlot;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\SPI\Persistence\TransactionHandler;
 
 /**
- * Repository class
- * @package eZ\Publish\Core\Repository
+ * Repository class.
  */
 class Repository implements RepositoryInterface
 {
     /**
-     * Repository Handler object
+     * Repository Handler object.
      *
      * @var \eZ\Publish\API\Repository\Repository
      */
     protected $repository;
 
     /**
-     * SignalDispatcher
+     * SignalDispatcher.
      *
      * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
     /**
-     * Instance of content service
+     * Instance of content service.
      *
      * @var \eZ\Publish\API\Repository\ContentService
      */
     protected $contentService;
 
     /**
-     * Instance of section service
+     * Instance of section service.
      *
      * @var \eZ\Publish\API\Repository\SectionService
      */
     protected $sectionService;
 
     /**
-     * Instance of role service
+     * Instance of role service.
      *
      * @var \eZ\Publish\API\Repository\RoleService
      */
     protected $roleService;
 
     /**
-     * Instance of search service
+     * Instance of search service.
      *
      * @var \eZ\Publish\API\Repository\SearchService
      */
     protected $searchService;
 
     /**
-     * Instance of user service
+     * Instance of user service.
      *
      * @var \eZ\Publish\API\Repository\UserService
      */
     protected $userService;
 
     /**
-     * Instance of language service
+     * Instance of language service.
      *
      * @var \eZ\Publish\API\Repository\LanguageService
      */
     protected $languageService;
 
     /**
-     * Instance of location service
+     * Instance of location service.
      *
      * @var \eZ\Publish\API\Repository\LocationService
      */
     protected $locationService;
 
     /**
-     * Instance of Trash service
+     * Instance of Trash service.
      *
      * @var \eZ\Publish\API\Repository\TrashService
      */
     protected $trashService;
 
     /**
-     * Instance of content type service
+     * Instance of content type service.
      *
      * @var \eZ\Publish\API\Repository\ContentTypeService
      */
     protected $contentTypeService;
 
     /**
-     * Instance of IO service
+     * Instance of IO service.
      *
      * @var \eZ\Publish\API\Repository\IOService
      */
     protected $ioService;
 
     /**
-     * Instance of object state service
+     * Instance of object state service.
      *
      * @var \eZ\Publish\API\Repository\ObjectStateService
      */
     protected $objectStateService;
 
     /**
-     * Instance of field type service
+     * Instance of field type service.
      *
      * @var \eZ\Publish\API\Repository\FieldTypeService
      */
     protected $fieldTypeService;
 
     /**
-     * Instance of URL alias service
+     * Instance of URL alias service.
      *
-     * @var \eZ\Publish\Core\Repository\UrlAliasService
+     * @var \eZ\Publish\Core\Repository\URLAliasService
      */
     protected $urlAliasService;
 
     /**
-     * Instance of URL wildcard service
+     * Instance of URL wildcard service.
      *
      * @var \eZ\Publish\Core\Repository\URLWildcardService
      */
     protected $urlWildcardService;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * Construct repository object from aggregated repository and signal
      * dispatcher
@@ -140,14 +142,14 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
      */
-    public function __construct( RepositoryInterface $repository, SignalDispatcher $signalDispatcher )
+    public function __construct(RepositoryInterface $repository, SignalDispatcher $signalDispatcher)
     {
-        $this->repository       = $repository;
+        $this->repository = $repository;
         $this->signalDispatcher = $signalDispatcher;
     }
 
     /**
-     * Get current user
+     * Get current user.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
@@ -160,43 +162,41 @@ class Repository implements RepositoryInterface
      * Sets the current user to the given $user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     *
-     * @return void
      */
-    public function setCurrentUser( User $user )
+    public function setCurrentUser(User $user)
     {
-        return $this->repository->setCurrentUser( $user );
+        return $this->repository->setCurrentUser($user);
     }
 
     /**
-     * Allows API execution to be performed with full access sand-boxed
+     * Allows API execution to be performed with full access sand-boxed.
      *
      * The closure sandbox will do a catch all on exceptions and rethrow after
      * re-setting the sudo flag.
      *
      * Example use:
      *     $location = $repository->sudo(
-     *         function ( $repo ) use ( $locationId )
+     *         function ( Repository $repo ) use ( $locationId )
      *         {
      *             return $repo->getLocationService()->loadLocation( $locationId )
      *         }
      *     );
      *
-     * @access private This function is not official API atm, and can change anytime.
      *
      * @param \Closure $callback
      *
      * @throws \RuntimeException Thrown on recursive sudo() use.
      * @throws \Exception Re throws exceptions thrown inside $callback
+     *
      * @return mixed
      */
-    public function sudo( \Closure $callback )
+    public function sudo(\Closure $callback)
     {
-        return $this->repository->sudo( $callback );
+        return $this->repository->sudo($callback);
     }
 
     /**
-     * Check if user has access to a given module / function
+     * Check if user has access to a given module / function.
      *
      * Low level function, use canUser instead if you have objects to check against.
      *
@@ -204,15 +204,15 @@ class Repository implements RepositoryInterface
      * @param string $function
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
-     * @return boolean|array Bool if user has full or no access, array if limitations if not
+     * @return bool|array Bool if user has full or no access, array if limitations if not
      */
-    public function hasAccess( $module, $function, User $user = null )
+    public function hasAccess($module, $function, User $user = null)
     {
-        return $this->repository->hasAccess( $module, $function, $user );
+        return $this->repository->hasAccess($module, $function, $user);
     }
 
     /**
-     * Check if user has access to a given action on a given value object
+     * Check if user has access to a given action on a given value object.
      *
      * Indicates if the current user is allowed to perform an action given by the function on the given
      * objects.
@@ -225,15 +225,15 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
      * @param mixed $targets The location, parent or "assignment" value object, or an array of the same
      *
-     * @return boolean
+     * @return bool
      */
-    public function canUser( $module, $function, ValueObject $object, $targets = null )
+    public function canUser($module, $function, ValueObject $object, $targets = null)
     {
-        return $this->repository->canUser( $module, $function, $object, $targets );
+        return $this->repository->canUser($module, $function, $object, $targets);
     }
 
     /**
-     * Get Content Service
+     * Get Content Service.
      *
      * Get service object to perform operations on Content objects and it's aggregate members.
      *
@@ -241,15 +241,17 @@ class Repository implements RepositoryInterface
      */
     public function getContentService()
     {
-        if ( $this->contentService !== null )
+        if ($this->contentService !== null) {
             return $this->contentService;
+        }
 
-        $this->contentService = new ContentService( $this->repository->getContentService(), $this->signalDispatcher );
+        $this->contentService = new ContentService($this->repository->getContentService(), $this->signalDispatcher);
+
         return $this->contentService;
     }
 
     /**
-     * Get Content Language Service
+     * Get Content Language Service.
      *
      * Get service object to perform operations on Content language objects
      *
@@ -257,15 +259,17 @@ class Repository implements RepositoryInterface
      */
     public function getContentLanguageService()
     {
-        if ( $this->languageService !== null )
+        if ($this->languageService !== null) {
             return $this->languageService;
+        }
 
-        $this->languageService = new LanguageService( $this->repository->getContentLanguageService(), $this->signalDispatcher );
+        $this->languageService = new LanguageService($this->repository->getContentLanguageService(), $this->signalDispatcher);
+
         return $this->languageService;
     }
 
     /**
-     * Get Content Type Service
+     * Get Content Type Service.
      *
      * Get service object to perform operations on Content Type objects and it's aggregate members.
      * ( Group, Field & FieldCategory )
@@ -274,15 +278,17 @@ class Repository implements RepositoryInterface
      */
     public function getContentTypeService()
     {
-        if ( $this->contentTypeService !== null )
+        if ($this->contentTypeService !== null) {
             return $this->contentTypeService;
+        }
 
-        $this->contentTypeService = new ContentTypeService( $this->repository->getContentTypeService(), $this->signalDispatcher );
+        $this->contentTypeService = new ContentTypeService($this->repository->getContentTypeService(), $this->signalDispatcher);
+
         return $this->contentTypeService;
     }
 
     /**
-     * Get Content Location Service
+     * Get Content Location Service.
      *
      * Get service object to perform operations on Location objects and subtrees
      *
@@ -290,15 +296,17 @@ class Repository implements RepositoryInterface
      */
     public function getLocationService()
     {
-        if ( $this->locationService !== null )
+        if ($this->locationService !== null) {
             return $this->locationService;
+        }
 
-        $this->locationService = new LocationService( $this->repository->getLocationService(), $this->signalDispatcher );
+        $this->locationService = new LocationService($this->repository->getLocationService(), $this->signalDispatcher);
+
         return $this->locationService;
     }
 
     /**
-     * Get Content Trash service
+     * Get Content Trash service.
      *
      * Trash service allows to perform operations related to location trash
      * (trash/untrash, load/list from trash...)
@@ -307,15 +315,17 @@ class Repository implements RepositoryInterface
      */
     public function getTrashService()
     {
-        if ( $this->trashService !== null )
+        if ($this->trashService !== null) {
             return $this->trashService;
+        }
 
-        $this->trashService = new TrashService( $this->repository->getTrashService(), $this->signalDispatcher );
+        $this->trashService = new TrashService($this->repository->getTrashService(), $this->signalDispatcher);
+
         return $this->trashService;
     }
 
     /**
-     * Get Content Section Service
+     * Get Content Section Service.
      *
      * Get Section service that lets you manipulate section objects
      *
@@ -323,15 +333,17 @@ class Repository implements RepositoryInterface
      */
     public function getSectionService()
     {
-        if ( $this->sectionService !== null )
+        if ($this->sectionService !== null) {
             return $this->sectionService;
+        }
 
-        $this->sectionService = new SectionService( $this->repository->getSectionService(), $this->signalDispatcher );
+        $this->sectionService = new SectionService($this->repository->getSectionService(), $this->signalDispatcher);
+
         return $this->sectionService;
     }
 
     /**
-     * Get User Service
+     * Get User Service.
      *
      * Get service object to perform operations on Users and UserGroup
      *
@@ -339,110 +351,130 @@ class Repository implements RepositoryInterface
      */
     public function getUserService()
     {
-        if ( $this->userService !== null )
+        if ($this->userService !== null) {
             return $this->userService;
+        }
 
-        $this->userService = new UserService( $this->repository->getUserService(), $this->signalDispatcher );
+        $this->userService = new UserService($this->repository->getUserService(), $this->signalDispatcher);
+
         return $this->userService;
     }
 
     /**
-     * Get URLAliasService
+     * Get URLAliasService.
      *
      * @return \eZ\Publish\API\Repository\URLAliasService
      */
     public function getURLAliasService()
     {
-        if ( $this->urlAliasService !== null )
+        if ($this->urlAliasService !== null) {
             return $this->urlAliasService;
+        }
 
-        $this->urlAliasService = new URLAliasService( $this->repository->getURLAliasService(), $this->signalDispatcher );
+        $this->urlAliasService = new URLAliasService($this->repository->getURLAliasService(), $this->signalDispatcher);
+
         return $this->urlAliasService;
     }
 
     /**
-     * Get URLWildcardService
+     * Get URLWildcardService.
      *
      * @return \eZ\Publish\API\Repository\URLWildcardService
      */
     public function getURLWildcardService()
     {
-        if ( $this->urlWildcardService !== null )
+        if ($this->urlWildcardService !== null) {
             return $this->urlWildcardService;
+        }
 
-        $this->urlWildcardService = new URLWildcardService( $this->repository->getURLWildcardService(), $this->signalDispatcher );
+        $this->urlWildcardService = new URLWildcardService($this->repository->getURLWildcardService(), $this->signalDispatcher);
+
         return $this->urlWildcardService;
     }
 
     /**
-     * Get ObjectStateService
+     * Get ObjectStateService.
      *
      * @return \eZ\Publish\API\Repository\ObjectStateService
      */
     public function getObjectStateService()
     {
-        if ( $this->objectStateService !== null )
+        if ($this->objectStateService !== null) {
             return $this->objectStateService;
+        }
 
-        $this->objectStateService = new ObjectStateService( $this->repository->getObjectStateService(), $this->signalDispatcher );
+        $this->objectStateService = new ObjectStateService($this->repository->getObjectStateService(), $this->signalDispatcher);
+
         return $this->objectStateService;
     }
 
     /**
-     * Get RoleService
+     * Get RoleService.
      *
      * @return \eZ\Publish\API\Repository\RoleService
      */
     public function getRoleService()
     {
-        if ( $this->roleService !== null )
+        if ($this->roleService !== null) {
             return $this->roleService;
+        }
 
-        $this->roleService = new RoleService( $this->repository->getRoleService(), $this->signalDispatcher );
+        $this->roleService = new RoleService($this->repository->getRoleService(), $this->signalDispatcher);
+
         return $this->roleService;
     }
 
     /**
-     * Get SearchService
+     * Get SearchService.
      *
      * @return \eZ\Publish\API\Repository\SearchService
      */
     public function getSearchService()
     {
-        if ( $this->searchService !== null )
+        if ($this->searchService !== null) {
             return $this->searchService;
+        }
 
-        $this->searchService = new SearchService( $this->repository->getSearchService(), $this->signalDispatcher );
+        $this->searchService = new SearchService($this->repository->getSearchService(), $this->signalDispatcher);
+
         return $this->searchService;
     }
 
     /**
-     * Get FieldTypeService
+     * Get FieldTypeService.
      *
      * @return \eZ\Publish\API\Repository\FieldTypeService
      */
     public function getFieldTypeService()
     {
-        if ( $this->fieldTypeService !== null )
+        if ($this->fieldTypeService !== null) {
             return $this->fieldTypeService;
+        }
 
-        $this->fieldTypeService = new FieldTypeService( $this->repository->getFieldTypeService(), $this->signalDispatcher );
+        $this->fieldTypeService = new FieldTypeService($this->repository->getFieldTypeService(), $this->signalDispatcher);
+
         return $this->fieldTypeService;
     }
 
     /**
-     * Begin transaction
+     * Begin transaction.
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,
      * otherwise work will be lost.
      */
     public function beginTransaction()
     {
-        return $this->repository->beginTransaction();
+        $return = $this->repository->beginTransaction();
+
+        if ($this->signalDispatcher instanceof TransactionHandler) {
+            $this->signalDispatcher->beginTransaction();
+        }
+
+        return $return;
     }
 
     /**
-     * Commit transaction
+     * Commit transaction.
      *
      * Commit transaction, or throw exceptions if no transactions has been started.
      *
@@ -450,11 +482,17 @@ class Repository implements RepositoryInterface
      */
     public function commit()
     {
-        return $this->repository->commit();
+        $return = $this->repository->commit();
+
+        if ($this->signalDispatcher instanceof TransactionHandler) {
+            $this->signalDispatcher->commit();
+        }
+
+        return $return;
     }
 
     /**
-     * Rollback transaction
+     * Rollback transaction.
      *
      * Rollback transaction, or throw exceptions if no transactions has been started.
      *
@@ -462,17 +500,23 @@ class Repository implements RepositoryInterface
      */
     public function rollback()
     {
+        if ($this->signalDispatcher instanceof TransactionHandler) {
+            $this->signalDispatcher->rollback();
+        }
+
         return $this->repository->rollback();
     }
 
     /**
-     * Enqueue an event to be triggered at commit or directly if no transaction has started
+     * Enqueue an event to be triggered at commit or directly if no transaction has started.
+     *
+     * @deprecated In 5.3.3, to be removed. Signals are emitted after transaction instead of being required to use this.
      *
      * @param Callable $event
      */
-    public function commitEvent( $event )
+    public function commitEvent($event)
     {
-        $this->repository->commitEvent( $event );
+        return $this->repository->commitEvent($event);
     }
 
     /**
@@ -484,8 +528,8 @@ class Repository implements RepositoryInterface
      *
      * @return \DateTime
      */
-    public function createDateTime( $timestamp = null )
+    public function createDateTime($timestamp = null)
     {
-        return $this->repository->createDateTime( $timestamp );
+        return $this->repository->createDateTime($timestamp);
     }
 }

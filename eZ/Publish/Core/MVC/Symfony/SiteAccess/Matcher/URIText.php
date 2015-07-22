@@ -1,32 +1,45 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIText class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 
-class URIText extends Regex implements Matcher
+class URIText extends Regex implements VersatileMatcher, URILexer
 {
+    /**
+     * @var string
+     */
+    private $prefix;
+
+    /**
+     * @var string
+     */
+    private $suffix;
+
     /**
      * Constructor.
      *
      * @param array $siteAccessesConfiguration SiteAccesses configuration.
      */
-    public function __construct( array $siteAccessesConfiguration )
+    public function __construct(array $siteAccessesConfiguration)
     {
+        $this->prefix = isset($siteAccessesConfiguration['prefix']) ? $siteAccessesConfiguration['prefix'] : '';
+        $this->suffix = isset($siteAccessesConfiguration['suffix']) ? $siteAccessesConfiguration['suffix'] : '';
+
         parent::__construct(
-            "^/" .
-            ( isset( $siteAccessesConfiguration["prefix"] ) ? preg_quote( $siteAccessesConfiguration["prefix"], "@" ) : "" ) .
-            "(\w+)" .
-            ( isset( $siteAccessesConfiguration["suffix"] ) ? preg_quote( $siteAccessesConfiguration["suffix"], "@" ) : "" ),
-            1
+            '^(/' . preg_quote($this->prefix, '@') . '(\w+)' . preg_quote($this->suffix, '@') . ')',
+            2
         );
     }
 
@@ -39,11 +52,54 @@ class URIText extends Regex implements Matcher
      * Injects the request object to match against.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
-     *
-     * @return void
      */
-    public function setRequest( SimplifiedRequest $request )
+    public function setRequest(SimplifiedRequest $request)
     {
-        $this->setMatchElement( $request->pathinfo );
+        if (!$this->element) {
+            $this->setMatchElement($request->pathinfo);
+        }
+
+        parent::setRequest($request);
+    }
+
+    /**
+     * Analyses $uri and removes the siteaccess part, if needed.
+     *
+     * @param string $uri The original URI
+     *
+     * @return string The modified URI
+     */
+    public function analyseURI($uri)
+    {
+        $uri = '/' . ltrim($uri, '/');
+
+        return preg_replace("@$this->regex@", '', $uri);
+    }
+
+    /**
+     * Analyses $linkUri when generating a link to a route, in order to have the siteaccess part back in the URI.
+     *
+     * @param string $linkUri
+     *
+     * @return string The modified link URI
+     */
+    public function analyseLink($linkUri)
+    {
+        $linkUri = '/' . ltrim($linkUri, '/');
+        $siteAccessUri = "/$this->prefix" . $this->match() . $this->suffix;
+
+        return $siteAccessUri . $linkUri;
+    }
+
+    public function reverseMatch($siteAccessName)
+    {
+        $this->request->setPathinfo("/{$this->prefix}{$siteAccessName}{$this->suffix}{$this->request->pathinfo}");
+
+        return $this;
+    }
+
+    public function getRequest()
+    {
+        return $this->request;
     }
 }

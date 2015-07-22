@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\Content\Location class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,7 @@ namespace eZ\Publish\API\Repository\Values\Content;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * This class represents a location in the repository
+ * This class represents a location in the repository.
  *
  * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo calls getContentInfo()
  * @property-read mixed $contentId calls getContentInfo()->id
@@ -25,6 +27,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $pathString the path to this location e.g. /1/2/4/23 where 23 is current id.
  * @property-read string $path Same as $pathString but as array, e.g. [ 1, 2, 4, 23 ]
  * @property-read int $depth Depth location has in the location tree
+ *
  * @property-read int $sortField Specifies which property the child locations should be sorted on. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $sortOrder Specifies whether the sort order should be ascending or descending. Valid values are {@link Location::SORT_ORDER_*}
  */
@@ -47,6 +50,9 @@ abstract class Location extends ValueObject
     const SORT_ORDER_DESC = 0;
     const SORT_ORDER_ASC = 1;
 
+    const STATUS_DRAFT = 0;
+    const STATUS_PUBLISHED = 1;
+
     /**
      * Location ID.
      *
@@ -55,7 +61,17 @@ abstract class Location extends ValueObject
     protected $id;
 
     /**
-     * Location priority
+     * the status of the location.
+     *
+     * a location gets the status DRAFT on newly created content which is not published. When content is published the
+     * location gets the status STATUS_PUBLISHED
+     *
+     * @var int
+     */
+    public $status = self::STATUS_PUBLISHED;
+
+    /**
+     * Location priority.
      *
      * Position of the Location among its siblings when sorted using priority
      * sort order.
@@ -67,7 +83,7 @@ abstract class Location extends ValueObject
     /**
      * Indicates that the Location entity has been explicitly marked as hidden.
      *
-     * @var boolean
+     * @var bool
      */
     protected $hidden;
 
@@ -75,7 +91,7 @@ abstract class Location extends ValueObject
      * Indicates that the Location is implicitly marked as hidden by a parent
      * location.
      *
-     * @var boolean
+     * @var bool
      */
     protected $invisible;
 
@@ -89,11 +105,21 @@ abstract class Location extends ValueObject
     protected $remoteId;
 
     /**
-     * Returns the content info of the content object of this location
+     * Returns the content info of the content object of this location.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
     abstract public function getContentInfo();
+
+    /**
+     * Returns true if current location is a draft.
+     *
+     * @return bool
+     */
+    public function isDraft()
+    {
+        return $this->status === self::STATUS_DRAFT;
+    }
 
     /**
      * Parent ID.
@@ -103,7 +129,7 @@ abstract class Location extends ValueObject
     protected $parentLocationId;
 
     /**
-     * The materialized path of the location entry, eg: /1/2/
+     * The materialized path of the location entry, eg: /1/2/.
      *
      * @var string
      */

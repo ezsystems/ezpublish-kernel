@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\API\Repository\Tests\FieldType\DateAndTimeIntegrationTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\DateAndTimeIntegrationTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,17 +13,18 @@ namespace eZ\Publish\API\Repository\Tests\FieldType;
 
 use eZ\Publish\Core\FieldType\DateAndTime\Value as DateAndTimeValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use DateTime;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
  */
-class DateAndTimeIntegrationTest extends BaseIntegrationTest
+class DateAndTimeIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -31,44 +34,44 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expected settings schema
+     * Get expected settings schema.
      *
      * @return array
      */
     public function getSettingsSchema()
     {
         return array(
-            "useSeconds" => array(
-                "type"    => "bool",
-                "default" => false
+            'useSeconds' => array(
+                'type' => 'bool',
+                'default' => false,
             ),
-            "defaultType" => array(
-                "type"    => "choice",
-                "default" => 0
+            'defaultType' => array(
+                'type' => 'choice',
+                'default' => 0,
             ),
-            "dateInterval" => array(
-                "type"    => "dateInterval",
-                "default" => null
-            )
+            'dateInterval' => array(
+                'type' => 'dateInterval',
+                'default' => null,
+            ),
         );
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get a valid $fieldSettings value.
      *
      * @return mixed
      */
     public function getValidFieldSettings()
     {
         return array(
-            "useSeconds"   => false,
-            "defaultType"  => 0,
-            "dateInterval" => null,
+            'useSeconds' => false,
+            'defaultType' => 0,
+            'dateInterval' => null,
         );
     }
 
     /**
-     * Get $fieldSettings value not accepted by the field type
+     * Get $fieldSettings value not accepted by the field type.
      *
      * @return mixed
      */
@@ -80,7 +83,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expected validator schema
+     * Get expected validator schema.
      *
      * @return array
      */
@@ -90,7 +93,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $validatorConfiguration.
      *
      * @return mixed
      */
@@ -100,19 +103,19 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get $validatorConfiguration not accepted by the field type
+     * Get $validatorConfiguration not accepted by the field type.
      *
      * @return mixed
      */
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            'unknown' => array( 'value' => 42 ),
+            'unknown' => array('value' => 42),
         );
     }
 
     /**
-     * Get initial field data for valid object creation
+     * Get initial field data for valid object creation.
      *
      * @return mixed
      */
@@ -120,7 +123,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
     {
         // We may only create times from timestamps here, since storing will
         // loose information about the timezone.
-        return DateAndTimeValue::fromTimestamp( 123456 );
+        return DateAndTimeValue::fromTimestamp(123456);
     }
 
     /**
@@ -130,10 +133,8 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field )
+    public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\DateAndTime\\Value',
@@ -141,7 +142,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'value' => new \DateTime( "@123456" ),
+            'value' => new \DateTime('@123456'),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -150,7 +151,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during creation
+     * Get field data which will result in errors during creation.
      *
      * This is a PHPUnit data provider.
      *
@@ -174,29 +175,29 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                "Some unknown date format", 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'
+                'Some unknown date format', 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
             ),
         );
     }
 
     /**
-     * Get update field externals data
+     * Get update field externals data.
      *
      * @return array
      */
     public function getValidUpdateFieldData()
     {
-        return DateAndTimeValue::fromTimestamp( 12345678 );
+        return DateAndTimeValue::fromTimestamp(12345678);
     }
 
     /**
-     * Get externals updated field data values
+     * Get externals updated field data values.
      *
      * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\DateAndTime\\Value',
@@ -204,7 +205,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'value' => new \DateTime( "@12345678" ),
+            'value' => new \DateTime('@12345678'),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -213,7 +214,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during update
+     * Get field data which will result in errors during update.
      *
      * This is a PHPUnit data provider.
      *
@@ -239,20 +240,18 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Tests failing content update
+     * Tests failing content update.
      *
      * @param mixed $failingValue
      * @param string $expectedException
      *
      * @dataProvider provideInvalidUpdateFieldData
-     *
-     * @return void
      */
-    public function testUpdateContentFails( $failingValue, $expectedException )
+    public function testUpdateContentFails($failingValue, $expectedException)
     {
         return array(
             array(
-                "Some unknown date format", 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'
+                'Some unknown date format', 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
             ),
         );
     }
@@ -265,7 +264,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
      *
      * @param Field $field
      */
-    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\DateAndTime\\Value',
@@ -273,7 +272,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
         );
 
         $expectedData = array(
-            'value' => new \DateTime( "@123456" ),
+            'value' => new \DateTime('@123456'),
         );
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -282,7 +281,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get data to test to hash method
+     * Get data to test to hash method.
      *
      * This is a PHPUnit data provider
      *
@@ -305,17 +304,17 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                DateAndTimeValue::fromTimestamp( 123456 ),
+                DateAndTimeValue::fromTimestamp(123456),
                 array(
                     'timestamp' => 123456,
-                    'rfc850'    => 'Friday, 02-Jan-70 10:17:36 GMT+0000',
+                    'rfc850' => 'Friday, 02-Jan-70 10:17:36 GMT+0000',
                 ),
             ),
         );
     }
 
     /**
-     * Get expectations for the fromHash call on our field value
+     * Get expectations for the fromHash call on our field value.
      *
      * This is a PHPUnit data provider
      *
@@ -327,9 +326,9 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
             array(
                 array(
                     'timestamp' => 123456,
-                    'rfc850'    => 'Friday, 02-Jan-70 10:17:36 GMT+0000',
+                    'rfc850' => 'Friday, 02-Jan-70 10:17:36 GMT+0000',
                 ),
-                DateAndTimeValue::fromTimestamp( 123456 )
+                DateAndTimeValue::fromTimestamp(123456),
             ),
         );
     }
@@ -337,7 +336,7 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new DateAndTimeValue ),
+            array(new DateAndTimeValue()),
         );
     }
 
@@ -345,8 +344,42 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
             ),
         );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return '2012-04-15T15:43:56Z';
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return '2015-04-15T15:43:56Z';
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        // Handling Legacy Search Engine, which stores DateAndTime value as integer timestamp
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
+            $dateTime = new DateTime($this->getValidSearchValueOne());
+
+            return $dateTime->getTimestamp();
+        }
+
+        return parent::getSearchTargetValueOne();
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        // Handling Legacy Search Engine, which stores DateAndTime value as integer timestamp
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
+            $dateTime = new DateTime($this->getValidSearchValueTwo());
+
+            return $dateTime->getTimestamp();
+        }
+
+        return parent::getSearchTargetValueTwo();
     }
 }

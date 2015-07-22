@@ -1,21 +1,21 @@
 <?php
+
 namespace eZ\Bundle\EzPublishRestBundle\ApiLoader;
 
-use eZ\Publish\Core\REST\Server\Input;
-use eZ\Publish\Core\REST\Server\Output;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\RequestStackAware;
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
-use eZ\Publish\Core\REST\Common;
-use eZ\Publish\Core\IO\IOService;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\Routing\RouterInterface;
 
 class Factory
 {
+    use RequestStackAware;
+
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
-    protected $container;
+    protected $configResolver;
 
     /**
      * @var \eZ\Publish\API\Repository\Repository
@@ -23,37 +23,39 @@ class Factory
     protected $repository;
 
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      * @param \eZ\Publish\API\Repository\Repository $repository
      */
-    public function __construct( ContainerInterface $container, Repository $repository )
+    public function __construct(ConfigResolverInterface $configResolver, Repository $repository)
     {
-        $this->container = $container;
+        $this->configResolver = $configResolver;
         $this->repository = $repository;
     }
 
-    public function getBinaryFileFieldTypeProcessor( IOService $binaryFileIOService )
+    public function getBinaryFileFieldTypeProcessor()
     {
-        $urlPrefix = $this->container->isScopeActive( 'request' ) ? $this->container->get( 'request' )->getUriForPath( '/' ) : '';
+        $request = $this->getCurrentRequest();
+        $hostPrefix = isset($request) ? rtrim($request->getUriForPath('/'), '/') : '';
 
-        return new FieldTypeProcessor\BinaryProcessor(
-            sys_get_temp_dir(),
-            $urlPrefix . $binaryFileIOService->getInternalPath( '{path}' )
-        );
+        return new FieldTypeProcessor\BinaryProcessor(sys_get_temp_dir(), $hostPrefix);
+    }
+
+    public function getMediaFieldTypeProcessor()
+    {
+        return new FieldTypeProcessor\MediaProcessor(sys_get_temp_dir());
     }
 
     /**
-     * Factory for ezpublish_rest.field_type_processor.ezimage
+     * Factory for ezpublish_rest.field_type_processor.ezimage.
      *
      * @param \Symfony\Component\Routing\RouterInterface $router
      *
      * @return \eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor
      */
-    public function getImageFieldTypeProcessor( RouterInterface $router )
+    public function getImageFieldTypeProcessor(RouterInterface $router)
     {
-        $configResolver = $this->container->get( 'ezpublish.config.resolver' );
-        $variationsIdentifiers = array_keys( $configResolver->getParameter( 'image_variations' ) );
-        sort( $variationsIdentifiers );
+        $variationsIdentifiers = array_keys($this->configResolver->getParameter('image_variations'));
+        sort($variationsIdentifiers);
 
         return new FieldTypeProcessor\ImageProcessor(
             // Config for local temp dir

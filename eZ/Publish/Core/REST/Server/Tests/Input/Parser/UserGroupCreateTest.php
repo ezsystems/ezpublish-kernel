@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,31 +19,31 @@ use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 class UserGroupCreateTest extends BaseTest
 {
     /**
-     * Tests the UserGroupCreate parser
+     * Tests the UserGroupCreate parser.
      */
     public function testParse()
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/3'
+                '_href' => '/content/types/3',
             ),
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
-                '_href' => '/content/sections/4'
+                '_href' => '/content/sections/4',
             ),
             'remoteId' => 'remoteId12345678',
             'fields' => array(
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'name',
-                        'fieldValue' => array()
-                    )
-                )
-            )
+                        'fieldValue' => array(),
+                    ),
+                ),
+            ),
         );
 
         $userGroupCreate = $this->getParser();
-        $result = $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $userGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupCreateStruct',
@@ -79,8 +81,7 @@ class UserGroupCreateTest extends BaseTest
             'remoteId not created correctly'
         );
 
-        foreach ( $result->fields as $field )
-        {
+        foreach ($result->fields as $field) {
             $this->assertEquals(
                 'foo',
                 $field->value,
@@ -90,7 +91,7 @@ class UserGroupCreateTest extends BaseTest
     }
 
     /**
-     * Test UserGroupCreate parser throwing exception on invalid ContentType
+     * Test UserGroupCreate parser throwing exception on invalid ContentType.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for ContentType element in UserGroupCreate.
@@ -101,25 +102,25 @@ class UserGroupCreateTest extends BaseTest
             'ContentType' => array(),
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
-                '_href' => '/content/sections/4'
+                '_href' => '/content/sections/4',
             ),
             'remoteId' => 'remoteId12345678',
             'fields' => array(
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'name',
-                        'fieldValue' => array()
-                    )
-                )
-            )
+                        'fieldValue' => array(),
+                    ),
+                ),
+            ),
         );
 
         $userGroupCreate = $this->getParser();
-        $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $userGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test UserGroupCreate parser throwing exception on missing mainLanguageCode
+     * Test UserGroupCreate parser throwing exception on missing mainLanguageCode.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'mainLanguageCode' element for UserGroupCreate.
@@ -128,28 +129,28 @@ class UserGroupCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/3'
+                '_href' => '/content/types/3',
             ),
             'Section' => array(
-                '_href' => '/content/sections/4'
+                '_href' => '/content/sections/4',
             ),
             'remoteId' => 'remoteId12345678',
             'fields' => array(
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'name',
-                        'fieldValue' => array()
-                    )
-                )
-            )
+                        'fieldValue' => array(),
+                    ),
+                ),
+            ),
         );
 
         $userGroupCreate = $this->getParser();
-        $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $userGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test UserGroupCreate parser throwing exception on invalid Section
+     * Test UserGroupCreate parser throwing exception on invalid Section.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for Section element in UserGroupCreate.
@@ -158,7 +159,7 @@ class UserGroupCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/3'
+                '_href' => '/content/types/3',
             ),
             'mainLanguageCode' => 'eng-US',
             'Section' => array(),
@@ -167,18 +168,18 @@ class UserGroupCreateTest extends BaseTest
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'name',
-                        'fieldValue' => array()
-                    )
-                )
-            )
+                        'fieldValue' => array(),
+                    ),
+                ),
+            ),
         );
 
         $userGroupCreate = $this->getParser();
-        $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $userGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test UserGroupCreate parser throwing exception on invalid fields data
+     * Test UserGroupCreate parser throwing exception on invalid fields data.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'fields' element for UserGroupCreate.
@@ -187,21 +188,21 @@ class UserGroupCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/3'
+                '_href' => '/content/types/3',
             ),
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
-                '_href' => '/content/sections/4'
+                '_href' => '/content/sections/4',
             ),
             'remoteId' => 'remoteId12345678',
         );
 
         $userGroupCreate = $this->getParser();
-        $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $userGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test UserGroupCreate parser throwing exception on missing field definition identifier
+     * Test UserGroupCreate parser throwing exception on missing field definition identifier.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldDefinitionIdentifier' element in field data for UserGroupCreate.
@@ -210,32 +211,32 @@ class UserGroupCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/3'
+                '_href' => '/content/types/3',
             ),
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
-                '_href' => '/content/sections/4'
+                '_href' => '/content/sections/4',
             ),
             'remoteId' => 'remoteId12345678',
             'fields' => array(
                 'field' => array(
                     array(
-                        'fieldValue' => array()
+                        'fieldValue' => array(),
                     ),
                     array(
                         'fieldDefinitionIdentifier' => 'name',
-                        'fieldValue' => array()
-                    )
-                )
-            )
+                        'fieldValue' => array(),
+                    ),
+                ),
+            ),
         );
 
         $userGroupCreate = $this->getParser();
-        $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $userGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test UserGroupCreate parser throwing exception on invalid field definition identifier
+     * Test UserGroupCreate parser throwing exception on invalid field definition identifier.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage 'unknown' is invalid field definition identifier for 'some_class' content type in UserGroupCreate.
@@ -244,29 +245,29 @@ class UserGroupCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/3'
+                '_href' => '/content/types/3',
             ),
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
-                '_href' => '/content/sections/4'
+                '_href' => '/content/sections/4',
             ),
             'remoteId' => 'remoteId12345678',
             'fields' => array(
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'unknown',
-                        'fieldValue' => array()
-                    )
-                )
-            )
+                        'fieldValue' => array(),
+                    ),
+                ),
+            ),
         );
 
         $userGroupCreate = $this->getParser();
-        $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $userGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test UserGroupCreate parser throwing exception on missing field value
+     * Test UserGroupCreate parser throwing exception on missing field value.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldValue' element for 'name' identifier in UserGroupCreate.
@@ -275,28 +276,28 @@ class UserGroupCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/3'
+                '_href' => '/content/types/3',
             ),
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
-                '_href' => '/content/sections/4'
+                '_href' => '/content/sections/4',
             ),
             'remoteId' => 'remoteId12345678',
             'fields' => array(
                 'field' => array(
                     array(
-                        'fieldDefinitionIdentifier' => 'name'
-                    )
-                )
-            )
+                        'fieldDefinitionIdentifier' => 'name',
+                    ),
+                ),
+            ),
         );
 
         $userGroupCreate = $this->getParser();
-        $userGroupCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $userGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Returns the UserGroupCreate parser
+     * Returns the UserGroupCreate parser.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\UserGroupCreate
      */
@@ -310,7 +311,7 @@ class UserGroupCreateTest extends BaseTest
     }
 
     /**
-     * Get the field type parser mock object
+     * Get the field type parser mock object.
      *
      * @return \eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
      */
@@ -334,22 +335,22 @@ class UserGroupCreateTest extends BaseTest
                     array(),
                     '',
                     false
-                )
+                ),
             ),
             '',
             false
         );
 
-        $fieldTypeParserMock->expects( $this->any() )
-            ->method( 'parseValue' )
-            ->with( 'ezstring', array() )
-            ->will( $this->returnValue( 'foo' ) );
+        $fieldTypeParserMock->expects($this->any())
+            ->method('parseValue')
+            ->with('ezstring', array())
+            ->will($this->returnValue('foo'));
 
         return $fieldTypeParserMock;
     }
 
     /**
-     * Get the user service mock object
+     * Get the user service mock object.
      *
      * @return \eZ\Publish\API\Repository\UserService
      */
@@ -364,18 +365,18 @@ class UserGroupCreateTest extends BaseTest
         );
 
         $contentType = $this->getContentType();
-        $userServiceMock->expects( $this->any() )
-            ->method( 'newUserGroupCreateStruct' )
+        $userServiceMock->expects($this->any())
+            ->method('newUserGroupCreateStruct')
             ->with(
-                $this->equalTo( 'eng-US' ),
-                $this->equalTo( $contentType )
+                $this->equalTo('eng-US'),
+                $this->equalTo($contentType)
             )
             ->will(
                 $this->returnValue(
                     new UserGroupCreateStruct(
                         array(
                             'contentType' => $contentType,
-                            'mainLanguageCode' => 'eng-US'
+                            'mainLanguageCode' => 'eng-US',
                         )
                     )
                 )
@@ -385,7 +386,7 @@ class UserGroupCreateTest extends BaseTest
     }
 
     /**
-     * Get the content type service mock object
+     * Get the content type service mock object.
      *
      * @return \eZ\Publish\API\Repository\ContentTypeService
      */
@@ -399,16 +400,16 @@ class UserGroupCreateTest extends BaseTest
             false
         );
 
-        $contentTypeServiceMock->expects( $this->any() )
-            ->method( 'loadContentType' )
-            ->with( $this->equalTo( 3 ) )
-            ->will( $this->returnValue( $this->getContentType() ) );
+        $contentTypeServiceMock->expects($this->any())
+            ->method('loadContentType')
+            ->with($this->equalTo(3))
+            ->will($this->returnValue($this->getContentType()));
 
         return $contentTypeServiceMock;
     }
 
     /**
-     * Get the content type used in UserGroupCreate parser
+     * Get the content type used in UserGroupCreate parser.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
@@ -423,10 +424,10 @@ class UserGroupCreateTest extends BaseTest
                         array(
                             'id' => 42,
                             'identifier' => 'name',
-                            'fieldTypeIdentifier' => 'ezstring'
+                            'fieldTypeIdentifier' => 'ezstring',
                         )
-                    )
-                )
+                    ),
+                ),
             )
         );
     }
@@ -434,8 +435,8 @@ class UserGroupCreateTest extends BaseTest
     public function getParseHrefExpectationsMap()
     {
         return array(
-            array( '/content/types/3', 'contentTypeId', 3 ),
-            array( '/content/sections/4', 'sectionId', 4 )
+            array('/content/types/3', 'contentTypeId', 3),
+            array('/content/sections/4', 'sectionId', 4),
         );
     }
 }

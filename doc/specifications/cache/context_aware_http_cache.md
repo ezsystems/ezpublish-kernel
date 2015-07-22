@@ -1,5 +1,8 @@
 # Context aware HTTP cache
 
+> **Important**: As of v5.4 / v2014.11, usage of `FOSHttpCacheBundle has been introduced.
+> Please [refer to dedicated specification](fos_http_cache.md).
+
 ## Description
 Being based on Symfony 2, eZ Publish 5 uses HTTP cache from version 5.0.
 However this cache management is only available for anonymous users due to HTTP restrictions.

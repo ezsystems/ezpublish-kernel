@@ -1,4 +1,3 @@
-.idea
 integration_tests/
 ezp/Io
 ezp/Persistence
@@ -11,3 +10,4 @@ docblox.xml
 composer.phar
 /vendor/
 var/
+.php_cs.cache

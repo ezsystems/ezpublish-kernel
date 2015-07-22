@@ -1,27 +1,28 @@
 <?php
+
 /**
- * File containing the SectionId Criterion parser class
+ * File containing the SectionId Criterion parser class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
-use eZ\Publish\Core\REST\Server\Input\Parser\Base;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId as SectionIdCriterion;
 
 /**
- * Parser for SectionId Criterion
+ * Parser for SectionId Criterion.
  */
-class SectionId extends Base
+class SectionId extends BaseParser
 {
     /**
-     * Parses input structure to a SectionId Criterion object
+     * Parses input structure to a SectionId Criterion object.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -30,12 +31,12 @@ class SectionId extends Base
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        if ( !array_key_exists( "SectionIdCriterion", $data ) )
-        {
-            throw new Exceptions\Parser( "Invalid <SectionIdCriterion> format" );
+        if (!array_key_exists('SectionIdCriterion', $data)) {
+            throw new Exceptions\Parser('Invalid <SectionIdCriterion> format');
         }
-        return new SectionIdCriterion( $data["SectionIdCriterion"] );
+
+        return new SectionIdCriterion($data['SectionIdCriterion']);
     }
 }

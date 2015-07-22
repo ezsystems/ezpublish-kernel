@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a PolicyTest class
+ * File containing a PolicyTest class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\Core\REST\Client\Input\Parser;
 class PolicyTest extends BaseTest
 {
     /**
-     * Tests the policy parser
+     * Tests the policy parser.
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
@@ -28,21 +30,21 @@ class PolicyTest extends BaseTest
             'function' => 'delete',
         );
 
-        $result = $policyParser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $policyParser->parse($inputArray, $this->getParsingDispatcherMock());
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Tests that the resulting policy is in fact an instance of Policy class
+     * Tests that the resulting policy is in fact an instance of Policy class.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Policy $result
      *
      * @depends testParse
      */
-    public function testResultIsPolicy( $result )
+    public function testResultIsPolicy($result)
     {
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\Policy',
@@ -51,13 +53,13 @@ class PolicyTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting policy contains the ID
+     * Tests that the resulting policy contains the ID.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Policy $result
      *
      * @depends testParse
      */
-    public function testResultContainsId( $result )
+    public function testResultContainsId($result)
     {
         $this->assertEquals(
             '42',
@@ -66,13 +68,13 @@ class PolicyTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting policy contains module
+     * Tests that the resulting policy contains module.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Policy $result
      *
      * @depends testParse
      */
-    public function testResultContainsModule( $result )
+    public function testResultContainsModule($result)
     {
         $this->assertEquals(
             'content',
@@ -81,13 +83,13 @@ class PolicyTest extends BaseTest
     }
 
     /**
-     * Tests that the resulting policy contains function
+     * Tests that the resulting policy contains function.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Policy $result
      *
      * @depends testParse
      */
-    public function testResultContainsFunction( $result )
+    public function testResultContainsFunction($result)
     {
         $this->assertEquals(
             'delete',
@@ -96,7 +98,7 @@ class PolicyTest extends BaseTest
     }
 
     /**
-     * Gets the parser for policy
+     * Gets the parser for policy.
      *
      * @return \eZ\Publish\Core\REST\Client\Input\Parser\Policy;
      */

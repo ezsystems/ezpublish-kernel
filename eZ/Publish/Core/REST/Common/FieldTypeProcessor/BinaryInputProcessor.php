@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the BinaryInputProcessor class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,7 +23,7 @@ abstract class BinaryInputProcessor extends FieldTypeProcessor
     /**
      * @param string $temporaryDirectory
      */
-    public function __construct( $temporaryDirectory )
+    public function __construct($temporaryDirectory)
     {
         $this->temporaryDirectory = $temporaryDirectory;
     }
@@ -29,18 +31,17 @@ abstract class BinaryInputProcessor extends FieldTypeProcessor
     /**
      * {@inheritDoc}
      */
-    public function preProcessValueHash( $incomingValueHash )
+    public function preProcessValueHash($incomingValueHash)
     {
-        if ( isset( $incomingValueHash['data'] ) )
-        {
-            $tempFile = tempnam( $this->temporaryDirectory, 'eZ_REST_BinaryFile' );
+        if (isset($incomingValueHash['data'])) {
+            $tempFile = tempnam($this->temporaryDirectory, 'eZ_REST_BinaryFile');
 
             file_put_contents(
                 $tempFile,
-                $binaryContent = base64_decode( $incomingValueHash['data'] )
+                base64_decode($incomingValueHash['data'])
             );
 
-            unset( $incomingValueHash['data'] );
+            unset($incomingValueHash['data']);
             $incomingValueHash['path'] = $tempFile;
         }
 

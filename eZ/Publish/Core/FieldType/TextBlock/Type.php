@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the TextBlock class
+ * File containing the TextBlock class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,22 +25,22 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 class Type extends FieldType
 {
     protected $settingsSchema = array(
-        "textRows" => array(
-            "type" => "int",
-            "default" => 10
-        )
+        'textRows' => array(
+            'type' => 'int',
+            'default' => 10,
+        ),
     );
 
     protected $validatorConfigurationSchema = array();
 
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
     public function getFieldTypeIdentifier()
     {
-        return "eztext";
+        return 'eztext';
     }
 
     /**
@@ -51,7 +53,7 @@ class Type extends FieldType
      *
      * @return string
      */
-    public function getName( SPIValue $value )
+    public function getName(SPIValue $value)
     {
         return (string)$value->text;
     }
@@ -64,19 +66,19 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value;
+        return new Value();
     }
 
     /**
-     * Returns if the given $value is considered empty by the field type
+     * Returns if the given $value is considered empty by the field type.
      *
      * @param mixed $value
      *
-     * @return boolean
+     * @return bool
      */
-    public function isEmptyValue( SPIValue $value )
+    public function isEmptyValue(SPIValue $value)
     {
-        return $value->text === null || trim( $value->text ) === "";
+        return $value->text === null || trim($value->text) === '';
     }
 
     /**
@@ -86,11 +88,10 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\TextBlock\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
-        if ( is_string( $inputValue ) )
-        {
-            $inputValue = new Value( $inputValue );
+        if (is_string($inputValue)) {
+            $inputValue = new Value($inputValue);
         }
 
         return $inputValue;
@@ -102,13 +103,10 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\TextBlock\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
-        if ( !is_string( $value->text ) )
-        {
+        if (!is_string($value->text)) {
             throw new InvalidArgumentType(
                 '$value->text',
                 'string',
@@ -124,92 +122,88 @@ class Type extends FieldType
      *
      * @return array
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo(BaseValue $value)
     {
         return false;
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * @param mixed $hash
      *
      * @return \eZ\Publish\Core\FieldType\TextBlock\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        if ( $hash === null )
-        {
+        if ($hash === null) {
             return $this->getEmptyValue();
         }
-        return new Value( $hash );
+
+        return new Value($hash);
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\TextBlock\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
-        if ( $this->isEmptyValue( $value ) )
-        {
+        if ($this->isEmptyValue($value)) {
             return null;
         }
+
         return $value->text;
     }
 
     /**
-     * Returns whether the field type is searchable
+     * Returns whether the field type is searchable.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSearchable()
     {
-        return true;
+        return false;
     }
 
     /**
-     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
      * @param mixed $fieldSettings
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateFieldSettings( $fieldSettings )
+    public function validateFieldSettings($fieldSettings)
     {
         $validationErrors = array();
 
-        foreach ( $fieldSettings as $name => $value )
-        {
-            if ( isset( $this->settingsSchema[$name] ) )
-            {
-                switch ( $name )
-                {
-                    case "textRows":
-                        if ( !is_integer( $value ) )
-                        {
+        foreach ($fieldSettings as $name => $value) {
+            if (isset($this->settingsSchema[$name])) {
+                switch ($name) {
+                    case 'textRows':
+                        if (!is_integer($value)) {
                             $validationErrors[] = new ValidationError(
                                 "Setting '%setting%' value must be of integer type",
                                 null,
                                 array(
-                                    "setting" => $name
-                                )
+                                    'setting' => $name,
+                                ),
+                                "[$name]"
                             );
                         }
                         break;
                 }
-            }
-            else
-            {
+            } else {
                 $validationErrors[] = new ValidationError(
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        "setting" => $name
-                    )
+                        'setting' => $name,
+                    ),
+                    "[$name]"
                 );
             }
         }

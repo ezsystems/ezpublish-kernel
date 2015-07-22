@@ -1,40 +1,40 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\ObjectState;
-use eZ\Publish\Core\REST\Common;
 
 class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the ObjectStateGroup visitor
+     * Test the ObjectStateGroup visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $objectStateGroup = new ObjectState\ObjectStateGroup(
             array(
-                'id'         => 42,
+                'id' => 42,
                 'identifier' => 'test-group',
                 'defaultLanguageCode' => 'eng-GB',
-                'languageCodes' => array( 'eng-GB', 'eng-US' ),
+                'languageCodes' => array('eng-GB', 'eng-US'),
                 'names' => array(
                     'eng-GB' => 'Group name EN',
                     'eng-US' => 'Group name EN US',
@@ -42,14 +42,20 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
                 'descriptions' => array(
                     'eng-GB' => 'Group description EN',
                     'eng-US' => 'Group description EN US',
-                )
+                ),
             )
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadObjectStateGroup',
-            array( 'objectStateGroupId' => $objectStateGroup->id ),
+            array('objectStateGroupId' => $objectStateGroup->id),
             "/content/objectstategroups/$objectStateGroup->id"
+        );
+
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadObjectStates',
+            array('objectStateGroupId' => $objectStateGroup->id),
+            "/content/objectstategroups/$objectStateGroup->id/objectstates"
         );
 
         $visitor->visit(
@@ -58,28 +64,28 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
             $objectStateGroup
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains ObjectStateGroup element
+     * Test if result contains ObjectStateGroup element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsObjectStateGroupElement( $result )
+    public function testResultContainsObjectStateGroupElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'ObjectStateGroup',
+                'tag' => 'ObjectStateGroup',
                 'children' => array(
-                    'count' => 6
-                )
+                    'count' => 7,
+                ),
             ),
             $result,
             'Invalid <ObjectStateGroup> element.',
@@ -88,21 +94,21 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains ObjectStateGroup element attributes
+     * Test if result contains ObjectStateGroup element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsObjectStateGroupAttributes( $result )
+    public function testResultContainsObjectStateGroupAttributes($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'ObjectStateGroup',
+                'tag' => 'ObjectStateGroup',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ObjectStateGroup+xml',
-                    'href'       => '/content/objectstategroups/42',
-                )
+                    'href' => '/content/objectstategroups/42',
+                ),
             ),
             $result,
             'Invalid <ObjectStateGroup> attributes.',
@@ -111,18 +117,18 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains id value element
+     * Test if result contains id value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsIdValueElement( $result )
+    public function testResultContainsIdValueElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'id',
-                'content'  => '42'
+                'tag' => 'id',
+                'content' => '42',
             ),
             $result,
             'Invalid or non-existing <ObjectStateGroup> id value element.',
@@ -131,18 +137,18 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains identifier value element
+     * Test if result contains identifier value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsIdentifierValueElement( $result )
+    public function testResultContainsIdentifierValueElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'identifier',
-                'content'  => 'test-group'
+                'tag' => 'identifier',
+                'content' => 'test-group',
             ),
             $result,
             'Invalid or non-existing <ObjectStateGroup> identifier value element.',
@@ -151,18 +157,18 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains defaultLanguageCode value element
+     * Test if result contains defaultLanguageCode value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsDefaultLanguageCodeValueElement( $result )
+    public function testResultContainsDefaultLanguageCodeValueElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'defaultLanguageCode',
-                'content'  => 'eng-GB'
+                'tag' => 'defaultLanguageCode',
+                'content' => 'eng-GB',
             ),
             $result,
             'Invalid or non-existing <ObjectStateGroup> defaultLanguageCode value element.',
@@ -171,18 +177,18 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains languageCodes value element
+     * Test if result contains languageCodes value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsLanguageCodesValueElement( $result )
+    public function testResultContainsLanguageCodesValueElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'languageCodes',
-                'content'  => 'eng-GB,eng-US'
+                'tag' => 'languageCodes',
+                'content' => 'eng-GB,eng-US',
             ),
             $result,
             'Invalid or non-existing <ObjectStateGroup> languageCodes value element.',
@@ -191,20 +197,20 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains names element
+     * Test if result contains names element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsNamesElement( $result )
+    public function testResultContainsNamesElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'names',
+                'tag' => 'names',
                 'children' => array(
-                    'count' => 2
-                )
+                    'count' => 2,
+                ),
             ),
             $result,
             'Invalid <names> element.',
@@ -213,20 +219,20 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains descriptions element
+     * Test if result contains descriptions element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsDescriptionsElement( $result )
+    public function testResultContainsDescriptionsElement($result)
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
-                'tag'      => 'descriptions',
+                'tag' => 'descriptions',
                 'children' => array(
-                    'count' => 2
-                )
+                    'count' => 2,
+                ),
             ),
             $result,
             'Invalid <descriptions> element.',
@@ -235,12 +241,12 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the ObjectStateGroup visitor
+     * Get the ObjectStateGroup visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ObjectStateGroup
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\ObjectStateGroup;
+        return new ValueObjectVisitor\ObjectStateGroup();
     }
 }

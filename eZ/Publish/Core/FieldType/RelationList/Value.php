@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RelationList FieldType Value class
+ * File containing the RelationList FieldType Value class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,23 +14,23 @@ namespace eZ\Publish\Core\FieldType\RelationList;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
- * Value for RelationList field type
+ * Value for RelationList field type.
  */
 class Value extends BaseValue
 {
     /**
-     * Related content id's
+     * Related content id's.
      *
      * @var mixed[]
      */
     public $destinationContentIds;
 
     /**
-     * Construct a new Value object and initialize it $text
+     * Construct a new Value object and initialize it $text.
      *
      * @param mixed[] $destinationContentIds
      */
-    public function __construct( array $destinationContentIds = array() )
+    public function __construct(array $destinationContentIds = array())
     {
         $this->destinationContentIds = $destinationContentIds;
     }
@@ -38,6 +40,6 @@ class Value extends BaseValue
      */
     public function __toString()
     {
-        return implode( ',', $this->destinationContentIds );
+        return implode(',', $this->destinationContentIds);
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Time class
+ * File containing the Time class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,35 +21,35 @@ use DateTime;
 class Type extends FieldType
 {
     /**
-     * Default value type empty
+     * Default value type empty.
      */
     const DEFAULT_EMPTY = 0;
 
     /**
-     * Default value type current date
+     * Default value type current date.
      */
     const DEFAULT_CURRENT_TIME = 1;
 
     protected $settingsSchema = array(
-        "useSeconds" => array(
-            "type" => "bool",
-            "default" => false
+        'useSeconds' => array(
+            'type' => 'bool',
+            'default' => false,
         ),
         // One of the DEFAULT_* class constants
-        "defaultType" => array(
-            "type" => "choice",
-            "default" => self::DEFAULT_EMPTY
-        )
+        'defaultType' => array(
+            'type' => 'choice',
+            'default' => self::DEFAULT_EMPTY,
+        ),
     );
 
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
     public function getFieldTypeIdentifier()
     {
-        return "eztime";
+        return 'eztime';
     }
 
     /**
@@ -60,15 +62,15 @@ class Type extends FieldType
      *
      * @return string
      */
-    public function getName( SPIValue $value )
+    public function getName(SPIValue $value)
     {
-        if ( $this->isEmptyValue( $value ) )
-        {
-            return "";
+        if ($this->isEmptyValue($value)) {
+            return '';
         }
 
-        $dateTime = new DateTime( "@{$value->time}" );
-        return $dateTime->format( 'g:i:s a' );
+        $dateTime = new DateTime("@{$value->time}");
+
+        return $dateTime->format('g:i:s a');
     }
 
     /**
@@ -79,7 +81,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value;
+        return new Value();
     }
 
     /**
@@ -89,21 +91,18 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\Time\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
-        if ( is_string( $inputValue ) )
-        {
-            $inputValue = Value::fromString( $inputValue );
+        if (is_string($inputValue)) {
+            $inputValue = Value::fromString($inputValue);
         }
 
-        if ( is_int( $inputValue ) )
-        {
-            $inputValue = Value::fromTimestamp( $inputValue );
+        if (is_int($inputValue)) {
+            $inputValue = Value::fromTimestamp($inputValue);
         }
 
-        if ( $inputValue instanceof DateTime )
-        {
-            $inputValue = Value::fromDateTime( $inputValue );
+        if ($inputValue instanceof DateTime) {
+            $inputValue = Value::fromDateTime($inputValue);
         }
 
         return $inputValue;
@@ -115,13 +114,10 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\Time\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
-        if ( !is_int( $value->time ) )
-        {
+        if (!is_int($value->time)) {
             throw new InvalidArgumentType(
                 '$value->time',
                 'DateTime',
@@ -137,39 +133,37 @@ class Type extends FieldType
      *
      * @return array
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo(BaseValue $value)
     {
         return $value->time;
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * @param int $hash Number of seconds since Unix Epoch
      *
      * @return \eZ\Publish\Core\FieldType\Time\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        if ( $hash === null )
-        {
+        if ($hash === null) {
             return $this->getEmptyValue();
         }
 
-        return new Value( $hash );
+        return new Value($hash);
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\Time\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
-        if ( $this->isEmptyValue( $value ) )
-        {
+        if ($this->isEmptyValue($value)) {
             return null;
         }
 
@@ -177,9 +171,9 @@ class Type extends FieldType
     }
 
     /**
-     * Returns whether the field type is searchable
+     * Returns whether the field type is searchable.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSearchable()
     {
@@ -187,57 +181,55 @@ class Type extends FieldType
     }
 
     /**
-     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
      * @param mixed $fieldSettings
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateFieldSettings( $fieldSettings )
+    public function validateFieldSettings($fieldSettings)
     {
         $validationErrors = array();
 
-        foreach ( $fieldSettings as $name => $value )
-        {
-            if ( !isset( $this->settingsSchema[$name] ) )
-            {
+        foreach ($fieldSettings as $name => $value) {
+            if (!isset($this->settingsSchema[$name])) {
                 $validationErrors[] = new ValidationError(
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        "setting" => $name
-                    )
+                        'setting' => $name,
+                    ),
+                    "[$name]"
                 );
                 continue;
             }
 
-            switch ( $name )
-            {
-                case "useSeconds":
-                    if ( !is_bool( $value ) )
-                    {
+            switch ($name) {
+                case 'useSeconds':
+                    if (!is_bool($value)) {
                         $validationErrors[] = new ValidationError(
                             "Setting '%setting%' value must be of boolean type",
                             null,
                             array(
-                                "setting" => $name
-                            )
+                                'setting' => $name,
+                            ),
+                            "[$name]"
                         );
                     }
                     break;
-                case "defaultType":
+                case 'defaultType':
                     $definedTypes = array(
                         self::DEFAULT_EMPTY,
-                        self::DEFAULT_CURRENT_TIME
+                        self::DEFAULT_CURRENT_TIME,
                     );
-                    if ( !in_array( $value, $definedTypes, true ) )
-                    {
+                    if (!in_array($value, $definedTypes, true)) {
                         $validationErrors[] = new ValidationError(
                             "Setting '%setting%' is of unknown type",
                             null,
                             array(
-                                "setting" => $name
-                            )
+                                'setting' => $name,
+                            ),
+                            "[$name]"
                         );
                     }
                     break;

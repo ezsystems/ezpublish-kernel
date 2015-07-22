@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RequestAwarePurger interface.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,11 +19,11 @@ use Symfony\Component\HttpFoundation\Request;
 interface RequestAwarePurger
 {
     /**
-     * Purges data from $request
+     * Purges data from $request.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return boolean True if purge was successful. False otherwise
+     * @return bool True if purge was successful. False otherwise
      */
-    public function purgeByRequest( Request $request );
+    public function purgeByRequest(Request $request);
 }

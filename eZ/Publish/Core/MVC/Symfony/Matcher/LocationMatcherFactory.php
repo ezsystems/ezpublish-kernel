@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the LocationMatcherFactory class.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,13 +24,15 @@ class LocationMatcherFactory extends ContentBasedMatcherFactory
      * @param ValueObject $valueObject
      *
      * @throws \InvalidArgumentException
+     *
      * @return bool
      */
-    protected function doMatch( MatcherInterface $matcher, ValueObject $valueObject )
+    protected function doMatch(MatcherInterface $matcher, ValueObject $valueObject)
     {
-        if ( !$valueObject instanceof Location )
-            throw new InvalidArgumentException( 'Value object must be a valid Location instance' );
+        if (!$valueObject instanceof Location) {
+            throw new InvalidArgumentException('Value object must be a valid Location instance');
+        }
 
-        return $matcher->matchLocation( $valueObject );
+        return $matcher->matchLocation($valueObject);
     }
 }

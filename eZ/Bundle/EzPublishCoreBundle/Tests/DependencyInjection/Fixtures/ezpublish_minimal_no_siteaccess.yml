@@ -1,0 +1,9 @@
+imagemagick:
+    enabled: false
+
+http_cache:
+    purge_type: local
+
+router:
+    default_router:
+        non_siteaccess_aware_routes: ['foo_route', 'my_prefix_']

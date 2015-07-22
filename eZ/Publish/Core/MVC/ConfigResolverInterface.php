@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ConfigResolverInterface interface.
  *
- * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -29,25 +31,25 @@ interface ConfigResolverInterface
      *
      * @return mixed
      */
-    public function getParameter( $paramName, $namespace = null, $scope = null );
+    public function getParameter($paramName, $namespace = null, $scope = null);
 
     /**
-     * Checks if $paramName exists in $namespace
+     * Checks if $paramName exists in $namespace.
      *
      * @param string $paramName
      * @param string $namespace If null, the default namespace should be used.
      * @param string $scope The scope you need $paramName value for.
      *
-     * @return boolean
+     * @return bool
      */
-    public function hasParameter( $paramName, $namespace = null, $scope = null );
+    public function hasParameter($paramName, $namespace = null, $scope = null);
 
     /**
      * Changes the default namespace to look parameter into.
      *
      * @param string $defaultNamespace
      */
-    public function setDefaultNamespace( $defaultNamespace );
+    public function setDefaultNamespace($defaultNamespace);
 
     /**
      * Returns the current default namespace.
