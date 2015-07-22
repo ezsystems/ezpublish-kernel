@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the TrashItem class
+ * File containing the TrashItem class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,7 +27,7 @@ class TrashItem extends APITrashItem
     protected $location;
 
     /**
-     * Returns the content info of the content object of this location
+     * Returns the content info of the content object of this location.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
@@ -34,14 +36,13 @@ class TrashItem extends APITrashItem
         return $this->location->getContentInfo();
     }
 
-    public function __get( $property )
+    public function __get($property)
     {
-        switch ( $property )
-        {
+        switch ($property) {
             case 'id':
                 return $this->getContentInfo()->id;
         }
-        return parent::__get( $property );
-    }
 
+        return parent::__get($property);
+    }
 }

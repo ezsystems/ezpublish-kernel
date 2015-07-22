@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,30 +17,28 @@ use eZ\Publish\SPI\FieldType\Indexable;
 use eZ\Publish\SPI\Search;
 
 /**
- * Indexable definition for Selection field type
+ * Indexable definition for Selection field type.
  */
 class SearchField implements Indexable
 {
     /**
-     * Get index data for field for search backend
+     * Get index data for field for search backend.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      *
      * @return \eZ\Publish\SPI\Search\Field[]
      */
-    public function getIndexData( Field $field, FieldDefinition $fieldDefinition )
+    public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
         $indexes = array();
         $values = array();
         $fieldSettings = $fieldDefinition->fieldTypeConstraints->fieldSettings;
-        $options = $fieldSettings["options"];
-        $positionSet = array_flip( $field->value->data );
+        $options = $fieldSettings['options'];
+        $positionSet = array_flip($field->value->data);
 
-        foreach ( $options as $index => $value )
-        {
-            if ( isset( $positionSet[$index] ) )
-            {
+        foreach ($options as $index => $value) {
+            if (isset($positionSet[$index])) {
                 $values[] = $value;
                 $indexes[] = $index;
             }
@@ -57,19 +57,19 @@ class SearchField implements Indexable
             ),
             new Search\Field(
                 'selected_option_count',
-                count( $indexes ),
+                count($indexes),
                 new Search\FieldType\IntegerField()
             ),
             new Search\Field(
                 'sort_value',
-                implode( "-", $indexes ),
+                implode('-', $indexes),
                 new Search\FieldType\StringField()
             ),
         );
     }
 
     /**
-     * Get index field types for search backend
+     * Get index field types for search backend.
      *
      * @return \eZ\Publish\SPI\Search\FieldType[]
      */
@@ -94,7 +94,7 @@ class SearchField implements Indexable
      */
     public function getDefaultMatchField()
     {
-        return "selected_option_index";
+        return 'selected_option_index';
     }
 
     /**
@@ -108,6 +108,6 @@ class SearchField implements Indexable
      */
     public function getDefaultSortField()
     {
-        return "sort_value";
+        return 'sort_value';
     }
 }

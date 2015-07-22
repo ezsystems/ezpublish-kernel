@@ -1,9 +1,11 @@
 <?php
+
 /**
- * AddPolicySignal class
+ * AddPolicySignal class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,20 +14,19 @@ namespace eZ\Publish\Core\SignalSlot\Signal\RoleService;
 use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
- * AddPolicySignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\RoleService
+ * AddPolicySignal class.
  */
 class AddPolicySignal extends Signal
 {
     /**
-     * RoleId
+     * RoleId.
      *
      * @var mixed
      */
     public $roleId;
 
     /**
-     * PolicyId
+     * PolicyId.
      *
      * @var mixed
      */

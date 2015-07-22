@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the CommonTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,13 +26,14 @@ class CommonTest extends AbstractParserTestCase
 
     protected function getContainerExtensions()
     {
-        $this->suggestionCollector = $this->getMock( 'eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\ConfigSuggestion\SuggestionCollectorInterface' );
-        return array( new EzPublishCoreExtension( array( new Common() ) ) );
+        $this->suggestionCollector = $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\ConfigSuggestion\SuggestionCollectorInterface');
+
+        return array(new EzPublishCoreExtension(array(new Common())));
     }
 
     protected function getMinimalConfiguration()
     {
-        return $this->minimalConfig = Yaml::parse( file_get_contents( __DIR__ . '/../../Fixtures/ezpublish_minimal.yml' ) );
+        return $this->minimalConfig = Yaml::parse(file_get_contents(__DIR__ . '/../../Fixtures/ezpublish_minimal.yml'));
     }
 
     public function testIndexPage()
@@ -39,14 +42,14 @@ class CommonTest extends AbstractParserTestCase
         $indexPage2 = '/Contact-Us';
         $config = array(
             'system' => array(
-                'ezdemo_site' => array( 'index_page' => $indexPage1 ),
-                'ezdemo_site_admin' => array( 'index_page' => $indexPage2 ),
-            )
+                'ezdemo_site' => array('index_page' => $indexPage1),
+                'ezdemo_site_admin' => array('index_page' => $indexPage2),
+            ),
         );
-        $this->load( $config );
+        $this->load($config);
 
-        $this->assertConfigResolverParameterValue( 'index_page', $indexPage1, 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'index_page', $indexPage2, 'ezdemo_site_admin' );
+        $this->assertConfigResolverParameterValue('index_page', $indexPage1, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('index_page', $indexPage2, 'ezdemo_site_admin');
     }
 
     public function testDefaultPage()
@@ -55,14 +58,14 @@ class CommonTest extends AbstractParserTestCase
         $defaultPage2 = '/Foo/bar';
         $config = array(
             'system' => array(
-                'ezdemo_site' => array( 'default_page' => $defaultPage1 ),
-                'ezdemo_site_admin' => array( 'default_page' => $defaultPage2 ),
-            )
+                'ezdemo_site' => array('default_page' => $defaultPage1),
+                'ezdemo_site_admin' => array('default_page' => $defaultPage2),
+            ),
         );
-        $this->load( $config );
+        $this->load($config);
 
-        $this->assertConfigResolverParameterValue( 'default_page', $defaultPage1, 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'default_page', $defaultPage2, 'ezdemo_site_admin' );
+        $this->assertConfigResolverParameterValue('default_page', $defaultPage1, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('default_page', $defaultPage2, 'ezdemo_site_admin');
     }
 
     /**
@@ -80,9 +83,9 @@ class CommonTest extends AbstractParserTestCase
                             'user' => 'root',
                             'password' => 'root',
                             'database_name' => 'ezdemo',
-                        )
-                    )
-                )
+                        ),
+                    ),
+                ),
             )
         );
     }
@@ -102,9 +105,9 @@ class CommonTest extends AbstractParserTestCase
                             'user' => 'root',
                             'password' => 'root',
                             'database_name' => 'ezdemo',
-                        )
-                    )
-                )
+                        ),
+                    ),
+                ),
             )
         );
     }
@@ -112,15 +115,15 @@ class CommonTest extends AbstractParserTestCase
     public function testNonExistentSettings()
     {
         $this->load();
-        $this->assertConfigResolverParameterValue( 'url_alias_router', true, 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'cache_pool_name', 'default', 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'var_dir', 'var', 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'storage_dir', 'storage', 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'binary_dir', 'original', 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'session_name', '%ezpublish.session_name.default%', 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'http_cache.purge_servers', array(), 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'anonymous_user_id', 10, 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'index_page', null, 'ezdemo_site' );
+        $this->assertConfigResolverParameterValue('url_alias_router', true, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('cache_pool_name', 'default', 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('var_dir', 'var', 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('storage_dir', 'storage', 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('binary_dir', 'original', 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('session_name', '%ezpublish.session_name.default%', 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('http_cache.purge_servers', array(), 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('anonymous_user_id', 10, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('index_page', null, 'ezdemo_site');
     }
 
     public function testMiscSettings()
@@ -134,7 +137,7 @@ class CommonTest extends AbstractParserTestCase
         $cachePurgeServers = array(
             'http://purge.server1/',
             'http://purge.server2:1234/foo',
-            'https://purge.server3/bar'
+            'https://purge.server3/bar',
         );
         $anonymousUserId = 10;
         $this->load(
@@ -148,22 +151,22 @@ class CommonTest extends AbstractParserTestCase
                         'session_name' => $sessionName,
                         'index_page' => $indexPage,
                         'http_cache' => array(
-                            'purge_servers' => $cachePurgeServers
+                            'purge_servers' => $cachePurgeServers,
                         ),
-                        'anonymous_user_id' => $anonymousUserId
-                    )
-                )
+                        'anonymous_user_id' => $anonymousUserId,
+                    ),
+                ),
             )
         );
 
-        $this->assertConfigResolverParameterValue( 'cache_pool_name', $cachePoolName, 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'var_dir', $varDir, 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'storage_dir', $storageDir, 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'binary_dir', $binaryDir, 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'session_name', $sessionName, 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'index_page', $indexPage, 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'http_cache.purge_servers', $cachePurgeServers, 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'anonymous_user_id', $anonymousUserId, 'ezdemo_site' );
+        $this->assertConfigResolverParameterValue('cache_pool_name', $cachePoolName, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('var_dir', $varDir, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('storage_dir', $storageDir, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('binary_dir', $binaryDir, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('session_name', $sessionName, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('index_page', $indexPage, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('http_cache.purge_servers', $cachePurgeServers, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('anonymous_user_id', $anonymousUserId, 'ezdemo_site');
     }
 
     public function testUserSettings()
@@ -178,13 +181,13 @@ class CommonTest extends AbstractParserTestCase
                             'layout' => $layout,
                             'login_template' => $loginTemplate,
                         ),
-                    )
-                )
+                    ),
+                ),
             )
         );
 
-        $this->assertConfigResolverParameterValue( 'security.base_layout', $layout, 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'security.login_template', $loginTemplate, 'ezdemo_site' );
+        $this->assertConfigResolverParameterValue('security.base_layout', $layout, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('security.login_template', $loginTemplate, 'ezdemo_site');
     }
 
     public function testNoUserSettings()
@@ -205,18 +208,18 @@ class CommonTest extends AbstractParserTestCase
     /**
      * @dataProvider sessionSettingsProvider
      */
-    public function testSessionSettings( array $inputParams, array $expected )
+    public function testSessionSettings(array $inputParams, array $expected)
     {
         $this->load(
             array(
                 'system' => array(
-                    'ezdemo_site' => $inputParams
-                )
+                    'ezdemo_site' => $inputParams,
+                ),
             )
         );
 
-        $this->assertConfigResolverParameterValue( 'session', $expected['session'], 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'session_name', $expected['session_name'], 'ezdemo_site' );
+        $this->assertConfigResolverParameterValue('session', $expected['session'], 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('session_name', $expected['session_name'], 'ezdemo_site');
     }
 
     public function sessionSettingsProvider()
@@ -231,7 +234,7 @@ class CommonTest extends AbstractParserTestCase
                         'cookie_lifetime' => 86400,
                         'cookie_secure' => false,
                         'cookie_httponly' => true,
-                    )
+                    ),
                 ),
                 array(
                     'session' => array(
@@ -242,8 +245,8 @@ class CommonTest extends AbstractParserTestCase
                         'cookie_secure' => false,
                         'cookie_httponly' => true,
                     ),
-                    'session_name' => 'foo'
-                )
+                    'session_name' => 'foo',
+                ),
             ),
             array(
                 array(
@@ -255,7 +258,7 @@ class CommonTest extends AbstractParserTestCase
                         'cookie_secure' => false,
                         'cookie_httponly' => true,
                     ),
-                    'session_name' => 'bar'
+                    'session_name' => 'bar',
                 ),
                 array(
                     'session' => array(
@@ -266,19 +269,19 @@ class CommonTest extends AbstractParserTestCase
                         'cookie_secure' => false,
                         'cookie_httponly' => true,
                     ),
-                    'session_name' => 'bar'
-                )
+                    'session_name' => 'bar',
+                ),
             ),
             array(
                 array(
-                    'session_name' => 'some_other_session_name'
+                    'session_name' => 'some_other_session_name',
                 ),
                 array(
                     'session' => array(
                         'name' => 'some_other_session_name',
                     ),
-                    'session_name' => 'some_other_session_name'
-                )
+                    'session_name' => 'some_other_session_name',
+                ),
             ),
         );
     }

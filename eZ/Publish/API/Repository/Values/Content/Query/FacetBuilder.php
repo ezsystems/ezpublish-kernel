@@ -1,12 +1,12 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- * @version //autogentag//
  *
- * @package eZ\Publish\API\Repository\Values\Content\Query
+ * @version //autogentag//
  */
 
 namespace eZ\Publish\API\Repository\Values\Content\Query;
@@ -14,35 +14,33 @@ namespace eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * This class is the base class for facet builders
- *
- * @package eZ\Publish\API\Repository\Values\Content\Query
+ * This class is the base class for facet builders.
  */
 abstract class FacetBuilder extends ValueObject
 {
     /**
-     * The name of the facet
+     * The name of the facet.
      *
      * @var string
      */
     public $name;
 
     /**
-     * If true the facet runs in a global mode not restricted by the query
+     * If true the facet runs in a global mode not restricted by the query.
      *
-     * @var boolean
+     * @var bool
      */
     public $global = false;
 
     /**
-     * An additional facet filter that will further filter the documents the facet will be executed on
+     * An additional facet filter that will further filter the documents the facet will be executed on.
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
     public $filter = null;
 
     /**
-     * Number of facets (terms) returned
+     * Number of facets (terms) returned.
      *
      * @var int
      */

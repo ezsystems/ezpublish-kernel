@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the InlineFragmentRenderer class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -29,37 +31,38 @@ class InlineFragmentRenderer extends BaseRenderer implements SiteAccessAware
      */
     private $siteAccess;
 
-    public function __construct( FragmentRendererInterface $innerRenderer )
+    public function __construct(FragmentRendererInterface $innerRenderer)
     {
         $this->innerRenderer = $innerRenderer;
     }
 
-    public function setFragmentPath( $path )
+    public function setFragmentPath($path)
     {
-        if ( $this->innerRenderer instanceof RoutableFragmentRenderer )
-        {
-            $this->innerRenderer->setFragmentPath( $path );
+        if ($this->innerRenderer instanceof RoutableFragmentRenderer) {
+            $this->innerRenderer->setFragmentPath($path);
         }
     }
 
-    public function setSiteAccess( SiteAccess $siteAccess = null )
+    public function setSiteAccess(SiteAccess $siteAccess = null)
     {
         $this->siteAccess = $siteAccess;
     }
 
-    public function render( $uri, Request $request, array $options = array() )
+    public function render($uri, Request $request, array $options = array())
     {
-        if ( $uri instanceof ControllerReference )
-        {
-            if ( $request->attributes->has( 'siteaccess' ) )
-                $uri->attributes['serialized_siteaccess'] = serialize( $request->attributes->get( 'siteaccess' ) );
-            if ( $request->attributes->has( 'semanticPathinfo' ) )
-                $uri->attributes['semanticPathinfo'] = $request->attributes->get( 'semanticPathinfo' );
-            if ( $request->attributes->has( 'viewParametersString' ) )
-                $uri->attributes['viewParametersString'] = $request->attributes->get( 'viewParametersString' );
+        if ($uri instanceof ControllerReference) {
+            if ($request->attributes->has('siteaccess')) {
+                $uri->attributes['serialized_siteaccess'] = serialize($request->attributes->get('siteaccess'));
+            }
+            if ($request->attributes->has('semanticPathinfo')) {
+                $uri->attributes['semanticPathinfo'] = $request->attributes->get('semanticPathinfo');
+            }
+            if ($request->attributes->has('viewParametersString')) {
+                $uri->attributes['viewParametersString'] = $request->attributes->get('viewParametersString');
+            }
         }
 
-        return $this->innerRenderer->render( $uri, $request, $options );
+        return $this->innerRenderer->render($uri, $request, $options);
     }
 
     public function getName()

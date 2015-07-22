@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ViewControllerListenerTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -56,37 +58,37 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->controllerResolver = $this->getMock( 'Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface' );
-        $this->controllerManager = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\Controller\\ManagerInterface' );
+        $this->controllerResolver = $this->getMock('Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface');
+        $this->controllerManager = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\Controller\\ManagerInterface');
         $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
         $this->repository = $repository = $this
-            ->getMockBuilder( $repositoryClass )
+            ->getMockBuilder($repositoryClass)
             ->disableOriginalConstructor()
             ->setMethods(
                 array_diff(
-                    get_class_methods( $repositoryClass ),
-                    array( 'sudo' )
+                    get_class_methods($repositoryClass),
+                    array('sudo')
                 )
             )
             ->getMock();
-        $this->logger = $this->getMock( 'Psr\\Log\\LoggerInterface' );
-        $this->controllerListener = new ViewControllerListener( $this->controllerResolver, $this->controllerManager, $this->repository, $this->logger );
+        $this->logger = $this->getMock('Psr\\Log\\LoggerInterface');
+        $this->controllerListener = new ViewControllerListener($this->controllerResolver, $this->controllerManager, $this->repository, $this->logger);
 
-        $this->request = new Request;
+        $this->request = new Request();
         $this->event = $this
-            ->getMockBuilder( 'Symfony\\Component\\HttpKernel\\Event\\FilterControllerEvent' )
+            ->getMockBuilder('Symfony\\Component\\HttpKernel\\Event\\FilterControllerEvent')
             ->disableOriginalConstructor()
             ->getMock();
         $this->event
-            ->expects( $this->any() )
-            ->method( 'getRequest' )
-            ->will( $this->returnValue( $this->request ) );
+            ->expects($this->any())
+            ->method('getRequest')
+            ->will($this->returnValue($this->request));
     }
 
     public function testGetSubscribedEvents()
     {
         $this->assertSame(
-            array( KernelEvents::CONTROLLER => array( 'getController', 10 ) ),
+            array(KernelEvents::CONTROLLER => array('getController', 10)),
             $this->controllerListener->getSubscribedEvents()
         );
     }
@@ -94,49 +96,49 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
     public function testGetControllerNonViewController()
     {
         $initialController = 'Foo::bar';
-        $this->request->attributes->set( '_controller', $initialController );
+        $this->request->attributes->set('_controller', $initialController);
         $this->repository
-            ->expects( $this->never() )
-            ->method( 'getLocationService' );
+            ->expects($this->never())
+            ->method('getLocationService');
         $this->repository
-            ->expects( $this->never() )
-            ->method( 'getContentService' );
+            ->expects($this->never())
+            ->method('getContentService');
 
         $this->controllerResolver
-            ->expects( $this->never() )
-            ->method( 'getControllerReference' );
+            ->expects($this->never())
+            ->method('getControllerReference');
 
         $this->event
-            ->expects( $this->never() )
-            ->method( 'setController' );
+            ->expects($this->never())
+            ->method('setController');
 
-        $this->assertNull( $this->controllerListener->getController( $this->event ) );
+        $this->assertNull($this->controllerListener->getController($this->event));
     }
 
     public function testGetControllerInvalidParams()
     {
         // Don't add locationId / contentId to request attributes to enforce failure
-        $this->request->attributes->set( '_controller', 'ez_content:viewLocation' );
+        $this->request->attributes->set('_controller', 'ez_content:viewLocation');
         $this->repository
-            ->expects( $this->never() )
-            ->method( 'getLocationService' );
+            ->expects($this->never())
+            ->method('getLocationService');
         $this->repository
-            ->expects( $this->never() )
-            ->method( 'getContentService' );
+            ->expects($this->never())
+            ->method('getContentService');
 
         $this->controllerResolver
-            ->expects( $this->never() )
-            ->method( 'getControllerReference' );
+            ->expects($this->never())
+            ->method('getControllerReference');
 
         $this->logger
-            ->expects( $this->once() )
-            ->method( 'error' );
+            ->expects($this->once())
+            ->method('error');
 
         $this->event
-            ->expects( $this->never() )
-            ->method( 'setController' );
+            ->expects($this->never())
+            ->method('setController');
 
-        $this->assertNull( $this->controllerListener->getController( $this->event ) );
+        $this->assertNull($this->controllerListener->getController($this->event));
     }
 
     public function testGetControllerNoMatchedController()
@@ -147,31 +149,31 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
             array(
                 '_controller' => 'ez_content:viewLocation',
                 'locationId' => $id,
-                'viewType' => $viewType
+                'viewType' => $viewType,
             )
         );
 
-        $locationServiceMock = $this->getMock( 'eZ\\Publish\\API\\Repository\\LocationService' );
-        $valueObject = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
+        $locationServiceMock = $this->getMock('eZ\\Publish\\API\\Repository\\LocationService');
+        $valueObject = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
         $locationServiceMock
-            ->expects( $this->once() )
-            ->method( 'loadLocation' )
-            ->with( $id )
-            ->will( $this->returnValue( $valueObject ) );
+            ->expects($this->once())
+            ->method('loadLocation')
+            ->with($id)
+            ->will($this->returnValue($valueObject));
         $this->repository
-            ->expects( $this->once() )
-            ->method( 'getLocationService' )
-            ->will( $this->returnValue( $locationServiceMock ) );
+            ->expects($this->once())
+            ->method('getLocationService')
+            ->will($this->returnValue($locationServiceMock));
         $this->controllerManager
-            ->expects( $this->once() )
-            ->method( 'getControllerReference' )
-            ->will( $this->returnValue( null ) );
+            ->expects($this->once())
+            ->method('getControllerReference')
+            ->will($this->returnValue(null));
 
         $this->event
-            ->expects( $this->never() )
-            ->method( 'setController' );
+            ->expects($this->never())
+            ->method('setController');
 
-        $this->assertNull( $this->controllerListener->getController( $this->event ) );
+        $this->assertNull($this->controllerListener->getController($this->event));
     }
 
     public function testGetControllerLocationId()
@@ -182,84 +184,84 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
             array(
                 '_controller' => 'ez_content:viewLocation',
                 'locationId' => $id,
-                'viewType' => $viewType
+                'viewType' => $viewType,
             )
         );
 
-        $locationServiceMock = $this->getMock( 'eZ\\Publish\\API\\Repository\\LocationService' );
-        $valueObject = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
+        $locationServiceMock = $this->getMock('eZ\\Publish\\API\\Repository\\LocationService');
+        $valueObject = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
         $locationServiceMock
-            ->expects( $this->once() )
-            ->method( 'loadLocation' )
-            ->with( $id )
-            ->will( $this->returnValue( $valueObject ) );
+            ->expects($this->once())
+            ->method('loadLocation')
+            ->with($id)
+            ->will($this->returnValue($valueObject));
         $this->repository
-            ->expects( $this->once() )
-            ->method( 'getLocationService' )
-            ->will( $this->returnValue( $locationServiceMock ) );
+            ->expects($this->once())
+            ->method('getLocationService')
+            ->will($this->returnValue($locationServiceMock));
 
         $controllerIdentifier = 'AcmeTestBundle:Default:foo';
         $controllerCallable = 'DefaultController::fooAction';
-        $controllerReference = new ControllerReference( $controllerIdentifier );
+        $controllerReference = new ControllerReference($controllerIdentifier);
         $this->controllerManager
-            ->expects( $this->once() )
-            ->method( 'getControllerReference' )
-            ->will( $this->returnValue( $controllerReference ) );
+            ->expects($this->once())
+            ->method('getControllerReference')
+            ->will($this->returnValue($controllerReference));
         $this->controllerResolver
-            ->expects( $this->once() )
-            ->method( 'getController' )
-            ->with( $this->request )
-            ->will( $this->returnValue( $controllerCallable ) );
+            ->expects($this->once())
+            ->method('getController')
+            ->with($this->request)
+            ->will($this->returnValue($controllerCallable));
         $this->event
-            ->expects( $this->once() )
-            ->method( 'setController' )
-            ->with( $controllerCallable );
+            ->expects($this->once())
+            ->method('setController')
+            ->with($controllerCallable);
 
-        $this->assertNull( $this->controllerListener->getController( $this->event ) );
-        $this->assertSame( $controllerIdentifier, $this->request->attributes->get( '_controller' ) );
+        $this->assertNull($this->controllerListener->getController($this->event));
+        $this->assertSame($controllerIdentifier, $this->request->attributes->get('_controller'));
     }
 
     public function testGetControllerLocation()
     {
         $id = 123;
         $location = $this
-            ->getMockBuilder( 'eZ\Publish\API\Repository\Values\Content\Location' )
-            ->setConstructorArgs( array( array( 'id' => $id ) ) )
+            ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\Location')
+            ->setConstructorArgs(array(array('id' => $id)))
             ->getMockForAbstractClass();
         $viewType = 'full';
         $this->request->attributes->add(
             array(
                 '_controller' => 'ez_content:viewLocation',
                 'location' => $location,
-                'viewType' => $viewType
+                'viewType' => $viewType,
             )
         );
 
         $this->repository
-            ->expects( $this->never() )
-            ->method( 'getLocationService' );
+            ->expects($this->never())
+            ->method('getLocationService');
 
         $controllerIdentifier = 'AcmeTestBundle:Default:foo';
         $controllerCallable = 'DefaultController::fooAction';
-        $controllerReference = new ControllerReference( $controllerIdentifier );
+        $controllerReference = new ControllerReference($controllerIdentifier);
         $this->controllerManager
-            ->expects( $this->once() )
-            ->method( 'getControllerReference' )
-            ->with( $location, $viewType )
-            ->will( $this->returnValue( $controllerReference ) );
+            ->expects($this->once())
+            ->method('getControllerReference')
+            ->with($location, $viewType)
+            ->will($this->returnValue($controllerReference));
         $this->controllerResolver
-            ->expects( $this->once() )
-            ->method( 'getController' )
-            ->with( $this->request )
-            ->will( $this->returnValue( $controllerCallable ) );
+            ->expects($this->once())
+            ->method('getController')
+            ->with($this->request)
+            ->will($this->returnValue($controllerCallable));
         $this->event
-            ->expects( $this->once() )
-            ->method( 'setController' )
-            ->with( $controllerCallable );
+            ->expects($this->once())
+            ->method('setController')
+            ->with($controllerCallable);
 
-        $this->assertNull( $this->controllerListener->getController( $this->event ) );
-        $this->assertSame( $controllerIdentifier, $this->request->attributes->get( '_controller' ) );
-        $this->assertSame( $id, $this->request->attributes->get( 'locationId' ) );
+        $this->assertNull($this->controllerListener->getController($this->event));
+        $this->assertSame($controllerIdentifier, $this->request->attributes->get('_controller'));
+        $this->assertSame($id, $this->request->attributes->get('locationId'));
     }
 
     /**
@@ -273,22 +275,22 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
             array(
                 '_controller' => 'ez_content:viewLocation',
                 'locationId' => $id,
-                'viewType' => $viewType
+                'viewType' => $viewType,
             )
         );
 
-        $locationServiceMock = $this->getMock( 'eZ\\Publish\\API\\Repository\\LocationService' );
+        $locationServiceMock = $this->getMock('eZ\\Publish\\API\\Repository\\LocationService');
         $locationServiceMock
-            ->expects( $this->once() )
-            ->method( 'loadLocation' )
-            ->with( $id )
-            ->will( $this->throwException( new UnauthorizedException( 'foo', 'bar' ) ) );
+            ->expects($this->once())
+            ->method('loadLocation')
+            ->with($id)
+            ->will($this->throwException(new UnauthorizedException('foo', 'bar')));
         $this->repository
-            ->expects( $this->once() )
-            ->method( 'getLocationService' )
-            ->will( $this->returnValue( $locationServiceMock ) );
+            ->expects($this->once())
+            ->method('getLocationService')
+            ->will($this->returnValue($locationServiceMock));
 
-        $this->controllerListener->getController( $this->event );
+        $this->controllerListener->getController($this->event);
     }
 
     public function testGetControllerContentId()
@@ -299,83 +301,83 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
             array(
                 '_controller' => 'ez_content:viewLocation',
                 'contentId' => $id,
-                'viewType' => $viewType
+                'viewType' => $viewType,
             )
         );
 
-        $contentServiceMock = $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' );
-        $valueObject = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' );
+        $contentServiceMock = $this->getMock('eZ\\Publish\\API\\Repository\\ContentService');
+        $valueObject = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
         $contentServiceMock
-            ->expects( $this->once() )
-            ->method( 'loadContentInfo' )
-            ->with( $id )
-            ->will( $this->returnValue( $valueObject ) );
+            ->expects($this->once())
+            ->method('loadContentInfo')
+            ->with($id)
+            ->will($this->returnValue($valueObject));
         $this->repository
-            ->expects( $this->once() )
-            ->method( 'getContentService' )
-            ->will( $this->returnValue( $contentServiceMock ) );
+            ->expects($this->once())
+            ->method('getContentService')
+            ->will($this->returnValue($contentServiceMock));
 
         $controllerIdentifier = 'AcmeTestBundle:Default:foo';
         $controllerCallable = 'DefaultController::fooAction';
-        $controllerReference = new ControllerReference( $controllerIdentifier );
+        $controllerReference = new ControllerReference($controllerIdentifier);
         $this->controllerManager
-            ->expects( $this->once() )
-            ->method( 'getControllerReference' )
-            ->will( $this->returnValue( $controllerReference ) );
+            ->expects($this->once())
+            ->method('getControllerReference')
+            ->will($this->returnValue($controllerReference));
         $this->controllerResolver
-            ->expects( $this->once() )
-            ->method( 'getController' )
-            ->with( $this->request )
-            ->will( $this->returnValue( $controllerCallable ) );
+            ->expects($this->once())
+            ->method('getController')
+            ->with($this->request)
+            ->will($this->returnValue($controllerCallable));
         $this->event
-            ->expects( $this->once() )
-            ->method( 'setController' )
-            ->with( $controllerCallable );
+            ->expects($this->once())
+            ->method('setController')
+            ->with($controllerCallable);
 
-        $this->assertNull( $this->controllerListener->getController( $this->event ) );
-        $this->assertSame( $controllerIdentifier, $this->request->attributes->get( '_controller' ) );
+        $this->assertNull($this->controllerListener->getController($this->event));
+        $this->assertSame($controllerIdentifier, $this->request->attributes->get('_controller'));
     }
 
     public function testGetControllerContentInfo()
     {
         $id = 123;
         $contentInfo = $this
-            ->getMockBuilder( 'eZ\Publish\API\Repository\Values\Content\ContentInfo' )
-            ->setConstructorArgs( array( array( 'id' => $id ) ) )
+            ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\ContentInfo')
+            ->setConstructorArgs(array(array('id' => $id)))
             ->getMockForAbstractClass();
         $viewType = 'full';
         $this->request->attributes->add(
             array(
                 '_controller' => 'ez_content:viewLocation',
                 'contentInfo' => $contentInfo,
-                'viewType' => $viewType
+                'viewType' => $viewType,
             )
         );
 
         $this->repository
-            ->expects( $this->never() )
-            ->method( 'getContentService' );
+            ->expects($this->never())
+            ->method('getContentService');
 
         $controllerIdentifier = 'AcmeTestBundle:Default:foo';
         $controllerCallable = 'DefaultController::fooAction';
-        $controllerReference = new ControllerReference( $controllerIdentifier );
+        $controllerReference = new ControllerReference($controllerIdentifier);
         $this->controllerManager
-            ->expects( $this->once() )
-            ->method( 'getControllerReference' )
-            ->with( $contentInfo, $viewType )
-            ->will( $this->returnValue( $controllerReference ) );
+            ->expects($this->once())
+            ->method('getControllerReference')
+            ->with($contentInfo, $viewType)
+            ->will($this->returnValue($controllerReference));
         $this->controllerResolver
-            ->expects( $this->once() )
-            ->method( 'getController' )
-            ->with( $this->request )
-            ->will( $this->returnValue( $controllerCallable ) );
+            ->expects($this->once())
+            ->method('getController')
+            ->with($this->request)
+            ->will($this->returnValue($controllerCallable));
         $this->event
-            ->expects( $this->once() )
-            ->method( 'setController' )
-            ->with( $controllerCallable );
+            ->expects($this->once())
+            ->method('setController')
+            ->with($controllerCallable);
 
-        $this->assertNull( $this->controllerListener->getController( $this->event ) );
-        $this->assertSame( $controllerIdentifier, $this->request->attributes->get( '_controller' ) );
-        $this->assertSame( $id, $this->request->attributes->get( 'contentId' ) );
+        $this->assertNull($this->controllerListener->getController($this->event));
+        $this->assertSame($controllerIdentifier, $this->request->attributes->get('_controller'));
+        $this->assertSame($id, $this->request->attributes->get('contentId'));
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the AggregateFacetBuilderVisitorPass class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,14 +23,13 @@ class AggregateFacetBuilderVisitorPass implements CompilerPassInterface
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
         if (
             !$container->hasDefinition(
                 'ezpublish.search.elasticsearch.content.facet_builder_visitor.aggregate'
             )
-        )
-        {
+        ) {
             return;
         }
 
@@ -36,17 +37,11 @@ class AggregateFacetBuilderVisitorPass implements CompilerPassInterface
             'ezpublish.search.elasticsearch.content.facet_builder_visitor.aggregate'
         );
 
-        foreach (
-            $container->findTaggedServiceIds(
-                'ezpublish.search.elasticsearch.content.facet_builder_visitor'
-            ) as $id => $attributes
-        )
-        {
+        $taggedServiceIds = $container->findTaggedServiceIds('ezpublish.search.elasticsearch.content.facet_builder_visitor');
+        foreach ($taggedServiceIds as $id => $attributes) {
             $aggregateFacetBuilderVisitorDefinition->addMethodCall(
                 'addVisitor',
-                array(
-                    new Reference( $id ),
-                )
+                [new Reference($id)]
             );
         }
     }

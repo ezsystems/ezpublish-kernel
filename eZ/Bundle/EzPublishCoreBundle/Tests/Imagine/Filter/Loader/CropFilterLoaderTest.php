@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the CropFilterLoaderTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -27,28 +29,28 @@ class CropFilterLoaderTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->innerLoader = $this->getMock( '\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface' );
+        $this->innerLoader = $this->getMock('\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
         $this->loader = new CropFilterLoader();
-        $this->loader->setInnerLoader( $this->innerLoader );
+        $this->loader->setInnerLoader($this->innerLoader);
     }
 
     /**
      * @expectedException \Imagine\Exception\InvalidArgumentException
      * @dataProvider loadInvalidProvider
      */
-    public function testLoadInvalidOptions( array $options )
+    public function testLoadInvalidOptions(array $options)
     {
-        $this->loader->load( $this->getMock( '\Imagine\Image\ImageInterface' ), $options );
+        $this->loader->load($this->getMock('\Imagine\Image\ImageInterface'), $options);
     }
 
     public function loadInvalidProvider()
     {
         return array(
-            array( array() ),
-            array( array( 123 ) ),
-            array( array( 'foo' => 'bar' ) ),
-            array( array( 123, 456 ) ),
-            array( array( 123, 456, 789 ) ),
+            array(array()),
+            array(array(123)),
+            array(array('foo' => 'bar')),
+            array(array(123, 456)),
+            array(array(123, 456, 789)),
         );
     }
 
@@ -59,13 +61,13 @@ class CropFilterLoaderTest extends PHPUnit_Framework_TestCase
         $offsetX = 100;
         $offsetY = 200;
 
-        $image = $this->getMock( '\Imagine\Image\ImageInterface' );
+        $image = $this->getMock('\Imagine\Image\ImageInterface');
         $this->innerLoader
-            ->expects( $this->once() )
-            ->method( 'load' )
-            ->with( $image, array( 'size' => array( $width, $height ), 'start' => array( $offsetX, $offsetY ) ) )
-            ->will( $this->returnValue( $image ) );
+            ->expects($this->once())
+            ->method('load')
+            ->with($image, array('size' => array($width, $height), 'start' => array($offsetX, $offsetY)))
+            ->will($this->returnValue($image));
 
-        $this->assertSame( $image, $this->loader->load( $image, array( $width, $height, $offsetX, $offsetY ) ) );
+        $this->assertSame($image, $this->loader->load($image, array($width, $height, $offsetX, $offsetY)));
     }
 }

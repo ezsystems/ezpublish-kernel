@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RestUserGroupRoleAssignment class
+ * File containing the RestUserGroupRoleAssignment class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,31 +15,31 @@ use eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment;
 use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
- * RestUserGroupRoleAssignment view model
+ * RestUserGroupRoleAssignment view model.
  */
 class RestUserGroupRoleAssignment extends RestValue
 {
     /**
-     * Role assignment
+     * Role assignment.
      *
      * @var \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment
      */
     public $roleAssignment;
 
     /**
-     * User group ID to which the role is assigned
+     * User group ID to which the role is assigned.
      *
      * @var mixed
      */
     public $id;
 
     /**
-     * Construct
+     * Construct.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment $roleAssignment
      * @param mixed $id
      */
-    public function __construct( UserGroupRoleAssignment $roleAssignment, $id )
+    public function __construct(UserGroupRoleAssignment $roleAssignment, $id)
     {
         $this->roleAssignment = $roleAssignment;
         $this->id = $id;

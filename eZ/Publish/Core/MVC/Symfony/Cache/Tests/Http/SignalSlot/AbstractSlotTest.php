@@ -1,10 +1,12 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
 use PHPUnit_Framework_TestCase;
@@ -23,7 +25,7 @@ abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase implements Sl
 
     public function setUp()
     {
-        $this->cachePurgerMock = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger' );
+        $this->cachePurgerMock = $this->getMock('eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger');
         $this->slot = $this->createSlot();
         self::$signal = $this->createSignal();
     }
@@ -31,7 +33,8 @@ abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase implements Sl
     protected function createSlot()
     {
         $class = $this->getSlotClass();
-        return new $class( $this->cachePurgerMock );
+
+        return new $class($this->cachePurgerMock);
     }
 
     /**
@@ -45,17 +48,17 @@ abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase implements Sl
     /**
      * @dataProvider getUnreceivedSignals
      */
-    public function testDoesNotReceiveOtherSignals( $signal )
+    public function testDoesNotReceiveOtherSignals($signal)
     {
-        $this->cachePurgerMock->expects( $this->never() )->method( 'purgeForContent' );
-        $this->cachePurgerMock->expects( $this->never() )->method( 'purgeAll' );
+        $this->cachePurgerMock->expects($this->never())->method('purgeForContent');
+        $this->cachePurgerMock->expects($this->never())->method('purgeAll');
 
-        $this->slot->receive( $signal );
+        $this->slot->receive($signal);
     }
 
-    protected function receive( $signal )
+    protected function receive($signal)
     {
-        $this->slot->receive( $signal );
+        $this->slot->receive($signal);
     }
 
     public static function getReceivedSignals()
@@ -64,21 +67,20 @@ abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase implements Sl
     }
 
     /**
-     * All existing SignalSlots
+     * All existing SignalSlots.
      */
     public static function getUnreceivedSignals()
     {
         static $arguments = [];
 
-        if ( empty( $arguments ) )
-        {
+        if (empty($arguments)) {
             $signals = self::getAllSignals();
 
-            foreach ( $signals as $signalClass )
-            {
-                if ( in_array( $signalClass, static::getReceivedSignalClasses() ) )
+            foreach ($signals as $signalClass) {
+                if (in_array($signalClass, static::getReceivedSignalClasses())) {
                     continue;
-                $arguments[] = [new $signalClass];
+                }
+                $arguments[] = [new $signalClass()];
             }
         }
 

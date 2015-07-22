@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the LocaleConverter class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ class LocaleConverter implements LocaleConverterInterface
 {
     /**
      * Conversion map, indexed by eZ Publish locale.
-     * See locale.yml
+     * See locale.yml.
      *
      * @var array
      */
@@ -33,10 +35,10 @@ class LocaleConverter implements LocaleConverterInterface
      */
     private $logger;
 
-    public function __construct( array $conversionMap, LoggerInterface $logger )
+    public function __construct(array $conversionMap, LoggerInterface $logger)
     {
         $this->conversionMap = $conversionMap;
-        $this->reverseConversionMap = array_flip( $conversionMap );
+        $this->reverseConversionMap = array_flip($conversionMap);
         $this->logger = $logger;
     }
 
@@ -45,13 +47,14 @@ class LocaleConverter implements LocaleConverterInterface
      * Returns null if conversion cannot be made.
      *
      * @param string $ezpLocale
+     *
      * @return string|null
      */
-    public function convertToPOSIX( $ezpLocale )
+    public function convertToPOSIX($ezpLocale)
     {
-        if ( !isset( $this->conversionMap[$ezpLocale] ) )
-        {
-            $this->logger->warning( "Could not convert locale '$ezpLocale' to POSIX format. Please check your locale configuration in ezpublish.yml" );
+        if (!isset($this->conversionMap[$ezpLocale])) {
+            $this->logger->warning("Could not convert locale '$ezpLocale' to POSIX format. Please check your locale configuration in ezpublish.yml");
+
             return;
         }
 
@@ -63,13 +66,14 @@ class LocaleConverter implements LocaleConverterInterface
      * Returns null if conversion cannot be made.
      *
      * @param string $posixLocale
+     *
      * @return string|null
      */
-    public function convertToEz( $posixLocale )
+    public function convertToEz($posixLocale)
     {
-        if ( !isset( $this->reverseConversionMap[$posixLocale] ) )
-        {
-            $this->logger->warning( "Could not convert locale '$posixLocale' to eZ Publish format. Please check your locale configuration in ezpublish.yml" );
+        if (!isset($this->reverseConversionMap[$posixLocale])) {
+            $this->logger->warning("Could not convert locale '$posixLocale' to eZ Publish format. Please check your locale configuration in ezpublish.yml");
+
             return;
         }
 

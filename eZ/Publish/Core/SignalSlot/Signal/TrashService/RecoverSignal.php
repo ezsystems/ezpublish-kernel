@@ -1,9 +1,11 @@
 <?php
+
 /**
- * RecoverSignal class
+ * RecoverSignal class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,27 +14,26 @@ namespace eZ\Publish\Core\SignalSlot\Signal\TrashService;
 use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
- * RecoverSignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\TrashService
+ * RecoverSignal class.
  */
 class RecoverSignal extends Signal
 {
     /**
-     * TrashItemId
+     * TrashItemId.
      *
      * @var mixed
      */
     public $trashItemId;
 
     /**
-     * NewParentLocationId
+     * NewParentLocationId.
      *
      * @var mixed
      */
     public $newParentLocationId;
 
     /**
-     * NewLocationId
+     * NewLocationId.
      *
      * @var mixed
      */

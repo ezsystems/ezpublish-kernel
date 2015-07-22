@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the eZXHTML5 edit validation test
+ * File containing the eZXHTML5 edit validation test.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -28,7 +30,7 @@ class Ezxhtml5EditTest extends PHPUnit_Framework_TestCase
 
 ',
                 array(
-                    "ezlink must not occur in the descendants of a",
+                    'ezlink must not occur in the descendants of a',
                 ),
             ),
         );
@@ -37,19 +39,18 @@ class Ezxhtml5EditTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider providerForTestValidate
      */
-    public function testValidate( $input, $expectedErrors )
+    public function testValidate($input, $expectedErrors)
     {
         $document = new DOMDocument();
-        $document->loadXML( $input );
+        $document->loadXML($input);
 
         $validator = $this->getConversionValidator();
-        $errors = $validator->validate( $document );
+        $errors = $validator->validate($document);
 
-        $this->assertEquals( count( $expectedErrors ), count( $errors ) );
+        $this->assertEquals(count($expectedErrors), count($errors));
 
-        foreach ( $errors as $index => $error )
-        {
-            $this->assertStringEndsWith( $expectedErrors[$index], $error );
+        foreach ($errors as $index => $error) {
+            $this->assertStringEndsWith($expectedErrors[$index], $error);
         }
     }
 
@@ -64,9 +65,8 @@ class Ezxhtml5EditTest extends PHPUnit_Framework_TestCase
     protected function getConversionValidator()
     {
         $validationSchema = $this->getConversionValidationSchemas();
-        if ( $validationSchema !== null && $this->validator === null )
-        {
-            $this->validator = new Validator( $validationSchema );
+        if ($validationSchema !== null && $this->validator === null) {
+            $this->validator = new Validator($validationSchema);
         }
 
         return $this->validator;
@@ -80,8 +80,8 @@ class Ezxhtml5EditTest extends PHPUnit_Framework_TestCase
     protected function getConversionValidationSchemas()
     {
         return array(
-            __DIR__ . "/../../../RichText/Resources/schemas/ezxhtml5/edit/ezxhtml5.xsd",
-            __DIR__ . "/../../../RichText/Resources/schemas/ezxhtml5/edit/ezxhtml5.iso.sch.xsl",
+            __DIR__ . '/../../../RichText/Resources/schemas/ezxhtml5/edit/ezxhtml5.xsd',
+            __DIR__ . '/../../../RichText/Resources/schemas/ezxhtml5/edit/ezxhtml5.iso.sch.xsl',
         );
     }
 }

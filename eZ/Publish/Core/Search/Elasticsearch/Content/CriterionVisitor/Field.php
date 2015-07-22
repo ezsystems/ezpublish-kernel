@@ -1,42 +1,43 @@
 <?php
+
 /**
- * File containing the abstract Field criterion visitor class
+ * File containing the abstract Field criterion visitor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 
-use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
- * Base class for Field criterion visitors
+ * Base class for Field criterion visitors.
  */
 abstract class Field extends FieldFilterBase
 {
     /**
-     * Field map
+     * Field map.
      *
      * @var \eZ\Publish\Core\Search\Common\FieldNameResolver
      */
     protected $fieldNameResolver;
 
     /**
-     * Create from FieldNameResolver
+     * Create from FieldNameResolver.
      *
      * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
      */
-    public function __construct( FieldNameResolver $fieldNameResolver )
+    public function __construct(FieldNameResolver $fieldNameResolver)
     {
         $this->fieldNameResolver = $fieldNameResolver;
     }
 
     /**
-     * Get field names
+     * Get field names.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param string $fieldDefinitionIdentifier
@@ -50,8 +51,7 @@ abstract class Field extends FieldFilterBase
         $fieldDefinitionIdentifier,
         $fieldTypeIdentifier = null,
         $name = null
-    )
-    {
+    ) {
         return $this->fieldNameResolver->getFieldNames(
             $criterion,
             $fieldDefinitionIdentifier,

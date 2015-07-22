@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\SPI\Tests\FieldType\TextLineIntegrationTest class
+ * File contains: eZ\Publish\SPI\Tests\FieldType\TextLineIntegrationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
 
 /**
- * Integration test for legacy storage field types
+ * Integration test for legacy storage field types.
  *
  * This abstract base test case is supposed to be the base for field type
  * integration tests. It basically calls all involved methods in the field type
@@ -36,7 +38,7 @@ use eZ\Publish\SPI\Persistence\Content;
 class TextLineIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -46,14 +48,14 @@ class TextLineIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get handler with required custom field types registered
+     * Get handler with required custom field types registered.
      *
      * @return Handler
      */
     public function getCustomHandler()
     {
         $fieldType = new FieldType\TextLine\Type();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
         return $this->getHandler(
             'ezstring',
@@ -75,7 +77,7 @@ class TextLineIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field definition data values
+     * Get field definition data values.
      *
      * This is a PHPUnit data provider
      *
@@ -86,7 +88,7 @@ class TextLineIntegrationTest extends BaseIntegrationTest
         return array(
             // The ezstring field type does not have any special field definition
             // properties
-            array( 'fieldType', 'ezstring' ),
+            array('fieldType', 'ezstring'),
             array(
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(
@@ -98,13 +100,13 @@ class TextLineIntegrationTest extends BaseIntegrationTest
                             ),
                         ),
                     )
-                )
+                ),
             ),
         );
     }
 
     /**
-     * Get initial field value
+     * Get initial field value.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -112,9 +114,9 @@ class TextLineIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => 'Some text…',
+                'data' => 'Some text…',
                 'externalData' => null,
-                'sortKey'      => 'some text',
+                'sortKey' => 'some text',
             )
         );
     }
@@ -130,9 +132,9 @@ class TextLineIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => null,
+                'data' => null,
                 'externalData' => null,
-                'sortKey'      => '',
+                'sortKey' => '',
             )
         );
     }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the BaseContentTypeServiceTest class
+ * File containing the BaseContentTypeServiceTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,16 +27,16 @@ abstract class BaseContentTypeServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $creatorId = $this->generateId( 'user', 14 );
+        $creatorId = $this->generateId('user', 14);
         /* BEGIN: Inline */
         $contentTypeService = $repository->getContentTypeService();
 
         $groups = array(
-            $contentTypeService->loadContentTypeGroupByIdentifier( 'Content' ),
-            $contentTypeService->loadContentTypeGroupByIdentifier( 'Setup' )
+            $contentTypeService->loadContentTypeGroupByIdentifier('Content'),
+            $contentTypeService->loadContentTypeGroupByIdentifier('Setup'),
         );
 
-        $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct('blog-post');
         $typeCreate->mainLanguageCode = 'eng-US';
         $typeCreate->remoteId = '384b94a1bd6bc06826410e284dd9684887bf56fc';
         $typeCreate->urlAliasSchema = 'url|scheme';
@@ -51,9 +53,7 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $typeCreate->creatorId = $creatorId;
         $typeCreate->creationDate = $this->createDateTime();
 
-        $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'title', 'ezstring'
-        );
+        $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('title', 'ezstring');
         $titleFieldCreate->names = array(
             'eng-US' => 'Title',
             'ger-DE' => 'Titel',
@@ -76,11 +76,9 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $titleFieldCreate->fieldSettings = array();
         $titleFieldCreate->isSearchable = true;
 
-        $typeCreate->addFieldDefinition( $titleFieldCreate );
+        $typeCreate->addFieldDefinition($titleFieldCreate);
 
-        $bodyFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'body', 'eztext'
-        );
+        $bodyFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('body', 'eztext');
         $bodyFieldCreate->names = array(
             'eng-US' => 'Body',
             'ger-DE' => 'Textkörper',
@@ -96,11 +94,11 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $bodyFieldCreate->isInfoCollector = false;
         $bodyFieldCreate->validatorConfiguration = array();
         $bodyFieldCreate->fieldSettings = array(
-            'textRows' => 80
+            'textRows' => 80,
         );
         $bodyFieldCreate->isSearchable = false;
 
-        $typeCreate->addFieldDefinition( $bodyFieldCreate );
+        $typeCreate->addFieldDefinition($bodyFieldCreate);
 
         $contentTypeDraft = $contentTypeService->createContentType(
             $typeCreate,
@@ -120,8 +118,8 @@ abstract class BaseContentTypeServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $parentLocationId = $this->generateId( 'location', 56 );
-        $sectionId = $this->generateId( 'section', 1 );
+        $parentLocationId = $this->generateId('location', 56);
+        $sectionId = $this->generateId('section', 1);
         /* BEGIN: Inline */
         // $parentLocationId is the id of the "/Design/eZ-publish" Location
 
@@ -130,7 +128,7 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Configure new location
-        $locationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
+        $locationCreate = $locationService->newLocationCreateStruct($parentLocationId);
 
         $locationCreate->priority = 23;
         $locationCreate->hidden = true;
@@ -139,22 +137,22 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
 
         // Load content type
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'blog-post' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('blog-post');
 
         // Configure new content object
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
+        $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
 
-        $contentCreate->setField( 'title', 'My awesome blog post' );
-        $contentCreate->setField( 'body', 'Body is not done yet but it is going to be awesome...' );
-        $contentCreate->setField( 'title', 'My marvellous blog post', 'eng-GB' );
-        $contentCreate->setField( 'body', 'Body is not done yet but it is going to be jolly good...', 'eng-GB' );
+        $contentCreate->setField('title', 'My awesome blog post');
+        $contentCreate->setField('body', 'Body is not done yet but it is going to be awesome...');
+        $contentCreate->setField('title', 'My marvellous blog post', 'eng-GB');
+        $contentCreate->setField('body', 'Body is not done yet but it is going to be jolly good...', 'eng-GB');
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         // $sectionId is the ID of section 1
         $contentCreate->sectionId = $sectionId;
         $contentCreate->alwaysAvailable = true;
 
         // Create a draft
-        $draft = $contentService->createContent( $contentCreate, array( $locationCreate ) );
+        $draft = $contentService->createContent($contentCreate, array($locationCreate));
         /* END: Inline */
 
         return $draft;

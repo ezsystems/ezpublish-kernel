@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the DoctrineDatabase location priority criterion handler class
+ * File containing the DoctrineDatabase location priority criterion handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,7 +18,7 @@ use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use RuntimeException;
 
 /**
- * Location priority criterion handler
+ * Location priority criterion handler.
  */
 class Priority extends CriterionHandler
 {
@@ -25,15 +27,15 @@ class Priority extends CriterionHandler
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return boolean
+     * @return bool
      */
-    public function accept( Criterion $criterion )
+    public function accept(Criterion $criterion)
     {
         return $criterion instanceof Criterion\Location\Priority;
     }
 
     /**
-     * Generate query expression for a Criterion this handler accepts
+     * Generate query expression for a Criterion this handler accepts.
      *
      * accept() must be called before calling this method.
      *
@@ -49,17 +51,15 @@ class Priority extends CriterionHandler
         SelectQuery $query,
         Criterion $criterion,
         array $fieldFilters
-    )
-    {
-        $column = $this->dbHandler->quoteColumn( 'priority' );
+    ) {
+        $column = $this->dbHandler->quoteColumn('priority');
 
-        switch ( $criterion->operator )
-        {
+        switch ($criterion->operator) {
             case Criterion\Operator::BETWEEN:
                 return $query->expr->between(
                     $column,
-                    $query->bindValue( $criterion->value[0] ),
-                    $query->bindValue( $criterion->value[1] )
+                    $query->bindValue($criterion->value[0]),
+                    $query->bindValue($criterion->value[1])
                 );
 
             case Criterion\Operator::GT:
@@ -67,9 +67,10 @@ class Priority extends CriterionHandler
             case Criterion\Operator::LT:
             case Criterion\Operator::LTE:
                 $operatorFunction = $this->comparatorMap[$criterion->operator];
+
                 return $query->expr->$operatorFunction(
                     $column,
-                    $query->bindValue( reset( $criterion->value ) )
+                    $query->bindValue(reset($criterion->value))
                 );
 
             default:
@@ -79,4 +80,3 @@ class Priority extends CriterionHandler
         }
     }
 }
-

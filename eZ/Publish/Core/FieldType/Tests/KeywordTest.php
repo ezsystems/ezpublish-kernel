@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the KeywordTest class
+ * File containing the KeywordTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -32,7 +34,7 @@ class KeywordTest extends FieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         $fieldType = new KeywordType();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
     }
@@ -59,12 +61,10 @@ class KeywordTest extends FieldTypeTest
 
     /**
      * Returns the empty value expected from the field type.
-     *
-     * @return void
      */
     protected function getEmptyValueExpectation()
     {
-        return new KeywordValue( array() );
+        return new KeywordValue(array());
     }
 
     /**
@@ -134,29 +134,29 @@ class KeywordTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new KeywordValue( array() ),
+                new KeywordValue(array()),
             ),
             array(
                 array(),
-                new KeywordValue( array() ),
+                new KeywordValue(array()),
             ),
             array(
                 'foo',
-                new KeywordValue( array( 'foo' ) ),
+                new KeywordValue(array('foo')),
             ),
             array(
-                array( 'foo' ),
-                new KeywordValue( array( 'foo' ) ),
+                array('foo'),
+                new KeywordValue(array('foo')),
             ),
             array(
-                new KeywordValue( array( 'foo' ) ),
-                new KeywordValue( array( 'foo' ) ),
+                new KeywordValue(array('foo')),
+                new KeywordValue(array('foo')),
             ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -194,18 +194,18 @@ class KeywordTest extends FieldTypeTest
     {
         return array(
             array(
-                new KeywordValue( array() ),
+                new KeywordValue(array()),
                 array(),
             ),
             array(
-                new KeywordValue( array( 'foo', 'bar' ) ),
-                array( 'foo', 'bar' ),
+                new KeywordValue(array('foo', 'bar')),
+                array('foo', 'bar'),
             ),
         );
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -244,11 +244,11 @@ class KeywordTest extends FieldTypeTest
         return array(
             array(
                 array(),
-                new KeywordValue( array() ),
+                new KeywordValue(array()),
             ),
             array(
-                array( 'foo', 'bar' ),
-                new KeywordValue( array( 'foo', 'bar' ) ),
+                array('foo', 'bar'),
+                new KeywordValue(array('foo', 'bar')),
             ),
         );
     }
@@ -261,8 +261,8 @@ class KeywordTest extends FieldTypeTest
     public function provideDataForGetName()
     {
         return array(
-            array( $this->getEmptyValueExpectation(), "" ),
-            array( new KeywordValue( array( 'foo', 'bar' ) ), "foo, bar" )
+            array($this->getEmptyValueExpectation(), ''),
+            array(new KeywordValue(array('foo', 'bar')), 'foo, bar'),
         );
     }
 }

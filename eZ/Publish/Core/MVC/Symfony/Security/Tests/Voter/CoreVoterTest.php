@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the CoreVoterTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,33 +26,33 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->repository = $this->getMock( 'eZ\Publish\API\Repository\Repository' );
+        $this->repository = $this->getMock('eZ\Publish\API\Repository\Repository');
     }
 
     /**
      * @dataProvider supportsAttributeProvider
      */
-    public function testSupportsAttribute( $attribute, $expectedResult )
+    public function testSupportsAttribute($attribute, $expectedResult)
     {
-        $voter = new CoreVoter( $this->repository );
-        $this->assertSame( $expectedResult, $voter->supportsAttribute( $attribute ) );
+        $voter = new CoreVoter($this->repository);
+        $this->assertSame($expectedResult, $voter->supportsAttribute($attribute));
     }
 
     public function supportsAttributeProvider()
     {
         return array(
-            array( 'foo', false ),
-            array( new Attribute( 'foo', 'bar' ), true ),
-            array( new Attribute( 'foo', 'bar', array( 'some' => 'thing' ) ), false ),
-            array( new \stdClass(), false ),
-            array( array( 'foo' ), false ),
+            array('foo', false),
+            array(new Attribute('foo', 'bar'), true),
+            array(new Attribute('foo', 'bar', array('some' => 'thing')), false),
+            array(new \stdClass(), false),
+            array(array('foo'), false),
             array(
                 new Attribute(
                     'foo',
                     'bar',
-                    array( 'valueObject' => $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' ) )
+                    array('valueObject' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject'))
                 ),
-                false
+                false,
             ),
         );
     }
@@ -58,33 +60,33 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider supportsClassProvider
      */
-    public function testSupportsClass( $class )
+    public function testSupportsClass($class)
     {
-        $voter = new CoreVoter( $this->repository );
-        $this->assertTrue( $voter->supportsClass( $class ) );
+        $voter = new CoreVoter($this->repository);
+        $this->assertTrue($voter->supportsClass($class));
     }
 
     public function supportsClassProvider()
     {
         return array(
-            array( 'foo' ),
-            array( 'bar' ),
-            array( 'eZ\Publish\API\Repository\Values\ValueObject' ),
-            array( 'eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController' ),
+            array('foo'),
+            array('bar'),
+            array('eZ\Publish\API\Repository\Values\ValueObject'),
+            array('eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController'),
         );
     }
 
     /**
      * @dataProvider voteInvalidAttributeProvider
      */
-    public function testVoteInvalidAttribute( array $attributes )
+    public function testVoteInvalidAttribute(array $attributes)
     {
-        $voter = new CoreVoter( $this->repository );
+        $voter = new CoreVoter($this->repository);
         $this->assertSame(
             VoterInterface::ACCESS_ABSTAIN,
             $voter->vote(
-                $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface' ),
-                new \stdClass,
+                $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface'),
+                new \stdClass(),
                 $attributes
             )
         );
@@ -93,19 +95,19 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
     public function voteInvalidAttributeProvider()
     {
         return array(
-            array( array() ),
-            array( array( 'foo' ) ),
-            array( array( 'foo', 'bar', array( 'some' => 'thing' ) ) ),
-            array( array( new \stdClass ) ),
+            array(array()),
+            array(array('foo')),
+            array(array('foo', 'bar', array('some' => 'thing'))),
+            array(array(new \stdClass())),
             array(
                 array(
                     new Attribute(
                         'foo',
                         'bar',
-                        array( 'valueObject' => $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' ) )
-                    )
+                        array('valueObject' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject'))
+                    ),
                 ),
-                false
+                false,
             ),
         );
     }
@@ -113,30 +115,27 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider voteProvider
      */
-    public function testVote( Attribute $attribute, $repositoryCanUser, $expectedResult )
+    public function testVote(Attribute $attribute, $repositoryCanUser, $expectedResult)
     {
-        $voter = new CoreVoter( $this->repository );
-        if ( $repositoryCanUser !== null )
-        {
+        $voter = new CoreVoter($this->repository);
+        if ($repositoryCanUser !== null) {
             $this->repository
-                ->expects( $this->once() )
-                ->method( 'hasAccess' )
-                ->with( $attribute->module, $attribute->function )
-                ->will( $this->returnValue( $repositoryCanUser ) );
-        }
-        else
-        {
+                ->expects($this->once())
+                ->method('hasAccess')
+                ->with($attribute->module, $attribute->function)
+                ->will($this->returnValue($repositoryCanUser));
+        } else {
             $this->repository
-                ->expects( $this->never() )
-                ->method( 'hasAccess' );
+                ->expects($this->never())
+                ->method('hasAccess');
         }
 
         $this->assertSame(
             $expectedResult,
             $voter->vote(
-                $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface' ),
-                new \stdClass,
-                array( $attribute )
+                $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface'),
+                new \stdClass(),
+                array($attribute)
             )
         );
     }
@@ -145,72 +144,72 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                new Attribute( 'content', 'read' ),
+                new Attribute('content', 'read'),
                 true,
-                VoterInterface::ACCESS_GRANTED
+                VoterInterface::ACCESS_GRANTED,
             ),
             array(
-                new Attribute( 'foo', 'bar' ),
+                new Attribute('foo', 'bar'),
                 true,
-                VoterInterface::ACCESS_GRANTED
+                VoterInterface::ACCESS_GRANTED,
             ),
             array(
-                new Attribute( 'content', 'read' ),
+                new Attribute('content', 'read'),
                 false,
-                VoterInterface::ACCESS_DENIED
+                VoterInterface::ACCESS_DENIED,
             ),
             array(
-                new Attribute( 'some', 'thing' ),
+                new Attribute('some', 'thing'),
                 false,
-                VoterInterface::ACCESS_DENIED
+                VoterInterface::ACCESS_DENIED,
             ),
             array(
                 new Attribute(
                     'content',
                     'read',
                     array(
-                        'valueObject' => $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' ),
-                        'targets' => $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' )
+                        'valueObject' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject'),
+                        'targets' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject'),
                     )
                 ),
                 null,
-                VoterInterface::ACCESS_ABSTAIN
+                VoterInterface::ACCESS_ABSTAIN,
             ),
             array(
                 new Attribute(
                     'content',
                     'read',
                     array(
-                        'valueObject' => $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' ),
-                        'targets' => array( $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' ) )
+                        'valueObject' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject'),
+                        'targets' => array($this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject')),
                     )
                 ),
                 null,
-                VoterInterface::ACCESS_ABSTAIN
+                VoterInterface::ACCESS_ABSTAIN,
             ),
             array(
                 new Attribute(
                     'content',
                     'read',
                     array(
-                        'valueObject' => $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' ),
-                        'targets' => $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' )
+                        'valueObject' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject'),
+                        'targets' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject'),
                     )
                 ),
                 null,
-                VoterInterface::ACCESS_ABSTAIN
+                VoterInterface::ACCESS_ABSTAIN,
             ),
             array(
                 new Attribute(
                     'content',
                     'read',
                     array(
-                        'valueObject' => $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' ),
-                        'targets' => array( $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' ) )
+                        'valueObject' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject'),
+                        'targets' => array($this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject')),
                     )
                 ),
                 null,
-                VoterInterface::ACCESS_ABSTAIN
+                VoterInterface::ACCESS_ABSTAIN,
             ),
         );
     }

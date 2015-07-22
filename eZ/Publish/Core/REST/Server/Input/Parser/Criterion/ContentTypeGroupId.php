@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentTypeGroupId parser class
+ * File containing the ContentTypeGroupId parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,12 +17,12 @@ use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeGroupId as ContentTypeGroupIdCriterion;
 
 /**
- * Parser for ContentTypeGroupId Criterion
+ * Parser for ContentTypeGroupId Criterion.
  */
 class ContentTypeGroupId extends BaseParser
 {
     /**
-     * Parses input structure to a Criterion object
+     * Parses input structure to a Criterion object.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -29,12 +31,12 @@ class ContentTypeGroupId extends BaseParser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeGroupId
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        if ( !array_key_exists( "ContentTypeGroupIdCriterion", $data ) )
-        {
-            throw new Exceptions\Parser( "Invalid <ContentTypeGroupIdCriterion> format" );
+        if (!array_key_exists('ContentTypeGroupIdCriterion', $data)) {
+            throw new Exceptions\Parser('Invalid <ContentTypeGroupIdCriterion> format');
         }
-        return new ContentTypeGroupIdCriterion( $data["ContentTypeGroupIdCriterion"] );
+
+        return new ContentTypeGroupIdCriterion($data['ContentTypeGroupIdCriterion']);
     }
 }

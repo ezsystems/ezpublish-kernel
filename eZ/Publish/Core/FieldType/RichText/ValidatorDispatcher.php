@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file contains the ValidatorDispatcher class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -27,11 +29,10 @@ class ValidatorDispatcher
     /**
      * @param \eZ\Publish\Core\FieldType\RichText\Validator[] $validatorMap
      */
-    public function __construct( $validatorMap )
+    public function __construct($validatorMap)
     {
-        foreach ( $validatorMap as $namespace => $validator )
-        {
-            $this->addValidator( $namespace, $validator );
+        foreach ($validatorMap as $namespace => $validator) {
+            $this->addValidator($namespace, $validator);
         }
     }
 
@@ -41,7 +42,7 @@ class ValidatorDispatcher
      * @param string $namespace
      * @param \eZ\Publish\Core\FieldType\RichText\Validator $validator
      */
-    public function addValidator( $namespace, Validator $validator = null )
+    public function addValidator($namespace, Validator $validator = null)
     {
         $this->mapping[$namespace] = $validator;
     }
@@ -55,27 +56,24 @@ class ValidatorDispatcher
      *
      * @return string[]
      */
-    public function dispatch( DOMDocument $document )
+    public function dispatch(DOMDocument $document)
     {
-        $documentNamespace = $document->documentElement->lookupNamespaceURI( null );
+        $documentNamespace = $document->documentElement->lookupNamespaceURI(null);
         // checking for null as ezxml has no default namespace...
-        if ( $documentNamespace === null )
-        {
-            $documentNamespace = $document->documentElement->lookupNamespaceURI( "xhtml" );
+        if ($documentNamespace === null) {
+            $documentNamespace = $document->documentElement->lookupNamespaceURI('xhtml');
         }
 
-        foreach ( $this->mapping as $namespace => $validator )
-        {
-            if ( $documentNamespace === $namespace )
-            {
-                if ( $validator === null )
-                {
+        foreach ($this->mapping as $namespace => $validator) {
+            if ($documentNamespace === $namespace) {
+                if ($validator === null) {
                     return array();
                 }
-                return $validator->validate( $document );
+
+                return $validator->validate($document);
             }
         }
 
-        throw new NotFoundException( "Validator", $documentNamespace );
+        throw new NotFoundException('Validator', $documentNamespace);
     }
 }

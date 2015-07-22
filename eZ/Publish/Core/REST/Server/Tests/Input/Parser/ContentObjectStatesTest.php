@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,20 +16,20 @@ use eZ\Publish\Core\REST\Common\Input\Parser;
 class ContentObjectStatesTest extends BaseTest
 {
     /**
-     * Tests the ContentObjectStates parser
+     * Tests the ContentObjectStates parser.
      */
     public function testParse()
     {
         $inputArray = array(
             'ObjectState' => array(
                 array(
-                    '_href' => '/content/objectstategroups/42/objectstates/21'
-                )
-            )
+                    '_href' => '/content/objectstategroups/42/objectstates/21',
+                ),
+            ),
         );
 
         $objectState = $this->getParser();
-        $result = $objectState->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $objectState->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInternalType(
             'array',
@@ -66,7 +68,7 @@ class ContentObjectStatesTest extends BaseTest
     }
 
     /**
-     * Test ContentObjectStates parser throwing exception on missing href
+     * Test ContentObjectStates parser throwing exception on missing href.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for ObjectState.
@@ -76,26 +78,26 @@ class ContentObjectStatesTest extends BaseTest
         $inputArray = array(
             'ObjectState' => array(
                 array(
-                    '_href' => '/content/objectstategroups/42/objectstates/21'
+                    '_href' => '/content/objectstategroups/42/objectstates/21',
                 ),
-                array()
-            )
+                array(),
+            ),
         );
 
         $objectState = $this->getParser();
-        $objectState->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $objectState->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     public function getParseHrefExpectationsMap()
     {
         return array(
-            array( '/content/objectstategroups/42/objectstates/21', 'objectStateId', 21 ),
-            array( '/content/objectstategroups/42/objectstates/21', 'objectStateGroupId', 42 ),
+            array('/content/objectstategroups/42/objectstates/21', 'objectStateId', 21),
+            array('/content/objectstategroups/42/objectstates/21', 'objectStateGroupId', 42),
         );
     }
 
     /**
-     * Gets the ContentObjectStates parser
+     * Gets the ContentObjectStates parser.
      *
      * @return \eZ\Publish\Core\REST\Common\Input\Parser\ContentObjectStates;
      */

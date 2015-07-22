@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the eZ Publish package.
  *
@@ -23,20 +24,20 @@ class BlockingLimitation extends Limitation
     protected $identifier;
 
     /**
-     * Create new Blocking Limitation with identifier injected dynamically
+     * Create new Blocking Limitation with identifier injected dynamically.
      *
      * @throws \InvalidArgumentException If $identifier is empty
+     *
      * @param string $identifier The identifier of the limitation
      * @param array $limitationValues
      */
-    public function __construct( $identifier, array $limitationValues )
+    public function __construct($identifier, array $limitationValues)
     {
-        if ( empty( $identifier ) )
-        {
-            throw new \InvalidArgumentException( 'Argument $identifier can not be empty' );
+        if (empty($identifier)) {
+            throw new \InvalidArgumentException('Argument $identifier can not be empty');
         }
 
-        parent::__construct( array( 'identifier' => $identifier, 'limitationValues' => $limitationValues ) );
+        parent::__construct(array('identifier' => $identifier, 'limitationValues' => $limitationValues));
     }
 
     /**

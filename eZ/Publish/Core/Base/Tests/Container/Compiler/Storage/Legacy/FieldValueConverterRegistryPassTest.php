@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the FieldValueConverterRegistryPassTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,18 +22,18 @@ class FieldValueConverterRegistryPassTest extends AbstractCompilerPassTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->setDefinition( 'ezpublish.persistence.legacy.field_value_converter.registry', new Definition() );
+        $this->setDefinition('ezpublish.persistence.legacy.field_value_converter.registry', new Definition());
     }
 
     /**
      * Register the compiler pass under test, just like you would do inside a bundle's load()
-     * method:
+     * method:.
      *
      *   $container->addCompilerPass(new MyCompilerPass());
      */
-    protected function registerCompilerPass( ContainerBuilder $container )
+    protected function registerCompilerPass(ContainerBuilder $container)
     {
-        $container->addCompilerPass( new FieldValueConverterRegistryPass() );
+        $container->addCompilerPass(new FieldValueConverterRegistryPass());
     }
 
     public function testRegisterConverter()
@@ -42,23 +44,23 @@ class FieldValueConverterRegistryPassTest extends AbstractCompilerPassTestCase
         $callback = '::foobar';
 
         $def = new Definition();
-        $def->setClass( $class );
+        $def->setClass($class);
         $def->addTag(
             'ezpublish.storageEngine.legacy.converter',
             array(
                 'alias' => $fieldTypeIdentifier,
                 'lazy' => true,
-                'callback' => $callback
+                'callback' => $callback,
             )
         );
-        $this->setDefinition( $serviceId, $def );
+        $this->setDefinition($serviceId, $def);
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.persistence.legacy.field_value_converter.registry',
             'register',
-            array( $fieldTypeIdentifier, $class . $callback )
+            array($fieldTypeIdentifier, $class . $callback)
         );
     }
 
@@ -73,22 +75,22 @@ class FieldValueConverterRegistryPassTest extends AbstractCompilerPassTestCase
         $callback = '::foobar';
 
         $def = new Definition();
-        $def->setClass( $class );
+        $def->setClass($class);
         $def->addTag(
             'ezpublish.storageEngine.legacy.converter',
             array(
                 'lazy' => true,
-                'callback' => $callback
+                'callback' => $callback,
             )
         );
-        $this->setDefinition( $serviceId, $def );
+        $this->setDefinition($serviceId, $def);
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.persistence.legacy.field_value_converter.registry',
             'register',
-            array( $fieldTypeIdentifier, $class . $callback )
+            array($fieldTypeIdentifier, $class . $callback)
         );
     }
 
@@ -103,7 +105,7 @@ class FieldValueConverterRegistryPassTest extends AbstractCompilerPassTestCase
         $callback = '::foobar';
 
         $def = new Definition();
-        $def->setClass( $class );
+        $def->setClass($class);
         $def->addTag(
             'ezpublish.storageEngine.legacy.converter',
             array(
@@ -111,14 +113,14 @@ class FieldValueConverterRegistryPassTest extends AbstractCompilerPassTestCase
                 'lazy' => true,
             )
         );
-        $this->setDefinition( $serviceId, $def );
+        $this->setDefinition($serviceId, $def);
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.persistence.legacy.field_value_converter.registry',
             'register',
-            array( $fieldTypeIdentifier, $class . $callback )
+            array($fieldTypeIdentifier, $class . $callback)
         );
     }
 
@@ -129,19 +131,19 @@ class FieldValueConverterRegistryPassTest extends AbstractCompilerPassTestCase
         $class = 'Some\Class';
 
         $def = new Definition();
-        $def->setClass( $class );
+        $def->setClass($class);
         $def->addTag(
             'ezpublish.storageEngine.legacy.converter',
-            array( 'alias' => $fieldTypeIdentifier )
+            array('alias' => $fieldTypeIdentifier)
         );
-        $this->setDefinition( $serviceId, $def );
+        $this->setDefinition($serviceId, $def);
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.persistence.legacy.field_value_converter.registry',
             'register',
-            array( $fieldTypeIdentifier, new Reference( $serviceId ) )
+            array($fieldTypeIdentifier, new Reference($serviceId))
         );
     }
 }

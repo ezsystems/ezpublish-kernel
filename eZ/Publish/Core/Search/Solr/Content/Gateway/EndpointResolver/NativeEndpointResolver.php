@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,12 +15,12 @@ use eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver;
 use RuntimeException;
 
 /**
- * NativeEndpointResolver provides Solr endpoints for a Content translations
+ * NativeEndpointResolver provides Solr endpoints for a Content translations.
  */
 class NativeEndpointResolver implements EndpointResolver
 {
     /**
-     * Holds an array of Solr entry endpoint names
+     * Holds an array of Solr entry endpoint names.
      *
      * @var string[]
      */
@@ -40,21 +42,21 @@ class NativeEndpointResolver implements EndpointResolver
     private $endpointMap;
 
     /**
-     * Holds a name of the default Endpoint used for translations, if configured
+     * Holds a name of the default Endpoint used for translations, if configured.
      *
      * @var null|string
      */
     private $defaultEndpoint;
 
     /**
-     * Holds a name of the Endpoint used to index translations in main languages, if configured
+     * Holds a name of the Endpoint used to index translations in main languages, if configured.
      *
      * @var null|string
      */
     private $mainLanguagesEndpoint;
 
     /**
-     * Create from Endpoint names
+     * Create from Endpoint names.
      *
      * @param string[] $entryEndpoints
      * @param string[] $endpointMap
@@ -66,8 +68,7 @@ class NativeEndpointResolver implements EndpointResolver
         array $endpointMap = array(),
         $defaultEndpoint = null,
         $mainLanguagesEndpoint = null
-    )
-    {
+    ) {
         $this->entryEndpoints = $entryEndpoints;
         $this->endpointMap = $endpointMap;
         $this->defaultEndpoint = $defaultEndpoint;
@@ -76,23 +77,20 @@ class NativeEndpointResolver implements EndpointResolver
 
     public function getEntryEndpoint()
     {
-        if ( empty( $this->entryEndpoints ) )
-        {
-            throw new RuntimeException( "Not entry endpoints defined" );
+        if (empty($this->entryEndpoints)) {
+            throw new RuntimeException('Not entry endpoints defined');
         }
 
-        return reset( $this->entryEndpoints );
+        return reset($this->entryEndpoints);
     }
 
-    public function getIndexingTarget( $languageCode )
+    public function getIndexingTarget($languageCode)
     {
-        if ( isset( $this->endpointMap[$languageCode] ) )
-        {
+        if (isset($this->endpointMap[$languageCode])) {
             return $this->endpointMap[$languageCode];
         }
 
-        if ( isset( $this->defaultEndpoint ) )
-        {
+        if (isset($this->defaultEndpoint)) {
             return $this->defaultEndpoint;
         }
 
@@ -106,75 +104,63 @@ class NativeEndpointResolver implements EndpointResolver
         return $this->mainLanguagesEndpoint;
     }
 
-    public function getSearchTargets( array $languageSettings )
+    public function getSearchTargets(array $languageSettings)
     {
         $languages = (
-            empty( $languageSettings["languages"] ) ?
+            empty($languageSettings['languages']) ?
                 array() :
-                $languageSettings["languages"]
+                $languageSettings['languages']
         );
         $useAlwaysAvailable = (
-            !isset( $languageSettings["useAlwaysAvailable"] ) ||
-            $languageSettings["useAlwaysAvailable"] === true
+            !isset($languageSettings['useAlwaysAvailable']) ||
+            $languageSettings['useAlwaysAvailable'] === true
         );
 
-        if ( ( $useAlwaysAvailable || empty( $languages ) ) && !isset( $this->mainLanguagesEndpoint ) )
-        {
+        if (($useAlwaysAvailable || empty($languages)) && !isset($this->mainLanguagesEndpoint)) {
             return $this->getEndpoints();
         }
 
         $targetSet = array();
 
-        foreach ( $languages as $languageCode )
-        {
-            if ( isset( $this->endpointMap[$languageCode] ) )
-            {
+        foreach ($languages as $languageCode) {
+            if (isset($this->endpointMap[$languageCode])) {
                 $targetSet[$this->endpointMap[$languageCode]] = true;
-            }
-            else if ( isset( $this->defaultEndpoint ) )
-            {
+            } elseif (isset($this->defaultEndpoint)) {
                 $targetSet[$this->defaultEndpoint] = true;
-            }
-            else
-            {
+            } else {
                 throw new RuntimeException(
                     "Language '{$languageCode}' is not mapped to Solr endpoint"
                 );
             }
         }
 
-        if ( ( $useAlwaysAvailable || empty( $targetSet ) ) && isset( $this->mainLanguagesEndpoint ) )
-        {
+        if (($useAlwaysAvailable || empty($targetSet)) && isset($this->mainLanguagesEndpoint)) {
             $targetSet[$this->mainLanguagesEndpoint] = true;
         }
 
-        if ( empty( $targetSet ) )
-        {
-            throw new RuntimeException( "No endpoints defined for given language settings" );
+        if (empty($targetSet)) {
+            throw new RuntimeException('No endpoints defined for given language settings');
         }
 
-        return array_keys( $targetSet );
+        return array_keys($targetSet);
     }
 
     public function getEndpoints()
     {
-        $endpointSet = array_flip( $this->endpointMap );
+        $endpointSet = array_flip($this->endpointMap);
 
-        if ( isset( $this->defaultEndpoint ) )
-        {
+        if (isset($this->defaultEndpoint)) {
             $endpointSet[$this->defaultEndpoint] = true;
         }
 
-        if ( isset( $this->mainLanguagesEndpoint ) )
-        {
+        if (isset($this->mainLanguagesEndpoint)) {
             $endpointSet[$this->mainLanguagesEndpoint] = true;
         }
 
-        if ( empty( $endpointSet ) )
-        {
-            throw new RuntimeException( "No endpoints defined" );
+        if (empty($endpointSet)) {
+            throw new RuntimeException('No endpoints defined');
         }
 
-        return array_keys( $endpointSet );
+        return array_keys($endpointSet);
     }
 }

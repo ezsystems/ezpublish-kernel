@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RichTextProcessorTest class
+ * File containing the RichTextProcessorTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,7 +22,7 @@ class RichTextProcessorTest extends PHPUnit_Framework_TestCase
         $processor = $this->getProcessor();
 
         $outputValue = array(
-            "xml" => <<<EOT
+            'xml' => <<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
     <title>Some text</title>
@@ -29,7 +31,7 @@ class RichTextProcessorTest extends PHPUnit_Framework_TestCase
 EOT
         );
         $processedOutputValue = $outputValue;
-        $processedOutputValue["xhtml5edit"] = <<<EOT
+        $processedOutputValue['xhtml5edit'] = <<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5/edit">
     <h1>Some text</h1>
@@ -39,17 +41,17 @@ EOT
 EOT;
 
         $convertedDocument = new DOMDocument();
-        $convertedDocument->loadXML( $processedOutputValue["xhtml5edit"] );
+        $convertedDocument->loadXML($processedOutputValue['xhtml5edit']);
 
         $this->converter
-            ->expects( $this->once() )
-            ->method( "convert" )
-            ->with( $this->isInstanceOf( "DOMDocument" ) )
-            ->will( $this->returnValue( $convertedDocument ) );
+            ->expects($this->once())
+            ->method('convert')
+            ->with($this->isInstanceOf('DOMDocument'))
+            ->will($this->returnValue($convertedDocument));
 
         $this->assertEquals(
             $processedOutputValue,
-            $processor->postProcessValueHash( $outputValue )
+            $processor->postProcessValueHash($outputValue)
         );
     }
 
@@ -63,8 +65,8 @@ EOT;
      */
     protected function getProcessor()
     {
-        $this->converter = $this->getMock( "eZ\\Publish\\Core\\FieldType\\RichText\\Converter" );
+        $this->converter = $this->getMock('eZ\\Publish\\Core\\FieldType\\RichText\\Converter');
 
-        return new RichTextProcessor( $this->converter );
+        return new RichTextProcessor($this->converter);
     }
 }

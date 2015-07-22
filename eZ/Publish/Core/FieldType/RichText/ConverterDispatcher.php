@@ -1,15 +1,16 @@
 <?php
+
 /**
  * This file contains the ConverterDispatcher class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\FieldType\RichText;
 
-use eZ\Publish\Core\FieldType\RichText\Converter;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use DOMDocument;
 
@@ -28,11 +29,10 @@ class ConverterDispatcher
     /**
      * @param \eZ\Publish\Core\FieldType\RichText\Converter[] $converterMap
      */
-    public function __construct( $converterMap )
+    public function __construct($converterMap)
     {
-        foreach ( $converterMap as $namespace => $converter )
-        {
-            $this->addConverter( $namespace, $converter );
+        foreach ($converterMap as $namespace => $converter) {
+            $this->addConverter($namespace, $converter);
         }
     }
 
@@ -42,7 +42,7 @@ class ConverterDispatcher
      * @param string $namespace
      * @param null|\eZ\Publish\Core\FieldType\RichText\Converter $converter
      */
-    public function addConverter( $namespace, Converter $converter = null )
+    public function addConverter($namespace, Converter $converter = null)
     {
         $this->mapping[$namespace] = $converter;
     }
@@ -56,27 +56,24 @@ class ConverterDispatcher
      *
      * @return \DOMDocument
      */
-    public function dispatch( DOMDocument $document )
+    public function dispatch(DOMDocument $document)
     {
-        $documentNamespace = $document->documentElement->lookupNamespaceURI( null );
+        $documentNamespace = $document->documentElement->lookupNamespaceURI(null);
         // checking for null as ezxml has no default namespace...
-        if ( $documentNamespace === null )
-        {
-            $documentNamespace = $document->documentElement->lookupNamespaceURI( "xhtml" );
+        if ($documentNamespace === null) {
+            $documentNamespace = $document->documentElement->lookupNamespaceURI('xhtml');
         }
 
-        foreach ( $this->mapping as $namespace => $converter )
-        {
-            if ( $documentNamespace === $namespace )
-            {
-                if ( $converter === null )
-                {
+        foreach ($this->mapping as $namespace => $converter) {
+            if ($documentNamespace === $namespace) {
+                if ($converter === null) {
                     return $document;
                 }
-                return $converter->convert( $document );
+
+                return $converter->convert($document);
             }
         }
 
-        throw new NotFoundException( "Converter", $documentNamespace );
+        throw new NotFoundException('Converter', $documentNamespace);
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the LocationLimitationTest class
+ * File containing the LocationLimitationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,49 +25,47 @@ use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation;
 class LocationLimitationTest extends BaseLimitationTest
 {
     /**
-     * Tests a LocationLimitation
+     * Tests a LocationLimitation.
      *
-     * @return void
      * @see eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation
      */
     public function testLocationLimitationAllow()
     {
         $repository = $this->getRepository();
 
-        $parentLocationId = $this->generateId( 'location', 60 );
+        $parentLocationId = $this->generateId('location', 60);
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         $roleService = $repository->getRoleService();
 
-        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+        $role = $roleService->loadRoleByIdentifier('Editor');
 
-        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new LocationLimitation(
-                array( 'limitationValues' => array( $parentLocationId ) )
+                array('limitationValues' => array($parentLocationId))
             )
         );
 
-        $role = $roleService->addPolicy( $role, $policyCreate );
+        $role = $roleService->addPolicy($role, $policyCreate);
 
-        $roleService->assignRoleToUser( $role, $user );
+        $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $draft = $this->createWikiPageDraft();
         /* END: Use Case */
 
         $this->assertEquals(
             'An awesome wiki page',
-            $draft->getFieldValue( 'title' )->text
+            $draft->getFieldValue('title')->text
         );
     }
 
     /**
-     * Tests a LocationLimitation
+     * Tests a LocationLimitation.
      *
-     * @return void
      * @see eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
@@ -73,26 +73,26 @@ class LocationLimitationTest extends BaseLimitationTest
     {
         $repository = $this->getRepository();
 
-        $parentLocationId = $this->generateId( 'location', 61 );
+        $parentLocationId = $this->generateId('location', 61);
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         $roleService = $repository->getRoleService();
 
-        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+        $role = $roleService->loadRoleByIdentifier('Editor');
 
-        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new LocationLimitation(
-                array( 'limitationValues' => array( $parentLocationId ) )
+                array('limitationValues' => array($parentLocationId))
             )
         );
 
-        $role = $roleService->addPolicy( $role, $policyCreate );
+        $role = $roleService->addPolicy($role, $policyCreate);
 
-        $roleService->assignRoleToUser( $role, $user );
+        $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $this->createWikiPageDraft();
         /* END: Use Case */

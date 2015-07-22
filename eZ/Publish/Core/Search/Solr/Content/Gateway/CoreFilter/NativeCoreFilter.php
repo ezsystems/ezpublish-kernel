@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,7 +22,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver;
 
 /**
- * Native core filter handles:
+ * Native core filter handles:.
  *
  * - search type (Content and Location)
  * - prioritized languages fallback
@@ -33,99 +35,92 @@ class NativeCoreFilter extends CoreFilter
      * Name of the Solr backend field holding document type identifier
      * ('content' or 'location').
      *
-     * @access private
      *
      * @var string
      */
-    const FIELD_DOCUMENT_TYPE = "document_type_id";
+    const FIELD_DOCUMENT_TYPE = 'document_type_id';
 
     /**
      * Name of the Solr backend field holding list of all translation's Content
      * language codes.
      *
-     * @access private
      *
      * @var string
      */
-    const FIELD_LANGUAGES = "language_code_ms";
+    const FIELD_LANGUAGES = 'language_code_ms';
 
     /**
      * Name of the Solr backend field holding language code of the indexed
      * translation.
      *
-     * @access private
      *
      * @var string
      */
-    const FIELD_LANGUAGE = "meta_indexed_language_code_s";
+    const FIELD_LANGUAGE = 'meta_indexed_language_code_s';
 
     /**
      * Name of the Solr backend field indicating if the indexed translation
      * is in the main language.
      *
-     * @access private
      *
      * @var string
      */
-    const FIELD_IS_MAIN_LANGUAGE = "meta_indexed_is_main_translation_b";
+    const FIELD_IS_MAIN_LANGUAGE = 'meta_indexed_is_main_translation_b';
 
     /**
      * Name of the Solr backend field indicating if the indexed translation
      * is always available.
      *
-     * @access private
      *
      * @var string
      */
-    const FIELD_IS_ALWAYS_AVAILABLE = "meta_indexed_is_main_translation_and_always_available_b";
+    const FIELD_IS_ALWAYS_AVAILABLE = 'meta_indexed_is_main_translation_and_always_available_b';
 
     /**
      * Name of the Solr backend field indicating if the indexed document is
      * located in the main translations index.
      *
-     * @access private
      *
      * @var string
      */
-    const FIELD_IS_MAIN_LANGUAGES_INDEX = "meta_indexed_main_translation_b";
+    const FIELD_IS_MAIN_LANGUAGES_INDEX = 'meta_indexed_main_translation_b';
 
     /**
      * Indicates presence of main languages index.
      *
-     * @var boolean
+     * @var bool
      */
     private $hasMainLanguagesEndpoint;
 
-    public function __construct( EndpointResolver $endpointResolver )
+    public function __construct(EndpointResolver $endpointResolver)
     {
         $this->hasMainLanguagesEndpoint = (
             $endpointResolver->getMainLanguagesEndpoint() !== null
         );
     }
 
-    public function apply( Query $query, array $languageSettings )
+    public function apply(Query $query, array $languageSettings)
     {
         $languages = (
-            empty( $languageSettings["languages"] ) ?
+            empty($languageSettings['languages']) ?
                 array() :
-                $languageSettings["languages"]
+                $languageSettings['languages']
         );
         $useAlwaysAvailable = (
-            !isset( $languageSettings["useAlwaysAvailable"] ) ||
-            $languageSettings["useAlwaysAvailable"] === true
+            !isset($languageSettings['useAlwaysAvailable']) ||
+            $languageSettings['useAlwaysAvailable'] === true
         );
 
-        $documentType = "content";
-        if ( $query instanceof LocationQuery )
-        {
-            $documentType = "location";
+        $documentType = 'content';
+        if ($query instanceof LocationQuery) {
+            $documentType = 'location';
         }
 
         $query->filter = new LogicalAnd(
             array(
-                new CustomField( self::FIELD_DOCUMENT_TYPE, Operator::EQ, $documentType ),
+                new CustomField(self::FIELD_DOCUMENT_TYPE, Operator::EQ, $documentType),
                 $query->filter,
-                $this->getCoreCriterion( $languages, $useAlwaysAvailable )
+                $this->getCoreCriterion($languages, $useAlwaysAvailable),
             )
         );
     }
@@ -137,26 +132,24 @@ class NativeCoreFilter extends CoreFilter
      * targeted translation endpoints.
      *
      * @param string[] $languageCodes
-     * @param boolean $useAlwaysAvailable
+     * @param bool $useAlwaysAvailable
      *
      * @return string
      */
-    private function getCoreCriterion( array $languageCodes, $useAlwaysAvailable )
+    private function getCoreCriterion(array $languageCodes, $useAlwaysAvailable)
     {
         // Handle languages if given
-        if ( !empty( $languageCodes ) )
-        {
+        if (!empty($languageCodes)) {
             // Get condition for prioritized languages fallback
-            $filter = $this->getLanguageFilter( $languageCodes );
+            $filter = $this->getLanguageFilter($languageCodes);
 
             // Handle always available fallback if used
-            if ( $useAlwaysAvailable )
-            {
+            if ($useAlwaysAvailable) {
                 // Combine conditions with OR
                 $filter = new LogicalOr(
                     array(
                         $filter,
-                        $this->getAlwaysAvailableFilter( $languageCodes )
+                        $this->getAlwaysAvailableFilter($languageCodes),
                     )
                 );
             }
@@ -166,7 +159,7 @@ class NativeCoreFilter extends CoreFilter
         }
 
         // Otherwise search only main languages
-        return new CustomField( self::FIELD_IS_MAIN_LANGUAGE, Operator::EQ, true );
+        return new CustomField(self::FIELD_IS_MAIN_LANGUAGE, Operator::EQ, true);
     }
 
     /**
@@ -176,25 +169,23 @@ class NativeCoreFilter extends CoreFilter
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
-    private function getLanguageFilter( array $languageCodes )
+    private function getLanguageFilter(array $languageCodes)
     {
         $languageFilters = array();
 
-        foreach ( $languageCodes as $languageCode )
-        {
+        foreach ($languageCodes as $languageCode) {
             // Include language
-            $condition = new CustomField( self::FIELD_LANGUAGE, Operator::EQ, $languageCode );
+            $condition = new CustomField(self::FIELD_LANGUAGE, Operator::EQ, $languageCode);
             // Get list of excluded languages
-            $excluded = $this->getExcludedLanguageCodes( $languageCodes, $languageCode );
+            $excluded = $this->getExcludedLanguageCodes($languageCodes, $languageCode);
 
             // Combine if list is not empty
-            if ( !empty( $excluded ) )
-            {
+            if (!empty($excluded)) {
                 $condition = new LogicalAnd(
                     array(
                         $condition,
                         new LogicalNot(
-                            new CustomField( self::FIELD_LANGUAGES, Operator::IN, $excluded )
+                            new CustomField(self::FIELD_LANGUAGES, Operator::IN, $excluded)
                         ),
                     )
                 );
@@ -204,26 +195,23 @@ class NativeCoreFilter extends CoreFilter
         }
 
         // Combine language fallback conditions with OR
-        if ( count( $languageFilters ) > 1 )
-        {
-            $languageFilters = array( new LogicalOr( $languageFilters ) );
+        if (count($languageFilters) > 1) {
+            $languageFilters = array(new LogicalOr($languageFilters));
         }
 
         // Exclude main languages index if used
-        if ( $this->hasMainLanguagesEndpoint )
-        {
+        if ($this->hasMainLanguagesEndpoint) {
             $languageFilters[] = new LogicalNot(
-                new CustomField( self::FIELD_IS_MAIN_LANGUAGES_INDEX, Operator::EQ, true )
+                new CustomField(self::FIELD_IS_MAIN_LANGUAGES_INDEX, Operator::EQ, true)
             );
         }
 
         // Combine conditions
-        if ( count( $languageFilters ) > 1 )
-        {
-            return new LogicalAnd( $languageFilters );
+        if (count($languageFilters) > 1) {
+            return new LogicalAnd($languageFilters);
         }
 
-        return reset( $languageFilters );
+        return reset($languageFilters);
     }
 
     /**
@@ -233,7 +221,7 @@ class NativeCoreFilter extends CoreFilter
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
-    private function getAlwaysAvailableFilter( array $languageCodes )
+    private function getAlwaysAvailableFilter(array $languageCodes)
     {
         $conditions = array(
             // Include always available main language translations
@@ -244,13 +232,12 @@ class NativeCoreFilter extends CoreFilter
             ),
             // Exclude all given languages
             new LogicalNot(
-                new CustomField( self::FIELD_LANGUAGES, Operator::IN, $languageCodes )
+                new CustomField(self::FIELD_LANGUAGES, Operator::IN, $languageCodes)
             ),
         );
 
         // Include only from main languages index if used
-        if ( $this->hasMainLanguagesEndpoint )
-        {
+        if ($this->hasMainLanguagesEndpoint) {
             $conditions[] = new CustomField(
                 self::FIELD_IS_MAIN_LANGUAGES_INDEX,
                 Operator::EQ,
@@ -259,7 +246,7 @@ class NativeCoreFilter extends CoreFilter
         }
 
         // Combine conditions
-        return new LogicalAnd( $conditions );
+        return new LogicalAnd($conditions);
     }
 
     /**
@@ -273,14 +260,12 @@ class NativeCoreFilter extends CoreFilter
      *
      * @return string[]
      */
-    private function getExcludedLanguageCodes( array $languageCodes, $selectedLanguageCode = null )
+    private function getExcludedLanguageCodes(array $languageCodes, $selectedLanguageCode = null)
     {
         $excludedLanguageCodes = array();
 
-        foreach ( $languageCodes as $languageCode )
-        {
-            if ( $selectedLanguageCode !== null && $languageCode === $selectedLanguageCode )
-            {
+        foreach ($languageCodes as $languageCode) {
+            if ($selectedLanguageCode !== null && $languageCode === $selectedLanguageCode) {
                 break;
             }
 

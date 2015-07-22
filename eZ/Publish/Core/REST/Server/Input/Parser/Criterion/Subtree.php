@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Subtree parser class
+ * File containing the Subtree parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,12 +17,12 @@ use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree as SubtreeCriterion;
 
 /**
- * Parser for Subtree Criterion
+ * Parser for Subtree Criterion.
  */
 class Subtree extends BaseParser
 {
     /**
-     * Parses input structure to a Criterion object
+     * Parses input structure to a Criterion object.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -29,12 +31,12 @@ class Subtree extends BaseParser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        if ( !array_key_exists( "SubtreeCriterion", $data ) )
-        {
-            throw new Exceptions\Parser( "Invalid <SubtreeCriterion> format" );
+        if (!array_key_exists('SubtreeCriterion', $data)) {
+            throw new Exceptions\Parser('Invalid <SubtreeCriterion> format');
         }
-        return new SubtreeCriterion( explode( ',', $data["SubtreeCriterion"] ) );
+
+        return new SubtreeCriterion(explode(',', $data['SubtreeCriterion']));
     }
 }

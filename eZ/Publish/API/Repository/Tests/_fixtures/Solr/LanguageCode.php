@@ -11,8 +11,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'title' => 'Home',
                     ),
                     'score' => 2.7917593,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
             1 => eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(
@@ -22,14 +22,14 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'title' => 'Contact Us',
                     ),
                     'score' => 2.7917593,
-                    'index' => NULL,
-                    'highlight' => NULL,
+                    'index' => null,
+                    'highlight' => null,
                 )
             ),
         ),
-        'spellSuggestion' => NULL,
+        'spellSuggestion' => null,
         'time' => 1,
-        'timedOut' => NULL,
+        'timedOut' => null,
         'maxScore' => 2.7917593,
         'totalCount' => 2,
     )

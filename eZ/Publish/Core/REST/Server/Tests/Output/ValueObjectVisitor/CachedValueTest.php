@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,8 +14,6 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Server\Exceptions;
-use eZ\Publish\Core\REST\Common;
 use eZ\Publish\Core\REST\Server\Values\CachedValue;
 use PHPUnit_Framework_MockObject_MockObject;
 use stdClass;
@@ -27,7 +27,7 @@ class CachedValueTest extends ValueObjectVisitorBaseTest
     protected $defaultOptions = array(
         'content.view_cache' => true,
         'content.ttl_cache' => true,
-        'content.default_ttl' => 60
+        'content.default_ttl' => 60,
     );
 
     /**
@@ -37,49 +37,49 @@ class CachedValueTest extends ValueObjectVisitorBaseTest
 
     public function setUp()
     {
-        $this->request = new Request;
-        $this->request->headers->set( 'X-User-Hash', 'blabla' );
+        $this->request = new Request();
+        $this->request->headers->set('X-User-Hash', 'blabla');
     }
 
     public function testVisit()
     {
         $responseMock = $this->getResponseMock();
-        $responseMock->expects( $this->once() )->method( 'setPublic' );
-        $responseMock->expects( $this->at( 1 ) )->method( 'setVary' )->with( 'Accept' );
-        $responseMock->expects( $this->once() )->method( 'setSharedMaxAge' )->with( $this->defaultOptions['content.default_ttl'] );
-        $responseMock->expects( $this->at( 3 ) )->method( 'setVary' )->with( 'X-User-Hash', false );
+        $responseMock->expects($this->once())->method('setPublic');
+        $responseMock->expects($this->at(1))->method('setVary')->with('Accept');
+        $responseMock->expects($this->once())->method('setSharedMaxAge')->with($this->defaultOptions['content.default_ttl']);
+        $responseMock->expects($this->at(3))->method('setVary')->with('X-User-Hash', false);
 
-        $result = $this->visit( new CachedValue( new stdClass ) );
+        $result = $this->visit(new CachedValue(new stdClass()));
 
-        self::assertNotNull( $result );
+        self::assertNotNull($result);
     }
 
     public function testVisitLocationCache()
     {
         $responseMock = $this->getResponseMock();
-        $responseMock->expects( $this->once() )->method( 'setPublic' );
-        $responseMock->expects( $this->at( 1 ) )->method( 'setVary' )->with( 'Accept' );
-        $responseMock->expects( $this->once() )->method( 'setSharedMaxAge' )->with( $this->defaultOptions['content.default_ttl'] );
-        $responseMock->expects( $this->at( 3 ) )->method( 'setVary' )->with( 'X-User-Hash', false );
+        $responseMock->expects($this->once())->method('setPublic');
+        $responseMock->expects($this->at(1))->method('setVary')->with('Accept');
+        $responseMock->expects($this->once())->method('setSharedMaxAge')->with($this->defaultOptions['content.default_ttl']);
+        $responseMock->expects($this->at(3))->method('setVary')->with('X-User-Hash', false);
 
-        $result = $this->visit( new CachedValue( new stdClass, array( 'locationId' => 'testLocationId' ) ) );
+        $result = $this->visit(new CachedValue(new stdClass(), array('locationId' => 'testLocationId')));
 
-        self::assertNotNull( $result );
+        self::assertNotNull($result);
     }
 
     public function testVisitNoUserHash()
     {
-        $this->request->headers->remove( 'X-User-Hash' );
+        $this->request->headers->remove('X-User-Hash');
 
         $responseMock = $this->getResponseMock();
-        $responseMock->expects( $this->once() )->method( 'setPublic' );
+        $responseMock->expects($this->once())->method('setPublic');
         // no Vary header on X-User-Hash
-        $responseMock->expects( $this->once() )->method( 'setVary' )->with( 'Accept' );
-        $responseMock->expects( $this->once() )->method( 'setSharedMaxAge' )->with( $this->defaultOptions['content.default_ttl'] );
+        $responseMock->expects($this->once())->method('setVary')->with('Accept');
+        $responseMock->expects($this->once())->method('setSharedMaxAge')->with($this->defaultOptions['content.default_ttl']);
 
-        $result = $this->visit( new CachedValue( new stdClass ) );
+        $result = $this->visit(new CachedValue(new stdClass()));
 
-        self::assertNotNull( $result );
+        self::assertNotNull($result);
     }
 
     public function testVisitNoRequest()
@@ -87,50 +87,50 @@ class CachedValueTest extends ValueObjectVisitorBaseTest
         $this->request = null;
 
         $responseMock = $this->getResponseMock();
-        $responseMock->expects( $this->once() )->method( 'setPublic' );
-        $responseMock->expects( $this->once() )->method( 'setVary' )->with( 'Accept' );
-        $responseMock->expects( $this->once() )->method( 'setSharedMaxAge' )->with( $this->defaultOptions['content.default_ttl'] );
+        $responseMock->expects($this->once())->method('setPublic');
+        $responseMock->expects($this->once())->method('setVary')->with('Accept');
+        $responseMock->expects($this->once())->method('setSharedMaxAge')->with($this->defaultOptions['content.default_ttl']);
 
-        $result = $this->visit( new CachedValue( new stdClass ) );
+        $result = $this->visit(new CachedValue(new stdClass()));
 
-        self::assertNotNull( $result );
+        self::assertNotNull($result);
     }
 
     public function testVisitViewCacheDisabled()
     {
         // disable caching globally
-        $this->options = array_merge( $this->defaultOptions, array( 'content.view_cache' => false ) );
+        $this->options = array_merge($this->defaultOptions, array('content.view_cache' => false));
 
-        $this->getResponseMock()->expects( $this->never() )->method( 'setPublic' );
+        $this->getResponseMock()->expects($this->never())->method('setPublic');
 
-        $result = $this->visit( new CachedValue( new stdClass ) );
+        $result = $this->visit(new CachedValue(new stdClass()));
 
-        self::assertNotNull( $result );
+        self::assertNotNull($result);
     }
 
     public function testVisitCacheTTLCacheDisabled()
     {
         // disable caching globally
-        $this->options = array_merge( $this->defaultOptions, array( 'content.ttl_cache' => false ) );
+        $this->options = array_merge($this->defaultOptions, array('content.ttl_cache' => false));
 
         $responseMock = $this->getResponseMock();
-        $responseMock->expects( $this->once() )->method( 'setPublic' );
-        $responseMock->expects( $this->once() )->method( 'setVary' )->with( 'Accept' );
-        $responseMock->expects( $this->never() )->method( 'setSharedMaxAge' );
+        $responseMock->expects($this->once())->method('setPublic');
+        $responseMock->expects($this->once())->method('setVary')->with('Accept');
+        $responseMock->expects($this->never())->method('setSharedMaxAge');
 
-        $result = $this->visit( new CachedValue( new stdClass ) );
+        $result = $this->visit(new CachedValue(new stdClass()));
 
-        self::assertNotNull( $result );
+        self::assertNotNull($result);
     }
 
-    protected function visit( $value )
+    protected function visit($value)
     {
-        $this->getVisitorMock()->expects( $this->once() )->method( 'visitValueObject' )->with( $value->value );
+        $this->getVisitorMock()->expects($this->once())->method('visitValueObject')->with($value->value);
 
         $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -138,11 +138,11 @@ class CachedValueTest extends ValueObjectVisitorBaseTest
             $value
         );
 
-        return $generator->endDocument( null );
+        return $generator->endDocument(null);
     }
 
     /**
-     * Must return an instance of the tested visitor object
+     * Must return an instance of the tested visitor object.
      *
      * @return \eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor
      */
@@ -152,11 +152,11 @@ class CachedValueTest extends ValueObjectVisitorBaseTest
             $this->getConfigProviderMock()
         );
         $requestStack = new RequestStack();
-        if ( $this->request )
-        {
-            $requestStack->push( $this->request );
+        if ($this->request) {
+            $requestStack->push($this->request);
         }
-        $visitor->setRequestStack( $requestStack );
+        $visitor->setRequestStack($requestStack);
+
         return $visitor;
     }
 
@@ -167,26 +167,24 @@ class CachedValueTest extends ValueObjectVisitorBaseTest
     {
         $options = $this->options ?: $this->defaultOptions;
 
-        $mock = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
+        $mock = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
         $mock
-            ->expects( $this->any() )
-            ->method( 'hasParameter' )
+            ->expects($this->any())
+            ->method('hasParameter')
             ->will(
                 $this->returnCallback(
-                    function ( $parameterName ) use ( $options )
-                    {
-                        return isset( $options[$parameterName] );
+                    function ($parameterName) use ($options) {
+                        return isset($options[$parameterName]);
                     }
                 )
             );
         $mock
-            ->expects( $this->any() )
-            ->method( 'getParameter' )
+            ->expects($this->any())
+            ->method('getParameter')
             ->will(
                 $this->returnCallback(
-                    function ( $parameterName, $defaultValue ) use ( $options )
-                    {
-                        return isset( $options[$parameterName] ) ? $options[$parameterName] : $defaultValue;
+                    function ($parameterName, $defaultValue) use ($options) {
+                        return isset($options[$parameterName]) ? $options[$parameterName] : $defaultValue;
                     }
                 )
             );

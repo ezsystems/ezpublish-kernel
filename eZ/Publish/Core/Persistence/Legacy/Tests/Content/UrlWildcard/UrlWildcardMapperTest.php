@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlWildcard\UrlWildcardMapperTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlWildcard\UrlWildcardMapperTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper;
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 
 /**
- * Test case for UrlWildcard Mapper
+ * Test case for UrlWildcard Mapper.
  */
 class UrlWildcardMapperTest extends TestCase
 {
@@ -28,18 +30,18 @@ class UrlWildcardMapperTest extends TestCase
         $mapper = $this->getMapper();
 
         $urlWildcard = $mapper->createUrlWildcard(
-            "pancake/*",
-            "cake/{1}",
+            'pancake/*',
+            'cake/{1}',
             true
         );
 
         self::assertEquals(
             new UrlWildcard(
                 array(
-                    "id" => null,
-                    "sourceUrl" => "/pancake/*",
-                    "destinationUrl" => "/cake/{1}",
-                    "forward" => true
+                    'id' => null,
+                    'sourceUrl' => '/pancake/*',
+                    'destinationUrl' => '/cake/{1}',
+                    'forward' => true,
                 )
             ),
             $urlWildcard
@@ -61,15 +63,15 @@ class UrlWildcardMapperTest extends TestCase
             'type' => '1',
         );
 
-        $urlWildcard = $mapper->extractUrlWildcardFromRow( $row );
+        $urlWildcard = $mapper->extractUrlWildcardFromRow($row);
 
         self::assertEquals(
             new UrlWildcard(
                 array(
-                    "id" => 42,
-                    "sourceUrl" => "/faq/*",
-                    "destinationUrl" => "/42",
-                    "forward" => true
+                    'id' => 42,
+                    'sourceUrl' => '/faq/*',
+                    'destinationUrl' => '/42',
+                    'forward' => true,
                 )
             ),
             $urlWildcard
@@ -96,29 +98,29 @@ class UrlWildcardMapperTest extends TestCase
                 'source_url' => 'faq/*',
                 'destination_url' => '42',
                 'type' => '1',
-            )
+            ),
         );
 
-        $urlWildcards = $mapper->extractUrlWildcardsFromRows( $rows );
+        $urlWildcards = $mapper->extractUrlWildcardsFromRows($rows);
 
         self::assertEquals(
             array(
                 new UrlWildcard(
                     array(
-                        "id" => 24,
-                        "sourceUrl" => "/contact-information",
-                        "destinationUrl" => "/contact",
-                        "forward" => false
+                        'id' => 24,
+                        'sourceUrl' => '/contact-information',
+                        'destinationUrl' => '/contact',
+                        'forward' => false,
                     )
                 ),
                 new UrlWildcard(
                     array(
-                        "id" => 42,
-                        "sourceUrl" => "/faq/*",
-                        "destinationUrl" => "/42",
-                        "forward" => true
+                        'id' => 42,
+                        'sourceUrl' => '/faq/*',
+                        'destinationUrl' => '/42',
+                        'forward' => true,
                     )
-                )
+                ),
             ),
             $urlWildcards
         );

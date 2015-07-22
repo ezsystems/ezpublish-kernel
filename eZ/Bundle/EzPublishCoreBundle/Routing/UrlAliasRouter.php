@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the UrlAliasRouter class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,19 +26,20 @@ class UrlAliasRouter extends BaseUrlAliasRouter
     /**
      * @param ConfigResolverInterface $configResolver
      */
-    public function setConfigResolver( ConfigResolverInterface $configResolver )
+    public function setConfigResolver(ConfigResolverInterface $configResolver)
     {
         $this->configResolver = $configResolver;
     }
 
-    public function matchRequest( Request $request )
+    public function matchRequest(Request $request)
     {
         // UrlAliasRouter might be disabled from configuration.
         // An example is for running the admin interface: it needs to be entirely run through the legacy kernel.
-        if ( $this->configResolver->getParameter( 'url_alias_router' ) === false )
-            throw new ResourceNotFoundException( "Config says to bypass UrlAliasRouter" );
+        if ($this->configResolver->getParameter('url_alias_router') === false) {
+            throw new ResourceNotFoundException('Config says to bypass UrlAliasRouter');
+        }
 
-        return parent::matchRequest( $request );
+        return parent::matchRequest($request);
     }
 
     /**
@@ -48,19 +51,18 @@ class UrlAliasRouter extends BaseUrlAliasRouter
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    protected function getUrlAlias( $pathinfo )
+    protected function getUrlAlias($pathinfo)
     {
-        $pathPrefix = $this->generator->getPathPrefixByRootLocationId( $this->rootLocationId );
+        $pathPrefix = $this->generator->getPathPrefixByRootLocationId($this->rootLocationId);
 
         if (
             $this->rootLocationId === null ||
-            $this->generator->isUriPrefixExcluded( $pathinfo ) ||
-            $pathPrefix === "/"
-        )
-        {
-            return parent::getUrlAlias( $pathinfo );
+            $this->generator->isUriPrefixExcluded($pathinfo) ||
+            $pathPrefix === '/'
+        ) {
+            return parent::getUrlAlias($pathinfo);
         }
 
-        return $this->urlAliasService->lookup( $pathPrefix . $pathinfo );
+        return $this->urlAliasService->lookup($pathPrefix . $pathinfo);
     }
 }

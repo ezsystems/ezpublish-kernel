@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RoleService class
+ * File containing the RoleService class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,16 +21,13 @@ use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruc
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
-
 use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
 use eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
-
 use eZ\Publish\Core\REST\Client\Values\User\PolicyCreateStruct;
 use eZ\Publish\Core\REST\Client\Values\User\PolicyUpdateStruct;
 use eZ\Publish\Core\REST\Client\Values\User\Role;
 use eZ\Publish\Core\REST\Client\Values\User\Policy;
 use eZ\Publish\Core\REST\Client\Values\User\RoleAssignment;
-
 use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
@@ -74,36 +73,33 @@ class RoleService implements APIRoleService, Sessionable
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      */
-    public function __construct( UserService $userService, HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, RequestParser $requestParser )
+    public function __construct(UserService $userService, HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, RequestParser $requestParser)
     {
-        $this->userService     = $userService;
-        $this->client          = $client;
+        $this->userService = $userService;
+        $this->client = $client;
         $this->inputDispatcher = $inputDispatcher;
-        $this->outputVisitor   = $outputVisitor;
-        $this->requestParser   = $requestParser;
+        $this->outputVisitor = $outputVisitor;
+        $this->requestParser = $requestParser;
     }
 
     /**
-     * Set session ID
+     * Set session ID.
      *
      * Only for testing
      *
      * @param mixed $id
      *
      * @private
-     *
-     * @return void
      */
-    public function setSession( $id )
+    public function setSession($id)
     {
-        if ( $this->outputVisitor instanceof Sessionable )
-        {
-            $this->outputVisitor->setSession( $id );
+        if ($this->outputVisitor instanceof Sessionable) {
+            $this->outputVisitor->setSession($id);
         }
     }
 
     /**
-     * Creates a new Role
+     * Creates a new Role.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists or if limitation of the
@@ -115,57 +111,56 @@ class RoleService implements APIRoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function createRole( APIRoleCreateStruct $roleCreateStruct )
+    public function createRole(APIRoleCreateStruct $roleCreateStruct)
     {
-        $inputMessage = $this->outputVisitor->visit( $roleCreateStruct );
-        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Role' );
+        $inputMessage = $this->outputVisitor->visit($roleCreateStruct);
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType('Role');
 
         $result = $this->client->request(
             'POST',
-            $this->requestParser->generate( 'roles' ),
+            $this->requestParser->generate('roles'),
             $inputMessage
         );
 
-        $createdRole = $this->inputDispatcher->parse( $result );
-        $createdRoleValues = $this->requestParser->parse( 'role', $createdRole->id );
+        $createdRole = $this->inputDispatcher->parse($result);
+        $createdRoleValues = $this->requestParser->parse('role', $createdRole->id);
 
         $createdPolicies = array();
-        foreach ( $roleCreateStruct->getPolicies() as $policyCreateStruct )
-        {
-            $inputMessage = $this->outputVisitor->visit( $policyCreateStruct );
-            $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Policy' );
+        foreach ($roleCreateStruct->getPolicies() as $policyCreateStruct) {
+            $inputMessage = $this->outputVisitor->visit($policyCreateStruct);
+            $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType('Policy');
 
             $result = $this->client->request(
                 'POST',
-                $this->requestParser->generate( 'policies', array( 'role' => $createdRoleValues['role'] ) ),
+                $this->requestParser->generate('policies', array('role' => $createdRoleValues['role'])),
                 $inputMessage
             );
 
-            $createdPolicy = $this->inputDispatcher->parse( $result );
+            $createdPolicy = $this->inputDispatcher->parse($result);
 
             // @todo Workaround for missing roleId in Policy XSD definition
             $createdPolicyArray = array(
                 'id' => $createdPolicy->id,
                 'roleId' => $createdRole->id,
                 'module' => $createdPolicy->module,
-                'function' => $createdPolicy->function
+                'function' => $createdPolicy->function,
             );
 
-            $createdPolicy = new Policy( $createdPolicyArray );
+            $createdPolicy = new Policy($createdPolicyArray);
             $createdPolicies[] = $createdPolicy;
         }
 
         return new Role(
             array(
                 'id' => $createdRole->id,
-                'identifier' => $createdRole->identifier
+                'identifier' => $createdRole->identifier,
             ),
             $createdPolicies
         );
     }
 
     /**
-     * Updates the name of the role
+     * Updates the name of the role.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
@@ -175,10 +170,10 @@ class RoleService implements APIRoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function updateRole( APIRole $role, RoleUpdateStruct $roleUpdateStruct )
+    public function updateRole(APIRole $role, RoleUpdateStruct $roleUpdateStruct)
     {
-        $inputMessage = $this->outputVisitor->visit( $roleUpdateStruct );
-        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Role' );
+        $inputMessage = $this->outputVisitor->visit($roleUpdateStruct);
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType('Role');
         $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
 
         $result = $this->client->request(
@@ -187,11 +182,11 @@ class RoleService implements APIRoleService, Sessionable
             $inputMessage
         );
 
-        return $this->inputDispatcher->parse( $result );
+        return $this->inputDispatcher->parse($result);
     }
 
     /**
-     * Adds a new policy to the role
+     * Adds a new policy to the role.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to add  a policy
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy create
@@ -203,29 +198,29 @@ class RoleService implements APIRoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function addPolicy( APIRole $role, APIPolicyCreateStruct $policyCreateStruct )
+    public function addPolicy(APIRole $role, APIPolicyCreateStruct $policyCreateStruct)
     {
-        $values = $this->requestParser->parse( 'role', $role->id );
-        $inputMessage = $this->outputVisitor->visit( $policyCreateStruct );
-        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Policy' );
+        $values = $this->requestParser->parse('role', $role->id);
+        $inputMessage = $this->outputVisitor->visit($policyCreateStruct);
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType('Policy');
 
         $result = $this->client->request(
             'POST',
-            $this->requestParser->generate( 'policies', array( 'role' => $values['role'] ) ),
+            $this->requestParser->generate('policies', array('role' => $values['role'])),
             $inputMessage
         );
 
-        $createdPolicy = $this->inputDispatcher->parse( $result );
+        $createdPolicy = $this->inputDispatcher->parse($result);
 
         // @todo Workaround for missing roleId in Policy XSD definition
         $createdPolicyArray = array(
             'id' => $createdPolicy->id,
             'roleId' => $role->id,
             'module' => $createdPolicy->module,
-            'function' => $createdPolicy->function
+            'function' => $createdPolicy->function,
         );
 
-        $createdPolicy = new Policy( $createdPolicyArray );
+        $createdPolicy = new Policy($createdPolicyArray);
 
         $existingPolicies = $role->getPolicies();
         $existingPolicies[] = $createdPolicy;
@@ -233,14 +228,14 @@ class RoleService implements APIRoleService, Sessionable
         return new Role(
             array(
                 'id' => $role->id,
-                'identifier' => $role->identifier
+                'identifier' => $role->identifier,
             ),
             $existingPolicies
         );
     }
 
     /**
-     * removes a policy from the role
+     * removes a policy from the role.
      *
      * @deprecated since 5.3, use {@link deletePolicy()} instead.
      *
@@ -252,16 +247,16 @@ class RoleService implements APIRoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role the updated role
      */
-    public function removePolicy( APIRole $role, APIPolicy $policy )
+    public function removePolicy(APIRole $role, APIPolicy $policy)
     {
-        $values = $this->requestParser->parse( 'role', $role->id );
+        $values = $this->requestParser->parse('role', $role->id);
         $response = $this->client->request(
             'DELETE',
             $this->requestParser->generate(
                 'policy',
                 array(
                     'role' => $values['role'],
-                    'policy' => $policy->id
+                    'policy' => $policy->id,
                 )
             ),
             new Message(
@@ -269,31 +264,32 @@ class RoleService implements APIRoleService, Sessionable
                 // all expected exceptions + none? Or is "Section" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'Policy' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('Policy'))
             )
         );
 
-        if ( !empty( $response->body ) )
-            $this->inputDispatcher->parse( $response );
+        if (!empty($response->body)) {
+            $this->inputDispatcher->parse($response);
+        }
 
-        return $this->loadRole( $role->id );
+        return $this->loadRole($role->id);
     }
 
     /**
-     * Deletes a policy
+     * Deletes a policy.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
      *
      * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to delete
      */
-    public function deletePolicy( APIPolicy $policy )
+    public function deletePolicy(APIPolicy $policy)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
      * Updates the limitations of a policy. The module and function cannot be changed and
-     * the limitations are replaced by the ones in $roleUpdateStruct
+     * the limitations are replaced by the ones in $roleUpdateStruct.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a policy
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy update
@@ -305,11 +301,11 @@ class RoleService implements APIRoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
-    public function updatePolicy( APIPolicy $policy, APIPolicyUpdateStruct $policyUpdateStruct )
+    public function updatePolicy(APIPolicy $policy, APIPolicyUpdateStruct $policyUpdateStruct)
     {
-        $values = $this->requestParser->parse( 'role', $policy->roleId );
-        $inputMessage = $this->outputVisitor->visit( $policyUpdateStruct );
-        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Policy' );
+        $values = $this->requestParser->parse('role', $policy->roleId);
+        $inputMessage = $this->outputVisitor->visit($policyUpdateStruct);
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType('Policy');
         $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
 
         $result = $this->client->request(
@@ -318,17 +314,17 @@ class RoleService implements APIRoleService, Sessionable
                 'policy',
                 array(
                     'role' => $values['role'],
-                    'policy' => $policy->id
+                    'policy' => $policy->id,
                 )
             ),
             $inputMessage
         );
 
-        return $this->inputDispatcher->parse( $result );
+        return $this->inputDispatcher->parse($result);
     }
 
     /**
-     * Loads a role for the given id
+     * Loads a role for the given id.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
@@ -337,38 +333,39 @@ class RoleService implements APIRoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function loadRole( $id )
+    public function loadRole($id)
     {
         $response = $this->client->request(
             'GET',
             $id,
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'Role' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('Role'))
             )
         );
 
-        $loadedRole = $this->inputDispatcher->parse( $response );
-        $loadedRoleValues = $this->requestParser->parse( 'role', $loadedRole->id );
+        $loadedRole = $this->inputDispatcher->parse($response);
+        $loadedRoleValues = $this->requestParser->parse('role', $loadedRole->id);
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate( 'policies', array( 'role' => $loadedRoleValues['role'] ) ),
+            $this->requestParser->generate('policies', array('role' => $loadedRoleValues['role'])),
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'PolicyList' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('PolicyList'))
             )
         );
 
-        $policies = $this->inputDispatcher->parse( $response );
+        $policies = $this->inputDispatcher->parse($response);
+
         return new Role(
             array(
                 'id' => $loadedRole->id,
-                'identifier' => $loadedRole->identifier
+                'identifier' => $loadedRole->identifier,
             ),
             $policies
         );
     }
 
     /**
-     * Loads a role for the given name
+     * Loads a role for the given name.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
@@ -377,22 +374,23 @@ class RoleService implements APIRoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function loadRoleByIdentifier( $name )
+    public function loadRoleByIdentifier($name)
     {
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate( 'roleByIdentifier', array( 'role' => $name ) ),
+            $this->requestParser->generate('roleByIdentifier', array('role' => $name)),
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'RoleList' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('RoleList'))
             )
         );
 
-        $result = $this->inputDispatcher->parse( $response );
-        return reset( $result );
+        $result = $this->inputDispatcher->parse($response);
+
+        return reset($result);
     }
 
     /**
-     * Loads all roles
+     * Loads all roles.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the roles
      *
@@ -402,23 +400,23 @@ class RoleService implements APIRoleService, Sessionable
     {
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate( 'roles' ),
+            $this->requestParser->generate('roles'),
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'RoleList' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('RoleList'))
             )
         );
 
-        return $this->inputDispatcher->parse( $response );
+        return $this->inputDispatcher->parse($response);
     }
 
     /**
-     * Deletes the given role
+     * Deletes the given role.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this role
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      */
-    public function deleteRole( APIRole $role )
+    public function deleteRole(APIRole $role)
     {
         $response = $this->client->request(
             'DELETE',
@@ -428,16 +426,17 @@ class RoleService implements APIRoleService, Sessionable
                 // all expected exceptions + none? Or is "Section" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'Role' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('Role'))
             )
         );
 
-        if ( !empty( $response->body ) )
-            $this->inputDispatcher->parse( $response );
+        if (!empty($response->body)) {
+            $this->inputDispatcher->parse($response);
+        }
     }
 
     /**
-     * Loads all policies from roles which are assigned to a user or to user groups to which the user belongs
+     * Loads all policies from roles which are assigned to a user or to user groups to which the user belongs.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      *
@@ -445,22 +444,22 @@ class RoleService implements APIRoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy[]
      */
-    public function loadPoliciesByUserId( $userId )
+    public function loadPoliciesByUserId($userId)
     {
-        $values = $this->requestParser->parse( 'user', $userId );
+        $values = $this->requestParser->parse('user', $userId);
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate( 'userPolicies', array( 'user' => $values['user'] ) ),
+            $this->requestParser->generate('userPolicies', array('user' => $values['user'])),
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'PolicyList' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('PolicyList'))
             )
         );
 
-        return $this->inputDispatcher->parse( $response );
+        return $this->inputDispatcher->parse($response);
     }
 
     /**
-     * Assigns a role to the given user group
+     * Assigns a role to the given user group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if $roleLimitation is not valid
@@ -469,25 +468,25 @@ class RoleService implements APIRoleService, Sessionable
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
      */
-    public function assignRoleToUserGroup( APIRole $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null )
+    public function assignRoleToUserGroup(APIRole $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null)
     {
         $roleAssignment = new RoleAssignment(
             array(
                 'role' => $role,
-                'limitation' => $roleLimitation
+                'limitation' => $roleLimitation,
             )
         );
 
-        $inputMessage = $this->outputVisitor->visit( $roleAssignment );
-        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'RoleAssignmentList' );
+        $inputMessage = $this->outputVisitor->visit($roleAssignment);
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType('RoleAssignmentList');
 
         $result = $this->client->request(
             'POST',
-            $this->requestParser->generate( 'groupRoleAssignments', array( 'group' => $userGroup->id ) ),
+            $this->requestParser->generate('groupRoleAssignments', array('group' => $userGroup->id)),
             $inputMessage
         );
 
-        $this->inputDispatcher->parse( $result );
+        $this->inputDispatcher->parse($result);
     }
 
     /**
@@ -499,32 +498,33 @@ class RoleService implements APIRoleService, Sessionable
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      */
-    public function unassignRoleFromUserGroup( APIRole $role, UserGroup $userGroup )
+    public function unassignRoleFromUserGroup(APIRole $role, UserGroup $userGroup)
     {
-        $values = $this->requestParser->parse( 'group', $userGroup->id );
+        $values = $this->requestParser->parse('group', $userGroup->id);
         $userGroupId = $values['group'];
 
-        $values = $this->requestParser->parse( 'role', $role->id );
+        $values = $this->requestParser->parse('role', $role->id);
         $roleId = $values['role'];
 
         $response = $this->client->request(
             'DELETE',
-            $this->requestParser->generate( 'groupRoleAssignment', array( 'group' => $userGroupId, 'role' => $roleId ) ),
+            $this->requestParser->generate('groupRoleAssignment', array('group' => $userGroupId, 'role' => $roleId)),
             new Message(
                 // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Section" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'RoleAssignmentList' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('RoleAssignmentList'))
             )
         );
 
-        if ( !empty( $response->body ) )
-            $this->inputDispatcher->parse( $response );
+        if (!empty($response->body)) {
+            $this->inputDispatcher->parse($response);
+        }
     }
 
     /**
-     * Assigns a role to the given user
+     * Assigns a role to the given user.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if $roleLimitation is not valid
@@ -535,25 +535,25 @@ class RoleService implements APIRoleService, Sessionable
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
      */
-    public function assignRoleToUser( APIRole $role, User $user, RoleLimitation $roleLimitation = null )
+    public function assignRoleToUser(APIRole $role, User $user, RoleLimitation $roleLimitation = null)
     {
         $roleAssignment = new RoleAssignment(
             array(
                 'role' => $role,
-                'limitation' => $roleLimitation
+                'limitation' => $roleLimitation,
             )
         );
 
-        $inputMessage = $this->outputVisitor->visit( $roleAssignment );
-        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'RoleAssignmentList' );
+        $inputMessage = $this->outputVisitor->visit($roleAssignment);
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType('RoleAssignmentList');
 
         $result = $this->client->request(
             'POST',
-            $this->requestParser->generate( 'userRoleAssignments', array( 'user' => $user->id ) ),
+            $this->requestParser->generate('userRoleAssignments', array('user' => $user->id)),
             $inputMessage
         );
 
-        $this->inputDispatcher->parse( $result );
+        $this->inputDispatcher->parse($result);
     }
 
     /**
@@ -565,32 +565,33 @@ class RoleService implements APIRoleService, Sessionable
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      */
-    public function unassignRoleFromUser( APIRole $role, User $user )
+    public function unassignRoleFromUser(APIRole $role, User $user)
     {
-        $values = $this->requestParser->parse( 'user', $user->id );
+        $values = $this->requestParser->parse('user', $user->id);
         $userId = $values['user'];
 
-        $values = $this->requestParser->parse( 'role', $role->id );
+        $values = $this->requestParser->parse('role', $role->id);
         $roleId = $values['role'];
 
         $response = $this->client->request(
             'DELETE',
-            $this->requestParser->generate( 'userRoleAssignment', array( 'user' => $userId, 'role' => $roleId ) ),
+            $this->requestParser->generate('userRoleAssignment', array('user' => $userId, 'role' => $roleId)),
             new Message(
                 // @todo: What media-type should we set here? Actually, it should be
                 // all expected exceptions + none? Or is "Section" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'RoleAssignmentList' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('RoleAssignmentList'))
             )
         );
 
-        if ( !empty( $response->body ) )
-            $this->inputDispatcher->parse( $response );
+        if (!empty($response->body)) {
+            $this->inputDispatcher->parse($response);
+        }
     }
 
     /**
-     * Returns the assigned user and user groups to this role
+     * Returns the assigned user and user groups to this role.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a role
      *
@@ -598,34 +599,33 @@ class RoleService implements APIRoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
      */
-    public function getRoleAssignments( APIRole $role )
+    public function getRoleAssignments(APIRole $role)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
      * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUser()
      */
-    public function getRoleAssignmentsForUser( User $user, $inherited = false )
+    public function getRoleAssignmentsForUser(User $user, $inherited = false)
     {
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate( 'userRoleAssignments' ),
+            $this->requestParser->generate('userRoleAssignments'),
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'RoleAssignmentList' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('RoleAssignmentList'))
             )
         );
 
-        $roleAssignments = $this->inputDispatcher->parse( $response );
+        $roleAssignments = $this->inputDispatcher->parse($response);
 
         $userRoleAssignments = array();
-        foreach ( $roleAssignments as $roleAssignment )
-        {
+        foreach ($roleAssignments as $roleAssignment) {
             $userRoleAssignments[] = new UserRoleAssignment(
                 array(
                     'limitation' => $roleAssignment->getRoleLimitation(),
                     'role' => $roleAssignment->getRole(),
-                    'user' => $user
+                    'user' => $user,
                 )
             );
         }
@@ -634,7 +634,7 @@ class RoleService implements APIRoleService, Sessionable
     }
 
     /**
-     * Returns the roles assigned to the given user group
+     * Returns the roles assigned to the given user group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user group
      *
@@ -642,26 +642,25 @@ class RoleService implements APIRoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment[]
      */
-    public function getRoleAssignmentsForUserGroup( UserGroup $userGroup )
+    public function getRoleAssignmentsForUserGroup(UserGroup $userGroup)
     {
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate( 'groupRoleAssignments' ),
+            $this->requestParser->generate('groupRoleAssignments'),
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'RoleAssignmentList' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('RoleAssignmentList'))
             )
         );
 
-        $roleAssignments = $this->inputDispatcher->parse( $response );
+        $roleAssignments = $this->inputDispatcher->parse($response);
 
         $userGroupRoleAssignments = array();
-        foreach ( $roleAssignments as $roleAssignment )
-        {
+        foreach ($roleAssignments as $roleAssignment) {
             $userGroupRoleAssignments[] = new UserGroupRoleAssignment(
                 array(
                     'limitation' => $roleAssignment->getRoleLimitation(),
                     'role' => $roleAssignment->getRole(),
-                    'userGroup' => $userGroup
+                    'userGroup' => $userGroup,
                 )
             );
         }
@@ -670,32 +669,32 @@ class RoleService implements APIRoleService, Sessionable
     }
 
     /**
-     * Instantiates a role create class
+     * Instantiates a role create class.
      *
      * @param string $name
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
      */
-    public function newRoleCreateStruct( $name )
+    public function newRoleCreateStruct($name)
     {
-        return new Values\User\RoleCreateStruct( $name );
+        return new Values\User\RoleCreateStruct($name);
     }
 
     /**
-     * Instantiates a policy create class
+     * Instantiates a policy create class.
      *
      * @param string $module
      * @param string $function
      *
      * @return \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct
      */
-    public function newPolicyCreateStruct( $module, $function )
+    public function newPolicyCreateStruct($module, $function)
     {
-        return new PolicyCreateStruct( $module, $function );
+        return new PolicyCreateStruct($module, $function);
     }
 
     /**
-     * Instantiates a policy update class
+     * Instantiates a policy update class.
      *
      * @return \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
      */
@@ -705,7 +704,7 @@ class RoleService implements APIRoleService, Sessionable
     }
 
     /**
-     * Instantiates a policy update class
+     * Instantiates a policy update class.
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct
      */
@@ -715,7 +714,7 @@ class RoleService implements APIRoleService, Sessionable
     }
 
     /**
-     * Returns the LimitationType registered with the given identifier
+     * Returns the LimitationType registered with the given identifier.
      *
      * @param string $identifier
      *
@@ -723,13 +722,13 @@ class RoleService implements APIRoleService, Sessionable
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if there is no LimitationType with $identifier
      */
-    public function getLimitationType( $identifier )
+    public function getLimitationType($identifier)
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException(__METHOD__);
     }
 
     /**
-     * Returns the LimitationType's assigned to a given module/function
+     * Returns the LimitationType's assigned to a given module/function.
      *
      * Typically used for:
      *  - Internal validation limitation value use on Policies
@@ -743,8 +742,8 @@ class RoleService implements APIRoleService, Sessionable
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If module/function to limitation type mapping
      *                                                                 refers to a non existing identifier.
      */
-    public function getLimitationTypesByModuleFunction( $module, $function )
+    public function getLimitationTypesByModuleFunction($module, $function)
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException(__METHOD__);
     }
 }

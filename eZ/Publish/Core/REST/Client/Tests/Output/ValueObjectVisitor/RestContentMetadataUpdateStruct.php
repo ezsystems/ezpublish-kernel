@@ -1,33 +1,33 @@
 <?php
+
 /**
- * File containing a SectionIncludingContentMetadataUpdateStructTest class
+ * File containing a SectionIncludingContentMetadataUpdateStructTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
-use eZ\Publish\Core\REST\Common;
 
-class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
+class RestContentMetadataUpdateStruct extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the SectionIncludingContentMetadataUpdateStructTest visitor
+     * Test the SectionIncludingContentMetadataUpdateStructTest visitor.
      *
      * @return string
      */
     public function testVisitComplete()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $sectionCreatestruct = new RestContentMetadataUpdateStruct(
             $this->getValidValues()
@@ -39,29 +39,29 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
             $sectionCreatestruct
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Tests that result contains ContentUpdate element
+     * Tests that result contains ContentUpdate element.
      *
      * @param string $result
      *
      * @depends testVisitComplete
      */
-    public function testResultContainsContentUpdateElement( $result )
+    public function testResultContainsContentUpdateElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'ContentUpdate',
+                'tag' => 'ContentUpdate',
                 'children' => array(
-                    'less_than'    => 3,
+                    'less_than' => 3,
                     'greater_than' => 1,
-                )
+                ),
             ),
             $result,
             'Invalid <ContentUpdate> element.',
@@ -70,21 +70,21 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that result contains Section element
+     * Tests that result contains Section element.
      *
      * @param string $result
      *
      * @depends testVisitComplete
      */
-    public function testResultSectionElement( $result )
+    public function testResultSectionElement($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'Section',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Section+xml',
-                    'href'       => '/content/sections/23'
-                )
+                    'href' => '/content/sections/23',
+                ),
             ),
             $result,
             'Invalid attributes for <Section> element.',
@@ -93,21 +93,21 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests Owner element attributes
+     * Tests Owner element attributes.
      *
      * @param string $result
      *
      * @depends testVisitComplete
      */
-    public function testResultOwnerElement( $result )
+    public function testResultOwnerElement($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'Owner',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.User+xml',
-                    'href'       => '/user/users/42'
-                )
+                    'href' => '/user/users/42',
+                ),
             ),
             $result,
             'Invalid attributes for <Owner> element.',
@@ -116,17 +116,17 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests attributes for Section element
+     * Tests attributes for Section element.
      */
     public function testVisitNoSectionUpdate()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $values = $this->getValidValues();
-        unset( $values['sectionId'] );
+        unset($values['sectionId']);
 
         $sectionCreatestruct = new RestContentMetadataUpdateStruct(
             $values
@@ -138,14 +138,14 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
             $sectionCreatestruct
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
         $this->assertXMLTag(
             array(
                 'tag' => 'Section',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Section+xml',
-                )
+                ),
             ),
             $result,
             'Invalid attributes for <Section> element.',
@@ -154,17 +154,17 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests the Owner element attributes
+     * Tests the Owner element attributes.
      */
     public function testVisitNoOwnerUpdate()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $values = $this->getValidValues();
-        unset( $values['ownerId'] );
+        unset($values['ownerId']);
 
         $sectionCreatestruct = new RestContentMetadataUpdateStruct(
             $values
@@ -176,14 +176,14 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
             $sectionCreatestruct
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
         $this->assertXMLTag(
             array(
                 'tag' => 'Owner',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.User+xml',
-                )
+                ),
             ),
             $result,
             'Invalid attributes for <Owner> element.',
@@ -200,7 +200,7 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
     {
         return array(
             'sectionId' => '/content/sections/23',
-            'ownerId'   => '/user/users/42',
+            'ownerId' => '/user/users/42',
             // @todo: Add missing properties
         );
     }
@@ -210,6 +210,6 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct;
+        return new ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct();
     }
 }

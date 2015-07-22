@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RichText Renderer interface
+ * File containing the RichText Renderer interface.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,37 +17,37 @@ namespace eZ\Publish\Core\FieldType\RichText;
 interface RendererInterface
 {
     /**
-     * Renders template tag
+     * Renders template tag.
      *
      * @param string $name
      * @param array $parameters
-     * @param boolean $isInline
+     * @param bool $isInline
      *
      * @return string
      */
-    public function renderTag( $name, array $parameters, $isInline );
+    public function renderTag($name, array $parameters, $isInline);
 
     /**
-     * Renders Content embed
+     * Renders Content embed.
      *
      * @param int|string $contentId
      * @param string $viewType
      * @param array $parameters
-     * @param boolean $isInline
+     * @param bool $isInline
      *
      * @return string
      */
-    public function renderContentEmbed( $contentId, $viewType, array $parameters, $isInline );
+    public function renderContentEmbed($contentId, $viewType, array $parameters, $isInline);
 
     /**
-     * Renders Location embed
+     * Renders Location embed.
      *
      * @param int|string $locationId
      * @param string $viewType
      * @param array $parameters
-     * @param boolean $isInline
+     * @param bool $isInline
      *
      * @return string
      */
-    public function renderLocationEmbed( $locationId, $viewType, array $parameters, $isInline );
+    public function renderLocationEmbed($locationId, $viewType, array $parameters, $isInline);
 }

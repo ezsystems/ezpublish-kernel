@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the file Variation class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,7 @@ namespace eZ\Publish\SPI\Variation\Values;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * Base class for file variations (i.e. image aliases)
+ * Base class for file variations (i.e. image aliases).
  *
  * @property-read int $fileSize Number of bytes for current variation
  * @property-read string $mimeType The MIME type (for example "image/png")
@@ -24,7 +26,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class Variation extends ValueObject
 {
     /**
-     * Number of bytes for current variation
+     * Number of bytes for current variation.
      *
      * @var int
      */

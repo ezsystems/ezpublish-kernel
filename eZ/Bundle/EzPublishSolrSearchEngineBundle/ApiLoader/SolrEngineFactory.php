@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -29,7 +31,7 @@ class SolrEngineFactory extends ContainerAware
      */
     private $searchEngineClass;
 
-    public function __construct( RepositoryConfigurationProvider $repositoryConfigurationProvider, $defaultConnection, $searchEngineClass )
+    public function __construct(RepositoryConfigurationProvider $repositoryConfigurationProvider, $defaultConnection, $searchEngineClass)
     {
         $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
         $this->defaultConnection = $defaultConnection;
@@ -41,17 +43,16 @@ class SolrEngineFactory extends ContainerAware
         $repositoryConfig = $this->repositoryConfigurationProvider->getRepositoryConfig();
 
         $connection = $this->defaultConnection;
-        if ( isset( $repositoryConfig['search']['connection'] ) )
-        {
+        if (isset($repositoryConfig['search']['connection'])) {
             $connection = $repositoryConfig['search']['connection'];
         }
 
-        $contentHandlerId = $this->container->getParameter( "ez_search_engine_solr.connection.$connection.content_handler_id" );
-        $locationHandlerId = $this->container->getParameter( "ez_search_engine_solr.connection.$connection.location_handler_id" );
+        $contentHandlerId = $this->container->getParameter("ez_search_engine_solr.connection.$connection.content_handler_id");
+        $locationHandlerId = $this->container->getParameter("ez_search_engine_solr.connection.$connection.location_handler_id");
 
         return new $this->searchEngineClass(
-            $this->container->get( $contentHandlerId ),
-            $this->container->get( $locationHandlerId )
+            $this->container->get($contentHandlerId),
+            $this->container->get($locationHandlerId)
         );
     }
 }

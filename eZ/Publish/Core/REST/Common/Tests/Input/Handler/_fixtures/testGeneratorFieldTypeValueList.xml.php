@@ -1,8 +1,8 @@
 <?php
 
-return array (
+return array(
   'Version' =>
-  array (
+  array(
     '_media-type' => 'application/vnd.ez.api.Version+xml',
     'Field' => array(
       'fieldValue' => array(
@@ -14,4 +14,3 @@ return array (
     )
   ),
 );
-

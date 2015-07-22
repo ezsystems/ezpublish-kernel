@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the LegacyStorageTest for Url FieldType
+ * File containing the LegacyStorageTest for Url FieldType.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,8 +15,7 @@ use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 
 /**
- * Tests the Url LegacyStorage gateway
- * @package eZ\Publish\Core\Repository\Tests\FieldType\Url\Gateway
+ * Tests the Url LegacyStorage gateway.
  */
 class LegacyStorageTest extends TestCase
 {
@@ -22,7 +23,7 @@ class LegacyStorageTest extends TestCase
     {
         $gateway = $this->getStorageGateway();
 
-        $gateway->setConnection( $this->getMock( "eZ\\Publish\\Core\\Persistence\\Database\\DatabaseHandler" ) );
+        $gateway->setConnection($this->getMock('eZ\\Publish\\Core\\Persistence\\Database\\DatabaseHandler'));
     }
 
     /**
@@ -32,42 +33,42 @@ class LegacyStorageTest extends TestCase
     {
         $gateway = $this->getStorageGateway();
 
-        $gateway->setConnection( new \DateTime() );
+        $gateway->setConnection(new \DateTime());
     }
 
     public function testGetIdUrlMap()
     {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urls.php" );
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urls.php');
 
         $gateway = $this->getStorageGateway();
 
         $this->assertEquals(
             array(
-                23 => "/content/view/sitemap/2",
-                24 => "/content/view/tagcloud/2"
+                23 => '/content/view/sitemap/2',
+                24 => '/content/view/tagcloud/2',
             ),
             $gateway->getIdUrlMap(
-                array( 23, 24, "fake" )
+                array(23, 24, 'fake')
             )
         );
     }
 
     public function testGetUrlIdMap()
     {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urls.php" );
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urls.php');
 
         $gateway = $this->getStorageGateway();
 
         $this->assertEquals(
             array(
-                "/content/view/sitemap/2" => 23,
-                "/content/view/tagcloud/2" => 24
+                '/content/view/sitemap/2' => 23,
+                '/content/view/tagcloud/2' => 24,
             ),
             $gateway->getUrlIdMap(
                 array(
-                    "/content/view/sitemap/2",
-                    "/content/view/tagcloud/2",
-                    "fake"
+                    '/content/view/sitemap/2',
+                    '/content/view/tagcloud/2',
+                    'fake',
                 )
             )
         );
@@ -77,42 +78,42 @@ class LegacyStorageTest extends TestCase
     {
         $gateway = $this->getStorageGateway();
 
-        $url = "one/two/three";
+        $url = 'one/two/three';
         $time = time();
-        $id = $gateway->insertUrl( $url );
+        $id = $gateway->insertUrl($url);
 
         $query = $this->getDatabaseHandler()->createSelectQuery();
         $query
-            ->select( "*" )
-            ->from( 'ezurl' )
+            ->select('*')
+            ->from('ezurl')
             ->where(
                 $query->expr->eq(
-                    $this->handler->quoteColumn( 'id' ),
-                    $query->bindValue( $id )
+                    $this->handler->quoteColumn('id'),
+                    $query->bindValue($id)
                 )
             );
         $statement = $query->prepare();
         $statement->execute();
 
-        $result = $statement->fetchAll( \PDO::FETCH_ASSOC );
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $expected = array(
             array(
                 'id' => $id,
-                'is_valid' => "1",
-                'last_checked' => "0",
-                'original_url_md5' => md5( $url ),
-                'url' => $url
-            )
+                'is_valid' => '1',
+                'last_checked' => '0',
+                'original_url_md5' => md5($url),
+                'url' => $url,
+            ),
         );
 
-        $this->assertGreaterThanOrEqual( $time, $result[0]["created"] );
-        $this->assertGreaterThanOrEqual( $time, $result[0]["modified"] );
+        $this->assertGreaterThanOrEqual($time, $result[0]['created']);
+        $this->assertGreaterThanOrEqual($time, $result[0]['modified']);
 
-        unset( $result[0]["created"] );
-        unset( $result[0]["modified"] );
+        unset($result[0]['created']);
+        unset($result[0]['modified']);
 
-        $this->assertEquals( $expected, $result );
+        $this->assertEquals($expected, $result);
     }
 
     public function testLinkUrl()
@@ -122,23 +123,23 @@ class LegacyStorageTest extends TestCase
         $urlId = 12;
         $fieldId = 10;
         $versionNo = 1;
-        $gateway->linkUrl( $urlId, $fieldId, $versionNo );
+        $gateway->linkUrl($urlId, $fieldId, $versionNo);
 
         $query = $this->getDatabaseHandler()->createSelectQuery();
         $query->select(
-            "*"
+            '*'
         )->from(
             'ezurl_object_link'
         )->where(
             $query->expr->eq(
-                $this->handler->quoteColumn( 'url_id' ),
-                $query->bindValue( $urlId )
+                $this->handler->quoteColumn('url_id'),
+                $query->bindValue($urlId)
             )
         );
         $statement = $query->prepare();
         $statement->execute();
 
-        $result = $statement->fetchAll( \PDO::FETCH_ASSOC );
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $expected = array(
             array(
@@ -148,25 +149,25 @@ class LegacyStorageTest extends TestCase
             ),
         );
 
-        $this->assertEquals( $expected, $result );
+        $this->assertEquals($expected, $result);
     }
 
     public function testUnlinkUrl()
     {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urls.php" );
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urls.php');
 
         $gateway = $this->getStorageGateway();
 
         $fieldId = 42;
         $versionNo = 5;
-        $gateway->unlinkUrl( $fieldId, $versionNo );
+        $gateway->unlinkUrl($fieldId, $versionNo);
 
         $query = $this->getDatabaseHandler()->createSelectQuery();
-        $query->select( "*" )->from( 'ezurl_object_link' );
+        $query->select('*')->from('ezurl_object_link');
         $statement = $query->prepare();
         $statement->execute();
 
-        $result = $statement->fetchAll( \PDO::FETCH_ASSOC );
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $expected = array(
             array(
@@ -176,15 +177,15 @@ class LegacyStorageTest extends TestCase
             ),
         );
 
-        $this->assertEquals( $expected, $result );
+        $this->assertEquals($expected, $result);
 
         // Check that orphaned URLs are correctly removed
         $query = $this->getDatabaseHandler()->createSelectQuery();
-        $query->select( "*" )->from( 'ezurl' );
+        $query->select('*')->from('ezurl');
         $statement = $query->prepare();
         $statement->execute();
 
-        $result = $statement->fetchAll( \PDO::FETCH_ASSOC );
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $expected = array(
             array(
@@ -195,10 +196,10 @@ class LegacyStorageTest extends TestCase
                 'modified' => '1343140541',
                 'original_url_md5' => 'c86bcb109d8e70f9db65c803baafd550',
                 'url' => '/content/view/tagcloud/2',
-            )
+            ),
         );
 
-        $this->assertEquals( $expected, $result );
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -207,17 +208,17 @@ class LegacyStorageTest extends TestCase
     protected $storageGateway;
 
     /**
-     * Returns a ready to test LegacyStorage gateway
+     * Returns a ready to test LegacyStorage gateway.
      *
      * @return \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage
      */
     protected function getStorageGateway()
     {
-        if ( !isset( $this->storageGateway ) )
-        {
+        if (!isset($this->storageGateway)) {
             $this->storageGateway = new LegacyStorage();
-            $this->storageGateway->setConnection( $this->getDatabaseHandler() );
+            $this->storageGateway->setConnection($this->getDatabaseHandler());
         }
+
         return $this->storageGateway;
     }
 }

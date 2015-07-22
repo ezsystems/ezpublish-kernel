@@ -1,10 +1,12 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributd with this source code.
  */
+
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParser;
@@ -12,14 +14,15 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAw
 class ComplexSettingParser extends DynamicSettingParser implements ComplexSettingParserInterface
 {
     /**
-     * Regular expression that matches a dynamic variable
+     * Regular expression that matches a dynamic variable.
+     *
      * @var string
      */
     private $dynamicSettingRegex;
 
     public function __construct()
     {
-        $boundaryDelimiter = preg_quote( static::BOUNDARY_DELIMITER, '/' );
+        $boundaryDelimiter = preg_quote(static::BOUNDARY_DELIMITER, '/');
         $this->dynamicSettingRegex = sprintf(
             '%s[a-zA-Z0-9_.-]+(?:(?:%s[a-zA-Z0-9_]+)(?:%s[a-zA-Z0-9_.-]+)?)?%s',
             $boundaryDelimiter,
@@ -30,27 +33,26 @@ class ComplexSettingParser extends DynamicSettingParser implements ComplexSettin
     }
 
     /**
-     * In addition to the parent's test, verifies the variables with a regexp
+     * In addition to the parent's test, verifies the variables with a regexp.
      *
      * {@inheritdoc}
      */
-    public function isDynamicSetting( $setting )
+    public function isDynamicSetting($setting)
     {
-        if ( parent::isDynamicSetting( $setting ) === false )
-        {
+        if (parent::isDynamicSetting($setting) === false) {
             return false;
         }
 
-        return (bool)preg_match( '/^' . $this->dynamicSettingRegex . '$/', $setting );
+        return (bool)preg_match('/^' . $this->dynamicSettingRegex . '$/', $setting);
     }
 
-    public function containsDynamicSettings( $string )
+    public function containsDynamicSettings($string)
     {
-        return count( $this->matchDynamicSettings( $string ) ) > 0;
+        return count($this->matchDynamicSettings($string)) > 0;
     }
 
     /**
-     * Matches all dynamic settings in $string
+     * Matches all dynamic settings in $string.
      *
      * Example: '/tmp/$var_dir/$storage_dir' => ['$var_dir$', '$storage_dir']
      *
@@ -58,14 +60,15 @@ class ComplexSettingParser extends DynamicSettingParser implements ComplexSettin
      *
      * @return array
      */
-    protected function matchDynamicSettings( $string )
+    protected function matchDynamicSettings($string)
     {
-        preg_match_all( '/' . $this->dynamicSettingRegex . '/', $string, $matches, PREG_PATTERN_ORDER );
+        preg_match_all('/' . $this->dynamicSettingRegex . '/', $string, $matches, PREG_PATTERN_ORDER);
+
         return $matches[0];
     }
 
-    public function parseComplexSetting( $string )
+    public function parseComplexSetting($string)
     {
-        return $this->matchDynamicSettings( $string );
+        return $this->matchDynamicSettings($string);
     }
 }

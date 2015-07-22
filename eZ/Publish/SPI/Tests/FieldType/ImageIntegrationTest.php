@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\SPI\Tests\FieldType\ImageIntegrationTest class
+ * File contains: eZ\Publish\SPI\Tests\FieldType\ImageIntegrationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,7 +21,7 @@ use RecursiveDirectoryIterator;
 use FileSystemIterator;
 
 /**
- * Integration test for legacy storage field types
+ * Integration test for legacy storage field types.
  *
  * This abstract base test case is supposed to be the base for field type
  * integration tests. It basically calls all involved methods in the field type
@@ -48,17 +50,17 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     private $aliasCleanerMock;
 
     /**
-     * Returns the storage identifier prefix used by the file service
+     * Returns the storage identifier prefix used by the file service.
      *
      * @return string
      */
     protected function getStoragePrefix()
     {
-        return self::$container->getParameter( 'image_storage_prefix' );
+        return self::$container->getParameter('image_storage_prefix');
     }
 
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -68,25 +70,26 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get handler with required custom field types registered
+     * Get handler with required custom field types registered.
      *
      * @return \eZ\Publish\SPI\Persistence\Handler
      */
     public function getCustomHandler()
     {
         $fieldType = new FieldType\Image\Type();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
-        $urlRedecorator = self::$container->get( "ezpublish.core.io.image_fieldtype.legacy_url_redecorator" );
+        $urlRedecorator = self::$container->get('ezpublish.core.io.image_fieldtype.legacy_url_redecorator');
 
-        $this->ioService = self::$container->get( "ezpublish.fieldType.ezimage.io_service" );
+        $this->ioService = self::$container->get('ezpublish.fieldType.ezimage.io_service');
+
         return $this->getHandler(
             'ezimage',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\ImageConverter( $this->ioService, $urlRedecorator ),
+            new Legacy\Content\FieldValue\Converter\ImageConverter($this->ioService, $urlRedecorator),
             new FieldType\Image\ImageStorage(
                 array(
-                    'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage( $urlRedecorator ),
+                    'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage($urlRedecorator),
                 ),
                 $this->ioService,
                 new FieldType\Image\PathGenerator\LegacyPathGenerator(),
@@ -99,18 +102,17 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
 
     public function getDeprecationWarnerMock()
     {
-        if ( !isset( $this->deprecationWarnerMock ) )
-        {
-            $this->deprecationWarnerMock = $this->getMock( 'eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface' );
+        if (!isset($this->deprecationWarnerMock)) {
+            $this->deprecationWarnerMock = $this->getMock('eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface');
         }
+
         return $this->deprecationWarnerMock;
     }
 
     public function getAliasCleanerMock()
     {
-        if ( !isset( $this->aliasCleanerMock ) )
-        {
-            $this->aliasCleanerMock = $this->getMock( '\eZ\Publish\Core\FieldType\Image\AliasCleanerInterface' );
+        if (!isset($this->aliasCleanerMock)) {
+            $this->aliasCleanerMock = $this->getMock('\eZ\Publish\Core\FieldType\Image\AliasCleanerInterface');
         }
 
         return $this->aliasCleanerMock;
@@ -129,14 +131,14 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                 'validators' => array(
                     'FileSizeValidator' => array(
                         'maxFileSize' => 2 * 1024 * 1024, // 2 MB
-                    )
-                )
+                    ),
+                ),
             )
         );
     }
 
     /**
-     * Get field definition data values
+     * Get field definition data values.
      *
      * This is a PHPUnit data provider
      *
@@ -147,7 +149,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         return array(
             // The ezint field type does not have any special field definition
             // properties
-            array( 'fieldType', 'ezimage' ),
+            array('fieldType', 'ezimage'),
             array(
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(
@@ -155,16 +157,16 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                         'validators' => array(
                             'FileSizeValidator' => array(
                                 'maxFileSize' => 2 * 1024 * 1024, // 2 MB
-                            )
-                        )
+                            ),
+                        ),
                     )
-                )
+                ),
             ),
         );
     }
 
     /**
-     * Get initial field value
+     * Get initial field value.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -172,19 +174,19 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => null,
+                'data' => null,
                 'externalData' => array(
-                    'inputUri' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                    'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
                     'fileName' => 'Ice-Flower.jpg',
                     'alternativeText' => 'An icy flower.',
                 ),
-                'sortKey'      => '',
+                'sortKey' => '',
             )
         );
     }
 
     /**
-     * Asserts that the loaded field data is correct
+     * Asserts that the loaded field data is correct.
      *
      * Performs assertions on the loaded field, mainly checking that the
      * $field->value->externalData is loaded correctly. If the loading of
@@ -192,14 +194,14 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      * also needs to be asserted. Make sure you implement this method agnostic
      * to the used SPI\Persistence implementation!
      */
-    public function assertLoadedFieldDataCorrect( Field $field )
+    public function assertLoadedFieldDataCorrect(Field $field)
     {
-        $this->assertNotNull( $field->value->data );
+        $this->assertNotNull($field->value->data);
 
-        $this->assertIOUriExists( $field->value->data['uri'] );
-        $this->assertEquals( 'Ice-Flower.jpg', $field->value->data['fileName'] );
-        $this->assertEquals( 'An icy flower.', $field->value->data['alternativeText'] );
-        $this->assertNull( $field->value->externalData );
+        $this->assertIOUriExists($field->value->data['uri']);
+        $this->assertEquals('Ice-Flower.jpg', $field->value->data['fileName']);
+        $this->assertEquals('An icy flower.', $field->value->data['alternativeText']);
+        $this->assertNull($field->value->externalData);
     }
 
     /**
@@ -213,19 +215,19 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => null,
+                'data' => null,
                 'externalData' => array(
-                    'inputUri' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                    'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
                     'fileName' => 'Blueish-Blue.jpg',
-                    'alternativeText' => 'This blue is so blueish.'
+                    'alternativeText' => 'This blue is so blueish.',
                 ),
-                'sortKey'      => '',
+                'sortKey' => '',
             )
         );
     }
 
     /**
-     * Asserts that the updated field data is loaded correct
+     * Asserts that the updated field data is loaded correct.
      *
      * Performs assertions on the loaded field after it has been updated,
      * mainly checking that the $field->value->externalData is loaded
@@ -233,27 +235,23 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      * $field, their correctness also needs to be asserted. Make sure you
      * implement this method agnostic to the used SPI\Persistence
      * implementation!
-     *
-     * @return void
      */
-    public function assertUpdatedFieldDataCorrect( Field $field )
+    public function assertUpdatedFieldDataCorrect(Field $field)
     {
-        $this->assertNotNull( $field->value->data );
-        $this->assertIOUriExists( $field->value->data['uri'] );
+        $this->assertNotNull($field->value->data);
+        $this->assertIOUriExists($field->value->data['uri']);
 
-        $this->assertEquals( 'Blueish-Blue.jpg', $field->value->data['fileName'] );
-        $this->assertEquals( 'This blue is so blueish.', $field->value->data['alternativeText'] );
-        $this->assertNull( $field->value->externalData );
+        $this->assertEquals('Blueish-Blue.jpg', $field->value->data['fileName']);
+        $this->assertEquals('This blue is so blueish.', $field->value->data['alternativeText']);
+        $this->assertNull($field->value->externalData);
     }
 
     /**
-     * Can be overwritten to assert that additional data has been deleted
+     * Can be overwritten to assert that additional data has been deleted.
      *
      * @param Content $content
-     *
-     * @return void
      */
-    public function assertDeletedFieldDataCorrect( Content $content )
+    public function assertDeletedFieldDataCorrect(Content $content)
     {
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
@@ -288,14 +286,14 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $this->testCreateContentType();
         $contentType = $this->testLoadContentTypeField();
         $this->getDeprecationWarnerMock()
-            ->expects( $this->never() )
-            ->method( 'log' );
+            ->expects($this->never())
+            ->method('log');
 
-        $this->createContent( $contentType, $this->getDeprecatedIdPropertyValue() );
+        $this->createContent($contentType, $this->getDeprecatedIdPropertyValue());
     }
 
     /**
-     * Get initial field value
+     * Get initial field value.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -305,7 +303,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data' => null,
                 'externalData' => array(
-                    'id' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                    'id' => ($path = __DIR__ . '/_fixtures/image.jpg'),
                     'fileName' => 'Ice-Flower.jpg',
                     'alternativeText' => 'An icy flower.',
                 ),
@@ -321,12 +319,10 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      *
      * @return mixed
      */
-    protected function deleteStoredFile( $content )
+    protected function deleteStoredFile($content)
     {
         return $this->ioService->deleteBinaryFile(
-            $this->ioService->loadBinaryFile( $content->fields[1]->value->data['id'] )
+            $this->ioService->loadBinaryFile($content->fields[1]->value->data['id'])
         );
     }
-
 }
-

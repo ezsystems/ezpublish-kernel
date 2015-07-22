@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,13 +21,13 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 class CustomFieldRange extends CriterionVisitor
 {
     /**
-     * Check if visitor is applicable to current criterion
+     * Check if visitor is applicable to current criterion.
      *
      * @param Criterion $criterion
      *
-     * @return boolean
+     * @return bool
      */
-    public function canVisit( Criterion $criterion )
+    public function canVisit(Criterion $criterion)
     {
         return
             $criterion instanceof Criterion\CustomField &&
@@ -39,26 +41,24 @@ class CustomFieldRange extends CriterionVisitor
     }
 
     /**
-     * Map field value to a proper Solr representation
+     * Map field value to a proper Solr representation.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Search\Solr\Content\CriterionVisitor $subVisitor
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
         $values = (array)$criterion->value;
         $start = $values[0];
-        $end = isset( $values[1] ) ? $values[1] : null;
+        $end = isset($values[1]) ? $values[1] : null;
 
-        if ( ( $criterion->operator === Operator::LT ) || ( $criterion->operator === Operator::LTE ) )
-        {
+        if (($criterion->operator === Operator::LT) || ($criterion->operator === Operator::LTE)) {
             $end = $start;
             $start = null;
         }
 
-        return $criterion->target . ":" . $this->getRange( $criterion->operator, $start, $end );
+        return $criterion->target . ':' . $this->getRange($criterion->operator, $start, $end);
     }
 }
-

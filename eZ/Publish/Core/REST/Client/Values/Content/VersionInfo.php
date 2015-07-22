@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the VersionInfo class
+ * File containing the VersionInfo class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -45,9 +47,9 @@ class VersionInfo extends APIVersionInfo
      */
     protected $names;
 
-    public function __construct( ContentService $contentService, array $data = array() )
+    public function __construct(ContentService $contentService, array $data = array())
     {
-        parent::__construct( $data );
+        parent::__construct($data);
 
         $this->contentService = $contentService;
     }
@@ -59,7 +61,7 @@ class VersionInfo extends APIVersionInfo
      */
     public function getContentInfo()
     {
-        return $this->contentService->loadContentInfo( $this->contentInfoId );
+        return $this->contentService->loadContentInfo($this->contentInfoId);
     }
 
     /**
@@ -80,32 +82,32 @@ class VersionInfo extends APIVersionInfo
      *
      * @return string
      */
-    public function getName( $languageCode = null )
+    public function getName($languageCode = null)
     {
-        if ( $languageCode === null )
-        {
+        if ($languageCode === null) {
             $languageCode = $this->initialLanguageCode;
         }
+
         return $this->names[$languageCode];
     }
 
-    public function __get( $propertyName )
+    public function __get($propertyName)
     {
-        switch ( $propertyName )
-        {
+        switch ($propertyName) {
             case 'contentInfo':
                 return $this->getContentInfo();
         }
-        return parent::__get( $propertyName );
+
+        return parent::__get($propertyName);
     }
 
-    public function __isset( $propertyName )
+    public function __isset($propertyName)
     {
-        switch ( $propertyName )
-        {
+        switch ($propertyName) {
             case 'contentInfo':
                 return true;
         }
-        return parent::__isset( $propertyName );
+
+        return parent::__isset($propertyName);
     }
 }

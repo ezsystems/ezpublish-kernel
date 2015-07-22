@@ -1,11 +1,12 @@
 <?php
+
 /**
  * File containing the ObjectStateService class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
- * @package eZ\Publish\Core\REST\Client
  */
 
 namespace eZ\Publish\Core\REST\Client;
@@ -14,7 +15,6 @@ use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Message;
-
 use eZ\Publish\API\Repository\ObjectStateService as APIObjectStateService;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
@@ -26,7 +26,7 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
 use eZ\Publish\Core\REST\Common\Values\ContentObjectStates;
 
 /**
- * ObjectStateService service
+ * ObjectStateService service.
  */
 class ObjectStateService implements APIObjectStateService, Sessionable
 {
@@ -56,16 +56,16 @@ class ObjectStateService implements APIObjectStateService, Sessionable
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      */
-    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, RequestParser $requestParser )
+    public function __construct(HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, RequestParser $requestParser)
     {
-        $this->client          = $client;
+        $this->client = $client;
         $this->inputDispatcher = $inputDispatcher;
-        $this->outputVisitor   = $outputVisitor;
-        $this->requestParser      = $requestParser;
+        $this->outputVisitor = $outputVisitor;
+        $this->requestParser = $requestParser;
     }
 
     /**
-     * Set session ID
+     * Set session ID.
      *
      * Only for testing
      *
@@ -73,16 +73,15 @@ class ObjectStateService implements APIObjectStateService, Sessionable
      *
      * @private
      */
-    public function setSession( $id )
+    public function setSession($id)
     {
-        if ( $this->outputVisitor instanceof Sessionable )
-        {
-            $this->outputVisitor->setSession( $id );
+        if ($this->outputVisitor instanceof Sessionable) {
+            $this->outputVisitor->setSession($id);
         }
     }
 
     /**
-     * Creates a new object state group
+     * Creates a new object state group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create an object state group
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state group with provided identifier already exists
@@ -91,22 +90,22 @@ class ObjectStateService implements APIObjectStateService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function createObjectStateGroup( ObjectStateGroupCreateStruct $objectStateGroupCreateStruct )
+    public function createObjectStateGroup(ObjectStateGroupCreateStruct $objectStateGroupCreateStruct)
     {
-        $inputMessage = $this->outputVisitor->visit( $objectStateGroupCreateStruct );
-        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'ObjectStateGroup' );
+        $inputMessage = $this->outputVisitor->visit($objectStateGroupCreateStruct);
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType('ObjectStateGroup');
 
         $result = $this->client->request(
             'POST',
-            $this->requestParser->generate( 'objectstategroups' ),
+            $this->requestParser->generate('objectstategroups'),
             $inputMessage
         );
 
-        return $this->inputDispatcher->parse( $result );
+        return $this->inputDispatcher->parse($result);
     }
 
     /**
-     * Loads a object state group
+     * Loads a object state group.
      *
      * @param mixed $objectStateGroupId
      *
@@ -114,20 +113,21 @@ class ObjectStateService implements APIObjectStateService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function loadObjectStateGroup( $objectStateGroupId )
+    public function loadObjectStateGroup($objectStateGroupId)
     {
         $response = $this->client->request(
             'GET',
             $objectStateGroupId,
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'ObjectStateGroup' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('ObjectStateGroup'))
             )
         );
-        return $this->inputDispatcher->parse( $response );
+
+        return $this->inputDispatcher->parse($response);
     }
 
     /**
-     * Loads all object state groups
+     * Loads all object state groups.
      *
      * @param int $offset
      * @param int $limit
@@ -136,40 +136,42 @@ class ObjectStateService implements APIObjectStateService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup[]
      */
-    public function loadObjectStateGroups( $offset = 0, $limit = -1 )
+    public function loadObjectStateGroups($offset = 0, $limit = -1)
     {
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate( 'objectstategroups' ),
+            $this->requestParser->generate('objectstategroups'),
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'ObjectStateGroupList' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('ObjectStateGroupList'))
             )
         );
-        return $this->inputDispatcher->parse( $response );
+
+        return $this->inputDispatcher->parse($response);
     }
 
     /**
-     * This method returns the ordered list of object states of a group
+     * This method returns the ordered list of object states of a group.
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState[]
      */
-    public function loadObjectStates( ObjectStateGroup $objectStateGroup )
+    public function loadObjectStates(ObjectStateGroup $objectStateGroup)
     {
-        $values = $this->requestParser->parse( 'objectstategroup', $objectStateGroup->id );
+        $values = $this->requestParser->parse('objectstategroup', $objectStateGroup->id);
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate( 'objectstates', array( 'objectstategroup' => $values['objectstategroup'] ) ),
+            $this->requestParser->generate('objectstates', array('objectstategroup' => $values['objectstategroup'])),
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'ObjectStateList' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('ObjectStateList'))
             )
         );
-        return $this->inputDispatcher->parse( $response );
+
+        return $this->inputDispatcher->parse($response);
     }
 
     /**
-     * Updates an object state group
+     * Updates an object state group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state group
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state group with provided identifier already exists
@@ -179,10 +181,10 @@ class ObjectStateService implements APIObjectStateService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function updateObjectStateGroup( ObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct )
+    public function updateObjectStateGroup(ObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct)
     {
-        $inputMessage = $this->outputVisitor->visit( $objectStateGroupUpdateStruct );
-        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'ObjectStateGroup' );
+        $inputMessage = $this->outputVisitor->visit($objectStateGroupUpdateStruct);
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType('ObjectStateGroup');
         $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
 
         // Should originally be PATCH, but PHP's shiny new internal web server
@@ -193,17 +195,17 @@ class ObjectStateService implements APIObjectStateService, Sessionable
             $inputMessage
         );
 
-        return $this->inputDispatcher->parse( $result );
+        return $this->inputDispatcher->parse($result);
     }
 
     /**
-     * Deletes a object state group including all states and links to content
+     * Deletes a object state group including all states and links to content.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete an object state group
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      */
-    public function deleteObjectStateGroup( ObjectStateGroup $objectStateGroup )
+    public function deleteObjectStateGroup(ObjectStateGroup $objectStateGroup)
     {
         $response = $this->client->request(
             'DELETE',
@@ -213,12 +215,13 @@ class ObjectStateService implements APIObjectStateService, Sessionable
                 // all expected exceptions + none? Or is "ObjectStateGroup" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'ObjectStateGroup' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('ObjectStateGroup'))
             )
         );
 
-        if ( !empty( $response->body ) )
-            $this->inputDispatcher->parse( $response );
+        if (!empty($response->body)) {
+            $this->inputDispatcher->parse($response);
+        }
     }
 
     /**
@@ -235,22 +238,22 @@ class ObjectStateService implements APIObjectStateService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function createObjectState( ObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct )
+    public function createObjectState(ObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct)
     {
-        $inputMessage = $this->outputVisitor->visit( $objectStateCreateStruct );
-        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'ObjectState' );
+        $inputMessage = $this->outputVisitor->visit($objectStateCreateStruct);
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType('ObjectState');
 
         $result = $this->client->request(
             'POST',
-            $this->requestParser->generate( 'objectstates', array( 'objectstategroup' => $objectStateGroup->id ) ),
+            $this->requestParser->generate('objectstates', array('objectstategroup' => $objectStateGroup->id)),
             $inputMessage
         );
 
-        return $this->inputDispatcher->parse( $result );
+        return $this->inputDispatcher->parse($result);
     }
 
     /**
-     * Loads an object state
+     * Loads an object state.
      *
      * @param mixed $stateId
      *
@@ -258,20 +261,21 @@ class ObjectStateService implements APIObjectStateService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function loadObjectState( $stateId )
+    public function loadObjectState($stateId)
     {
         $response = $this->client->request(
             'GET',
             $stateId,
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'ObjectState' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('ObjectState'))
             )
         );
-        return $this->inputDispatcher->parse( $response );
+
+        return $this->inputDispatcher->parse($response);
     }
 
     /**
-     * Updates an object state
+     * Updates an object state.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the object state with provided identifier already exists in the same group
@@ -281,10 +285,10 @@ class ObjectStateService implements APIObjectStateService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function updateObjectState( ObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct )
+    public function updateObjectState(ObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct)
     {
-        $inputMessage = $this->outputVisitor->visit( $objectStateUpdateStruct );
-        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'ObjectState' );
+        $inputMessage = $this->outputVisitor->visit($objectStateUpdateStruct);
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType('ObjectState');
         $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
 
         // Should originally be PATCH, but PHP's shiny new internal web server
@@ -295,20 +299,20 @@ class ObjectStateService implements APIObjectStateService, Sessionable
             $inputMessage
         );
 
-        return $this->inputDispatcher->parse( $result );
+        return $this->inputDispatcher->parse($result);
     }
 
     /**
-     * Changes the priority of the state
+     * Changes the priority of the state.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to change priority on an object state
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      * @param int $priority
      */
-    public function setPriorityOfObjectState( ObjectState $objectState, $priority )
+    public function setPriorityOfObjectState(ObjectState $objectState, $priority)
     {
-        throw new \Exception( "@todo Implement" );
+        throw new \Exception('@todo Implement');
     }
 
     /**
@@ -319,7 +323,7 @@ class ObjectStateService implements APIObjectStateService, Sessionable
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      */
-    public function deleteObjectState( ObjectState $objectState )
+    public function deleteObjectState(ObjectState $objectState)
     {
         $response = $this->client->request(
             'DELETE',
@@ -329,12 +333,13 @@ class ObjectStateService implements APIObjectStateService, Sessionable
                 // all expected exceptions + none? Or is "ObjectState" correct,
                 // since this is what is to be expected by the resource
                 // identified by the URL?
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'ObjectState' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('ObjectState'))
             )
         );
 
-        if ( !empty( $response->body ) )
-            $this->inputDispatcher->parse( $response );
+        if (!empty($response->body)) {
+            $this->inputDispatcher->parse($response);
+        }
     }
 
     /**
@@ -347,22 +352,22 @@ class ObjectStateService implements APIObjectStateService, Sessionable
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      */
-    public function setContentState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState )
+    public function setContentState(ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState)
     {
-        $inputMessage = $this->outputVisitor->visit( new ContentObjectStates( array( $objectState ) ) );
-        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'ContentObjectStates' );
+        $inputMessage = $this->outputVisitor->visit(new ContentObjectStates(array($objectState)));
+        $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType('ContentObjectStates');
         $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
 
         // Should originally be PATCH, but PHP's shiny new internal web server
         // dies with it.
-        $values = $this->requestParser->parse( 'object', $contentInfo->id );
+        $values = $this->requestParser->parse('object', $contentInfo->id);
         $result = $this->client->request(
             'POST',
-            $this->requestParser->generate( 'objectObjectStates', array( 'object' => $values['object'] ) ),
+            $this->requestParser->generate('objectObjectStates', array('object' => $values['object'])),
             $inputMessage
         );
 
-        $this->inputDispatcher->parse( $result );
+        $this->inputDispatcher->parse($result);
     }
 
     /**
@@ -375,39 +380,37 @@ class ObjectStateService implements APIObjectStateService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */
-    public function getContentState( ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup )
+    public function getContentState(ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup)
     {
-        $values = $this->requestParser->parse( 'object', $contentInfo->id );
-        $groupValues = $this->requestParser->parse( 'objectstategroup', $objectStateGroup->id );
+        $values = $this->requestParser->parse('object', $contentInfo->id);
+        $groupValues = $this->requestParser->parse('objectstategroup', $objectStateGroup->id);
         $response = $this->client->request(
             'GET',
-            $this->requestParser->generate( 'objectObjectStates', array( 'object' => $values['object'] ) ),
+            $this->requestParser->generate('objectObjectStates', array('object' => $values['object'])),
             new Message(
-                array( 'Accept' => $this->outputVisitor->getMediaType( 'ContentObjectStates' ) )
+                array('Accept' => $this->outputVisitor->getMediaType('ContentObjectStates'))
             )
         );
 
-        $objectStates = $this->inputDispatcher->parse( $response );
-        foreach ( $objectStates as $state )
-        {
-            $stateValues = $this->requestParser->parse( 'objectstate', $state->id );
-            if ( $stateValues['objectstategroup'] == $groupValues['objectstategroup'] )
-            {
+        $objectStates = $this->inputDispatcher->parse($response);
+        foreach ($objectStates as $state) {
+            $stateValues = $this->requestParser->parse('objectstate', $state->id);
+            if ($stateValues['objectstategroup'] == $groupValues['objectstategroup']) {
                 return $state;
             }
         }
     }
 
     /**
-     * Returns the number of objects which are in this state
+     * Returns the number of objects which are in this state.
      *
      * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
      *
      * @return int
      */
-    public function getContentCount( ObjectState $objectState )
+    public function getContentCount(ObjectState $objectState)
     {
-        throw new \Exception( "@todo Implement" );
+        throw new \Exception('@todo Implement');
     }
 
     /**
@@ -417,11 +420,11 @@ class ObjectStateService implements APIObjectStateService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct
      */
-    public function newObjectStateGroupCreateStruct( $identifier )
+    public function newObjectStateGroupCreateStruct($identifier)
     {
         return new ObjectStateGroupCreateStruct(
             array(
-                'identifier' => $identifier
+                'identifier' => $identifier,
             )
         );
     }
@@ -443,11 +446,11 @@ class ObjectStateService implements APIObjectStateService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct
      */
-    public function newObjectStateCreateStruct( $identifier )
+    public function newObjectStateCreateStruct($identifier)
     {
         return new ObjectStateCreateStruct(
             array(
-                'identifier' => $identifier
+                'identifier' => $identifier,
             )
         );
     }

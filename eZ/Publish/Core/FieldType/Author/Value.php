@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Author Value class
+ * File containing the Author Value class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,25 +14,25 @@ namespace eZ\Publish\Core\FieldType\Author;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
- * Value for Author field type
+ * Value for Author field type.
  */
 class Value extends BaseValue
 {
     /**
-     * List of authors
+     * List of authors.
      *
      * @var \eZ\Publish\Core\FieldType\Author\AuthorCollection
      */
     public $authors;
 
     /**
-     * Construct a new Value object and initialize with $authors
+     * Construct a new Value object and initialize with $authors.
      *
      * @param \eZ\Publish\Core\FieldType\Author\Author[] $authors
      */
-    public function __construct( array $authors = array() )
+    public function __construct(array $authors = array())
     {
-        $this->authors = new AuthorCollection( $authors );
+        $this->authors = new AuthorCollection($authors);
     }
 
     /**
@@ -38,19 +40,18 @@ class Value extends BaseValue
      */
     public function __toString()
     {
-        if ( empty( $this->authors ) )
-            return "";
+        if (empty($this->authors)) {
+            return '';
+        }
 
         $authorNames = array();
 
-        if ( $this->authors instanceof AuthorCollection )
-        {
-            foreach ( $this->authors as $author )
-            {
+        if ($this->authors instanceof AuthorCollection) {
+            foreach ($this->authors as $author) {
                 $authorNames[] = $author->name;
             }
         }
 
-        return implode( ', ', $authorNames );
+        return implode(', ', $authorNames);
     }
 }

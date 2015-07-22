@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -44,22 +46,22 @@ class RelatedLocationsListenerTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->repository = $this
-            ->getMockBuilder( '\eZ\Publish\Core\Repository\Repository' )
+            ->getMockBuilder('\eZ\Publish\Core\Repository\Repository')
             ->disableOriginalConstructor()
-            ->setMethods( ['getContentService', 'getLocationService'] )
+            ->setMethods(['getContentService', 'getLocationService'])
             ->getMock();
-        $this->contentService = $this->getMock( '\eZ\Publish\API\Repository\ContentService' );
-        $this->locationService = $this->getMock( '\eZ\Publish\API\Repository\LocationService' );
+        $this->contentService = $this->getMock('\eZ\Publish\API\Repository\ContentService');
+        $this->locationService = $this->getMock('\eZ\Publish\API\Repository\LocationService');
         $this->repository
-            ->expects( $this->any() )
-            ->method( 'getContentService' )
-            ->will( $this->returnValue( $this->contentService ) );
+            ->expects($this->any())
+            ->method('getContentService')
+            ->will($this->returnValue($this->contentService));
         $this->repository
-            ->expects( $this->any() )
-            ->method( 'getLocationService' )
-            ->will( $this->returnValue( $this->locationService ) );
+            ->expects($this->any())
+            ->method('getLocationService')
+            ->will($this->returnValue($this->locationService));
 
-        $this->listener = new RelatedLocationsListener( $this->repository );
+        $this->listener = new RelatedLocationsListener($this->repository);
     }
 
     public function testGetSubscribedEvents()
@@ -73,46 +75,46 @@ class RelatedLocationsListenerTest extends PHPUnit_Framework_TestCase
     public function testOnContentCacheClear()
     {
         $contentId = 123;
-        $contentInfo = new ContentInfo( ['id' => $contentId] );
-        $event = new ContentCacheClearEvent( $contentInfo );
+        $contentInfo = new ContentInfo(['id' => $contentId]);
+        $event = new ContentCacheClearEvent($contentInfo);
 
         $versionInfo = new VersionInfo();
         $this->contentService
-            ->expects( $this->once() )
-            ->method( 'loadVersionInfo' )
-            ->with( $contentInfo )
-            ->will( $this->returnValue( $versionInfo ) );
+            ->expects($this->once())
+            ->method('loadVersionInfo')
+            ->with($contentInfo)
+            ->will($this->returnValue($versionInfo));
 
         // Relation
-        $relatedContentInfo1 = new ContentInfo( ['id' => 1] );
+        $relatedContentInfo1 = new ContentInfo(['id' => 1]);
         $relatedLocation1 = new Location();
-        $relatedContentInfo2 = new ContentInfo( ['id' => 2] );
+        $relatedContentInfo2 = new ContentInfo(['id' => 2]);
         $relatedLocation2 = new Location();
         $relatedLocation3 = new Location();
         $relations = [
-            new Relation( ['destinationContentInfo' => $relatedContentInfo1] ),
-            new Relation( ['destinationContentInfo' => $relatedContentInfo2] ),
+            new Relation(['destinationContentInfo' => $relatedContentInfo1]),
+            new Relation(['destinationContentInfo' => $relatedContentInfo2]),
         ];
         $this->contentService
-            ->expects( $this->once() )
-            ->method( 'loadRelations' )
-            ->with( $versionInfo )
-            ->will( $this->returnValue( $relations ) );
+            ->expects($this->once())
+            ->method('loadRelations')
+            ->with($versionInfo)
+            ->will($this->returnValue($relations));
 
         // Reverse relations
         $reverseRelatedContentInfo = new ContentInfo();
         $relatedLocation4 = new Location();
-        $reverseRelations = [new Relation( ['sourceContentInfo' => $reverseRelatedContentInfo] )];
+        $reverseRelations = [new Relation(['sourceContentInfo' => $reverseRelatedContentInfo])];
         $this->contentService
-            ->expects( $this->once() )
-            ->method( 'loadReverseRelations' )
-            ->with( $contentInfo )
-            ->will( $this->returnValue( $reverseRelations ) );
+            ->expects($this->once())
+            ->method('loadReverseRelations')
+            ->with($contentInfo)
+            ->will($this->returnValue($reverseRelations));
 
         // Relation locations loading with locationService
         $this->locationService
-            ->expects( $this->exactly( count( $relations ) + count( $reverseRelations ) ) )
-            ->method( 'loadLocations' )
+            ->expects($this->exactly(count($relations) + count($reverseRelations)))
+            ->method('loadLocations')
             ->will(
                 $this->returnValueMap(
                     [
@@ -124,7 +126,7 @@ class RelatedLocationsListenerTest extends PHPUnit_Framework_TestCase
             );
 
         $allRelatedLocations = [$relatedLocation1, $relatedLocation2, $relatedLocation3, $relatedLocation4];
-        $this->listener->onContentCacheClear( $event );
-        $this->assertSame( $allRelatedLocations, $event->getLocationsToClear() );
+        $this->listener->onContentCacheClear($event);
+        $this->assertSame($allRelatedLocations, $event->getLocationsToClear());
     }
 }

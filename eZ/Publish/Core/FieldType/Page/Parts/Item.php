@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Item class
+ * File containing the Item class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -93,8 +95,7 @@ class Item extends ValueObject
     {
         $hash = array();
 
-        foreach ( $this->getProperties() as $property )
-        {
+        foreach ($this->getProperties() as $property) {
             $hash[$property] = $this->$property;
         }
 

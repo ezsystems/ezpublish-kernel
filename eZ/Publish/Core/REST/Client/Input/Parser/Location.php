@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Location parser class
+ * File containing the Location parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\Core\Repository\Values;
 
 /**
- * Parser for Location
+ * Parser for Location.
  */
 class Location extends BaseParser
 {
@@ -28,13 +30,13 @@ class Location extends BaseParser
     /**
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
      */
-    public function __construct( ParserTools $parserTools )
+    public function __construct(ParserTools $parserTools)
     {
         $this->parserTools = $parserTools;
     }
 
     /**
-     * Parse input structure
+     * Parse input structure.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -43,9 +45,9 @@ class Location extends BaseParser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        $content = $parsingDispatcher->parse( $data['Content'], 'Content' );
+        $content = $parsingDispatcher->parse($data['Content'], 'Content');
 
         return new Values\Content\Location(
             array(
@@ -58,8 +60,8 @@ class Location extends BaseParser
                 'parentLocationId' => $data['ParentLocation']['_href'],
                 'pathString' => $data['pathString'],
                 'depth' => (int)$data['depth'],
-                'sortField' => $this->parserTools->parseDefaultSortField( $data['sortField'] ),
-                'sortOrder' => $this->parserTools->parseDefaultSortOrder( $data['sortOrder'] ),
+                'sortField' => $this->parserTools->parseDefaultSortField($data['sortField']),
+                'sortOrder' => $this->parserTools->parseDefaultSortOrder($data['sortOrder']),
             )
         );
     }

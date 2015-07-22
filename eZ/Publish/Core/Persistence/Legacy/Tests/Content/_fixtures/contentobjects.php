@@ -1,13 +1,13 @@
 <?php
 
-return array (
-  'ezcontentobject_attribute' => array (
-    0 => array (
+return array(
+  'ezcontentobject_attribute' => array(
+    0 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '4',
-      'data_float' => NULL,
-      'data_int' => NULL,
+      'data_float' => null,
+      'data_int' => null,
       'data_text' => 'Main group',
       'data_type_string' => 'ezstring',
       'id' => '7',
@@ -17,12 +17,12 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1 => array (
+    1 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '4',
-      'data_float' => NULL,
-      'data_int' => NULL,
+      'data_float' => null,
+      'data_int' => null,
       'data_text' => 'Users',
       'data_type_string' => 'ezstring',
       'id' => '8',
@@ -32,7 +32,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    2 => array (
+    2 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '8',
       'contentobject_id' => '10',
@@ -47,7 +47,7 @@ return array (
       'sort_key_string' => 'anonymous',
       'version' => '2',
     ),
-    3 => array (
+    3 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '9',
       'contentobject_id' => '10',
@@ -62,7 +62,7 @@ return array (
       'sort_key_string' => 'user',
       'version' => '2',
     ),
-    4 => array (
+    4 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '12',
       'contentobject_id' => '10',
@@ -77,7 +77,7 @@ return array (
       'sort_key_string' => '',
       'version' => '2',
     ),
-    5 => array (
+    5 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '11',
@@ -92,7 +92,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    6 => array (
+    6 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '11',
@@ -107,7 +107,7 @@ return array (
       'sort_key_string' => 'members',
       'version' => '2',
     ),
-    7 => array (
+    7 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '11',
@@ -122,7 +122,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    8 => array (
+    8 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '11',
@@ -137,7 +137,7 @@ return array (
       'sort_key_string' => '',
       'version' => '2',
     ),
-    9 => array (
+    9 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '12',
@@ -152,7 +152,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    10 => array (
+    10 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '12',
@@ -167,7 +167,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    11 => array (
+    11 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '13',
@@ -182,7 +182,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    12 => array (
+    12 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '13',
@@ -197,7 +197,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    13 => array (
+    13 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '8',
       'contentobject_id' => '14',
@@ -212,7 +212,7 @@ return array (
       'sort_key_string' => 'administrator',
       'version' => '3',
     ),
-    14 => array (
+    14 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '8',
       'contentobject_id' => '14',
@@ -227,7 +227,7 @@ return array (
       'sort_key_string' => 'administrator',
       'version' => '4',
     ),
-    15 => array (
+    15 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '9',
       'contentobject_id' => '14',
@@ -242,7 +242,7 @@ return array (
       'sort_key_string' => 'user',
       'version' => '3',
     ),
-    16 => array (
+    16 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '9',
       'contentobject_id' => '14',
@@ -257,7 +257,7 @@ return array (
       'sort_key_string' => 'user',
       'version' => '4',
     ),
-    17 => array (
+    17 => array(
       'attribute_original_id' => '30',
       'contentclassattribute_id' => '12',
       'contentobject_id' => '14',
@@ -272,7 +272,7 @@ return array (
       'sort_key_string' => '',
       'version' => '3',
     ),
-    18 => array (
+    18 => array(
       'attribute_original_id' => '30',
       'contentclassattribute_id' => '12',
       'contentobject_id' => '14',
@@ -287,7 +287,7 @@ return array (
       'sort_key_string' => '',
       'version' => '4',
     ),
-    19 => array (
+    19 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '41',
@@ -302,7 +302,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    20 => array (
+    20 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '41',
@@ -320,7 +320,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    21 => array (
+    21 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '42',
@@ -335,7 +335,7 @@ return array (
       'sort_key_string' => 'anonymous users',
       'version' => '1',
     ),
-    22 => array (
+    22 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '42',
@@ -350,7 +350,7 @@ return array (
       'sort_key_string' => 'user group for the anonymous user',
       'version' => '1',
     ),
-    23 => array (
+    23 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '41',
@@ -365,7 +365,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    24 => array (
+    24 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '41',
@@ -380,7 +380,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    25 => array (
+    25 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '41',
@@ -395,7 +395,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    26 => array (
+    26 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '45',
@@ -410,7 +410,7 @@ return array (
       'sort_key_string' => 'setup',
       'version' => '1',
     ),
-    27 => array (
+    27 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '45',
@@ -425,7 +425,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    28 => array (
+    28 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '45',
@@ -443,7 +443,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    29 => array (
+    29 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '45',
@@ -461,7 +461,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    30 => array (
+    30 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '45',
@@ -476,7 +476,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    31 => array (
+    31 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '49',
@@ -491,7 +491,7 @@ return array (
       'sort_key_string' => 'images',
       'version' => '1',
     ),
-    32 => array (
+    32 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '49',
@@ -506,7 +506,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    33 => array (
+    33 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '49',
@@ -524,7 +524,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    34 => array (
+    34 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '49',
@@ -542,7 +542,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    35 => array (
+    35 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '49',
@@ -557,7 +557,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    36 => array (
+    36 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '50',
@@ -572,7 +572,7 @@ return array (
       'sort_key_string' => 'files',
       'version' => '1',
     ),
-    37 => array (
+    37 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '50',
@@ -587,7 +587,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    38 => array (
+    38 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '50',
@@ -605,7 +605,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    39 => array (
+    39 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '50',
@@ -623,7 +623,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    40 => array (
+    40 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '50',
@@ -638,7 +638,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    41 => array (
+    41 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '51',
@@ -653,7 +653,7 @@ return array (
       'sort_key_string' => 'multimedia',
       'version' => '1',
     ),
-    42 => array (
+    42 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '51',
@@ -668,7 +668,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    43 => array (
+    43 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '51',
@@ -686,7 +686,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    44 => array (
+    44 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '51',
@@ -704,7 +704,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    45 => array (
+    45 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '51',
@@ -719,7 +719,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    46 => array (
+    46 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '159',
       'contentobject_id' => '52',
@@ -734,7 +734,7 @@ return array (
       'sort_key_string' => 'common ini settings',
       'version' => '1',
     ),
-    47 => array (
+    47 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '160',
       'contentobject_id' => '52',
@@ -749,7 +749,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    48 => array (
+    48 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '161',
       'contentobject_id' => '52',
@@ -764,7 +764,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    49 => array (
+    49 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '162',
       'contentobject_id' => '52',
@@ -779,7 +779,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    50 => array (
+    50 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '163',
       'contentobject_id' => '52',
@@ -794,7 +794,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    51 => array (
+    51 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '164',
       'contentobject_id' => '52',
@@ -809,7 +809,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    52 => array (
+    52 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '165',
       'contentobject_id' => '52',
@@ -824,7 +824,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    53 => array (
+    53 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '166',
       'contentobject_id' => '52',
@@ -839,7 +839,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    54 => array (
+    54 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '167',
       'contentobject_id' => '52',
@@ -854,7 +854,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    55 => array (
+    55 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '168',
       'contentobject_id' => '52',
@@ -869,7 +869,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    56 => array (
+    56 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '169',
       'contentobject_id' => '52',
@@ -884,7 +884,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    57 => array (
+    57 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '170',
       'contentobject_id' => '52',
@@ -899,7 +899,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    58 => array (
+    58 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '171',
       'contentobject_id' => '52',
@@ -914,7 +914,7 @@ return array (
       'sort_key_string' => '',
       'version' => '1',
     ),
-    59 => array (
+    59 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '172',
       'contentobject_id' => '54',
@@ -929,7 +929,7 @@ return array (
       'sort_key_string' => '',
       'version' => '2',
     ),
-    60 => array (
+    60 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '173',
       'contentobject_id' => '54',
@@ -947,7 +947,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    61 => array (
+    61 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '174',
       'contentobject_id' => '54',
@@ -964,7 +964,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    62 => array (
+    62 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '175',
       'contentobject_id' => '54',
@@ -979,7 +979,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '0',
       'version' => '2',
     ),
-    63 => array (
+    63 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '177',
       'contentobject_id' => '54',
@@ -994,7 +994,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    64 => array (
+    64 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '178',
       'contentobject_id' => '54',
@@ -1009,7 +1009,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    65 => array (
+    65 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '179',
       'contentobject_id' => '10',
@@ -1024,7 +1024,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    66 => array (
+    66 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '179',
       'contentobject_id' => '14',
@@ -1039,7 +1039,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '3',
     ),
-    67 => array (
+    67 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '179',
       'contentobject_id' => '14',
@@ -1054,7 +1054,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '4',
     ),
-    68 => array (
+    68 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '180',
       'contentobject_id' => '10',
@@ -1069,7 +1069,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    69 => array (
+    69 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '180',
       'contentobject_id' => '14',
@@ -1086,7 +1086,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '3',
     ),
-    70 => array (
+    70 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '180',
       'contentobject_id' => '14',
@@ -1103,12 +1103,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '4',
     ),
-    71 => array (
+    71 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '56',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Design',
       'data_type_string' => 'ezstring',
       'id' => '181',
@@ -1118,12 +1118,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'design',
       'version' => '1',
     ),
-    72 => array (
+    72 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '56',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '182',
@@ -1133,7 +1133,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    73 => array (
+    73 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '56',
@@ -1151,7 +1151,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    74 => array (
+    74 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '56',
@@ -1169,7 +1169,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    75 => array (
+    75 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '56',
@@ -1184,12 +1184,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    76 => array (
+    76 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '41',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '187',
@@ -1199,12 +1199,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    77 => array (
+    77 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '45',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '188',
@@ -1214,12 +1214,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    78 => array (
+    78 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '49',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '189',
@@ -1229,12 +1229,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    79 => array (
+    79 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '50',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '190',
@@ -1244,12 +1244,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    80 => array (
+    80 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '51',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '191',
@@ -1259,12 +1259,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    81 => array (
+    81 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '56',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '192',
@@ -1274,7 +1274,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    82 => array (
+    82 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '41',
@@ -1289,7 +1289,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    83 => array (
+    83 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '45',
@@ -1304,7 +1304,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    84 => array (
+    84 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '49',
@@ -1319,7 +1319,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    85 => array (
+    85 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '50',
@@ -1334,7 +1334,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    86 => array (
+    86 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '51',
@@ -1349,7 +1349,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    87 => array (
+    87 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '56',
@@ -1364,12 +1364,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    88 => array (
+    88 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '57',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Banners',
       'data_type_string' => 'ezstring',
       'id' => '200',
@@ -1379,12 +1379,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'banners',
       'version' => '1',
     ),
-    89 => array (
+    89 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '57',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '201',
@@ -1394,7 +1394,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    90 => array (
+    90 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '57',
@@ -1411,7 +1411,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    91 => array (
+    91 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '57',
@@ -1428,7 +1428,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    92 => array (
+    92 => array(
       'attribute_original_id' => '204',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '57',
@@ -1443,12 +1443,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    93 => array (
+    93 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '57',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '205',
@@ -1458,7 +1458,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    94 => array (
+    94 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '57',
@@ -1473,12 +1473,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    95 => array (
+    95 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '319',
       'contentobject_id' => '58',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Woman (Communities)',
       'data_type_string' => 'ezstring',
       'id' => '207',
@@ -1488,12 +1488,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'woman (communities)',
       'version' => '1',
     ),
-    96 => array (
+    96 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '320',
       'contentobject_id' => '58',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '208',
@@ -1503,12 +1503,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    97 => array (
+    97 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '321',
       'contentobject_id' => '58',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Woman-Communities.jpg" suffix="jpg" basename="Woman-Communities" dirpath="var/ezwebin_site/storage/images/media/banners/woman-communities/209-1-eng-US" url="var/ezwebin_site/storage/images/media/banners/woman-communities/209-1-eng-US/Woman-Communities.jpg" original_filename="84f1da4c.jpg" mime_type="image/jpeg" width="764" height="197" alternative_text="Woman (Communities)" alias_key="1293033771" timestamp="1311154173"><original attribute_id="209" attribute_version="1" attribute_language="eng-US"/><information Height="197" Width="764" IsColor="1"/></ezimage>
 ',
@@ -1520,12 +1520,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    98 => array (
+    98 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '322',
       'contentobject_id' => '58',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'eztext',
       'id' => '210',
@@ -1535,12 +1535,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    99 => array (
+    99 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '323',
       'contentobject_id' => '58',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '211',
@@ -1550,12 +1550,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    100 => array (
+    100 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '319',
       'contentobject_id' => '59',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Woman (Frontpage)',
       'data_type_string' => 'ezstring',
       'id' => '212',
@@ -1565,12 +1565,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'woman (frontpage)',
       'version' => '1',
     ),
-    101 => array (
+    101 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '320',
       'contentobject_id' => '59',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '213',
@@ -1580,12 +1580,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    102 => array (
+    102 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '321',
       'contentobject_id' => '59',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Woman-Frontpage.jpg" suffix="jpg" basename="Woman-Frontpage" dirpath="var/ezwebin_site/storage/images/media/banners/woman-frontpage/214-1-eng-US" url="var/ezwebin_site/storage/images/media/banners/woman-frontpage/214-1-eng-US/Woman-Frontpage.jpg" original_filename="83ea7f16.jpg" mime_type="image/jpeg" width="764" height="197" alternative_text="Woman (Frontpage)" alias_key="1293033771" timestamp="1311154173"><original attribute_id="214" attribute_version="1" attribute_language="eng-US"/><information Height="197" Width="764" IsColor="1"/></ezimage>
 ',
@@ -1597,12 +1597,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    103 => array (
+    103 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '322',
       'contentobject_id' => '59',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'eztext',
       'id' => '215',
@@ -1612,12 +1612,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    104 => array (
+    104 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '323',
       'contentobject_id' => '59',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '216',
@@ -1627,12 +1627,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    105 => array (
+    105 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '319',
       'contentobject_id' => '60',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Woman (Products)',
       'data_type_string' => 'ezstring',
       'id' => '217',
@@ -1642,12 +1642,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'woman (products)',
       'version' => '1',
     ),
-    106 => array (
+    106 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '320',
       'contentobject_id' => '60',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '218',
@@ -1657,12 +1657,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    107 => array (
+    107 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '321',
       'contentobject_id' => '60',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Woman-Products.jpg" suffix="jpg" basename="Woman-Products" dirpath="var/ezwebin_site/storage/images/media/banners/woman-products/219-1-eng-US" url="var/ezwebin_site/storage/images/media/banners/woman-products/219-1-eng-US/Woman-Products.jpg" original_filename="99bedbaa.jpg" mime_type="image/jpeg" width="764" height="197" alternative_text="Woman (Products)" alias_key="1293033771" timestamp="1311154173"><original attribute_id="219" attribute_version="1" attribute_language="eng-US"/><information Height="197" Width="764" IsColor="1"/></ezimage>
 ',
@@ -1674,12 +1674,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    108 => array (
+    108 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '322',
       'contentobject_id' => '60',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'eztext',
       'id' => '220',
@@ -1689,12 +1689,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    109 => array (
+    109 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '323',
       'contentobject_id' => '60',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '221',
@@ -1704,12 +1704,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    110 => array (
+    110 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '319',
       'contentobject_id' => '61',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Woman (Partners)',
       'data_type_string' => 'ezstring',
       'id' => '222',
@@ -1719,12 +1719,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'woman (partners)',
       'version' => '1',
     ),
-    111 => array (
+    111 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '320',
       'contentobject_id' => '61',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '223',
@@ -1734,12 +1734,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    112 => array (
+    112 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '321',
       'contentobject_id' => '61',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Woman-Partners.jpg" suffix="jpg" basename="Woman-Partners" dirpath="var/ezwebin_site/storage/images/media/banners/woman-partners/224-1-eng-US" url="var/ezwebin_site/storage/images/media/banners/woman-partners/224-1-eng-US/Woman-Partners.jpg" original_filename="24ec46f7.jpg" mime_type="image/jpeg" width="764" height="197" alternative_text="Woman (Partners)" alias_key="1293033771" timestamp="1311154173"><original attribute_id="224" attribute_version="1" attribute_language="eng-US"/><information Height="197" Width="764" IsColor="1"/></ezimage>
 ',
@@ -1751,12 +1751,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    113 => array (
+    113 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '322',
       'contentobject_id' => '61',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'eztext',
       'id' => '225',
@@ -1766,12 +1766,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    114 => array (
+    114 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '323',
       'contentobject_id' => '61',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '226',
@@ -1781,12 +1781,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    115 => array (
+    115 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '319',
       'contentobject_id' => '62',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Pencils (Support)',
       'data_type_string' => 'ezstring',
       'id' => '227',
@@ -1796,12 +1796,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'pencils (support)',
       'version' => '1',
     ),
-    116 => array (
+    116 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '320',
       'contentobject_id' => '62',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '228',
@@ -1811,12 +1811,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    117 => array (
+    117 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '321',
       'contentobject_id' => '62',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Pencils-Support.jpg" suffix="jpg" basename="Pencils-Support" dirpath="var/ezwebin_site/storage/images/media/banners/pencils-support/229-1-eng-US" url="var/ezwebin_site/storage/images/media/banners/pencils-support/229-1-eng-US/Pencils-Support.jpg" original_filename="50dbb211.jpg" mime_type="image/jpeg" width="764" height="197" alternative_text="Pencils (Support)" alias_key="1293033771" timestamp="1311154173"><original attribute_id="229" attribute_version="1" attribute_language="eng-US"/><information Height="197" Width="764" IsColor="1"/></ezimage>
 ',
@@ -1828,12 +1828,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    118 => array (
+    118 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '322',
       'contentobject_id' => '62',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'eztext',
       'id' => '230',
@@ -1843,12 +1843,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    119 => array (
+    119 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '323',
       'contentobject_id' => '62',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '231',
@@ -1858,12 +1858,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    120 => array (
+    120 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '319',
       'contentobject_id' => '63',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Woman (Training)',
       'data_type_string' => 'ezstring',
       'id' => '232',
@@ -1873,12 +1873,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'woman (training)',
       'version' => '1',
     ),
-    121 => array (
+    121 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '320',
       'contentobject_id' => '63',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '233',
@@ -1888,12 +1888,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    122 => array (
+    122 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '321',
       'contentobject_id' => '63',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Woman-Training.jpg" suffix="jpg" basename="Woman-Training" dirpath="var/ezwebin_site/storage/images/media/banners/woman-training/234-1-eng-US" url="var/ezwebin_site/storage/images/media/banners/woman-training/234-1-eng-US/Woman-Training.jpg" original_filename="47966db1.jpg" mime_type="image/jpeg" width="764" height="197" alternative_text="Woman (Training)" alias_key="1293033771" timestamp="1311154174"><original attribute_id="234" attribute_version="1" attribute_language="eng-US"/><information Height="197" Width="764" IsColor="1"/></ezimage>
 ',
@@ -1905,12 +1905,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    123 => array (
+    123 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '322',
       'contentobject_id' => '63',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'eztext',
       'id' => '235',
@@ -1920,12 +1920,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    124 => array (
+    124 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '323',
       'contentobject_id' => '63',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '236',
@@ -1935,12 +1935,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    125 => array (
+    125 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '319',
       'contentobject_id' => '64',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Woman (Solutions)',
       'data_type_string' => 'ezstring',
       'id' => '237',
@@ -1950,12 +1950,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'woman (solutions)',
       'version' => '1',
     ),
-    126 => array (
+    126 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '320',
       'contentobject_id' => '64',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '238',
@@ -1965,12 +1965,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    127 => array (
+    127 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '321',
       'contentobject_id' => '64',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Woman-Solutions.jpg" suffix="jpg" basename="Woman-Solutions" dirpath="var/ezwebin_site/storage/images/media/banners/woman-solutions/239-1-eng-US" url="var/ezwebin_site/storage/images/media/banners/woman-solutions/239-1-eng-US/Woman-Solutions.jpg" original_filename="944390f8.jpg" mime_type="image/jpeg" width="764" height="197" alternative_text="Woman (Solutions)" alias_key="1293033771" timestamp="1311154174"><original attribute_id="239" attribute_version="1" attribute_language="eng-US"/><information Height="197" Width="764" IsColor="1"/></ezimage>
 ',
@@ -1982,12 +1982,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    128 => array (
+    128 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '322',
       'contentobject_id' => '64',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'eztext',
       'id' => '240',
@@ -1997,12 +1997,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    129 => array (
+    129 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '323',
       'contentobject_id' => '64',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '241',
@@ -2012,12 +2012,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    130 => array (
+    130 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '236',
       'contentobject_id' => '65',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Home',
       'data_type_string' => 'ezstring',
       'id' => '242',
@@ -2027,12 +2027,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'home',
       'version' => '1',
     ),
-    131 => array (
+    131 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '237',
       'contentobject_id' => '65',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezobjectrelation',
       'id' => '243',
@@ -2042,7 +2042,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    132 => array (
+    132 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '238',
       'contentobject_id' => '65',
@@ -2057,7 +2057,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    133 => array (
+    133 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '239',
       'contentobject_id' => '65',
@@ -2074,7 +2074,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    134 => array (
+    134 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '240',
       'contentobject_id' => '65',
@@ -2091,7 +2091,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    135 => array (
+    135 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '241',
       'contentobject_id' => '65',
@@ -2106,12 +2106,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    136 => array (
+    136 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '242',
       'contentobject_id' => '65',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '248',
@@ -2121,12 +2121,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    137 => array (
+    137 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '66',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'rest_api',
       'data_type_string' => 'ezstring',
       'id' => '249',
@@ -2136,7 +2136,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'rest_api',
       'version' => '1',
     ),
-    138 => array (
+    138 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '66',
@@ -2151,12 +2151,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    139 => array (
+    139 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '66',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="rest_api.png" suffix="png" basename="rest_api" dirpath="var/ezwebin_site/storage/images/media/images/rest_api/251-1-eng-US" url="var/ezwebin_site/storage/images/media/images/rest_api/251-1-eng-US/rest_api.png" original_filename="4d710d81.png" mime_type="image/png" width="442" height="356" alternative_text="" alias_key="1293033771" timestamp="1311154174"><original attribute_id="251" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -2168,12 +2168,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    140 => array (
+    140 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '66',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '252',
@@ -2183,12 +2183,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    141 => array (
+    141 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '236',
       'contentobject_id' => '67',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Products',
       'data_type_string' => 'ezstring',
       'id' => '253',
@@ -2198,7 +2198,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'products',
       'version' => '1',
     ),
-    142 => array (
+    142 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '237',
       'contentobject_id' => '67',
@@ -2213,7 +2213,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    143 => array (
+    143 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '238',
       'contentobject_id' => '67',
@@ -2233,7 +2233,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    144 => array (
+    144 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '239',
       'contentobject_id' => '67',
@@ -2259,7 +2259,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    145 => array (
+    145 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '240',
       'contentobject_id' => '67',
@@ -2274,7 +2274,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    146 => array (
+    146 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '241',
       'contentobject_id' => '67',
@@ -2289,12 +2289,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    147 => array (
+    147 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '242',
       'contentobject_id' => '67',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '259',
@@ -2304,12 +2304,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    148 => array (
+    148 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '68',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Software',
       'data_type_string' => 'ezstring',
       'id' => '260',
@@ -2319,12 +2319,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'software',
       'version' => '1',
     ),
-    149 => array (
+    149 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '68',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '261',
@@ -2334,7 +2334,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    150 => array (
+    150 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '68',
@@ -2349,7 +2349,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    151 => array (
+    151 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '68',
@@ -2364,7 +2364,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    152 => array (
+    152 => array(
       'attribute_original_id' => '264',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '68',
@@ -2379,12 +2379,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    153 => array (
+    153 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '68',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '265',
@@ -2394,7 +2394,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    154 => array (
+    154 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '68',
@@ -2409,12 +2409,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    155 => array (
+    155 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '220',
       'contentobject_id' => '69',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'OS Type I',
       'data_type_string' => 'ezstring',
       'id' => '267',
@@ -2424,12 +2424,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'os type i',
       'version' => '1',
     ),
-    156 => array (
+    156 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '221',
       'contentobject_id' => '69',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '268',
@@ -2439,7 +2439,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    157 => array (
+    157 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '222',
       'contentobject_id' => '69',
@@ -2454,7 +2454,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    158 => array (
+    158 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '223',
       'contentobject_id' => '69',
@@ -2469,12 +2469,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    159 => array (
+    159 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '224',
       'contentobject_id' => '69',
       'data_float' => '499',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezprice',
       'id' => '271',
@@ -2484,12 +2484,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    160 => array (
+    160 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '225',
       'contentobject_id' => '69',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="OS-Type-I.jpg" suffix="jpg" basename="OS-Type-I" dirpath="var/ezwebin_site/storage/images/products/software/os-type-i/272-1-eng-US" url="var/ezwebin_site/storage/images/products/software/os-type-i/272-1-eng-US/OS-Type-I.jpg" original_filename="5a7ae69c.jpg" mime_type="image/jpeg" width="148" height="116" alternative_text="OS Type I" alias_key="1293033771" timestamp="1311154175"><original attribute_id="272" attribute_version="1" attribute_language="eng-US"/><information Height="116" Width="148" IsColor="1"/></ezimage>
 ',
@@ -2501,7 +2501,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    161 => array (
+    161 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '226',
       'contentobject_id' => '69',
@@ -2516,12 +2516,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    162 => array (
+    162 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '227',
       'contentobject_id' => '69',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezmultioption option_counter="2"><name>Additional options</name><multioptions><multioption id="1" name="Type" priority="1" default_option_id=""><option id="1" option_id="1" value="Silver" additional_price="10.00"/><option id="2" option_id="2" value="Gold" additional_price="20.00"/></multioption></multioptions></ezmultioption>
 ',
@@ -2533,12 +2533,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    163 => array (
+    163 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '228',
       'contentobject_id' => '69',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '275',
@@ -2548,12 +2548,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    164 => array (
+    164 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '70',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Boxes',
       'data_type_string' => 'ezstring',
       'id' => '276',
@@ -2563,12 +2563,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'boxes',
       'version' => '1',
     ),
-    165 => array (
+    165 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '70',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '277',
@@ -2578,7 +2578,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    166 => array (
+    166 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '70',
@@ -2593,7 +2593,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    167 => array (
+    167 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '70',
@@ -2608,7 +2608,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    168 => array (
+    168 => array(
       'attribute_original_id' => '280',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '70',
@@ -2623,12 +2623,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    169 => array (
+    169 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '70',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '281',
@@ -2638,7 +2638,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    170 => array (
+    170 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '70',
@@ -2653,12 +2653,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    171 => array (
+    171 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '220',
       'contentobject_id' => '71',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'CD/DVD Box I',
       'data_type_string' => 'ezstring',
       'id' => '283',
@@ -2668,12 +2668,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'cd/dvd box i',
       'version' => '1',
     ),
-    172 => array (
+    172 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '221',
       'contentobject_id' => '71',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '284',
@@ -2683,7 +2683,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    173 => array (
+    173 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '222',
       'contentobject_id' => '71',
@@ -2698,7 +2698,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    174 => array (
+    174 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '223',
       'contentobject_id' => '71',
@@ -2713,12 +2713,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    175 => array (
+    175 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '224',
       'contentobject_id' => '71',
       'data_float' => '199',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezprice',
       'id' => '287',
@@ -2728,12 +2728,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    176 => array (
+    176 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '225',
       'contentobject_id' => '71',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="CD-DVD-Box-I.jpg" suffix="jpg" basename="CD-DVD-Box-I" dirpath="var/ezwebin_site/storage/images/products/boxes/cd-dvd-box-i/288-1-eng-US" url="var/ezwebin_site/storage/images/products/boxes/cd-dvd-box-i/288-1-eng-US/CD-DVD-Box-I.jpg" original_filename="835c5e5d.jpg" mime_type="image/jpeg" width="150" height="114" alternative_text="CD/DVD Box I" alias_key="1293033771" timestamp="1311154176"><original attribute_id="288" attribute_version="1" attribute_language="eng-US"/><information Height="114" Width="150" IsColor="1"/></ezimage>
 ',
@@ -2745,7 +2745,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    177 => array (
+    177 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '226',
       'contentobject_id' => '71',
@@ -2760,12 +2760,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    178 => array (
+    178 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '227',
       'contentobject_id' => '71',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezmultioption option_counter="2"><name>Additional options</name><multioptions><multioption id="1" name="Cover type" priority="1" default_option_id=""><option id="1" option_id="1" value="Soft" additional_price="10.00"/><option id="2" option_id="2" value="Hard" additional_price="15.00"/></multioption></multioptions></ezmultioption>
 ',
@@ -2777,12 +2777,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    179 => array (
+    179 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '228',
       'contentobject_id' => '71',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '291',
@@ -2792,12 +2792,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    180 => array (
+    180 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '220',
       'contentobject_id' => '72',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'CD/DVD Box II',
       'data_type_string' => 'ezstring',
       'id' => '292',
@@ -2807,12 +2807,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'cd/dvd box ii',
       'version' => '1',
     ),
-    181 => array (
+    181 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '221',
       'contentobject_id' => '72',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '293',
@@ -2822,7 +2822,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    182 => array (
+    182 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '222',
       'contentobject_id' => '72',
@@ -2837,7 +2837,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    183 => array (
+    183 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '223',
       'contentobject_id' => '72',
@@ -2852,12 +2852,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    184 => array (
+    184 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '224',
       'contentobject_id' => '72',
       'data_float' => '299',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezprice',
       'id' => '296',
@@ -2867,12 +2867,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    185 => array (
+    185 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '225',
       'contentobject_id' => '72',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="CD-DVD-Box-II.jpg" suffix="jpg" basename="CD-DVD-Box-II" dirpath="var/ezwebin_site/storage/images/products/boxes/cd-dvd-box-ii/297-1-eng-US" url="var/ezwebin_site/storage/images/products/boxes/cd-dvd-box-ii/297-1-eng-US/CD-DVD-Box-II.jpg" original_filename="f2444e89.jpg" mime_type="image/jpeg" width="152" height="124" alternative_text="CD/DVD Box II" alias_key="1293033771" timestamp="1311154176"><original attribute_id="297" attribute_version="1" attribute_language="eng-US"/><information Height="124" Width="152" IsColor="1"/></ezimage>
 ',
@@ -2884,7 +2884,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    186 => array (
+    186 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '226',
       'contentobject_id' => '72',
@@ -2899,12 +2899,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    187 => array (
+    187 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '227',
       'contentobject_id' => '72',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezmultioption option_counter="2"><name>Additional options</name><multioptions><multioption id="1" name="Cover type" priority="1" default_option_id=""><option id="1" option_id="1" value="Soft" additional_price="10.00"/><option id="2" option_id="2" value="Hard" additional_price="15.00"/></multioption></multioptions></ezmultioption>
 ',
@@ -2916,12 +2916,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    188 => array (
+    188 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '228',
       'contentobject_id' => '72',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '300',
@@ -2931,12 +2931,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    189 => array (
+    189 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '220',
       'contentobject_id' => '73',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'CD/DVD Box III',
       'data_type_string' => 'ezstring',
       'id' => '301',
@@ -2946,12 +2946,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'cd/dvd box iii',
       'version' => '1',
     ),
-    190 => array (
+    190 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '221',
       'contentobject_id' => '73',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '302',
@@ -2961,7 +2961,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    191 => array (
+    191 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '222',
       'contentobject_id' => '73',
@@ -2976,7 +2976,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    192 => array (
+    192 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '223',
       'contentobject_id' => '73',
@@ -2991,12 +2991,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    193 => array (
+    193 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '224',
       'contentobject_id' => '73',
       'data_float' => '99',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezprice',
       'id' => '305',
@@ -3006,12 +3006,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    194 => array (
+    194 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '225',
       'contentobject_id' => '73',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="CD-DVD-Box-III.jpg" suffix="jpg" basename="CD-DVD-Box-III" dirpath="var/ezwebin_site/storage/images/products/boxes/cd-dvd-box-iii/306-1-eng-US" url="var/ezwebin_site/storage/images/products/boxes/cd-dvd-box-iii/306-1-eng-US/CD-DVD-Box-III.jpg" original_filename="eff90c13.jpg" mime_type="image/jpeg" width="150" height="108" alternative_text="CD/DVD Box III" alias_key="1293033771" timestamp="1311154176"><original attribute_id="306" attribute_version="1" attribute_language="eng-US"/><information Height="108" Width="150" IsColor="1"/></ezimage>
 ',
@@ -3023,7 +3023,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    195 => array (
+    195 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '226',
       'contentobject_id' => '73',
@@ -3038,12 +3038,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    196 => array (
+    196 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '227',
       'contentobject_id' => '73',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezmultioption option_counter="2"><name>Additional options</name><multioptions><multioption id="1" name="Cover type" priority="1" default_option_id=""><option id="1" option_id="1" value="Soft" additional_price="10.00"/><option id="2" option_id="2" value="Hard" additional_price="15.00"/></multioption></multioptions></ezmultioption>
 ',
@@ -3055,12 +3055,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    197 => array (
+    197 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '228',
       'contentobject_id' => '73',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '309',
@@ -3070,12 +3070,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    198 => array (
+    198 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '74',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Products sheets',
       'data_type_string' => 'ezstring',
       'id' => '310',
@@ -3085,12 +3085,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'products sheets',
       'version' => '1',
     ),
-    199 => array (
+    199 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '74',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '311',
@@ -3100,7 +3100,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    200 => array (
+    200 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '74',
@@ -3115,7 +3115,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    201 => array (
+    201 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '74',
@@ -3130,7 +3130,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    202 => array (
+    202 => array(
       'attribute_original_id' => '314',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '74',
@@ -3145,12 +3145,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    203 => array (
+    203 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '74',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '315',
@@ -3160,7 +3160,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    204 => array (
+    204 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '74',
@@ -3175,12 +3175,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    205 => array (
+    205 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '236',
       'contentobject_id' => '75',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Solutions',
       'data_type_string' => 'ezstring',
       'id' => '317',
@@ -3190,7 +3190,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'solutions',
       'version' => '1',
     ),
-    206 => array (
+    206 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '237',
       'contentobject_id' => '75',
@@ -3205,7 +3205,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    207 => array (
+    207 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '238',
       'contentobject_id' => '75',
@@ -3220,7 +3220,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    208 => array (
+    208 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '239',
       'contentobject_id' => '75',
@@ -3243,7 +3243,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    209 => array (
+    209 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '240',
       'contentobject_id' => '75',
@@ -3260,7 +3260,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    210 => array (
+    210 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '241',
       'contentobject_id' => '75',
@@ -3275,12 +3275,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    211 => array (
+    211 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '242',
       'contentobject_id' => '75',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '323',
@@ -3290,12 +3290,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    212 => array (
+    212 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '76',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Web publishing',
       'data_type_string' => 'ezstring',
       'id' => '324',
@@ -3305,12 +3305,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'web publishing',
       'version' => '1',
     ),
-    213 => array (
+    213 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '76',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '325',
@@ -3320,7 +3320,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    214 => array (
+    214 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '76',
@@ -3335,7 +3335,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    215 => array (
+    215 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '76',
@@ -3350,7 +3350,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    216 => array (
+    216 => array(
       'attribute_original_id' => '328',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '76',
@@ -3365,12 +3365,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    217 => array (
+    217 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '76',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '329',
@@ -3380,7 +3380,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    218 => array (
+    218 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '76',
@@ -3395,12 +3395,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    219 => array (
+    219 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '77',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Fusce sagittis sagittis',
       'data_type_string' => 'ezstring',
       'id' => '331',
@@ -3410,12 +3410,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'fusce sagittis sagittis',
       'version' => '1',
     ),
-    220 => array (
+    220 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '77',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '332',
@@ -3425,12 +3425,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    221 => array (
+    221 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '77',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -3442,7 +3442,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    222 => array (
+    222 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '77',
@@ -3457,7 +3457,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    223 => array (
+    223 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '77',
@@ -3472,7 +3472,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    224 => array (
+    224 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '77',
@@ -3487,12 +3487,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    225 => array (
+    225 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '77',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Fusce-sagittis-sagittis.jpg" suffix="jpg" basename="Fusce-sagittis-sagittis" dirpath="var/ezwebin_site/storage/images/solutions/web-publishing/fusce-sagittis-sagittis/337-1-eng-US" url="var/ezwebin_site/storage/images/solutions/web-publishing/fusce-sagittis-sagittis/337-1-eng-US/Fusce-sagittis-sagittis.jpg" original_filename="cf8327d1.jpg" mime_type="image/jpeg" width="120" height="120" alternative_text="Fusce sagittis" alias_key="1293033771" timestamp="1311154177"><original attribute_id="337" attribute_version="1" attribute_language="eng-US"/><information Height="120" Width="120" IsColor="1"/></ezimage>
 ',
@@ -3504,7 +3504,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    226 => array (
+    226 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '77',
@@ -3519,7 +3519,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    227 => array (
+    227 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '77',
@@ -3534,7 +3534,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    228 => array (
+    228 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '77',
@@ -3549,12 +3549,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    229 => array (
+    229 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '77',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '341',
@@ -3564,7 +3564,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    230 => array (
+    230 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '77',
@@ -3579,12 +3579,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    231 => array (
+    231 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '78',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Etiam posuere sodales arcu',
       'data_type_string' => 'ezstring',
       'id' => '343',
@@ -3594,12 +3594,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'etiam posuere sodales arcu',
       'version' => '1',
     ),
-    232 => array (
+    232 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '78',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '344',
@@ -3609,12 +3609,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    233 => array (
+    233 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '78',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -3626,7 +3626,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    234 => array (
+    234 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '78',
@@ -3641,7 +3641,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    235 => array (
+    235 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '78',
@@ -3656,7 +3656,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    236 => array (
+    236 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '78',
@@ -3671,12 +3671,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    237 => array (
+    237 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '78',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Etiam-posuere-sodales-arcu.jpg" suffix="jpg" basename="Etiam-posuere-sodales-arcu" dirpath="var/ezwebin_site/storage/images/solutions/web-publishing/etiam-posuere-sodales-arcu/349-1-eng-US" url="var/ezwebin_site/storage/images/solutions/web-publishing/etiam-posuere-sodales-arcu/349-1-eng-US/Etiam-posuere-sodales-arcu.jpg" original_filename="6e62eb23.jpg" mime_type="image/jpeg" width="120" height="120" alternative_text="Vivamus sed" alias_key="1293033771" timestamp="1311154178"><original attribute_id="349" attribute_version="1" attribute_language="eng-US"/><information Height="120" Width="120" IsColor="1"/></ezimage>
 ',
@@ -3688,7 +3688,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    238 => array (
+    238 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '78',
@@ -3703,7 +3703,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    239 => array (
+    239 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '78',
@@ -3718,7 +3718,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    240 => array (
+    240 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '78',
@@ -3733,12 +3733,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    241 => array (
+    241 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '78',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '353',
@@ -3748,7 +3748,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    242 => array (
+    242 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '78',
@@ -3763,12 +3763,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    243 => array (
+    243 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '79',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'In hac habitasse platea',
       'data_type_string' => 'ezstring',
       'id' => '355',
@@ -3778,12 +3778,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'in hac habitasse platea',
       'version' => '1',
     ),
-    244 => array (
+    244 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '79',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '356',
@@ -3793,12 +3793,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    245 => array (
+    245 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '79',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -3810,7 +3810,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    246 => array (
+    246 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '79',
@@ -3825,7 +3825,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    247 => array (
+    247 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '79',
@@ -3840,7 +3840,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    248 => array (
+    248 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '79',
@@ -3855,12 +3855,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    249 => array (
+    249 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '79',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="In-hac-habitasse-platea.jpg" suffix="jpg" basename="In-hac-habitasse-platea" dirpath="var/ezwebin_site/storage/images/solutions/web-publishing/in-hac-habitasse-platea/361-1-eng-US" url="var/ezwebin_site/storage/images/solutions/web-publishing/in-hac-habitasse-platea/361-1-eng-US/In-hac-habitasse-platea.jpg" original_filename="f36b1c32.jpg" mime_type="image/jpeg" width="120" height="120" alternative_text="In hac habitasse" alias_key="1293033771" timestamp="1311154178"><original attribute_id="361" attribute_version="1" attribute_language="eng-US"/><information Height="120" Width="120" IsColor="1"/></ezimage>
 ',
@@ -3872,7 +3872,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    250 => array (
+    250 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '79',
@@ -3887,7 +3887,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    251 => array (
+    251 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '79',
@@ -3902,7 +3902,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    252 => array (
+    252 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '79',
@@ -3917,12 +3917,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    253 => array (
+    253 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '79',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '365',
@@ -3932,7 +3932,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    254 => array (
+    254 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '79',
@@ -3947,12 +3947,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    255 => array (
+    255 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '80',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Content management',
       'data_type_string' => 'ezstring',
       'id' => '367',
@@ -3962,12 +3962,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'content management',
       'version' => '1',
     ),
-    256 => array (
+    256 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '80',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '368',
@@ -3977,7 +3977,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    257 => array (
+    257 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '80',
@@ -3992,7 +3992,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    258 => array (
+    258 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '80',
@@ -4007,7 +4007,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    259 => array (
+    259 => array(
       'attribute_original_id' => '371',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '80',
@@ -4022,12 +4022,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    260 => array (
+    260 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '80',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '372',
@@ -4037,7 +4037,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    261 => array (
+    261 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '80',
@@ -4052,12 +4052,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    262 => array (
+    262 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '81',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Fusce sagittis sagittis urna',
       'data_type_string' => 'ezstring',
       'id' => '374',
@@ -4067,12 +4067,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'fusce sagittis sagittis urna',
       'version' => '1',
     ),
-    263 => array (
+    263 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '81',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '375',
@@ -4082,12 +4082,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    264 => array (
+    264 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '81',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -4099,7 +4099,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    265 => array (
+    265 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '81',
@@ -4114,7 +4114,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    266 => array (
+    266 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '81',
@@ -4129,7 +4129,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    267 => array (
+    267 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '81',
@@ -4144,12 +4144,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    268 => array (
+    268 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '81',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154179"><original attribute_id="380" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -4161,7 +4161,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    269 => array (
+    269 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '81',
@@ -4176,7 +4176,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    270 => array (
+    270 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '81',
@@ -4191,7 +4191,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    271 => array (
+    271 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '81',
@@ -4206,12 +4206,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    272 => array (
+    272 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '81',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '384',
@@ -4221,7 +4221,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    273 => array (
+    273 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '81',
@@ -4236,12 +4236,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    274 => array (
+    274 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '82',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Class aptent taciti sociosqu',
       'data_type_string' => 'ezstring',
       'id' => '386',
@@ -4251,12 +4251,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'class aptent taciti sociosqu',
       'version' => '1',
     ),
-    275 => array (
+    275 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '82',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '387',
@@ -4266,12 +4266,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    276 => array (
+    276 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '82',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -4283,7 +4283,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    277 => array (
+    277 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '82',
@@ -4298,7 +4298,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    278 => array (
+    278 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '82',
@@ -4313,7 +4313,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    279 => array (
+    279 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '82',
@@ -4328,12 +4328,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    280 => array (
+    280 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '82',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154179"><original attribute_id="392" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -4345,7 +4345,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    281 => array (
+    281 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '82',
@@ -4360,7 +4360,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    282 => array (
+    282 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '82',
@@ -4375,7 +4375,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    283 => array (
+    283 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '82',
@@ -4390,12 +4390,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    284 => array (
+    284 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '82',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '396',
@@ -4405,7 +4405,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    285 => array (
+    285 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '82',
@@ -4420,12 +4420,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    286 => array (
+    286 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '83',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Aenean malesuada ligula',
       'data_type_string' => 'ezstring',
       'id' => '398',
@@ -4435,12 +4435,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'aenean malesuada ligula',
       'version' => '1',
     ),
-    287 => array (
+    287 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '83',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '399',
@@ -4450,12 +4450,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    288 => array (
+    288 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '83',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -4467,7 +4467,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    289 => array (
+    289 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '83',
@@ -4482,7 +4482,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    290 => array (
+    290 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '83',
@@ -4497,7 +4497,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    291 => array (
+    291 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '83',
@@ -4512,12 +4512,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    292 => array (
+    292 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '83',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154179"><original attribute_id="404" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -4529,7 +4529,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    293 => array (
+    293 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '83',
@@ -4544,7 +4544,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    294 => array (
+    294 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '83',
@@ -4559,7 +4559,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    295 => array (
+    295 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '83',
@@ -4574,12 +4574,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    296 => array (
+    296 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '83',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '408',
@@ -4589,7 +4589,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    297 => array (
+    297 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '83',
@@ -4604,12 +4604,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    298 => array (
+    298 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '236',
       'contentobject_id' => '84',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Training',
       'data_type_string' => 'ezstring',
       'id' => '410',
@@ -4619,7 +4619,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'training',
       'version' => '1',
     ),
-    299 => array (
+    299 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '237',
       'contentobject_id' => '84',
@@ -4634,7 +4634,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    300 => array (
+    300 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '238',
       'contentobject_id' => '84',
@@ -4649,7 +4649,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    301 => array (
+    301 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '239',
       'contentobject_id' => '84',
@@ -4670,7 +4670,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    302 => array (
+    302 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '240',
       'contentobject_id' => '84',
@@ -4688,7 +4688,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    303 => array (
+    303 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '241',
       'contentobject_id' => '84',
@@ -4703,12 +4703,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    304 => array (
+    304 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '242',
       'contentobject_id' => '84',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '416',
@@ -4718,12 +4718,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    305 => array (
+    305 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '85',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Certification',
       'data_type_string' => 'ezstring',
       'id' => '417',
@@ -4733,12 +4733,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'certification',
       'version' => '1',
     ),
-    306 => array (
+    306 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '85',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '418',
@@ -4748,7 +4748,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    307 => array (
+    307 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '85',
@@ -4763,7 +4763,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    308 => array (
+    308 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '85',
@@ -4778,7 +4778,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    309 => array (
+    309 => array(
       'attribute_original_id' => '421',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '85',
@@ -4793,12 +4793,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    310 => array (
+    310 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '85',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '422',
@@ -4808,7 +4808,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    311 => array (
+    311 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '85',
@@ -4823,12 +4823,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    312 => array (
+    312 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '86',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Professional workshops',
       'data_type_string' => 'ezstring',
       'id' => '424',
@@ -4838,12 +4838,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'professional workshops',
       'version' => '1',
     ),
-    313 => array (
+    313 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '86',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '425',
@@ -4853,7 +4853,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    314 => array (
+    314 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '86',
@@ -4868,7 +4868,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    315 => array (
+    315 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '86',
@@ -4883,7 +4883,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    316 => array (
+    316 => array(
       'attribute_original_id' => '428',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '86',
@@ -4898,12 +4898,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    317 => array (
+    317 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '86',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '429',
@@ -4913,7 +4913,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    318 => array (
+    318 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '86',
@@ -4928,12 +4928,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    319 => array (
+    319 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '87',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Etiam sodales mauris',
       'data_type_string' => 'ezstring',
       'id' => '431',
@@ -4943,12 +4943,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'etiam sodales mauris',
       'version' => '1',
     ),
-    320 => array (
+    320 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '87',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '432',
@@ -4958,12 +4958,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    321 => array (
+    321 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '87',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -4975,7 +4975,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    322 => array (
+    322 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '87',
@@ -4990,7 +4990,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    323 => array (
+    323 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '87',
@@ -5005,7 +5005,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    324 => array (
+    324 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '87',
@@ -5020,12 +5020,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    325 => array (
+    325 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '87',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Etiam-sodales-mauris.jpg" suffix="jpg" basename="Etiam-sodales-mauris" dirpath="var/ezwebin_site/storage/images/training/professional-workshops/etiam-sodales-mauris/437-1-eng-US" url="var/ezwebin_site/storage/images/training/professional-workshops/etiam-sodales-mauris/437-1-eng-US/Etiam-sodales-mauris.jpg" original_filename="7fa13e41.jpg" mime_type="image/jpeg" width="120" height="120" alternative_text="Etiam sodales" alias_key="1293033771" timestamp="1311154180"><original attribute_id="437" attribute_version="1" attribute_language="eng-US"/><information Height="120" Width="120" IsColor="1"/></ezimage>
 ',
@@ -5037,7 +5037,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    326 => array (
+    326 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '87',
@@ -5052,7 +5052,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    327 => array (
+    327 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '87',
@@ -5067,7 +5067,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    328 => array (
+    328 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '87',
@@ -5082,12 +5082,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    329 => array (
+    329 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '87',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '441',
@@ -5097,7 +5097,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    330 => array (
+    330 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '87',
@@ -5112,12 +5112,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    331 => array (
+    331 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '88',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Class aptent taciti',
       'data_type_string' => 'ezstring',
       'id' => '443',
@@ -5127,12 +5127,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'class aptent taciti',
       'version' => '1',
     ),
-    332 => array (
+    332 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '88',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '444',
@@ -5142,12 +5142,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    333 => array (
+    333 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '88',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -5159,7 +5159,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    334 => array (
+    334 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '88',
@@ -5174,7 +5174,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    335 => array (
+    335 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '88',
@@ -5189,7 +5189,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    336 => array (
+    336 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '88',
@@ -5204,12 +5204,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    337 => array (
+    337 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '88',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Class-aptent-taciti.jpg" suffix="jpg" basename="Class-aptent-taciti" dirpath="var/ezwebin_site/storage/images/training/professional-workshops/class-aptent-taciti/449-1-eng-US" url="var/ezwebin_site/storage/images/training/professional-workshops/class-aptent-taciti/449-1-eng-US/Class-aptent-taciti.jpg" original_filename="579f544b.jpg" mime_type="image/jpeg" width="120" height="120" alternative_text="Class aptent" alias_key="1293033771" timestamp="1311154180"><original attribute_id="449" attribute_version="1" attribute_language="eng-US"/><information Height="120" Width="120" IsColor="1"/></ezimage>
 ',
@@ -5221,7 +5221,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    338 => array (
+    338 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '88',
@@ -5236,7 +5236,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    339 => array (
+    339 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '88',
@@ -5251,7 +5251,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    340 => array (
+    340 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '88',
@@ -5266,12 +5266,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    341 => array (
+    341 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '88',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '453',
@@ -5281,7 +5281,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    342 => array (
+    342 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '88',
@@ -5296,12 +5296,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    343 => array (
+    343 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '89',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Duis auctor vehicula erat',
       'data_type_string' => 'ezstring',
       'id' => '455',
@@ -5311,12 +5311,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'duis auctor vehicula erat',
       'version' => '1',
     ),
-    344 => array (
+    344 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '89',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '456',
@@ -5326,12 +5326,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    345 => array (
+    345 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '89',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -5343,7 +5343,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    346 => array (
+    346 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '89',
@@ -5358,7 +5358,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    347 => array (
+    347 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '89',
@@ -5373,7 +5373,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    348 => array (
+    348 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '89',
@@ -5388,12 +5388,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    349 => array (
+    349 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '89',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Duis-auctor-vehicula-erat.jpg" suffix="jpg" basename="Duis-auctor-vehicula-erat" dirpath="var/ezwebin_site/storage/images/training/professional-workshops/duis-auctor-vehicula-erat/461-1-eng-US" url="var/ezwebin_site/storage/images/training/professional-workshops/duis-auctor-vehicula-erat/461-1-eng-US/Duis-auctor-vehicula-erat.jpg" original_filename="15509f33.jpg" mime_type="image/jpeg" width="120" height="120" alternative_text="Duis auctor" alias_key="1293033771" timestamp="1311154181"><original attribute_id="461" attribute_version="1" attribute_language="eng-US"/><information Height="120" Width="120" IsColor="1"/></ezimage>
 ',
@@ -5405,7 +5405,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    350 => array (
+    350 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '89',
@@ -5420,7 +5420,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    351 => array (
+    351 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '89',
@@ -5435,7 +5435,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    352 => array (
+    352 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '89',
@@ -5450,12 +5450,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    353 => array (
+    353 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '89',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '465',
@@ -5465,7 +5465,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    354 => array (
+    354 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '89',
@@ -5480,12 +5480,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    355 => array (
+    355 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '316',
       'contentobject_id' => '90',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Events and seminars',
       'data_type_string' => 'ezstring',
       'id' => '467',
@@ -5495,12 +5495,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'events and seminars',
       'version' => '1',
     ),
-    356 => array (
+    356 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '317',
       'contentobject_id' => '90',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '468',
@@ -5510,7 +5510,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    357 => array (
+    357 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '318',
       'contentobject_id' => '90',
@@ -5525,12 +5525,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '0',
       'version' => '1',
     ),
-    358 => array (
+    358 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '91',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Self-paced courses',
       'data_type_string' => 'ezstring',
       'id' => '470',
@@ -5540,12 +5540,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'self-paced courses',
       'version' => '1',
     ),
-    359 => array (
+    359 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '91',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '471',
@@ -5555,7 +5555,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    360 => array (
+    360 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '91',
@@ -5570,7 +5570,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    361 => array (
+    361 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '91',
@@ -5585,7 +5585,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    362 => array (
+    362 => array(
       'attribute_original_id' => '474',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '91',
@@ -5600,12 +5600,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    363 => array (
+    363 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '91',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '475',
@@ -5615,7 +5615,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    364 => array (
+    364 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '91',
@@ -5630,12 +5630,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    365 => array (
+    365 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '92',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Instructor-led courses',
       'data_type_string' => 'ezstring',
       'id' => '477',
@@ -5645,12 +5645,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'instructor-led courses',
       'version' => '1',
     ),
-    366 => array (
+    366 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '92',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '478',
@@ -5660,7 +5660,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    367 => array (
+    367 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '92',
@@ -5675,7 +5675,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    368 => array (
+    368 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '92',
@@ -5690,7 +5690,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    369 => array (
+    369 => array(
       'attribute_original_id' => '481',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '92',
@@ -5705,12 +5705,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    370 => array (
+    370 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '92',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '482',
@@ -5720,7 +5720,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    371 => array (
+    371 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '92',
@@ -5735,12 +5735,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    372 => array (
+    372 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '93',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Additional learning resources',
       'data_type_string' => 'ezstring',
       'id' => '484',
@@ -5750,12 +5750,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'additional learning resources',
       'version' => '1',
     ),
-    373 => array (
+    373 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '93',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '485',
@@ -5765,7 +5765,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    374 => array (
+    374 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '93',
@@ -5780,7 +5780,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    375 => array (
+    375 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '93',
@@ -5795,7 +5795,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    376 => array (
+    376 => array(
       'attribute_original_id' => '488',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '93',
@@ -5810,12 +5810,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    377 => array (
+    377 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '93',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '489',
@@ -5825,7 +5825,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    378 => array (
+    378 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '93',
@@ -5840,12 +5840,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    379 => array (
+    379 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '236',
       'contentobject_id' => '94',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Support',
       'data_type_string' => 'ezstring',
       'id' => '491',
@@ -5855,7 +5855,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'support',
       'version' => '1',
     ),
-    380 => array (
+    380 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '237',
       'contentobject_id' => '94',
@@ -5870,7 +5870,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    381 => array (
+    381 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '238',
       'contentobject_id' => '94',
@@ -5887,7 +5887,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    382 => array (
+    382 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '239',
       'contentobject_id' => '94',
@@ -5904,7 +5904,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    383 => array (
+    383 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '240',
       'contentobject_id' => '94',
@@ -5919,7 +5919,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    384 => array (
+    384 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '241',
       'contentobject_id' => '94',
@@ -5934,12 +5934,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    385 => array (
+    385 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '242',
       'contentobject_id' => '94',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '497',
@@ -5949,12 +5949,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    386 => array (
+    386 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '95',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Knowledgebase',
       'data_type_string' => 'ezstring',
       'id' => '498',
@@ -5964,7 +5964,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'knowledgebase',
       'version' => '1',
     ),
-    387 => array (
+    387 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '244',
       'contentobject_id' => '95',
@@ -5979,12 +5979,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    388 => array (
+    388 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '95',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '500',
@@ -5994,7 +5994,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    389 => array (
+    389 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '95',
@@ -6009,12 +6009,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    390 => array (
+    390 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '96',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Sed suscipit',
       'data_type_string' => 'ezstring',
       'id' => '502',
@@ -6024,7 +6024,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'sed suscipit',
       'version' => '1',
     ),
-    391 => array (
+    391 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '244',
       'contentobject_id' => '96',
@@ -6039,12 +6039,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    392 => array (
+    392 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '96',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '504',
@@ -6054,7 +6054,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    393 => array (
+    393 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '96',
@@ -6069,12 +6069,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    394 => array (
+    394 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '97',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Ut interdum',
       'data_type_string' => 'ezstring',
       'id' => '506',
@@ -6084,7 +6084,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'ut interdum',
       'version' => '1',
     ),
-    395 => array (
+    395 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '244',
       'contentobject_id' => '97',
@@ -6099,12 +6099,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    396 => array (
+    396 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '97',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '508',
@@ -6114,7 +6114,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    397 => array (
+    397 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '97',
@@ -6129,12 +6129,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    398 => array (
+    398 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '98',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Documentation',
       'data_type_string' => 'ezstring',
       'id' => '510',
@@ -6144,7 +6144,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'documentation',
       'version' => '1',
     ),
-    399 => array (
+    399 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '244',
       'contentobject_id' => '98',
@@ -6159,12 +6159,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    400 => array (
+    400 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '98',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '512',
@@ -6174,7 +6174,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    401 => array (
+    401 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '98',
@@ -6189,12 +6189,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    402 => array (
+    402 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '99',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Mauris pretium',
       'data_type_string' => 'ezstring',
       'id' => '514',
@@ -6204,7 +6204,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'mauris pretium',
       'version' => '1',
     ),
-    403 => array (
+    403 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '244',
       'contentobject_id' => '99',
@@ -6219,12 +6219,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    404 => array (
+    404 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '99',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '516',
@@ -6234,7 +6234,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    405 => array (
+    405 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '99',
@@ -6249,12 +6249,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    406 => array (
+    406 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '100',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Aliquam posuere',
       'data_type_string' => 'ezstring',
       'id' => '518',
@@ -6264,7 +6264,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'aliquam posuere',
       'version' => '1',
     ),
-    407 => array (
+    407 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '244',
       'contentobject_id' => '100',
@@ -6279,12 +6279,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    408 => array (
+    408 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '100',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '520',
@@ -6294,7 +6294,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    409 => array (
+    409 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '100',
@@ -6309,12 +6309,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    410 => array (
+    410 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '101',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Books',
       'data_type_string' => 'ezstring',
       'id' => '522',
@@ -6324,12 +6324,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'books',
       'version' => '1',
     ),
-    411 => array (
+    411 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '101',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '523',
@@ -6339,7 +6339,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    412 => array (
+    412 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '101',
@@ -6354,7 +6354,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    413 => array (
+    413 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '101',
@@ -6369,7 +6369,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    414 => array (
+    414 => array(
       'attribute_original_id' => '526',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '101',
@@ -6384,12 +6384,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    415 => array (
+    415 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '101',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '527',
@@ -6399,7 +6399,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    416 => array (
+    416 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '101',
@@ -6414,12 +6414,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    417 => array (
+    417 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '102',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Aliquam pulvinar suscipit tellus',
       'data_type_string' => 'ezstring',
       'id' => '529',
@@ -6429,12 +6429,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'aliquam pulvinar suscipit tellus',
       'version' => '1',
     ),
-    418 => array (
+    418 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '102',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '530',
@@ -6444,12 +6444,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    419 => array (
+    419 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '102',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -6461,7 +6461,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    420 => array (
+    420 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '102',
@@ -6476,7 +6476,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    421 => array (
+    421 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '102',
@@ -6491,7 +6491,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    422 => array (
+    422 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '102',
@@ -6506,12 +6506,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    423 => array (
+    423 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '102',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Aliquam-pulvinar-suscipit-tellus.jpg" suffix="jpg" basename="Aliquam-pulvinar-suscipit-tellus" dirpath="var/ezwebin_site/storage/images/support/books/aliquam-pulvinar-suscipit-tellus/535-1-eng-US" url="var/ezwebin_site/storage/images/support/books/aliquam-pulvinar-suscipit-tellus/535-1-eng-US/Aliquam-pulvinar-suscipit-tellus.jpg" original_filename="7bf18646.jpg" mime_type="image/jpeg" width="120" height="120" alternative_text="Aliquam pulvinar" alias_key="1293033771" timestamp="1311154184"><original attribute_id="535" attribute_version="1" attribute_language="eng-US"/><information Height="120" Width="120" IsColor="1"/></ezimage>
 ',
@@ -6523,7 +6523,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    424 => array (
+    424 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '102',
@@ -6538,7 +6538,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    425 => array (
+    425 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '102',
@@ -6553,7 +6553,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    426 => array (
+    426 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '102',
@@ -6568,12 +6568,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    427 => array (
+    427 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '102',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '539',
@@ -6583,7 +6583,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    428 => array (
+    428 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '102',
@@ -6598,12 +6598,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    429 => array (
+    429 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '103',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Customer Service',
       'data_type_string' => 'ezstring',
       'id' => '541',
@@ -6613,12 +6613,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'customer service',
       'version' => '1',
     ),
-    430 => array (
+    430 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '103',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '542',
@@ -6628,7 +6628,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    431 => array (
+    431 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '103',
@@ -6643,7 +6643,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    432 => array (
+    432 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '103',
@@ -6658,7 +6658,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    433 => array (
+    433 => array(
       'attribute_original_id' => '545',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '103',
@@ -6673,12 +6673,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    434 => array (
+    434 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '103',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '546',
@@ -6688,7 +6688,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    435 => array (
+    435 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '103',
@@ -6703,12 +6703,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    436 => array (
+    436 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '104',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Support Programs',
       'data_type_string' => 'ezstring',
       'id' => '548',
@@ -6718,12 +6718,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'support programs',
       'version' => '1',
     ),
-    437 => array (
+    437 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '104',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '549',
@@ -6733,7 +6733,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    438 => array (
+    438 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '104',
@@ -6748,7 +6748,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    439 => array (
+    439 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '104',
@@ -6763,7 +6763,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    440 => array (
+    440 => array(
       'attribute_original_id' => '552',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '104',
@@ -6778,12 +6778,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    441 => array (
+    441 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '104',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '553',
@@ -6793,7 +6793,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    442 => array (
+    442 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '104',
@@ -6808,12 +6808,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    443 => array (
+    443 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '105',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Getting started',
       'data_type_string' => 'ezstring',
       'id' => '555',
@@ -6823,12 +6823,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'getting started',
       'version' => '1',
     ),
-    444 => array (
+    444 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '105',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '556',
@@ -6838,7 +6838,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    445 => array (
+    445 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '105',
@@ -6853,7 +6853,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    446 => array (
+    446 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '105',
@@ -6868,7 +6868,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    447 => array (
+    447 => array(
       'attribute_original_id' => '559',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '105',
@@ -6883,12 +6883,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    448 => array (
+    448 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '105',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '560',
@@ -6898,7 +6898,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    449 => array (
+    449 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '105',
@@ -6913,12 +6913,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    450 => array (
+    450 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '106',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Tutorials for',
       'data_type_string' => 'ezstring',
       'id' => '562',
@@ -6928,12 +6928,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'tutorials for',
       'version' => '1',
     ),
-    451 => array (
+    451 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '106',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '563',
@@ -6943,12 +6943,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    452 => array (
+    452 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '106',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -6960,7 +6960,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    453 => array (
+    453 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '106',
@@ -6977,7 +6977,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    454 => array (
+    454 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '106',
@@ -6992,7 +6992,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    455 => array (
+    455 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '106',
@@ -7007,12 +7007,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    456 => array (
+    456 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '106',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154185"><original attribute_id="568" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -7024,7 +7024,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    457 => array (
+    457 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '106',
@@ -7039,7 +7039,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    458 => array (
+    458 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '106',
@@ -7054,7 +7054,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    459 => array (
+    459 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '106',
@@ -7069,12 +7069,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    460 => array (
+    460 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '106',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '572',
@@ -7084,7 +7084,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    461 => array (
+    461 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '106',
@@ -7099,12 +7099,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    462 => array (
+    462 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '107',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Get involved',
       'data_type_string' => 'ezstring',
       'id' => '574',
@@ -7114,12 +7114,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'get involved',
       'version' => '1',
     ),
-    463 => array (
+    463 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '107',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '575',
@@ -7129,12 +7129,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    464 => array (
+    464 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '107',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -7146,7 +7146,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    465 => array (
+    465 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '107',
@@ -7161,7 +7161,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    466 => array (
+    466 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '107',
@@ -7176,7 +7176,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    467 => array (
+    467 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '107',
@@ -7191,12 +7191,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    468 => array (
+    468 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '107',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154185"><original attribute_id="580" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -7208,7 +7208,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    469 => array (
+    469 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '107',
@@ -7223,7 +7223,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    470 => array (
+    470 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '107',
@@ -7238,7 +7238,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    471 => array (
+    471 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '107',
@@ -7253,12 +7253,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    472 => array (
+    472 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '107',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '584',
@@ -7268,7 +7268,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    473 => array (
+    473 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '107',
@@ -7283,12 +7283,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    474 => array (
+    474 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '108',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'How to use eZ Publish',
       'data_type_string' => 'ezstring',
       'id' => '586',
@@ -7298,12 +7298,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'how to use ez publish',
       'version' => '1',
     ),
-    475 => array (
+    475 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '108',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '587',
@@ -7313,12 +7313,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    476 => array (
+    476 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '108',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -7330,7 +7330,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    477 => array (
+    477 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '108',
@@ -7345,7 +7345,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    478 => array (
+    478 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '108',
@@ -7362,7 +7362,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    479 => array (
+    479 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '108',
@@ -7377,12 +7377,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    480 => array (
+    480 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '108',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="How-to-use-eZ-Publish.jpg" suffix="jpg" basename="How-to-use-eZ-Publish" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/592-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/592-1-eng-US/How-to-use-eZ-Publish.jpg" original_filename="affa2705.jpg" mime_type="image/jpeg" width="540" height="351" alternative_text="" alias_key="1293033771" timestamp="1311154185"><original attribute_id="592" attribute_version="1" attribute_language="eng-US"/><information Height="351" Width="540" IsColor="1"/></ezimage>
 ',
@@ -7394,7 +7394,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    481 => array (
+    481 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '108',
@@ -7409,7 +7409,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    482 => array (
+    482 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '108',
@@ -7424,7 +7424,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    483 => array (
+    483 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '108',
@@ -7439,12 +7439,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    484 => array (
+    484 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '108',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '596',
@@ -7454,7 +7454,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    485 => array (
+    485 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '108',
@@ -7469,12 +7469,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    486 => array (
+    486 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '109',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '598',
@@ -7484,7 +7484,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    487 => array (
+    487 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '109',
@@ -7499,12 +7499,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    488 => array (
+    488 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '109',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics1/600-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics1/600-1-eng-US/graphics1.jpg" original_filename="c6a49b95.jpg" mime_type="image/jpeg" width="540" height="351" alternative_text="" alias_key="1293033771" timestamp="1311154186"><original attribute_id="600" attribute_version="1" attribute_language="eng-US"/><information Height="351" Width="540" IsColor="1"/></ezimage>
 ',
@@ -7516,12 +7516,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    489 => array (
+    489 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '109',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '601',
@@ -7531,12 +7531,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    490 => array (
+    490 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '110',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '602',
@@ -7546,7 +7546,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    491 => array (
+    491 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '110',
@@ -7561,12 +7561,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    492 => array (
+    492 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '110',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics12/604-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics12/604-1-eng-US/graphics1.jpg" original_filename="afc64b77.jpg" mime_type="image/jpeg" width="540" height="357" alternative_text="" alias_key="1293033771" timestamp="1311154186"><original attribute_id="604" attribute_version="1" attribute_language="eng-US"/><information Height="357" Width="540" IsColor="1"/></ezimage>
 ',
@@ -7578,12 +7578,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    493 => array (
+    493 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '110',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '605',
@@ -7593,12 +7593,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    494 => array (
+    494 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '111',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '606',
@@ -7608,7 +7608,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    495 => array (
+    495 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '111',
@@ -7623,12 +7623,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    496 => array (
+    496 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '111',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics13/608-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics13/608-1-eng-US/graphics1.jpg" original_filename="ccb0f9f7.jpg" mime_type="image/jpeg" width="540" height="419" alternative_text="" alias_key="1293033771" timestamp="1311154186"><original attribute_id="608" attribute_version="1" attribute_language="eng-US"/><information Height="419" Width="540" IsColor="1"/></ezimage>
 ',
@@ -7640,12 +7640,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    497 => array (
+    497 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '111',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '609',
@@ -7655,12 +7655,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    498 => array (
+    498 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '112',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '610',
@@ -7670,7 +7670,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    499 => array (
+    499 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '112',
@@ -7685,12 +7685,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    500 => array (
+    500 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '112',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics14/612-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics14/612-1-eng-US/graphics1.jpg" original_filename="be2fb4a2.jpg" mime_type="image/jpeg" width="540" height="404" alternative_text="" alias_key="1293033771" timestamp="1311154186"><original attribute_id="612" attribute_version="1" attribute_language="eng-US"/><information Height="404" Width="540" IsColor="1"/></ezimage>
 ',
@@ -7702,12 +7702,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    501 => array (
+    501 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '112',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '613',
@@ -7717,12 +7717,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    502 => array (
+    502 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '113',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '614',
@@ -7732,7 +7732,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    503 => array (
+    503 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '113',
@@ -7747,12 +7747,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    504 => array (
+    504 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '113',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics15/616-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics15/616-1-eng-US/graphics1.jpg" original_filename="2db91653.jpg" mime_type="image/jpeg" width="540" height="347" alternative_text="" alias_key="1293033771" timestamp="1311154187"><original attribute_id="616" attribute_version="1" attribute_language="eng-US"/><information Height="347" Width="540" IsColor="1"/></ezimage>
 ',
@@ -7764,12 +7764,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    505 => array (
+    505 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '113',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '617',
@@ -7779,12 +7779,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    506 => array (
+    506 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '114',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '618',
@@ -7794,7 +7794,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    507 => array (
+    507 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '114',
@@ -7809,12 +7809,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    508 => array (
+    508 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '114',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics16/620-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics16/620-1-eng-US/graphics1.jpg" original_filename="b14081cb.jpg" mime_type="image/jpeg" width="540" height="409" alternative_text="" alias_key="1293033771" timestamp="1311154187"><original attribute_id="620" attribute_version="1" attribute_language="eng-US"/><information Height="409" Width="540" IsColor="1"/></ezimage>
 ',
@@ -7826,12 +7826,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    509 => array (
+    509 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '114',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '621',
@@ -7841,12 +7841,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    510 => array (
+    510 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '115',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '622',
@@ -7856,7 +7856,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    511 => array (
+    511 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '115',
@@ -7871,12 +7871,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    512 => array (
+    512 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '115',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics17/624-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics17/624-1-eng-US/graphics1.jpg" original_filename="dd1815c4.jpg" mime_type="image/jpeg" width="540" height="425" alternative_text="" alias_key="1293033771" timestamp="1311154187"><original attribute_id="624" attribute_version="1" attribute_language="eng-US"/><information Height="425" Width="540" IsColor="1"/></ezimage>
 ',
@@ -7888,12 +7888,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    513 => array (
+    513 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '115',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '625',
@@ -7903,12 +7903,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    514 => array (
+    514 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '116',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '626',
@@ -7918,7 +7918,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    515 => array (
+    515 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '116',
@@ -7933,12 +7933,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    516 => array (
+    516 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '116',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics18/628-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics18/628-1-eng-US/graphics1.jpg" original_filename="485af257.jpg" mime_type="image/jpeg" width="540" height="346" alternative_text="" alias_key="1293033771" timestamp="1311154187"><original attribute_id="628" attribute_version="1" attribute_language="eng-US"/><information Height="346" Width="540" IsColor="1"/></ezimage>
 ',
@@ -7950,12 +7950,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    517 => array (
+    517 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '116',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '629',
@@ -7965,12 +7965,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    518 => array (
+    518 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '117',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '630',
@@ -7980,7 +7980,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    519 => array (
+    519 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '117',
@@ -7995,12 +7995,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    520 => array (
+    520 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '117',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics19/632-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-use-ez-publish/graphics19/632-1-eng-US/graphics1.jpg" original_filename="1a13bc86.jpg" mime_type="image/jpeg" width="540" height="351" alternative_text="" alias_key="1293033771" timestamp="1311154187"><original attribute_id="632" attribute_version="1" attribute_language="eng-US"/><information Height="351" Width="540" IsColor="1"/></ezimage>
 ',
@@ -8012,12 +8012,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    521 => array (
+    521 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '117',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '633',
@@ -8027,12 +8027,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    522 => array (
+    522 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '118',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'How to manage eZ Publish',
       'data_type_string' => 'ezstring',
       'id' => '634',
@@ -8042,12 +8042,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'how to manage ez publish',
       'version' => '1',
     ),
-    523 => array (
+    523 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '118',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '635',
@@ -8057,12 +8057,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    524 => array (
+    524 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '118',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -8074,7 +8074,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    525 => array (
+    525 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '118',
@@ -8089,7 +8089,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    526 => array (
+    526 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '118',
@@ -8106,7 +8106,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    527 => array (
+    527 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '118',
@@ -8121,12 +8121,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    528 => array (
+    528 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '118',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="How-to-manage-eZ-Publish.jpg" suffix="jpg" basename="How-to-manage-eZ-Publish" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/640-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/640-1-eng-US/How-to-manage-eZ-Publish.jpg" original_filename="c6fabb5a.jpg" mime_type="image/jpeg" width="540" height="332" alternative_text="" alias_key="1293033771" timestamp="1311154187"><original attribute_id="640" attribute_version="1" attribute_language="eng-US"/><information Height="332" Width="540" IsColor="1"/></ezimage>
 ',
@@ -8138,7 +8138,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    529 => array (
+    529 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '118',
@@ -8153,7 +8153,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    530 => array (
+    530 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '118',
@@ -8168,7 +8168,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    531 => array (
+    531 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '118',
@@ -8183,12 +8183,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    532 => array (
+    532 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '118',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '644',
@@ -8198,7 +8198,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    533 => array (
+    533 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '118',
@@ -8213,12 +8213,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    534 => array (
+    534 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '119',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '646',
@@ -8228,7 +8228,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    535 => array (
+    535 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '119',
@@ -8243,12 +8243,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    536 => array (
+    536 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '119',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/graphics1/648-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/graphics1/648-1-eng-US/graphics1.jpg" original_filename="3268defa.jpg" mime_type="image/jpeg" width="540" height="332" alternative_text="" alias_key="1293033771" timestamp="1311154188"><original attribute_id="648" attribute_version="1" attribute_language="eng-US"/><information Height="332" Width="540" IsColor="1"/></ezimage>
 ',
@@ -8260,12 +8260,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    537 => array (
+    537 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '119',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '649',
@@ -8275,12 +8275,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    538 => array (
+    538 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '120',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '650',
@@ -8290,7 +8290,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    539 => array (
+    539 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '120',
@@ -8305,12 +8305,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    540 => array (
+    540 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '120',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/graphics12/652-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/graphics12/652-1-eng-US/graphics1.jpg" original_filename="06b28423.jpg" mime_type="image/jpeg" width="540" height="346" alternative_text="" alias_key="1293033771" timestamp="1311154188"><original attribute_id="652" attribute_version="1" attribute_language="eng-US"/><information Height="346" Width="540" IsColor="1"/></ezimage>
 ',
@@ -8322,12 +8322,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    541 => array (
+    541 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '120',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '653',
@@ -8337,12 +8337,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    542 => array (
+    542 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '121',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '654',
@@ -8352,7 +8352,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    543 => array (
+    543 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '121',
@@ -8367,12 +8367,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    544 => array (
+    544 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '121',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/graphics13/656-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/graphics13/656-1-eng-US/graphics1.jpg" original_filename="fb93c150.jpg" mime_type="image/jpeg" width="540" height="414" alternative_text="" alias_key="1293033771" timestamp="1311154188"><original attribute_id="656" attribute_version="1" attribute_language="eng-US"/><information Height="414" Width="540" IsColor="1"/></ezimage>
 ',
@@ -8384,12 +8384,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    545 => array (
+    545 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '121',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '657',
@@ -8399,12 +8399,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    546 => array (
+    546 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '122',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '658',
@@ -8414,7 +8414,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    547 => array (
+    547 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '122',
@@ -8429,12 +8429,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    548 => array (
+    548 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '122',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/graphics14/660-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/graphics14/660-1-eng-US/graphics1.jpg" original_filename="e472d575.jpg" mime_type="image/jpeg" width="540" height="346" alternative_text="" alias_key="1293033771" timestamp="1311154188"><original attribute_id="660" attribute_version="1" attribute_language="eng-US"/><information Height="346" Width="540" IsColor="1"/></ezimage>
 ',
@@ -8446,12 +8446,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    549 => array (
+    549 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '122',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '661',
@@ -8461,12 +8461,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    550 => array (
+    550 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '123',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '662',
@@ -8476,7 +8476,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    551 => array (
+    551 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '123',
@@ -8491,12 +8491,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    552 => array (
+    552 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '123',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.png" suffix="png" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/graphics15/664-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/graphics15/664-1-eng-US/graphics1.png" original_filename="724f9667.png" mime_type="image/png" width="500" height="409" alternative_text="" alias_key="1293033771" timestamp="1311154188"><original attribute_id="664" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -8508,12 +8508,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    553 => array (
+    553 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '123',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '665',
@@ -8523,12 +8523,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    554 => array (
+    554 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '124',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '666',
@@ -8538,7 +8538,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    555 => array (
+    555 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '124',
@@ -8553,12 +8553,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    556 => array (
+    556 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '124',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/graphics16/668-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/graphics16/668-1-eng-US/graphics1.jpg" original_filename="13338db0.jpg" mime_type="image/jpeg" width="540" height="405" alternative_text="" alias_key="1293033771" timestamp="1311154189"><original attribute_id="668" attribute_version="1" attribute_language="eng-US"/><information Height="405" Width="540" IsColor="1"/></ezimage>
 ',
@@ -8570,12 +8570,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    557 => array (
+    557 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '124',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '669',
@@ -8585,12 +8585,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    558 => array (
+    558 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '125',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '670',
@@ -8600,7 +8600,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    559 => array (
+    559 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '125',
@@ -8615,12 +8615,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    560 => array (
+    560 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '125',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/graphics17/672-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/graphics17/672-1-eng-US/graphics1.jpg" original_filename="00bc8122.jpg" mime_type="image/jpeg" width="500" height="423" alternative_text="" alias_key="1293033771" timestamp="1311154189"><original attribute_id="672" attribute_version="1" attribute_language="eng-US"/><information Height="423" Width="500" IsColor="1"/></ezimage>
 ',
@@ -8632,12 +8632,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    561 => array (
+    561 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '125',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '673',
@@ -8647,12 +8647,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    562 => array (
+    562 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '126',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '674',
@@ -8662,7 +8662,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    563 => array (
+    563 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '126',
@@ -8677,12 +8677,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    564 => array (
+    564 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '126',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/graphics18/676-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-manage-ez-publish/graphics18/676-1-eng-US/graphics1.jpg" original_filename="d265bd27.jpg" mime_type="image/jpeg" width="540" height="347" alternative_text="" alias_key="1293033771" timestamp="1311154189"><original attribute_id="676" attribute_version="1" attribute_language="eng-US"/><information Height="347" Width="540" IsColor="1"/></ezimage>
 ',
@@ -8694,12 +8694,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    565 => array (
+    565 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '126',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '677',
@@ -8709,12 +8709,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    566 => array (
+    566 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '127',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'How to develop with eZ Publish',
       'data_type_string' => 'ezstring',
       'id' => '678',
@@ -8724,12 +8724,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'how to develop with ez publish',
       'version' => '1',
     ),
-    567 => array (
+    567 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '127',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '679',
@@ -8739,12 +8739,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    568 => array (
+    568 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '127',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -8756,7 +8756,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    569 => array (
+    569 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '127',
@@ -8771,7 +8771,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    570 => array (
+    570 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '127',
@@ -8788,7 +8788,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    571 => array (
+    571 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '127',
@@ -8803,12 +8803,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    572 => array (
+    572 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '127',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="How-to-develop-with-eZ-Publish.png" suffix="png" basename="How-to-develop-with-eZ-Publish" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-develop-with-ez-publish/684-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-develop-with-ez-publish/684-1-eng-US/How-to-develop-with-eZ-Publish.png" original_filename="db3eaa06.png" mime_type="image/png" width="500" height="409" alternative_text="" alias_key="1293033771" timestamp="1311154189"><original attribute_id="684" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -8820,7 +8820,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    573 => array (
+    573 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '127',
@@ -8835,7 +8835,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    574 => array (
+    574 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '127',
@@ -8850,7 +8850,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    575 => array (
+    575 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '127',
@@ -8865,12 +8865,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    576 => array (
+    576 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '127',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '688',
@@ -8880,7 +8880,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    577 => array (
+    577 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '127',
@@ -8895,12 +8895,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    578 => array (
+    578 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '128',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '690',
@@ -8910,7 +8910,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    579 => array (
+    579 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '128',
@@ -8925,12 +8925,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    580 => array (
+    580 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '128',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-develop-with-ez-publish/graphics1/692-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-develop-with-ez-publish/graphics1/692-1-eng-US/graphics1.jpg" original_filename="c9dbc90f.jpg" mime_type="image/jpeg" width="500" height="409" alternative_text="" alias_key="1293033771" timestamp="1311154190"><original attribute_id="692" attribute_version="1" attribute_language="eng-US"/><information Height="409" Width="500" IsColor="1"/></ezimage>
 ',
@@ -8942,12 +8942,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    581 => array (
+    581 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '128',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '693',
@@ -8957,12 +8957,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    582 => array (
+    582 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '129',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '694',
@@ -8972,7 +8972,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    583 => array (
+    583 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '129',
@@ -8987,12 +8987,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    584 => array (
+    584 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '129',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.png" suffix="png" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/how-to-develop-with-ez-publish/graphics12/696-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/how-to-develop-with-ez-publish/graphics12/696-1-eng-US/graphics1.png" original_filename="7e906b13.png" mime_type="image/png" width="540" height="411" alternative_text="" alias_key="1293033771" timestamp="1311154190"><original attribute_id="696" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -9004,12 +9004,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    585 => array (
+    585 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '129',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '697',
@@ -9019,12 +9019,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    586 => array (
+    586 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '130',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Lots of Websites, One eZ Publish Installation',
       'data_type_string' => 'ezstring',
       'id' => '698',
@@ -9034,12 +9034,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'lots of websites, one ez publish installation',
       'version' => '1',
     ),
-    587 => array (
+    587 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '130',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Adding Siteaccesses in eZ Publish',
       'data_type_string' => 'ezstring',
       'id' => '699',
@@ -9049,12 +9049,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'adding siteaccesses in ez publish',
       'version' => '1',
     ),
-    588 => array (
+    588 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '130',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Greg McAvoy-Jensen" email="admin@myportal.com"/></authors></ezauthor>
 ',
@@ -9066,7 +9066,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    589 => array (
+    589 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '130',
@@ -9081,7 +9081,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    590 => array (
+    590 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '130',
@@ -9096,7 +9096,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    591 => array (
+    591 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '130',
@@ -9111,12 +9111,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    592 => array (
+    592 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '130',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154190"><original attribute_id="704" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -9128,7 +9128,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    593 => array (
+    593 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '130',
@@ -9143,7 +9143,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    594 => array (
+    594 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '130',
@@ -9158,7 +9158,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    595 => array (
+    595 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '130',
@@ -9173,12 +9173,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    596 => array (
+    596 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '130',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '708',
@@ -9188,7 +9188,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    597 => array (
+    597 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '130',
@@ -9203,12 +9203,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    598 => array (
+    598 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '131',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'New features',
       'data_type_string' => 'ezstring',
       'id' => '710',
@@ -9218,12 +9218,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'new features',
       'version' => '1',
     ),
-    599 => array (
+    599 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '131',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '711',
@@ -9233,7 +9233,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    600 => array (
+    600 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '131',
@@ -9248,7 +9248,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    601 => array (
+    601 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '131',
@@ -9263,7 +9263,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    602 => array (
+    602 => array(
       'attribute_original_id' => '714',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '131',
@@ -9278,12 +9278,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    603 => array (
+    603 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '131',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '715',
@@ -9293,7 +9293,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    604 => array (
+    604 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '131',
@@ -9308,12 +9308,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    605 => array (
+    605 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '132',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Improved user registration workflow',
       'data_type_string' => 'ezstring',
       'id' => '717',
@@ -9323,12 +9323,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'improved user registration workflow',
       'version' => '1',
     ),
-    606 => array (
+    606 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '132',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '718',
@@ -9338,12 +9338,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    607 => array (
+    607 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '132',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -9355,7 +9355,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    608 => array (
+    608 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '132',
@@ -9370,7 +9370,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    609 => array (
+    609 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '132',
@@ -9387,7 +9387,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    610 => array (
+    610 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '132',
@@ -9402,12 +9402,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    611 => array (
+    611 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '132',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154190"><original attribute_id="723" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -9419,7 +9419,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    612 => array (
+    612 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '132',
@@ -9434,7 +9434,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    613 => array (
+    613 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '132',
@@ -9449,7 +9449,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    614 => array (
+    614 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '132',
@@ -9464,12 +9464,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    615 => array (
+    615 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '132',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '727',
@@ -9479,7 +9479,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    616 => array (
+    616 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '132',
@@ -9494,12 +9494,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    617 => array (
+    617 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '133',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '729',
@@ -9509,7 +9509,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    618 => array (
+    618 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '133',
@@ -9524,12 +9524,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    619 => array (
+    619 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '133',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.png" suffix="png" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/new-features/improved-user-registration-workflow/graphics1/731-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/new-features/improved-user-registration-workflow/graphics1/731-1-eng-US/graphics1.png" original_filename="2f51f75c.png" mime_type="image/png" width="509" height="238" alternative_text="" alias_key="1293033771" timestamp="1311154190"><original attribute_id="731" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -9541,12 +9541,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    620 => array (
+    620 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '133',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '732',
@@ -9556,12 +9556,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    621 => array (
+    621 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '134',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '733',
@@ -9571,7 +9571,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    622 => array (
+    622 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '134',
@@ -9586,12 +9586,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    623 => array (
+    623 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '134',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/new-features/improved-user-registration-workflow/graphics12/735-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/new-features/improved-user-registration-workflow/graphics12/735-1-eng-US/graphics1.jpg" original_filename="ec2680c6.jpg" mime_type="image/jpeg" width="1159" height="503" alternative_text="" alias_key="1293033771" timestamp="1311154191"><original attribute_id="735" attribute_version="1" attribute_language="eng-US"/><information Height="503" Width="1159" IsColor="1" ByteOrderMotorola="1"><array name="ifd0"><item key="XResolution" base64="1">MTUwLzE=</item><item key="YResolution" base64="1">MTUwLzE=</item><item key="ResolutionUnit" base64="1">Mg==</item><item key="Exif_IFD_Pointer" base64="1">Nzg=</item></array><array name="exif"><item key="ExifImageWidth" base64="1">MTE1OQ==</item><item key="ExifImageLength" base64="1">NTAz</item></array></information></ezimage>
 ',
@@ -9603,12 +9603,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    624 => array (
+    624 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '134',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '736',
@@ -9618,12 +9618,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    625 => array (
+    625 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '135',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '737',
@@ -9633,7 +9633,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    626 => array (
+    626 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '135',
@@ -9648,12 +9648,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    627 => array (
+    627 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '135',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/new-features/improved-user-registration-workflow/graphics13/739-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/new-features/improved-user-registration-workflow/graphics13/739-1-eng-US/graphics1.jpg" original_filename="884d3f23.jpg" mime_type="image/jpeg" width="1338" height="217" alternative_text="" alias_key="1293033771" timestamp="1311154191"><original attribute_id="739" attribute_version="1" attribute_language="eng-US"/><information Height="217" Width="1338" IsColor="1" ByteOrderMotorola="1"><array name="ifd0"><item key="XResolution" base64="1">MTUwLzE=</item><item key="YResolution" base64="1">MTUwLzE=</item><item key="ResolutionUnit" base64="1">Mg==</item><item key="Exif_IFD_Pointer" base64="1">Nzg=</item></array><array name="exif"><item key="ExifImageWidth" base64="1">MTMzOA==</item><item key="ExifImageLength" base64="1">MjE3</item></array></information></ezimage>
 ',
@@ -9665,12 +9665,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    628 => array (
+    628 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '135',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '740',
@@ -9680,12 +9680,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    629 => array (
+    629 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '136',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Improved block editing',
       'data_type_string' => 'ezstring',
       'id' => '741',
@@ -9695,12 +9695,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'improved block editing',
       'version' => '1',
     ),
-    630 => array (
+    630 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '136',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '742',
@@ -9710,12 +9710,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    631 => array (
+    631 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '136',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -9727,7 +9727,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    632 => array (
+    632 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '136',
@@ -9742,7 +9742,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    633 => array (
+    633 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '136',
@@ -9759,7 +9759,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    634 => array (
+    634 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '136',
@@ -9774,12 +9774,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    635 => array (
+    635 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '136',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154191"><original attribute_id="747" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -9791,7 +9791,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    636 => array (
+    636 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '136',
@@ -9806,7 +9806,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    637 => array (
+    637 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '136',
@@ -9821,7 +9821,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    638 => array (
+    638 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '136',
@@ -9836,12 +9836,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    639 => array (
+    639 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '136',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '751',
@@ -9851,7 +9851,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    640 => array (
+    640 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '136',
@@ -9866,12 +9866,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    641 => array (
+    641 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '137',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '753',
@@ -9881,7 +9881,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    642 => array (
+    642 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '137',
@@ -9896,12 +9896,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    643 => array (
+    643 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '137',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/new-features/improved-block-editing/graphics1/755-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/new-features/improved-block-editing/graphics1/755-1-eng-US/graphics1.jpg" original_filename="afc16bee.jpg" mime_type="image/jpeg" width="832" height="599" alternative_text="" alias_key="1293033771" timestamp="1311154191"><original attribute_id="755" attribute_version="1" attribute_language="eng-US"/><information Height="599" Width="832" IsColor="1" ByteOrderMotorola="1"><array name="ifd0"><item key="XResolution" base64="1">MTUwLzE=</item><item key="YResolution" base64="1">MTUwLzE=</item><item key="ResolutionUnit" base64="1">Mg==</item><item key="Exif_IFD_Pointer" base64="1">Nzg=</item></array><array name="exif"><item key="ExifImageWidth" base64="1">ODMy</item><item key="ExifImageLength" base64="1">NTk5</item></array></information></ezimage>
 ',
@@ -9913,12 +9913,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    644 => array (
+    644 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '137',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '756',
@@ -9928,12 +9928,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    645 => array (
+    645 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '138',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '757',
@@ -9943,7 +9943,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    646 => array (
+    646 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '138',
@@ -9958,12 +9958,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    647 => array (
+    647 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '138',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/new-features/improved-block-editing/graphics12/759-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/new-features/improved-block-editing/graphics12/759-1-eng-US/graphics1.jpg" original_filename="e9bde168.jpg" mime_type="image/jpeg" width="911" height="626" alternative_text="" alias_key="1293033771" timestamp="1311154192"><original attribute_id="759" attribute_version="1" attribute_language="eng-US"/><information Height="626" Width="911" IsColor="1" ByteOrderMotorola="1"><array name="ifd0"><item key="XResolution" base64="1">MTUwLzE=</item><item key="YResolution" base64="1">MTUwLzE=</item><item key="ResolutionUnit" base64="1">Mg==</item><item key="Exif_IFD_Pointer" base64="1">Nzg=</item></array><array name="exif"><item key="ExifImageWidth" base64="1">OTEx</item><item key="ExifImageLength" base64="1">NjI2</item></array></information></ezimage>
 ',
@@ -9975,12 +9975,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    648 => array (
+    648 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '138',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '760',
@@ -9990,12 +9990,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    649 => array (
+    649 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '139',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Improved front-end editing',
       'data_type_string' => 'ezstring',
       'id' => '761',
@@ -10005,12 +10005,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'improved front-end editing',
       'version' => '1',
     ),
-    650 => array (
+    650 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '139',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '762',
@@ -10020,12 +10020,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    651 => array (
+    651 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '139',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -10037,7 +10037,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    652 => array (
+    652 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '139',
@@ -10054,7 +10054,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    653 => array (
+    653 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '139',
@@ -10071,7 +10071,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    654 => array (
+    654 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '139',
@@ -10086,12 +10086,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    655 => array (
+    655 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '139',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154192"><original attribute_id="767" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -10103,7 +10103,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    656 => array (
+    656 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '139',
@@ -10118,7 +10118,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    657 => array (
+    657 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '139',
@@ -10133,7 +10133,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    658 => array (
+    658 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '139',
@@ -10148,12 +10148,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    659 => array (
+    659 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '139',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '771',
@@ -10163,7 +10163,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    660 => array (
+    660 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '139',
@@ -10178,12 +10178,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    661 => array (
+    661 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '140',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '773',
@@ -10193,7 +10193,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    662 => array (
+    662 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '140',
@@ -10208,12 +10208,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    663 => array (
+    663 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '140',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/new-features/improved-front-end-editing/graphics1/775-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/new-features/improved-front-end-editing/graphics1/775-1-eng-US/graphics1.jpg" original_filename="ff6bcfd1.jpg" mime_type="image/jpeg" width="1030" height="151" alternative_text="" alias_key="1293033771" timestamp="1311154192"><original attribute_id="775" attribute_version="1" attribute_language="eng-US"/><information Height="151" Width="1030" IsColor="1" ByteOrderMotorola="1"><array name="ifd0"><item key="Orientation" base64="1">MQ==</item><item key="XResolution" base64="1">MTUwLzE=</item><item key="YResolution" base64="1">MTUwLzE=</item><item key="ResolutionUnit" base64="1">Mg==</item><item key="Exif_IFD_Pointer" base64="1">OTA=</item></array><array name="exif"><item key="ExifImageWidth" base64="1">MTAzMA==</item><item key="ExifImageLength" base64="1">MTUx</item></array></information></ezimage>
 ',
@@ -10225,12 +10225,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    664 => array (
+    664 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '140',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '776',
@@ -10240,12 +10240,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    665 => array (
+    665 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '141',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '777',
@@ -10255,7 +10255,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    666 => array (
+    666 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '141',
@@ -10270,12 +10270,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    667 => array (
+    667 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '141',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/new-features/improved-front-end-editing/graphics12/779-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/new-features/improved-front-end-editing/graphics12/779-1-eng-US/graphics1.jpg" original_filename="f30d1e92.jpg" mime_type="image/jpeg" width="805" height="84" alternative_text="" alias_key="1293033771" timestamp="1311154192"><original attribute_id="779" attribute_version="1" attribute_language="eng-US"/><information Height="84" Width="805" IsColor="1" ByteOrderMotorola="1"><array name="ifd0"><item key="XResolution" base64="1">MTUwLzE=</item><item key="YResolution" base64="1">MTUwLzE=</item><item key="ResolutionUnit" base64="1">Mg==</item><item key="Exif_IFD_Pointer" base64="1">Nzg=</item></array><array name="exif"><item key="ExifImageWidth" base64="1">ODA1</item><item key="ExifImageLength" base64="1">ODQ=</item></array></information><alias name="medium" filename="graphics1_medium.jpg" suffix="jpg" dirpath="var/ezwebin_site/storage/images/getting-started/new-features/improved-front-end-editing/graphics12/779-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/new-features/improved-front-end-editing/graphics12/779-1-eng-US/graphics1_medium.jpg" mime_type="image/jpeg" width="200" height="21" alias_key="3736024005" timestamp="1311154279" is_valid="1"/></ezimage>
 ',
@@ -10287,12 +10287,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    668 => array (
+    668 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '141',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '780',
@@ -10302,12 +10302,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    669 => array (
+    669 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '142',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '781',
@@ -10317,7 +10317,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    670 => array (
+    670 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '142',
@@ -10332,12 +10332,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    671 => array (
+    671 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '142',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/new-features/improved-front-end-editing/graphics13/783-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/new-features/improved-front-end-editing/graphics13/783-1-eng-US/graphics1.jpg" original_filename="17d497d3.jpg" mime_type="image/jpeg" width="1278" height="136" alternative_text="" alias_key="1293033771" timestamp="1311154192"><original attribute_id="783" attribute_version="1" attribute_language="eng-US"/><information Height="136" Width="1278" IsColor="1" ByteOrderMotorola="1"><array name="ifd0"><item key="XResolution" base64="1">MTUwLzE=</item><item key="YResolution" base64="1">MTUwLzE=</item><item key="ResolutionUnit" base64="1">Mg==</item><item key="Exif_IFD_Pointer" base64="1">Nzg=</item></array><array name="exif"><item key="ExifImageWidth" base64="1">MTI3OA==</item><item key="ExifImageLength" base64="1">MTM2</item></array></information></ezimage>
 ',
@@ -10349,12 +10349,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    672 => array (
+    672 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '142',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '784',
@@ -10364,12 +10364,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    673 => array (
+    673 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '143',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '785',
@@ -10379,7 +10379,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    674 => array (
+    674 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '143',
@@ -10394,12 +10394,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    675 => array (
+    675 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '143',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/new-features/improved-front-end-editing/graphics14/787-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/new-features/improved-front-end-editing/graphics14/787-1-eng-US/graphics1.jpg" original_filename="c3833d09.jpg" mime_type="image/jpeg" width="1365" height="140" alternative_text="" alias_key="1293033771" timestamp="1311154193"><original attribute_id="787" attribute_version="1" attribute_language="eng-US"/><information Height="140" Width="1365" IsColor="1" ByteOrderMotorola="1"><array name="ifd0"><item key="XResolution" base64="1">MTUwLzE=</item><item key="YResolution" base64="1">MTUwLzE=</item><item key="ResolutionUnit" base64="1">Mg==</item><item key="Exif_IFD_Pointer" base64="1">Nzg=</item></array><array name="exif"><item key="ExifImageWidth" base64="1">MTM2NQ==</item><item key="ExifImageLength" base64="1">MTQw</item></array></information></ezimage>
 ',
@@ -10411,12 +10411,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    676 => array (
+    676 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '143',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '788',
@@ -10426,12 +10426,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    677 => array (
+    677 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '144',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'FastCGI',
       'data_type_string' => 'ezstring',
       'id' => '789',
@@ -10441,12 +10441,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'fastcgi',
       'version' => '1',
     ),
-    678 => array (
+    678 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '144',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '790',
@@ -10456,12 +10456,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    679 => array (
+    679 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '144',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -10473,7 +10473,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    680 => array (
+    680 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '144',
@@ -10488,7 +10488,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    681 => array (
+    681 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '144',
@@ -10503,7 +10503,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    682 => array (
+    682 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '144',
@@ -10518,12 +10518,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    683 => array (
+    683 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '144',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154193"><original attribute_id="795" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -10535,7 +10535,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    684 => array (
+    684 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '144',
@@ -10550,7 +10550,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    685 => array (
+    685 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '144',
@@ -10565,7 +10565,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    686 => array (
+    686 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '144',
@@ -10580,12 +10580,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    687 => array (
+    687 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '144',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '799',
@@ -10595,7 +10595,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    688 => array (
+    688 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '144',
@@ -10610,12 +10610,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    689 => array (
+    689 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '145',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Support for Red Hat Enterprise',
       'data_type_string' => 'ezstring',
       'id' => '801',
@@ -10625,12 +10625,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'support for red hat enterprise',
       'version' => '1',
     ),
-    690 => array (
+    690 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '145',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '802',
@@ -10640,12 +10640,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    691 => array (
+    691 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '145',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -10657,7 +10657,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    692 => array (
+    692 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '145',
@@ -10672,7 +10672,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    693 => array (
+    693 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '145',
@@ -10689,7 +10689,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    694 => array (
+    694 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '145',
@@ -10704,12 +10704,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    695 => array (
+    695 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '145',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154193"><original attribute_id="807" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -10721,7 +10721,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    696 => array (
+    696 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '145',
@@ -10736,7 +10736,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    697 => array (
+    697 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '145',
@@ -10751,7 +10751,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    698 => array (
+    698 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '145',
@@ -10766,12 +10766,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    699 => array (
+    699 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '145',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '811',
@@ -10781,7 +10781,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    700 => array (
+    700 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '145',
@@ -10796,12 +10796,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    701 => array (
+    701 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '146',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '813',
@@ -10811,7 +10811,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    702 => array (
+    702 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '146',
@@ -10826,12 +10826,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    703 => array (
+    703 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '146',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.png" suffix="png" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/new-features/support-for-red-hat-enterprise/graphics1/815-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/new-features/support-for-red-hat-enterprise/graphics1/815-1-eng-US/graphics1.png" original_filename="733e4b0a.png" mime_type="image/png" width="476" height="128" alternative_text="" alias_key="1293033771" timestamp="1311154194"><original attribute_id="815" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -10843,12 +10843,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    704 => array (
+    704 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '146',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '816',
@@ -10858,12 +10858,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    705 => array (
+    705 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '147',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Canonical links',
       'data_type_string' => 'ezstring',
       'id' => '817',
@@ -10873,12 +10873,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'canonical links',
       'version' => '1',
     ),
-    706 => array (
+    706 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '147',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '818',
@@ -10888,12 +10888,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    707 => array (
+    707 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '147',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -10905,7 +10905,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    708 => array (
+    708 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '147',
@@ -10920,7 +10920,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    709 => array (
+    709 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '147',
@@ -10935,7 +10935,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    710 => array (
+    710 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '147',
@@ -10950,12 +10950,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    711 => array (
+    711 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '147',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154194"><original attribute_id="823" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -10967,7 +10967,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    712 => array (
+    712 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '147',
@@ -10982,7 +10982,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    713 => array (
+    713 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '147',
@@ -10997,7 +10997,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    714 => array (
+    714 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '147',
@@ -11012,12 +11012,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    715 => array (
+    715 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '147',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '827',
@@ -11027,7 +11027,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    716 => array (
+    716 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '147',
@@ -11042,12 +11042,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    717 => array (
+    717 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '148',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Asynchronous publishing',
       'data_type_string' => 'ezstring',
       'id' => '829',
@@ -11057,12 +11057,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'asynchronous publishing',
       'version' => '1',
     ),
-    718 => array (
+    718 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '148',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '830',
@@ -11072,12 +11072,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    719 => array (
+    719 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '148',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -11089,7 +11089,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    720 => array (
+    720 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '148',
@@ -11104,7 +11104,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    721 => array (
+    721 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '148',
@@ -11136,7 +11136,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    722 => array (
+    722 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '148',
@@ -11151,12 +11151,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    723 => array (
+    723 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '148',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154194"><original attribute_id="835" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -11168,7 +11168,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    724 => array (
+    724 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '148',
@@ -11183,7 +11183,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    725 => array (
+    725 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '148',
@@ -11198,7 +11198,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    726 => array (
+    726 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '148',
@@ -11213,12 +11213,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    727 => array (
+    727 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '148',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '839',
@@ -11228,7 +11228,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    728 => array (
+    728 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '148',
@@ -11243,12 +11243,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    729 => array (
+    729 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '149',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '841',
@@ -11258,7 +11258,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    730 => array (
+    730 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '149',
@@ -11273,12 +11273,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    731 => array (
+    731 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '149',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.jpg" suffix="jpg" basename="graphics1" dirpath="var/ezwebin_site/storage/images/getting-started/new-features/asynchronous-publishing/graphics1/843-1-eng-US" url="var/ezwebin_site/storage/images/getting-started/new-features/asynchronous-publishing/graphics1/843-1-eng-US/graphics1.jpg" original_filename="a2a28ec0.jpg" mime_type="image/jpeg" width="1413" height="1060" alternative_text="" alias_key="1293033771" timestamp="1311154195"><original attribute_id="843" attribute_version="1" attribute_language="eng-US"/><information Height="1060" Width="1413" IsColor="1" ByteOrderMotorola="1"><array name="ifd0"><item key="XResolution" base64="1">MTUwLzE=</item><item key="YResolution" base64="1">MTUwLzE=</item><item key="ResolutionUnit" base64="1">Mg==</item><item key="Exif_IFD_Pointer" base64="1">Nzg=</item></array><array name="exif"><item key="ExifImageWidth" base64="1">MTQxMw==</item><item key="ExifImageLength" base64="1">MTA2MA==</item></array></information></ezimage>
 ',
@@ -11290,12 +11290,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    732 => array (
+    732 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '149',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '844',
@@ -11305,12 +11305,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    733 => array (
+    733 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '150',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'REST API interface',
       'data_type_string' => 'ezstring',
       'id' => '845',
@@ -11320,12 +11320,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'rest api interface',
       'version' => '1',
     ),
-    734 => array (
+    734 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '150',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '846',
@@ -11335,12 +11335,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    735 => array (
+    735 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '150',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -11352,7 +11352,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    736 => array (
+    736 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '150',
@@ -11367,7 +11367,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    737 => array (
+    737 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '150',
@@ -11384,7 +11384,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    738 => array (
+    738 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '150',
@@ -11399,12 +11399,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    739 => array (
+    739 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '150',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154195"><original attribute_id="851" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -11416,7 +11416,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    740 => array (
+    740 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '150',
@@ -11431,7 +11431,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    741 => array (
+    741 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '150',
@@ -11446,7 +11446,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    742 => array (
+    742 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '150',
@@ -11461,12 +11461,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    743 => array (
+    743 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '150',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '855',
@@ -11476,7 +11476,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    744 => array (
+    744 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '150',
@@ -11491,12 +11491,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    745 => array (
+    745 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '151',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'eZ Publish Enterprise',
       'data_type_string' => 'ezstring',
       'id' => '857',
@@ -11506,12 +11506,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'ez publish enterprise',
       'version' => '1',
     ),
-    746 => array (
+    746 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '151',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '858',
@@ -11521,12 +11521,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    747 => array (
+    747 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '151',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -11538,7 +11538,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    748 => array (
+    748 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '151',
@@ -11553,7 +11553,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    749 => array (
+    749 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '151',
@@ -11570,7 +11570,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    750 => array (
+    750 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '151',
@@ -11585,12 +11585,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    751 => array (
+    751 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '151',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154195"><original attribute_id="863" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -11602,7 +11602,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    752 => array (
+    752 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '151',
@@ -11617,7 +11617,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    753 => array (
+    753 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '151',
@@ -11632,7 +11632,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    754 => array (
+    754 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '151',
@@ -11647,12 +11647,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    755 => array (
+    755 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '151',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '867',
@@ -11662,7 +11662,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    756 => array (
+    756 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '151',
@@ -11677,12 +11677,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    757 => array (
+    757 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '152',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '869',
@@ -11692,7 +11692,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    758 => array (
+    758 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '152',
@@ -11707,12 +11707,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    759 => array (
+    759 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '152',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.png" suffix="png" basename="graphics1" dirpath="var/ezwebin_site/storage/images/ez-publish-enterprise/graphics1/871-1-eng-US" url="var/ezwebin_site/storage/images/ez-publish-enterprise/graphics1/871-1-eng-US/graphics1.png" original_filename="068699a4.png" mime_type="image/png" width="332" height="293" alternative_text="" alias_key="1293033771" timestamp="1311154195"><original attribute_id="871" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -11724,12 +11724,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    760 => array (
+    760 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '152',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '872',
@@ -11739,12 +11739,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    761 => array (
+    761 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '153',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'graphics1',
       'data_type_string' => 'ezstring',
       'id' => '873',
@@ -11754,7 +11754,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'graphics1',
       'version' => '1',
     ),
-    762 => array (
+    762 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '153',
@@ -11769,12 +11769,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    763 => array (
+    763 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '153',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="graphics1.png" suffix="png" basename="graphics1" dirpath="var/ezwebin_site/storage/images/ez-publish-enterprise/graphics12/875-1-eng-US" url="var/ezwebin_site/storage/images/ez-publish-enterprise/graphics12/875-1-eng-US/graphics1.png" original_filename="d1120108.png" mime_type="image/png" width="448" height="151" alternative_text="" alias_key="1293033771" timestamp="1311154196"><original attribute_id="875" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -11786,12 +11786,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    764 => array (
+    764 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '153',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '876',
@@ -11801,12 +11801,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    765 => array (
+    765 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '236',
       'contentobject_id' => '154',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Partners',
       'data_type_string' => 'ezstring',
       'id' => '877',
@@ -11816,7 +11816,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'partners',
       'version' => '1',
     ),
-    766 => array (
+    766 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '237',
       'contentobject_id' => '154',
@@ -11831,7 +11831,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    767 => array (
+    767 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '238',
       'contentobject_id' => '154',
@@ -11846,7 +11846,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    768 => array (
+    768 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '239',
       'contentobject_id' => '154',
@@ -11863,7 +11863,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    769 => array (
+    769 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '240',
       'contentobject_id' => '154',
@@ -11880,7 +11880,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    770 => array (
+    770 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '241',
       'contentobject_id' => '154',
@@ -11897,12 +11897,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    771 => array (
+    771 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '242',
       'contentobject_id' => '154',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '883',
@@ -11912,12 +11912,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    772 => array (
+    772 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '155',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Partner News',
       'data_type_string' => 'ezstring',
       'id' => '884',
@@ -11927,12 +11927,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'partner news',
       'version' => '1',
     ),
-    773 => array (
+    773 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '155',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '885',
@@ -11942,7 +11942,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    774 => array (
+    774 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '155',
@@ -11957,7 +11957,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    775 => array (
+    775 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '155',
@@ -11972,7 +11972,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    776 => array (
+    776 => array(
       'attribute_original_id' => '888',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '155',
@@ -11987,12 +11987,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    777 => array (
+    777 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '155',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '889',
@@ -12002,7 +12002,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    778 => array (
+    778 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '155',
@@ -12017,12 +12017,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    779 => array (
+    779 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '156',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Pellentesque quam mauris',
       'data_type_string' => 'ezstring',
       'id' => '891',
@@ -12032,12 +12032,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'pellentesque quam mauris',
       'version' => '1',
     ),
-    780 => array (
+    780 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '156',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '892',
@@ -12047,12 +12047,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    781 => array (
+    781 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '156',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -12064,7 +12064,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    782 => array (
+    782 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '156',
@@ -12079,7 +12079,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    783 => array (
+    783 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '156',
@@ -12094,7 +12094,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    784 => array (
+    784 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '156',
@@ -12109,12 +12109,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    785 => array (
+    785 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '156',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Pellentesque-quam-mauris.jpg" suffix="jpg" basename="Pellentesque-quam-mauris" dirpath="var/ezwebin_site/storage/images/partners/partner-news/pellentesque-quam-mauris/897-1-eng-US" url="var/ezwebin_site/storage/images/partners/partner-news/pellentesque-quam-mauris/897-1-eng-US/Pellentesque-quam-mauris.jpg" original_filename="61bfee3f.jpg" mime_type="image/jpeg" width="120" height="120" alternative_text="Pellentesque quam mauris" alias_key="1293033771" timestamp="1311154196"><original attribute_id="897" attribute_version="1" attribute_language="eng-US"/><information Height="120" Width="120" IsColor="1"/></ezimage>
 ',
@@ -12126,7 +12126,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    786 => array (
+    786 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '156',
@@ -12141,7 +12141,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    787 => array (
+    787 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '156',
@@ -12156,7 +12156,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    788 => array (
+    788 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '156',
@@ -12171,12 +12171,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    789 => array (
+    789 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '156',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '901',
@@ -12186,7 +12186,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    790 => array (
+    790 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '156',
@@ -12201,12 +12201,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    791 => array (
+    791 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '157',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Penatibus et magnis dis',
       'data_type_string' => 'ezstring',
       'id' => '903',
@@ -12216,12 +12216,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'penatibus et magnis dis',
       'version' => '1',
     ),
-    792 => array (
+    792 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '157',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '904',
@@ -12231,12 +12231,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    793 => array (
+    793 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '157',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -12248,7 +12248,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    794 => array (
+    794 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '157',
@@ -12263,7 +12263,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    795 => array (
+    795 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '157',
@@ -12278,7 +12278,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    796 => array (
+    796 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '157',
@@ -12293,12 +12293,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    797 => array (
+    797 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '157',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Penatibus-et-magnis-dis.jpg" suffix="jpg" basename="Penatibus-et-magnis-dis" dirpath="var/ezwebin_site/storage/images/partners/partner-news/penatibus-et-magnis-dis/909-1-eng-US" url="var/ezwebin_site/storage/images/partners/partner-news/penatibus-et-magnis-dis/909-1-eng-US/Penatibus-et-magnis-dis.jpg" original_filename="e86ae2c7.jpg" mime_type="image/jpeg" width="120" height="120" alternative_text="Penatibus et magnis dis" alias_key="1293033771" timestamp="1311154197"><original attribute_id="909" attribute_version="1" attribute_language="eng-US"/><information Height="120" Width="120" IsColor="1"/></ezimage>
 ',
@@ -12310,7 +12310,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    798 => array (
+    798 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '157',
@@ -12325,7 +12325,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    799 => array (
+    799 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '157',
@@ -12340,7 +12340,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    800 => array (
+    800 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '157',
@@ -12355,12 +12355,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    801 => array (
+    801 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '157',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '913',
@@ -12370,7 +12370,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    802 => array (
+    802 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '157',
@@ -12385,12 +12385,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    803 => array (
+    803 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '158',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'News',
       'data_type_string' => 'ezstring',
       'id' => '915',
@@ -12400,12 +12400,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'news',
       'version' => '1',
     ),
-    804 => array (
+    804 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '158',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '916',
@@ -12415,7 +12415,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    805 => array (
+    805 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '158',
@@ -12430,7 +12430,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    806 => array (
+    806 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '158',
@@ -12445,7 +12445,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    807 => array (
+    807 => array(
       'attribute_original_id' => '919',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '158',
@@ -12460,12 +12460,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    808 => array (
+    808 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '158',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '920',
@@ -12475,7 +12475,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    809 => array (
+    809 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '158',
@@ -12490,12 +12490,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    810 => array (
+    810 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '159',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Curabitur hendrerit dignissim',
       'data_type_string' => 'ezstring',
       'id' => '922',
@@ -12505,12 +12505,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'curabitur hendrerit dignissim',
       'version' => '1',
     ),
-    811 => array (
+    811 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '159',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '923',
@@ -12520,12 +12520,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    812 => array (
+    812 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '159',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -12537,7 +12537,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    813 => array (
+    813 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '159',
@@ -12552,7 +12552,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    814 => array (
+    814 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '159',
@@ -12567,7 +12567,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    815 => array (
+    815 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '159',
@@ -12582,12 +12582,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    816 => array (
+    816 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '159',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Curabitur-hendrerit-dignissim.jpg" suffix="jpg" basename="Curabitur-hendrerit-dignissim" dirpath="var/ezwebin_site/storage/images/partners/news/curabitur-hendrerit-dignissim/928-1-eng-US" url="var/ezwebin_site/storage/images/partners/news/curabitur-hendrerit-dignissim/928-1-eng-US/Curabitur-hendrerit-dignissim.jpg" original_filename="806a2270.jpg" mime_type="image/jpeg" width="120" height="120" alternative_text="Curabitur hendrerit dignissim" alias_key="1293033771" timestamp="1311154197"><original attribute_id="928" attribute_version="1" attribute_language="eng-US"/><information Height="120" Width="120" IsColor="1"/></ezimage>
 ',
@@ -12599,7 +12599,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    817 => array (
+    817 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '159',
@@ -12614,7 +12614,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    818 => array (
+    818 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '159',
@@ -12629,7 +12629,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    819 => array (
+    819 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '159',
@@ -12644,12 +12644,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    820 => array (
+    820 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '159',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '932',
@@ -12659,7 +12659,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    821 => array (
+    821 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '159',
@@ -12674,12 +12674,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    822 => array (
+    822 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '160',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Proin condimentum risus',
       'data_type_string' => 'ezstring',
       'id' => '934',
@@ -12689,12 +12689,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'proin condimentum risus',
       'version' => '1',
     ),
-    823 => array (
+    823 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '160',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '935',
@@ -12704,12 +12704,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    824 => array (
+    824 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '160',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -12721,7 +12721,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    825 => array (
+    825 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '160',
@@ -12736,7 +12736,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    826 => array (
+    826 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '160',
@@ -12751,7 +12751,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    827 => array (
+    827 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '160',
@@ -12766,12 +12766,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    828 => array (
+    828 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '160',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Proin-condimentum-risus.jpg" suffix="jpg" basename="Proin-condimentum-risus" dirpath="var/ezwebin_site/storage/images/partners/news/proin-condimentum-risus/940-1-eng-US" url="var/ezwebin_site/storage/images/partners/news/proin-condimentum-risus/940-1-eng-US/Proin-condimentum-risus.jpg" original_filename="815e11b9.jpg" mime_type="image/jpeg" width="120" height="120" alternative_text="Proin condimentum risus" alias_key="1293033771" timestamp="1311154198"><original attribute_id="940" attribute_version="1" attribute_language="eng-US"/><information Height="120" Width="120" IsColor="1"/></ezimage>
 ',
@@ -12783,7 +12783,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    829 => array (
+    829 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '160',
@@ -12798,7 +12798,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    830 => array (
+    830 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '160',
@@ -12813,7 +12813,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    831 => array (
+    831 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '160',
@@ -12828,12 +12828,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    832 => array (
+    832 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '160',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '944',
@@ -12843,7 +12843,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    833 => array (
+    833 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '160',
@@ -12858,12 +12858,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    834 => array (
+    834 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '161',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Morbi tristique senectus',
       'data_type_string' => 'ezstring',
       'id' => '946',
@@ -12873,12 +12873,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'morbi tristique senectus',
       'version' => '1',
     ),
-    835 => array (
+    835 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '161',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '947',
@@ -12888,12 +12888,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    836 => array (
+    836 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '161',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -12905,7 +12905,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    837 => array (
+    837 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '161',
@@ -12920,7 +12920,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    838 => array (
+    838 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '161',
@@ -12935,7 +12935,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    839 => array (
+    839 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '161',
@@ -12950,12 +12950,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    840 => array (
+    840 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '161',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Morbi-tristique-senectus.jpg" suffix="jpg" basename="Morbi-tristique-senectus" dirpath="var/ezwebin_site/storage/images/partners/news/morbi-tristique-senectus/952-1-eng-US" url="var/ezwebin_site/storage/images/partners/news/morbi-tristique-senectus/952-1-eng-US/Morbi-tristique-senectus.jpg" original_filename="d992fbc6.jpg" mime_type="image/jpeg" width="120" height="120" alternative_text="Morbi tristique senectus" alias_key="1293033771" timestamp="1311154198"><original attribute_id="952" attribute_version="1" attribute_language="eng-US"/><information Height="120" Width="120" IsColor="1"/></ezimage>
 ',
@@ -12967,7 +12967,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    841 => array (
+    841 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '161',
@@ -12982,7 +12982,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    842 => array (
+    842 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '161',
@@ -12997,7 +12997,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    843 => array (
+    843 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '161',
@@ -13012,12 +13012,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    844 => array (
+    844 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '161',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '956',
@@ -13027,7 +13027,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    845 => array (
+    845 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '161',
@@ -13042,12 +13042,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    846 => array (
+    846 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '162',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Partner Products',
       'data_type_string' => 'ezstring',
       'id' => '958',
@@ -13057,12 +13057,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'partner products',
       'version' => '1',
     ),
-    847 => array (
+    847 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '162',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '959',
@@ -13072,7 +13072,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    848 => array (
+    848 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '162',
@@ -13087,7 +13087,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    849 => array (
+    849 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '162',
@@ -13102,7 +13102,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    850 => array (
+    850 => array(
       'attribute_original_id' => '962',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '162',
@@ -13117,12 +13117,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    851 => array (
+    851 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '162',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '963',
@@ -13132,7 +13132,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    852 => array (
+    852 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '162',
@@ -13147,12 +13147,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    853 => array (
+    853 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '163',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Partners',
       'data_type_string' => 'ezstring',
       'id' => '965',
@@ -13162,12 +13162,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'partners',
       'version' => '1',
     ),
-    854 => array (
+    854 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '163',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '966',
@@ -13177,7 +13177,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    855 => array (
+    855 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '163',
@@ -13192,7 +13192,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    856 => array (
+    856 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '163',
@@ -13207,7 +13207,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    857 => array (
+    857 => array(
       'attribute_original_id' => '969',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '163',
@@ -13222,12 +13222,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    858 => array (
+    858 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '163',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '970',
@@ -13237,7 +13237,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    859 => array (
+    859 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '163',
@@ -13252,12 +13252,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    860 => array (
+    860 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '164',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Neque orci malesuada felis',
       'data_type_string' => 'ezstring',
       'id' => '972',
@@ -13267,12 +13267,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'neque orci malesuada felis',
       'version' => '1',
     ),
-    861 => array (
+    861 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '164',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '973',
@@ -13282,12 +13282,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    862 => array (
+    862 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '164',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -13299,7 +13299,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    863 => array (
+    863 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '164',
@@ -13314,7 +13314,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    864 => array (
+    864 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '164',
@@ -13329,7 +13329,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    865 => array (
+    865 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '164',
@@ -13344,12 +13344,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    866 => array (
+    866 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '164',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Neque-orci-malesuada-felis.jpg" suffix="jpg" basename="Neque-orci-malesuada-felis" dirpath="var/ezwebin_site/storage/images/partners/partners/neque-orci-malesuada-felis/978-1-eng-US" url="var/ezwebin_site/storage/images/partners/partners/neque-orci-malesuada-felis/978-1-eng-US/Neque-orci-malesuada-felis.jpg" original_filename="4aa68ccb.jpg" mime_type="image/jpeg" width="120" height="120" alternative_text="Neque orci malesuada felis" alias_key="1293033771" timestamp="1311154199"><original attribute_id="978" attribute_version="1" attribute_language="eng-US"/><information Height="120" Width="120" IsColor="1"/></ezimage>
 ',
@@ -13361,7 +13361,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    867 => array (
+    867 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '164',
@@ -13376,7 +13376,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    868 => array (
+    868 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '164',
@@ -13391,7 +13391,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    869 => array (
+    869 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '164',
@@ -13406,12 +13406,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    870 => array (
+    870 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '164',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '982',
@@ -13421,7 +13421,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    871 => array (
+    871 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '164',
@@ -13436,12 +13436,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    872 => array (
+    872 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '236',
       'contentobject_id' => '165',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Community',
       'data_type_string' => 'ezstring',
       'id' => '984',
@@ -13451,7 +13451,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'community',
       'version' => '1',
     ),
-    873 => array (
+    873 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '237',
       'contentobject_id' => '165',
@@ -13466,7 +13466,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    874 => array (
+    874 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '238',
       'contentobject_id' => '165',
@@ -13483,7 +13483,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    875 => array (
+    875 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '239',
       'contentobject_id' => '165',
@@ -13500,7 +13500,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    876 => array (
+    876 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '240',
       'contentobject_id' => '165',
@@ -13517,7 +13517,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    877 => array (
+    877 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '241',
       'contentobject_id' => '165',
@@ -13534,12 +13534,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    878 => array (
+    878 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '242',
       'contentobject_id' => '165',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '990',
@@ -13549,12 +13549,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    879 => array (
+    879 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '302',
       'contentobject_id' => '166',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Forum',
       'data_type_string' => 'ezstring',
       'id' => '991',
@@ -13564,7 +13564,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'forum',
       'version' => '1',
     ),
-    880 => array (
+    880 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '303',
       'contentobject_id' => '166',
@@ -13579,12 +13579,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    881 => array (
+    881 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '304',
       'contentobject_id' => '167',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Nulla vitae tellus sit amet',
       'data_type_string' => 'ezstring',
       'id' => '993',
@@ -13594,12 +13594,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'nulla vitae tellus sit amet',
       'version' => '1',
     ),
-    882 => array (
+    882 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '305',
       'contentobject_id' => '167',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Nulla vitae tellus sit amet velit tincidunt gravida. Vivamus cursus, pede et lacinia porttitor, urna ante sagittis velit, id vulputate dui metus a erat.',
       'data_type_string' => 'eztext',
       'id' => '994',
@@ -13609,7 +13609,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    883 => array (
+    883 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '306',
       'contentobject_id' => '167',
@@ -13624,7 +13624,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    884 => array (
+    884 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '307',
       'contentobject_id' => '167',
@@ -13639,12 +13639,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    885 => array (
+    885 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '304',
       'contentobject_id' => '168',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Ut mollis sodales nibh',
       'data_type_string' => 'ezstring',
       'id' => '997',
@@ -13654,12 +13654,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'ut mollis sodales nibh',
       'version' => '1',
     ),
-    886 => array (
+    886 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '305',
       'contentobject_id' => '168',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Donec vulputate lectus. Suspendisse tempus molestie metus. Nullam non velit eget elit iaculis fringilla. Ut interdum auctor orci. Ut mollis sodales nibh.',
       'data_type_string' => 'eztext',
       'id' => '998',
@@ -13669,7 +13669,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    887 => array (
+    887 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '306',
       'contentobject_id' => '168',
@@ -13684,7 +13684,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    888 => array (
+    888 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '307',
       'contentobject_id' => '168',
@@ -13699,12 +13699,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    889 => array (
+    889 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '304',
       'contentobject_id' => '169',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Nam risus leo',
       'data_type_string' => 'ezstring',
       'id' => '1001',
@@ -13714,12 +13714,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'nam risus leo',
       'version' => '1',
     ),
-    890 => array (
+    890 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '305',
       'contentobject_id' => '169',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Nulla facilisi. Nam risus leo, accumsan et, accumsan ut, aliquam sed, dui. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
       'data_type_string' => 'eztext',
       'id' => '1002',
@@ -13729,7 +13729,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    891 => array (
+    891 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '306',
       'contentobject_id' => '169',
@@ -13744,7 +13744,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    892 => array (
+    892 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '307',
       'contentobject_id' => '169',
@@ -13759,12 +13759,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    893 => array (
+    893 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '170',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Wiki',
       'data_type_string' => 'ezstring',
       'id' => '1005',
@@ -13774,7 +13774,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'wiki',
       'version' => '1',
     ),
-    894 => array (
+    894 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '244',
       'contentobject_id' => '170',
@@ -13789,12 +13789,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    895 => array (
+    895 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '170',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1007',
@@ -13804,7 +13804,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    896 => array (
+    896 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '170',
@@ -13819,12 +13819,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    897 => array (
+    897 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '171',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Sed suscipit',
       'data_type_string' => 'ezstring',
       'id' => '1009',
@@ -13834,7 +13834,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'sed suscipit',
       'version' => '1',
     ),
-    898 => array (
+    898 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '244',
       'contentobject_id' => '171',
@@ -13849,12 +13849,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    899 => array (
+    899 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '171',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1011',
@@ -13864,7 +13864,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    900 => array (
+    900 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '171',
@@ -13879,12 +13879,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    901 => array (
+    901 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '172',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Ut interdum',
       'data_type_string' => 'ezstring',
       'id' => '1013',
@@ -13894,7 +13894,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'ut interdum',
       'version' => '1',
     ),
-    902 => array (
+    902 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '244',
       'contentobject_id' => '172',
@@ -13909,12 +13909,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    903 => array (
+    903 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '172',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1015',
@@ -13924,7 +13924,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    904 => array (
+    904 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '172',
@@ -13939,12 +13939,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    905 => array (
+    905 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '173',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Fusce pulvinar',
       'data_type_string' => 'ezstring',
       'id' => '1017',
@@ -13954,7 +13954,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'fusce pulvinar',
       'version' => '1',
     ),
-    906 => array (
+    906 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '244',
       'contentobject_id' => '173',
@@ -13969,12 +13969,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    907 => array (
+    907 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '173',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1019',
@@ -13984,7 +13984,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    908 => array (
+    908 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '173',
@@ -13999,12 +13999,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    909 => array (
+    909 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '174',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Duis id tortor',
       'data_type_string' => 'ezstring',
       'id' => '1021',
@@ -14014,7 +14014,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'duis id tortor',
       'version' => '1',
     ),
-    910 => array (
+    910 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '244',
       'contentobject_id' => '174',
@@ -14029,12 +14029,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    911 => array (
+    911 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '174',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1023',
@@ -14044,7 +14044,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    912 => array (
+    912 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '174',
@@ -14059,12 +14059,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    913 => array (
+    913 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '243',
       'contentobject_id' => '175',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Curabitur lacinia',
       'data_type_string' => 'ezstring',
       'id' => '1025',
@@ -14074,7 +14074,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'curabitur lacinia',
       'version' => '1',
     ),
-    914 => array (
+    914 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '244',
       'contentobject_id' => '175',
@@ -14089,12 +14089,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    915 => array (
+    915 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '245',
       'contentobject_id' => '175',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1027',
@@ -14104,7 +14104,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    916 => array (
+    916 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '246',
       'contentobject_id' => '175',
@@ -14119,12 +14119,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    917 => array (
+    917 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '286',
       'contentobject_id' => '176',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Pictures',
       'data_type_string' => 'ezstring',
       'id' => '1029',
@@ -14134,7 +14134,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'pictures',
       'version' => '1',
     ),
-    918 => array (
+    918 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '287',
       'contentobject_id' => '176',
@@ -14149,7 +14149,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    919 => array (
+    919 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '288',
       'contentobject_id' => '176',
@@ -14164,12 +14164,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    920 => array (
+    920 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '289',
       'contentobject_id' => '176',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezobjectrelation',
       'id' => '1032',
@@ -14179,12 +14179,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    921 => array (
+    921 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '177',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Ivo on eZ Tags',
       'data_type_string' => 'ezstring',
       'id' => '1033',
@@ -14194,7 +14194,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'ivo on ez tags',
       'version' => '1',
     ),
-    922 => array (
+    922 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '177',
@@ -14209,12 +14209,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    923 => array (
+    923 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '177',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Ivo-on-eZ-Tags.jpg" suffix="jpg" basename="Ivo-on-eZ-Tags" dirpath="var/ezwebin_site/storage/images/community/pictures/ivo-on-ez-tags/1035-1-eng-US" url="var/ezwebin_site/storage/images/community/pictures/ivo-on-ez-tags/1035-1-eng-US/Ivo-on-eZ-Tags.jpg" original_filename="9c0a818b.jpg" mime_type="image/jpeg" width="640" height="480" alternative_text="" alias_key="1293033771" timestamp="1311154202"><original attribute_id="1035" attribute_version="1" attribute_language="eng-US"/><information Height="480" Width="640" IsColor="1" ByteOrderMotorola="0" ApertureFNumber="f/4.9" Thumbnail.FileType="2" Thumbnail.MimeType="image/jpeg"><array name="ifd0"><item key="Make" base64="1">UGFuYXNvbmlj</item><item key="Model" base64="1">RE1DLVRaNQ==</item><item key="XResolution" base64="1">MTgwLzE=</item><item key="YResolution" base64="1">MTgwLzE=</item><item key="ResolutionUnit" base64="1">Mg==</item><item key="Software" base64="1">VmVyLjEuMCAg</item><item key="DateTime" base64="1">MjAxMTowMToyNyAxMTozNjo1MQ==</item><item key="Artist" base64="1">UGljYXNh</item><item key="YCbCrPositioning" base64="1">Mg==</item><item key="Exif_IFD_Pointer" base64="1">NTAy</item><item key="UndefinedTag:0xC4A5" base64="1">UHJpbnRJTQAwMjUwAAAOAAEAFgAWAAIAAAAAAAMAZAAAAAcAAAAAAAgAAAAAAAkAAAAAAAoAAAAAAAsArAAAAAwAAAAAAA0AAAAAAA4AxAAAAAABBQAAAAEBAQAAABABgAAAAAkRAAAQJwAACw8AABAnAACXBQAAECcAALAIAAAQJwAAARwAABAnAABeAgAAECcAAIsAAAAQJwAAywMAABAnAADlGwAAECcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</item><item key="UndefinedTag:0xC6D2" base64="1">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</item></array><array name="exif"><item key="ExposureTime" base64="1">MTAvMzAw</item><item key="FNumber" base64="1">NDkvMTA=</item><item key="ExposureProgram" base64="1">Mg==</item><item key="ISOSpeedRatings" base64="1">ODAw</item><item key="ExifVersion" base64="1">MDIyMQ==</item><item key="DateTimeOriginal" base64="1">MjAxMTowMToyNyAxMTozNjo1MQ==</item><item key="DateTimeDigitized" base64="1">MjAxMTowMToyNyAxMTozNjo1MQ==</item><item key="ComponentsConfiguration" base64="1">AQIDAA==</item><item key="CompressedBitsPerPixel" base64="1">NC8x</item><item key="ExposureBiasValue" base64="1">MC8xMDA=</item><item key="MaxApertureValue" base64="1">MzQ0LzEwMA==</item><item key="MeteringMode" base64="1">NQ==</item><item key="LightSource" base64="1">MA==</item><item key="Flash" base64="1">MTY=</item><item key="FocalLength" base64="1">NDcwLzEw</item><item key="MakerNote" base64="1">UGFuYXNvbmljAAAANgABAAMAAQAAAAIAAAACAAcABAAAAAABAgADAAMAAQAAAAEAAAAHAAMAAQAAAAUAAAAPAAEAAgAAAAAQAAAaAAMAAQAAAAIAAAAcAAMAAQAAAAIAAAAfAAMAAQAAAAEAAAAgAAMAAQAAAAIAAAAhAAcACCAAALwGAAAiAAMAAQAAAAAAAAAjAAMAAQAAAAAAAAAkAAMAAQAAAAAAAAAlAAcAEAAAAMQmAAAmAAcABAAAADAyNzAnAAMAAQAAAAAAAAAoAAMAAQAAAAEAAAApAAQAAQAAANAlAAAqAAMAAQAAAAAAAAArAAQAAQAAAAAAAAAsAAMAAQAAAAAAAAAtAAMAAQAAAAAAAAAuAAMAAQAAAAEAAAAvAAMAAQAAAAEAAAAwAAMAAQAAAAEAAAAxAAMAAQAAAAIAAAAyAAMAAQAAAAAAAAAzAAIAFAAAANQmAAA0AAMAAQAAAAEAAAA1AAMAAQAAAAEAAAA2AAMAAQAAAP//AAA3AAMAAQAAAAEBAAA4AAMAAQAAAAEAAAA6AAMAAQAAAAIAAAA7AAMAAQAAAAEAAAA8AAMAAQAAAP//AAA9AAMAAQAAAAEAAAA+AAMAAQAAAAEAAAA/AAMAAQAAAAAAAABNAAUAAgAAAOgmAABOAAcAKgAAAPgmAABPAAMAAQAAAAAAAABeAAcABAAAAAAAAAAAgAcABAAAADAxMjEBgAMAAQAAAAAAAAACgAMAAQAAAAIAAAADgAMAAQAAAAEAAAAEgAMAAQAAAKQGAAAFgAMAAQAAAB4EAAAGgAMAAQAAAIYHAAAHgAMAAQAAAAEAAAAIgAMAAQAAAAEAAAAJgAMAAQAAAAEAAAAQgAIAFAAAACInAAAAAAAARFYBAkVQAADw/0RCCgbw/0FGtgCgrxCAoq8AAqSvADCmrwAAyq9EALKvAQC0rwAAuq8IALyv7/++rw0A+K8AAPqvAACor1QEqq9sD8ivTUDYr3wDtq8gAbivAADOr9MA0q8hANCvKACsr5UBsK9EAK6vRADUr2UA9K8oAPKvKADirwAA5K8CAOCvXw/mrwAA6K8BAOqvAADsrwAA9q9xNNqvAADWrwAE8K8kAAQGwxkKBmwPyAYBAZqvAACcryAAnq8AAPD/U1RyAKQGAACmBgAAqAYAAKoGAACsBgAA+gcAAK4GAACwBgAAtgYAALgGAAC6BgAA9AcAAPYHAACyBgAAtAYAALAEAACyBAAAYKkAAGKpAABkqQAAaKkAAGapAABqqQAAeKkAAHqpAAB8qQAAfqkAAPD/QUUmASAFXQIiBWIC7gddAiQFcgQQBWgD3gaeAyYFCwDABgAAKAU6ARgFWQI6BQEAxRkAAFAFVwJSBYACygaoAAAFAwA2BQAAQgUAAAgFAAACBQAACgUAAAQFAABABQAABAcAAAwHAAAGBwAACAcAAAoHAADyBgAA9gb///QGAAD4Bv//DgVnAyoFTgAsBQEDMgUBA/oGWQL8BqgAAAcAAjsFAQA+BQEAxhlXAsgZkAIwBQABHAXfAOgG+AoaBWoT7wYBAPAGAAD+BoAALgUAAAEFAABgBQAANAUAAA5noAI4BQAADgczABAHAAASByMAFAcBABYHXgAXBwAAGAcAAEgFAABKBQAARAUAAEYFAAAUBTEBFgUnADwFKgFYBRIDWgXUAPD/V0LqAAAEpAYCBIYHXAQeBAQE/QAGBA0BYASeAxoEGQBeBA4AXwQGABIE1wAUBPsAFgR1ARgERgHMBGcEzgTnCdAE7wbSBDkHCAQDAQoEKgG0BNIAtgQAAUAE9QAwBF4AOAR4ADIEgAA6BIQANATg/zwEBAA2BBAAPgQpAEwE/gBOBAsBwAT9AMIEDQHqBAAAgAUOAIIFfwCDBYUAjAUAAI4FhgCPBYwAUgTXAFQE+wBWBNcAWAT7ANQE1wDWBPsA2ATXANoE+wDwBCQH8gRRBvQEGAH2BDEB+AQhB/oERwb8BBcB/gQzAfD/WUPmAE6qFABQqhQAUqoUAFSqFABEqv//RqrMiEiqdwNKqgAATKoAADiqUAA6qlAAPKpQAD6qUAAuqoiIMKrMiDKqd1U0qiIRNqoAAIIEIACABAkAhAQAAISqcABgqikzYqopM2SqYHxmqmB8aKo6SWqqAQBsqgAAbqoAAIaqAACIqgAAiqoUAIyqFACOqgAAkKoAAJKqHwCUqh8AlqoAAJiqAACgqvAAoqoQAKSq6ACmqgAAqKoKAFiqAQBaqgAAXKoAAF6qIACaqgAAnKoAAMCq0ADCqtAAxKrQAMaq0ADIqggI8P9DTQ4A/AUAMASsAADw/0RTLgAArwABAq+nhQqv5wAEr4UBBq8QAQivCQAMr0gBDq8QARCvhQESr6sA8P9JU8oAiK4AALSuawC2rmIAuK4UC7quFAuArq8Dgq7+A4Su5wOGrucDAK64AwKusAMErqwDBq6mAwiupgMKrqIDDK6mAw6upAMQrqYDEq6oAxSurAMWrq4DGK62AxquugMcrsADHq7IAyCuGAQirg4EJK4QBCauEAQorhYEKq4UBCyuFAQurgwEMK4MBDKuCgQ0rgQENq72Aziu9AM6rvgDPK74Az6uAARArgYCQq4HAkSuAABGrgAAYK4RAmKuEAJkrgAAZq4AAPD/RkSmAGCsAABirAAAgKwAAIKsAACErAAAhqwAAIisAACKrAAAjKwAAI6sAACQrAAAkqwAAJSsAACWrAAAmKwAAJqsAACcrAAAnqwAAECsAABCrAAARKwAAEasAABIrAAASqwAAEysAABOrAAAUKwAAFKsAABUrAAAVqwAAFisAABarAAAXKwAAF6sAABmBQAAbgUAAHAFAAByBQAAbAUAAGQFAADw/0lBOgCgqf//oqn//6Sp//+mqf//qKn//6qp//+sqf//rqn//4CpAACCqQAAhKkAAIipAACGqTgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEFFQk0OB3QHnQeZB3YHNQd8AjQBogAdAEEAHwAfACAAIAAgAOcGagfWB6wHkgerB6ECUgGnAB8ARgAiACIAIwAjACMADQiaCIYISgizBwEIlgJZAaUAIQBJACMAIwAlACUAJACjCOcI5gjYCKUIYQh0Ak4BmAAXACMAOAA5ADcANQAzAHYI3gjXCMMImAhgCGMCTAHMAHEALACXAOUA5wDqAOwAvwjTCKwH2waXB10IPgJNAcgAcAB/AOUA8gD3APIA/wDnCAkHKQbIB1wIXAgPAjoBfgBYAKYAmgBSAI8ACgE8AecIVQfMBdMFGAdbCOUBFAEgABwALgAkAAwADgCfAEEB3AjKBnAFkgSHBl4FWQF4ABUAEgAdABUADAAMAFAAbQHGCF8HFwW5A4ABswBKAA4AFAAPACIAIgALABIAFQARAf0CWwKNAV4APABHADMAPAAaAA4AGwAaAAoAEwAPANEArAMGBO4ExAKrA1UFIgHzACkADAAdADIAEgAPABkAdwASCIAIbwg2CA4Inwc4AfsAJgAMAEMAUAAbABMALwDqACkHRQfwB6sH5gdsBzcBAQEgAAwAHwAeAA0AGgCiAHgB1AXQBWQGHgZIBtQFJgHyABEACQAWABcAEAAkAGwAlgHLAOIA/QAIAQgBDwERAeAADAAGAAgACgAHABAANwCiAVBSU1RXGBsDvgJAA7oDxwOWA/EDCgUdBSYD/gzFC+sLNw1IEJ0Z3wNhA9oDDAQaBBAEkgXJBx8H/wM3C4oINwjLDnoLDRyjBDoERgRWBI8ECQX/B5AKdwoQCX8DYwKOAbMFOwcpIDkHuAdSBx0HJwc5CB8N+A9uDoAI8gEXAboAAQIqBH4fhgUuBTQFNwVcBcYG0QyXEjURAgXYAe4ApQAZAgQEwB1VBnAFlBTxLRMsvCLjIaQzvjHyBbICCwNhAq4CAgTUGgAGJQUIFLYcawOoAqYCSQKKDLcLHgPmBmMLlwEbBBgYHAWlBHwPVBRGAggCkAIrAfkA5wAyAXYC3Ag5AmkDQRbBBCAETAbUC7ID6QM8BKQB8QClAvMBtgIGB/wBpAdiFSUE6QN6Dk8NGQIrArECpAGiAukB1wCiBCYQtwPwACIUUgbWBj8JDhKtA00JwQgSCmsRbAzCB8kGNgdfAskAkg3LA4EEywQsBQkEfwOSBc4GoAWzBH4EHQOmAcsA3gAFHbQfTyTEIRIi8BtVDW0eRyGKCBYEhgLNALsAiADJAH8iA2qxdRt5nX2ceMxJzYWnO9AH+APNAYsAaAB5AI4AoyoLyvTIgtBwxlO182UbyjFOWAdiAsQAoQAhAo8AgQCYLd3Npsy10hO1pJ6FrT/I81BTB90B/QEsAisDQAGTAPoWzALMAm0D0AO+A6MDMQSWBREFxQOODHgLqguXDrQOUxhKA4ID7AMcBCQEMgQNBmgIowe4BesJ9QYrB9ANjArLG88DUgRRBG0EiwRTBasIGAuhClUIfQLhASoBKwU9BsceqwaxB3YHHgc6B4sIxw0+EHgOaQfNAQUBrQBOAgsEER6qBDUFpgU3CGoNSRLyGLkdKhZaBOwB3ACqALoCFQSdHN4EYAUFGmAzVCzAH8IfzjPTMlIIMQPbA9oDVQJGBKEZmQQEBZkVrxn7A8oCpAJrAnYOVwuDA7UHmwqBAVEE6BYvBIwEnxHXDxMC1wGCAiYB7gDbAHYBHQKjCA4C5wMmFbYD8APyB0gNAAT7AxcEfwHoAHcCuAGYAsUGBAJ3Bw4UjwPNA9MO4QoUAh4CuAJ9AZsC4wHXAOgGTxEzA/MAixISBsIGmwdnDDgCNQdqBloGrAidCZ0IlAaXBJcB1gDTDcsHEAnJCPUImgVqBeIIUAvOBdwDtgP2AXoBoAD5AHQeJSKeJi8k2CRoG60QlCAFIqAGSwQEAqAAjgCCAM8AXCuViauTNZeQmoSED19Bo145zwVYA3MBcgBYAHAAhQCHN1nMq8np0DK7O6bzaVrJxkFzBSECsADtAMsCjQBzABQ8086EzZTSU65joCOtxsejRLkF2gEzAj0C9QQCAoMAAAAAAAAAgAHgDzwMLAoACAAOBAgIAMAPwA0AAAAAAAAmAAAAAAAAAAAAwB8AAAAAAAAAAAAAAAAAAAAAAAAAAAAABwBGQ0NWBQABAGwPXw8AAAAAAAAAAAAAAAAAAAAAAAAAAFIlCAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQBgDcsBoQH6APgB+QDfACQBkwHpAKoDGAT5AkwBfASWATYB/QF7A9QAjAfyAAAAAACiADMBAAAAAIAO3gG6AQUBIgI3Ad8ARQGAAfkA5AM5BBgDagGRBBQCNgEjAo0D5gDNB/cAAAAAAKYARAEAAAAAoA/gAboBHwEkAjgB2gBbAZQBBAHdA1QEMgN5AZ8EHgIuAT8CtAPwAAgI/wAAAAAArQBWAQAAAADAEMsBwAEhAf4BNQHZAGUBhwEFAdEDQwQ1A4EBmAQQAiwBRgKWA/EAAwgAAQAAAAChAFcBAAAAAOARhQGkAQ0B3gENAdgAKQFDAfEAUgMLBAgDYAF5BP4BNQEBAsIC6QCIB9YAAAAAAIQA8AAAAAAAlTjTAOYG5QHGAcABbwLyAbUBAAAMBAwCvA2jA60BBgMfAxkDogEAAOMF6wAAAAAAHAAOAAAAAAA1NyQBRAEKASEBhAI9ATgBBAFZAQYDBwFwAvgAJwIKBscB/QFsAu8C0QW/AQAAAABsAvgCAAAAABU2RgGeATMBUgGWA1ABZAGBAR4C/gNIAfYCHgGFAisHDgI+AgoDlQP7BjUCAAAAAJ8C8wIAAAAA9TRhAbsBNwFnAQ4EVAFmAZoBLAJqBHMBVQM0AacCeAcgAkwCLgO3A3wHjwIAAAAA/QILAwAAAADVM50BOwJbAdgBwwShAbkBMALCAmsFngGdA10BvgLcB0QCZwJIA/4DEQiFAgAAAADjAv0CAAAAALUyaQG3AUoBgAGkA2MBcgFwAf0BSASUAVcDUgFkAkAHAwInAr0CjQNlB00CAAAAAK4CnQIAAAAAlTEuAUgBGAE3AR8CQQEoAeoAOgECA18B1AIiAQ8CCgbAAd8BUQLYAjIGRQIAAAAApQKYAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAV0JDWg8PDw8PDw8MDA4KDg4ODg4PDw8PDw8PAwoOCg4ODg4ODw8PDw8PDwMKDg4ODg4ODg8PDw8PDw8DCgoOCgoKCgoPDw8PDw8PAwoKCgoKCgoKDw8PDw8PDwMKCgoKCgoKCg8PDw8PDw8DCg4KCQ4OCgoPDw8PDw8PDAoODg4ODgoKDw8PDwUPAQEODg4ODg4KCg8PDw8PAQ8ODg4ODg4OCQoPDw8BDw8PCQoODg4ODg4KDwIBDw8PDwEKDgoKDg4OCg8PDw8PDw8DCg4KCg4ODgoPDw8PDw8PAwoODg4ODgoKDw8PDw8PDwMKDg4ODg4KCgUFBQICAgEDCg4ODg4OCgpCTUhMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEY1NTA4MTAxNTAxMTkAMDA5OTk5Ojk5Ojk5IDAwOjAwOjAwAH8AAAAAAQAAfwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA5OTk5Ojk5Ojk5IDAwOjAwOjAwAA==</item><item key="FlashPixVersion" base64="1">MDEwMA==</item><item key="ColorSpace" base64="1">MQ==</item><item key="ExifImageWidth" base64="1">NjQw</item><item key="ExifImageLength" base64="1">NDgw</item><item key="InteroperabilityOffset" base64="1">MTAwMzg=</item><item key="SensingMethod" base64="1">Mg==</item><item key="FileSource" base64="1">Aw==</item><item key="SceneType" base64="1">AQ==</item><item key="CustomRendered" base64="1">MA==</item><item key="ExposureMode" base64="1">MA==</item><item key="WhiteBalance" base64="1">MA==</item><item key="DigitalZoomRatio" base64="1">MC8xMA==</item><item key="FocalLengthIn35mmFilm" base64="1">Mjgw</item><item key="SceneCaptureType" base64="1">MA==</item><item key="GainControl" base64="1">Mg==</item><item key="Contrast" base64="1">MA==</item><item key="Saturation" base64="1">MA==</item><item key="Sharpness" base64="1">MA==</item><item key="ImageUniqueID" base64="1">ZjMzYWVmMjUxZTZhNWRhYjYwMDdhYzAyOGJjZDU3NjI=</item></array></information><alias name="listitem" filename="Ivo-on-eZ-Tags_listitem.jpg" suffix="jpg" dirpath="var/ezwebin_site/storage/images/community/pictures/ivo-on-ez-tags/1035-1-eng-US" url="var/ezwebin_site/storage/images/community/pictures/ivo-on-ez-tags/1035-1-eng-US/Ivo-on-eZ-Tags_listitem.jpg" mime_type="image/jpeg" width="130" height="98" alias_key="379714049" timestamp="1311154279" is_valid="1"/></ezimage>
 ',
@@ -14226,12 +14226,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    924 => array (
+    924 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '177',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1036',
@@ -14241,12 +14241,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    925 => array (
+    925 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '178',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Are you ready for the Community day?',
       'data_type_string' => 'ezstring',
       'id' => '1037',
@@ -14256,7 +14256,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'are you ready for the community day?',
       'version' => '1',
     ),
-    926 => array (
+    926 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '178',
@@ -14271,12 +14271,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    927 => array (
+    927 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '178',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Are-you-ready-for-the-Community-day.jpg" suffix="jpg" basename="Are-you-ready-for-the-Community-day" dirpath="var/ezwebin_site/storage/images/community/pictures/are-you-ready-for-the-community-day/1039-1-eng-US" url="var/ezwebin_site/storage/images/community/pictures/are-you-ready-for-the-community-day/1039-1-eng-US/Are-you-ready-for-the-Community-day.jpg" original_filename="65d29873.jpg" mime_type="image/jpeg" width="640" height="480" alternative_text="" alias_key="1293033771" timestamp="1311154202"><original attribute_id="1039" attribute_version="1" attribute_language="eng-US"/><information Height="480" Width="640" IsColor="1" ByteOrderMotorola="0" ApertureFNumber="f/4.5" Thumbnail.FileType="2" Thumbnail.MimeType="image/jpeg"><array name="ifd0"><item key="Make" base64="1">UGFuYXNvbmlj</item><item key="Model" base64="1">RE1DLVRaNQ==</item><item key="XResolution" base64="1">MTgwLzE=</item><item key="YResolution" base64="1">MTgwLzE=</item><item key="ResolutionUnit" base64="1">Mg==</item><item key="Software" base64="1">VmVyLjEuMCAg</item><item key="DateTime" base64="1">MjAxMTowMToyNyAxMTozODozNg==</item><item key="Artist" base64="1">UGljYXNh</item><item key="YCbCrPositioning" base64="1">Mg==</item><item key="Exif_IFD_Pointer" base64="1">NTAy</item><item key="UndefinedTag:0xC4A5" base64="1">UHJpbnRJTQAwMjUwAAAOAAEAFgAWAAIAAAAAAAMAZAAAAAcAAAAAAAgAAAAAAAkAAAAAAAoAAAAAAAsArAAAAAwAAAAAAA0AAAAAAA4AxAAAAAABBQAAAAEBAQAAABABgAAAAAkRAAAQJwAACw8AABAnAACXBQAAECcAALAIAAAQJwAAARwAABAnAABeAgAAECcAAIsAAAAQJwAAywMAABAnAADlGwAAECcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</item><item key="UndefinedTag:0xC6D2" base64="1">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</item></array><array name="exif"><item key="ExposureTime" base64="1">MTAvNDAw</item><item key="FNumber" base64="1">NDUvMTA=</item><item key="ExposureProgram" base64="1">Mg==</item><item key="ISOSpeedRatings" base64="1">MTYw</item><item key="ExifVersion" base64="1">MDIyMQ==</item><item key="DateTimeOriginal" base64="1">MjAxMTowMToyNyAxMTozODozNg==</item><item key="DateTimeDigitized" base64="1">MjAxMTowMToyNyAxMTozODozNg==</item><item key="ComponentsConfiguration" base64="1">AQIDAA==</item><item key="CompressedBitsPerPixel" base64="1">NC8x</item><item key="ExposureBiasValue" base64="1">MC8xMDA=</item><item key="MaxApertureValue" base64="1">MzQ0LzEwMA==</item><item key="MeteringMode" base64="1">NQ==</item><item key="LightSource" base64="1">MA==</item><item key="Flash" base64="1">MTY=</item><item key="FocalLength" base64="1">MTEzLzEw</item><item key="MakerNote" base64="1">UGFuYXNvbmljAAAANgABAAMAAQAAAAIAAAACAAcABAAAAAABAgADAAMAAQAAAAEAAAAHAAMAAQAAAAUAAAAPAAEAAgAAAAAQAAAaAAMAAQAAAAIAAAAcAAMAAQAAAAIAAAAfAAMAAQAAAAEAAAAgAAMAAQAAAAIAAAAhAAcACCAAALwGAAAiAAMAAQAAAAAAAAAjAAMAAQAAAAAAAAAkAAMAAQAAAAAAAAAlAAcAEAAAAMQmAAAmAAcABAAAADAyNzAnAAMAAQAAAAAAAAAoAAMAAQAAAAEAAAApAAQAAQAAAEkHAAAqAAMAAQAAAAAAAAArAAQAAQAAAAAAAAAsAAMAAQAAAAAAAAAtAAMAAQAAAAAAAAAuAAMAAQAAAAEAAAAvAAMAAQAAAAEAAAAwAAMAAQAAAAEAAAAxAAMAAQAAAAIAAAAyAAMAAQAAAAAAAAAzAAIAFAAAANQmAAA0AAMAAQAAAAEAAAA1AAMAAQAAAAEAAAA2AAMAAQAAAP//AAA3AAMAAQAAAAEBAAA4AAMAAQAAAAEAAAA6AAMAAQAAAAIAAAA7AAMAAQAAAAEAAAA8AAMAAQAAAP//AAA9AAMAAQAAAAEAAAA+AAMAAQAAAAEAAAA/AAMAAQAAAAAAAABNAAUAAgAAAOgmAABOAAcAKgAAAPgmAABPAAMAAQAAAAAAAABeAAcABAAAAAAAAAAAgAcABAAAADAxMjEBgAMAAQAAAAAAAAACgAMAAQAAAAEAAAADgAMAAQAAAAEAAAAEgAMAAQAAACoHAAAFgAMAAQAAAB4EAAAGgAMAAQAAAAUIAAAHgAMAAQAAAAEAAAAIgAMAAQAAAAEAAAAJgAMAAQAAAAEAAAAQgAIAFAAAACInAAAAAAAARFYBAkVQAADw/0RCCgbw/0FGtgCgrxCBoq8AAqSvADCmrwAAyq8sALKvAQC0rwAAuq8iALyv6f++rxcA+K8AAPqvAACor2YCqq8MLciv8gPYr0ACtq/AALivAADOr5cA0q8WANCvKACsrx0BsK9HAK6vRwDUrz8A9K8iAPKvKADirwAA5K8BAOCv9SzmrwcA6K8HAOqvAwDsrwAA9q8AANqvAADWrwAE8K8OAAQGvREKBgwtyAYBAZqvAACcrwAAnq8AAPD/U1RyAKQGAACmBgAAqAYAAKoGAACsBgAA+gcAAK4GAACwBgAAtgYAALgGAAC6BgAA9AcAAPYHAACyBgAAtAYAALAEAACyBAAAYKkAAGKpAABkqQAAaKkAAGapAABqqQAAeKkAAHqpAAB8qQAAfqkAAPD/QUUmASAFmQIiBWIC7geZAiQFdgUQBWsE3gaPBCYFegDABgAAKAW2ABgFgAE6BQEAxRkAAFAFLQJSBUkDygY5AAAFAwA2BQAAQgUAAAgFAAACBQAACgUAAAQFAABABQAABAcAAAwHAAAGBwAACAcAAAoHAADyBgAA9gb///QGAAD4Bv//DgV6BCoFaAAsBYABMgWAAfoGgAH8BgAAAAcAATsFAQA+BQEAxhktAsgZpwIwBQABHAXFAOgG7QoaBWoT7wYBAPAGAQD+BgAALgUAAAEFAABgBQAANAUAAA5noAI4BQAADgcAABAHAAASBwEAFAcBABYHAAAXBwAAGAcAAEgFAABKBQAARAUAAEYFAAAUBTEBFgUnADwFKgFYBRIDWgVAAPD/V0LqAAAEKgcCBAUIXAQeBAQEEQEGBPsAYASPBBoEAAFeBHIAXwQKABIE3AAUBPsAFgR1ARgERgHMBGcEzgTnCdAE7wbSBDkHCAQXAQoE9gC0BNIQtgSAAEAE9QAwBF8AOAR3ADIEfwA6BI8ANATs/zwEDgA2BBIAPgQnAEwEEgFOBPYAwAQRAcIE+QDqBAAAgAVoAIIFiQCDBXsAjAUKAI4FhgCPBYwAUgTcAFQE+wBWBNwAWAT7ANQE3ADWBPsA2ATcANoE+wDwBCQH8gRRBvQEGAH2BDEB+AQhB/oERwb8BBcB/gQzAfD/WUPmAE6qBgBQqgYAUqoGAFSqBgBEqoiIRqrdqkiqiGZKqhEATKoAADiqMAA6qjAAPKowAD6qMAAuqoiIMKrMiDKqd2Y0qiIRNqoAAIIEAACABAkAhAQAAISqcABgqkVFYqpFRWSqWHJmqlhyaKpDQ2qqAgBsqgAAbqoAAIaqAACIqgAAiqoIAIyqCACOqgAAkKoAAJKqHwCUqh8AlqoAAJiqAACgqvAAoqoQAKSq6ACmqgAAqKoKAFiqAQBaqgkAXKoJAF6qIACaqgAAnKoAAMCq///Cqv//xKr//8aq///Iqv//8P9DTQ4A/AUAMASsAADw/0RTLgAAr4AAAq/xhwqvVAAEr1YBBq83AAivAAAMr3UADq8AABCvVgESrzcA8P9JU8oAiK4AALSurgC2rpoAuK6jALquTAGArkwDgq76A4Su5wOGrucDAK4mAwKuLAMEri4DBq4uAwiuNAMKrjgDDK5AAw6uSgMQrkwDEq5SAxSuVAMWrloDGK5iAxquaAMcrmoDHq5sAyCu8AMirvgDJK74Ayau8AMorugDKq7kAyyu3AMurt4DMK7YAzKu4AM0ruYDNq7iAziu5AM6ruwDPK7uAz6u7gNArukBQq7qAUSuAABGrgAAYK7wAWKu7gFkrgAAZq4AAPD/RkSmAGCsAABirAAAgKwAAIKsAACErAAAhqwAAIisAACKrAAAjKwAAI6sAACQrAAAkqwAAJSsAACWrAAAmKwAAJqsAACcrAAAnqwAAECsAABCrAAARKwAAEasAABIrAAASqwAAEysAABOrAAAUKwAAFKsAABUrAAAVqwAAFisAABarAAAXKwAAF6sAABmBQAAbgUAAHAFAAByBQAAbAUAAGQFAADw/0lBOgCgqf//oqn//6Sp//+mqf//qKn//6qp//+sqf//rqn//4CpAACCqQAAhKkAAIipAACGqQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEFFQk38AuICzAK4AqoCngKdApoCkQKMAoYCfwJ+AoECfgJkAoQCRgKHAnUCOQK0AoECTQJCAg0CygHEAb8BzQEcAjcCTwJ+AfgB8AGDAscCpwKXApICUAJEAsMBmwGyAdABGwL7Aq8C5ALeAt0C3wLjAugC3QLTAsgCuAKsAqUClAJ3AgoDAQP1AvIC8gL0AvwC+ALrAt0C0AK9ArACogKNAnECDgMJAwEDBAMIAwoDDQMJA/gC6ALZAsICtQKeAosCcwITAxAD/wLwAiIDJQMrAyIDAQPuAuEClwK8AqgCkwJ7AhMDEgNqAiUC9AGwAdgBCwKxAagBMQKfAXEBKwKYAoYCCgMPA/4CzgKfAtMC7QKWArwCagKuAoQCQQJzApgCgwL9AgQDCgMWA4ICTQJrAq8CJQIQAggCLgK7AqgClQJ7AuMC7wLzAgMDCQMIAwsDBQP6Au8C4gLMArMCmQKHAmMC0QLVAt0C5wLrAugC6ALkAt4C2ALNAroCqQKRAnYCXgLMAssCzALPAtACywLHAscCxgLCArkCrAKiAo4CcwJSAoICdQJyAnICcgJwAmsCbgJxAnECawJsAmcCYAJJAiwCdgEgARcBGQFQAVMBNwErAUoBEQE8AUMB/gD5APEAEQFYAkICPAI5AjcCMQIzAjQCLwInAhsCFAIOAg0C/QHjAVBSU1QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABGQ0NWBgABAAwt9SwTLTwtAAAAAAAAAAAAAAAAAAAAAEk0uCUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQDJKqQBfQFvAcwA0wAAAAAAAAAAAAAAOAPzAmEDjQBYAQAAAAAAAAAAAACGAwAAAACGA4YDAAAAAIkr3gGrAbsBywDnAAAAAAAAAAAAAACGAz4DvgObAIEBAAAAAAAAAAAAAMsDAAAAAMsDywMAAAAASSwzAvIBHALXAA8BAAAAAAAAAAAAAM8DfgMYBKgAogEAAAAAAAAAAAAADgQAAAAADgQOBAAAAAAJLWYCKwJ0AuEAPAEAAAAAAAAAAAAA7AOnA1sEsAC4AQAAAAAAAAAAAAAsBAAAAAAsBCwEAAAAAMktPQIPAm4C4gBGAQAAAAAAAAAAAADZA48DTAS6AMoBAAAAAAAAAAAAAA4EAAAAAA4EDgQAAAAAiS7wAcgBJgLdADYBAAAAAAAAAAAAAI8DUwMgBLEAvgEAAAAAAAAAAAAA1QMAAAAA1QPVAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAV0JDWgYGBgYGBgYGBgYGBgYGAwMGBgMGBgYGAwMDBgYGAwMDBgMDAwYGBgYGBgYGBgYDAwYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGAwYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgMGAwYGBgYGBgYGBgYDBgYGAwMGBgYGBgYGBgMGBgMDAwMDBgYGBgYGBgYGBgYGAwMDBgYGBgYGBgYGBgYDAwMDAwYGBgYGBgYGBgYGAwMDAwMGBgYGBgYGBgMGBgMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDBAQEBAQEBAQEBAQEBANCTUhMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEY1NTA4MTAxNTAxMTkAMDA5OTk5Ojk5Ojk5IDAwOjAwOjAwAH8AAAAAAQAAfwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA5OTk5Ojk5Ojk5IDAwOjAwOjAwAA==</item><item key="FlashPixVersion" base64="1">MDEwMA==</item><item key="ColorSpace" base64="1">MQ==</item><item key="ExifImageWidth" base64="1">NjQw</item><item key="ExifImageLength" base64="1">NDgw</item><item key="InteroperabilityOffset" base64="1">MTAwMzg=</item><item key="SensingMethod" base64="1">Mg==</item><item key="FileSource" base64="1">Aw==</item><item key="SceneType" base64="1">AQ==</item><item key="CustomRendered" base64="1">MA==</item><item key="ExposureMode" base64="1">MA==</item><item key="WhiteBalance" base64="1">MA==</item><item key="DigitalZoomRatio" base64="1">MC8xMA==</item><item key="FocalLengthIn35mmFilm" base64="1">Njc=</item><item key="SceneCaptureType" base64="1">MA==</item><item key="GainControl" base64="1">MQ==</item><item key="Contrast" base64="1">MA==</item><item key="Saturation" base64="1">MA==</item><item key="Sharpness" base64="1">MA==</item><item key="ImageUniqueID" base64="1">MzZlNTczMTBhYjA5ZTQ1ZGIzYWRiOTA2ZWY1YTAzZWU=</item></array></information><alias name="listitem" filename="Are-you-ready-for-the-Community-day_listitem.jpg" suffix="jpg" dirpath="var/ezwebin_site/storage/images/community/pictures/are-you-ready-for-the-community-day/1039-1-eng-US" url="var/ezwebin_site/storage/images/community/pictures/are-you-ready-for-the-community-day/1039-1-eng-US/Are-you-ready-for-the-Community-day_listitem.jpg" mime_type="image/jpeg" width="130" height="98" alias_key="379714049" timestamp="1311154279" is_valid="1"/></ezimage>
 ',
@@ -14288,12 +14288,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    928 => array (
+    928 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '178',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1040',
@@ -14303,12 +14303,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    929 => array (
+    929 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '179',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Let\'s work together!',
       'data_type_string' => 'ezstring',
       'id' => '1041',
@@ -14318,7 +14318,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'let\'s work together!',
       'version' => '1',
     ),
-    930 => array (
+    930 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '179',
@@ -14333,12 +14333,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    931 => array (
+    931 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '179',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Let-s-work-together.jpg" suffix="jpg" basename="Let-s-work-together" dirpath="var/ezwebin_site/storage/images/community/pictures/let-s-work-together/1043-1-eng-US" url="var/ezwebin_site/storage/images/community/pictures/let-s-work-together/1043-1-eng-US/Let-s-work-together.jpg" original_filename="3ef0e6bc.jpg" mime_type="image/jpeg" width="640" height="360" alternative_text="" alias_key="1293033771" timestamp="1311154202"><original attribute_id="1043" attribute_version="1" attribute_language="eng-US"/><information Height="360" Width="640" IsColor="1" ByteOrderMotorola="0" ApertureFNumber="f/3.3" Thumbnail.FileType="2" Thumbnail.MimeType="image/jpeg"><array name="ifd0"><item key="Make" base64="1">UGFuYXNvbmlj</item><item key="Model" base64="1">RE1DLVRaNQ==</item><item key="XResolution" base64="1">MTgwLzE=</item><item key="YResolution" base64="1">MTgwLzE=</item><item key="ResolutionUnit" base64="1">Mg==</item><item key="Software" base64="1">VmVyLjEuMCAg</item><item key="DateTime" base64="1">MjAxMTowMToyNyAxNjo0NTowOA==</item><item key="Artist" base64="1">UGljYXNh</item><item key="YCbCrPositioning" base64="1">Mg==</item><item key="Exif_IFD_Pointer" base64="1">NTAy</item><item key="UndefinedTag:0xC4A5" base64="1">UHJpbnRJTQAwMjUwAAAOAAEAFgAWAAIAAAAAAAMAZAAAAAcAAAAAAAgAAAAAAAkAAAAAAAoAAAAAAAsArAAAAAwAAAAAAA0AAAAAAA4AxAAAAAABBQAAAAEBAQAAABABgAAAAAkRAAAQJwAACw8AABAnAACXBQAAECcAALAIAAAQJwAAARwAABAnAABeAgAAECcAAIsAAAAQJwAAywMAABAnAADlGwAAECcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</item><item key="UndefinedTag:0xC6D2" base64="1">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</item></array><array name="exif"><item key="ExposureTime" base64="1">MTAvMTUw</item><item key="FNumber" base64="1">MzMvMTA=</item><item key="ExposureProgram" base64="1">Mg==</item><item key="ISOSpeedRatings" base64="1">ODAw</item><item key="ExifVersion" base64="1">MDIyMQ==</item><item key="DateTimeOriginal" base64="1">MjAxMTowMToyNyAxNjo0NTowOA==</item><item key="DateTimeDigitized" base64="1">MjAxMTowMToyNyAxNjo0NTowOA==</item><item key="ComponentsConfiguration" base64="1">AQIDAA==</item><item key="CompressedBitsPerPixel" base64="1">NC8x</item><item key="ExposureBiasValue" base64="1">MC8xMDA=</item><item key="MaxApertureValue" base64="1">MzQ0LzEwMA==</item><item key="MeteringMode" base64="1">NQ==</item><item key="LightSource" base64="1">MA==</item><item key="Flash" base64="1">MTY=</item><item key="FocalLength" base64="1">NDcvMTA=</item><item key="MakerNote" base64="1">UGFuYXNvbmljAAAANgABAAMAAQAAAAIAAAACAAcABAAAAAABAgADAAMAAQAAAAEAAAAHAAMAAQAAAAUAAAAPAAEAAgAAACAAAAAaAAMAAQAAAAQAAAAcAAMAAQAAAAIAAAAfAAMAAQAAABUAAAAgAAMAAQAAAAIAAAAhAAcACCAAALwGAAAiAAMAAQAAAAAAAAAjAAMAAQAAAAAAAAAkAAMAAQAAAAAAAAAlAAcAEAAAAMQmAAAmAAcABAAAADAyNzAnAAMAAQAAAAAAAAAoAAMAAQAAAAEAAAApAAQAAQAAAIUQAAAqAAMAAQAAAAAAAAArAAQAAQAAAAAAAAAsAAMAAQAAAAIAAAAtAAMAAQAAAAAAAAAuAAMAAQAAAAEAAAAvAAMAAQAAAAEAAAAwAAMAAQAAAAEAAAAxAAMAAQAAAAEAAAAyAAMAAQAAAAEAAAAzAAIAFAAAANQmAAA0AAMAAQAAAAEAAAA1AAMAAQAAAAEAAAA2AAMAAQAAAP//AAA3AAMAAQAAAAEBAAA4AAMAAQAAAAEAAAA6AAMAAQAAAAIAAAA7AAMAAQAAAAEAAAA8AAMAAQAAAP//AAA9AAMAAQAAAAUAAAA+AAMAAQAAAAEAAAA/AAMAAQAAAAAAAABNAAUAAgAAAOgmAABOAAcAKgAAAPgmAABPAAMAAQAAAAAAAABeAAcABAAAAAAAAAAAgAcABAAAADAxMjEBgAMAAQAAABUAAAACgAMAAQAAAAIAAAADgAMAAQAAAAIAAAAEgAMAAQAAABQFAAAFgAMAAQAAAB4EAAAGgAMAAQAAAIsIAAAHgAMAAQAAAAEAAAAIgAMAAQAAAAEAAAAJgAMAAQAAAAEAAAAQgAIAFAAAACInAAAAAAAARFYBAkVQAADw/0RCCgbw/0FGtgCgrxCIoq8CgqSvEDCmrwAAyq9QALKvAwC0rwEAuq8IALyv7/++rwAA+K8AAPqvMACor+ADqq/IDMivQJzYr5T+tq8gAbivAADOr0sB0q8oANCvKACsr4QCsK9TAK6vUwDUrycA9K8pAPKvKQDirwAA5K8BAOCvmAzmrwEA6K8AAOqvAADsrwAA9q8WU9qvAADWrwAA8K8AAAQGtgoKBsgMyAYBAZqvAACcrwAAnq8AAPD/U1RyAKQGAACmBgAAqAYAAKoGAACsBgAA+gcAAK4GAACwBgAAtgYAALgGAAC6BgAA9AcAAPYHAACyBgAAtAYAALAEAACyBAAAYKkAAGKpAABkqQAAaKkAAGapAABqqQAAeKkAAHqpAAB8qQAAfqkAAPD/QUUmASAFFQIiBWIC7gcdBSQFsAIQBaUB3ga0ASYFBgDABgAAKAWyARgFWQI6BQEAxRkCAFAFxQFSBasBygYTAgAFAwA2BQAAQgUAAAgFAAACBQAACgUAAAQFAABABQAABAfT/gwHsP8GBwAACAcZAAoHAADyBgAA9gb///QGAAD4Bk0ADgUxAioFFQAsBQEDMgUBA/oGWQL8BqgAAAcAAjsFAQA+BQIAxhnFAcgZ7QEwBYABHAUbAugGvwoaBWoT7wYCAPAGAQD+BgAALgUAAAEFAABgBQAANAUAAA5noAI4BQAADgckABAHEQASBzgAFAdCDRYHQgAXBzYAGAcjAEgFAABKBQAARAUAAEYFAAAUBTEBFgUnADwFKAFYBTIBWgXUAPD/V0LqAAAEFAUCBIsIXAQeBAQEwQAGBOgAYAS0ARoEBABeBAAAXwQGABIE//8UBP//FgT//xgE///MBGcEzgTnCdAE7wbSBDkHCASEAAoECgG0BAAAtgQBAUAE9QAwBEoAOARZADIEZAA6BHsANAT7/zwEGwA2BBMAPgQlAEwEDAFOBBgBwATBAMIE6ADqBAAAgAUAAIIFhgCDBYwAjAUAAI4FhgCPBYwAUgS4AFQE3gBWBLgAWATeANQEygDWBPEA2AS4ANoE3gDwBCQH8gRRBvQEGAH2BDEB+AQhB/oERwb8BBcB/gQzAfD/WUPmAE6qFABQqhQAUqoUAFSqFABEqv//RqrMiEiqdwNKqgAATKoAADiqUAA6qlAAPKpQAD6qUAAuqoiIMKrMiDKqd1U0qiIRNqoAAIIEKgCABAQAhAQAAISqcABgqjI+YqoyPmSqOktmqjpLaKoxPmqqAQBsqgAAbqoAAIaqAACIqgAAiqoMAIyqDACOqgAAkKoAAJKqHwCUqh8AlqoAAJiqAACgqvAAoqoQAKSq6ACmqgAAqKoKAFiqAQBaqgAAXKoAAF6qIACaqgAAnKoAAMCq0ADCqtAAxKrQAMaq0ADIqggI8P9DTQ4A/AUAMASsAADw/0RTLgAArwAAAq8AAAqvAAAErwAABq8AAAivAAAMrwAADq8AABCvAAASrwAA8P9JU8oAiK4AALSuMQC2rjcAuK7SArquBwKArncDgq7sBoSu5wOGrucDAK50AwKuXAMErlIDBq5IAwiuRAMKrkIDDK5IAw6uTAMQrlIDEq5SAxSuUgMWrk4DGK4AABquAAAcrgAAHq4AACCu9gMiruYDJK7YAyauyAMorsoDKq7YAyyu7AMurvYDMK72AzKu0gM0rrQDNq6kAziuAAA6rgAAPK4AAD6uAABArvABQq7oAUSu6AFGrgAAYK7wAWKu8QFkrvABZq4AAPD/RkSmAGCsAABirAAAgKwAAIKsAACErAAAhqwAAIisAACKrAAAjKwAAI6sAACQrAAAkqwAAJSsAACWrAAAmKwAAJqsAACcrAAAnqwAAECsAABCrAAARKwAAEasAABIrAAASqwAAEysAABOrAAAUKwAAFKsAABUrAAAVqwAAFisAABarAAAXKwAAF6sAABmBQAAbgUAAHAFAAByBQAAbAViAGQFAATw/0lBOgCgqfECoqnwD6Sp//+mqf//qKkRQqqpQA+sqf//rqn//4CpPwKCqQAAhKkAAIipjwCGqQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEFFQk3YA+ACEQSTA7MA8AB6AY4B0wLiCxwM6gqSAusA6AACASUFtAIbAvsAvwBgAMQAGgHVAsYOZg+lDjkDcgQuAiMBFgXJAyID+wDmAFoAywAsARkD5g5kD4cOmQSaCdYDMgHuBSYElAP+Av4A2gB6AT0BGgMHD2EPsg7IBdQLHwObAc4GCwQDAS8BCAEAATAC8QFlAkQH3wVnCtgG0Q0ABIADmQY6BW4BYgFqAbMBcQLnA30CRAE7ArMBDQUnChoCkgPTAdYBAAK7AS0BHgJ1BCEEQwNGAloBWQLhAKAHGQMUAeoB8ADJAWgAegDXAIkCXQJlAxIDugCxAWgAIwTtBVAA3gBOADYBQgCZAFkAqQF1AOoBVQE/AfkAKAAvACoAUwA3ABsASQBQAOQAtgXAAFEA8gAbA/wBeQAoAH8AFgA1ACIAHAA4AC0ADwFPAZAATABoAMwAUAFrAFkAbwAcAB4AFgAYAC0AKwASAa8AOAA0ACsAWAApABcAGAAnAB4AHAAUAB0AIwAYAOQACAExACIAHABiACkAEAAdABoAFwAaADAAMAA7ABcAYwCYANsAJAAcAH8AMQAsADIAIAAPABMAwgAsAEIAGQAlACgALQAnAC8AswA4AC8AIQAiABEADwA0AGQAPgAlACEALwAeACEAIwBXAB8AKAAjABQAEAAMAFBSU1QbFMMMYRLwDysCnwS3BocHkhE8SB5PXkVoCd8E+wQuBbUZXQyGC8QFVwLEASgE3AUSEorpK+DMmvgMgBSzB8kFiBrmEQwQbgYpArQBNgRVBqITpfEH2BSF5BaMMZENCwZKHsMSDRUKDyUCCQVRB9gGfxUK9371Wb4HH4k+YAiDB+IieBBRBfMHdQJKBh0KbAtmDdVf3kgDeLoo7FEmED0QOh6EFrYIhQjQBUQJXA7rExIKswY0CxkH3Cc9RhwMLRMbB5sHqgl7CGwFVAu0Fv4Ulg5wC0IHvwygBkcoYQvAFC0I8QOKCJ0BgQKWBDQNjwoXEtEN6QPcCOAB2yNaJ6ELJwNEAkkETgG2AuwBKQg6AqUJTgYEBY0ErwDZAP0ARgLRAOQANAFNAWgEUC15A3oBgwcZE5IJsAH/ANsBcwAWAY4AAwH1ANkAEgVIBa4CZwHtAekDqwaTAScCxAF3AJoAbQAZAdEAKwHcBNYC5QDlAMoAogGPAF4AggCtAIYAhwBYABQBlgCbAG0E4gSXAJgAhAAGArMAWwCbAHYAeAB8AIEADwH9AGcAeAFgAo4BsQC9ABEDBAHQAP8AdwBcAG4AwwH6ADIBaQDkAMUAvAC7APoArQP6AOwAtACLAFYAXADxAAsCHgGrAJgA1wCDAKYAlQC9AcIAzACjAFsAVQBVAEMUfAubEIgOAgJmBEkGSgfUEvVK8E41QrMH5wQUBUMFdxlxCyoLigU9Ar8BRQRHBqkUqfHw3zCYdQvxE8UGugWnGgQRBQ9PBgYCtwFFBIMGiBpg9d3Wd4O7FukywgnzBSce3RCfFL4N+wGaBUAHBAdcIEL3KvXIsrsgPD3fBkcH2iL9DlcFNQjYAbYG0QkwDO8P/F53SXZwCix4TskPfg8YHPYUIwlqCR0FlwkaDwEUYQmqBkgLeQaRKzlDdwwNE2wGugbRCacI/wSpC5cWexUGDnILYgcJDfgH1SZeCXkblQfJA7IIugGWAh8F2AxVCrASHA3WAywJ5gFkKfojnhWZAqsCbgNlAZECdwKlB3wCNwlMBn0EjwS4AOsALgEsBM8AAQExAVIBWgQpLYwDzwFvC4UPsgmJATcBrwF5ACIBhQBQAe8A4QAfBaMEtwJyARMCFATHBmgBSwKxAXIAoABhAEcCzAAvAaoEqwLqAOkAxgC1AawAjgCQALoAjACEAFYA3gGWAKgAOgTlBI0AmACGAP4BfgBeAJsAfAB+AH4AawASAfYAYgBXAYQC4gGrAN0AxwLQAMcAAwFkAFMAaABOAfsAJQFfAM0AwQC5ALUACQFVA80A2wC0AIMAWQBcAOwAFgIWAaAAlQDMAHQAmwCOAJkBugC+AKAAWABTAHkAAAAAAAAARALUAgQLjAJIAgACwAAAAAAAAAAAAAAAAAAWAAAAAAAAAAAEAAQABAAEAAQABAAAAAAAAAAAAAAAAAAABgBGQ0NWBQABAMgMmAwAAAAAAAAAAAAAAAAAAAAAAAAAAD8ZdwsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQB3C+sChAffAaoBSgEHAakBjwIAAMcEsQQyDMsC6wKrAbcAdQIkBQAAoQdDAQAAAAACAAEAAAAAAJcM4APFCYUCDAJqAUwBAwIgAwAAagY5BVoNMANJA84B4QD0AqAFAABhCHcBAAAAAAIAAgAAAAAAtw23A9gJwQJOApoBbAE7AsMDAABzBjoFZQ1GA1gD3gECAQADBgYAAGoIfgEAAAAAAgAAAAAAAADXDjAD9AikAoQCegEhATECFwQAAKwFFQXfDEwDeQPZAecAEQNRBgAADAiBAQAAAAADAAIAAAAAAPcPXwJiBuIByAEqAfcApwH7AgAA/gNKBCMLzQIlA4MB0wCPApMFAAC1BmIBAAAAAAMAAgAAAAAAoxBCAkkG+wH/AbABggGIAVQBAAAGBNsBgAeqAc0BGQFjASgBxwAAAGkEwgAAAAAACAAFAAAAAACDD0YCqwYGAnECsgGpAZMBTwEAAC0EKwKbCdQBQAI/AaMBWAHYAAAAnwXhAAAAAAAJAAQAAAAAAGMORAJxCCkCKwPLAb0BngFJAQAABgWDApILFwKbAl0ByQF8AdwAAAC4BvQAAAAAAAoABQAAAAAAQw2bAmEKdgIGA+IBpwG9AVwBAADyBd0CnwxKApoCcQHFAZEB5gAAAHUH6QAAAAAACQAFAAAAAAAjDIkCyQlTAmICswGIAZIBWwEAACAG2gJODC0CQQJLAZgBcwHVAAAAbwfgAAAAAAAIAAIAAAAAAAMLSQI9B/sBAwKkAXkBjgFWAQAAugSIAk4K8gHHATABVwE7AcMAAABvBtEAAAAAAAkABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAV0JDWgQKCgoKCgoKCg4ODgoKCgoKCgEJCg4OCg4ODg4KCgoKCgoCCgoOCgoODg4OCgoKCgoKDgoKCgoKDg4ODgoKCgoKCgoKCgoACg4ODg4KCgAKCgoKCgoKCgoKCgoKBAoKCgoKCgoKCgoOCgoKCgoKCgoKDgoKCg4KDgoKCgoKCgoKDg4OCg4KCgoKCgoKDg4OCg4OCgoOCgoOCgoKDgoODgoOCgoOCgoKDgkKCg4KDg4ODgoODgoKDg4ODg4ODg4ODgoKDg4KCg4ODgoODg4ODg4KCg4ODgoKDg4KDg4KDg4OCg4ODg4ODg4OCg4ODg4ODg4KDg4ODg4ODg4ODg4ODg5CTUhMAAAAAAAAAAAAERoWAAAAAAAAAAAAAAAAAFdhTwAAAAAAAAAAAAAAAABZYEwAAAUAAAAEAAAAAAAAW2JTAAEGAAAAAAAAAAAAACIYMAo6AQABAAAAAAAAAQAAAAARKAAAAAAAAAAAAAAAAAAAAAYGAgAAAAAAAAAAAQAAAAAKGQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUAAAABwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEY1NTA4MTAxNTAxMTkAMDA5OTk5Ojk5Ojk5IDAwOjAwOjAwAFcAAAAAAQAAXwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA5OTk5Ojk5Ojk5IDAwOjAwOjAwAA==</item><item key="FlashPixVersion" base64="1">MDEwMA==</item><item key="ColorSpace" base64="1">MQ==</item><item key="ExifImageWidth" base64="1">NjQw</item><item key="ExifImageLength" base64="1">MzYw</item><item key="InteroperabilityOffset" base64="1">MTAwMzg=</item><item key="SensingMethod" base64="1">Mg==</item><item key="FileSource" base64="1">Aw==</item><item key="SceneType" base64="1">AQ==</item><item key="CustomRendered" base64="1">MA==</item><item key="ExposureMode" base64="1">MA==</item><item key="WhiteBalance" base64="1">MA==</item><item key="DigitalZoomRatio" base64="1">MC8xMA==</item><item key="FocalLengthIn35mmFilm" base64="1">Mjg=</item><item key="SceneCaptureType" base64="1">MA==</item><item key="GainControl" base64="1">Mg==</item><item key="Contrast" base64="1">MA==</item><item key="Saturation" base64="1">MQ==</item><item key="Sharpness" base64="1">MQ==</item><item key="ImageUniqueID" base64="1">Yjc5N2I4MDg4NTA1NDM4OGY2NTYwYzI1ZWY3MTkwM2E=</item></array></information><alias name="listitem" filename="Let-s-work-together_listitem.jpg" suffix="jpg" dirpath="var/ezwebin_site/storage/images/community/pictures/let-s-work-together/1043-1-eng-US" url="var/ezwebin_site/storage/images/community/pictures/let-s-work-together/1043-1-eng-US/Let-s-work-together_listitem.jpg" mime_type="image/jpeg" width="130" height="73" alias_key="379714049" timestamp="1311154279" is_valid="1"/></ezimage>
 ',
@@ -14350,12 +14350,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    932 => array (
+    932 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '179',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1044',
@@ -14365,12 +14365,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    933 => array (
+    933 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '180',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'The Mediterranean seen from Nice!',
       'data_type_string' => 'ezstring',
       'id' => '1045',
@@ -14380,7 +14380,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'the mediterranean seen from nice!',
       'version' => '1',
     ),
-    934 => array (
+    934 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '180',
@@ -14395,12 +14395,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    935 => array (
+    935 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '180',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="The-Mediterranean-seen-from-Nice.jpg" suffix="jpg" basename="The-Mediterranean-seen-from-Nice" dirpath="var/ezwebin_site/storage/images/community/pictures/the-mediterranean-seen-from-nice/1047-1-eng-US" url="var/ezwebin_site/storage/images/community/pictures/the-mediterranean-seen-from-nice/1047-1-eng-US/The-Mediterranean-seen-from-Nice.jpg" original_filename="56b81989.jpg" mime_type="image/jpeg" width="640" height="360" alternative_text="" alias_key="1293033771" timestamp="1311154202"><original attribute_id="1047" attribute_version="1" attribute_language="eng-US"/><information Height="360" Width="640" IsColor="1" ByteOrderMotorola="0" ApertureFNumber="f/9.0" Thumbnail.FileType="2" Thumbnail.MimeType="image/jpeg"><array name="ifd0"><item key="Make" base64="1">UGFuYXNvbmlj</item><item key="Model" base64="1">RE1DLVRaNQ==</item><item key="XResolution" base64="1">MTgwLzE=</item><item key="YResolution" base64="1">MTgwLzE=</item><item key="ResolutionUnit" base64="1">Mg==</item><item key="Software" base64="1">VmVyLjEuMCAg</item><item key="DateTime" base64="1">MjAxMTowMToyNyAxMTozOTo1Mg==</item><item key="Artist" base64="1">UGljYXNh</item><item key="YCbCrPositioning" base64="1">Mg==</item><item key="Exif_IFD_Pointer" base64="1">NTAy</item><item key="UndefinedTag:0xC4A5" base64="1">UHJpbnRJTQAwMjUwAAAOAAEAFgAWAAIAAAAAAAMAZAAAAAcAAAAAAAgAAAAAAAkAAAAAAAoAAAAAAAsArAAAAAwAAAAAAA0AAAAAAA4AxAAAAAABBQAAAAEBAQAAABABgAAAAAkRAAAQJwAACw8AABAnAACXBQAAECcAALAIAAAQJwAAARwAABAnAABeAgAAECcAAIsAAAAQJwAAywMAABAnAADlGwAAECcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</item><item key="UndefinedTag:0xC6D2" base64="1">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</item></array><array name="exif"><item key="ExposureTime" base64="1">MTAvNjQwMA==</item><item key="FNumber" base64="1">OTAvMTA=</item><item key="ExposureProgram" base64="1">OA==</item><item key="ISOSpeedRatings" base64="1">MTYw</item><item key="ExifVersion" base64="1">MDIyMQ==</item><item key="DateTimeOriginal" base64="1">MjAxMTowMToyNyAxMTozOTo1Mg==</item><item key="DateTimeDigitized" base64="1">MjAxMTowMToyNyAxMTozOTo1Mg==</item><item key="ComponentsConfiguration" base64="1">AQIDAA==</item><item key="CompressedBitsPerPixel" base64="1">NC8x</item><item key="ExposureBiasValue" base64="1">MC8xMDA=</item><item key="MaxApertureValue" base64="1">MzQ0LzEwMA==</item><item key="MeteringMode" base64="1">NQ==</item><item key="LightSource" base64="1">MA==</item><item key="Flash" base64="1">MjQ=</item><item key="FocalLength" base64="1">NjcvMTA=</item><item key="MakerNote" base64="1">UGFuYXNvbmljAAAANgABAAMAAQAAAAIAAAACAAcABAAAAAABAgADAAMAAQAAAAEAAAAHAAMAAQAAAAUAAAAPAAEAAgAAACAAAAAaAAMAAQAAAAQAAAAcAAMAAQAAAAIAAAAfAAMAAQAAAAMAAAAgAAMAAQAAAAIAAAAhAAcACCAAALwGAAAiAAMAAQAAAAAAAAAjAAMAAQAAAAAAAAAkAAMAAQAAAAAAAAAlAAcAEAAAAMQmAAAmAAcABAAAADAyNzAnAAMAAQAAAAAAAAAoAAMAAQAAAAEAAAApAAQAAQAAAOskAAAqAAMAAQAAAAAAAAArAAQAAQAAAAAAAAAsAAMAAQAAAAAAAAAtAAMAAQAAAAAAAAAuAAMAAQAAAAEAAAAvAAMAAQAAAAEAAAAwAAMAAQAAAAEAAAAxAAMAAQAAAAIAAAAyAAMAAQAAAAEAAAAzAAIAFAAAANQmAAA0AAMAAQAAAAEAAAA1AAMAAQAAAAEAAAA2AAMAAQAAAP//AAA3AAMAAQAAAAEBAAA4AAMAAQAAAAEAAAA6AAMAAQAAAAIAAAA7AAMAAQAAAAEAAAA8AAMAAQAAAP//AAA9AAMAAQAAAAUAAAA+AAMAAQAAAAEAAAA/AAMAAQAAAAAAAABNAAUAAgAAAOgmAABOAAcAKgAAAPgmAABPAAMAAQAAAAAAAABeAAcABAAAAAAAAAAAgAcABAAAADAxMjEBgAMAAQAAAAMAAAACgAMAAQAAAAEAAAADgAMAAQAAAAEAAAAEgAMAAQAAABYHAAAFgAMAAQAAAB4EAAAGgAMAAQAAACoHAAAHgAMAAQAAAAEAAAAIgAMAAQAAAAEAAAAJgAMAAQAAAAEAAAAQgAIAFAAAACInAAAAAAAARFYBAkVQAADw/0RCCgbw/0FGtgCgrxCAoq8AAqSvADCmrwAAyq9UALKvAQC0rwAAuq+OALyv7/++rwAA+K8AAPqvFwCor7wBqq9ZGsivQJzYr63/tq8gAbivAADOr4cA0q8UANCvKACsr/8AsK8oAK6vKADUr0oA9K8mAPKvKADirwAA5K8BAOCvQhrmr98B6K//AeqvGQDsrwAA9q8AANqvAADWrwAE8K8GAAQGbg4KBlkayAYCApqvAACcrwAAnq8AAPD/U1RyAKQGAACmBgAAqAYAAKoGAACsBgAA+gcAAK4GAACwBgAAtgYAALgGAAC6BgAA9AcAAPYHAACyBgAAtAYAALAEAACyBAAAYKkAAGKpAABkqQAAaKkAAGapAABqqQAAeKkAAHqpAAB8qQAAfqkAAPD/QUUmASAFZgIiBWIC7gdmAiQF9ggQBesH3gYJCCYFsQDABp0BKAW2ABgFCgE6BQIAxRkAAFAFPANSBboFygYCAAAFAwA2BQAAQgUAAAgFAAACBcr/CgUAAAQFAABABQAABAfK/wwHAAAGBwAACAcAAAoHAADyBgAA9gb///QGAAD4Bv//DgXsByoFHgAsBQoBMgUKAfoGCgH8BgAAAAcAATsFAgA+BQAAxhk8A8gZsAQwBQAAHAUMAOgGvQoaBaoT7wYBAPAGAQD+BgAALgUAAAEFAABgBQAANAUAAA5noAI4BQAADgcJABAHAAASBz0AFAcBABYHEAAXBwAAGAcAAEgFAABKBQAARAUAAEYFAAAUBTEBFgUnADwFLQFYBRIYWgVCAPD/V0LqAAAEFgcCBCoHXAQeBAQEDgEGBBoBYAQJCBoE0gBeBP8AXwQKABIE+QAUBAoBFgQOARgEGgHMBGcEzgTnCdAE7wbSBDkHCAQhAQoEFwG0BAQitgQAAUAE9QAwBFIAOARpADIEcAA6BHMANATg/zwEBAA2BBAAPgQpAEwEGAFOBBYBwAQTAcIEHQHqBAAAgAUFAYIFjACDBYsAjAUJAI4FhwCPBY0AUgT6AFQEFQFWBPoAWAQVAdQE+gDWBBUB2AT6ANoEFQHwBCQH8gRRBvQEGAH2BDEB+AQhB/oERwb8BBcB/gQzAfD/WUPmAE6qBgBQqgYAUqoGAFSqBgBEqoiIRqrdqkiqiGZKqhEATKoAADiqMAA6qjAAPKowAD6qMAAuqoiIMKrMiDKqd2Y0qiIRNqoAAIIEAACABAkAhAQAAISqcABgqpubYqqbm2SqY39mqmN/aKpoaGqqAgBsqgAAbqoAAIaqAACIqgAAiqoIAIyqCACOqgAAkKoAAJKqHwCUqh8AlqoAAJiqAACgqvAAoqoQAKSq6ACmqgAAqKoKAFiqAQBaqgkAXKoJAF6qIACaqgAAnKoAAMCq///Cqv//xKr//8aq///Iqv//8P9DTQ4A/AUAMASsAADw/0RTLgAArwAAAq8AAAqvAAAErwAABq8AAAivAAAMrwAADq8AABCvAAASrwAA8P9JU8oAiK4AALSuQQG2rlcBuK5uA7qutQmArmcEgq7mA4Su5wOGrucDAK5uBAKucgQErnYEBq58BAiuggQKroQEDK6GBA6uggQQrooEEq6EBBSuiAQWroIEGK6IBBquhAQcroYEHq6ABCCu8AMiruwDJK7oAyau5gMort4DKq7gAyyu2AMurtgDMK7cAzKu3AM0ruADNq7kAziu4gM6rt4DPK7iAz6u3gNArvEBQq4AAESuAABGrgAAYK7wAWKuAABkrgAAZq4AAPD/RkSmAGCsAABirAAAgKwAAIKsAACErAAAhqwAAIisAACKrAAAjKwAAI6sAACQrAAAkqwAAJSsAACWrAAAmKwAAJqsAACcrAAAnqwAAECsAABCrAAARKwAAEasAABIrAAASqwAAEysAABOrAAAUKwAAFKsAABUrAAAVqwAAFisAABarAAAXKwAAF6sAABmBQAAbgUAAHAFAAByBQAAbAViAGQFAAjw/0lBOgCgqfIioqnwD6Sp8iKmqfAPqKkCIqqpAA+sqf//rqn//4CpFACCqQAAhKkAAIipGwCGqQcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEFFQk0cAo8DwwTuBcYF/QIPAnwCvQLcBEEEUwPwAgcC5gHzAbsBTALIBH0DbQP0A+oCIAPLAhwE7gPSAuIC7wLnAeIBqQP6A/kCpAIxA5QDFQRgBG4EpgN/A0gDYwS2A8ICKgKMAxEFKQZKBnUD3AMIBMsBdgUQBowF0wTFBF8CCAOjA6AEVwXpBcIFcQVvBMUCZQIxANUAsgMuBKoEJgNzA4wDMQRqBScGsgbBBaEF/gQOApQAFgNKAqAD4ALEAwgEjgPLAwQFQAUyBf4E1QMyBH4BUgAQAt4DsAM+A8IDjwPDAj8ERgNVA1gDjAPRA8EDygIvAHYAFwFXApsCpgJeAlACxgPyAykEvwNkA4oDUwOHASkAigE5AicByAGQAooCbwLwAnMDsAOHAx4DtgIsATMAJAAhAeICKwIxApICxQJ6AkgB+wAQAbgBxAF/AFwAHwGhAEsBrAEaAVABPQHvALoA8gAtAUMBSQE4ANkANQEXAXIACQH4AHkBAwEeAcoA6gC1AAkBLAEtAVYBHQEZAeQAYAC3AAwBCAEcAesA1ADEAIwA5gDbAPcAKgEDAeAAzQBHAKUA5gDcAAMBxQCtALsAeQDCAKgAoQD5AOEAjADyAJwAEwF/ALwAAQG5AKIAogDaAMQB4AGuAIUAdgBdAKcAZACdAGwAkgB2AHwAigB5AFBSU1QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABGQ0NWCAABAFkaQhomGigaBRoNGpoZChrdGSYaAAAAAB4nmBUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQBzFu0AogDXABsBEgGWALAAAgHtACMCmQLgALkBswN3AvIAiQGHAkYC6wXhAgAAAABmBZkCAAAAAJMXJwGqAOcAjwFlAZ8AygBYAUYBwgL6AgUBDAJSBNYCEwHFAe4CmQLhBiUDAAAAAOQF0AIAAAAAsxhyAbcAJAFpAvwBtAAHAdEBvQHlA1EDIwFsAuIEJAMsARACPQPtArkHTwMAAAAANAb4AgAAAADTGbwB2QB7AeMCVAK8ADYBLAIMAq4EewM8Aa4CKgVPAy8BQwJeAxMDHwhiAwAAAABjBhIDAAAAAPMaowHHAE4BhgIWArUAFAHOAeIBKARdAyEBjAL5BCoDKQEjAiwD/ALGB08DAAAAAD8G8AIAAAAAExxHAagAAwGgAX8BngDVAE0BZAH9AgYD+QAhAmcE2wIDAdcB1wK6Av8GGAMAAAAA4gXHAgAAAAAzHfQAngDZABEBAgGOAL8ABAEJAR8CmgLQAMgBsgNuAtkAkQFvAlMC9AXLAgAAAABRBYgCAAAAAFMezAChAMYA4wDiAI0AsgDhAN0AwQE1ArYAiQEWAwYCvABRAfwB8wH7BH4CAAAAAMYEPQIAAAAAzyuwAKwAsgDHAKwAwwDLAJYAqgB6AZQAlwB/AKsAVAC5AJwAXQBcADcBfAAAAAAAoAAdAAAAAACvKq8AqACsAMUArQDBAMUAmACqAHQBkgCUAH4AtwBTAMEAnQBcAF4ARQF1AAAAAACoAB4AAAAAAI8prgCsALMAxwCgAMQAxwCZAKgAegGcAJYAhwDFAFQA0ACkAFwAYgBbAYIAAAAAALcAHQAAAAAAbyivAKoAsADJAKMAxQDFAJ0AqgB5AaYAnwCMAM0AUwDdAKgAWgBgAG8BkgAAAAAAxwAcAAAAAABPJ6wArACuAMkApgDEAMMAnwCoAHcBrgCvAJIA3ABTAPIArgBdAGAAggGQAAAAAADVABwAAAAAAC8mqwCvAK0AwwCsAMgAxQChAKcAfAGoAK0AlADqAFUACAGuAFwAXwCHAX0AAAAAAOsAHwAAAAAADyWrAKwAsADDAKMAwgDDAJ0AqQBzAbEAuwCbAPoAUAATAboAYABhAJYBjwAAAAAABQEfAAAAAADvI64AqwC0AMAApQDGAMYAoQCmAHsBwwCgAKkACgFTACcBxQBiAGUAsQGrAAAAAAAYAR4AAAAAAM8irgCqALIAywChAMEAwwCdAKgAfQHNAKAAtwAeAVUAQgHYAGQAYwDDAbIAAAAAADEBHgAAAAAAryGtAKoAswDKAK0AyQDEAKMArAB/AeEArADCADkBVQBlAekAYwBhAO8BwQAAAAAAVgEeAAAAAACPIK4AqQCxAMwApQDRAMMAoACuAH4B+QDgANgAVAFWAJUB/wBiAGcAHwLlAAAAAAB6AR0AAAAAAG8fswCqALkAywCfAM8AyACpAKoAgwERAcoA7AB6AVMAwAEdAWgAaABJAu0AAAAAAKEBIAAAAAAATx61AK0AtgDVAKcA0wDJAKMArACNASUBygACAbIBVgAEAjwBaABoAHoCBAEAAAAA4AEhAAAAAAAvHbgAqQDBANIAqADgAMoAogCrAJEBVwEPAS8B6gFVAFICbwF0AG0A3QIwAQAAAAAoAiQAAAAAAA8cvwCvAMsA3gCmAPUAzwCpAKwAogGQARsBWwExAlYAxwKzAXcAbQAyA1wBAAAAAHsCJAAAAAAA7xrIALUA6wADAagAJQHfAKgArgDFAcUBSAGXAZ4CWABjAwECewBuAKUDdwEAAAAAzgIkAAAAAADPGe4AygAfATgBpQCSASABpwCsABECTALwAeEBIwNYADEEkQKQAHUAegT4AQAAAABBAyUAAAAAAK8YOQHjAGEB1wGjAEICeAGmAK0AtAKlAicCDwLBA1kAvwTaApoAgQAlBSgCAAAAAJoDJAAAAAAAjxezARkBogGXAqUAOQPkAbIArQCHA/ACMAIuAkgEWwAuBRYDoACNAKQFMAIAAAAAxQMpAAAAAABvFgMCRwGmASYDpQB5A/EBwQCyABsEFwNoAkYCfgRhAD4FFwOzAKUA6gVLAgAAAADjAzgAAAAAAE8VIwIvAVIBKAOnAP8CswG9ALYAJgQtA6UCJQJ2BG4AAAUDA9kAzAASBoQCAAAAAM0DRwAAAAAALxSuAd0AFAGFAqoA+AE/Ab8AxwBaA+YCKAIBAhoEgABtBJgC4gDxAKoFOwIAAAAAjwNVAAAAAAAPEzYB3AD9ALoBrQBqAe0A2wD1AKACjwLYAdQBiQOUAM8DPgIQARwBLAXsAQAAAAA/A20AAAAAAO8R8AAUASsBNAG9ADUB5gAXATcBagI+ArsBsgH9AqkAOAPoAToBUAHABMIBAAAAAO4CggAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAV0JDWgIFAQEBAQICAgEBAgIFBQUFBQIBAgEBAgICAQICAgUFAgEBAgIBAQEBAQECAQICAgUFAQMBAQEBAQEBAQECAgIBAQEDAQEBAQECAgIBBQECAgEDAwMBAQEBAwECBQEBAQIBAQEDAQEBAwEBAQEBAQIBAQUFBQICDwoBDw8PDw8PAQEBAQIFBQUKBQUCDw8PDwEDAQMDAwMDAwMDAQEBAQICAgEBAQMDAQMBAQIBAQIBAgIBAQEBAQEDAQECAgICBQ8FBQEBAQICAwUFBQUFBQUGDwUFAQUFBQMPDw8FDw8PBg8GBgUPBgYGBQYPBQ8PDw8PBgYDBgYFAwUGBgYGBgZCTUhMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEY1NTA4MTAxNTAxMTkAMDA5OTk5Ojk5Ojk5IDAwOjAwOjAwAH8AAAAAAQAAfwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA5OTk5Ojk5Ojk5IDAwOjAwOjAwAA==</item><item key="FlashPixVersion" base64="1">MDEwMA==</item><item key="ColorSpace" base64="1">MQ==</item><item key="ExifImageWidth" base64="1">NjQw</item><item key="ExifImageLength" base64="1">MzYw</item><item key="InteroperabilityOffset" base64="1">MTAwMzg=</item><item key="SensingMethod" base64="1">Mg==</item><item key="FileSource" base64="1">Aw==</item><item key="SceneType" base64="1">AQ==</item><item key="CustomRendered" base64="1">MA==</item><item key="ExposureMode" base64="1">MA==</item><item key="WhiteBalance" base64="1">MA==</item><item key="DigitalZoomRatio" base64="1">MC8xMA==</item><item key="FocalLengthIn35mmFilm" base64="1">NDA=</item><item key="SceneCaptureType" base64="1">MA==</item><item key="GainControl" base64="1">MQ==</item><item key="Contrast" base64="1">MA==</item><item key="Saturation" base64="1">MQ==</item><item key="Sharpness" base64="1">MQ==</item><item key="ImageUniqueID" base64="1">MzNkZmVjZDk3NDk5NmE2MDBiYTA0ZGE0Y2I0NjUwNTc=</item></array></information></ezimage>
 ',
@@ -14412,12 +14412,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    936 => array (
+    936 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '180',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1048',
@@ -14427,12 +14427,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    937 => array (
+    937 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '181',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Hotel lobby at Isola2000',
       'data_type_string' => 'ezstring',
       'id' => '1049',
@@ -14442,7 +14442,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'hotel lobby at isola2000',
       'version' => '1',
     ),
-    938 => array (
+    938 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '181',
@@ -14457,12 +14457,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    939 => array (
+    939 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '181',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Hotel-lobby-at-Isola2000.jpg" suffix="jpg" basename="Hotel-lobby-at-Isola2000" dirpath="var/ezwebin_site/storage/images/community/pictures/hotel-lobby-at-isola2000/1051-1-eng-US" url="var/ezwebin_site/storage/images/community/pictures/hotel-lobby-at-isola2000/1051-1-eng-US/Hotel-lobby-at-Isola2000.jpg" original_filename="7485826a.jpg" mime_type="image/jpeg" width="388" height="584" alternative_text="" alias_key="1293033771" timestamp="1311154203"><original attribute_id="1051" attribute_version="1" attribute_language="eng-US"/><information Height="584" Width="388" IsColor="1" ByteOrderMotorola="1" ApertureFNumber="f/3.5"><array name="ifd0"><item key="Make" base64="1">UEVOVEFYICAgICAgICAgICAgIA==</item><item key="Model" base64="1">UEVOVEFYIEsyMEQgICAgICAgIA==</item><item key="Orientation" base64="1">MQ==</item><item key="XResolution" base64="1">NzIvMQ==</item><item key="YResolution" base64="1">NzIvMQ==</item><item key="ResolutionUnit" base64="1">Mg==</item><item key="Software" base64="1">SzIwRCBWZXIgMS4wNCAgICAgICAgICA=</item><item key="DateTime" base64="1">MjAxMTowMToyOSAxMDoyNToxNg==</item><item key="Exif_IFD_Pointer" base64="1">MjIy</item></array><array name="exif"><item key="ExposureTime" base64="1">MS8xNQ==</item><item key="FNumber" base64="1">Ny8y</item><item key="ExposureProgram" base64="1">Mg==</item><item key="ISOSpeedRatings" base64="1">NDAw</item><item key="ExifVersion" base64="1">MDIyMQ==</item><item key="DateTimeOriginal" base64="1">MjAxMTowMToyOSAxMDoyNToxNg==</item><item key="DateTimeDigitized" base64="1">MjAxMTowMToyOSAxMDoyNToxNg==</item><item key="ExposureBiasValue" base64="1">MC8x</item><item key="MeteringMode" base64="1">NQ==</item><item key="Flash" base64="1">MTY=</item><item key="FocalLength" base64="1">MTgvMQ==</item><item key="FlashPixVersion" base64="1">MDEwMA==</item><item key="ColorSpace" base64="1">MQ==</item><item key="ExifImageWidth" base64="1">Mzg4</item><item key="ExifImageLength" base64="1">NTg0</item><item key="SensingMethod" base64="1">Mg==</item><item key="CustomRendered" base64="1">MA==</item><item key="ExposureMode" base64="1">MA==</item><item key="WhiteBalance" base64="1">MA==</item><item key="FocalLengthIn35mmFilm" base64="1">Mjc=</item><item key="SceneCaptureType" base64="1">MA==</item><item key="Contrast" base64="1">Mg==</item><item key="Saturation" base64="1">MA==</item><item key="Sharpness" base64="1">Mg==</item><item key="SubjectDistanceRange" base64="1">Mw==</item></array></information></ezimage>
 ',
@@ -14474,12 +14474,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    940 => array (
+    940 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '181',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1052',
@@ -14489,12 +14489,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    941 => array (
+    941 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '182',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Alexander on the past, Gaby on today and tomorrow',
       'data_type_string' => 'ezstring',
       'id' => '1053',
@@ -14504,7 +14504,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'alexander on the past, gaby on today and tomorrow',
       'version' => '1',
     ),
-    942 => array (
+    942 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '182',
@@ -14519,12 +14519,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    943 => array (
+    943 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '182',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Alexander-on-the-past-Gaby-on-today-and-tomorrow.jpg" suffix="jpg" basename="Alexander-on-the-past-Gaby-on-today-and-tomorrow" dirpath="var/ezwebin_site/storage/images/community/pictures/alexander-on-the-past-gaby-on-today-and-tomorrow/1055-1-eng-US" url="var/ezwebin_site/storage/images/community/pictures/alexander-on-the-past-gaby-on-today-and-tomorrow/1055-1-eng-US/Alexander-on-the-past-Gaby-on-today-and-tomorrow.jpg" original_filename="9243daf4.jpg" mime_type="image/jpeg" width="584" height="388" alternative_text="" alias_key="1293033771" timestamp="1311154203"><original attribute_id="1055" attribute_version="1" attribute_language="eng-US"/><information Height="388" Width="584" IsColor="1" ByteOrderMotorola="1" ApertureFNumber="f/8.0"><array name="ifd0"><item key="Make" base64="1">UEVOVEFYICAgICAgICAgICAgIA==</item><item key="Model" base64="1">UEVOVEFYIEsyMEQgICAgICAgIA==</item><item key="Orientation" base64="1">MQ==</item><item key="XResolution" base64="1">NzIvMQ==</item><item key="YResolution" base64="1">NzIvMQ==</item><item key="ResolutionUnit" base64="1">Mg==</item><item key="Software" base64="1">SzIwRCBWZXIgMS4wNCAgICAgICAgICA=</item><item key="DateTime" base64="1">MjAxMTowMToyOCAwOToxMTozNw==</item><item key="Exif_IFD_Pointer" base64="1">MjIy</item></array><array name="exif"><item key="ExposureTime" base64="1">MS8xODA=</item><item key="FNumber" base64="1">OC8x</item><item key="ExposureProgram" base64="1">MQ==</item><item key="ISOSpeedRatings" base64="1">NDAw</item><item key="ExifVersion" base64="1">MDIyMQ==</item><item key="DateTimeOriginal" base64="1">MjAxMTowMToyOCAwOToxMTozNw==</item><item key="DateTimeDigitized" base64="1">MjAxMTowMToyOCAwOToxMTozNw==</item><item key="ExposureBiasValue" base64="1">MC8x</item><item key="MeteringMode" base64="1">NQ==</item><item key="Flash" base64="1">MTY=</item><item key="FocalLength" base64="1">ODAvMQ==</item><item key="FlashPixVersion" base64="1">MDEwMA==</item><item key="ColorSpace" base64="1">MQ==</item><item key="ExifImageWidth" base64="1">NTg0</item><item key="ExifImageLength" base64="1">Mzg4</item><item key="SensingMethod" base64="1">Mg==</item><item key="CustomRendered" base64="1">MA==</item><item key="ExposureMode" base64="1">MQ==</item><item key="WhiteBalance" base64="1">MA==</item><item key="FocalLengthIn35mmFilm" base64="1">MTIw</item><item key="SceneCaptureType" base64="1">MA==</item><item key="Contrast" base64="1">Mg==</item><item key="Saturation" base64="1">MA==</item><item key="Sharpness" base64="1">Mg==</item><item key="SubjectDistanceRange" base64="1">Mw==</item></array></information></ezimage>
 ',
@@ -14536,12 +14536,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    944 => array (
+    944 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '182',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1056',
@@ -14551,12 +14551,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    945 => array (
+    945 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '183',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Isola2000 in white - beautiful skiing!',
       'data_type_string' => 'ezstring',
       'id' => '1057',
@@ -14566,7 +14566,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'isola2000 in white - beautiful skiing!',
       'version' => '1',
     ),
-    946 => array (
+    946 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '183',
@@ -14581,12 +14581,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    947 => array (
+    947 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '183',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Isola2000-in-white-beautiful-skiing.jpg" suffix="jpg" basename="Isola2000-in-white-beautiful-skiing" dirpath="var/ezwebin_site/storage/images/community/pictures/isola2000-in-white-beautiful-skiing/1059-1-eng-US" url="var/ezwebin_site/storage/images/community/pictures/isola2000-in-white-beautiful-skiing/1059-1-eng-US/Isola2000-in-white-beautiful-skiing.jpg" original_filename="a2e4cb83.jpg" mime_type="image/jpeg" width="584" height="388" alternative_text="" alias_key="1293033771" timestamp="1311154203"><original attribute_id="1059" attribute_version="1" attribute_language="eng-US"/><information Height="388" Width="584" IsColor="1" ByteOrderMotorola="1" ApertureFNumber="f/8.0"><array name="ifd0"><item key="Make" base64="1">UEVOVEFYICAgICAgICAgICAgIA==</item><item key="Model" base64="1">UEVOVEFYIEsyMEQgICAgICAgIA==</item><item key="Orientation" base64="1">MQ==</item><item key="XResolution" base64="1">NzIvMQ==</item><item key="YResolution" base64="1">NzIvMQ==</item><item key="ResolutionUnit" base64="1">Mg==</item><item key="Software" base64="1">SzIwRCBWZXIgMS4wNCAgICAgICAgICA=</item><item key="DateTime" base64="1">MjAxMTowMToyOSAxMzozNDowMA==</item><item key="Exif_IFD_Pointer" base64="1">MjIy</item></array><array name="exif"><item key="ExposureTime" base64="1">MS8zNTA=</item><item key="FNumber" base64="1">OC8x</item><item key="ExposureProgram" base64="1">Mg==</item><item key="ISOSpeedRatings" base64="1">MTAw</item><item key="ExifVersion" base64="1">MDIyMQ==</item><item key="DateTimeOriginal" base64="1">MjAxMTowMToyOSAxMzozNDowMA==</item><item key="DateTimeDigitized" base64="1">MjAxMTowMToyOSAxMzozNDowMA==</item><item key="ExposureBiasValue" base64="1">MC8x</item><item key="MeteringMode" base64="1">NQ==</item><item key="Flash" base64="1">MTY=</item><item key="FocalLength" base64="1">MjAvMQ==</item><item key="FlashPixVersion" base64="1">MDEwMA==</item><item key="ColorSpace" base64="1">MQ==</item><item key="ExifImageWidth" base64="1">NTg0</item><item key="ExifImageLength" base64="1">Mzg4</item><item key="SensingMethod" base64="1">Mg==</item><item key="CustomRendered" base64="1">MA==</item><item key="ExposureMode" base64="1">MA==</item><item key="WhiteBalance" base64="1">MA==</item><item key="FocalLengthIn35mmFilm" base64="1">MzA=</item><item key="SceneCaptureType" base64="1">MA==</item><item key="Contrast" base64="1">Mg==</item><item key="Saturation" base64="1">MA==</item><item key="Sharpness" base64="1">Mg==</item><item key="SubjectDistanceRange" base64="1">Mw==</item></array></information></ezimage>
 ',
@@ -14598,12 +14598,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    948 => array (
+    948 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '183',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1060',
@@ -14613,12 +14613,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    949 => array (
+    949 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '184',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'CEO future pitch - Adaptable, open, reliable!',
       'data_type_string' => 'ezstring',
       'id' => '1061',
@@ -14628,7 +14628,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'ceo future pitch - adaptable, open, reliable!',
       'version' => '1',
     ),
-    950 => array (
+    950 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '184',
@@ -14643,12 +14643,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    951 => array (
+    951 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '184',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="CEO-future-pitch-Adaptable-open-reliable.jpg" suffix="jpg" basename="CEO-future-pitch-Adaptable-open-reliable" dirpath="var/ezwebin_site/storage/images/community/pictures/ceo-future-pitch-adaptable-open-reliable/1063-1-eng-US" url="var/ezwebin_site/storage/images/community/pictures/ceo-future-pitch-adaptable-open-reliable/1063-1-eng-US/CEO-future-pitch-Adaptable-open-reliable.jpg" original_filename="90d2d17c.jpg" mime_type="image/jpeg" width="584" height="388" alternative_text="" alias_key="1293033771" timestamp="1311154203"><original attribute_id="1063" attribute_version="1" attribute_language="eng-US"/><information Height="388" Width="584" IsColor="1" ByteOrderMotorola="1" ApertureFNumber="f/8.0"><array name="ifd0"><item key="Make" base64="1">UEVOVEFYICAgICAgICAgICAgIA==</item><item key="Model" base64="1">UEVOVEFYIEsyMEQgICAgICAgIA==</item><item key="Orientation" base64="1">MQ==</item><item key="XResolution" base64="1">NzIvMQ==</item><item key="YResolution" base64="1">NzIvMQ==</item><item key="ResolutionUnit" base64="1">Mg==</item><item key="Software" base64="1">SzIwRCBWZXIgMS4wNCAgICAgICAgICA=</item><item key="DateTime" base64="1">MjAxMTowMToyOCAwOToxNzozNw==</item><item key="Exif_IFD_Pointer" base64="1">MjIy</item></array><array name="exif"><item key="ExposureTime" base64="1">MS8xODA=</item><item key="FNumber" base64="1">OC8x</item><item key="ExposureProgram" base64="1">MQ==</item><item key="ISOSpeedRatings" base64="1">NDAw</item><item key="ExifVersion" base64="1">MDIyMQ==</item><item key="DateTimeOriginal" base64="1">MjAxMTowMToyOCAwOToxNzozNw==</item><item key="DateTimeDigitized" base64="1">MjAxMTowMToyOCAwOToxNzozNw==</item><item key="ExposureBiasValue" base64="1">MC8x</item><item key="MeteringMode" base64="1">NQ==</item><item key="Flash" base64="1">MTY=</item><item key="FocalLength" base64="1">MTA1LzE=</item><item key="FlashPixVersion" base64="1">MDEwMA==</item><item key="ColorSpace" base64="1">MQ==</item><item key="ExifImageWidth" base64="1">NTg0</item><item key="ExifImageLength" base64="1">Mzg4</item><item key="SensingMethod" base64="1">Mg==</item><item key="CustomRendered" base64="1">MA==</item><item key="ExposureMode" base64="1">MQ==</item><item key="WhiteBalance" base64="1">MA==</item><item key="FocalLengthIn35mmFilm" base64="1">MTU3</item><item key="SceneCaptureType" base64="1">MA==</item><item key="Contrast" base64="1">Mg==</item><item key="Saturation" base64="1">MA==</item><item key="Sharpness" base64="1">Mg==</item><item key="SubjectDistanceRange" base64="1">Mw==</item></array></information></ezimage>
 ',
@@ -14660,12 +14660,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    952 => array (
+    952 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '184',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1064',
@@ -14675,12 +14675,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    953 => array (
+    953 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '211',
       'contentobject_id' => '185',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Blog',
       'data_type_string' => 'ezstring',
       'id' => '1065',
@@ -14690,7 +14690,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'blog',
       'version' => '1',
     ),
-    954 => array (
+    954 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '212',
       'contentobject_id' => '185',
@@ -14705,12 +14705,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    955 => array (
+    955 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '213',
       'contentobject_id' => '185',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1067',
@@ -14720,12 +14720,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    956 => array (
+    956 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '214',
       'contentobject_id' => '186',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Visit Paris',
       'data_type_string' => 'ezstring',
       'id' => '1068',
@@ -14735,7 +14735,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'visit paris',
       'version' => '1',
     ),
-    957 => array (
+    957 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '215',
       'contentobject_id' => '186',
@@ -14750,7 +14750,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    958 => array (
+    958 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '216',
       'contentobject_id' => '186',
@@ -14765,7 +14765,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    959 => array (
+    959 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '217',
       'contentobject_id' => '186',
@@ -14780,12 +14780,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    960 => array (
+    960 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '218',
       'contentobject_id' => '186',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1072',
@@ -14795,7 +14795,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    961 => array (
+    961 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '219',
       'contentobject_id' => '186',
@@ -14810,12 +14810,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    962 => array (
+    962 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '214',
       'contentobject_id' => '187',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Paris in France',
       'data_type_string' => 'ezstring',
       'id' => '1074',
@@ -14825,7 +14825,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'paris in france',
       'version' => '1',
     ),
-    963 => array (
+    963 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '215',
       'contentobject_id' => '187',
@@ -14840,7 +14840,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    964 => array (
+    964 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '216',
       'contentobject_id' => '187',
@@ -14855,7 +14855,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    965 => array (
+    965 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '217',
       'contentobject_id' => '187',
@@ -14870,12 +14870,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    966 => array (
+    966 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '218',
       'contentobject_id' => '187',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1078',
@@ -14885,7 +14885,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    967 => array (
+    967 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '219',
       'contentobject_id' => '187',
@@ -14900,12 +14900,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    968 => array (
+    968 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '188',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Company',
       'data_type_string' => 'ezstring',
       'id' => '1080',
@@ -14915,12 +14915,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'company',
       'version' => '1',
     ),
-    969 => array (
+    969 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '188',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1081',
@@ -14930,7 +14930,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    970 => array (
+    970 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '188',
@@ -14947,7 +14947,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    971 => array (
+    971 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '188',
@@ -14963,7 +14963,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    972 => array (
+    972 => array(
       'attribute_original_id' => '1084',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '188',
@@ -14978,12 +14978,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    973 => array (
+    973 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '188',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1085',
@@ -14993,7 +14993,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    974 => array (
+    974 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '188',
@@ -15008,12 +15008,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    975 => array (
+    975 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '189',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'About company',
       'data_type_string' => 'ezstring',
       'id' => '1087',
@@ -15023,12 +15023,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'about company',
       'version' => '1',
     ),
-    976 => array (
+    976 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '189',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1088',
@@ -15038,7 +15038,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    977 => array (
+    977 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '189',
@@ -15053,7 +15053,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    978 => array (
+    978 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '189',
@@ -15068,7 +15068,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    979 => array (
+    979 => array(
       'attribute_original_id' => '1091',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '189',
@@ -15083,12 +15083,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    980 => array (
+    980 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '189',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1092',
@@ -15098,7 +15098,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    981 => array (
+    981 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '189',
@@ -15113,12 +15113,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    982 => array (
+    982 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '190',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'New features',
       'data_type_string' => 'ezstring',
       'id' => '1094',
@@ -15128,12 +15128,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'new features',
       'version' => '1',
     ),
-    983 => array (
+    983 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '190',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1095',
@@ -15143,7 +15143,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    984 => array (
+    984 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '190',
@@ -15158,7 +15158,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    985 => array (
+    985 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '190',
@@ -15173,7 +15173,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    986 => array (
+    986 => array(
       'attribute_original_id' => '1098',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '190',
@@ -15188,12 +15188,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    987 => array (
+    987 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '190',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1099',
@@ -15203,7 +15203,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    988 => array (
+    988 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '190',
@@ -15218,12 +15218,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    989 => array (
+    989 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '191',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Separate content & design in eZ Publish',
       'data_type_string' => 'ezstring',
       'id' => '1101',
@@ -15233,12 +15233,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'separate content & design in ez publish',
       'version' => '1',
     ),
-    990 => array (
+    990 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '191',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1102',
@@ -15248,12 +15248,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    991 => array (
+    991 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '191',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -15265,7 +15265,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    992 => array (
+    992 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '191',
@@ -15280,7 +15280,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    993 => array (
+    993 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '191',
@@ -15297,7 +15297,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    994 => array (
+    994 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '191',
@@ -15312,12 +15312,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    995 => array (
+    995 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '191',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Separate-content-design-in-eZ-Publish.jpg" suffix="jpg" basename="Separate-content-design-in-eZ-Publish" dirpath="var/ezwebin_site/storage/images/company/new-features/separate-content-design-in-ez-publish/1107-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/separate-content-design-in-ez-publish/1107-1-eng-US/Separate-content-design-in-eZ-Publish.jpg" original_filename="844e123d.jpg" mime_type="image/jpeg" width="530" height="420" alternative_text="" alias_key="1293033771" timestamp="1311154205"><original attribute_id="1107" attribute_version="1" attribute_language="eng-US"/><information Height="420" Width="530" IsColor="1"/></ezimage>
 ',
@@ -15329,7 +15329,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    996 => array (
+    996 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '191',
@@ -15344,7 +15344,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    997 => array (
+    997 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '191',
@@ -15359,7 +15359,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    998 => array (
+    998 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '191',
@@ -15374,12 +15374,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    999 => array (
+    999 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '191',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1111',
@@ -15389,7 +15389,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1000 => array (
+    1000 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '191',
@@ -15404,12 +15404,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1001 => array (
+    1001 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '192',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'separation_of_content_and_design',
       'data_type_string' => 'ezstring',
       'id' => '1113',
@@ -15419,7 +15419,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'separation_of_content_and_design',
       'version' => '1',
     ),
-    1002 => array (
+    1002 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '192',
@@ -15434,12 +15434,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1003 => array (
+    1003 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '192',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="separation_of_content_and_design.jpg" suffix="jpg" basename="separation_of_content_and_design" dirpath="var/ezwebin_site/storage/images/company/new-features/separate-content-design-in-ez-publish/separation_of_content_and_design/1115-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/separate-content-design-in-ez-publish/separation_of_content_and_design/1115-1-eng-US/separation_of_content_and_design.jpg" original_filename="1cb1af18.jpg" mime_type="image/jpeg" width="500" height="195" alternative_text="" alias_key="1293033771" timestamp="1311154205"><original attribute_id="1115" attribute_version="1" attribute_language="eng-US"/><information Height="195" Width="500" IsColor="1"/></ezimage>
 ',
@@ -15451,12 +15451,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1004 => array (
+    1004 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '192',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1116',
@@ -15466,12 +15466,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1005 => array (
+    1005 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '193',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'How to use eZ Publish',
       'data_type_string' => 'ezstring',
       'id' => '1117',
@@ -15481,12 +15481,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'how to use ez publish',
       'version' => '1',
     ),
-    1006 => array (
+    1006 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '193',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1118',
@@ -15496,12 +15496,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1007 => array (
+    1007 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '193',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -15513,7 +15513,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1008 => array (
+    1008 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '193',
@@ -15528,7 +15528,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1009 => array (
+    1009 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '193',
@@ -15545,7 +15545,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1010 => array (
+    1010 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '193',
@@ -15560,12 +15560,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1011 => array (
+    1011 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '193',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="How-to-use-eZ-Publish.jpg" suffix="jpg" basename="How-to-use-eZ-Publish" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/1123-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/1123-1-eng-US/How-to-use-eZ-Publish.jpg" original_filename="0aab879e.jpg" mime_type="image/jpeg" width="540" height="351" alternative_text="" alias_key="1293033771" timestamp="1311154205"><original attribute_id="1123" attribute_version="1" attribute_language="eng-US"/><information Height="351" Width="540" IsColor="1"/></ezimage>
 ',
@@ -15577,7 +15577,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1012 => array (
+    1012 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '193',
@@ -15592,7 +15592,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1013 => array (
+    1013 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '193',
@@ -15607,7 +15607,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1014 => array (
+    1014 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '193',
@@ -15622,12 +15622,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1015 => array (
+    1015 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '193',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1127',
@@ -15637,7 +15637,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1016 => array (
+    1016 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '193',
@@ -15652,12 +15652,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1017 => array (
+    1017 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '194',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'openoffice_import_large',
       'data_type_string' => 'ezstring',
       'id' => '1129',
@@ -15667,7 +15667,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'openoffice_import_large',
       'version' => '1',
     ),
-    1018 => array (
+    1018 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '194',
@@ -15682,12 +15682,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1019 => array (
+    1019 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '194',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="openoffice_import_large.jpg" suffix="jpg" basename="openoffice_import_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/openoffice_import_large/1131-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/openoffice_import_large/1131-1-eng-US/openoffice_import_large.jpg" original_filename="36b1357b.jpg" mime_type="image/jpeg" width="540" height="357" alternative_text="" alias_key="1293033771" timestamp="1311154206"><original attribute_id="1131" attribute_version="1" attribute_language="eng-US"/><information Height="357" Width="540" IsColor="1"/></ezimage>
 ',
@@ -15699,12 +15699,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1020 => array (
+    1020 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '194',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1132',
@@ -15714,12 +15714,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1021 => array (
+    1021 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '195',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'translation_large',
       'data_type_string' => 'ezstring',
       'id' => '1133',
@@ -15729,7 +15729,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'translation_large',
       'version' => '1',
     ),
-    1022 => array (
+    1022 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '195',
@@ -15744,12 +15744,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1023 => array (
+    1023 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '195',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="translation_large.jpg" suffix="jpg" basename="translation_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/translation_large/1135-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/translation_large/1135-1-eng-US/translation_large.jpg" original_filename="503004df.jpg" mime_type="image/jpeg" width="540" height="419" alternative_text="" alias_key="1293033771" timestamp="1311154206"><original attribute_id="1135" attribute_version="1" attribute_language="eng-US"/><information Height="419" Width="540" IsColor="1"/></ezimage>
 ',
@@ -15761,12 +15761,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1024 => array (
+    1024 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '195',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1136',
@@ -15776,12 +15776,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1025 => array (
+    1025 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '196',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'multiupload_large',
       'data_type_string' => 'ezstring',
       'id' => '1137',
@@ -15791,7 +15791,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'multiupload_large',
       'version' => '1',
     ),
-    1026 => array (
+    1026 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '196',
@@ -15806,12 +15806,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1027 => array (
+    1027 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '196',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="multiupload_large.jpg" suffix="jpg" basename="multiupload_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/multiupload_large/1139-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/multiupload_large/1139-1-eng-US/multiupload_large.jpg" original_filename="9652f5a1.jpg" mime_type="image/jpeg" width="540" height="404" alternative_text="" alias_key="1293033771" timestamp="1311154206"><original attribute_id="1139" attribute_version="1" attribute_language="eng-US"/><information Height="404" Width="540" IsColor="1"/></ezimage>
 ',
@@ -15823,12 +15823,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1028 => array (
+    1028 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '196',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1140',
@@ -15838,12 +15838,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1029 => array (
+    1029 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '197',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'gallery_large',
       'data_type_string' => 'ezstring',
       'id' => '1141',
@@ -15853,7 +15853,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'gallery_large',
       'version' => '1',
     ),
-    1030 => array (
+    1030 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '197',
@@ -15868,12 +15868,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1031 => array (
+    1031 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '197',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="gallery_large.jpg" suffix="jpg" basename="gallery_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/gallery_large/1143-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/gallery_large/1143-1-eng-US/gallery_large.jpg" original_filename="b1b5ed39.jpg" mime_type="image/jpeg" width="540" height="347" alternative_text="" alias_key="1293033771" timestamp="1311154206"><original attribute_id="1143" attribute_version="1" attribute_language="eng-US"/><information Height="347" Width="540" IsColor="1"/></ezimage>
 ',
@@ -15885,12 +15885,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1032 => array (
+    1032 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '197',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1144',
@@ -15900,12 +15900,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1033 => array (
+    1033 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '198',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'search_result_large',
       'data_type_string' => 'ezstring',
       'id' => '1145',
@@ -15915,7 +15915,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'search_result_large',
       'version' => '1',
     ),
-    1034 => array (
+    1034 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '198',
@@ -15930,12 +15930,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1035 => array (
+    1035 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '198',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="search_result_large.jpg" suffix="jpg" basename="search_result_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/search_result_large/1147-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/search_result_large/1147-1-eng-US/search_result_large.jpg" original_filename="fb6cf7d3.jpg" mime_type="image/jpeg" width="540" height="346" alternative_text="" alias_key="1293033771" timestamp="1311154207"><original attribute_id="1147" attribute_version="1" attribute_language="eng-US"/><information Height="346" Width="540" IsColor="1"/></ezimage>
 ',
@@ -15947,12 +15947,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1036 => array (
+    1036 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '198',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1148',
@@ -15962,12 +15962,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1037 => array (
+    1037 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '199',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'ez_tool_bar_large',
       'data_type_string' => 'ezstring',
       'id' => '1149',
@@ -15977,7 +15977,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'ez_tool_bar_large',
       'version' => '1',
     ),
-    1038 => array (
+    1038 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '199',
@@ -15992,12 +15992,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1039 => array (
+    1039 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '199',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="ez_tool_bar_large.jpg" suffix="jpg" basename="ez_tool_bar_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/ez_tool_bar_large/1151-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/ez_tool_bar_large/1151-1-eng-US/ez_tool_bar_large.jpg" original_filename="9c1fd673.jpg" mime_type="image/jpeg" width="540" height="351" alternative_text="" alias_key="1293033771" timestamp="1311154207"><original attribute_id="1151" attribute_version="1" attribute_language="eng-US"/><information Height="351" Width="540" IsColor="1"/></ezimage>
 ',
@@ -16009,12 +16009,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1040 => array (
+    1040 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '199',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1152',
@@ -16024,12 +16024,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1041 => array (
+    1041 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '200',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'quicktime_large',
       'data_type_string' => 'ezstring',
       'id' => '1153',
@@ -16039,7 +16039,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'quicktime_large',
       'version' => '1',
     ),
-    1042 => array (
+    1042 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '200',
@@ -16054,12 +16054,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1043 => array (
+    1043 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '200',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="quicktime_large.jpg" suffix="jpg" basename="quicktime_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/quicktime_large/1155-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/quicktime_large/1155-1-eng-US/quicktime_large.jpg" original_filename="af4e1807.jpg" mime_type="image/jpeg" width="540" height="409" alternative_text="" alias_key="1293033771" timestamp="1311154207"><original attribute_id="1155" attribute_version="1" attribute_language="eng-US"/><information Height="409" Width="540" IsColor="1"/></ezimage>
 ',
@@ -16071,12 +16071,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1044 => array (
+    1044 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '200',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1156',
@@ -16086,12 +16086,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1045 => array (
+    1045 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '201',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'web_2_0_large',
       'data_type_string' => 'ezstring',
       'id' => '1157',
@@ -16101,7 +16101,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'web_2_0_large',
       'version' => '1',
     ),
-    1046 => array (
+    1046 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '201',
@@ -16116,12 +16116,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1047 => array (
+    1047 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '201',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="web_2_0_large.jpg" suffix="jpg" basename="web_2_0_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/web_2_0_large/1159-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-use-ez-publish/web_2_0_large/1159-1-eng-US/web_2_0_large.jpg" original_filename="cd03d9fc.jpg" mime_type="image/jpeg" width="540" height="425" alternative_text="" alias_key="1293033771" timestamp="1311154207"><original attribute_id="1159" attribute_version="1" attribute_language="eng-US"/><information Height="425" Width="540" IsColor="1"/></ezimage>
 ',
@@ -16133,12 +16133,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1048 => array (
+    1048 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '201',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1160',
@@ -16148,12 +16148,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1049 => array (
+    1049 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '202',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'How to manage eZ Publish',
       'data_type_string' => 'ezstring',
       'id' => '1161',
@@ -16163,12 +16163,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'how to manage ez publish',
       'version' => '1',
     ),
-    1050 => array (
+    1050 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '202',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1162',
@@ -16178,12 +16178,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1051 => array (
+    1051 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '202',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -16195,7 +16195,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1052 => array (
+    1052 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '202',
@@ -16210,7 +16210,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1053 => array (
+    1053 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '202',
@@ -16227,7 +16227,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1054 => array (
+    1054 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '202',
@@ -16242,12 +16242,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1055 => array (
+    1055 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '202',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="How-to-manage-eZ-Publish.jpg" suffix="jpg" basename="How-to-manage-eZ-Publish" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/1167-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/1167-1-eng-US/How-to-manage-eZ-Publish.jpg" original_filename="4da87751.jpg" mime_type="image/jpeg" width="540" height="332" alternative_text="" alias_key="1293033771" timestamp="1311154207"><original attribute_id="1167" attribute_version="1" attribute_language="eng-US"/><information Height="332" Width="540" IsColor="1"/></ezimage>
 ',
@@ -16259,7 +16259,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1056 => array (
+    1056 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '202',
@@ -16274,7 +16274,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1057 => array (
+    1057 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '202',
@@ -16289,7 +16289,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1058 => array (
+    1058 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '202',
@@ -16304,12 +16304,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1059 => array (
+    1059 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '202',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1171',
@@ -16319,7 +16319,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1060 => array (
+    1060 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '202',
@@ -16334,12 +16334,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1061 => array (
+    1061 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '203',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'usermanagement_large',
       'data_type_string' => 'ezstring',
       'id' => '1173',
@@ -16349,7 +16349,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'usermanagement_large',
       'version' => '1',
     ),
-    1062 => array (
+    1062 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '203',
@@ -16364,12 +16364,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1063 => array (
+    1063 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '203',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="usermanagement_large.jpg" suffix="jpg" basename="usermanagement_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/usermanagement_large/1175-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/usermanagement_large/1175-1-eng-US/usermanagement_large.jpg" original_filename="c7fdf3e4.jpg" mime_type="image/jpeg" width="540" height="346" alternative_text="" alias_key="1293033771" timestamp="1311154208"><original attribute_id="1175" attribute_version="1" attribute_language="eng-US"/><information Height="346" Width="540" IsColor="1"/></ezimage>
 ',
@@ -16381,12 +16381,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1064 => array (
+    1064 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '203',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1176',
@@ -16396,12 +16396,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1065 => array (
+    1065 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '204',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'workflow_large',
       'data_type_string' => 'ezstring',
       'id' => '1177',
@@ -16411,7 +16411,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'workflow_large',
       'version' => '1',
     ),
-    1066 => array (
+    1066 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '204',
@@ -16426,12 +16426,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1067 => array (
+    1067 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '204',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="workflow_large.jpg" suffix="jpg" basename="workflow_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/workflow_large/1179-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/workflow_large/1179-1-eng-US/workflow_large.jpg" original_filename="d4a5a15d.jpg" mime_type="image/jpeg" width="540" height="414" alternative_text="" alias_key="1293033771" timestamp="1311154208"><original attribute_id="1179" attribute_version="1" attribute_language="eng-US"/><information Height="414" Width="540" IsColor="1"/></ezimage>
 ',
@@ -16443,12 +16443,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1068 => array (
+    1068 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '204',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1180',
@@ -16458,12 +16458,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1069 => array (
+    1069 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '205',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'versioning_large',
       'data_type_string' => 'ezstring',
       'id' => '1181',
@@ -16473,7 +16473,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'versioning_large',
       'version' => '1',
     ),
-    1070 => array (
+    1070 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '205',
@@ -16488,12 +16488,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1071 => array (
+    1071 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '205',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="versioning_large.jpg" suffix="jpg" basename="versioning_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/versioning_large/1183-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/versioning_large/1183-1-eng-US/versioning_large.jpg" original_filename="5041e7aa.jpg" mime_type="image/jpeg" width="540" height="346" alternative_text="" alias_key="1293033771" timestamp="1311154208"><original attribute_id="1183" attribute_version="1" attribute_language="eng-US"/><information Height="346" Width="540" IsColor="1"/></ezimage>
 ',
@@ -16505,12 +16505,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1072 => array (
+    1072 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '205',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1184',
@@ -16520,12 +16520,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1073 => array (
+    1073 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '206',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'datatypes_attributes_content_class_and_objects_large',
       'data_type_string' => 'ezstring',
       'id' => '1185',
@@ -16535,7 +16535,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'datatypes_attributes_content_class_and_objects_large',
       'version' => '1',
     ),
-    1074 => array (
+    1074 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '206',
@@ -16550,12 +16550,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1075 => array (
+    1075 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '206',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="datatypes_attributes_content_class_and_objects_large.png" suffix="png" basename="datatypes_attributes_content_class_and_objects_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/datatypes_attributes_content_class_and_objects_large/1187-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/datatypes_attributes_content_class_and_objects_large/1187-1-eng-US/datatypes_attributes_content_class_and_objects_large.png" original_filename="3ac3d302.png" mime_type="image/png" width="500" height="409" alternative_text="" alias_key="1293033771" timestamp="1311154209"><original attribute_id="1187" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -16567,12 +16567,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1076 => array (
+    1076 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '206',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1188',
@@ -16582,12 +16582,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1077 => array (
+    1077 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '207',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'multiple_location_large',
       'data_type_string' => 'ezstring',
       'id' => '1189',
@@ -16597,7 +16597,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'multiple_location_large',
       'version' => '1',
     ),
-    1078 => array (
+    1078 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '207',
@@ -16612,12 +16612,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1079 => array (
+    1079 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '207',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="multiple_location_large.jpg" suffix="jpg" basename="multiple_location_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/multiple_location_large/1191-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/multiple_location_large/1191-1-eng-US/multiple_location_large.jpg" original_filename="d2bd9a18.jpg" mime_type="image/jpeg" width="540" height="405" alternative_text="" alias_key="1293033771" timestamp="1311154209"><original attribute_id="1191" attribute_version="1" attribute_language="eng-US"/><information Height="405" Width="540" IsColor="1"/></ezimage>
 ',
@@ -16629,12 +16629,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1080 => array (
+    1080 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '207',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1192',
@@ -16644,12 +16644,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1081 => array (
+    1081 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '208',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'multisite_deployment_large',
       'data_type_string' => 'ezstring',
       'id' => '1193',
@@ -16659,7 +16659,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'multisite_deployment_large',
       'version' => '1',
     ),
-    1082 => array (
+    1082 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '208',
@@ -16674,12 +16674,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1083 => array (
+    1083 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '208',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="multisite_deployment_large.jpg" suffix="jpg" basename="multisite_deployment_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/multisite_deployment_large/1195-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/multisite_deployment_large/1195-1-eng-US/multisite_deployment_large.jpg" original_filename="fa5f0924.jpg" mime_type="image/jpeg" width="500" height="423" alternative_text="" alias_key="1293033771" timestamp="1311154209"><original attribute_id="1195" attribute_version="1" attribute_language="eng-US"/><information Height="423" Width="500" IsColor="1"/></ezimage>
 ',
@@ -16691,12 +16691,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1084 => array (
+    1084 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '208',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1196',
@@ -16706,12 +16706,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1085 => array (
+    1085 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '209',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'seo_large',
       'data_type_string' => 'ezstring',
       'id' => '1197',
@@ -16721,7 +16721,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'seo_large',
       'version' => '1',
     ),
-    1086 => array (
+    1086 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '209',
@@ -16736,12 +16736,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1087 => array (
+    1087 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '209',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="seo_large.jpg" suffix="jpg" basename="seo_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/seo_large/1199-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/seo_large/1199-1-eng-US/seo_large.jpg" original_filename="25149bcc.jpg" mime_type="image/jpeg" width="540" height="347" alternative_text="" alias_key="1293033771" timestamp="1311154209"><original attribute_id="1199" attribute_version="1" attribute_language="eng-US"/><information Height="347" Width="540" IsColor="1"/></ezimage>
 ',
@@ -16753,12 +16753,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1088 => array (
+    1088 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '209',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1200',
@@ -16768,12 +16768,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1089 => array (
+    1089 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '210',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'admin_site_large',
       'data_type_string' => 'ezstring',
       'id' => '1201',
@@ -16783,7 +16783,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'admin_site_large',
       'version' => '1',
     ),
-    1090 => array (
+    1090 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '210',
@@ -16798,12 +16798,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1091 => array (
+    1091 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '210',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="admin_site_large.jpg" suffix="jpg" basename="admin_site_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/admin_site_large/1203-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-manage-ez-publish/admin_site_large/1203-1-eng-US/admin_site_large.jpg" original_filename="57b1a75c.jpg" mime_type="image/jpeg" width="540" height="332" alternative_text="" alias_key="1293033771" timestamp="1311154210"><original attribute_id="1203" attribute_version="1" attribute_language="eng-US"/><information Height="332" Width="540" IsColor="1"/></ezimage>
 ',
@@ -16815,12 +16815,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1092 => array (
+    1092 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '210',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1204',
@@ -16830,12 +16830,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1093 => array (
+    1093 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '211',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'How to develop with eZ Publish',
       'data_type_string' => 'ezstring',
       'id' => '1205',
@@ -16845,12 +16845,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'how to develop with ez publish',
       'version' => '1',
     ),
-    1094 => array (
+    1094 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '211',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1206',
@@ -16860,12 +16860,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1095 => array (
+    1095 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '211',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="nospam@ez.no"/></authors></ezauthor>
 ',
@@ -16877,7 +16877,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1096 => array (
+    1096 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '211',
@@ -16892,7 +16892,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1097 => array (
+    1097 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '211',
@@ -16909,7 +16909,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1098 => array (
+    1098 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '211',
@@ -16924,12 +16924,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1099 => array (
+    1099 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '211',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="How-to-develop-with-eZ-Publish.png" suffix="png" basename="How-to-develop-with-eZ-Publish" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-develop-with-ez-publish/1211-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-develop-with-ez-publish/1211-1-eng-US/How-to-develop-with-eZ-Publish.png" original_filename="33e36be8.png" mime_type="image/png" width="500" height="409" alternative_text="Content class" alias_key="1293033771" timestamp="1311154210"><original attribute_id="1211" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -16941,7 +16941,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1100 => array (
+    1100 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '211',
@@ -16956,7 +16956,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1101 => array (
+    1101 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '211',
@@ -16971,7 +16971,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1102 => array (
+    1102 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '211',
@@ -16986,12 +16986,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1103 => array (
+    1103 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '211',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1215',
@@ -17001,7 +17001,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1104 => array (
+    1104 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '211',
@@ -17016,12 +17016,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1105 => array (
+    1105 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '212',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'datatypes_attributes_content_class_and_objects_large',
       'data_type_string' => 'ezstring',
       'id' => '1217',
@@ -17031,7 +17031,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'datatypes_attributes_content_class_and_objects_large',
       'version' => '1',
     ),
-    1106 => array (
+    1106 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '212',
@@ -17046,12 +17046,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1107 => array (
+    1107 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '212',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="datatypes_attributes_content_class_and_objects_large.jpg" suffix="jpg" basename="datatypes_attributes_content_class_and_objects_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-develop-with-ez-publish/datatypes_attributes_content_class_and_objects_large/1219-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-develop-with-ez-publish/datatypes_attributes_content_class_and_objects_large/1219-1-eng-US/datatypes_attributes_content_class_and_objects_large.jpg" original_filename="e252a562.jpg" mime_type="image/jpeg" width="500" height="409" alternative_text="" alias_key="1293033771" timestamp="1311154210"><original attribute_id="1219" attribute_version="1" attribute_language="eng-US"/><information Height="409" Width="500" IsColor="1"/></ezimage>
 ',
@@ -17063,12 +17063,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1108 => array (
+    1108 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '212',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1220',
@@ -17078,12 +17078,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1109 => array (
+    1109 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '213',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'site_style_large',
       'data_type_string' => 'ezstring',
       'id' => '1221',
@@ -17093,7 +17093,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'site_style_large',
       'version' => '1',
     ),
-    1110 => array (
+    1110 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '213',
@@ -17108,12 +17108,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1111 => array (
+    1111 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '213',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="site_style_large.png" suffix="png" basename="site_style_large" dirpath="var/ezwebin_site/storage/images/company/new-features/how-to-develop-with-ez-publish/site_style_large/1223-1-eng-US" url="var/ezwebin_site/storage/images/company/new-features/how-to-develop-with-ez-publish/site_style_large/1223-1-eng-US/site_style_large.png" original_filename="b3b89834.png" mime_type="image/png" width="540" height="411" alternative_text="" alias_key="1293033771" timestamp="1311154211"><original attribute_id="1223" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -17125,12 +17125,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1112 => array (
+    1112 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '213',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1224',
@@ -17140,12 +17140,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1113 => array (
+    1113 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '214',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'REST API interface',
       'data_type_string' => 'ezstring',
       'id' => '1225',
@@ -17155,12 +17155,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'rest api interface',
       'version' => '1',
     ),
-    1114 => array (
+    1114 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '214',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1226',
@@ -17170,12 +17170,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1115 => array (
+    1115 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '214',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -17187,7 +17187,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1116 => array (
+    1116 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '214',
@@ -17202,7 +17202,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1117 => array (
+    1117 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '214',
@@ -17217,7 +17217,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1118 => array (
+    1118 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '214',
@@ -17232,12 +17232,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1119 => array (
+    1119 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '214',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154211"><original attribute_id="1231" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -17249,7 +17249,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1120 => array (
+    1120 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '214',
@@ -17264,7 +17264,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1121 => array (
+    1121 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '214',
@@ -17279,7 +17279,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1122 => array (
+    1122 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '214',
@@ -17294,12 +17294,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1123 => array (
+    1123 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '214',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1235',
@@ -17309,7 +17309,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1124 => array (
+    1124 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '214',
@@ -17324,12 +17324,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1125 => array (
+    1125 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '215',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Asynchronous Publishing',
       'data_type_string' => 'ezstring',
       'id' => '1237',
@@ -17339,12 +17339,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'asynchronous publishing',
       'version' => '1',
     ),
-    1126 => array (
+    1126 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '215',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1238',
@@ -17354,12 +17354,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1127 => array (
+    1127 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '215',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -17371,7 +17371,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1128 => array (
+    1128 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '215',
@@ -17386,7 +17386,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1129 => array (
+    1129 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '215',
@@ -17401,7 +17401,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1130 => array (
+    1130 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '215',
@@ -17416,12 +17416,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1131 => array (
+    1131 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '215',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154211"><original attribute_id="1243" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -17433,7 +17433,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1132 => array (
+    1132 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '215',
@@ -17448,7 +17448,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1133 => array (
+    1133 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '215',
@@ -17463,7 +17463,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1134 => array (
+    1134 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '215',
@@ -17478,12 +17478,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1135 => array (
+    1135 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '215',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1247',
@@ -17493,7 +17493,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1136 => array (
+    1136 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '215',
@@ -17508,12 +17508,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1137 => array (
+    1137 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '216',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Canonical links',
       'data_type_string' => 'ezstring',
       'id' => '1249',
@@ -17523,12 +17523,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'canonical links',
       'version' => '1',
     ),
-    1138 => array (
+    1138 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '216',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1250',
@@ -17538,12 +17538,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1139 => array (
+    1139 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '216',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -17555,7 +17555,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1140 => array (
+    1140 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '216',
@@ -17570,7 +17570,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1141 => array (
+    1141 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '216',
@@ -17585,7 +17585,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1142 => array (
+    1142 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '216',
@@ -17600,12 +17600,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1143 => array (
+    1143 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '216',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154211"><original attribute_id="1255" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -17617,7 +17617,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1144 => array (
+    1144 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '216',
@@ -17632,7 +17632,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1145 => array (
+    1145 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '216',
@@ -17647,7 +17647,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1146 => array (
+    1146 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '216',
@@ -17662,12 +17662,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1147 => array (
+    1147 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '216',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1259',
@@ -17677,7 +17677,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1148 => array (
+    1148 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '216',
@@ -17692,12 +17692,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1149 => array (
+    1149 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '217',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Support for Red Hat Enterprise',
       'data_type_string' => 'ezstring',
       'id' => '1261',
@@ -17707,12 +17707,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'support for red hat enterprise',
       'version' => '1',
     ),
-    1150 => array (
+    1150 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '217',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1262',
@@ -17722,12 +17722,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1151 => array (
+    1151 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '217',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -17739,7 +17739,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1152 => array (
+    1152 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '217',
@@ -17754,7 +17754,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1153 => array (
+    1153 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '217',
@@ -17769,7 +17769,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1154 => array (
+    1154 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '217',
@@ -17784,12 +17784,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1155 => array (
+    1155 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '217',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154211"><original attribute_id="1267" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -17801,7 +17801,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1156 => array (
+    1156 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '217',
@@ -17816,7 +17816,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1157 => array (
+    1157 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '217',
@@ -17831,7 +17831,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1158 => array (
+    1158 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '217',
@@ -17846,12 +17846,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1159 => array (
+    1159 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '217',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1271',
@@ -17861,7 +17861,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1160 => array (
+    1160 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '217',
@@ -17876,12 +17876,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1161 => array (
+    1161 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '218',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'FastCGI',
       'data_type_string' => 'ezstring',
       'id' => '1273',
@@ -17891,12 +17891,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'fastcgi',
       'version' => '1',
     ),
-    1162 => array (
+    1162 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '218',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1274',
@@ -17906,12 +17906,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1163 => array (
+    1163 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '218',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="bk@ez.no"/></authors></ezauthor>
 ',
@@ -17923,7 +17923,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1164 => array (
+    1164 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '218',
@@ -17938,7 +17938,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1165 => array (
+    1165 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '218',
@@ -17953,7 +17953,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1166 => array (
+    1166 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '218',
@@ -17968,12 +17968,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1167 => array (
+    1167 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '218',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1311154212"><original attribute_id="1279" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -17985,7 +17985,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1168 => array (
+    1168 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '218',
@@ -18000,7 +18000,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1169 => array (
+    1169 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '218',
@@ -18015,7 +18015,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1170 => array (
+    1170 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '218',
@@ -18030,12 +18030,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1171 => array (
+    1171 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '218',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1283',
@@ -18045,7 +18045,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1172 => array (
+    1172 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '218',
@@ -18060,12 +18060,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1173 => array (
+    1173 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '252',
       'contentobject_id' => '219',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Events',
       'data_type_string' => 'ezstring',
       'id' => '1285',
@@ -18075,7 +18075,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'events',
       'version' => '1',
     ),
-    1174 => array (
+    1174 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '253',
       'contentobject_id' => '219',
@@ -18090,12 +18090,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1175 => array (
+    1175 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '254',
       'contentobject_id' => '219',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <related-objects><relation-list/></related-objects>
 ',
@@ -18107,12 +18107,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1176 => array (
+    1176 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '220',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Career',
       'data_type_string' => 'ezstring',
       'id' => '1288',
@@ -18122,12 +18122,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'career',
       'version' => '1',
     ),
-    1177 => array (
+    1177 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '220',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1289',
@@ -18137,7 +18137,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1178 => array (
+    1178 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '220',
@@ -18152,7 +18152,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1179 => array (
+    1179 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '220',
@@ -18167,7 +18167,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1180 => array (
+    1180 => array(
       'attribute_original_id' => '1292',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '220',
@@ -18182,12 +18182,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1181 => array (
+    1181 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '220',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1293',
@@ -18197,7 +18197,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1182 => array (
+    1182 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '220',
@@ -18212,12 +18212,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1183 => array (
+    1183 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '4',
       'contentobject_id' => '221',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Investors Relation',
       'data_type_string' => 'ezstring',
       'id' => '1295',
@@ -18227,12 +18227,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'investors relation',
       'version' => '1',
     ),
-    1184 => array (
+    1184 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '155',
       'contentobject_id' => '221',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1296',
@@ -18242,7 +18242,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1185 => array (
+    1185 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '119',
       'contentobject_id' => '221',
@@ -18257,7 +18257,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1186 => array (
+    1186 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '156',
       'contentobject_id' => '221',
@@ -18272,7 +18272,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1187 => array (
+    1187 => array(
       'attribute_original_id' => '1299',
       'contentclassattribute_id' => '158',
       'contentobject_id' => '221',
@@ -18287,12 +18287,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1188 => array (
+    1188 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '181',
       'contentobject_id' => '221',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1300',
@@ -18302,7 +18302,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1189 => array (
+    1189 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '182',
       'contentobject_id' => '221',
@@ -18317,12 +18317,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1190 => array (
+    1190 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '229',
       'contentobject_id' => '222',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Contact',
       'data_type_string' => 'ezstring',
       'id' => '1302',
@@ -18332,7 +18332,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'contact',
       'version' => '1',
     ),
-    1191 => array (
+    1191 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '230',
       'contentobject_id' => '222',
@@ -18347,12 +18347,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1192 => array (
+    1192 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '231',
       'contentobject_id' => '222',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1304',
@@ -18362,12 +18362,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1193 => array (
+    1193 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '232',
       'contentobject_id' => '222',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1305',
@@ -18377,12 +18377,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1194 => array (
+    1194 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '233',
       'contentobject_id' => '222',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'eztext',
       'id' => '1306',
@@ -18392,12 +18392,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1195 => array (
+    1195 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '234',
       'contentobject_id' => '222',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezemail',
       'id' => '1307',
@@ -18407,12 +18407,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1196 => array (
+    1196 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '235',
       'contentobject_id' => '222',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezemail',
       'id' => '1308',
@@ -18422,12 +18422,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1197 => array (
+    1197 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '247',
       'contentobject_id' => '223',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Morbi neque',
       'data_type_string' => 'ezstring',
       'id' => '1309',
@@ -18437,12 +18437,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'morbi neque',
       'version' => '1',
     ),
-    1198 => array (
+    1198 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '248',
       'contentobject_id' => '223',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Morbi-neque.jpg" suffix="jpg" basename="Morbi-neque" dirpath="var/ezwebin_site/storage/images/company/contact/morbi-neque/1310-1-eng-US" url="var/ezwebin_site/storage/images/company/contact/morbi-neque/1310-1-eng-US/Morbi-neque.jpg" original_filename="c74270b3.jpg" mime_type="image/jpeg" width="120" height="120" alternative_text="Morbi neque" alias_key="1293033771" timestamp="1311154212"><original attribute_id="1310" attribute_version="1" attribute_language="eng-US"/><information Height="120" Width="120" IsColor="1"/></ezimage>
 ',
@@ -18454,12 +18454,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1199 => array (
+    1199 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '249',
       'contentobject_id' => '223',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1311',
@@ -18469,7 +18469,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1200 => array (
+    1200 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '250',
       'contentobject_id' => '223',
@@ -18484,7 +18484,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1201 => array (
+    1201 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '251',
       'contentobject_id' => '223',
@@ -18499,12 +18499,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1202 => array (
+    1202 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '266',
       'contentobject_id' => '224',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Company banner',
       'data_type_string' => 'ezstring',
       'id' => '1314',
@@ -18514,7 +18514,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'company banner',
       'version' => '1',
     ),
-    1203 => array (
+    1203 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '267',
       'contentobject_id' => '224',
@@ -18529,12 +18529,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1204 => array (
+    1204 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '268',
       'contentobject_id' => '224',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="1" filename="Company-banner.jpg" suffix="jpg" basename="Company-banner" dirpath="var/ezwebin_site/storage/images/company/company-banner/1316-1-eng-US" url="var/ezwebin_site/storage/images/company/company-banner/1316-1-eng-US/Company-banner.jpg" original_filename="0e055a7f.jpg" mime_type="image/jpeg" width="566" height="197" alternative_text="Company banner" alias_key="1293033771" timestamp="1311154212"><original attribute_id="1316" attribute_version="1" attribute_language="eng-US"/><information Height="197" Width="566" IsColor="1"/></ezimage>
 ',
@@ -18546,12 +18546,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1205 => array (
+    1205 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '269',
       'contentobject_id' => '224',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1317',
@@ -18561,7 +18561,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1206 => array (
+    1206 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '329',
       'contentobject_id' => '54',
@@ -18576,7 +18576,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1207 => array (
+    1207 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '330',
       'contentobject_id' => '54',
@@ -18591,12 +18591,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1208 => array (
+    1208 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '331',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Login',
       'data_type_string' => 'ezstring',
       'id' => '1320',
@@ -18606,12 +18606,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'login',
       'version' => '2',
     ),
-    1209 => array (
+    1209 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '332',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Logout',
       'data_type_string' => 'ezstring',
       'id' => '1321',
@@ -18621,12 +18621,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'logout',
       'version' => '2',
     ),
-    1210 => array (
+    1210 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '333',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'My profile',
       'data_type_string' => 'ezstring',
       'id' => '1322',
@@ -18636,12 +18636,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'my profile',
       'version' => '2',
     ),
-    1211 => array (
+    1211 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '334',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Register',
       'data_type_string' => 'ezstring',
       'id' => '1323',
@@ -18651,12 +18651,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'register',
       'version' => '2',
     ),
-    1212 => array (
+    1212 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '335',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '/rss/feed/my_feed',
       'data_type_string' => 'ezstring',
       'id' => '1324',
@@ -18666,12 +18666,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '/rss/feed/my_feed',
       'version' => '2',
     ),
-    1213 => array (
+    1213 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '336',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Shopping basket',
       'data_type_string' => 'ezstring',
       'id' => '1325',
@@ -18681,12 +18681,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'shopping basket',
       'version' => '2',
     ),
-    1214 => array (
+    1214 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '337',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Site settings',
       'data_type_string' => 'ezstring',
       'id' => '1326',
@@ -18696,12 +18696,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'site settings',
       'version' => '2',
     ),
-    1215 => array (
+    1215 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '338',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Copyright &#169; 2011 <a href="http://ez.no" title="eZ Systems">eZ Systems AS</a> (except where otherwise noted). All rights reserved.',
       'data_type_string' => 'eztext',
       'id' => '1327',
@@ -18711,7 +18711,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1216 => array (
+    1216 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '339',
       'contentobject_id' => '54',
@@ -18726,12 +18726,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1217 => array (
+    1217 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '340',
       'contentobject_id' => '54',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'eztext',
       'id' => '1329',
@@ -18741,12 +18741,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1218 => array (
+    1218 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '225',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Partners',
       'data_type_string' => 'ezstring',
       'id' => '1330',
@@ -18756,12 +18756,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'partners',
       'version' => '1',
     ),
-    1219 => array (
+    1219 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '225',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '1331',
@@ -18771,12 +18771,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1220 => array (
+    1220 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '226',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'New test article',
       'data_type_string' => 'ezstring',
       'id' => '1332',
@@ -18786,12 +18786,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'new test article',
       'version' => '1',
     ),
-    1221 => array (
+    1221 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '183',
       'contentobject_id' => '226',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'New test article (2)',
       'data_type_string' => 'ezstring',
       'id' => '1332',
@@ -18801,12 +18801,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'new test article (2)',
       'version' => '2',
     ),
-    1222 => array (
+    1222 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '226',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Something',
       'data_type_string' => 'ezstring',
       'id' => '1333',
@@ -18816,12 +18816,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'something',
       'version' => '1',
     ),
-    1223 => array (
+    1223 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '184',
       'contentobject_id' => '226',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Something',
       'data_type_string' => 'ezstring',
       'id' => '1333',
@@ -18831,12 +18831,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'something',
       'version' => '2',
     ),
-    1224 => array (
+    1224 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '226',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="kn@ez.no"/></authors></ezauthor>
 ',
@@ -18848,12 +18848,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1225 => array (
+    1225 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '185',
       'contentobject_id' => '226',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezauthor><authors><author id="0" name="Administrator User" email="kn@ez.no"/></authors></ezauthor>
 ',
@@ -18865,7 +18865,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1226 => array (
+    1226 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '226',
@@ -18882,7 +18882,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1227 => array (
+    1227 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '186',
       'contentobject_id' => '226',
@@ -18899,7 +18899,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1228 => array (
+    1228 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '226',
@@ -18916,7 +18916,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1229 => array (
+    1229 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '187',
       'contentobject_id' => '226',
@@ -18933,7 +18933,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1230 => array (
+    1230 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '226',
@@ -18948,7 +18948,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1231 => array (
+    1231 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '188',
       'contentobject_id' => '226',
@@ -18963,12 +18963,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1232 => array (
+    1232 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '226',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1313047865"><original attribute_id="1338" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -18980,12 +18980,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1233 => array (
+    1233 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '189',
       'contentobject_id' => '226',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '<?xml version="1.0" encoding="utf-8"?>
 <ezimage serial_number="1" is_valid="" filename="" suffix="" basename="" dirpath="" url="" original_filename="" mime_type="" width="" height="" alternative_text="" alias_key="1293033771" timestamp="1313047865"><original attribute_id="1338" attribute_version="1" attribute_language="eng-US"/></ezimage>
 ',
@@ -18997,7 +18997,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1234 => array (
+    1234 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '226',
@@ -19014,7 +19014,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1235 => array (
+    1235 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '190',
       'contentobject_id' => '226',
@@ -19031,7 +19031,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1236 => array (
+    1236 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '226',
@@ -19046,7 +19046,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1237 => array (
+    1237 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '191',
       'contentobject_id' => '226',
@@ -19061,7 +19061,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1238 => array (
+    1238 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '226',
@@ -19076,7 +19076,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1239 => array (
+    1239 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '192',
       'contentobject_id' => '226',
@@ -19091,12 +19091,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1240 => array (
+    1240 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '226',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1342',
@@ -19106,12 +19106,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1241 => array (
+    1241 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '193',
       'contentobject_id' => '226',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezkeyword',
       'id' => '1342',
@@ -19121,12 +19121,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1242 => array (
+    1242 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '226',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezsrrating',
       'id' => '1343',
@@ -19136,12 +19136,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '1',
     ),
-    1243 => array (
+    1243 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '226',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezsrrating',
       'id' => '1343',
@@ -19151,12 +19151,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1244 => array (
+    1244 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '194',
       'contentobject_id' => '226',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezsrrating',
       'id' => '4000',
@@ -19166,12 +19166,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1245 => array (
+    1245 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '6',
       'contentobject_id' => '225',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Partners',
       'data_type_string' => 'ezstring',
       'id' => '4001',
@@ -19181,12 +19181,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'partners',
       'version' => '2',
     ),
-    1246 => array (
+    1246 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '7',
       'contentobject_id' => '225',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => '',
       'data_type_string' => 'ezstring',
       'id' => '4002',
@@ -19196,12 +19196,12 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
-    1247 => array (
+    1247 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '302',
       'contentobject_id' => '166',
       'data_float' => '0',
-      'data_int' => NULL,
+      'data_int' => null,
       'data_text' => 'Forum',
       'data_type_string' => 'ezstring',
       'id' => '4003',
@@ -19211,7 +19211,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => 'forum',
       'version' => '2',
     ),
-    1248 => array (
+    1248 => array(
       'attribute_original_id' => '0',
       'contentclassattribute_id' => '303',
       'contentobject_id' => '166',
@@ -19227,8 +19227,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '2',
     )
   ),
-  'ezcontentobject_version' => array (
-    0 => array (
+  'ezcontentobject_version' => array(
+    0 => array(
       'contentobject_id' => '4',
       'created' => '0',
       'creator_id' => '14',
@@ -19241,7 +19241,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '1',
     ),
-    1 => array (
+    1 => array(
       'contentobject_id' => '11',
       'created' => '1033920737',
       'creator_id' => '14',
@@ -19254,7 +19254,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    2 => array (
+    2 => array(
       'contentobject_id' => '12',
       'created' => '1033920760',
       'creator_id' => '14',
@@ -19267,7 +19267,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    3 => array (
+    3 => array(
       'contentobject_id' => '13',
       'created' => '1033920786',
       'creator_id' => '14',
@@ -19280,7 +19280,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    4 => array (
+    4 => array(
       'contentobject_id' => '41',
       'created' => '1060695450',
       'creator_id' => '14',
@@ -19293,7 +19293,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    5 => array (
+    5 => array(
       'contentobject_id' => '42',
       'created' => '1072180278',
       'creator_id' => '14',
@@ -19306,7 +19306,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    6 => array (
+    6 => array(
       'contentobject_id' => '10',
       'created' => '1072180337',
       'creator_id' => '14',
@@ -19319,7 +19319,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '2',
       'workflow_event_pos' => '0',
     ),
-    7 => array (
+    7 => array(
       'contentobject_id' => '45',
       'created' => '1079684084',
       'creator_id' => '14',
@@ -19332,7 +19332,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    8 => array (
+    8 => array(
       'contentobject_id' => '49',
       'created' => '1080220181',
       'creator_id' => '14',
@@ -19345,7 +19345,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    9 => array (
+    9 => array(
       'contentobject_id' => '50',
       'created' => '1080220211',
       'creator_id' => '14',
@@ -19358,7 +19358,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    10 => array (
+    10 => array(
       'contentobject_id' => '51',
       'created' => '1080220225',
       'creator_id' => '14',
@@ -19371,7 +19371,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    11 => array (
+    11 => array(
       'contentobject_id' => '52',
       'created' => '1082016497',
       'creator_id' => '14',
@@ -19384,7 +19384,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    12 => array (
+    12 => array(
       'contentobject_id' => '56',
       'created' => '1103023120',
       'creator_id' => '14',
@@ -19397,7 +19397,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    13 => array (
+    13 => array(
       'contentobject_id' => '14',
       'created' => '1301061783',
       'creator_id' => '14',
@@ -19410,7 +19410,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '3',
       'workflow_event_pos' => '0',
     ),
-    14 => array (
+    14 => array(
       'contentobject_id' => '54',
       'created' => '1301062300',
       'creator_id' => '14',
@@ -19423,7 +19423,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '2',
       'workflow_event_pos' => '0',
     ),
-    15 => array (
+    15 => array(
       'contentobject_id' => '57',
       'created' => '1168428357',
       'creator_id' => '14',
@@ -19436,7 +19436,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    16 => array (
+    16 => array(
       'contentobject_id' => '58',
       'created' => '1175499884',
       'creator_id' => '14',
@@ -19449,7 +19449,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    17 => array (
+    17 => array(
       'contentobject_id' => '59',
       'created' => '1175499919',
       'creator_id' => '14',
@@ -19462,7 +19462,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    18 => array (
+    18 => array(
       'contentobject_id' => '60',
       'created' => '1175499947',
       'creator_id' => '14',
@@ -19475,7 +19475,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    19 => array (
+    19 => array(
       'contentobject_id' => '61',
       'created' => '1175500068',
       'creator_id' => '14',
@@ -19488,7 +19488,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    20 => array (
+    20 => array(
       'contentobject_id' => '62',
       'created' => '1175500086',
       'creator_id' => '14',
@@ -19501,7 +19501,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    21 => array (
+    21 => array(
       'contentobject_id' => '63',
       'created' => '1175500520',
       'creator_id' => '14',
@@ -19514,7 +19514,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    22 => array (
+    22 => array(
       'contentobject_id' => '64',
       'created' => '1175500561',
       'creator_id' => '14',
@@ -19527,7 +19527,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    23 => array (
+    23 => array(
       'contentobject_id' => '65',
       'created' => '1299780934',
       'creator_id' => '14',
@@ -19540,7 +19540,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    24 => array (
+    24 => array(
       'contentobject_id' => '66',
       'created' => '1299781436',
       'creator_id' => '14',
@@ -19553,7 +19553,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    25 => array (
+    25 => array(
       'contentobject_id' => '67',
       'created' => '1174567458',
       'creator_id' => '14',
@@ -19566,7 +19566,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    26 => array (
+    26 => array(
       'contentobject_id' => '68',
       'created' => '1174302333',
       'creator_id' => '14',
@@ -19579,7 +19579,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    27 => array (
+    27 => array(
       'contentobject_id' => '69',
       'created' => '1174303659',
       'creator_id' => '14',
@@ -19592,7 +19592,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    28 => array (
+    28 => array(
       'contentobject_id' => '70',
       'created' => '1174302380',
       'creator_id' => '14',
@@ -19605,7 +19605,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    29 => array (
+    29 => array(
       'contentobject_id' => '71',
       'created' => '1174303300',
       'creator_id' => '14',
@@ -19618,7 +19618,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    30 => array (
+    30 => array(
       'contentobject_id' => '72',
       'created' => '1174303407',
       'creator_id' => '14',
@@ -19631,7 +19631,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    31 => array (
+    31 => array(
       'contentobject_id' => '73',
       'created' => '1174304926',
       'creator_id' => '14',
@@ -19644,7 +19644,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    32 => array (
+    32 => array(
       'contentobject_id' => '74',
       'created' => '1174302401',
       'creator_id' => '14',
@@ -19657,7 +19657,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    33 => array (
+    33 => array(
       'contentobject_id' => '75',
       'created' => '1175500667',
       'creator_id' => '14',
@@ -19670,7 +19670,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    34 => array (
+    34 => array(
       'contentobject_id' => '76',
       'created' => '1175069333',
       'creator_id' => '14',
@@ -19683,7 +19683,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    35 => array (
+    35 => array(
       'contentobject_id' => '77',
       'created' => '1174643924',
       'creator_id' => '14',
@@ -19696,7 +19696,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    36 => array (
+    36 => array(
       'contentobject_id' => '78',
       'created' => '1174644062',
       'creator_id' => '14',
@@ -19709,7 +19709,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    37 => array (
+    37 => array(
       'contentobject_id' => '79',
       'created' => '1174644699',
       'creator_id' => '14',
@@ -19722,7 +19722,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    38 => array (
+    38 => array(
       'contentobject_id' => '80',
       'created' => '1175069353',
       'creator_id' => '14',
@@ -19735,7 +19735,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    39 => array (
+    39 => array(
       'contentobject_id' => '81',
       'created' => '1174645164',
       'creator_id' => '14',
@@ -19748,7 +19748,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    40 => array (
+    40 => array(
       'contentobject_id' => '82',
       'created' => '1174645280',
       'creator_id' => '14',
@@ -19761,7 +19761,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    41 => array (
+    41 => array(
       'contentobject_id' => '83',
       'created' => '1174645353',
       'creator_id' => '14',
@@ -19774,7 +19774,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    42 => array (
+    42 => array(
       'contentobject_id' => '84',
       'created' => '1175513890',
       'creator_id' => '14',
@@ -19787,7 +19787,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    43 => array (
+    43 => array(
       'contentobject_id' => '85',
       'created' => '1175238144',
       'creator_id' => '14',
@@ -19800,7 +19800,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    44 => array (
+    44 => array(
       'contentobject_id' => '86',
       'created' => '1175069166',
       'creator_id' => '14',
@@ -19813,7 +19813,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    45 => array (
+    45 => array(
       'contentobject_id' => '87',
       'created' => '1175236143',
       'creator_id' => '14',
@@ -19826,7 +19826,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    46 => array (
+    46 => array(
       'contentobject_id' => '88',
       'created' => '1175236170',
       'creator_id' => '14',
@@ -19839,7 +19839,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    47 => array (
+    47 => array(
       'contentobject_id' => '89',
       'created' => '1175238540',
       'creator_id' => '14',
@@ -19852,7 +19852,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    48 => array (
+    48 => array(
       'contentobject_id' => '90',
       'created' => '1174389626',
       'creator_id' => '14',
@@ -19865,7 +19865,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    49 => array (
+    49 => array(
       'contentobject_id' => '91',
       'created' => '1175238182',
       'creator_id' => '14',
@@ -19878,7 +19878,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    50 => array (
+    50 => array(
       'contentobject_id' => '92',
       'created' => '1175238211',
       'creator_id' => '14',
@@ -19891,7 +19891,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    51 => array (
+    51 => array(
       'contentobject_id' => '93',
       'created' => '1175069305',
       'creator_id' => '14',
@@ -19904,7 +19904,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    52 => array (
+    52 => array(
       'contentobject_id' => '94',
       'created' => '1175496885',
       'creator_id' => '14',
@@ -19917,7 +19917,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    53 => array (
+    53 => array(
       'contentobject_id' => '95',
       'created' => '1175258807',
       'creator_id' => '14',
@@ -19930,7 +19930,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    54 => array (
+    54 => array(
       'contentobject_id' => '96',
       'created' => '1175253354',
       'creator_id' => '14',
@@ -19943,7 +19943,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    55 => array (
+    55 => array(
       'contentobject_id' => '97',
       'created' => '1175253355',
       'creator_id' => '14',
@@ -19956,7 +19956,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    56 => array (
+    56 => array(
       'contentobject_id' => '98',
       'created' => '1175082027',
       'creator_id' => '14',
@@ -19969,7 +19969,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    57 => array (
+    57 => array(
       'contentobject_id' => '99',
       'created' => '1175082005',
       'creator_id' => '14',
@@ -19982,7 +19982,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    58 => array (
+    58 => array(
       'contentobject_id' => '100',
       'created' => '1175082007',
       'creator_id' => '14',
@@ -19995,7 +19995,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    59 => array (
+    59 => array(
       'contentobject_id' => '101',
       'created' => '1175253486',
       'creator_id' => '14',
@@ -20008,7 +20008,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    60 => array (
+    60 => array(
       'contentobject_id' => '102',
       'created' => '1175496936',
       'creator_id' => '14',
@@ -20021,7 +20021,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    61 => array (
+    61 => array(
       'contentobject_id' => '103',
       'created' => '1175253638',
       'creator_id' => '14',
@@ -20034,7 +20034,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    62 => array (
+    62 => array(
       'contentobject_id' => '104',
       'created' => '1175253680',
       'creator_id' => '14',
@@ -20047,7 +20047,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    63 => array (
+    63 => array(
       'contentobject_id' => '105',
       'created' => '1299158726',
       'creator_id' => '14',
@@ -20060,7 +20060,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    64 => array (
+    64 => array(
       'contentobject_id' => '106',
       'created' => '1299826193',
       'creator_id' => '14',
@@ -20073,7 +20073,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    65 => array (
+    65 => array(
       'contentobject_id' => '107',
       'created' => '1299782457',
       'creator_id' => '14',
@@ -20086,7 +20086,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    66 => array (
+    66 => array(
       'contentobject_id' => '108',
       'created' => '1299782077',
       'creator_id' => '14',
@@ -20099,7 +20099,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    67 => array (
+    67 => array(
       'contentobject_id' => '109',
       'created' => '1299772463',
       'creator_id' => '14',
@@ -20112,7 +20112,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    68 => array (
+    68 => array(
       'contentobject_id' => '110',
       'created' => '1299772463',
       'creator_id' => '14',
@@ -20125,7 +20125,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    69 => array (
+    69 => array(
       'contentobject_id' => '111',
       'created' => '1299772463',
       'creator_id' => '14',
@@ -20138,7 +20138,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    70 => array (
+    70 => array(
       'contentobject_id' => '112',
       'created' => '1299772463',
       'creator_id' => '14',
@@ -20151,7 +20151,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    71 => array (
+    71 => array(
       'contentobject_id' => '113',
       'created' => '1299772463',
       'creator_id' => '14',
@@ -20164,7 +20164,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    72 => array (
+    72 => array(
       'contentobject_id' => '114',
       'created' => '1299772463',
       'creator_id' => '14',
@@ -20177,7 +20177,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    73 => array (
+    73 => array(
       'contentobject_id' => '115',
       'created' => '1299772463',
       'creator_id' => '14',
@@ -20190,7 +20190,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    74 => array (
+    74 => array(
       'contentobject_id' => '116',
       'created' => '1299772463',
       'creator_id' => '14',
@@ -20203,7 +20203,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    75 => array (
+    75 => array(
       'contentobject_id' => '117',
       'created' => '1299772463',
       'creator_id' => '14',
@@ -20216,7 +20216,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    76 => array (
+    76 => array(
       'contentobject_id' => '118',
       'created' => '1299772545',
       'creator_id' => '14',
@@ -20229,7 +20229,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    77 => array (
+    77 => array(
       'contentobject_id' => '119',
       'created' => '1299772545',
       'creator_id' => '14',
@@ -20242,7 +20242,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    78 => array (
+    78 => array(
       'contentobject_id' => '120',
       'created' => '1299772545',
       'creator_id' => '14',
@@ -20255,7 +20255,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    79 => array (
+    79 => array(
       'contentobject_id' => '121',
       'created' => '1299772545',
       'creator_id' => '14',
@@ -20268,7 +20268,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    80 => array (
+    80 => array(
       'contentobject_id' => '122',
       'created' => '1299772545',
       'creator_id' => '14',
@@ -20281,7 +20281,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    81 => array (
+    81 => array(
       'contentobject_id' => '123',
       'created' => '1299772545',
       'creator_id' => '14',
@@ -20294,7 +20294,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    82 => array (
+    82 => array(
       'contentobject_id' => '124',
       'created' => '1299772545',
       'creator_id' => '14',
@@ -20307,7 +20307,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    83 => array (
+    83 => array(
       'contentobject_id' => '125',
       'created' => '1299772545',
       'creator_id' => '14',
@@ -20320,7 +20320,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    84 => array (
+    84 => array(
       'contentobject_id' => '126',
       'created' => '1299772545',
       'creator_id' => '14',
@@ -20333,7 +20333,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    85 => array (
+    85 => array(
       'contentobject_id' => '127',
       'created' => '1299782157',
       'creator_id' => '14',
@@ -20346,7 +20346,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    86 => array (
+    86 => array(
       'contentobject_id' => '128',
       'created' => '1299772637',
       'creator_id' => '14',
@@ -20359,7 +20359,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    87 => array (
+    87 => array(
       'contentobject_id' => '129',
       'created' => '1299772637',
       'creator_id' => '14',
@@ -20372,7 +20372,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    88 => array (
+    88 => array(
       'contentobject_id' => '130',
       'created' => '1284398171',
       'creator_id' => '14',
@@ -20385,7 +20385,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    89 => array (
+    89 => array(
       'contentobject_id' => '131',
       'created' => '1299780740',
       'creator_id' => '14',
@@ -20398,7 +20398,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    90 => array (
+    90 => array(
       'contentobject_id' => '132',
       'created' => '1299781985',
       'creator_id' => '14',
@@ -20411,7 +20411,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    91 => array (
+    91 => array(
       'contentobject_id' => '133',
       'created' => '1299773631',
       'creator_id' => '14',
@@ -20424,7 +20424,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    92 => array (
+    92 => array(
       'contentobject_id' => '134',
       'created' => '1299773631',
       'creator_id' => '14',
@@ -20437,7 +20437,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    93 => array (
+    93 => array(
       'contentobject_id' => '135',
       'created' => '1299773631',
       'creator_id' => '14',
@@ -20450,7 +20450,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    94 => array (
+    94 => array(
       'contentobject_id' => '136',
       'created' => '1299773644',
       'creator_id' => '14',
@@ -20463,7 +20463,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    95 => array (
+    95 => array(
       'contentobject_id' => '137',
       'created' => '1299773644',
       'creator_id' => '14',
@@ -20476,7 +20476,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    96 => array (
+    96 => array(
       'contentobject_id' => '138',
       'created' => '1299773644',
       'creator_id' => '14',
@@ -20489,7 +20489,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    97 => array (
+    97 => array(
       'contentobject_id' => '139',
       'created' => '1299781873',
       'creator_id' => '14',
@@ -20502,7 +20502,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    98 => array (
+    98 => array(
       'contentobject_id' => '140',
       'created' => '1299773656',
       'creator_id' => '14',
@@ -20515,7 +20515,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    99 => array (
+    99 => array(
       'contentobject_id' => '141',
       'created' => '1299773656',
       'creator_id' => '14',
@@ -20528,7 +20528,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    100 => array (
+    100 => array(
       'contentobject_id' => '142',
       'created' => '1299773656',
       'creator_id' => '14',
@@ -20541,7 +20541,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    101 => array (
+    101 => array(
       'contentobject_id' => '143',
       'created' => '1299773656',
       'creator_id' => '14',
@@ -20554,7 +20554,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    102 => array (
+    102 => array(
       'contentobject_id' => '144',
       'created' => '1299781559',
       'creator_id' => '14',
@@ -20567,7 +20567,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    103 => array (
+    103 => array(
       'contentobject_id' => '145',
       'created' => '1299826213',
       'creator_id' => '14',
@@ -20580,7 +20580,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    104 => array (
+    104 => array(
       'contentobject_id' => '146',
       'created' => '1299773676',
       'creator_id' => '14',
@@ -20593,7 +20593,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    105 => array (
+    105 => array(
       'contentobject_id' => '147',
       'created' => '1299773690',
       'creator_id' => '14',
@@ -20606,7 +20606,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    106 => array (
+    106 => array(
       'contentobject_id' => '148',
       'created' => '1299773704',
       'creator_id' => '14',
@@ -20619,7 +20619,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    107 => array (
+    107 => array(
       'contentobject_id' => '149',
       'created' => '1299773703',
       'creator_id' => '14',
@@ -20632,7 +20632,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    108 => array (
+    108 => array(
       'contentobject_id' => '150',
       'created' => '1299781471',
       'creator_id' => '14',
@@ -20645,7 +20645,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    109 => array (
+    109 => array(
       'contentobject_id' => '151',
       'created' => '1299780633',
       'creator_id' => '14',
@@ -20658,7 +20658,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    110 => array (
+    110 => array(
       'contentobject_id' => '152',
       'created' => '1299780355',
       'creator_id' => '14',
@@ -20671,7 +20671,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    111 => array (
+    111 => array(
       'contentobject_id' => '153',
       'created' => '1299780355',
       'creator_id' => '14',
@@ -20684,7 +20684,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    112 => array (
+    112 => array(
       'contentobject_id' => '154',
       'created' => '1175499320',
       'creator_id' => '14',
@@ -20697,7 +20697,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    113 => array (
+    113 => array(
       'contentobject_id' => '155',
       'created' => '1175498170',
       'creator_id' => '14',
@@ -20710,7 +20710,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    114 => array (
+    114 => array(
       'contentobject_id' => '156',
       'created' => '1175497864',
       'creator_id' => '14',
@@ -20723,7 +20723,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    115 => array (
+    115 => array(
       'contentobject_id' => '157',
       'created' => '1175499122',
       'creator_id' => '14',
@@ -20736,7 +20736,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    116 => array (
+    116 => array(
       'contentobject_id' => '158',
       'created' => '1175497254',
       'creator_id' => '14',
@@ -20749,7 +20749,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    117 => array (
+    117 => array(
       'contentobject_id' => '159',
       'created' => '1175498224',
       'creator_id' => '14',
@@ -20762,7 +20762,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    118 => array (
+    118 => array(
       'contentobject_id' => '160',
       'created' => '1175498737',
       'creator_id' => '14',
@@ -20775,7 +20775,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    119 => array (
+    119 => array(
       'contentobject_id' => '161',
       'created' => '1175498890',
       'creator_id' => '14',
@@ -20788,7 +20788,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    120 => array (
+    120 => array(
       'contentobject_id' => '162',
       'created' => '1175497211',
       'creator_id' => '14',
@@ -20801,7 +20801,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    121 => array (
+    121 => array(
       'contentobject_id' => '163',
       'created' => '1175497171',
       'creator_id' => '14',
@@ -20814,7 +20814,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    122 => array (
+    122 => array(
       'contentobject_id' => '164',
       'created' => '1175499551',
       'creator_id' => '14',
@@ -20827,7 +20827,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    123 => array (
+    123 => array(
       'contentobject_id' => '165',
       'created' => '1193915715',
       'creator_id' => '14',
@@ -20840,7 +20840,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    124 => array (
+    124 => array(
       'contentobject_id' => '166',
       'created' => '1193915699',
       'creator_id' => '14',
@@ -20853,7 +20853,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    125 => array (
+    125 => array(
       'contentobject_id' => '167',
       'created' => '1193906039',
       'creator_id' => '14',
@@ -20866,7 +20866,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    126 => array (
+    126 => array(
       'contentobject_id' => '168',
       'created' => '1193906579',
       'creator_id' => '14',
@@ -20879,7 +20879,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    127 => array (
+    127 => array(
       'contentobject_id' => '169',
       'created' => '1193906040',
       'creator_id' => '14',
@@ -20892,7 +20892,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    128 => array (
+    128 => array(
       'contentobject_id' => '170',
       'created' => '1193906045',
       'creator_id' => '14',
@@ -20905,7 +20905,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    129 => array (
+    129 => array(
       'contentobject_id' => '171',
       'created' => '1299779680',
       'creator_id' => '14',
@@ -20918,7 +20918,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    130 => array (
+    130 => array(
       'contentobject_id' => '172',
       'created' => '1193906046',
       'creator_id' => '14',
@@ -20931,7 +20931,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    131 => array (
+    131 => array(
       'contentobject_id' => '173',
       'created' => '1193906046',
       'creator_id' => '14',
@@ -20944,7 +20944,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    132 => array (
+    132 => array(
       'contentobject_id' => '174',
       'created' => '1193906047',
       'creator_id' => '14',
@@ -20957,7 +20957,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    133 => array (
+    133 => array(
       'contentobject_id' => '175',
       'created' => '1193906047',
       'creator_id' => '14',
@@ -20970,7 +20970,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    134 => array (
+    134 => array(
       'contentobject_id' => '176',
       'created' => '1299773437',
       'creator_id' => '14',
@@ -20983,7 +20983,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    135 => array (
+    135 => array(
       'contentobject_id' => '177',
       'created' => '1299773204',
       'creator_id' => '14',
@@ -20996,7 +20996,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    136 => array (
+    136 => array(
       'contentobject_id' => '178',
       'created' => '1299773232',
       'creator_id' => '14',
@@ -21009,7 +21009,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    137 => array (
+    137 => array(
       'contentobject_id' => '179',
       'created' => '1299773245',
       'creator_id' => '14',
@@ -21022,7 +21022,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    138 => array (
+    138 => array(
       'contentobject_id' => '180',
       'created' => '1299773266',
       'creator_id' => '14',
@@ -21035,7 +21035,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    139 => array (
+    139 => array(
       'contentobject_id' => '181',
       'created' => '1299773330',
       'creator_id' => '14',
@@ -21048,7 +21048,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    140 => array (
+    140 => array(
       'contentobject_id' => '182',
       'created' => '1299773379',
       'creator_id' => '14',
@@ -21061,7 +21061,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    141 => array (
+    141 => array(
       'contentobject_id' => '183',
       'created' => '1299773397',
       'creator_id' => '14',
@@ -21074,7 +21074,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    142 => array (
+    142 => array(
       'contentobject_id' => '184',
       'created' => '1299773419',
       'creator_id' => '14',
@@ -21087,7 +21087,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    143 => array (
+    143 => array(
       'contentobject_id' => '185',
       'created' => '1193915419',
       'creator_id' => '14',
@@ -21100,7 +21100,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    144 => array (
+    144 => array(
       'contentobject_id' => '186',
       'created' => '1193915476',
       'creator_id' => '14',
@@ -21113,7 +21113,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    145 => array (
+    145 => array(
       'contentobject_id' => '187',
       'created' => '1193915617',
       'creator_id' => '14',
@@ -21126,7 +21126,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    146 => array (
+    146 => array(
       'contentobject_id' => '188',
       'created' => '1175242696',
       'creator_id' => '14',
@@ -21139,7 +21139,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    147 => array (
+    147 => array(
       'contentobject_id' => '189',
       'created' => '1174305514',
       'creator_id' => '14',
@@ -21152,7 +21152,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    148 => array (
+    148 => array(
       'contentobject_id' => '190',
       'created' => '1299159416',
       'creator_id' => '14',
@@ -21165,7 +21165,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    149 => array (
+    149 => array(
       'contentobject_id' => '191',
       'created' => '1193907125',
       'creator_id' => '14',
@@ -21178,7 +21178,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    150 => array (
+    150 => array(
       'contentobject_id' => '192',
       'created' => '1253010589',
       'creator_id' => '14',
@@ -21191,7 +21191,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    151 => array (
+    151 => array(
       'contentobject_id' => '193',
       'created' => '1193914499',
       'creator_id' => '14',
@@ -21204,7 +21204,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    152 => array (
+    152 => array(
       'contentobject_id' => '194',
       'created' => '1253009641',
       'creator_id' => '14',
@@ -21217,7 +21217,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    153 => array (
+    153 => array(
       'contentobject_id' => '195',
       'created' => '1253009692',
       'creator_id' => '14',
@@ -21230,7 +21230,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    154 => array (
+    154 => array(
       'contentobject_id' => '196',
       'created' => '1253009743',
       'creator_id' => '14',
@@ -21243,7 +21243,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    155 => array (
+    155 => array(
       'contentobject_id' => '197',
       'created' => '1253009784',
       'creator_id' => '14',
@@ -21256,7 +21256,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    156 => array (
+    156 => array(
       'contentobject_id' => '198',
       'created' => '1253009879',
       'creator_id' => '14',
@@ -21269,7 +21269,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    157 => array (
+    157 => array(
       'contentobject_id' => '199',
       'created' => '1253010805',
       'creator_id' => '14',
@@ -21282,7 +21282,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    158 => array (
+    158 => array(
       'contentobject_id' => '200',
       'created' => '1253009816',
       'creator_id' => '14',
@@ -21295,7 +21295,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    159 => array (
+    159 => array(
       'contentobject_id' => '201',
       'created' => '1253009848',
       'creator_id' => '14',
@@ -21308,7 +21308,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    160 => array (
+    160 => array(
       'contentobject_id' => '202',
       'created' => '1299782198',
       'creator_id' => '14',
@@ -21321,7 +21321,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    161 => array (
+    161 => array(
       'contentobject_id' => '203',
       'created' => '1253010223',
       'creator_id' => '14',
@@ -21334,7 +21334,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    162 => array (
+    162 => array(
       'contentobject_id' => '204',
       'created' => '1253010249',
       'creator_id' => '14',
@@ -21347,7 +21347,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    163 => array (
+    163 => array(
       'contentobject_id' => '205',
       'created' => '1253010272',
       'creator_id' => '14',
@@ -21360,7 +21360,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    164 => array (
+    164 => array(
       'contentobject_id' => '206',
       'created' => '1253010315',
       'creator_id' => '14',
@@ -21373,7 +21373,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    165 => array (
+    165 => array(
       'contentobject_id' => '207',
       'created' => '1253010343',
       'creator_id' => '14',
@@ -21386,7 +21386,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    166 => array (
+    166 => array(
       'contentobject_id' => '208',
       'created' => '1253010367',
       'creator_id' => '14',
@@ -21399,7 +21399,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    167 => array (
+    167 => array(
       'contentobject_id' => '209',
       'created' => '1253010401',
       'creator_id' => '14',
@@ -21412,7 +21412,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    168 => array (
+    168 => array(
       'contentobject_id' => '210',
       'created' => '1253010921',
       'creator_id' => '14',
@@ -21425,7 +21425,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    169 => array (
+    169 => array(
       'contentobject_id' => '211',
       'created' => '1193914345',
       'creator_id' => '14',
@@ -21438,7 +21438,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    170 => array (
+    170 => array(
       'contentobject_id' => '212',
       'created' => '1253011179',
       'creator_id' => '14',
@@ -21451,7 +21451,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    171 => array (
+    171 => array(
       'contentobject_id' => '213',
       'created' => '1253011241',
       'creator_id' => '14',
@@ -21464,7 +21464,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    172 => array (
+    172 => array(
       'contentobject_id' => '214',
       'created' => '1299159430',
       'creator_id' => '14',
@@ -21477,7 +21477,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    173 => array (
+    173 => array(
       'contentobject_id' => '215',
       'created' => '1299159470',
       'creator_id' => '14',
@@ -21490,7 +21490,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    174 => array (
+    174 => array(
       'contentobject_id' => '216',
       'created' => '1299159503',
       'creator_id' => '14',
@@ -21503,7 +21503,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    175 => array (
+    175 => array(
       'contentobject_id' => '217',
       'created' => '1299159538',
       'creator_id' => '14',
@@ -21516,7 +21516,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    176 => array (
+    176 => array(
       'contentobject_id' => '218',
       'created' => '1299216456',
       'creator_id' => '14',
@@ -21529,7 +21529,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    177 => array (
+    177 => array(
       'contentobject_id' => '219',
       'created' => '1174305636',
       'creator_id' => '14',
@@ -21542,7 +21542,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    178 => array (
+    178 => array(
       'contentobject_id' => '220',
       'created' => '1175069781',
       'creator_id' => '14',
@@ -21555,7 +21555,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    179 => array (
+    179 => array(
       'contentobject_id' => '221',
       'created' => '1175069727',
       'creator_id' => '14',
@@ -21568,7 +21568,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    180 => array (
+    180 => array(
       'contentobject_id' => '222',
       'created' => '1174308738',
       'creator_id' => '14',
@@ -21581,7 +21581,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    181 => array (
+    181 => array(
       'contentobject_id' => '223',
       'created' => '1174654820',
       'creator_id' => '14',
@@ -21594,7 +21594,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    182 => array (
+    182 => array(
       'contentobject_id' => '224',
       'created' => '1175242951',
       'creator_id' => '14',
@@ -21607,7 +21607,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    183 => array (
+    183 => array(
       'contentobject_id' => '14',
       'created' => '1311154214',
       'creator_id' => '14',
@@ -21620,7 +21620,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '4',
       'workflow_event_pos' => '0',
     ),
-    184 => array (
+    184 => array(
       'contentobject_id' => '225',
       'created' => '1311154215',
       'creator_id' => '14',
@@ -21633,7 +21633,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    185 => array (
+    185 => array(
       'contentobject_id' => '11',
       'created' => '1311154215',
       'creator_id' => '14',
@@ -21646,7 +21646,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '2',
       'workflow_event_pos' => '0',
     ),
-    186 => array (
+    186 => array(
       'contentobject_id' => '226',
       'created' => '1313047865',
       'creator_id' => '14',
@@ -21659,7 +21659,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '1',
       'workflow_event_pos' => '0',
     ),
-    187 => array (
+    187 => array(
       'contentobject_id' => '226',
       'created' => '1313061317',
       'creator_id' => '14',
@@ -21672,7 +21672,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '2',
       'workflow_event_pos' => '0',
     ),
-    188 => array (
+    188 => array(
       'contentobject_id' => '225',
       'created' => '1311155215',
       'creator_id' => '14',
@@ -21685,7 +21685,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'version' => '2',
       'workflow_event_pos' => '0',
     ),
-    124 => array (
+    124 => array(
       'contentobject_id' => '166',
       'created' => '1193916699',
       'creator_id' => '14',
@@ -21699,8 +21699,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'workflow_event_pos' => '0',
     )
   ),
-  'ezcontentobject' => array (
-    0 => array (
+  'ezcontentobject' => array(
+    0 => array(
       'contentclass_id' => '3',
       'current_version' => '1',
       'id' => '4',
@@ -21714,7 +21714,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'status' => '1',
     ),
-    1 => array (
+    1 => array(
       'contentclass_id' => '4',
       'current_version' => '2',
       'id' => '10',
@@ -21728,7 +21728,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'status' => '1',
     ),
-    2 => array (
+    2 => array(
       'contentclass_id' => '3',
       'current_version' => '2',
       'id' => '11',
@@ -21742,7 +21742,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'status' => '1',
     ),
-    3 => array (
+    3 => array(
       'contentclass_id' => '3',
       'current_version' => '1',
       'id' => '12',
@@ -21756,7 +21756,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'status' => '1',
     ),
-    4 => array (
+    4 => array(
       'contentclass_id' => '3',
       'current_version' => '1',
       'id' => '13',
@@ -21770,7 +21770,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'status' => '1',
     ),
-    5 => array (
+    5 => array(
       'contentclass_id' => '4',
       'current_version' => '4',
       'id' => '14',
@@ -21784,7 +21784,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'status' => '1',
     ),
-    6 => array (
+    6 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '41',
@@ -21798,7 +21798,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'status' => '1',
     ),
-    7 => array (
+    7 => array(
       'contentclass_id' => '3',
       'current_version' => '1',
       'id' => '42',
@@ -21812,7 +21812,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '2',
       'status' => '1',
     ),
-    8 => array (
+    8 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '45',
@@ -21826,7 +21826,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '4',
       'status' => '1',
     ),
-    9 => array (
+    9 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '49',
@@ -21840,7 +21840,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'status' => '1',
     ),
-    10 => array (
+    10 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '50',
@@ -21854,7 +21854,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'status' => '1',
     ),
-    11 => array (
+    11 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '51',
@@ -21868,7 +21868,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'status' => '1',
     ),
-    12 => array (
+    12 => array(
       'contentclass_id' => '14',
       'current_version' => '1',
       'id' => '52',
@@ -21882,7 +21882,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '4',
       'status' => '1',
     ),
-    13 => array (
+    13 => array(
       'contentclass_id' => '15',
       'current_version' => '2',
       'id' => '54',
@@ -21896,7 +21896,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '5',
       'status' => '1',
     ),
-    14 => array (
+    14 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '56',
@@ -21910,7 +21910,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '5',
       'status' => '1',
     ),
-    15 => array (
+    15 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '57',
@@ -21924,7 +21924,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'status' => '1',
     ),
-    16 => array (
+    16 => array(
       'contentclass_id' => '42',
       'current_version' => '1',
       'id' => '58',
@@ -21938,7 +21938,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'status' => '1',
     ),
-    17 => array (
+    17 => array(
       'contentclass_id' => '42',
       'current_version' => '1',
       'id' => '59',
@@ -21952,7 +21952,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'status' => '1',
     ),
-    18 => array (
+    18 => array(
       'contentclass_id' => '42',
       'current_version' => '1',
       'id' => '60',
@@ -21966,7 +21966,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'status' => '1',
     ),
-    19 => array (
+    19 => array(
       'contentclass_id' => '42',
       'current_version' => '1',
       'id' => '61',
@@ -21980,7 +21980,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'status' => '1',
     ),
-    20 => array (
+    20 => array(
       'contentclass_id' => '42',
       'current_version' => '1',
       'id' => '62',
@@ -21994,7 +21994,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'status' => '1',
     ),
-    21 => array (
+    21 => array(
       'contentclass_id' => '42',
       'current_version' => '1',
       'id' => '63',
@@ -22008,7 +22008,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'status' => '1',
     ),
-    22 => array (
+    22 => array(
       'contentclass_id' => '42',
       'current_version' => '1',
       'id' => '64',
@@ -22022,7 +22022,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'status' => '1',
     ),
-    23 => array (
+    23 => array(
       'contentclass_id' => '23',
       'current_version' => '1',
       'id' => '65',
@@ -22036,7 +22036,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    24 => array (
+    24 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '66',
@@ -22050,7 +22050,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'status' => '1',
     ),
-    25 => array (
+    25 => array(
       'contentclass_id' => '23',
       'current_version' => '1',
       'id' => '67',
@@ -22064,7 +22064,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    26 => array (
+    26 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '68',
@@ -22078,7 +22078,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    27 => array (
+    27 => array(
       'contentclass_id' => '21',
       'current_version' => '1',
       'id' => '69',
@@ -22092,7 +22092,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    28 => array (
+    28 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '70',
@@ -22106,7 +22106,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    29 => array (
+    29 => array(
       'contentclass_id' => '21',
       'current_version' => '1',
       'id' => '71',
@@ -22120,7 +22120,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    30 => array (
+    30 => array(
       'contentclass_id' => '21',
       'current_version' => '1',
       'id' => '72',
@@ -22134,7 +22134,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    31 => array (
+    31 => array(
       'contentclass_id' => '21',
       'current_version' => '1',
       'id' => '73',
@@ -22148,7 +22148,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    32 => array (
+    32 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '74',
@@ -22162,7 +22162,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    33 => array (
+    33 => array(
       'contentclass_id' => '23',
       'current_version' => '1',
       'id' => '75',
@@ -22176,7 +22176,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    34 => array (
+    34 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '76',
@@ -22190,7 +22190,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    35 => array (
+    35 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '77',
@@ -22204,7 +22204,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    36 => array (
+    36 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '78',
@@ -22218,7 +22218,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    37 => array (
+    37 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '79',
@@ -22232,7 +22232,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    38 => array (
+    38 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '80',
@@ -22246,7 +22246,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    39 => array (
+    39 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '81',
@@ -22260,7 +22260,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    40 => array (
+    40 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '82',
@@ -22274,7 +22274,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    41 => array (
+    41 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '83',
@@ -22288,7 +22288,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    42 => array (
+    42 => array(
       'contentclass_id' => '23',
       'current_version' => '1',
       'id' => '84',
@@ -22302,7 +22302,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    43 => array (
+    43 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '85',
@@ -22316,7 +22316,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    44 => array (
+    44 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '86',
@@ -22330,7 +22330,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    45 => array (
+    45 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '87',
@@ -22344,7 +22344,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    46 => array (
+    46 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '88',
@@ -22358,7 +22358,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    47 => array (
+    47 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '89',
@@ -22372,7 +22372,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    48 => array (
+    48 => array(
       'contentclass_id' => '41',
       'current_version' => '1',
       'id' => '90',
@@ -22386,7 +22386,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    49 => array (
+    49 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '91',
@@ -22400,7 +22400,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    50 => array (
+    50 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '92',
@@ -22414,7 +22414,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    51 => array (
+    51 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '93',
@@ -22428,7 +22428,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    52 => array (
+    52 => array(
       'contentclass_id' => '23',
       'current_version' => '1',
       'id' => '94',
@@ -22442,7 +22442,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    53 => array (
+    53 => array(
       'contentclass_id' => '24',
       'current_version' => '1',
       'id' => '95',
@@ -22456,7 +22456,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    54 => array (
+    54 => array(
       'contentclass_id' => '24',
       'current_version' => '1',
       'id' => '96',
@@ -22470,7 +22470,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    55 => array (
+    55 => array(
       'contentclass_id' => '24',
       'current_version' => '1',
       'id' => '97',
@@ -22484,7 +22484,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    56 => array (
+    56 => array(
       'contentclass_id' => '24',
       'current_version' => '1',
       'id' => '98',
@@ -22498,7 +22498,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    57 => array (
+    57 => array(
       'contentclass_id' => '24',
       'current_version' => '1',
       'id' => '99',
@@ -22512,7 +22512,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    58 => array (
+    58 => array(
       'contentclass_id' => '24',
       'current_version' => '1',
       'id' => '100',
@@ -22526,7 +22526,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    59 => array (
+    59 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '101',
@@ -22540,7 +22540,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    60 => array (
+    60 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '102',
@@ -22554,7 +22554,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    61 => array (
+    61 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '103',
@@ -22568,7 +22568,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    62 => array (
+    62 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '104',
@@ -22582,7 +22582,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    63 => array (
+    63 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '105',
@@ -22596,7 +22596,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    64 => array (
+    64 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '106',
@@ -22610,7 +22610,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    65 => array (
+    65 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '107',
@@ -22624,7 +22624,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    66 => array (
+    66 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '108',
@@ -22638,7 +22638,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    67 => array (
+    67 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '109',
@@ -22652,7 +22652,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    68 => array (
+    68 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '110',
@@ -22666,7 +22666,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    69 => array (
+    69 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '111',
@@ -22680,7 +22680,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    70 => array (
+    70 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '112',
@@ -22694,7 +22694,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    71 => array (
+    71 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '113',
@@ -22708,7 +22708,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    72 => array (
+    72 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '114',
@@ -22722,7 +22722,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    73 => array (
+    73 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '115',
@@ -22736,7 +22736,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    74 => array (
+    74 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '116',
@@ -22750,7 +22750,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    75 => array (
+    75 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '117',
@@ -22764,7 +22764,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    76 => array (
+    76 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '118',
@@ -22778,7 +22778,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    77 => array (
+    77 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '119',
@@ -22792,7 +22792,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    78 => array (
+    78 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '120',
@@ -22806,7 +22806,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    79 => array (
+    79 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '121',
@@ -22820,7 +22820,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    80 => array (
+    80 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '122',
@@ -22834,7 +22834,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    81 => array (
+    81 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '123',
@@ -22848,7 +22848,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    82 => array (
+    82 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '124',
@@ -22862,7 +22862,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    83 => array (
+    83 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '125',
@@ -22876,7 +22876,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    84 => array (
+    84 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '126',
@@ -22890,7 +22890,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    85 => array (
+    85 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '127',
@@ -22904,7 +22904,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    86 => array (
+    86 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '128',
@@ -22918,7 +22918,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    87 => array (
+    87 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '129',
@@ -22932,7 +22932,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    88 => array (
+    88 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '130',
@@ -22946,7 +22946,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    89 => array (
+    89 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '131',
@@ -22960,7 +22960,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    90 => array (
+    90 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '132',
@@ -22974,7 +22974,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    91 => array (
+    91 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '133',
@@ -22988,7 +22988,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    92 => array (
+    92 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '134',
@@ -23002,7 +23002,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    93 => array (
+    93 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '135',
@@ -23016,7 +23016,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    94 => array (
+    94 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '136',
@@ -23030,7 +23030,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    95 => array (
+    95 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '137',
@@ -23044,7 +23044,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    96 => array (
+    96 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '138',
@@ -23058,7 +23058,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    97 => array (
+    97 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '139',
@@ -23072,7 +23072,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    98 => array (
+    98 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '140',
@@ -23086,7 +23086,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    99 => array (
+    99 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '141',
@@ -23100,7 +23100,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    100 => array (
+    100 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '142',
@@ -23114,7 +23114,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    101 => array (
+    101 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '143',
@@ -23128,7 +23128,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    102 => array (
+    102 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '144',
@@ -23142,7 +23142,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    103 => array (
+    103 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '145',
@@ -23156,7 +23156,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    104 => array (
+    104 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '146',
@@ -23170,7 +23170,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    105 => array (
+    105 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '147',
@@ -23184,7 +23184,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    106 => array (
+    106 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '148',
@@ -23198,7 +23198,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    107 => array (
+    107 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '149',
@@ -23212,7 +23212,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    108 => array (
+    108 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '150',
@@ -23226,7 +23226,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    109 => array (
+    109 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '151',
@@ -23240,7 +23240,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    110 => array (
+    110 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '152',
@@ -23254,7 +23254,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    111 => array (
+    111 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '153',
@@ -23268,7 +23268,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    112 => array (
+    112 => array(
       'contentclass_id' => '23',
       'current_version' => '1',
       'id' => '154',
@@ -23282,7 +23282,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '6',
       'status' => '1',
     ),
-    113 => array (
+    113 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '155',
@@ -23296,7 +23296,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '6',
       'status' => '1',
     ),
-    114 => array (
+    114 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '156',
@@ -23310,7 +23310,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '6',
       'status' => '1',
     ),
-    115 => array (
+    115 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '157',
@@ -23324,7 +23324,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '6',
       'status' => '1',
     ),
-    116 => array (
+    116 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '158',
@@ -23338,7 +23338,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '6',
       'status' => '1',
     ),
-    117 => array (
+    117 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '159',
@@ -23352,7 +23352,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '6',
       'status' => '1',
     ),
-    118 => array (
+    118 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '160',
@@ -23366,7 +23366,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '6',
       'status' => '1',
     ),
-    119 => array (
+    119 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '161',
@@ -23380,7 +23380,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '6',
       'status' => '1',
     ),
-    120 => array (
+    120 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '162',
@@ -23394,7 +23394,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '6',
       'status' => '1',
     ),
-    121 => array (
+    121 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '163',
@@ -23408,7 +23408,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '6',
       'status' => '1',
     ),
-    122 => array (
+    122 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '164',
@@ -23422,7 +23422,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '6',
       'status' => '1',
     ),
-    123 => array (
+    123 => array(
       'contentclass_id' => '23',
       'current_version' => '1',
       'id' => '165',
@@ -23436,7 +23436,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    124 => array (
+    124 => array(
       'contentclass_id' => '37',
       'current_version' => '1',
       'id' => '166',
@@ -23450,7 +23450,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    125 => array (
+    125 => array(
       'contentclass_id' => '38',
       'current_version' => '1',
       'id' => '167',
@@ -23464,7 +23464,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    126 => array (
+    126 => array(
       'contentclass_id' => '38',
       'current_version' => '1',
       'id' => '168',
@@ -23478,7 +23478,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    127 => array (
+    127 => array(
       'contentclass_id' => '38',
       'current_version' => '1',
       'id' => '169',
@@ -23492,7 +23492,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    128 => array (
+    128 => array(
       'contentclass_id' => '24',
       'current_version' => '1',
       'id' => '170',
@@ -23506,7 +23506,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    129 => array (
+    129 => array(
       'contentclass_id' => '24',
       'current_version' => '1',
       'id' => '171',
@@ -23520,7 +23520,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    130 => array (
+    130 => array(
       'contentclass_id' => '24',
       'current_version' => '1',
       'id' => '172',
@@ -23534,7 +23534,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    131 => array (
+    131 => array(
       'contentclass_id' => '24',
       'current_version' => '1',
       'id' => '173',
@@ -23548,7 +23548,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    132 => array (
+    132 => array(
       'contentclass_id' => '24',
       'current_version' => '1',
       'id' => '174',
@@ -23562,7 +23562,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    133 => array (
+    133 => array(
       'contentclass_id' => '24',
       'current_version' => '1',
       'id' => '175',
@@ -23576,7 +23576,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    134 => array (
+    134 => array(
       'contentclass_id' => '35',
       'current_version' => '1',
       'id' => '176',
@@ -23590,7 +23590,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    135 => array (
+    135 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '177',
@@ -23604,7 +23604,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    136 => array (
+    136 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '178',
@@ -23618,7 +23618,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    137 => array (
+    137 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '179',
@@ -23632,7 +23632,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    138 => array (
+    138 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '180',
@@ -23646,7 +23646,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    139 => array (
+    139 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '181',
@@ -23660,7 +23660,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    140 => array (
+    140 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '182',
@@ -23674,7 +23674,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    141 => array (
+    141 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '183',
@@ -23688,7 +23688,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    142 => array (
+    142 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '184',
@@ -23702,7 +23702,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    143 => array (
+    143 => array(
       'contentclass_id' => '19',
       'current_version' => '1',
       'id' => '185',
@@ -23716,7 +23716,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    144 => array (
+    144 => array(
       'contentclass_id' => '20',
       'current_version' => '1',
       'id' => '186',
@@ -23730,7 +23730,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    145 => array (
+    145 => array(
       'contentclass_id' => '20',
       'current_version' => '1',
       'id' => '187',
@@ -23744,7 +23744,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    146 => array (
+    146 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '188',
@@ -23758,7 +23758,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    147 => array (
+    147 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '189',
@@ -23772,7 +23772,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    148 => array (
+    148 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '190',
@@ -23786,7 +23786,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    149 => array (
+    149 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '191',
@@ -23800,7 +23800,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    150 => array (
+    150 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '192',
@@ -23814,7 +23814,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    151 => array (
+    151 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '193',
@@ -23828,7 +23828,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    152 => array (
+    152 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '194',
@@ -23842,7 +23842,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    153 => array (
+    153 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '195',
@@ -23856,7 +23856,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    154 => array (
+    154 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '196',
@@ -23870,7 +23870,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    155 => array (
+    155 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '197',
@@ -23884,7 +23884,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    156 => array (
+    156 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '198',
@@ -23898,7 +23898,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    157 => array (
+    157 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '199',
@@ -23912,7 +23912,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    158 => array (
+    158 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '200',
@@ -23926,7 +23926,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'status' => '1',
     ),
-    159 => array (
+    159 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '201',
@@ -23940,7 +23940,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '3',
       'status' => '1',
     ),
-    160 => array (
+    160 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '202',
@@ -23954,7 +23954,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    161 => array (
+    161 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '203',
@@ -23968,7 +23968,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    162 => array (
+    162 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '204',
@@ -23982,7 +23982,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    163 => array (
+    163 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '205',
@@ -23996,7 +23996,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    164 => array (
+    164 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '206',
@@ -24010,7 +24010,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    165 => array (
+    165 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '207',
@@ -24024,7 +24024,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    166 => array (
+    166 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '208',
@@ -24038,7 +24038,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    167 => array (
+    167 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '209',
@@ -24052,7 +24052,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    168 => array (
+    168 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '210',
@@ -24066,7 +24066,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    169 => array (
+    169 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '211',
@@ -24080,7 +24080,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    170 => array (
+    170 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '212',
@@ -24094,7 +24094,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    171 => array (
+    171 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '213',
@@ -24108,7 +24108,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    172 => array (
+    172 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '214',
@@ -24122,7 +24122,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    173 => array (
+    173 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '215',
@@ -24136,7 +24136,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    174 => array (
+    174 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '216',
@@ -24150,7 +24150,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    175 => array (
+    175 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '217',
@@ -24164,7 +24164,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    176 => array (
+    176 => array(
       'contentclass_id' => '16',
       'current_version' => '1',
       'id' => '218',
@@ -24178,7 +24178,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    177 => array (
+    177 => array(
       'contentclass_id' => '26',
       'current_version' => '1',
       'id' => '219',
@@ -24192,7 +24192,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    178 => array (
+    178 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '220',
@@ -24206,7 +24206,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    179 => array (
+    179 => array(
       'contentclass_id' => '1',
       'current_version' => '1',
       'id' => '221',
@@ -24220,7 +24220,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    180 => array (
+    180 => array(
       'contentclass_id' => '22',
       'current_version' => '1',
       'id' => '222',
@@ -24234,7 +24234,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    181 => array (
+    181 => array(
       'contentclass_id' => '25',
       'current_version' => '1',
       'id' => '223',
@@ -24248,7 +24248,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    182 => array (
+    182 => array(
       'contentclass_id' => '30',
       'current_version' => '1',
       'id' => '224',
@@ -24262,7 +24262,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    183 => array (
+    183 => array(
       'contentclass_id' => '3',
       'current_version' => '1',
       'id' => '225',
@@ -24276,7 +24276,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'section_id' => '1',
       'status' => '1',
     ),
-    184 => array (
+    184 => array(
       'contentclass_id' => '16',
       'current_version' => '2',
       'id' => '226',
@@ -24291,8 +24291,8 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'status' => '1',
     ),
   ),
-  'ezcontentobject_tree' => array (
-    0 => array (
+  'ezcontentobject_tree' => array(
+    0 => array(
       'contentobject_id' => '0',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24310,7 +24310,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    1 => array (
+    1 => array(
       'contentobject_id' => '65',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24328,7 +24328,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '8',
       'sort_order' => '1',
     ),
-    2 => array (
+    2 => array(
       'contentobject_id' => '4',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24346,7 +24346,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    3 => array (
+    3 => array(
       'contentobject_id' => '11',
       'contentobject_is_published' => '1',
       'contentobject_version' => '2',
@@ -24364,7 +24364,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    4 => array (
+    4 => array(
       'contentobject_id' => '12',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24382,7 +24382,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    5 => array (
+    5 => array(
       'contentobject_id' => '13',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24400,7 +24400,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    6 => array (
+    6 => array(
       'contentobject_id' => '14',
       'contentobject_is_published' => '1',
       'contentobject_version' => '4',
@@ -24418,7 +24418,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    7 => array (
+    7 => array(
       'contentobject_id' => '41',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24436,7 +24436,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    8 => array (
+    8 => array(
       'contentobject_id' => '42',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24454,7 +24454,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    9 => array (
+    9 => array(
       'contentobject_id' => '10',
       'contentobject_is_published' => '1',
       'contentobject_version' => '2',
@@ -24472,7 +24472,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    10 => array (
+    10 => array(
       'contentobject_id' => '45',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24490,7 +24490,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    11 => array (
+    11 => array(
       'contentobject_id' => '49',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24508,7 +24508,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    12 => array (
+    12 => array(
       'contentobject_id' => '50',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24526,7 +24526,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    13 => array (
+    13 => array(
       'contentobject_id' => '51',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24544,7 +24544,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '9',
       'sort_order' => '1',
     ),
-    14 => array (
+    14 => array(
       'contentobject_id' => '52',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24562,7 +24562,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    15 => array (
+    15 => array(
       'contentobject_id' => '54',
       'contentobject_is_published' => '1',
       'contentobject_version' => '2',
@@ -24580,7 +24580,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    16 => array (
+    16 => array(
       'contentobject_id' => '56',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24598,7 +24598,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    17 => array (
+    17 => array(
       'contentobject_id' => '57',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24616,7 +24616,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    18 => array (
+    18 => array(
       'contentobject_id' => '58',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24634,7 +24634,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    19 => array (
+    19 => array(
       'contentobject_id' => '59',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24652,7 +24652,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    20 => array (
+    20 => array(
       'contentobject_id' => '60',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24670,7 +24670,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    21 => array (
+    21 => array(
       'contentobject_id' => '61',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24688,7 +24688,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    22 => array (
+    22 => array(
       'contentobject_id' => '62',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24706,7 +24706,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    23 => array (
+    23 => array(
       'contentobject_id' => '63',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24724,7 +24724,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    24 => array (
+    24 => array(
       'contentobject_id' => '64',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24742,7 +24742,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    25 => array (
+    25 => array(
       'contentobject_id' => '66',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24760,7 +24760,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    26 => array (
+    26 => array(
       'contentobject_id' => '67',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24778,7 +24778,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    27 => array (
+    27 => array(
       'contentobject_id' => '68',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24796,7 +24796,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    28 => array (
+    28 => array(
       'contentobject_id' => '69',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24814,7 +24814,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    29 => array (
+    29 => array(
       'contentobject_id' => '70',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24832,7 +24832,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    30 => array (
+    30 => array(
       'contentobject_id' => '71',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24850,7 +24850,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    31 => array (
+    31 => array(
       'contentobject_id' => '72',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24868,7 +24868,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    32 => array (
+    32 => array(
       'contentobject_id' => '73',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24886,7 +24886,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    33 => array (
+    33 => array(
       'contentobject_id' => '74',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24904,7 +24904,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    34 => array (
+    34 => array(
       'contentobject_id' => '75',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24922,7 +24922,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    35 => array (
+    35 => array(
       'contentobject_id' => '76',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24940,7 +24940,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    36 => array (
+    36 => array(
       'contentobject_id' => '77',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24958,7 +24958,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    37 => array (
+    37 => array(
       'contentobject_id' => '78',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24976,7 +24976,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    38 => array (
+    38 => array(
       'contentobject_id' => '79',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -24994,7 +24994,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    39 => array (
+    39 => array(
       'contentobject_id' => '80',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25012,7 +25012,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    40 => array (
+    40 => array(
       'contentobject_id' => '81',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25030,7 +25030,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    41 => array (
+    41 => array(
       'contentobject_id' => '82',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25048,7 +25048,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    42 => array (
+    42 => array(
       'contentobject_id' => '83',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25066,7 +25066,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    43 => array (
+    43 => array(
       'contentobject_id' => '84',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25084,7 +25084,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    44 => array (
+    44 => array(
       'contentobject_id' => '85',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25102,7 +25102,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    45 => array (
+    45 => array(
       'contentobject_id' => '86',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25120,7 +25120,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    46 => array (
+    46 => array(
       'contentobject_id' => '87',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25138,7 +25138,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    47 => array (
+    47 => array(
       'contentobject_id' => '88',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25156,7 +25156,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    48 => array (
+    48 => array(
       'contentobject_id' => '89',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25174,7 +25174,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    49 => array (
+    49 => array(
       'contentobject_id' => '90',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25192,7 +25192,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    50 => array (
+    50 => array(
       'contentobject_id' => '91',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25210,7 +25210,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    51 => array (
+    51 => array(
       'contentobject_id' => '92',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25228,7 +25228,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    52 => array (
+    52 => array(
       'contentobject_id' => '93',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25246,7 +25246,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    53 => array (
+    53 => array(
       'contentobject_id' => '94',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25264,7 +25264,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    54 => array (
+    54 => array(
       'contentobject_id' => '95',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25282,7 +25282,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    55 => array (
+    55 => array(
       'contentobject_id' => '96',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25300,7 +25300,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    56 => array (
+    56 => array(
       'contentobject_id' => '97',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25318,7 +25318,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    57 => array (
+    57 => array(
       'contentobject_id' => '98',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25336,7 +25336,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    58 => array (
+    58 => array(
       'contentobject_id' => '99',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25354,7 +25354,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    59 => array (
+    59 => array(
       'contentobject_id' => '100',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25372,7 +25372,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    60 => array (
+    60 => array(
       'contentobject_id' => '101',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25390,7 +25390,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    61 => array (
+    61 => array(
       'contentobject_id' => '102',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25408,7 +25408,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    62 => array (
+    62 => array(
       'contentobject_id' => '103',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25426,7 +25426,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    63 => array (
+    63 => array(
       'contentobject_id' => '104',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25444,7 +25444,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    64 => array (
+    64 => array(
       'contentobject_id' => '105',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25462,7 +25462,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    65 => array (
+    65 => array(
       'contentobject_id' => '106',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25480,7 +25480,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    66 => array (
+    66 => array(
       'contentobject_id' => '107',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25498,7 +25498,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    67 => array (
+    67 => array(
       'contentobject_id' => '108',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25516,7 +25516,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    68 => array (
+    68 => array(
       'contentobject_id' => '109',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25534,7 +25534,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    69 => array (
+    69 => array(
       'contentobject_id' => '110',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25552,7 +25552,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    70 => array (
+    70 => array(
       'contentobject_id' => '111',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25570,7 +25570,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    71 => array (
+    71 => array(
       'contentobject_id' => '112',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25588,7 +25588,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    72 => array (
+    72 => array(
       'contentobject_id' => '113',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25606,7 +25606,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    73 => array (
+    73 => array(
       'contentobject_id' => '114',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25624,7 +25624,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    74 => array (
+    74 => array(
       'contentobject_id' => '115',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25642,7 +25642,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    75 => array (
+    75 => array(
       'contentobject_id' => '116',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25660,7 +25660,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    76 => array (
+    76 => array(
       'contentobject_id' => '117',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25678,7 +25678,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    77 => array (
+    77 => array(
       'contentobject_id' => '118',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25696,7 +25696,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    78 => array (
+    78 => array(
       'contentobject_id' => '119',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25714,7 +25714,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    79 => array (
+    79 => array(
       'contentobject_id' => '120',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25732,7 +25732,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    80 => array (
+    80 => array(
       'contentobject_id' => '121',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25750,7 +25750,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    81 => array (
+    81 => array(
       'contentobject_id' => '122',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25768,7 +25768,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    82 => array (
+    82 => array(
       'contentobject_id' => '123',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25786,7 +25786,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    83 => array (
+    83 => array(
       'contentobject_id' => '124',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25804,7 +25804,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    84 => array (
+    84 => array(
       'contentobject_id' => '125',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25822,7 +25822,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    85 => array (
+    85 => array(
       'contentobject_id' => '126',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25840,7 +25840,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    86 => array (
+    86 => array(
       'contentobject_id' => '127',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25858,7 +25858,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    87 => array (
+    87 => array(
       'contentobject_id' => '128',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25876,7 +25876,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    88 => array (
+    88 => array(
       'contentobject_id' => '129',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25894,7 +25894,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    89 => array (
+    89 => array(
       'contentobject_id' => '130',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25912,7 +25912,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    90 => array (
+    90 => array(
       'contentobject_id' => '131',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25930,7 +25930,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    91 => array (
+    91 => array(
       'contentobject_id' => '132',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25948,7 +25948,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    92 => array (
+    92 => array(
       'contentobject_id' => '133',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25966,7 +25966,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    93 => array (
+    93 => array(
       'contentobject_id' => '134',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -25984,7 +25984,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    94 => array (
+    94 => array(
       'contentobject_id' => '135',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26002,7 +26002,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    95 => array (
+    95 => array(
       'contentobject_id' => '136',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26020,7 +26020,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    96 => array (
+    96 => array(
       'contentobject_id' => '137',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26038,7 +26038,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    97 => array (
+    97 => array(
       'contentobject_id' => '138',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26056,7 +26056,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    98 => array (
+    98 => array(
       'contentobject_id' => '139',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26074,7 +26074,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    99 => array (
+    99 => array(
       'contentobject_id' => '140',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26092,7 +26092,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    100 => array (
+    100 => array(
       'contentobject_id' => '141',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26110,7 +26110,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    101 => array (
+    101 => array(
       'contentobject_id' => '142',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26128,7 +26128,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    102 => array (
+    102 => array(
       'contentobject_id' => '143',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26146,7 +26146,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    103 => array (
+    103 => array(
       'contentobject_id' => '144',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26164,7 +26164,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    104 => array (
+    104 => array(
       'contentobject_id' => '145',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26182,7 +26182,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    105 => array (
+    105 => array(
       'contentobject_id' => '146',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26200,7 +26200,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    106 => array (
+    106 => array(
       'contentobject_id' => '147',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26218,7 +26218,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    107 => array (
+    107 => array(
       'contentobject_id' => '148',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26236,7 +26236,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    108 => array (
+    108 => array(
       'contentobject_id' => '149',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26254,7 +26254,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    109 => array (
+    109 => array(
       'contentobject_id' => '150',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26272,7 +26272,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    110 => array (
+    110 => array(
       'contentobject_id' => '151',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26290,7 +26290,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    111 => array (
+    111 => array(
       'contentobject_id' => '152',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26308,7 +26308,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    112 => array (
+    112 => array(
       'contentobject_id' => '153',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26326,7 +26326,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    113 => array (
+    113 => array(
       'contentobject_id' => '154',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26344,7 +26344,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    114 => array (
+    114 => array(
       'contentobject_id' => '155',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26362,7 +26362,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    115 => array (
+    115 => array(
       'contentobject_id' => '156',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26380,7 +26380,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    116 => array (
+    116 => array(
       'contentobject_id' => '157',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26398,7 +26398,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    117 => array (
+    117 => array(
       'contentobject_id' => '158',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26416,7 +26416,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    118 => array (
+    118 => array(
       'contentobject_id' => '159',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26434,7 +26434,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    119 => array (
+    119 => array(
       'contentobject_id' => '160',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26452,7 +26452,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    120 => array (
+    120 => array(
       'contentobject_id' => '161',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26470,7 +26470,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    121 => array (
+    121 => array(
       'contentobject_id' => '162',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26488,7 +26488,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    122 => array (
+    122 => array(
       'contentobject_id' => '163',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26506,7 +26506,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    123 => array (
+    123 => array(
       'contentobject_id' => '164',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26524,7 +26524,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    124 => array (
+    124 => array(
       'contentobject_id' => '165',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26542,7 +26542,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    125 => array (
+    125 => array(
       'contentobject_id' => '166',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26560,7 +26560,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    126 => array (
+    126 => array(
       'contentobject_id' => '167',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26578,7 +26578,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    127 => array (
+    127 => array(
       'contentobject_id' => '168',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26596,7 +26596,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    128 => array (
+    128 => array(
       'contentobject_id' => '169',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26614,7 +26614,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    129 => array (
+    129 => array(
       'contentobject_id' => '170',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26632,7 +26632,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    130 => array (
+    130 => array(
       'contentobject_id' => '171',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26650,7 +26650,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    131 => array (
+    131 => array(
       'contentobject_id' => '172',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26668,7 +26668,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    132 => array (
+    132 => array(
       'contentobject_id' => '173',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26686,7 +26686,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    133 => array (
+    133 => array(
       'contentobject_id' => '174',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26704,7 +26704,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    134 => array (
+    134 => array(
       'contentobject_id' => '175',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26722,7 +26722,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    135 => array (
+    135 => array(
       'contentobject_id' => '176',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26740,7 +26740,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    136 => array (
+    136 => array(
       'contentobject_id' => '177',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26758,7 +26758,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    137 => array (
+    137 => array(
       'contentobject_id' => '178',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26776,7 +26776,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    138 => array (
+    138 => array(
       'contentobject_id' => '179',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26794,7 +26794,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    139 => array (
+    139 => array(
       'contentobject_id' => '180',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26812,7 +26812,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    140 => array (
+    140 => array(
       'contentobject_id' => '181',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26830,7 +26830,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    141 => array (
+    141 => array(
       'contentobject_id' => '182',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26848,7 +26848,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    142 => array (
+    142 => array(
       'contentobject_id' => '183',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26866,7 +26866,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    143 => array (
+    143 => array(
       'contentobject_id' => '184',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26884,7 +26884,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    144 => array (
+    144 => array(
       'contentobject_id' => '185',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26902,7 +26902,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    145 => array (
+    145 => array(
       'contentobject_id' => '186',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26920,7 +26920,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    146 => array (
+    146 => array(
       'contentobject_id' => '187',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26938,7 +26938,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    147 => array (
+    147 => array(
       'contentobject_id' => '188',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26956,7 +26956,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    148 => array (
+    148 => array(
       'contentobject_id' => '189',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26974,7 +26974,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    149 => array (
+    149 => array(
       'contentobject_id' => '190',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -26992,7 +26992,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    150 => array (
+    150 => array(
       'contentobject_id' => '191',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27010,7 +27010,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    151 => array (
+    151 => array(
       'contentobject_id' => '192',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27028,7 +27028,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    152 => array (
+    152 => array(
       'contentobject_id' => '193',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27046,7 +27046,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    153 => array (
+    153 => array(
       'contentobject_id' => '194',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27064,7 +27064,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    154 => array (
+    154 => array(
       'contentobject_id' => '195',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27082,7 +27082,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    155 => array (
+    155 => array(
       'contentobject_id' => '196',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27100,7 +27100,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    156 => array (
+    156 => array(
       'contentobject_id' => '197',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27118,7 +27118,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    157 => array (
+    157 => array(
       'contentobject_id' => '198',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27136,7 +27136,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    158 => array (
+    158 => array(
       'contentobject_id' => '199',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27154,7 +27154,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    159 => array (
+    159 => array(
       'contentobject_id' => '200',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27172,7 +27172,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    160 => array (
+    160 => array(
       'contentobject_id' => '201',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27190,7 +27190,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    161 => array (
+    161 => array(
       'contentobject_id' => '202',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27208,7 +27208,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    162 => array (
+    162 => array(
       'contentobject_id' => '203',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27226,7 +27226,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    163 => array (
+    163 => array(
       'contentobject_id' => '204',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27244,7 +27244,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    164 => array (
+    164 => array(
       'contentobject_id' => '205',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27262,7 +27262,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    165 => array (
+    165 => array(
       'contentobject_id' => '206',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27280,7 +27280,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    166 => array (
+    166 => array(
       'contentobject_id' => '207',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27298,7 +27298,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    167 => array (
+    167 => array(
       'contentobject_id' => '208',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27316,7 +27316,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    168 => array (
+    168 => array(
       'contentobject_id' => '209',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27334,7 +27334,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    169 => array (
+    169 => array(
       'contentobject_id' => '210',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27352,7 +27352,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    170 => array (
+    170 => array(
       'contentobject_id' => '211',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27370,7 +27370,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    171 => array (
+    171 => array(
       'contentobject_id' => '212',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27388,7 +27388,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    172 => array (
+    172 => array(
       'contentobject_id' => '213',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27406,7 +27406,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '0',
     ),
-    173 => array (
+    173 => array(
       'contentobject_id' => '214',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27424,7 +27424,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    174 => array (
+    174 => array(
       'contentobject_id' => '215',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27442,7 +27442,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    175 => array (
+    175 => array(
       'contentobject_id' => '216',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27460,7 +27460,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    176 => array (
+    176 => array(
       'contentobject_id' => '217',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27478,7 +27478,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    177 => array (
+    177 => array(
       'contentobject_id' => '218',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27496,7 +27496,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    178 => array (
+    178 => array(
       'contentobject_id' => '219',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27514,7 +27514,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    179 => array (
+    179 => array(
       'contentobject_id' => '220',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27532,7 +27532,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    180 => array (
+    180 => array(
       'contentobject_id' => '221',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27550,7 +27550,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    181 => array (
+    181 => array(
       'contentobject_id' => '222',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27568,7 +27568,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    182 => array (
+    182 => array(
       'contentobject_id' => '223',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27586,7 +27586,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '2',
       'sort_order' => '1',
     ),
-    183 => array (
+    183 => array(
       'contentobject_id' => '224',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27604,7 +27604,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    184 => array (
+    184 => array(
       'contentobject_id' => '225',
       'contentobject_is_published' => '1',
       'contentobject_version' => '1',
@@ -27622,7 +27622,7 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_field' => '1',
       'sort_order' => '1',
     ),
-    185 => array (
+    185 => array(
       'contentobject_id' => '226',
       'contentobject_is_published' => '1',
       'contentobject_version' => '2',
@@ -30415,4 +30415,3 @@ keywords=cms, publish, e-commerce, content management, development framework',
     ),
   ),
 );
-

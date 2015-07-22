@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the BlockMatcherFactoryTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,44 +20,44 @@ class BlockMatcherFactoryTest extends BaseMatcherFactoryTest
     public function testGetMatcherForLocation()
     {
         $matcherServiceIdentifier = 'my.matcher.service';
-        $resolverMock = $this->getResolverMock( $matcherServiceIdentifier );
-        $container = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
+        $resolverMock = $this->getResolverMock($matcherServiceIdentifier);
+        $container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
         $container
-            ->expects( $this->atLeastOnce() )
-            ->method( 'has' )
+            ->expects($this->atLeastOnce())
+            ->method('has')
             ->will(
                 $this->returnValueMap(
                     array(
-                        array( $matcherServiceIdentifier, true )
+                        array($matcherServiceIdentifier, true),
                     )
                 )
             );
         $container
-            ->expects( $this->atLeastOnce() )
-            ->method( 'get' )
+            ->expects($this->atLeastOnce())
+            ->method('get')
             ->will(
                 $this->returnValueMap(
                     array(
-                        array( $matcherServiceIdentifier, ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\Block\\MatcherInterface' ) ),
+                        array($matcherServiceIdentifier, ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\Block\\MatcherInterface')),
                     )
                 )
             );
 
-        $matcherFactory = new BlockMatcherFactory( $resolverMock, $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' ) );
-        $matcherFactory->setContainer( $container );
-        $matcherFactory->match( $this->getBlockMock(), 'full' );
+        $matcherFactory = new BlockMatcherFactory($resolverMock, $this->getMock('eZ\\Publish\\API\\Repository\\Repository'));
+        $matcherFactory->setContainer($container);
+        $matcherFactory->match($this->getBlockMock(), 'full');
     }
 
     public function testSetSiteAccessNull()
     {
         $matcherServiceIdentifier = 'my.matcher.service';
-        $resolverMock = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
-        $container = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
+        $resolverMock = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
 
         $resolverMock
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'block_view' )
+            ->expects($this->once())
+            ->method('getParameter')
+            ->with('block_view')
             ->will(
                 $this->returnValue(
                     array(
@@ -63,23 +65,23 @@ class BlockMatcherFactoryTest extends BaseMatcherFactoryTest
                             'matchRule' => array(
                                 'template' => 'my_template.html.twig',
                                 'match' => array(
-                                    $matcherServiceIdentifier => 'someValue'
-                                )
-                            )
-                        )
+                                    $matcherServiceIdentifier => 'someValue',
+                                ),
+                            ),
+                        ),
                     )
                 )
             );
-        $matcherFactory = new BlockMatcherFactory( $resolverMock, $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' ) );
-        $matcherFactory->setContainer( $container );
+        $matcherFactory = new BlockMatcherFactory($resolverMock, $this->getMock('eZ\\Publish\\API\\Repository\\Repository'));
+        $matcherFactory->setContainer($container);
         $matcherFactory->setSiteAccess();
     }
 
     public function testSetSiteAccess()
     {
         $matcherServiceIdentifier = 'my.matcher.service';
-        $resolverMock = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
-        $container = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
+        $resolverMock = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
 
         $siteAccessName = 'siteaccess_name';
         $updatedMatchConfig = array(
@@ -87,14 +89,14 @@ class BlockMatcherFactoryTest extends BaseMatcherFactoryTest
                 'matchRule2' => array(
                     'template' => 'my_other_template.html.twig',
                     'match' => array(
-                        'foo' => array( 'bar' )
-                    )
-                )
-            )
+                        'foo' => array('bar'),
+                    ),
+                ),
+            ),
         );
         $resolverMock
-            ->expects( $this->atLeastOnce() )
-            ->method( 'getParameter' )
+            ->expects($this->atLeastOnce())
+            ->method('getParameter')
             ->will(
                 $this->returnValueMap(
                     array(
@@ -105,23 +107,23 @@ class BlockMatcherFactoryTest extends BaseMatcherFactoryTest
                                     'matchRule' => array(
                                         'template' => 'my_template.html.twig',
                                         'match' => array(
-                                            $matcherServiceIdentifier => 'someValue'
-                                        )
-                                    )
-                                )
-                            )
+                                            $matcherServiceIdentifier => 'someValue',
+                                        ),
+                                    ),
+                                ),
+                            ),
                         ),
-                        array( 'block_view', 'ezsettings', $siteAccessName, $updatedMatchConfig ),
+                        array('block_view', 'ezsettings', $siteAccessName, $updatedMatchConfig),
                     )
                 )
             );
-        $matcherFactory = new BlockMatcherFactory( $resolverMock, $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' ) );
-        $matcherFactory->setContainer( $container );
-        $matcherFactory->setSiteAccess( new SiteAccess( $siteAccessName ) );
+        $matcherFactory = new BlockMatcherFactory($resolverMock, $this->getMock('eZ\\Publish\\API\\Repository\\Repository'));
+        $matcherFactory->setContainer($container);
+        $matcherFactory->setSiteAccess(new SiteAccess($siteAccessName));
 
-        $refObj = new \ReflectionObject( $matcherFactory );
-        $refProp = $refObj->getProperty( 'matchConfig' );
-        $refProp->setAccessible( true );
-        $this->assertSame( $updatedMatchConfig, $refProp->getValue( $matcherFactory ) );
+        $refObj = new \ReflectionObject($matcherFactory);
+        $refProp = $refObj->getProperty('matchConfig');
+        $refProp->setAccessible(true);
+        $this->assertSame($updatedMatchConfig, $refProp->getValue($matcherFactory));
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\API\Repository\Tests\FieldType\UrlIntegrationTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\UrlIntegrationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,7 @@ use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
@@ -21,7 +23,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class UrlIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -31,7 +33,7 @@ class UrlIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expected settings schema
+     * Get expected settings schema.
      *
      * @return array
      */
@@ -41,7 +43,7 @@ class UrlIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get a valid $fieldSettings value.
      *
      * @return mixed
      */
@@ -51,7 +53,7 @@ class UrlIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get $fieldSettings value not accepted by the field type
+     * Get $fieldSettings value not accepted by the field type.
      *
      * @return mixed
      */
@@ -63,7 +65,7 @@ class UrlIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get expected validator schema
+     * Get expected validator schema.
      *
      * @return array
      */
@@ -73,7 +75,7 @@ class UrlIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $validatorConfiguration.
      *
      * @return mixed
      */
@@ -83,25 +85,25 @@ class UrlIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get $validatorConfiguration not accepted by the field type
+     * Get $validatorConfiguration not accepted by the field type.
      *
      * @return mixed
      */
     public function getInvalidValidatorConfiguration()
     {
         return array(
-            'unknown' => array( 'value' => 23 )
+            'unknown' => array('value' => 23),
         );
     }
 
     /**
-     * Get initial field data for valid object creation
+     * Get initial field data for valid object creation.
      *
      * @return mixed
      */
     public function getValidCreationFieldData()
     {
-        return new UrlValue( 'http://example.com', 'Example' );
+        return new UrlValue('http://example.com', 'Example');
     }
 
     /**
@@ -111,10 +113,8 @@ class UrlIntegrationTest extends BaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field )
+    public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Url\\Value',
@@ -132,7 +132,7 @@ class UrlIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during creation
+     * Get field data which will result in errors during creation.
      *
      * This is a PHPUnit data provider.
      *
@@ -156,34 +156,34 @@ class UrlIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new UrlValue( 23 ),
+                new UrlValue(23),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(
-                new UrlValue( 'http://example.com', 23 ),
+                new UrlValue('http://example.com', 23),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
         );
     }
 
     /**
-     * Get update field externals data
+     * Get update field externals data.
      *
      * @return array
      */
     public function getValidUpdateFieldData()
     {
-        return new UrlValue( 'http://example.com/2', 'Example  2' );
+        return new UrlValue('http://example.com/2', 'Example  2');
     }
 
     /**
-     * Get externals updated field data values
+     * Get externals updated field data values.
      *
      * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Url\\Value',
@@ -201,7 +201,7 @@ class UrlIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during update
+     * Get field data which will result in errors during update.
      *
      * This is a PHPUnit data provider.
      *
@@ -234,7 +234,7 @@ class UrlIntegrationTest extends BaseIntegrationTest
      *
      * @param Field $field
      */
-    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Url\\Value',
@@ -252,7 +252,7 @@ class UrlIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get data to test to hash method
+     * Get data to test to hash method.
      *
      * This is a PHPUnit data provider
      *
@@ -275,24 +275,24 @@ class UrlIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                new UrlValue( 'http://example.com' ),
+                new UrlValue('http://example.com'),
                 array(
                     'link' => 'http://example.com',
                     'text' => null,
-                )
+                ),
             ),
             array(
-                new UrlValue( 'http://example.com', 'Link text' ),
+                new UrlValue('http://example.com', 'Link text'),
                 array(
                     'link' => 'http://example.com',
                     'text' => 'Link text',
-                )
+                ),
             ),
         );
     }
 
     /**
-     * Get expectations for the fromHash call on our field value
+     * Get expectations for the fromHash call on our field value.
      *
      * This is a PHPUnit data provider
      *
@@ -302,23 +302,23 @@ class UrlIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                array( 'link' => 'http://example.com/sindelfingen' ),
-                new UrlValue( 'http://example.com/sindelfingen' )
+                array('link' => 'http://example.com/sindelfingen'),
+                new UrlValue('http://example.com/sindelfingen'),
             ),
             array(
-                array( 'link' => 'http://example.com/sindelfingen', 'text' => 'Foo' ),
-                new UrlValue( 'http://example.com/sindelfingen', 'Foo' )
-            )
+                array('link' => 'http://example.com/sindelfingen', 'text' => 'Foo'),
+                new UrlValue('http://example.com/sindelfingen', 'Foo'),
+            ),
         );
     }
 
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new UrlValue ),
-            array( new UrlValue( null ) ),
-            array( new UrlValue( "" ) ),
-            array( new UrlValue( "", "" ) ),
+            array(new UrlValue()),
+            array(new UrlValue(null)),
+            array(new UrlValue('')),
+            array(new UrlValue('', '')),
         );
     }
 
@@ -326,10 +326,10 @@ class UrlIntegrationTest extends BaseIntegrationTest
     {
         return array(
             array(
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
             ),
             array(
-                new UrlValue( 'http://example.com' )
+                new UrlValue('http://example.com'),
             ),
         );
     }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the Events class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,6 +26,7 @@ final class MVCEvents
      * This event is triggered by the view manager and allows you to inject additional parameters to the content view template.
      *
      * The event listener method receives a \eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent
+     *
      * @see eZ\Publish\Core\MVC\Symfony\View\Manager
      */
     const PRE_CONTENT_VIEW = 'ezpublish.pre_content_view';

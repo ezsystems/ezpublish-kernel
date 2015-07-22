@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -17,7 +18,7 @@ class LegacyStorageImageFileListTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->rowReaderMock = $this->getMock( 'eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileRowReader' );
+        $this->rowReaderMock = $this->getMock('eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileRowReader');
         $this->fileList = new LegacyStorageImageFileList(
             $this->rowReaderMock,
             'var/ezdemo_site/storage',
@@ -25,37 +26,35 @@ class LegacyStorageImageFileListTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    function testIterator()
+    public function testIterator()
     {
         $expected = array(
             'path/to/1st/image.jpg',
             'path/to/2nd/image.jpg',
         );
-        $this->configureRowReaderMock( $expected );
+        $this->configureRowReaderMock($expected);
 
-        foreach ( $this->fileList as $index => $file )
-        {
-            self::assertEquals( $expected[$index], $file );
+        foreach ($this->fileList as $index => $file) {
+            self::assertEquals($expected[$index], $file);
         }
     }
 
     /**
-     * Tests that the iterator transforms the ezimagefile value into a binaryfile id
+     * Tests that the iterator transforms the ezimagefile value into a binaryfile id.
      */
     public function testImageIdTransformation()
     {
-        $this->configureRowReaderMock( array( 'var/ezdemo_site/storage/images/path/to/1st/image.jpg' ) );
-        foreach ( $this->fileList as $file )
-        {
-            self::assertEquals( 'path/to/1st/image.jpg', $file );
+        $this->configureRowReaderMock(array('var/ezdemo_site/storage/images/path/to/1st/image.jpg'));
+        foreach ($this->fileList as $file) {
+            self::assertEquals('path/to/1st/image.jpg', $file);
         }
     }
 
-    private function configureRowReaderMock( array $fileList )
+    private function configureRowReaderMock(array $fileList)
     {
-        $mockInvocator = $this->rowReaderMock->expects( $this->any() )->method( 'getRow' );
-        call_user_func_array( array( $mockInvocator, 'willReturnOnConsecutiveCalls' ), $fileList );
+        $mockInvocator = $this->rowReaderMock->expects($this->any())->method('getRow');
+        call_user_func_array(array($mockInvocator, 'willReturnOnConsecutiveCalls'), $fileList);
 
-        $this->rowReaderMock->expects( $this->any() )->method( 'getCount' )->willReturn( count( $fileList ) );
+        $this->rowReaderMock->expects($this->any())->method('getCount')->willReturn(count($fileList));
     }
 }

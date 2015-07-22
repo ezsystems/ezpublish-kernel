@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Functional\LocationTest class
+ * File containing the Functional\LocationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,17 +15,16 @@ use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTes
 
 class LocationTest extends RESTFunctionalTestCase
 {
-
     /**
      * @covers POST /content/objects/{contentId}/locations
      * @returns string location href
      */
     public function testCreateLocation()
     {
-        $content = $this->createFolder( 'testCreateLocation', '/api/ezp/v2/content/locations/1/2' );
+        $content = $this->createFolder('testCreateLocation', '/api/ezp/v2/content/locations/1/2');
         $contentHref = $content['_href'];
 
-        $remoteId = $this->addTestSuffix( "testCreatelocation" );
+        $remoteId = $this->addTestSuffix('testCreatelocation');
 
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -36,14 +37,15 @@ class LocationTest extends RESTFunctionalTestCase
   <sortOrder>ASC</sortOrder>
 </LocationCreate>
 XML;
-        $request = $this->createHttpRequest( "POST", "$contentHref/locations", "LocationCreate+xml", "Location+json" );
-        $request->setContent( $body );
+        $request = $this->createHttpRequest('POST', "$contentHref/locations", 'LocationCreate+xml', 'Location+json');
+        $request->setContent($body);
 
-        $response = $this->sendHttpRequest( $request );
-        self::assertHttpResponseCodeEquals( $response, 201 );
-        self::assertHttpResponseHasHeader( $response, 'Location' );
+        $response = $this->sendHttpRequest($request);
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader( 'Location' );
+        $href = $response->getHeader('Location');
+
         return $href;
     }
 
@@ -51,92 +53,92 @@ XML;
      * @depends testCreateLocation
      * @covers GET /content/locations?remoteId=<locationRemoteId>
      */
-    public function testRedirectLocationByRemoteId( $locationHref )
+    public function testRedirectLocationByRemoteId($locationHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "/api/ezp/v2/content/locations?remoteId=" . $this->addTestSuffix( 'testCreateLocation' ) )
+            $this->createHttpRequest('GET', '/api/ezp/v2/content/locations?remoteId=' . $this->addTestSuffix('testCreateLocation'))
         );
 
-        self::assertHttpResponseCodeEquals( $response, 307 );
-        self::assertHttpResponseHasHeader( $response, 'Location', $locationHref );
+        self::assertHttpResponseCodeEquals($response, 307);
+        self::assertHttpResponseHasHeader($response, 'Location', $locationHref);
     }
 
     /**
      * @depends testCreateLocation
      * @covers GET /content/locations?id=<locationId>
      */
-    public function testRedirectLocationById( $locationHref )
+    public function testRedirectLocationById($locationHref)
     {
-        $hrefParts = explode( '/', $locationHref );
-        $id = array_pop( $hrefParts );
+        $hrefParts = explode('/', $locationHref);
+        $id = array_pop($hrefParts);
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "/api/ezp/v2/content/locations?id=$id" )
+            $this->createHttpRequest('GET', "/api/ezp/v2/content/locations?id=$id")
         );
 
-        self::assertHttpResponseCodeEquals( $response, 307 );
-        self::assertHttpResponseHasHeader( $response, 'Location', $locationHref );
+        self::assertHttpResponseCodeEquals($response, 307);
+        self::assertHttpResponseHasHeader($response, 'Location', $locationHref);
     }
 
     /**
      * @depends testCreateLocation
      * @covers GET /content/locations/{locationPath}
      */
-    public function testLoadLocation( $locationHref )
+    public function testLoadLocation($locationHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'GET', $locationHref )
+            $this->createHttpRequest('GET', $locationHref)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @depends testCreateLocation
      * @covers COPY /content/locations/{locationPath}
+     *
      * @return string the created location's href
      */
-    public function testCopySubtree( $locationHref )
+    public function testCopySubtree($locationHref)
     {
-        $request = $this->createHttpRequest( 'COPY', $locationHref );
-        $request->addHeader( 'Destination: /api/ezp/v2/content/locations/1/43' );
-        $response = $this->sendHttpRequest( $request );
+        $request = $this->createHttpRequest('COPY', $locationHref);
+        $request->addHeader('Destination: /api/ezp/v2/content/locations/1/43');
+        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals( $response, 201 );
-        self::assertHttpResponseHasHeader( $response, 'Location' );
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
 
-        return $response->getHeader( 'Location' );
+        return $response->getHeader('Location');
     }
 
     /**
      * @covers MOVE /content/locations/{locationPath}
      * @depends testCopySubtree
      */
-    public function testMoveSubtree( $locationHref )
+    public function testMoveSubtree($locationHref)
     {
-        $request = $this->createHttpRequest( 'MOVE', $locationHref );
-        $request->addHeader( 'Destination: /api/ezp/v2/content/locations/1/5' );
-        $response = $this->sendHttpRequest( $request );
+        $request = $this->createHttpRequest('MOVE', $locationHref);
+        $request->addHeader('Destination: /api/ezp/v2/content/locations/1/5');
+        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals( $response, 201 );
-        self::assertHttpResponseHasHeader( $response, 'Location' );
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
     }
 
     /**
      * @depends testCreateLocation
      * @covers GET /content/objects/{contentId}/locations
      */
-    public function testLoadLocationsForContent( $contentHref)
+    public function testLoadLocationsForContent($contentHref)
     {
-
     }
 
     /**
      * @depends testCreateLocation
      * @covers SWAP /content/locations/{locationPath}
      */
-    public function testSwapLocation( $locationHref )
+    public function testSwapLocation($locationHref)
     {
-        self::markTestSkipped( "@todo Implement" );
+        self::markTestSkipped('@todo Implement');
 
         /*$content = $this->createFolder( __FUNCTION__, "/api/ezp/v2/content/locations/1/2" );
 
@@ -151,21 +153,21 @@ XML;
      * @depends testCreateLocation
      * @covers GET /content/locations/{locationPath}/children
      */
-    public function testLoadLocationChildren( $locationHref)
+    public function testLoadLocationChildren($locationHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "$locationHref/children", '', 'LocationList+json' )
+            $this->createHttpRequest('GET', "$locationHref/children", '', 'LocationList+json')
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
-        self::assertHttpResponseHasHeader( $response, 'Content-Type', $this->generateMediaTypeString( 'LocationList+json' ) );
+        self::assertHttpResponseCodeEquals($response, 200);
+        self::assertHttpResponseHasHeader($response, 'Content-Type', $this->generateMediaTypeString('LocationList+json'));
     }
 
     /**
      * @covers PATCH /content/locations/{locationPath}
      * @depends testCreateLocation
      */
-    public function testUpdateLocation( $locationHref )
+    public function testUpdateLocation($locationHref)
     {
         $body = <<< XML
 <LocationUpdate>
@@ -175,24 +177,24 @@ XML;
 </LocationUpdate>
 XML;
 
-        $request = $this->createHttpRequest( 'PATCH', $locationHref, 'LocationUpdate+xml', 'Location+json' );
-        $request->setContent( $body );
+        $request = $this->createHttpRequest('PATCH', $locationHref, 'LocationUpdate+xml', 'Location+json');
+        $request->setContent($body);
 
-        $response = $this->sendHttpRequest( $request );
+        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @depends testCreateLocation
      * @covers DELETE /content/locations/{path}
      */
-    public function testDeleteSubtree( $locationHref)
+    public function testDeleteSubtree($locationHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( 'DELETE', $locationHref )
+            $this->createHttpRequest('DELETE', $locationHref)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 204 );
+        self::assertHttpResponseCodeEquals($response, 204);
     }
 }

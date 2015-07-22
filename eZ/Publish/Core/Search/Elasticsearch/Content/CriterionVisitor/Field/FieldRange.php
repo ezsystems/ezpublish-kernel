@@ -1,35 +1,35 @@
 <?php
+
 /**
- * File containing the range FieldRange Field criterion visitor class
+ * File containing the range FieldRange Field criterion visitor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor\Field;
 
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher as Dispatcher;
-use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor\Field;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use RuntimeException;
 
 /**
- * Visits the Field criterion with range operators (LT, LTE, GT, GTE and BETWEEN)
+ * Visits the Field criterion with range operators (LT, LTE, GT, GTE and BETWEEN).
  */
 class FieldRange extends Field
 {
     /**
-     * Check if visitor is applicable to current criterion
+     * Check if visitor is applicable to current criterion.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return boolean
+     * @return bool
      */
-    public function canVisit( Criterion $criterion )
+    public function canVisit(Criterion $criterion)
     {
         return
             $criterion instanceof Criterion\Field &&
@@ -51,13 +51,12 @@ class FieldRange extends Field
      *
      * @return array
      */
-    protected function getCondition( Criterion $criterion )
+    protected function getCondition(Criterion $criterion)
     {
-        $fieldNames = $this->getFieldNames( $criterion, $criterion->target );
+        $fieldNames = $this->getFieldNames($criterion, $criterion->target);
         $value = (array)$criterion->value;
 
-        if ( empty( $fieldNames ) )
-        {
+        if (empty($fieldNames)) {
             throw new InvalidArgumentException(
                 "\$criterion->target",
                 "No searchable fields found for the given criterion target '{$criterion->target}'."
@@ -65,29 +64,27 @@ class FieldRange extends Field
         }
 
         $start = $value[0];
-        $end = isset( $value[1] ) ? $value[1] : null;
-        if ( ( $criterion->operator === Operator::LT ) || ( $criterion->operator === Operator::LTE ) )
-        {
+        $end = isset($value[1]) ? $value[1] : null;
+        if (($criterion->operator === Operator::LT) || ($criterion->operator === Operator::LTE)) {
             $end = $start;
             $start = null;
         }
 
         $fields = array();
-        foreach ( $fieldNames as $name )
-        {
-            $fields[] = "fields_doc." . $name;
+        foreach ($fieldNames as $name) {
+            $fields[] = 'fields_doc.' . $name;
         }
 
         return array(
-            "query_string" => array(
-                "fields" => $fields,
-                "query" => $this->getQueryRange( $criterion->operator, $start, $end ),
+            'query_string' => array(
+                'fields' => $fields,
+                'query' => $this->getQueryRange($criterion->operator, $start, $end),
             ),
         );
     }
 
     /**
-     * Map field value to a proper Elasticsearch filter representation
+     * Map field value to a proper Elasticsearch filter representation.
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
@@ -97,25 +94,24 @@ class FieldRange extends Field
      *
      * @return mixed
      */
-    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters )
+    public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters)
     {
         $filter = array(
-            "nested" => array(
-                "path" => "fields_doc",
-                "filter" => array(
-                    "query" => $this->getCondition( $criterion ),
+            'nested' => array(
+                'path' => 'fields_doc',
+                'filter' => array(
+                    'query' => $this->getCondition($criterion),
                 ),
             ),
         );
 
-        $fieldFilter = $this->getFieldFilter( $fieldFilters );
+        $fieldFilter = $this->getFieldFilter($fieldFilters);
 
-        if ( $fieldFilter !== null )
-        {
-            $filter["nested"]["filter"] = array(
-                "and" => array(
+        if ($fieldFilter !== null) {
+            $filter['nested']['filter'] = array(
+                'and' => array(
                     $fieldFilter,
-                    $filter["nested"]["filter"],
+                    $filter['nested']['filter'],
                 ),
             );
         }
@@ -124,7 +120,7 @@ class FieldRange extends Field
     }
 
     /**
-     * Map field value to a proper Elasticsearch query representation
+     * Map field value to a proper Elasticsearch query representation.
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
@@ -134,35 +130,32 @@ class FieldRange extends Field
      *
      * @return mixed
      */
-    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters )
+    public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters)
     {
         $query = array(
-            "bool" => array(
-                "should" => $this->getCondition( $criterion ),
-                "minimum_should_match" => 1,
+            'bool' => array(
+                'should' => $this->getCondition($criterion),
+                'minimum_should_match' => 1,
             ),
         );
 
-        $fieldFilter = $this->getFieldFilter( $fieldFilters );
+        $fieldFilter = $this->getFieldFilter($fieldFilters);
 
-        if ( $fieldFilter === null )
-        {
+        if ($fieldFilter === null) {
             $query = array(
-                "nested" => array(
-                    "path" => "fields_doc",
-                    "query" => $this->getCondition( $criterion ),
+                'nested' => array(
+                    'path' => 'fields_doc',
+                    'query' => $this->getCondition($criterion),
                 ),
             );
-        }
-        else
-        {
+        } else {
             $query = array(
-                "nested" => array(
-                    "path" => "fields_doc",
-                    "query" => array(
-                        "filtered" => array(
-                            "query" => $this->getCondition( $criterion ),
-                            "filter" => $fieldFilter,
+                'nested' => array(
+                    'path' => 'fields_doc',
+                    'query' => array(
+                        'filtered' => array(
+                            'query' => $this->getCondition($criterion),
+                            'filter' => $fieldFilter,
                         ),
                     ),
                 ),

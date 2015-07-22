@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RestContentTypeBase ValueObjectVisitor class
+ * File containing the RestContentTypeBase ValueObjectVisitor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,7 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\API\Repository\Values;
 
 /**
- * Base for RestContentType related value object visitors
+ * Base for RestContentType related value object visitors.
  */
 abstract class RestContentTypeBase extends ValueObjectVisitor
 {
@@ -25,10 +27,9 @@ abstract class RestContentTypeBase extends ValueObjectVisitor
      *
      * @return string
      */
-    protected function getUrlTypeSuffix( $contentTypeStatus )
+    protected function getUrlTypeSuffix($contentTypeStatus)
     {
-        switch ( $contentTypeStatus )
-        {
+        switch ($contentTypeStatus) {
             case Values\ContentType\ContentType::STATUS_DEFINED:
                 return '';
 
@@ -43,16 +44,15 @@ abstract class RestContentTypeBase extends ValueObjectVisitor
     }
 
     /**
-     * Serializes the given $contentTypeStatus to a string representation
+     * Serializes the given $contentTypeStatus to a string representation.
      *
      * @param int $contentTypeStatus
      *
      * @return string
      */
-    protected function serializeStatus( $contentTypeStatus )
+    protected function serializeStatus($contentTypeStatus)
     {
-        switch ( $contentTypeStatus )
-        {
+        switch ($contentTypeStatus) {
             case Values\ContentType\ContentType::STATUS_DEFINED:
                 return 'DEFINED';
 
@@ -63,6 +63,6 @@ abstract class RestContentTypeBase extends ValueObjectVisitor
                 return 'MODIFIED';
         }
 
-        throw new \RuntimeException( "Unknown content type status: '{$contentTypeStatus}'." );
+        throw new \RuntimeException("Unknown content type status: '{$contentTypeStatus}'.");
     }
 }

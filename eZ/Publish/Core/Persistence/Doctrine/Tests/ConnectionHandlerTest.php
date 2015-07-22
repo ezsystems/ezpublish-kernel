@@ -9,9 +9,9 @@ class ConnectionHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider dataDsn
      */
-    public function testParseDSN( $expected, $dsn )
+    public function testParseDSN($expected, $dsn)
     {
-        $this->assertEquals( $expected, ConnectionHandler::parseDSN( $dsn ) );
+        $this->assertEquals($expected, ConnectionHandler::parseDSN($dsn));
     }
 
     /**
@@ -22,19 +22,19 @@ class ConnectionHandlerTest extends \PHPUnit_Framework_TestCase
         return array(
             array(
                 array(
-                    'driver'   => 'pdo_pgsql',
+                    'driver' => 'pdo_pgsql',
                     'user' => 'postgres',
-                    'host'     => 'localhost',
-                    'dbname'   => 'eztest',
+                    'host' => 'localhost',
+                    'dbname' => 'eztest',
                 ),
-                'pgsql://postgres@localhost/eztest'
+                'pgsql://postgres@localhost/eztest',
             ),
             array(
                 array(
-                    'driver'   => 'pdo_mysql',
+                    'driver' => 'pdo_mysql',
                     'user' => 'root',
-                    'host'     => 'localhost',
-                    'dbname'   => 'eztest',
+                    'host' => 'localhost',
+                    'dbname' => 'eztest',
                 ),
                 'mysql://root@localhost/eztest',
             ),
@@ -51,14 +51,14 @@ class ConnectionHandlerTest extends \PHPUnit_Framework_TestCase
                     'path' => 'foo.db',
                 ),
                 'sqlite:///foo.db',
-            )
+            ),
         );
     }
 
     public function testSqliteConnectionSubtype()
     {
-        $handler = ConnectionHandler::createFromDSN( 'sqlite://:memory:' );
+        $handler = ConnectionHandler::createFromDSN('sqlite://:memory:');
 
-        $this->assertInstanceOf( 'eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler\SqliteConnectionHandler', $handler );
+        $this->assertInstanceOf('eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler\SqliteConnectionHandler', $handler);
     }
 }

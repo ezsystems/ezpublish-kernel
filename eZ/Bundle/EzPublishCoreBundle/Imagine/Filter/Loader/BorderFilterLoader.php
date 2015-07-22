@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the BorderFilterLoad class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,25 +26,22 @@ class BorderFilterLoader implements LoaderInterface
 {
     const DEFAULT_BORDER_COLOR = '#000';
 
-    public function load( ImageInterface $image, array $options = array() )
+    public function load(ImageInterface $image, array $options = array())
     {
-        $optionsCount = count( $options );
-        if ( $optionsCount < 2 )
-        {
-            throw new InvalidArgumentException( 'Invalid options for border filter. You must provide array(width, height)' );
+        $optionsCount = count($options);
+        if ($optionsCount < 2) {
+            throw new InvalidArgumentException('Invalid options for border filter. You must provide array(width, height)');
         }
 
         $color = static::DEFAULT_BORDER_COLOR;
-        if ( $optionsCount > 2 )
-        {
-            list( $width, $height, $color ) = $options;
-        }
-        else
-        {
-            list( $width, $height ) = $options;
+        if ($optionsCount > 2) {
+            list($width, $height, $color) = $options;
+        } else {
+            list($width, $height) = $options;
         }
 
-        $border = new Border( $image->palette()->color( $color ), $width, $height );
-        return $border->apply( $image );
+        $border = new Border($image->palette()->color($color), $width, $height);
+
+        return $border->apply($image);
     }
 }

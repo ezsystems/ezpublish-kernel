@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -14,7 +15,7 @@ class OriginalDirectoryVariationPathGeneratorTest extends \PHPUnit_Framework_Tes
         $generator = new OriginalDirectoryVariationPathGenerator();
         self::assertEquals(
             'path/to/original_large.png',
-            $generator->getVariationPath( 'path/to/original.png', 'large' )
+            $generator->getVariationPath('path/to/original.png', 'large')
         );
     }
 }

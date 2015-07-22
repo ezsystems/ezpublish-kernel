@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RoleCreateStruct class
+ * File containing the RoleCreateStruct class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,17 +28,17 @@ class RoleCreateStruct extends APIRoleCreateStruct
     private $policies = array();
 
     /**
-     * Instantiates a role create class
+     * Instantiates a role create class.
      *
      * @param string $name
      */
-    public function __construct( $name )
+    public function __construct($name)
     {
-        parent::__construct( array( 'identifier' => $name ) );
+        parent::__construct(array('identifier' => $name));
     }
 
     /**
-     * Returns policies associated with the role
+     * Returns policies associated with the role.
      *
      * @return \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[]
      */
@@ -46,11 +48,11 @@ class RoleCreateStruct extends APIRoleCreateStruct
     }
 
     /**
-     * Adds a policy to this role
+     * Adds a policy to this role.
      *
      * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct
      */
-    public function addPolicy( Values\User\PolicyCreateStruct $policyCreateStruct )
+    public function addPolicy(Values\User\PolicyCreateStruct $policyCreateStruct)
     {
         $this->policies[] = $policyCreateStruct;
     }

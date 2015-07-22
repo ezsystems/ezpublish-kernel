@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Test Setup Factory base class
+ * File containing the Test Setup Factory base class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,28 +23,27 @@ class SetupFactory extends APILegacySetupFactory
     /**
      * @var string
      */
-    protected $repositoryReference = "ezpublish.api.inner_repository";
+    protected $repositoryReference = 'ezpublish.api.inner_repository';
 
     /**
-     * Returns the service container used for initialization of the repository
+     * Returns the service container used for initialization of the repository.
      *
      * @return \eZ\Publish\Core\Base\ServiceContainer
      */
     protected function getServiceContainer()
     {
-        if ( !isset( static::$serviceContainer ) )
-        {
-            $config = include __DIR__ . "/../../../../../../../../config.php";
+        if (!isset(static::$serviceContainer)) {
+            $config = include __DIR__ . '/../../../../../../../../config.php';
             $installDir = $config['install_dir'];
 
             /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
             $containerBuilder = include $config['container_builder_path'];
 
-            /** @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
-            $loader->load( 'tests/integration_legacy_core.yml' );
+            /* @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
+            $loader->load('tests/integration_legacy_core.yml');
 
             $containerBuilder->setParameter(
-                "legacy_dsn",
+                'legacy_dsn',
                 static::$dsn
             );
 

@@ -1,24 +1,21 @@
 <?php
+
 /**
  * File containing the IndexRequestListenerTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\IndexRequestListener;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use eZ\Bundle\EzPublishCoreBundle\Kernel;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Routing\RequestContext;
 
 class IndexRequestListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,16 +48,16 @@ class IndexRequestListenerTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
+        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
 
-        $this->indexRequestEventListener = new IndexRequestListener( $this->configResolver );
+        $this->indexRequestEventListener = new IndexRequestListener($this->configResolver);
 
         $this->request = $this
-            ->getMockBuilder( 'Symfony\\Component\\HttpFoundation\\Request' )
-            ->setMethods( array( 'getSession', 'hasSession' ) )
+            ->getMockBuilder('Symfony\\Component\\HttpFoundation\\Request')
+            ->setMethods(array('getSession', 'hasSession'))
             ->getMock();
 
-        $this->httpKernel = $this->getMock( 'Symfony\\Component\\HttpKernel\\HttpKernelInterface' );
+        $this->httpKernel = $this->getMock('Symfony\\Component\\HttpKernel\\HttpKernelInterface');
         $this->event = new GetResponseEvent(
             $this->httpKernel,
             $this->request,
@@ -73,8 +70,8 @@ class IndexRequestListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             array(
                 KernelEvents::REQUEST => array(
-                    array( 'onKernelRequestIndex', 40 ),
-                )
+                    array('onKernelRequestIndex', 40),
+                ),
             ),
             $this->indexRequestEventListener->getSubscribedEvents()
         );
@@ -83,36 +80,36 @@ class IndexRequestListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider indexPageProvider
      */
-    public function testOnKernelRequestIndexOnIndexPage( $requestPath, $configuredIndexPath, $expectedIndexPath )
+    public function testOnKernelRequestIndexOnIndexPage($requestPath, $configuredIndexPath, $expectedIndexPath)
     {
         $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'index_page' )
-            ->will( $this->returnValue( $configuredIndexPath ) );
-        $this->request->attributes->set( 'semanticPathinfo', $requestPath );
-        $this->indexRequestEventListener->onKernelRequestIndex( $this->event );
-        $this->assertEquals( $expectedIndexPath, $this->request->attributes->get( 'semanticPathinfo' ) );
-        $this->assertTrue( $this->request->attributes->get( 'needsForward' ) );
+            ->expects($this->once())
+            ->method('getParameter')
+            ->with('index_page')
+            ->will($this->returnValue($configuredIndexPath));
+        $this->request->attributes->set('semanticPathinfo', $requestPath);
+        $this->indexRequestEventListener->onKernelRequestIndex($this->event);
+        $this->assertEquals($expectedIndexPath, $this->request->attributes->get('semanticPathinfo'));
+        $this->assertTrue($this->request->attributes->get('needsForward'));
     }
 
     public function indexPageProvider()
     {
         return array(
-            array( '/', '/foo', '/foo' ),
-            array( '/', '/foo/', '/foo/' ),
-            array( '/', '/foo/bar', '/foo/bar' ),
-            array( '/', 'foo/bar', '/foo/bar' ),
-            array( '', 'foo/bar', '/foo/bar' ),
-            array( '', '/foo/bar', '/foo/bar' ),
-            array( '', '/foo/bar/', '/foo/bar/' ),
+            array('/', '/foo', '/foo'),
+            array('/', '/foo/', '/foo/'),
+            array('/', '/foo/bar', '/foo/bar'),
+            array('/', 'foo/bar', '/foo/bar'),
+            array('', 'foo/bar', '/foo/bar'),
+            array('', '/foo/bar', '/foo/bar'),
+            array('', '/foo/bar/', '/foo/bar/'),
         );
     }
 
     public function testOnKernelRequestIndexNotOnIndexPage()
     {
-        $this->request->attributes->set( 'semanticPathinfo', '/anyContent' );
-        $this->indexRequestEventListener->onKernelRequestIndex( $this->event );
-        $this->assertFalse( $this->request->attributes->has( 'needsForward' ) );
+        $this->request->attributes->set('semanticPathinfo', '/anyContent');
+        $this->indexRequestEventListener->onKernelRequestIndex($this->event);
+        $this->assertFalse($this->request->attributes->has('needsForward'));
     }
 }

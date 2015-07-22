@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the AuthorTest class
+ * File containing the AuthorTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,7 +18,7 @@ use PHPUnit_Framework_TestCase;
 use DOMDocument;
 
 /**
- * Test case for Author converter in Legacy storage
+ * Test case for Author converter in Legacy storage.
  *
  * @group fieldType
  * @group ezauthor
@@ -36,17 +38,17 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->converter = new AuthorConverter;
+        $this->converter = new AuthorConverter();
         $this->authors = array(
-            array( 'id' => 21, 'name' => 'Boba Fett', 'email' => 'boba.fett@bountyhunters.com' ),
-            array( 'id' => 42, 'name' => 'Darth Vader', 'email' => 'darth.vader@evilempire.biz' ),
-            array( 'id' => 63, 'name' => 'Luke Skywalker', 'email' => 'luke@imtheone.net' )
+            array('id' => 21, 'name' => 'Boba Fett', 'email' => 'boba.fett@bountyhunters.com'),
+            array('id' => 42, 'name' => 'Darth Vader', 'email' => 'darth.vader@evilempire.biz'),
+            array('id' => 63, 'name' => 'Luke Skywalker', 'email' => 'luke@imtheone.net'),
         );
     }
 
     protected function tearDown()
     {
-        unset( $this->authors );
+        unset($this->authors);
         parent::tearDown();
     }
 
@@ -55,35 +57,32 @@ class AuthorTest extends PHPUnit_Framework_TestCase
      */
     public function testToStorageValue()
     {
-        $value = new FieldValue;
+        $value = new FieldValue();
         $value->data = $this->authors;
-        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue = new StorageFieldValue();
 
-        $this->converter->toStorageValue( $value, $storageFieldValue );
-        $doc = new DOMDocument( '1.0', 'utf-8' );
-        self::assertTrue( $doc->loadXML( $storageFieldValue->dataText ) );
+        $this->converter->toStorageValue($value, $storageFieldValue);
+        $doc = new DOMDocument('1.0', 'utf-8');
+        self::assertTrue($doc->loadXML($storageFieldValue->dataText));
 
-        $authorsXml = $doc->getElementsByTagName( 'author' );
-        self::assertSame( count( $this->authors ), $authorsXml->length );
+        $authorsXml = $doc->getElementsByTagName('author');
+        self::assertSame(count($this->authors), $authorsXml->length);
 
         // Loop against XML nodes and compare them to the real Author objects.
         // Then remove Author from $this->authors
         // This way, we can check if all authors have been converted in XML
-        foreach ( $authorsXml as $authorXml )
-        {
-            foreach ( $this->authors as $i => $author )
-            {
-                if ( $authorXml->getAttribute( 'id' ) == $author["id"] )
-                {
-                    self::assertSame( $author["name"], $authorXml->getAttribute( 'name' ) );
-                    self::assertSame( $author["email"], $authorXml->getAttribute( 'email' ) );
-                    unset( $this->authors[$i] );
+        foreach ($authorsXml as $authorXml) {
+            foreach ($this->authors as $i => $author) {
+                if ($authorXml->getAttribute('id') == $author['id']) {
+                    self::assertSame($author['name'], $authorXml->getAttribute('name'));
+                    self::assertSame($author['email'], $authorXml->getAttribute('email'));
+                    unset($this->authors[$i]);
                     break;
                 }
             }
         }
 
-        self::assertEmpty( $this->authors, 'All authors have not been converted as expected' );
+        self::assertEmpty($this->authors, 'All authors have not been converted as expected');
     }
 
     /**
@@ -91,7 +90,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldValue()
     {
-        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue = new StorageFieldValue();
         $storageFieldValue->dataText = <<<EOT
 <?xml version="1.0" encoding="utf-8"?>
 <ezauthor>
@@ -102,31 +101,28 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     </authors>
 </ezauthor>
 EOT;
-        $doc = new DOMDocument( '1.0', 'utf-8' );
-        self::assertTrue( $doc->loadXML( $storageFieldValue->dataText ) );
-        $authorsXml = $doc->getElementsByTagName( 'author' );
-        $fieldValue = new FieldValue;
+        $doc = new DOMDocument('1.0', 'utf-8');
+        self::assertTrue($doc->loadXML($storageFieldValue->dataText));
+        $authorsXml = $doc->getElementsByTagName('author');
+        $fieldValue = new FieldValue();
 
-        $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInternalType( 'array', $fieldValue->data );
+        $this->converter->toFieldValue($storageFieldValue, $fieldValue);
+        self::assertInternalType('array', $fieldValue->data);
 
-        $authorsXml = $doc->getElementsByTagName( 'author' );
-        self::assertSame( $authorsXml->length, count( $fieldValue->data ) );
+        $authorsXml = $doc->getElementsByTagName('author');
+        self::assertSame($authorsXml->length, count($fieldValue->data));
 
         $aAuthors = $fieldValue->data;
-        foreach ( $fieldValue->data as $i => $author )
-        {
-            foreach ( $authorsXml as $authorXml )
-            {
-                if ( $authorXml->getAttribute( 'id' ) == $author["id"] )
-                {
-                    self::assertSame( $authorXml->getAttribute( 'name' ), $author["name"] );
-                    self::assertSame( $authorXml->getAttribute( 'email' ), $author["email"] );
+        foreach ($fieldValue->data as $i => $author) {
+            foreach ($authorsXml as $authorXml) {
+                if ($authorXml->getAttribute('id') == $author['id']) {
+                    self::assertSame($authorXml->getAttribute('name'), $author['name']);
+                    self::assertSame($authorXml->getAttribute('email'), $author['email']);
                     unset($aAuthors[$i]);
                     break;
                 }
             }
         }
-        self::assertEmpty( $aAuthors, 'All authors have not been converted as expected from storage' );
+        self::assertEmpty($aAuthors, 'All authors have not been converted as expected from storage');
     }
 }

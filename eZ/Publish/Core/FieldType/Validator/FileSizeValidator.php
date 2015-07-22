@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the FileSizeValidator class
+ * File containing the FileSizeValidator class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,32 +23,29 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 class FileSizeValidator extends Validator
 {
     protected $constraints = array(
-        'maxFileSize' => false
+        'maxFileSize' => false,
     );
 
     protected $constraintsSchema = array(
-        "maxFileSize" => array(
-            "type" => "int",
-            "default" => false
-        )
+        'maxFileSize' => array(
+            'type' => 'int',
+            'default' => false,
+        ),
     );
 
-    public function validateConstraints( $constraints )
+    public function validateConstraints($constraints)
     {
         $validationErrors = array();
 
-        foreach ( $constraints as $name => $value )
-        {
-            switch ( $name )
-            {
-                case "maxFileSize":
-                    if ( $value !== false && !is_integer( $value ) )
-                    {
+        foreach ($constraints as $name => $value) {
+            switch ($name) {
+                case 'maxFileSize':
+                    if ($value !== false && !is_integer($value)) {
                         $validationErrors[] = new ValidationError(
                             "Validator parameter '%parameter%' value must be of integer type",
                             null,
                             array(
-                                "parameter" => $name
+                                'parameter' => $name,
                             )
                         );
                     }
@@ -56,7 +55,7 @@ class FileSizeValidator extends Validator
                         "Validator parameter '%parameter%' is unknown",
                         null,
                         array(
-                            "parameter" => $name
+                            'parameter' => $name,
                         )
                     );
             }
@@ -66,23 +65,22 @@ class FileSizeValidator extends Validator
     }
 
     /**
-     * Checks if $value->file has the appropriate size
+     * Checks if $value->file has the appropriate size.
      *
      * @param \eZ\Publish\Core\FieldType\BinaryFile\Value $value
      *
-     * @return boolean
+     * @return bool
      */
-    public function validate( BaseValue $value )
+    public function validate(BaseValue $value)
     {
         $isValid = true;
 
-        if ( $this->constraints['maxFileSize'] !== false && $value->file->size > $this->constraints['maxFileSize'] )
-        {
+        if ($this->constraints['maxFileSize'] !== false && $value->file->size > $this->constraints['maxFileSize']) {
             $this->errors[] = new ValidationError(
-                "The file size cannot exceed %size% byte.",
-                "The file size cannot exceed %size% bytes.",
+                'The file size cannot exceed %size% byte.',
+                'The file size cannot exceed %size% bytes.',
                 array(
-                    "size" => $this->constraints['maxFileSize']
+                    'size' => $this->constraints['maxFileSize'],
                 )
             );
             $isValid = false;

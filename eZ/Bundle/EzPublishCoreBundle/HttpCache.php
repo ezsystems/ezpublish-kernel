@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the HttpCache class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,49 +22,41 @@ abstract class HttpCache extends EventDispatchingHttpCache
 {
     protected function createStore()
     {
-        return new LocationAwareStore( $this->cacheDir ?: $this->kernel->getCacheDir() . '/http_cache' );
+        return new LocationAwareStore($this->cacheDir ?: $this->kernel->getCacheDir() . '/http_cache');
     }
 
     /**
      * Handle invalidation, including Http PURGE requests.
-     * All non-allowed PURGE requests will receive an HTTP 405
+     * All non-allowed PURGE requests will receive an HTTP 405.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param boolean $catch
+     * @param bool $catch
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function invalidate( Request $request, $catch = false )
+    protected function invalidate(Request $request, $catch = false)
     {
-        if ( $request->getMethod() !== 'PURGE' && $request->getMethod() !== 'BAN' )
-        {
-            return parent::invalidate( $request, $catch );
+        if ($request->getMethod() !== 'PURGE' && $request->getMethod() !== 'BAN') {
+            return parent::invalidate($request, $catch);
         }
 
         // Reject all non-authorized clients
-        if ( !$this->isInternalRequestAllowed( $request ) )
-        {
-            return new Response( '', 405 );
+        if (!$this->isInternalRequestAllowed($request)) {
+            return new Response('', 405);
         }
 
         $response = new Response();
         $store = $this->getStore();
-        if ( $store instanceof RequestAwarePurger )
-        {
-            $result = $store->purgeByRequest( $request );
-        }
-        else
-        {
-            $result = $store->purge( $request->getUri() );
+        if ($store instanceof RequestAwarePurger) {
+            $result = $store->purgeByRequest($request);
+        } else {
+            $result = $store->purge($request->getUri());
         }
 
-        if ( $result === true )
-        {
-            $response->setStatusCode( 200, 'Purged' );
-        }
-        else
-        {
-            $response->setStatusCode( 404, 'Not purged' );
+        if ($result === true) {
+            $response->setStatusCode(200, 'Purged');
+        } else {
+            $response->setStatusCode(404, 'Not purged');
         }
 
         return $response;
@@ -74,30 +68,32 @@ abstract class HttpCache extends EventDispatchingHttpCache
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return boolean
+     * @return bool
      */
-    protected function isInternalRequestAllowed( Request $request )
+    protected function isInternalRequestAllowed(Request $request)
     {
-        if ( !$this->isInternalIPAllowed( $request->getClientIp() ) )
+        if (!$this->isInternalIPAllowed($request->getClientIp())) {
             return false;
+        }
 
         return true;
     }
 
     /**
-     * Checks if $ip is allowed for Http PURGE requests
+     * Checks if $ip is allowed for Http PURGE requests.
      *
      * @todo Check subnets
      *
      * @param string $ip
      *
-     * @return boolean
+     * @return bool
      */
-    protected function isInternalIPAllowed( $ip )
+    protected function isInternalIPAllowed($ip)
     {
-        $allowedIps = array_fill_keys( $this->getInternalAllowedIPs(), true );
-        if ( !isset( $allowedIps[$ip] ) )
+        $allowedIps = array_fill_keys($this->getInternalAllowedIPs(), true);
+        if (!isset($allowedIps[$ip])) {
             return false;
+        }
 
         return true;
     }
@@ -109,11 +105,11 @@ abstract class HttpCache extends EventDispatchingHttpCache
      */
     protected function getInternalAllowedIPs()
     {
-        return array( '127.0.0.1', '::1', 'fe80::1' );
+        return array('127.0.0.1', '::1', 'fe80::1');
     }
 
     protected function getDefaultSubscribers()
     {
-        return [new UserContextSubscriber( ['user_hash_header' => 'X-User-Hash', 'session_name_prefix' => 'eZSESSID'] )];
+        return [new UserContextSubscriber(['user_hash_header' => 'X-User-Hash', 'session_name_prefix' => 'eZSESSID'])];
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-return array (
-    'ezurlalias_ml' => array (
-        0 => array (
+return array(
+    'ezurlalias_ml' => array(
+        0 => array(
             'action' => 'eznode:2',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -15,7 +15,7 @@ return array (
             'text' => '',
             'text_md5' => 'd41d8cd98f00b204e9800998ecf8427e',
         ),
-        1 => array (
+        1 => array(
             'action' => 'eznode:314',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -28,7 +28,7 @@ return array (
             'text' => 'jedan',
             'text_md5' => '6896260129051a949051c3847c34466f',
         ),
-        2 => array (
+        2 => array(
             'action' => 'eznode:315',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -42,7 +42,7 @@ return array (
             'text_md5' => 'c67ed9a09ab136fae610b6a087d82e21',
         ),
     ),
-    'ezcontent_language' => array (
+    'ezcontent_language' => array(
         0 => array(
             'disabled' => 0,
             'id' => 2,
@@ -50,16 +50,15 @@ return array (
             'name' => 'Croatian (Hrvatski)'
         ),
     ),
-    'ezurlalias_ml_incr' => array (
-        0 => array (
+    'ezurlalias_ml_incr' => array(
+        0 => array(
             'id' => '1',
         ),
-        1 => array (
+        1 => array(
             'id' => '2',
         ),
-        2 => array (
+        2 => array(
             'id' => '3',
         ),
     ),
 );
-

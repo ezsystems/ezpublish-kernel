@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Language Gateway class
+ * File containing the Language Gateway class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,183 +18,144 @@ use PDOException;
 use RuntimeException;
 
 /**
- * Language Handler
+ * Language Handler.
  */
 class ExceptionConversion extends Gateway
 {
     /**
-     * The wrapped gateway
+     * The wrapped gateway.
      *
      * @var Gateway
      */
     protected $innerGateway;
 
     /**
-     * Creates a new exception conversion gateway around $innerGateway
+     * Creates a new exception conversion gateway around $innerGateway.
      *
      * @param Gateway $innerGateway
      */
-    public function __construct( Gateway $innerGateway )
+    public function __construct(Gateway $innerGateway)
     {
         $this->innerGateway = $innerGateway;
     }
 
     /**
-     * Inserts the given $language
+     * Inserts the given $language.
      *
      * @param Language $language
      *
      * @return int ID of the new language
      */
-    public function insertLanguage( Language $language )
+    public function insertLanguage(Language $language)
     {
-        try
-        {
-            return $this->innerGateway->insertLanguage( $language );
-        }
-        catch ( DBALException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->insertLanguage($language);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Updates the data of the given $language
+     * Updates the data of the given $language.
      *
      * @param Language $language
-     *
-     * @return void
      */
-    public function updateLanguage( Language $language )
+    public function updateLanguage(Language $language)
     {
-        try
-        {
-            return $this->innerGateway->updateLanguage( $language );
-        }
-        catch ( DBALException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->updateLanguage($language);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Loads data for the Language with $id
+     * Loads data for the Language with $id.
      *
      * @param int $id
      *
      * @return string[][]
      */
-    public function loadLanguageData( $id )
+    public function loadLanguageData($id)
     {
-        try
-        {
-            return $this->innerGateway->loadLanguageData( $id );
-        }
-        catch ( DBALException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->loadLanguageData($id);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Loads data for the Language with Language Code (eg: eng-GB)
+     * Loads data for the Language with Language Code (eg: eng-GB).
      *
      * @param string $languageCode
      *
      * @return string[][]
      */
-    public function loadLanguageDataByLanguageCode( $languageCode )
+    public function loadLanguageDataByLanguageCode($languageCode)
     {
-        try
-        {
-            return $this->innerGateway->loadLanguageDataByLanguageCode( $languageCode );
-        }
-        catch ( DBALException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->loadLanguageDataByLanguageCode($languageCode);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Loads the data for all languages
+     * Loads the data for all languages.
      *
      * @return string[][]
      */
     public function loadAllLanguagesData()
     {
-        try
-        {
+        try {
             return $this->innerGateway->loadAllLanguagesData();
-        }
-        catch ( DBALException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Deletes the language with $id
+     * Deletes the language with $id.
      *
      * @param int $id
-     *
-     * @return void
      */
-    public function deleteLanguage( $id )
+    public function deleteLanguage($id)
     {
-        try
-        {
-            return $this->innerGateway->deleteLanguage( $id );
-        }
-        catch ( DBALException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->deleteLanguage($id);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 
     /**
-     * Check whether a language may be deleted
+     * Check whether a language may be deleted.
      *
      * @param int $id
      *
-     * @return boolean
+     * @return bool
      */
-    public function canDeleteLanguage( $id )
+    public function canDeleteLanguage($id)
     {
-        try
-        {
-            return $this->innerGateway->canDeleteLanguage( $id );
-        }
-        catch ( DBALException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->canDeleteLanguage($id);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 }

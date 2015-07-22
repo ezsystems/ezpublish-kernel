@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\Content\ContentInfo class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -31,21 +33,21 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class ContentInfo extends ValueObject
 {
     /**
-     * The unique id of the Content object
+     * The unique id of the Content object.
      *
      * @var mixed
      */
     protected $id;
 
     /**
-     * The Content Type id of the Content object
+     * The Content Type id of the Content object.
      *
      * @var mixed
      */
     protected $contentTypeId;
 
     /**
-     * The computed name (via name schema) in the main language of the Content object
+     * The computed name (via name schema) in the main language of the Content object.
      *
      * For names in other languages then main see {@see \eZ\Publish\API\Repository\Values\Content\VersionInfo}
      *
@@ -54,7 +56,7 @@ class ContentInfo extends ValueObject
     protected $name;
 
     /**
-     * The section to which the Content object is assigned
+     * The section to which the Content object is assigned.
      *
      * @var mixed
      */
@@ -69,55 +71,56 @@ class ContentInfo extends ValueObject
     protected $currentVersionNo;
 
     /**
-     * True if there exists a published version, false otherwise
+     * True if there exists a published version, false otherwise.
      *
-     * @var boolean Constant.
+     * @var bool Constant.
      */
     protected $published;
 
     /**
-     * The owner of the Content object
+     * The owner of the Content object.
      *
      * @var mixed
      */
     protected $ownerId;
 
     /**
-     * Content modification date
+     * Content modification date.
      *
      * @var \DateTime
      */
     protected $modificationDate;
 
     /**
-     * Content publication date
+     * Content publication date.
      *
      * @var \DateTime
      */
     protected $publishedDate;
 
     /**
-     * Indicates if the Content object is shown in the mainlanguage if its not present in an other requested language
+     * Indicates if the Content object is shown in the mainlanguage if its not present in an other requested language.
      *
-     * @var boolean
+     * @var bool
      */
     protected $alwaysAvailable;
 
     /**
-     * Remote identifier used as a custom identifier for the object
+     * Remote identifier used as a custom identifier for the object.
+     *
      * @var string
      */
     protected $remoteId;
 
     /**
-     * The main language code of the Content object
+     * The main language code of the Content object.
      *
      * @var string
      */
     protected $mainLanguageCode;
 
-     /**
-     * Identifier of the main location
+    /**
+     * Identifier of the main location.
      *
      * If the Content object has multiple locations,
      * $mainLocationId will point to the main one.

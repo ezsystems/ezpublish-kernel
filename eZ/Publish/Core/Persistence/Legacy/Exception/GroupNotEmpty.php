@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the GroupNotEmpty exception class
+ * File containing the GroupNotEmpty exception class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,15 +20,15 @@ use eZ\Publish\Core\Base\Exceptions\BadStateException;
 class GroupNotEmpty extends BadStateException
 {
     /**
-     * Creates a new exception for $groupId
+     * Creates a new exception for $groupId.
      *
      * @param mixed $groupId
      */
-    public function __construct( $groupId )
+    public function __construct($groupId)
     {
         parent::__construct(
             '$groupId',
-            sprintf( 'Group with ID "%s" is not empty.', $groupId )
+            sprintf('Group with ID "%s" is not empty.', $groupId)
         );
     }
 }

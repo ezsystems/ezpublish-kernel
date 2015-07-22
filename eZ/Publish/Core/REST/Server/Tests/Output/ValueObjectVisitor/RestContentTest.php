@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,10 +13,8 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Values\RestContent;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values;
-use eZ\Publish\Core\REST\Common;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class RestContentTest extends ValueObjectVisitorBaseTest
@@ -24,59 +24,59 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      */
     public function testVisitWithoutEmbeddedVersion()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $restContent = $this->getBasicRestContent();
 
-        $this->getVisitorMock()->expects( $this->never() )
-            ->method( 'visitValueObject' );
+        $this->getVisitorMock()->expects($this->never())
+            ->method('visitValueObject');
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadContent',
-            array( 'contentId' => $restContent->contentInfo->id ),
+            array('contentId' => $restContent->contentInfo->id),
             "/content/objects/{$restContent->contentInfo->id}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentType',
-            array( 'contentTypeId' => $restContent->contentInfo->contentTypeId ),
+            array('contentTypeId' => $restContent->contentInfo->contentTypeId),
             "/content/types/{$restContent->contentInfo->contentTypeId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentVersions',
-            array( 'contentId' => $restContent->contentInfo->id ),
+            array('contentId' => $restContent->contentInfo->id),
             "/content/objects/{$restContent->contentInfo->id}/versions"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_redirectCurrentVersion',
-            array( 'contentId' => $restContent->contentInfo->id ),
+            array('contentId' => $restContent->contentInfo->id),
             "/content/objects/{$restContent->contentInfo->id}/currentversion"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadSection',
-            array( 'sectionId' => $restContent->contentInfo->sectionId ),
+            array('sectionId' => $restContent->contentInfo->sectionId),
             "/content/sections/{$restContent->contentInfo->sectionId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocation',
-            array( 'locationPath' => $locationPath = trim( $restContent->mainLocation->pathString, '/' ) ),
+            array('locationPath' => $locationPath = trim($restContent->mainLocation->pathString, '/')),
             "/content/locations/{$locationPath}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocationsForContent',
-            array( 'contentId' => $restContent->contentInfo->id ),
+            array('contentId' => $restContent->contentInfo->id),
             "/content/objects/{$restContent->contentInfo->id}/locations"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadUser',
-            array( 'userId' => $restContent->contentInfo->ownerId ),
+            array('userId' => $restContent->contentInfo->ownerId),
             "/user/users/{$restContent->contentInfo->ownerId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_getObjectStatesForContent',
-            array( 'contentId' => $restContent->contentInfo->id ),
+            array('contentId' => $restContent->contentInfo->id),
             "/content/objects/{$restContent->contentInfo->id}/objectstates"
         );
 
@@ -86,12 +86,12 @@ class RestContentTest extends ValueObjectVisitorBaseTest
             $restContent
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         $dom = new \DOMDocument();
-        $dom->loadXml( $result );
+        $dom->loadXml($result);
 
         return $dom;
     }
@@ -107,7 +107,7 @@ class RestContentTest extends ValueObjectVisitorBaseTest
                     'currentVersionNo' => 5,
                     'published' => true,
                     'ownerId' => 'user23',
-                    'modificationDate' => new \DateTime( '2012-09-05 15:27 Europe/Berlin' ),
+                    'modificationDate' => new \DateTime('2012-09-05 15:27 Europe/Berlin'),
                     'publishedDate' => null,
                     'alwaysAvailable' => true,
                     'remoteId' => 'abc123',
@@ -130,9 +130,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testContentHrefCorrect( \DOMDocument $dom )
+    public function testContentHrefCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content[@href="/content/objects/content23"]'  );
+        $this->assertXPath($dom, '/Content[@href="/content/objects/content23"]');
     }
 
     /**
@@ -140,9 +140,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testContentIdCorrect( \DOMDocument $dom )
+    public function testContentIdCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content[@id="content23"]'  );
+        $this->assertXPath($dom, '/Content[@id="content23"]');
     }
 
     /**
@@ -150,9 +150,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testContentMediaTypeWithoutVersionCorrect( \DOMDocument $dom )
+    public function testContentMediaTypeWithoutVersionCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content[@media-type="application/vnd.ez.api.ContentInfo+xml"]'  );
+        $this->assertXPath($dom, '/Content[@media-type="application/vnd.ez.api.ContentInfo+xml"]');
     }
 
     /**
@@ -160,9 +160,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testContentRemoteIdCorrect( \DOMDocument $dom )
+    public function testContentRemoteIdCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content[@remoteId="abc123"]'  );
+        $this->assertXPath($dom, '/Content[@remoteId="abc123"]');
     }
 
     /**
@@ -170,9 +170,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testContentTypeHrefCorrect( \DOMDocument $dom )
+    public function testContentTypeHrefCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/ContentType[@href="/content/types/contentType23"]'  );
+        $this->assertXPath($dom, '/Content/ContentType[@href="/content/types/contentType23"]');
     }
 
     /**
@@ -180,9 +180,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testContentTypeMediaTypeCorrect( \DOMDocument $dom )
+    public function testContentTypeMediaTypeCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/ContentType[@media-type="application/vnd.ez.api.ContentType+xml"]'  );
+        $this->assertXPath($dom, '/Content/ContentType[@media-type="application/vnd.ez.api.ContentType+xml"]');
     }
 
     /**
@@ -190,9 +190,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testNameCorrect( \DOMDocument $dom )
+    public function testNameCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/Name[text()="Sindelfingen"]'  );
+        $this->assertXPath($dom, '/Content/Name[text()="Sindelfingen"]');
     }
 
     /**
@@ -200,9 +200,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testVersionsHrefCorrect( \DOMDocument $dom )
+    public function testVersionsHrefCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/Versions[@href="/content/objects/content23/versions"]'  );
+        $this->assertXPath($dom, '/Content/Versions[@href="/content/objects/content23/versions"]');
     }
 
     /**
@@ -210,9 +210,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testVersionsMediaTypeCorrect( \DOMDocument $dom )
+    public function testVersionsMediaTypeCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/Versions[@media-type="application/vnd.ez.api.VersionList+xml"]'  );
+        $this->assertXPath($dom, '/Content/Versions[@media-type="application/vnd.ez.api.VersionList+xml"]');
     }
 
     /**
@@ -220,9 +220,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testCurrentVersionHrefCorrect( \DOMDocument $dom )
+    public function testCurrentVersionHrefCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/CurrentVersion[@href="/content/objects/content23/currentversion"]'  );
+        $this->assertXPath($dom, '/Content/CurrentVersion[@href="/content/objects/content23/currentversion"]');
     }
 
     /**
@@ -230,9 +230,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testCurrentVersionMediaTypeCorrect( \DOMDocument $dom )
+    public function testCurrentVersionMediaTypeCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/CurrentVersion[@media-type="application/vnd.ez.api.Version+xml"]'  );
+        $this->assertXPath($dom, '/Content/CurrentVersion[@media-type="application/vnd.ez.api.Version+xml"]');
     }
 
     /**
@@ -240,9 +240,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testSectionHrefCorrect( \DOMDocument $dom )
+    public function testSectionHrefCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/Section[@href="/content/sections/section23"]'  );
+        $this->assertXPath($dom, '/Content/Section[@href="/content/sections/section23"]');
     }
 
     /**
@@ -250,9 +250,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testSectionMediaTypeCorrect( \DOMDocument $dom )
+    public function testSectionMediaTypeCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/Section[@media-type="application/vnd.ez.api.Section+xml"]'  );
+        $this->assertXPath($dom, '/Content/Section[@media-type="application/vnd.ez.api.Section+xml"]');
     }
 
     /**
@@ -260,9 +260,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testMainLocationHrefCorrect( \DOMDocument $dom )
+    public function testMainLocationHrefCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/MainLocation[@href="/content/locations/1/2/23"]'  );
+        $this->assertXPath($dom, '/Content/MainLocation[@href="/content/locations/1/2/23"]');
     }
 
     /**
@@ -270,9 +270,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testMainLocationMediaTypeCorrect( \DOMDocument $dom )
+    public function testMainLocationMediaTypeCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/MainLocation[@media-type="application/vnd.ez.api.Location+xml"]'  );
+        $this->assertXPath($dom, '/Content/MainLocation[@media-type="application/vnd.ez.api.Location+xml"]');
     }
 
     /**
@@ -280,9 +280,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testLocationsHrefCorrect( \DOMDocument $dom )
+    public function testLocationsHrefCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/Locations[@href="/content/objects/content23/locations"]'  );
+        $this->assertXPath($dom, '/Content/Locations[@href="/content/objects/content23/locations"]');
     }
 
     /**
@@ -290,9 +290,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testLocationsMediaTypeCorrect( \DOMDocument $dom )
+    public function testLocationsMediaTypeCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/Locations[@media-type="application/vnd.ez.api.LocationList+xml"]'  );
+        $this->assertXPath($dom, '/Content/Locations[@media-type="application/vnd.ez.api.LocationList+xml"]');
     }
 
     /**
@@ -300,9 +300,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testOwnerHrefCorrect( \DOMDocument $dom )
+    public function testOwnerHrefCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/Owner[@href="/user/users/user23"]'  );
+        $this->assertXPath($dom, '/Content/Owner[@href="/user/users/user23"]');
     }
 
     /**
@@ -310,9 +310,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testOwnerMediaTypeCorrect( \DOMDocument $dom )
+    public function testOwnerMediaTypeCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/Owner[@media-type="application/vnd.ez.api.User+xml"]'  );
+        $this->assertXPath($dom, '/Content/Owner[@media-type="application/vnd.ez.api.User+xml"]');
     }
 
     /**
@@ -320,9 +320,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testLastModificationDateCorrect( \DOMDocument $dom )
+    public function testLastModificationDateCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/lastModificationDate[text()="2012-09-05T15:27:00+02:00"]'  );
+        $this->assertXPath($dom, '/Content/lastModificationDate[text()="2012-09-05T15:27:00+02:00"]');
     }
 
     /**
@@ -330,9 +330,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testMainLanguageCodeCorrect( \DOMDocument $dom )
+    public function testMainLanguageCodeCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/mainLanguageCode[text()="eng-US"]'  );
+        $this->assertXPath($dom, '/Content/mainLanguageCode[text()="eng-US"]');
     }
 
     /**
@@ -340,9 +340,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithoutEmbeddedVersion
      */
-    public function testAlwaysAvailableCorrect( \DOMDocument $dom )
+    public function testAlwaysAvailableCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/alwaysAvailable[text()="true"]'  );
+        $this->assertXPath($dom, '/Content/alwaysAvailable[text()="true"]');
     }
 
     /**
@@ -350,66 +350,66 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      */
     public function testVisitWithEmbeddedVersion()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $restContent = $this->getBasicRestContent();
         $restContent->currentVersion = new Values\Content\Content(
             array(
-                'versionInfo' => new Values\Content\VersionInfo( array( 'versionNo' => 5 ) ),
-                'internalFields' => array()
+                'versionInfo' => new Values\Content\VersionInfo(array('versionNo' => 5)),
+                'internalFields' => array(),
             )
         );
         $restContent->relations = array();
         $restContent->contentType = $this->getMockForAbstractClass(
-            "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType"
+            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'
         );
 
-        $this->getVisitorMock()->expects( $this->once() )
-            ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Server\\Values\\Version' ) );
+        $this->getVisitorMock()->expects($this->once())
+            ->method('visitValueObject')
+            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\Version'));
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadContent',
-            array( 'contentId' => $restContent->contentInfo->id ),
+            array('contentId' => $restContent->contentInfo->id),
             "/content/objects/{$restContent->contentInfo->id}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentType',
-            array( 'contentTypeId' => $restContent->contentInfo->contentTypeId ),
+            array('contentTypeId' => $restContent->contentInfo->contentTypeId),
             "/content/types/{$restContent->contentInfo->contentTypeId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentVersions',
-            array( 'contentId' => $restContent->contentInfo->id ),
+            array('contentId' => $restContent->contentInfo->id),
             "/content/objects/{$restContent->contentInfo->id}/versions"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_redirectCurrentVersion',
-            array( 'contentId' => $restContent->contentInfo->id ),
+            array('contentId' => $restContent->contentInfo->id),
             "/content/objects/{$restContent->contentInfo->id}/currentversion"
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadSection',
-            array( 'sectionId' => $restContent->contentInfo->sectionId ),
+            array('sectionId' => $restContent->contentInfo->sectionId),
             "/content/sections/{$restContent->contentInfo->sectionId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocation',
-            array( 'locationPath' => $locationPath = trim( $restContent->mainLocation->pathString, '/' ) ),
+            array('locationPath' => $locationPath = trim($restContent->mainLocation->pathString, '/')),
             "/content/locations/{$locationPath}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocationsForContent',
-            array( 'contentId' => $restContent->contentInfo->id ),
+            array('contentId' => $restContent->contentInfo->id),
             "/content/objects/{$restContent->contentInfo->id}/locations"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadUser',
-            array( 'userId' => $restContent->contentInfo->ownerId ),
+            array('userId' => $restContent->contentInfo->ownerId),
             "/user/users/{$restContent->contentInfo->ownerId}"
         );
 
@@ -419,12 +419,12 @@ class RestContentTest extends ValueObjectVisitorBaseTest
             $restContent
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         $dom = new \DOMDocument();
-        $dom->loadXml( $result );
+        $dom->loadXml($result);
 
         return $dom;
     }
@@ -434,9 +434,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithEmbeddedVersion
      */
-    public function testContentMediaTypeWithVersionCorrect( \DOMDocument $dom )
+    public function testContentMediaTypeWithVersionCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content[@media-type="application/vnd.ez.api.Content+xml"]'  );
+        $this->assertXPath($dom, '/Content[@media-type="application/vnd.ez.api.Content+xml"]');
     }
 
     /**
@@ -444,9 +444,9 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithEmbeddedVersion
      */
-    public function testEmbeddedCurrentVersionHrefCorrect( \DOMDocument $dom )
+    public function testEmbeddedCurrentVersionHrefCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/CurrentVersion[@href="/content/objects/content23/currentversion"]'  );
+        $this->assertXPath($dom, '/Content/CurrentVersion[@href="/content/objects/content23/currentversion"]');
     }
 
     /**
@@ -454,18 +454,18 @@ class RestContentTest extends ValueObjectVisitorBaseTest
      *
      * @depends testVisitWithEmbeddedVersion
      */
-    public function testEmbeddedCurrentVersionMediaTypeCorrect( \DOMDocument $dom )
+    public function testEmbeddedCurrentVersionMediaTypeCorrect(\DOMDocument $dom)
     {
-        $this->assertXPath( $dom, '/Content/CurrentVersion[@media-type="application/vnd.ez.api.Version+xml"]'  );
+        $this->assertXPath($dom, '/Content/CurrentVersion[@media-type="application/vnd.ez.api.Version+xml"]');
     }
 
     /**
-     * Get the Content visitor
+     * Get the Content visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestContent
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\RestContent;
+        return new ValueObjectVisitor\RestContent();
     }
 }

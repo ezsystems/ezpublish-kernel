@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 class LocationUpdateTest extends BaseTest
 {
     /**
-     * Tests the LocationUpdate parser
+     * Tests the LocationUpdate parser.
      */
     public function testParse()
     {
@@ -25,11 +27,11 @@ class LocationUpdateTest extends BaseTest
             'remoteId' => 'remote-id',
             'hidden' => 'true',
             'sortField' => 'PATH',
-            'sortOrder' => 'ASC'
+            'sortOrder' => 'ASC',
         );
 
         $locationUpdate = $this->getParser();
-        $result = $locationUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $locationUpdate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestLocationUpdateStruct',
@@ -75,7 +77,7 @@ class LocationUpdateTest extends BaseTest
     }
 
     /**
-     * Test LocationUpdate parser throwing exception on missing sort field
+     * Test LocationUpdate parser throwing exception on missing sort field.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'sortField' element for LocationUpdate.
@@ -85,15 +87,15 @@ class LocationUpdateTest extends BaseTest
         $inputArray = array(
             'priority' => 0,
             'remoteId' => 'remote-id',
-            'sortOrder' => 'ASC'
+            'sortOrder' => 'ASC',
         );
 
         $locationUpdate = $this->getParser();
-        $locationUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $locationUpdate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test LocationUpdate parser throwing exception on missing sort order
+     * Test LocationUpdate parser throwing exception on missing sort order.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'sortOrder' element for LocationUpdate.
@@ -103,15 +105,15 @@ class LocationUpdateTest extends BaseTest
         $inputArray = array(
             'priority' => 0,
             'remoteId' => 'remote-id',
-            'sortField' => 'PATH'
+            'sortField' => 'PATH',
         );
 
         $locationUpdate = $this->getParser();
-        $locationUpdate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $locationUpdate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Returns the LocationUpdateStruct parser
+     * Returns the LocationUpdateStruct parser.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\LocationUpdate
      */
@@ -124,7 +126,7 @@ class LocationUpdateTest extends BaseTest
     }
 
     /**
-     * Get the location service mock object
+     * Get the location service mock object.
      *
      * @return \eZ\Publish\API\Repository\LocationService
      */
@@ -138,10 +140,10 @@ class LocationUpdateTest extends BaseTest
             false
         );
 
-        $locationServiceMock->expects( $this->any() )
-            ->method( 'newLocationUpdateStruct' )
+        $locationServiceMock->expects($this->any())
+            ->method('newLocationUpdateStruct')
             ->will(
-                $this->returnValue( new LocationUpdateStruct() )
+                $this->returnValue(new LocationUpdateStruct())
             );
 
         return $locationServiceMock;

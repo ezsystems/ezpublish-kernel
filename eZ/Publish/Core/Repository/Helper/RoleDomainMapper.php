@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RoleDomainMapper class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,9 +25,7 @@ use eZ\Publish\SPI\Persistence\User\RoleAssignment as SPIRoleAssignment;
 use eZ\Publish\SPI\Persistence\User\Role as SPIRole;
 
 /**
- * Internal service to map Role objects between API and SPI values
- *
- * @package eZ\Publish\Core\Repository
+ * Internal service to map Role objects between API and SPI values.
  */
 class RoleDomainMapper
 {
@@ -37,50 +37,47 @@ class RoleDomainMapper
     /**
      * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
      */
-    public function __construct( LimitationService $limitationService )
+    public function __construct(LimitationService $limitationService)
     {
         $this->limitationService = $limitationService;
     }
 
     /**
-     * Maps provided SPI Role value object to API Role value object
+     * Maps provided SPI Role value object to API Role value object.
      *
      * @param \eZ\Publish\SPI\Persistence\User\Role $role
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function buildDomainRoleObject( SPIRole $role )
+    public function buildDomainRoleObject(SPIRole $role)
     {
         $rolePolicies = array();
-        foreach ( $role->policies as $spiPolicy )
-        {
-            $rolePolicies[] = $this->buildDomainPolicyObject( $spiPolicy );
+        foreach ($role->policies as $spiPolicy) {
+            $rolePolicies[] = $this->buildDomainPolicyObject($spiPolicy);
         }
 
         return new Role(
             array(
                 'id' => $role->id,
                 'identifier' => $role->identifier,
-                'policies' => $rolePolicies
+                'policies' => $rolePolicies,
             )
         );
     }
 
     /**
-     * Maps provided SPI Policy value object to API Policy value object
+     * Maps provided SPI Policy value object to API Policy value object.
      *
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
-    public function buildDomainPolicyObject( SPIPolicy $policy )
+    public function buildDomainPolicyObject(SPIPolicy $policy)
     {
         $policyLimitations = array();
-        if ( $policy->module !== '*' && $policy->function !== '*' && $policy->limitations !== '*' )
-        {
-            foreach ( $policy->limitations as $identifier => $values )
-            {
-                $policyLimitations[] = $this->limitationService->getLimitationType( $identifier )->buildValue( $values );
+        if ($policy->module !== '*' && $policy->function !== '*' && $policy->limitations !== '*') {
+            foreach ($policy->limitations as $identifier => $values) {
+                $policyLimitations[] = $this->limitationService->getLimitationType($identifier)->buildValue($values);
             }
         }
 
@@ -90,13 +87,13 @@ class RoleDomainMapper
                 'roleId' => $policy->roleId,
                 'module' => $policy->module,
                 'function' => $policy->function,
-                'limitations' => $policyLimitations
+                'limitations' => $policyLimitations,
             )
         );
     }
 
     /**
-     * Builds the API UserRoleAssignment object from provided SPI RoleAssignment object
+     * Builds the API UserRoleAssignment object from provided SPI RoleAssignment object.
      *
      * @param \eZ\Publish\SPI\Persistence\User\RoleAssignment $spiRoleAssignment
      * @param \eZ\Publish\API\Repository\Values\User\User $user
@@ -104,28 +101,27 @@ class RoleDomainMapper
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment
      */
-    public function buildDomainUserRoleAssignmentObject( SPIRoleAssignment $spiRoleAssignment, User $user, APIRole $role )
+    public function buildDomainUserRoleAssignmentObject(SPIRoleAssignment $spiRoleAssignment, User $user, APIRole $role)
     {
         $limitation = null;
-        if ( !empty( $spiRoleAssignment->limitationIdentifier ) )
-        {
+        if (!empty($spiRoleAssignment->limitationIdentifier)) {
             $limitation = $this
                 ->limitationService
-                ->getLimitationType( $spiRoleAssignment->limitationIdentifier )
-                ->buildValue( $spiRoleAssignment->values );
+                ->getLimitationType($spiRoleAssignment->limitationIdentifier)
+                ->buildValue($spiRoleAssignment->values);
         }
 
         return new UserRoleAssignment(
             array(
                 'limitation' => $limitation,
                 'role' => $role,
-                'user' => $user
+                'user' => $user,
             )
         );
     }
 
     /**
-     * Builds the API UserGroupRoleAssignment object from provided SPI RoleAssignment object
+     * Builds the API UserGroupRoleAssignment object from provided SPI RoleAssignment object.
      *
      * @param \eZ\Publish\SPI\Persistence\User\RoleAssignment $spiRoleAssignment
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
@@ -133,38 +129,36 @@ class RoleDomainMapper
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment
      */
-    public function buildDomainUserGroupRoleAssignmentObject( SPIRoleAssignment $spiRoleAssignment, UserGroup $userGroup, APIRole $role )
+    public function buildDomainUserGroupRoleAssignmentObject(SPIRoleAssignment $spiRoleAssignment, UserGroup $userGroup, APIRole $role)
     {
         $limitation = null;
-        if ( !empty( $spiRoleAssignment->limitationIdentifier ) )
-        {
+        if (!empty($spiRoleAssignment->limitationIdentifier)) {
             $limitation = $this
                 ->limitationService
-                ->getLimitationType( $spiRoleAssignment->limitationIdentifier )
-                ->buildValue( $spiRoleAssignment->values );
+                ->getLimitationType($spiRoleAssignment->limitationIdentifier)
+                ->buildValue($spiRoleAssignment->values);
         }
 
         return new UserGroupRoleAssignment(
             array(
                 'limitation' => $limitation,
                 'role' => $role,
-                'userGroup' => $userGroup
+                'userGroup' => $userGroup,
             )
         );
     }
 
     /**
-     * Creates SPI Role value object from provided API role create struct
+     * Creates SPI Role value object from provided API role create struct.
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
-    public function buildPersistenceRoleObject( APIRoleCreateStruct $roleCreateStruct )
+    public function buildPersistenceRoleObject(APIRoleCreateStruct $roleCreateStruct)
     {
         $policiesToCreate = array();
-        foreach ( $roleCreateStruct->getPolicies() as $policyCreateStruct )
-        {
+        foreach ($roleCreateStruct->getPolicies() as $policyCreateStruct) {
             $policiesToCreate[] = $this->buildPersistencePolicyObject(
                 $policyCreateStruct->module,
                 $policyCreateStruct->function,
@@ -175,13 +169,13 @@ class RoleDomainMapper
         return new SPIRole(
             array(
                 'identifier' => $roleCreateStruct->identifier,
-                'policies' => $policiesToCreate
+                'policies' => $policiesToCreate,
             )
         );
     }
 
     /**
-     * Creates SPI Policy value object from provided module, function and limitations
+     * Creates SPI Policy value object from provided module, function and limitations.
      *
      * @param string $module
      * @param string $function
@@ -189,14 +183,12 @@ class RoleDomainMapper
      *
      * @return \eZ\Publish\SPI\Persistence\User\Policy
      */
-    public function buildPersistencePolicyObject( $module, $function, array $limitations )
+    public function buildPersistencePolicyObject($module, $function, array $limitations)
     {
-        $limitationsToCreate = "*";
-        if ( $module !== '*' && $function !== '*' && !empty( $limitations ) )
-        {
+        $limitationsToCreate = '*';
+        if ($module !== '*' && $function !== '*' && !empty($limitations)) {
             $limitationsToCreate = array();
-            foreach ( $limitations as $limitation )
-            {
+            foreach ($limitations as $limitation) {
                 $limitationsToCreate[$limitation->getIdentifier()] = $limitation->limitationValues;
             }
         }
@@ -205,7 +197,7 @@ class RoleDomainMapper
             array(
                 'module' => $module,
                 'function' => $function,
-                'limitations' => $limitationsToCreate
+                'limitations' => $limitationsToCreate,
             )
         );
     }

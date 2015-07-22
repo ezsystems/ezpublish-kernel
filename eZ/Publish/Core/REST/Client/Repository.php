@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Repository class
+ * File containing the Repository class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,11 +14,10 @@ namespace eZ\Publish\Core\REST\Client;
 use eZ\Publish\API\Repository\Repository as APIRepository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User;
-
 use eZ\Publish\Core\REST\Common;
 
 /**
- * REST Client Repository
+ * REST Client Repository.
  *
  * @see \eZ\Publish\API\Repository\Repository
  */
@@ -83,14 +84,14 @@ class Repository implements APIRepository
     private $fieldTypeService;
 
     /**
-     * Client
+     * Client.
      *
      * @var \eZ\Publish\Core\REST\Client\HttpClient
      */
     private $client;
 
     /**
-     * Input parsing dispatcher
+     * Input parsing dispatcher.
      *
      * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
      */
@@ -120,17 +121,17 @@ class Repository implements APIRepository
      * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\SPI\FieldType\FieldType[] $fieldTypes
      */
-    public function __construct( HttpClient $client, Common\Input\Dispatcher $inputDispatcher, Common\Output\Visitor $outputVisitor, Common\RequestParser $requestParser, array $fieldTypes )
+    public function __construct(HttpClient $client, Common\Input\Dispatcher $inputDispatcher, Common\Output\Visitor $outputVisitor, Common\RequestParser $requestParser, array $fieldTypes)
     {
-        $this->client          = $client;
+        $this->client = $client;
         $this->inputDispatcher = $inputDispatcher;
-        $this->outputVisitor   = $outputVisitor;
-        $this->requestParser   = $requestParser;
-        $this->fieldTypes      = $fieldTypes;
+        $this->outputVisitor = $outputVisitor;
+        $this->requestParser = $requestParser;
+        $this->fieldTypes = $fieldTypes;
     }
 
     /**
-     * Get current user
+     * Get current user.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
@@ -143,10 +144,8 @@ class Repository implements APIRepository
      * Sets the current user to the given $user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     *
-     * @return void
      */
-    public function setCurrentUser( User $user )
+    public function setCurrentUser(User $user)
     {
         throw new Exceptions\MethodNotAllowedException(
             'It is not allowed to set a current user in this implementation. Please use a corresponding authenticating HttpClient instead.'
@@ -158,16 +157,16 @@ class Repository implements APIRepository
      * @param string $function
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
-     * @return boolean|\eZ\Publish\API\Repository\Values\User\Limitation[] if limitations are on this function an array of limitations is returned
+     * @return bool|\eZ\Publish\API\Repository\Values\User\Limitation[] if limitations are on this function an array of limitations is returned
      */
-    public function hasAccess( $module, $function, User $user = null )
+    public function hasAccess($module, $function, User $user = null)
     {
         // @todo: Implement
     }
 
     /**
      * Indicates if the current user is allowed to perform an action given by the function on the given
-     * objects
+     * objects.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
@@ -177,15 +176,15 @@ class Repository implements APIRepository
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
      * @param mixed $targets The location, parent or "assignment" value object, or an array of the same
      *
-     * @return boolean
+     * @return bool
      */
-    public function canUser( $module, $function, ValueObject $object, $targets = null )
+    public function canUser($module, $function, ValueObject $object, $targets = null)
     {
         // @todo: Implement
     }
 
     /**
-     * Get Content Service
+     * Get Content Service.
      *
      * Get service object to perform operations on Content objects and it's aggregate members.
      *
@@ -193,8 +192,7 @@ class Repository implements APIRepository
      */
     public function getContentService()
     {
-        if ( null === $this->contentService )
-        {
+        if (null === $this->contentService) {
             $this->contentService = new ContentService(
                 $this->client,
                 $this->inputDispatcher,
@@ -203,11 +201,12 @@ class Repository implements APIRepository
                 $this->getContentTypeService()
             );
         }
+
         return $this->contentService;
     }
 
     /**
-     * Get Content Language Service
+     * Get Content Language Service.
      *
      * Get service object to perform operations on Content language objects
      *
@@ -215,8 +214,7 @@ class Repository implements APIRepository
      */
     public function getContentLanguageService()
     {
-        if ( null === $this->languageService )
-        {
+        if (null === $this->languageService) {
             $this->languageService = new LanguageService(
                 $this->getContentService(),
                 'eng-US',
@@ -226,11 +224,12 @@ class Repository implements APIRepository
                 $this->requestParser
             );
         }
+
         return $this->languageService;
     }
 
     /**
-     * Get Content Type Service
+     * Get Content Type Service.
      *
      * Get service object to perform operations on Content Type objects and it's aggregate members.
      * ( Group, Field & FieldCategory )
@@ -239,8 +238,7 @@ class Repository implements APIRepository
      */
     public function getContentTypeService()
     {
-        if ( null === $this->contentTypeService )
-        {
+        if (null === $this->contentTypeService) {
             $this->contentTypeService = new ContentTypeService(
                 $this->client,
                 $this->inputDispatcher,
@@ -248,11 +246,12 @@ class Repository implements APIRepository
                 $this->requestParser
             );
         }
+
         return $this->contentTypeService;
     }
 
     /**
-     * Get Content Location Service
+     * Get Content Location Service.
      *
      * Get service object to perform operations on Location objects and subtrees
      *
@@ -260,8 +259,7 @@ class Repository implements APIRepository
      */
     public function getLocationService()
     {
-        if ( null === $this->locationService )
-        {
+        if (null === $this->locationService) {
             $this->locationService = new LocationService(
                 $this->client,
                 $this->inputDispatcher,
@@ -269,11 +267,12 @@ class Repository implements APIRepository
                 $this->requestParser
             );
         }
+
         return $this->locationService;
     }
 
     /**
-     * Get Content Trash service
+     * Get Content Trash service.
      *
      * Trash service allows to perform operations related to location trash
      * (trash/untrash, load/list from trash...)
@@ -282,8 +281,7 @@ class Repository implements APIRepository
      */
     public function getTrashService()
     {
-        if ( null === $this->trashService )
-        {
+        if (null === $this->trashService) {
             $this->trashService = new TrashService(
                 $this->getLocationService(),
                 $this->client,
@@ -292,11 +290,12 @@ class Repository implements APIRepository
                 $this->requestParser
             );
         }
+
         return $this->trashService;
     }
 
     /**
-     * Get Content Section Service
+     * Get Content Section Service.
      *
      * Get Section service that lets you manipulate section objects
      *
@@ -304,8 +303,7 @@ class Repository implements APIRepository
      */
     public function getSectionService()
     {
-        if ( null === $this->sectionService )
-        {
+        if (null === $this->sectionService) {
             $this->sectionService = new SectionService(
                 $this->client,
                 $this->inputDispatcher,
@@ -313,11 +311,12 @@ class Repository implements APIRepository
                 $this->requestParser
             );
         }
+
         return $this->sectionService;
     }
 
     /**
-     * Get Search Service
+     * Get Search Service.
      *
      * Get search service that lets you find content objects
      *
@@ -325,11 +324,11 @@ class Repository implements APIRepository
      */
     public function getSearchService()
     {
-        throw new \RuntimeException( '@todo: Implement.' );
+        throw new \RuntimeException('@todo: Implement.');
     }
 
     /**
-     * Get User Service
+     * Get User Service.
      *
      * Get service object to perform operations on Users and UserGroup
      *
@@ -337,8 +336,7 @@ class Repository implements APIRepository
      */
     public function getUserService()
     {
-        if ( null === $this->userService )
-        {
+        if (null === $this->userService) {
             $this->userService = new UserService(
                 $this->client,
                 $this->inputDispatcher,
@@ -346,11 +344,12 @@ class Repository implements APIRepository
                 $this->requestParser
             );
         }
+
         return $this->userService;
     }
 
     /**
-     * Get IO Service
+     * Get IO Service.
      *
      * Get service object to perform operations on binary files
      *
@@ -358,8 +357,7 @@ class Repository implements APIRepository
      */
     public function getIOService()
     {
-        if ( null === $this->ioService )
-        {
+        if (null === $this->ioService) {
             $this->ioService = new IOService(
                 $this->client,
                 $this->inputDispatcher,
@@ -367,18 +365,18 @@ class Repository implements APIRepository
                 $this->requestParser
             );
         }
+
         return $this->ioService;
     }
 
     /**
-     * Get RoleService
+     * Get RoleService.
      *
      * @return \eZ\Publish\API\Repository\RoleService
      */
     public function getRoleService()
     {
-        if ( null === $this->roleService )
-        {
+        if (null === $this->roleService) {
             $this->roleService = new RoleService(
                 $this->getUserService(),
                 $this->client,
@@ -387,18 +385,18 @@ class Repository implements APIRepository
                 $this->requestParser
             );
         }
+
         return $this->roleService;
     }
 
     /**
-     * Get URLAliasService
+     * Get URLAliasService.
      *
      * @return \eZ\Publish\API\Repository\URLAliasService
      */
     public function getURLAliasService()
     {
-        if ( null === $this->urlAliasService )
-        {
+        if (null === $this->urlAliasService) {
             $this->urlAliasService = new URLAliasService(
                 $this->client,
                 $this->inputDispatcher,
@@ -406,28 +404,28 @@ class Repository implements APIRepository
                 $this->requestParser
             );
         }
+
         return $this->urlAliasService;
     }
 
     /**
-     * Get URLWildcardService
+     * Get URLWildcardService.
      *
      * @return \eZ\Publish\API\Repository\URLWildcardService
      */
     public function getURLWildcardService()
     {
-        throw new \RuntimeException( '@todo: Implement' );
+        throw new \RuntimeException('@todo: Implement');
     }
 
     /**
-     * Get ObjectStateService
+     * Get ObjectStateService.
      *
      * @return \eZ\Publish\API\Repository\ObjectStateService
      */
     public function getObjectStateService()
     {
-        if ( null === $this->objectStateService )
-        {
+        if (null === $this->objectStateService) {
             $this->objectStateService = new ObjectStateService(
                 $this->client,
                 $this->inputDispatcher,
@@ -435,25 +433,26 @@ class Repository implements APIRepository
                 $this->requestParser
             );
         }
+
         return $this->objectStateService;
     }
 
     /**
-     * Get FieldTypeService
+     * Get FieldTypeService.
      *
      * @return \eZ\Publish\API\Repository\FieldTypeService
      */
     public function getFieldTypeService()
     {
-        if ( null === $this->fieldTypeService )
-        {
-            $this->fieldTypeService = new FieldTypeService( $this->fieldTypes );
+        if (null === $this->fieldTypeService) {
+            $this->fieldTypeService = new FieldTypeService($this->fieldTypes);
         }
+
         return $this->fieldTypeService;
     }
 
     /**
-     * Begin transaction
+     * Begin transaction.
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,
      * otherwise work will be lost.
@@ -464,7 +463,7 @@ class Repository implements APIRepository
     }
 
     /**
-     * Commit transaction
+     * Commit transaction.
      *
      * Commit transaction, or throw exceptions if no transactions has been started.
      *
@@ -476,7 +475,7 @@ class Repository implements APIRepository
     }
 
     /**
-     * Rollback transaction
+     * Rollback transaction.
      *
      * Rollback transaction, or throw exceptions if no transactions has been started.
      *
@@ -488,12 +487,13 @@ class Repository implements APIRepository
     }
 
     /**
-     * Enqueue an event to be triggered at commit or directly if no transaction has started
+     * Enqueue an event to be triggered at commit or directly if no transaction has started.
      *
      * @deprecated In 5.3.3, to be removed. Signals are emitted after transaction instead of being required to use this.
+     *
      * @param Callable $event
      */
-    public function commitEvent( $event )
+    public function commitEvent($event)
     {
         $event();
     }

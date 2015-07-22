@@ -1,8 +1,8 @@
 <?php
 
-return array (
+return array(
   0 =>
-  array (
+  array(
     'ezcontentobject_version_id' => '439',
     'ezcontentobject_version_version' => '1',
     'ezcontentobject_version_modified' => '1033920746',
@@ -29,7 +29,7 @@ return array (
     'ezcontentobject_name_content_translation' => 'eng-US',
   ),
   1 =>
-  array (
+  array(
     'ezcontentobject_version_id' => '674',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1311154215',

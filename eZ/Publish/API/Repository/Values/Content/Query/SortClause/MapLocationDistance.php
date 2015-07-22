@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\Content\Query\SortClause\MapLocationDistance class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,19 +17,19 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\MapLocation
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 
 /**
- * Sets sort direction on the MapLocation distance for a content query
+ * Sets sort direction on the MapLocation distance for a content query.
  */
 class MapLocationDistance extends SortClause implements CustomFieldInterface
 {
     /**
-     * Custom fields to sort by instead of the default field
+     * Custom fields to sort by instead of the default field.
      *
      * @var array
      */
     protected $customFields = array();
 
     /**
-     * Constructs a new MapLocationDistance SortClause on Type $typeIdentifier and Field $fieldIdentifier
+     * Constructs a new MapLocationDistance SortClause on Type $typeIdentifier and Field $fieldIdentifier.
      *
      * @param string $typeIdentifier ContentType identifier
      * @param string $fieldIdentifier FieldDefinition identifier
@@ -43,8 +45,7 @@ class MapLocationDistance extends SortClause implements CustomFieldInterface
         $longitude,
         $sortDirection = Query::SORT_ASC,
         $languageCode = null
-    )
-    {
+    ) {
         parent::__construct(
             'maplocation_distance',
             $sortDirection,
@@ -59,23 +60,21 @@ class MapLocationDistance extends SortClause implements CustomFieldInterface
     }
 
     /**
-     * Set a custom field to sort by
+     * Set a custom field to sort by.
      *
      * Set a custom field to sort by for a defined field in a defined type.
      *
      * @param string $type
      * @param string $field
      * @param string $customField
-     *
-     * @return void
      */
-    public function setCustomField( $type, $field, $customField )
+    public function setCustomField($type, $field, $customField)
     {
         $this->customFields[$type][$field] = $customField;
     }
 
     /**
-     * Return custom field
+     * Return custom field.
      *
      * If no custom field is set, return null
      *
@@ -84,11 +83,10 @@ class MapLocationDistance extends SortClause implements CustomFieldInterface
      *
      * @return mixed
      */
-    public function getCustomField( $type, $field )
+    public function getCustomField($type, $field)
     {
-        if ( !isset( $this->customFields[$type] ) ||
-            !isset( $this->customFields[$type][$field] ) )
-        {
+        if (!isset($this->customFields[$type]) ||
+            !isset($this->customFields[$type][$field])) {
             return null;
         }
 

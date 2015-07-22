@@ -1,19 +1,18 @@
 <?php
+
 /**
- * File containing the BinaryBaseTest class
+ * File containing the BinaryBaseTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
 
-use eZ\Publish\SPI\FieldType\BinaryBase\MimeTypeDetector;
-use eZ\Publish\SPI\FieldType\FileService;
-
 /**
- * Base class for binary field types
+ * Base class for binary field types.
  *
  * @group fieldType
  */
@@ -22,12 +21,12 @@ abstract class BinaryBaseTest extends FieldTypeTest
     protected function getValidatorConfigurationSchemaExpectation()
     {
         return array(
-            "FileSizeValidator" => array(
-                "maxFileSize" => array(
-                    "type" => "int",
-                    "default" => null
-                )
-            )
+            'FileSizeValidator' => array(
+                'maxFileSize' => array(
+                    'type' => 'int',
+                    'default' => null,
+                ),
+            ),
         );
     }
 
@@ -40,11 +39,11 @@ abstract class BinaryBaseTest extends FieldTypeTest
     {
         return array(
             array(
-                $this->getMockForAbstractClass( 'eZ\Publish\Core\FieldType\Value' ),
+                $this->getMockForAbstractClass('eZ\Publish\Core\FieldType\Value'),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                array( 'id' => '/foo/bar' ),
+                array('id' => '/foo/bar'),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
@@ -82,21 +81,21 @@ abstract class BinaryBaseTest extends FieldTypeTest
     {
         return array(
             array(
-                array()
+                array(),
             ),
             array(
                 array(
                     'FileSizeValidator' => array(
                         'maxFileSize' => 2342,
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 array(
                     'FileSizeValidator' => array(
                         'maxFileSize' => null,
-                    )
-                )
+                    ),
+                ),
             ),
         );
     }
@@ -148,22 +147,22 @@ abstract class BinaryBaseTest extends FieldTypeTest
         return array(
             array(
                 array(
-                    'NonExistingValidator' => array()
-                )
+                    'NonExistingValidator' => array(),
+                ),
             ),
             array(
                 // maxFileSize must be int or bool
                 array(
                     'FileSizeValidator' => array(
                         'maxFileSize' => 'foo',
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 // maxFileSize is required for this validator
                 array(
-                    'FileSizeValidator' => array()
-                )
+                    'FileSizeValidator' => array(),
+                ),
             ),
         );
     }

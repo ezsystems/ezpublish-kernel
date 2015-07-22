@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Price class
+ * File containing the Price class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,19 +17,19 @@ use eZ\Publish\SPI\FieldType\Indexable;
 use eZ\Publish\SPI\Search;
 
 /**
- * Indexable definition for string field type
+ * Indexable definition for string field type.
  */
 class SearchField implements Indexable
 {
     /**
-     * Get index data for field for search backend
+     * Get index data for field for search backend.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      *
      * @return \eZ\Publish\SPI\Search\Field[]
      */
-    public function getIndexData( Field $field, FieldDefinition $fieldDefinition )
+    public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
         return array(
             new Search\Field(
@@ -41,7 +43,7 @@ class SearchField implements Indexable
     }
 
     /**
-     * Get index field types for search backend
+     * Get index field types for search backend.
      *
      * @return \eZ\Publish\SPI\Search\FieldType[]
      */
@@ -63,7 +65,7 @@ class SearchField implements Indexable
      */
     public function getDefaultMatchField()
     {
-        return "value";
+        return 'value';
     }
 
     /**

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ErrorMessage parser class
+ * File containing the ErrorMessage parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,12 +15,12 @@ use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
 /**
- * Parser for ErrorMessage
+ * Parser for ErrorMessage.
  */
 class ErrorMessage extends BaseParser
 {
     /**
-     * Mapping of error codes to the respective exception classes
+     * Mapping of error codes to the respective exception classes.
      *
      * @var array
      */
@@ -30,23 +32,18 @@ class ErrorMessage extends BaseParser
     );
 
     /**
-     * Parse input structure
+     * Parse input structure.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      *
      * @throws \Exception
-     *
-     * @return void
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        if ( isset( $this->errorCodeMapping[$data['errorCode']] ) )
-        {
+        if (isset($this->errorCodeMapping[$data['errorCode']])) {
             $exceptionClass = $this->errorCodeMapping[$data['errorCode']];
-        }
-        else
-        {
+        } else {
             $exceptionClass = '\\Exception';
         }
 

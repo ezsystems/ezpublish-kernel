@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RichText Link converter test
+ * File containing the RichText Link converter test.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,8 +19,7 @@ use DOMDocument;
 
 /**
  * Tests the Link converter
- * Class LinkTest
- * @package eZ\Publish\Core\Repository\Tests\FieldType\RichText\Converter
+ * Class LinkTest.
  */
 class LinkTest extends PHPUnit_Framework_TestCase
 {
@@ -27,7 +28,7 @@ class LinkTest extends PHPUnit_Framework_TestCase
      */
     protected function getMockContentService()
     {
-        return $this->getMockBuilder( 'eZ\Publish\Core\Repository\ContentService' )
+        return $this->getMockBuilder('eZ\Publish\Core\Repository\ContentService')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -37,7 +38,7 @@ class LinkTest extends PHPUnit_Framework_TestCase
      */
     protected function getMockLocationService()
     {
-        return $this->getMockBuilder( 'eZ\Publish\Core\Repository\LocationService' )
+        return $this->getMockBuilder('eZ\Publish\Core\Repository\LocationService')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -48,7 +49,7 @@ class LinkTest extends PHPUnit_Framework_TestCase
     protected function getMockUrlAliasRouter()
     {
         return $this
-            ->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Symfony\\Routing\\UrlAliasRouter' )
+            ->getMockBuilder('eZ\\Publish\\Core\\MVC\\Symfony\\Routing\\UrlAliasRouter')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -111,36 +112,36 @@ class LinkTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test conversion of ezurl://<id> links
+     * Test conversion of ezurl://<id> links.
      *
      * @dataProvider providerLinkXmlSample
      */
-    public function testLink( $input, $output )
+    public function testLink($input, $output)
     {
         $inputDocument = new DOMDocument();
-        $inputDocument->loadXML( $input );
+        $inputDocument->loadXML($input);
 
         $contentService = $this->getMockContentService();
         $locationService = $this->getMockLocationService();
         $urlAliasRouter = $this->getMockUrlAliasRouter();
 
-        $contentService->expects( $this->never() )
-            ->method( $this->anything() );
+        $contentService->expects($this->never())
+            ->method($this->anything());
 
-        $locationService->expects( $this->never() )
-            ->method( $this->anything() );
+        $locationService->expects($this->never())
+            ->method($this->anything());
 
-        $urlAliasRouter->expects( $this->never() )
-            ->method( $this->anything() );
+        $urlAliasRouter->expects($this->never())
+            ->method($this->anything());
 
-        $converter = new Link( $locationService, $contentService, $urlAliasRouter );
+        $converter = new Link($locationService, $contentService, $urlAliasRouter);
 
-        $outputDocument = $converter->convert( $inputDocument );
+        $outputDocument = $converter->convert($inputDocument);
 
         $expectedOutputDocument = new DOMDocument();
-        $expectedOutputDocument->loadXML( $output );
+        $expectedOutputDocument->loadXML($output);
 
-        $this->assertEquals( $expectedOutputDocument, $outputDocument );
+        $this->assertEquals($expectedOutputDocument, $outputDocument);
     }
 
     /**
@@ -207,39 +208,39 @@ class LinkTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test conversion of ezlocation://<id> links
+     * Test conversion of ezlocation://<id> links.
      *
      * @dataProvider providerLocationLink
      */
-    public function testConvertLocationLink( $input, $output, $locationId, $urlResolved )
+    public function testConvertLocationLink($input, $output, $locationId, $urlResolved)
     {
         $inputDocument = new DOMDocument();
-        $inputDocument->loadXML( $input );
+        $inputDocument->loadXML($input);
 
         $contentService = $this->getMockContentService();
         $locationService = $this->getMockLocationService();
         $urlAliasRouter = $this->getMockUrlAliasRouter();
 
-        $location = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Location' );
+        $location = $this->getMock('eZ\Publish\API\Repository\Values\Content\Location');
 
-        $locationService->expects( $this->once() )
-            ->method( 'loadLocation' )
-            ->with( $this->equalTo( $locationId ) )
-            ->will( $this->returnValue( $location ) );
+        $locationService->expects($this->once())
+            ->method('loadLocation')
+            ->with($this->equalTo($locationId))
+            ->will($this->returnValue($location));
 
-        $urlAliasRouter->expects( $this->once() )
-            ->method( 'generate' )
-            ->with( $this->equalTo( $location ) )
-            ->will( $this->returnValue( $urlResolved ) );
+        $urlAliasRouter->expects($this->once())
+            ->method('generate')
+            ->with($this->equalTo($location))
+            ->will($this->returnValue($urlResolved));
 
-        $converter = new Link( $locationService, $contentService, $urlAliasRouter );
+        $converter = new Link($locationService, $contentService, $urlAliasRouter);
 
-        $outputDocument = $converter->convert( $inputDocument );
+        $outputDocument = $converter->convert($inputDocument);
 
         $expectedOutputDocument = new DOMDocument();
-        $expectedOutputDocument->loadXML( $output );
+        $expectedOutputDocument->loadXML($output);
 
-        $this->assertEquals( $expectedOutputDocument, $outputDocument );
+        $this->assertEquals($expectedOutputDocument, $outputDocument);
     }
 
     /**
@@ -264,9 +265,9 @@ class LinkTest extends PHPUnit_Framework_TestCase
   </para>
 </section>',
                 106,
-                new APINotFoundException( "Location", 106 ),
+                new APINotFoundException('Location', 106),
                 'warning',
-                'While generating links for richtext, could not locate Location with ID 106'
+                'While generating links for richtext, could not locate Location with ID 106',
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -284,9 +285,9 @@ class LinkTest extends PHPUnit_Framework_TestCase
   </para>
 </section>',
                 106,
-                new APIUnauthorizedException( "Location", 106 ),
+                new APIUnauthorizedException('Location', 106),
                 'notice',
-                'While generating links for richtext, unauthorized to load Location with ID 106'
+                'While generating links for richtext, unauthorized to load Location with ID 106',
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -304,46 +305,46 @@ class LinkTest extends PHPUnit_Framework_TestCase
   </ezembed>
 </section>',
                 106,
-                new APIUnauthorizedException( "Location", 106 ),
+                new APIUnauthorizedException('Location', 106),
                 'notice',
-                'While generating links for richtext, unauthorized to load Location with ID 106'
+                'While generating links for richtext, unauthorized to load Location with ID 106',
             ),
         );
     }
 
     /**
-     * Test logging of bad location links
+     * Test logging of bad location links.
      *
      * @dataProvider providerBadLocationLink
      */
-    public function testConvertBadLocationLink( $input, $output, $locationId, $exception, $logType, $logMessage )
+    public function testConvertBadLocationLink($input, $output, $locationId, $exception, $logType, $logMessage)
     {
         $inputDocument = new DOMDocument();
-        $inputDocument->loadXML( $input );
+        $inputDocument->loadXML($input);
 
         $contentService = $this->getMockContentService();
         $locationService = $this->getMockLocationService();
         $urlAliasRouter = $this->getMockUrlAliasRouter();
 
-        $logger = $this->getMock( 'Psr\Log\LoggerInterface' );
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
 
-        $logger->expects( $this->once() )
-            ->method( $logType )
-            ->with( $this->equalTo( $logMessage ) );
+        $logger->expects($this->once())
+            ->method($logType)
+            ->with($this->equalTo($logMessage));
 
-        $locationService->expects( $this->once() )
-            ->method( 'loadLocation' )
-            ->with( $this->equalTo( $locationId ) )
-            ->will( $this->throwException( $exception ) );
+        $locationService->expects($this->once())
+            ->method('loadLocation')
+            ->with($this->equalTo($locationId))
+            ->will($this->throwException($exception));
 
-        $converter = new Link( $locationService, $contentService, $urlAliasRouter, $logger );
+        $converter = new Link($locationService, $contentService, $urlAliasRouter, $logger);
 
-        $outputDocument = $converter->convert( $inputDocument );
+        $outputDocument = $converter->convert($inputDocument);
 
         $expectedOutputDocument = new DOMDocument();
-        $expectedOutputDocument->loadXML( $output );
+        $expectedOutputDocument->loadXML($output);
 
-        $this->assertEquals( $expectedOutputDocument, $outputDocument );
+        $this->assertEquals($expectedOutputDocument, $outputDocument);
     }
 
     /**
@@ -410,51 +411,51 @@ class LinkTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test conversion of ezcontent://<id> links
+     * Test conversion of ezcontent://<id> links.
      *
      * @dataProvider providerContentLink
      */
-    public function testConvertContentLink( $input, $output, $contentId, $urlResolved )
+    public function testConvertContentLink($input, $output, $contentId, $urlResolved)
     {
         $locationId = 106;
         $inputDocument = new DOMDocument();
-        $inputDocument->loadXML( $input );
+        $inputDocument->loadXML($input);
 
         $contentService = $this->getMockContentService();
         $locationService = $this->getMockLocationService();
         $urlAliasRouter = $this->getMockUrlAliasRouter();
 
-        $contentInfo = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\ContentInfo' );
-        $location = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Location' );
+        $contentInfo = $this->getMock('eZ\Publish\API\Repository\Values\Content\ContentInfo');
+        $location = $this->getMock('eZ\Publish\API\Repository\Values\Content\Location');
 
-        $contentInfo->expects( $this->once() )
-            ->method( '__get' )
-            ->with( $this->equalTo( 'mainLocationId' ) )
-            ->will( $this->returnValue( $locationId ) );
+        $contentInfo->expects($this->once())
+            ->method('__get')
+            ->with($this->equalTo('mainLocationId'))
+            ->will($this->returnValue($locationId));
 
-        $contentService->expects( $this->any() )
-            ->method( 'loadContentInfo' )
-            ->with( $this->equalTo( $contentId ) )
-            ->will( $this->returnValue( $contentInfo ) );
+        $contentService->expects($this->any())
+            ->method('loadContentInfo')
+            ->with($this->equalTo($contentId))
+            ->will($this->returnValue($contentInfo));
 
-        $locationService->expects( $this->once() )
-            ->method( 'loadLocation' )
-            ->with( $this->equalTo( $locationId ) )
-            ->will( $this->returnValue( $location ) );
+        $locationService->expects($this->once())
+            ->method('loadLocation')
+            ->with($this->equalTo($locationId))
+            ->will($this->returnValue($location));
 
-        $urlAliasRouter->expects( $this->once() )
-            ->method( 'generate' )
-            ->with( $this->equalTo( $location ) )
-            ->will( $this->returnValue( $urlResolved ) );
+        $urlAliasRouter->expects($this->once())
+            ->method('generate')
+            ->with($this->equalTo($location))
+            ->will($this->returnValue($urlResolved));
 
-        $converter = new Link( $locationService, $contentService, $urlAliasRouter );
+        $converter = new Link($locationService, $contentService, $urlAliasRouter);
 
-        $outputDocument = $converter->convert( $inputDocument );
+        $outputDocument = $converter->convert($inputDocument);
 
         $expectedOutputDocument = new DOMDocument();
-        $expectedOutputDocument->loadXML( $output );
+        $expectedOutputDocument->loadXML($output);
 
-        $this->assertEquals( $expectedOutputDocument, $outputDocument );
+        $this->assertEquals($expectedOutputDocument, $outputDocument);
     }
 
     /**
@@ -479,9 +480,9 @@ class LinkTest extends PHPUnit_Framework_TestCase
   </para>
 </section>',
                 205,
-                new APINotFoundException( "Content", 205 ),
+                new APINotFoundException('Content', 205),
                 'warning',
-                'While generating links for richtext, could not locate Content object with ID 205'
+                'While generating links for richtext, could not locate Content object with ID 205',
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -499,9 +500,9 @@ class LinkTest extends PHPUnit_Framework_TestCase
   </para>
 </section>',
                 205,
-                new APIUnauthorizedException( "Content", 205 ),
+                new APIUnauthorizedException('Content', 205),
                 'notice',
-                'While generating links for richtext, unauthorized to load Content object with ID 205'
+                'While generating links for richtext, unauthorized to load Content object with ID 205',
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -519,45 +520,45 @@ class LinkTest extends PHPUnit_Framework_TestCase
   </ezembed>
 </section>',
                 205,
-                new APIUnauthorizedException( "Content", 205 ),
+                new APIUnauthorizedException('Content', 205),
                 'notice',
-                'While generating links for richtext, unauthorized to load Content object with ID 205'
+                'While generating links for richtext, unauthorized to load Content object with ID 205',
             ),
         );
     }
 
     /**
-     * Test logging of bad content links
+     * Test logging of bad content links.
      *
      * @dataProvider providerBadContentLink
      */
-    public function testConvertBadContentLink( $input, $output, $contentId, $exception, $logType, $logMessage )
+    public function testConvertBadContentLink($input, $output, $contentId, $exception, $logType, $logMessage)
     {
         $inputDocument = new DOMDocument();
-        $inputDocument->loadXML( $input );
+        $inputDocument->loadXML($input);
 
         $contentService = $this->getMockContentService();
         $locationService = $this->getMockLocationService();
         $urlAliasRouter = $this->getMockUrlAliasRouter();
 
-        $logger = $this->getMock( 'Psr\Log\LoggerInterface' );
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
 
-        $logger->expects( $this->once() )
-            ->method( $logType )
-            ->with( $this->equalTo( $logMessage ) );
+        $logger->expects($this->once())
+            ->method($logType)
+            ->with($this->equalTo($logMessage));
 
-        $contentService->expects( $this->once() )
-            ->method( 'loadContentInfo' )
-            ->with( $this->equalTo( $contentId ) )
-            ->will( $this->throwException( $exception ) );
+        $contentService->expects($this->once())
+            ->method('loadContentInfo')
+            ->with($this->equalTo($contentId))
+            ->will($this->throwException($exception));
 
-        $converter = new Link( $locationService, $contentService, $urlAliasRouter, $logger );
+        $converter = new Link($locationService, $contentService, $urlAliasRouter, $logger);
 
-        $outputDocument = $converter->convert( $inputDocument );
+        $outputDocument = $converter->convert($inputDocument);
 
         $expectedOutputDocument = new DOMDocument();
-        $expectedOutputDocument->loadXML( $output );
+        $expectedOutputDocument->loadXML($output);
 
-        $this->assertEquals( $expectedOutputDocument, $outputDocument );
+        $this->assertEquals($expectedOutputDocument, $outputDocument);
     }
 }

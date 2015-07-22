@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Content Search Gateway class
+ * File containing the Content Search Gateway class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,18 +24,18 @@ use RuntimeException;
 class ExceptionConversion extends Gateway
 {
     /**
-     * The wrapped gateway
+     * The wrapped gateway.
      *
      * @var Gateway
      */
     protected $innerGateway;
 
     /**
-     * Creates a new exception conversion gateway around $innerGateway
+     * Creates a new exception conversion gateway around $innerGateway.
      *
      * @param Gateway $innerGateway
      */
-    public function __construct( Gateway $innerGateway )
+    public function __construct(Gateway $innerGateway)
     {
         $this->innerGateway = $innerGateway;
     }
@@ -59,20 +61,13 @@ class ExceptionConversion extends Gateway
         array $sort = null,
         array $fieldFilters = array(),
         $doCount = true
-    )
-    {
-        try
-        {
-            return $this->innerGateway->find( $criterion, $offset, $limit, $sort, $fieldFilters, $doCount );
-        }
-        catch ( DBALException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+    ) {
+        try {
+            return $this->innerGateway->find($criterion, $offset, $limit, $sort, $fieldFilters, $doCount);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 }
-

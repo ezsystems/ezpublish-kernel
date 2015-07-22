@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RestUserGroup class
+ * File containing the RestUserGroup class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
- * REST UserGroup, as received by /user/groups/<path>
+ * REST UserGroup, as received by /user/groups/<path>.
  */
 class RestUserGroup extends RestValue
 {
@@ -46,7 +48,7 @@ class RestUserGroup extends RestValue
     public $mainLocation;
 
     /**
-     * Construct
+     * Construct.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
@@ -60,8 +62,7 @@ class RestUserGroup extends RestValue
         ContentInfo $contentInfo,
         Location $mainLocation,
         array $relations
-    )
-    {
+    ) {
         $this->content = $content;
         $this->contentType = $contentType;
         $this->contentInfo = $contentInfo;

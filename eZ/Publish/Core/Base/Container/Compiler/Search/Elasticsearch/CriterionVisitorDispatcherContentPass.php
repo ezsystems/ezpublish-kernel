@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the CriterionVisitorDispatcherContentPass class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,10 +23,9 @@ class CriterionVisitorDispatcherContentPass implements CompilerPassInterface
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
-        if ( !$container->hasDefinition( 'ezpublish.search.elasticsearch.content.criterion_visitor_dispatcher' ) )
-        {
+        if (!$container->hasDefinition('ezpublish.search.elasticsearch.content.criterion_visitor_dispatcher')) {
             return;
         }
 
@@ -32,12 +33,11 @@ class CriterionVisitorDispatcherContentPass implements CompilerPassInterface
             'ezpublish.search.elasticsearch.content.criterion_visitor_dispatcher'
         );
 
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.search.elasticsearch.content.criterion_visitor' ) as $id => $attributes )
-        {
+        foreach ($container->findTaggedServiceIds('ezpublish.search.elasticsearch.content.criterion_visitor') as $id => $attributes) {
             $aggregateCriterionVisitorDefinition->addMethodCall(
                 'addVisitor',
                 array(
-                    new Reference( $id ),
+                    new Reference($id),
                 )
             );
         }

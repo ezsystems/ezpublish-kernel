@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,15 +22,14 @@ class URI extends Map implements URILexer
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
      */
-    public function setRequest( SimplifiedRequest $request )
+    public function setRequest(SimplifiedRequest $request)
     {
-        if ( !$this->key )
-        {
-            sscanf( $request->pathinfo, "/%[^/]", $key );
-            $this->setMapKey( $key );
+        if (!$this->key) {
+            sscanf($request->pathinfo, '/%[^/]', $key);
+            $this->setMapKey($key);
         }
 
-        parent::setRequest( $request );
+        parent::setRequest($request);
     }
 
     public function getName()
@@ -43,9 +44,9 @@ class URI extends Map implements URILexer
      *
      * @return string
      */
-    public function analyseURI( $uri )
+    public function analyseURI($uri)
     {
-        return substr( $uri, strlen( "/$this->key" ) );
+        return substr($uri, strlen("/$this->key"));
     }
 
     /**
@@ -55,31 +56,29 @@ class URI extends Map implements URILexer
      *
      * @return string The modified link URI
      */
-    public function analyseLink( $linkUri )
+    public function analyseLink($linkUri)
     {
         // Joining slash between uriElements and actual linkUri must be present, except if $linkUri is empty.
-        $joiningSlash = empty( $linkUri ) ? '' : '/';
-        $linkUri = ltrim( $linkUri, '/' );
+        $joiningSlash = empty($linkUri) ? '' : '/';
+        $linkUri = ltrim($linkUri, '/');
         // Removing query string to analyse as SiteAccess might be in it.
-        $qsPos = strpos( $linkUri, '?' );
+        $qsPos = strpos($linkUri, '?');
         $queryString = '';
-        if ( $qsPos !== false )
-        {
-            $queryString = substr( $linkUri, $qsPos );
-            $linkUri = substr( $linkUri, 0, $qsPos );
+        if ($qsPos !== false) {
+            $queryString = substr($linkUri, $qsPos);
+            $linkUri = substr($linkUri, 0, $qsPos);
         }
 
         return "/{$this->key}{$joiningSlash}{$linkUri}{$queryString}";
     }
 
-    public function reverseMatch( $siteAccessName )
+    public function reverseMatch($siteAccessName)
     {
-        $matcher = parent::reverseMatch( $siteAccessName );
-        if ( $matcher instanceof URI )
-        {
+        $matcher = parent::reverseMatch($siteAccessName);
+        if ($matcher instanceof self) {
             $request = $matcher->getRequest();
             // Clean up "old" siteaccess prefix and add the new prefix.
-            $request->setPathinfo( $this->analyseLink( $request->pathinfo ) );
+            $request->setPathinfo($this->analyseLink($request->pathinfo));
         }
 
         return $matcher;

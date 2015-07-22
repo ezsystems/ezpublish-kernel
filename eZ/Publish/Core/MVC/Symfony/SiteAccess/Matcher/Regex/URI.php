@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Regex\URI class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,11 +25,11 @@ class URI extends Regex implements Matcher
      *
      * @param array $siteAccessesConfiguration SiteAccesses configuration.
      */
-    public function __construct( array $siteAccessesConfiguration )
+    public function __construct(array $siteAccessesConfiguration)
     {
         parent::__construct(
-            isset( $siteAccessesConfiguration["regex"] ) ? $siteAccessesConfiguration["regex"] : "",
-            isset( $siteAccessesConfiguration["itemNumber"] ) ? (int)$siteAccessesConfiguration["itemNumber"] : 1
+            isset($siteAccessesConfiguration['regex']) ? $siteAccessesConfiguration['regex'] : '',
+            isset($siteAccessesConfiguration['itemNumber']) ? (int)$siteAccessesConfiguration['itemNumber'] : 1
         );
     }
 
@@ -41,13 +43,12 @@ class URI extends Regex implements Matcher
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
      */
-    public function setRequest( SimplifiedRequest $request )
+    public function setRequest(SimplifiedRequest $request)
     {
-        if ( !$this->element )
-        {
-            $this->setMatchElement( $request->pathinfo );
+        if (!$this->element) {
+            $this->setMatchElement($request->pathinfo);
         }
 
-        parent::setRequest( $request );
+        parent::setRequest($request);
     }
 }

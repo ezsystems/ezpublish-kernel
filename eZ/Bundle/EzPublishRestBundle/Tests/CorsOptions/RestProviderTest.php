@@ -1,11 +1,14 @@
 <?php
+
 /**
  * File containing the RestConfigurationProviderTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
+
 namespace eZ\Bundle\EzPublishRestBundle\Tests\CorsOptions;
 
 use eZ\Bundle\EzPublishRestBundle\CorsOptions\RestProvider;
@@ -21,19 +24,19 @@ class RestProviderTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Return value expectation for RequestMatcher::matchRequest
-     * Set to false to expect Router::match() never to be called, or to an exception to have it throw one
+     * Set to false to expect Router::match() never to be called, or to an exception to have it throw one.
      */
     protected $matchRequestResult = array();
 
     public function testGetOptions()
     {
-        $this->matchRequestResult = array( 'allowedMethods' => 'GET,POST,DELETE' );
+        $this->matchRequestResult = array('allowedMethods' => 'GET,POST,DELETE');
 
         self::assertEquals(
             array(
-                'allow_methods' => array( 'GET', 'POST', 'DELETE' ),
+                'allow_methods' => array('GET', 'POST', 'DELETE'),
             ),
-            $this->getProvider()->getOptions( $this->createRequest() )
+            $this->getProvider()->getOptions($this->createRequest())
         );
     }
 
@@ -44,18 +47,18 @@ class RestProviderTest extends PHPUnit_Framework_TestCase
             array(
                 'allow_methods' => array(),
             ),
-            $this->getProvider()->getOptions( $this->createRequest() )
+            $this->getProvider()->getOptions($this->createRequest())
         );
     }
 
     public function testGetOptionsMethodNotAllowed()
     {
-        $this->matchRequestResult = new MethodNotAllowedException( array( 'OPTIONS' ) );
+        $this->matchRequestResult = new MethodNotAllowedException(array('OPTIONS'));
         self::assertEquals(
             array(
                 'allow_methods' => array(),
             ),
-            $this->getProvider()->getOptions( $this->createRequest() )
+            $this->getProvider()->getOptions($this->createRequest())
         );
     }
 
@@ -64,8 +67,8 @@ class RestProviderTest extends PHPUnit_Framework_TestCase
      */
     public function testGetOptionsException()
     {
-        $this->matchRequestResult = new Exception;
-        $this->getProvider()->getOptions( $this->createRequest() );
+        $this->matchRequestResult = new Exception();
+        $this->getProvider()->getOptions($this->createRequest());
     }
 
     public function testGetOptionsNoMethods()
@@ -75,7 +78,7 @@ class RestProviderTest extends PHPUnit_Framework_TestCase
             array(
                 'allow_methods' => array(),
             ),
-            $this->getProvider()->getOptions( $this->createRequest() )
+            $this->getProvider()->getOptions($this->createRequest())
         );
     }
 
@@ -84,21 +87,22 @@ class RestProviderTest extends PHPUnit_Framework_TestCase
         $this->matchRequestResult = false;
         self::assertEquals(
             array(),
-            $this->getProvider()->getOptions( $this->createRequest( false ) )
+            $this->getProvider()->getOptions($this->createRequest(false))
         );
     }
 
     /**
      * @param bool $isRestRequest wether or not to set the is_rest_request attribute
+     *
      * @return Request
      */
-    protected function createRequest( $isRestRequest = true )
+    protected function createRequest($isRestRequest = true)
     {
-        $request = new Request;
-        if ( $isRestRequest )
-        {
-            $request->attributes->set( 'is_rest_request', true );
+        $request = new Request();
+        if ($isRestRequest) {
+            $request->attributes->set('is_rest_request', true);
         }
+
         return $request;
     }
 
@@ -114,24 +118,19 @@ class RestProviderTest extends PHPUnit_Framework_TestCase
      */
     protected function getRequestMatcherMock()
     {
-        $mock = $this->getMock( 'Symfony\Component\Routing\Matcher\RequestMatcherInterface' );
+        $mock = $this->getMock('Symfony\Component\Routing\Matcher\RequestMatcherInterface');
 
-        if ( $this->matchRequestResult instanceof Exception )
-        {
-            $mock->expects( $this->any() )
-                ->method( 'matchRequest' )
-                ->will( $this->throwException( $this->matchRequestResult ) );
-        }
-        else if ( $this->matchRequestResult === false )
-        {
-            $mock->expects( $this->never() )
-                ->method( 'matchRequest' );
-        }
-        else
-        {
-            $mock->expects( $this->any() )
-                ->method( 'matchRequest' )
-                ->will( $this->returnValue( $this->matchRequestResult ) );
+        if ($this->matchRequestResult instanceof Exception) {
+            $mock->expects($this->any())
+                ->method('matchRequest')
+                ->will($this->throwException($this->matchRequestResult));
+        } elseif ($this->matchRequestResult === false) {
+            $mock->expects($this->never())
+                ->method('matchRequest');
+        } else {
+            $mock->expects($this->any())
+                ->method('matchRequest')
+                ->will($this->returnValue($this->matchRequestResult));
         }
 
         return $mock;

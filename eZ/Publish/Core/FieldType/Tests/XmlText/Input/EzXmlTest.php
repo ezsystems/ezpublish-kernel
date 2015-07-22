@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the XmlText EzXml test
+ * File containing the XmlText EzXml test.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,10 +20,10 @@ class EzXmlTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider providerForTestConvertCorrect
      */
-    public function testConvertCorrect( $xmlString )
+    public function testConvertCorrect($xmlString)
     {
-        $input = new EzXml( $xmlString );
-        $this->assertEquals( $xmlString, $input->getInternalRepresentation() );
+        $input = new EzXml($xmlString);
+        $this->assertEquals($xmlString, $input->getInternalRepresentation());
     }
 
     public function providerForTestConvertCorrect()
@@ -43,19 +45,17 @@ class EzXmlTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider providerForTestConvertIncorrect
      */
-    public function testConvertIncorrect( $xmlString, $exceptionMessage )
+    public function testConvertIncorrect($xmlString, $exceptionMessage)
     {
-        try
-        {
-            $input = new EzXml( $xmlString );
-        }
-        catch ( Exception $e )
-        {
-            $this->assertEquals( $exceptionMessage, $e->getMessage() );
+        try {
+            $input = new EzXml($xmlString);
+        } catch (Exception $e) {
+            $this->assertEquals($exceptionMessage, $e->getMessage());
+
             return;
         }
 
-        $this->fail( "Expecting an Exception with message: " . $exceptionMessage );
+        $this->fail('Expecting an Exception with message: ' . $exceptionMessage);
     }
 
     public function providerForTestConvertIncorrect()

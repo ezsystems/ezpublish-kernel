@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Elasticsearch ContentType facet builder visitor class
+ * File containing the Elasticsearch ContentType facet builder visitor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,68 +16,68 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use eZ\Publish\API\Repository\Values\Content\Search\Facet;
 
 /**
- * Visits the ContentType facet builder
+ * Visits the ContentType facet builder.
  */
 class ContentType extends FacetBuilderVisitor
 {
     /**
-     * Check if visitor is applicable to current facet result
+     * Check if visitor is applicable to current facet result.
      *
      * @param string $name
      *
-     * @return boolean
+     * @return bool
      */
-    public function canMap( $name )
+    public function canMap($name)
     {
-        return ( substr( $name, 0, 6 ) === "type__" );
+        return (substr($name, 0, 6) === 'type__');
     }
 
     /**
-     * Map Elasticsearch facet result back to facet objects
+     * Map Elasticsearch facet result back to facet objects.
      *
      * @param string $name
      * @param mixed $data
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\Facet
      */
-    public function map( $name, $data )
+    public function map($name, $data)
     {
         return new Facet\ContentTypeFacet(
             array(
-                "name" => (string)substr( $name, 6 ),
-                "entries" => $this->mapData( $data ),
+                'name' => (string)substr($name, 6),
+                'entries' => $this->mapData($data),
             )
         );
     }
 
     /**
-     * Check if visitor is applicable to current facet builder
+     * Check if visitor is applicable to current facet builder.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder $facetBuilder
      *
-     * @return boolean
+     * @return bool
      */
-    public function canVisit( FacetBuilder $facetBuilder )
+    public function canVisit(FacetBuilder $facetBuilder)
     {
         return $facetBuilder instanceof FacetBuilder\ContentTypeFacetBuilder;
     }
 
     /**
-     * Map facet builder to a proper Elasticsearch representation
+     * Map facet builder to a proper Elasticsearch representation.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder $facetBuilder
      *
      * @return mixed
      */
-    public function visit( FacetBuilder $facetBuilder )
+    public function visit(FacetBuilder $facetBuilder)
     {
         return array(
             "type__{$facetBuilder->name}" => array(
-                "terms" => array(
-                    "field" => "type_id",
-                    "min_doc_count" => $facetBuilder->minCount,
-                    "size" => $facetBuilder->limit,
-                )
+                'terms' => array(
+                    'field' => 'type_id',
+                    'min_doc_count' => $facetBuilder->minCount,
+                    'size' => $facetBuilder->limit,
+                ),
             ),
         );
     }

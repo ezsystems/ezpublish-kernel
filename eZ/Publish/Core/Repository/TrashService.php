@@ -1,11 +1,12 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\Repository\TrashService class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
- * @package eZ\Publish\Core\Repository
  */
 
 namespace eZ\Publish\Core\Repository;
@@ -27,9 +28,7 @@ use DateTime;
 use Exception;
 
 /**
- * Trash service, used for managing trashed content
- *
- * @package eZ\Publish\Core\Repository
+ * Trash service, used for managing trashed content.
  */
 class TrashService implements TrashServiceInterface
 {
@@ -54,7 +53,7 @@ class TrashService implements TrashServiceInterface
     protected $nameSchemaService;
 
     /**
-     * Setups service with reference to repository object that created it & corresponding handler
+     * Setups service with reference to repository object that created it & corresponding handler.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
@@ -66,8 +65,7 @@ class TrashService implements TrashServiceInterface
         Handler $handler,
         Helper\NameSchemaService $nameSchemaService,
         array $settings = array()
-    )
-    {
+    ) {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
         $this->nameSchemaService = $nameSchemaService;
@@ -89,15 +87,17 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
-    public function loadTrashItem( $trashItemId )
+    public function loadTrashItem($trashItemId)
     {
-        if ( $this->repository->hasAccess( 'content', 'restore' ) !== true )
-            throw new UnauthorizedException( 'content', 'restore' );
+        if ($this->repository->hasAccess('content', 'restore') !== true) {
+            throw new UnauthorizedException('content', 'restore');
+        }
 
-        $spiTrashItem = $this->persistenceHandler->trashHandler()->loadTrashItem( $trashItemId );
-        $trash = $this->buildDomainTrashItemObject( $spiTrashItem );
-        if ( !$this->repository->canUser( 'content', 'read', $trash->getContentInfo() ) )
-            throw new UnauthorizedException( 'content', 'read' );
+        $spiTrashItem = $this->persistenceHandler->trashHandler()->loadTrashItem($trashItemId);
+        $trash = $this->buildDomainTrashItemObject($spiTrashItem);
+        if (!$this->repository->canUser('content', 'read', $trash->getContentInfo())) {
+            throw new UnauthorizedException('content', 'read');
+        }
 
         return $trash;
     }
@@ -113,29 +113,28 @@ class TrashService implements TrashServiceInterface
      *
      * @return null|\eZ\Publish\API\Repository\Values\Content\TrashItem null if location was deleted, otherwise TrashItem
      */
-    public function trash( Location $location )
+    public function trash(Location $location)
     {
-        if ( !is_numeric( $location->id ) )
-            throw new InvalidArgumentValue( "id", $location->id, "Location" );
+        if (!is_numeric($location->id)) {
+            throw new InvalidArgumentValue('id', $location->id, 'Location');
+        }
 
-        if ( $this->repository->canUser( 'content', 'manage_locations', $location->getContentInfo(), $location ) !== true )
-            throw new UnauthorizedException( 'content', 'manage_locations' );
+        if ($this->repository->canUser('content', 'manage_locations', $location->getContentInfo(), $location) !== true) {
+            throw new UnauthorizedException('content', 'manage_locations');
+        }
 
         $this->repository->beginTransaction();
-        try
-        {
-            $spiTrashItem = $this->persistenceHandler->trashHandler()->trashSubtree( $location->id );
-            $this->persistenceHandler->urlAliasHandler()->locationDeleted( $location->id );
+        try {
+            $spiTrashItem = $this->persistenceHandler->trashHandler()->trashSubtree($location->id);
+            $this->persistenceHandler->urlAliasHandler()->locationDeleted($location->id);
             $this->repository->commit();
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             $this->repository->rollback();
             throw $e;
         }
 
-        return isset( $spiTrashItem )
-            ? $this->buildDomainTrashItemObject( $spiTrashItem )
+        return isset($spiTrashItem)
+            ? $this->buildDomainTrashItemObject($spiTrashItem)
             : null;
     }
 
@@ -151,35 +150,37 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created or recovered location
      */
-    public function recover( APITrashItem $trashItem, Location $newParentLocation = null )
+    public function recover(APITrashItem $trashItem, Location $newParentLocation = null)
     {
-        if ( !is_numeric( $trashItem->id ) )
-            throw new InvalidArgumentValue( "id", $trashItem->id, "TrashItem" );
+        if (!is_numeric($trashItem->id)) {
+            throw new InvalidArgumentValue('id', $trashItem->id, 'TrashItem');
+        }
 
-        if ( $newParentLocation === null && !is_numeric( $trashItem->parentLocationId ) )
-            throw new InvalidArgumentValue( "parentLocationId", $trashItem->parentLocationId, "TrashItem" );
+        if ($newParentLocation === null && !is_numeric($trashItem->parentLocationId)) {
+            throw new InvalidArgumentValue('parentLocationId', $trashItem->parentLocationId, 'TrashItem');
+        }
 
-        if ( $newParentLocation !== null && !is_numeric( $newParentLocation->id ) )
-            throw new InvalidArgumentValue( "parentLocationId", $newParentLocation->id, "Location" );
+        if ($newParentLocation !== null && !is_numeric($newParentLocation->id)) {
+            throw new InvalidArgumentValue('parentLocationId', $newParentLocation->id, 'Location');
+        }
 
-        if ( $this->repository->hasAccess( 'content', 'restore' ) !== true )
-            throw new UnauthorizedException( 'content', 'restore' );
+        if ($this->repository->hasAccess('content', 'restore') !== true) {
+            throw new UnauthorizedException('content', 'restore');
+        }
 
         $this->repository->beginTransaction();
-        try
-        {
+        try {
             $newParentLocationId = $newParentLocation ? $newParentLocation->id : $trashItem->parentLocationId;
             $newLocationId = $this->persistenceHandler->trashHandler()->recover(
                 $trashItem->id,
                 $newParentLocationId
             );
 
-            $content = $this->repository->getContentService()->loadContent( $trashItem->contentId );
-            $urlAliasNames = $this->nameSchemaService->resolveUrlAliasSchema( $content );
+            $content = $this->repository->getContentService()->loadContent($trashItem->contentId);
+            $urlAliasNames = $this->nameSchemaService->resolveUrlAliasSchema($content);
 
             // Publish URL aliases for recovered location
-            foreach ( $urlAliasNames as $languageCode => $name )
-            {
+            foreach ($urlAliasNames as $languageCode => $name) {
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
                     $newLocationId,
                     $newParentLocationId,
@@ -190,14 +191,12 @@ class TrashService implements TrashServiceInterface
             }
 
             $this->repository->commit();
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             $this->repository->rollback();
             throw $e;
         }
 
-        return $this->repository->getLocationService()->loadLocation( $newLocationId );
+        return $this->repository->getLocationService()->loadLocation($newLocationId);
     }
 
     /**
@@ -210,18 +209,16 @@ class TrashService implements TrashServiceInterface
      */
     public function emptyTrash()
     {
-        if ( $this->repository->hasAccess( 'content', 'cleantrash' ) !== true )
-            throw new UnauthorizedException( 'content', 'cleantrash' );
+        if ($this->repository->hasAccess('content', 'cleantrash') !== true) {
+            throw new UnauthorizedException('content', 'cleantrash');
+        }
 
         $this->repository->beginTransaction();
-        try
-        {
+        try {
             // Persistence layer takes care of deleting content objects
             $this->persistenceHandler->trashHandler()->emptyTrash();
             $this->repository->commit();
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             $this->repository->rollback();
             throw $e;
         }
@@ -236,22 +233,21 @@ class TrashService implements TrashServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
      */
-    public function deleteTrashItem( APITrashItem $trashItem )
+    public function deleteTrashItem(APITrashItem $trashItem)
     {
-        if ( $this->repository->hasAccess( 'content', 'cleantrash' ) !== true )
-            throw new UnauthorizedException( 'content', 'cleantrash' );
+        if ($this->repository->hasAccess('content', 'cleantrash') !== true) {
+            throw new UnauthorizedException('content', 'cleantrash');
+        }
 
-        if ( !is_numeric( $trashItem->id ) )
-            throw new InvalidArgumentValue( "id", $trashItem->id, "TrashItem" );
+        if (!is_numeric($trashItem->id)) {
+            throw new InvalidArgumentValue('id', $trashItem->id, 'TrashItem');
+        }
 
         $this->repository->beginTransaction();
-        try
-        {
-            $this->persistenceHandler->trashHandler()->deleteTrashItem( $trashItem->id );
+        try {
+            $this->persistenceHandler->trashHandler()->deleteTrashItem($trashItem->id);
             $this->repository->commit();
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             $this->repository->rollback();
             throw $e;
         }
@@ -266,28 +262,31 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
      */
-    public function findTrashItems( Query $query )
+    public function findTrashItems(Query $query)
     {
-        if ( $query->filter !== null && !$query->filter instanceof Criterion )
-            throw new InvalidArgumentValue( "query->filter", $query->filter, "Query" );
+        if ($query->filter !== null && !$query->filter instanceof Criterion) {
+            throw new InvalidArgumentValue('query->filter', $query->filter, 'Query');
+        }
 
-        if ( $query->sortClauses !== null )
-        {
-            if ( !is_array( $query->sortClauses ) )
-                throw new InvalidArgumentValue( "query->sortClauses", $query->sortClauses, "Query" );
+        if ($query->sortClauses !== null) {
+            if (!is_array($query->sortClauses)) {
+                throw new InvalidArgumentValue('query->sortClauses', $query->sortClauses, 'Query');
+            }
 
-            foreach ( $query->sortClauses as $sortClause )
-            {
-                if ( !$sortClause instanceof SortClause )
-                    throw new InvalidArgumentValue( "query->sortClauses", "only instances of SortClause class are allowed" );
+            foreach ($query->sortClauses as $sortClause) {
+                if (!$sortClause instanceof SortClause) {
+                    throw new InvalidArgumentValue('query->sortClauses', 'only instances of SortClause class are allowed');
+                }
             }
         }
 
-        if ( $query->offset !== null && !is_numeric( $query->offset ) )
-            throw new InvalidArgumentValue( "query->offset", $query->offset, "Query" );
+        if ($query->offset !== null && !is_numeric($query->offset)) {
+            throw new InvalidArgumentValue('query->offset', $query->offset, 'Query');
+        }
 
-        if ( $query->limit !== null && !is_numeric( $query->limit ) )
-            throw new InvalidArgumentValue( "query->limit", $query->limit, "Query" );
+        if ($query->limit !== null && !is_numeric($query->limit)) {
+            throw new InvalidArgumentValue('query->limit', $query->limit, 'Query');
+        }
 
         $spiTrashItems = $this->persistenceHandler->trashHandler()->findTrashItems(
             $query->filter !== null ? $query->filter : null,
@@ -297,13 +296,12 @@ class TrashService implements TrashServiceInterface
         );
 
         $trashItems = array();
-        foreach ( $spiTrashItems as $spiTrashItem )
-        {
-            $trashItems[] = $this->buildDomainTrashItemObject( $spiTrashItem );
+        foreach ($spiTrashItems as $spiTrashItem) {
+            $trashItems[] = $this->buildDomainTrashItemObject($spiTrashItem);
         }
 
         $searchResult = new SearchResult();
-        $searchResult->count = count( $trashItems );
+        $searchResult->count = count($trashItems);
         $searchResult->items = $trashItems;
         $searchResult->query = $query;
 
@@ -311,17 +309,17 @@ class TrashService implements TrashServiceInterface
     }
 
     /**
-     * Builds the domain TrashItem object from provided persistence trash item
+     * Builds the domain TrashItem object from provided persistence trash item.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Trashed $spiTrashItem
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
-    protected function buildDomainTrashItemObject( Trashed $spiTrashItem )
+    protected function buildDomainTrashItemObject(Trashed $spiTrashItem)
     {
         return new TrashItem(
             array(
-                'contentInfo' => $this->repository->getContentService()->loadContentInfo( $spiTrashItem->contentId ),
+                'contentInfo' => $this->repository->getContentService()->loadContentInfo($spiTrashItem->contentId),
                 'id' => $spiTrashItem->id,
                 'priority' => $spiTrashItem->priority,
                 'hidden' => $spiTrashItem->hidden,
@@ -341,10 +339,11 @@ class TrashService implements TrashServiceInterface
      *
      * @return \DateTime
      */
-    protected function getDateTime( $timestamp )
+    protected function getDateTime($timestamp)
     {
         $dateTime = new DateTime();
-        $dateTime->setTimestamp( $timestamp );
+        $dateTime->setTimestamp($timestamp);
+
         return $dateTime;
     }
 }

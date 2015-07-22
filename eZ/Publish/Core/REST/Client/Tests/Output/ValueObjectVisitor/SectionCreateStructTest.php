@@ -1,38 +1,38 @@
 <?php
+
 /**
- * File containing a SectionCreateStructTest class
+ * File containing a SectionCreateStructTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
 use eZ\Publish\API\Repository\Values\Content;
-use eZ\Publish\Core\REST\Common;
 
 class SectionCreateStructTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Tests the SectionCreateStruct visitor
+     * Tests the SectionCreateStruct visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $sectionCreateStruct = new Content\SectionCreateStruct(
             array(
                 'identifier' => 'some-section',
-                'name'       => 'Some Section',
+                'name' => 'Some Section',
             )
         );
 
@@ -42,29 +42,29 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
             $sectionCreateStruct
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Tests that the result contains SectionInput element
+     * Tests that the result contains SectionInput element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsSectionInputElement( $result )
+    public function testResultContainsSectionInputElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'SectionInput',
+                'tag' => 'SectionInput',
                 'children' => array(
-                    'less_than'    => 3,
+                    'less_than' => 3,
                     'greater_than' => 1,
-                )
+                ),
             ),
             $result,
             'Invalid <SectionInput> element.',
@@ -73,20 +73,20 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains SectionInput attributes
+     * Tests that the result contains SectionInput attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsSectionInputAttributes( $result )
+    public function testResultContainsSectionInputAttributes($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'SectionInput',
+                'tag' => 'SectionInput',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.SectionInput+xml',
-                )
+                ),
             ),
             $result,
             'Invalid <SectionInput> attributes.',
@@ -95,18 +95,18 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains identifier value element
+     * Tests that the result contains identifier value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsIdentifierValueElement( $result )
+    public function testResultContainsIdentifierValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'identifier',
-                'content'  => 'some-section',
+                'tag' => 'identifier',
+                'content' => 'some-section',
             ),
             $result,
             'Invalid or non-existing <SectionInput> identifier value element.',
@@ -115,18 +115,18 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains name value element
+     * Tests that the result contains name value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsNameValueElement( $result )
+    public function testResultContainsNameValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'name',
-                'content'  => 'Some Section',
+                'tag' => 'name',
+                'content' => 'Some Section',
             ),
             $result,
             'Invalid or non-existing <SectionInput> name value element.',
@@ -135,12 +135,12 @@ class SectionCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Gets the SectionCreateStruct visitor
+     * Gets the SectionCreateStruct visitor.
      *
      * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\SectionCreateStruct
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\SectionCreateStruct;
+        return new ValueObjectVisitor\SectionCreateStruct();
     }
 }

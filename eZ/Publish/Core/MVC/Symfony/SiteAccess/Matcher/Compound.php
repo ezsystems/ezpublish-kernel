@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the abstract Compound Siteaccess matcher.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -48,32 +50,28 @@ abstract class Compound implements CompoundInterface, URILexer
      */
     protected $request;
 
-    public function __construct( array $config )
+    public function __construct(array $config)
     {
         $this->config = $config;
         $this->matchersMap = array();
     }
 
-    public function setMatcherBuilder( MatcherBuilderInterface $matcherBuilder )
+    public function setMatcherBuilder(MatcherBuilderInterface $matcherBuilder)
     {
         $this->matcherBuilder = $matcherBuilder;
-        foreach ( $this->config as $i => $rule )
-        {
-            foreach ( $rule['matchers'] as $matcherClass => $matchingConfig )
-            {
-                $this->matchersMap[$i][$matcherClass] = $matcherBuilder->buildMatcher( $matcherClass, $matchingConfig, $this->request );
+        foreach ($this->config as $i => $rule) {
+            foreach ($rule['matchers'] as $matcherClass => $matchingConfig) {
+                $this->matchersMap[$i][$matcherClass] = $matcherBuilder->buildMatcher($matcherClass, $matchingConfig, $this->request);
             }
         }
     }
 
-    public function setRequest( SimplifiedRequest $request )
+    public function setRequest(SimplifiedRequest $request)
     {
         $this->request = $request;
-        foreach ( $this->matchersMap as $ruleset )
-        {
-            foreach ( $ruleset as $matcher )
-            {
-                $matcher->setRequest( $request );
+        foreach ($this->matchersMap as $ruleset) {
+            foreach ($ruleset as $matcher) {
+                $matcher->setRequest($request);
             }
         }
     }
@@ -83,26 +81,22 @@ abstract class Compound implements CompoundInterface, URILexer
         return $this->request;
     }
 
-    public function analyseURI( $uri )
+    public function analyseURI($uri)
     {
-        foreach ( $this->getSubMatchers() as $matcher )
-        {
-            if ( $matcher instanceof URILexer )
-            {
-                $uri = $matcher->analyseURI( $uri );
+        foreach ($this->getSubMatchers() as $matcher) {
+            if ($matcher instanceof URILexer) {
+                $uri = $matcher->analyseURI($uri);
             }
         }
 
         return $uri;
     }
 
-    public function analyseLink( $linkUri )
+    public function analyseLink($linkUri)
     {
-        foreach ( $this->getSubMatchers() as $matcher )
-        {
-            if ( $matcher instanceof URILexer )
-            {
-                $linkUri = $matcher->analyseLink( $linkUri );
+        foreach ($this->getSubMatchers() as $matcher) {
+            if ($matcher instanceof URILexer) {
+                $linkUri = $matcher->analyseLink($linkUri);
             }
         }
 
@@ -114,7 +108,7 @@ abstract class Compound implements CompoundInterface, URILexer
         return $this->subMatchers;
     }
 
-    public function setSubMatchers( array $subMatchers )
+    public function setSubMatchers(array $subMatchers)
     {
         $this->subMatchers = $subMatchers;
     }
@@ -132,7 +126,7 @@ abstract class Compound implements CompoundInterface, URILexer
            static::NAME . '(' .
            implode(
                ', ',
-               array_keys( $this->getSubMatchers() )
+               array_keys($this->getSubMatchers())
            ) . ')';
     }
 
@@ -145,6 +139,6 @@ abstract class Compound implements CompoundInterface, URILexer
     {
         // We don't need the whole matcher map and the matcher builder once serialized.
         // config property is not needed either as it's only needed for matching.
-        return array( 'subMatchers' );
+        return array('subMatchers');
     }
 }

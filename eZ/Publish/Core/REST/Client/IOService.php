@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the IOService class
+ * File containing the IOService class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,15 +14,12 @@ namespace eZ\Publish\Core\REST\Client;
 use eZ\Publish\API\Repository\IOService as APIIOService;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
-
 use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
 /**
  * Service used to handle io operations.
- *
- * @package eZ\Publish\API\Repository
  */
 class IOService implements APIIOService, Sessionable
 {
@@ -50,35 +49,32 @@ class IOService implements APIIOService, Sessionable
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
      * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      */
-    public function __construct( HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, RequestParser $requestParser )
+    public function __construct(HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, RequestParser $requestParser)
     {
-        $this->client          = $client;
+        $this->client = $client;
         $this->inputDispatcher = $inputDispatcher;
-        $this->outputVisitor   = $outputVisitor;
-        $this->requestParser   = $requestParser;
+        $this->outputVisitor = $outputVisitor;
+        $this->requestParser = $requestParser;
     }
 
     /**
-     * Set session ID
+     * Set session ID.
      *
      * Only for testing
      *
      * @param mixed tringid
      *
      * @private
-     *
-     * @return void
      */
-    public function setSession( $id )
+    public function setSession($id)
     {
-        if ( $this->outputVisitor instanceof Sessionable )
-        {
-            $this->outputVisitor->setSession( $id );
+        if ($this->outputVisitor instanceof Sessionable) {
+            $this->outputVisitor->setSession($id);
         }
     }
 
     /**
-     * Creates a BinaryFileCreateStruct object from the uploaded file $uploadedFile
+     * Creates a BinaryFileCreateStruct object from the uploaded file $uploadedFile.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException When given an invalid uploaded file
      *
@@ -86,13 +82,13 @@ class IOService implements APIIOService, Sessionable
      *
      * @return \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct
      */
-    public function newBinaryCreateStructFromUploadedFile( array $uploadedFile )
+    public function newBinaryCreateStructFromUploadedFile(array $uploadedFile)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Creates a BinaryFileCreateStruct object from $localFile
+     * Creates a BinaryFileCreateStruct object from $localFile.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException When given a non existing / unreadable file
      *
@@ -100,35 +96,35 @@ class IOService implements APIIOService, Sessionable
      *
      * @return \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct
      */
-    public function newBinaryCreateStructFromLocalFile( $localFile )
+    public function newBinaryCreateStructFromLocalFile($localFile)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Creates a  binary file in the the repository
+     * Creates a  binary file in the the repository.
      *
      * @param \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct $binaryFileCreateStruct
      *
      * @return \eZ\Publish\Core\IO\Values\BinaryFile The created BinaryFile object
      */
-    public function createBinaryFile( BinaryFileCreateStruct $binaryFileCreateStruct )
+    public function createBinaryFile(BinaryFileCreateStruct $binaryFileCreateStruct)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Deletes the BinaryFile with $path
+     * Deletes the BinaryFile with $path.
      *
      * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
      */
-    public function deleteBinaryFile( BinaryFile $binaryFile )
+    public function deleteBinaryFile(BinaryFile $binaryFile)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Loads the binary file with $id
+     * Loads the binary file with $id.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
@@ -136,32 +132,32 @@ class IOService implements APIIOService, Sessionable
      *
      * @return \eZ\Publish\Core\IO\Values\BinaryFile
      */
-    public function loadBinaryFile( $binaryFileId )
+    public function loadBinaryFile($binaryFileId)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Returns a read (mode: rb) file resource to the binary file identified by $path
+     * Returns a read (mode: rb) file resource to the binary file identified by $path.
      *
      * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
      *
      * @return resource
      */
-    public function getFileInputStream( BinaryFile $binaryFile )
+    public function getFileInputStream(BinaryFile $binaryFile)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Returns the content of the binary file
+     * Returns the content of the binary file.
      *
      * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
      *
      * @return string
      */
-    public function getFileContents( BinaryFile $binaryFile )
+    public function getFileContents(BinaryFile $binaryFile)
     {
-        throw new \Exception( "@todo: Implement." );
+        throw new \Exception('@todo: Implement.');
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\Core\Repository\Values\User\RoleCreateStruct;
 class RoleInputTest extends BaseTest
 {
     /**
-     * Tests the RoleInput parser
+     * Tests the RoleInput parser.
      */
     public function testParse()
     {
@@ -43,7 +45,7 @@ class RoleInputTest extends BaseTest
         );
 
         $roleInput = $this->getParser();
-        $result = $roleInput->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $roleInput->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleCreateStruct',
@@ -73,7 +75,7 @@ class RoleInputTest extends BaseTest
     }
 
     /**
-     * Returns the role input parser
+     * Returns the role input parser.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\RoleInput
      */
@@ -86,7 +88,7 @@ class RoleInputTest extends BaseTest
     }
 
     /**
-     * Get the role service mock object
+     * Get the role service mock object.
      *
      * @return \eZ\Publish\API\Repository\RoleService
      */
@@ -100,11 +102,11 @@ class RoleInputTest extends BaseTest
             false
         );
 
-        $roleServiceMock->expects( $this->any() )
-            ->method( 'newRoleCreateStruct' )
-            ->with( $this->equalTo( 'Identifier Bar' ) )
+        $roleServiceMock->expects($this->any())
+            ->method('newRoleCreateStruct')
+            ->with($this->equalTo('Identifier Bar'))
             ->will(
-                $this->returnValue( new RoleCreateStruct( array( 'identifier' => 'Identifier Bar' ) ) )
+                $this->returnValue(new RoleCreateStruct(array('identifier' => 'Identifier Bar')))
             );
 
         return $roleServiceMock;

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,14 +20,14 @@ use eZ\Publish\Core\REST\Server\Input\Parser\FieldDefinitionCreate;
 class FieldDefinitionCreateTest extends BaseTest
 {
     /**
-     * Tests the FieldDefinitionCreate parser
+     * Tests the FieldDefinitionCreate parser.
      */
     public function testParse()
     {
         $inputArray = $this->getInputArray();
 
         $fieldDefinitionCreate = $this->getParser();
-        $result = $fieldDefinitionCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $fieldDefinitionCreate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinitionCreateStruct',
@@ -88,19 +90,19 @@ class FieldDefinitionCreateTest extends BaseTest
         );
 
         $this->assertEquals(
-            array( 'eng-US' => 'Title' ),
+            array('eng-US' => 'Title'),
             $result->names,
             'names not created correctly'
         );
 
         $this->assertEquals(
-            array( 'eng-US' => 'This is the title' ),
+            array('eng-US' => 'This is the title'),
             $result->descriptions,
             'descriptions not created correctly'
         );
 
         $this->assertEquals(
-            array( 'textRows' => 24 ),
+            array('textRows' => 24),
             $result->fieldSettings,
             'fieldSettings not created correctly'
         );
@@ -109,8 +111,8 @@ class FieldDefinitionCreateTest extends BaseTest
             array(
                 'StringLengthValidator' => array(
                     'minStringLength' => 12,
-                    'maxStringLength' => 24
-                )
+                    'maxStringLength' => 24,
+                ),
             ),
             $result->validatorConfiguration,
             'validatorConfiguration not created correctly'
@@ -118,7 +120,7 @@ class FieldDefinitionCreateTest extends BaseTest
     }
 
     /**
-     * Test FieldDefinitionCreate parser throwing exception on missing identifier
+     * Test FieldDefinitionCreate parser throwing exception on missing identifier.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'identifier' element for FieldDefinitionCreate.
@@ -126,14 +128,14 @@ class FieldDefinitionCreateTest extends BaseTest
     public function testParseExceptionOnMissingIdentifier()
     {
         $inputArray = $this->getInputArray();
-        unset( $inputArray['identifier'] );
+        unset($inputArray['identifier']);
 
         $fieldDefinitionCreate = $this->getParser();
-        $fieldDefinitionCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $fieldDefinitionCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test FieldDefinitionCreate parser throwing exception on missing fieldType
+     * Test FieldDefinitionCreate parser throwing exception on missing fieldType.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldType' element for FieldDefinitionCreate.
@@ -141,14 +143,14 @@ class FieldDefinitionCreateTest extends BaseTest
     public function testParseExceptionOnMissingFieldType()
     {
         $inputArray = $this->getInputArray();
-        unset( $inputArray['fieldType'] );
+        unset($inputArray['fieldType']);
 
         $fieldDefinitionCreate = $this->getParser();
-        $fieldDefinitionCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $fieldDefinitionCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test FieldDefinitionCreate parser throwing exception on invalid names
+     * Test FieldDefinitionCreate parser throwing exception on invalid names.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'names' element for FieldDefinitionCreate.
@@ -156,14 +158,14 @@ class FieldDefinitionCreateTest extends BaseTest
     public function testParseExceptionOnInvalidNames()
     {
         $inputArray = $this->getInputArray();
-        unset( $inputArray['names']['value'] );
+        unset($inputArray['names']['value']);
 
         $fieldDefinitionCreate = $this->getParser();
-        $fieldDefinitionCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $fieldDefinitionCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test FieldDefinitionCreate parser throwing exception on invalid descriptions
+     * Test FieldDefinitionCreate parser throwing exception on invalid descriptions.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'descriptions' element for FieldDefinitionCreate.
@@ -171,14 +173,14 @@ class FieldDefinitionCreateTest extends BaseTest
     public function testParseExceptionOnInvalidDescriptions()
     {
         $inputArray = $this->getInputArray();
-        unset( $inputArray['descriptions']['value'] );
+        unset($inputArray['descriptions']['value']);
 
         $fieldDefinitionCreate = $this->getParser();
-        $fieldDefinitionCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $fieldDefinitionCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Returns the FieldDefinitionCreate parser
+     * Returns the FieldDefinitionCreate parser.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\FieldDefinitionCreate
      */
@@ -192,7 +194,7 @@ class FieldDefinitionCreateTest extends BaseTest
     }
 
     /**
-     * Get the FieldTypeParser mock object
+     * Get the FieldTypeParser mock object.
      *
      * @return \eZ\Publish\Core\REST\Common\Input\FieldTypeParser
      */
@@ -206,23 +208,23 @@ class FieldDefinitionCreateTest extends BaseTest
             false
         );
 
-        $fieldTypeParserMock->expects( $this->any() )
-            ->method( 'parseValue' )
-            ->will( $this->returnValue( 'New title' ) );
+        $fieldTypeParserMock->expects($this->any())
+            ->method('parseValue')
+            ->will($this->returnValue('New title'));
 
-        $fieldTypeParserMock->expects( $this->any() )
-            ->method( 'parseFieldSettings' )
-            ->will( $this->returnValue( array( 'textRows' => 24 ) ) );
+        $fieldTypeParserMock->expects($this->any())
+            ->method('parseFieldSettings')
+            ->will($this->returnValue(array('textRows' => 24)));
 
-        $fieldTypeParserMock->expects( $this->any() )
-            ->method( 'parseValidatorConfiguration' )
+        $fieldTypeParserMock->expects($this->any())
+            ->method('parseValidatorConfiguration')
             ->will(
                 $this->returnValue(
                     array(
                         'StringLengthValidator' => array(
                             'minStringLength' => 12,
-                            'maxStringLength' => 24
-                        )
+                            'maxStringLength' => 24,
+                        ),
                     )
                 )
             );
@@ -231,7 +233,7 @@ class FieldDefinitionCreateTest extends BaseTest
     }
 
     /**
-     * Get the content type service mock object
+     * Get the content type service mock object.
      *
      * @return \eZ\Publish\API\Repository\ContentTypeService
      */
@@ -245,15 +247,15 @@ class FieldDefinitionCreateTest extends BaseTest
             false
         );
 
-        $contentTypeServiceMock->expects( $this->any() )
-            ->method( 'newFieldDefinitionCreateStruct' )
-            ->with( $this->equalTo( 'title' ), $this->equalTo( 'ezstring' ) )
+        $contentTypeServiceMock->expects($this->any())
+            ->method('newFieldDefinitionCreateStruct')
+            ->with($this->equalTo('title'), $this->equalTo('ezstring'))
             ->will(
                 $this->returnValue(
                     new FieldDefinitionCreateStruct(
                         array(
                             'identifier' => 'title',
-                            'fieldTypeIdentifier' => 'ezstring'
+                            'fieldTypeIdentifier' => 'ezstring',
                         )
                     )
                 )
@@ -263,7 +265,7 @@ class FieldDefinitionCreateTest extends BaseTest
     }
 
     /**
-     * Returns the array under test
+     * Returns the array under test.
      *
      * @return array
      */
@@ -283,27 +285,27 @@ class FieldDefinitionCreateTest extends BaseTest
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-US',
-                        '#text' => 'Title'
-                    )
-                )
+                        '#text' => 'Title',
+                    ),
+                ),
             ),
             'descriptions' => array(
                 'value' => array(
                     array(
                         '_languageCode' => 'eng-US',
-                        '#text' => 'This is the title'
-                    )
-                )
+                        '#text' => 'This is the title',
+                    ),
+                ),
             ),
             // Note that ezstring does not support settings, but that is irrelevant for the test
             'fieldSettings' => array(
-                'textRows' => 24
+                'textRows' => 24,
             ),
             'validatorConfiguration' => array(
                 'StringLengthValidator' => array(
                     'minStringLength' => '12',
-                    'maxStringLength' => '24'
-                )
+                    'maxStringLength' => '24',
+                ),
             ),
         );
     }

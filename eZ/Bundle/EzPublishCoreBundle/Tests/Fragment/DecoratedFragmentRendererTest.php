@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the DecoratedFragmentRendererTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,87 +27,87 @@ class DecoratedFragmentRendererTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->innerRenderer = $this->getMock( 'Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface' );
+        $this->innerRenderer = $this->getMock('Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface');
     }
 
     public function testSetFragmentPathNotRoutableRenderer()
     {
-        $matcher = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer' );
-        $siteAccess = new SiteAccess( 'test', 'test', $matcher );
+        $matcher = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
+        $siteAccess = new SiteAccess('test', 'test', $matcher);
         $matcher
-            ->expects( $this->never() )
-            ->method( 'analyseLink' );
+            ->expects($this->never())
+            ->method('analyseLink');
 
-        $renderer = new DecoratedFragmentRenderer( $this->innerRenderer );
-        $renderer->setSiteAccess( $siteAccess );
-        $renderer->setFragmentPath( 'foo' );
+        $renderer = new DecoratedFragmentRenderer($this->innerRenderer);
+        $renderer->setSiteAccess($siteAccess);
+        $renderer->setFragmentPath('foo');
     }
 
     public function testSetFragmentPath()
     {
-        $matcher = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer' );
-        $siteAccess = new SiteAccess( 'test', 'test', $matcher );
+        $matcher = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
+        $siteAccess = new SiteAccess('test', 'test', $matcher);
         $matcher
-            ->expects( $this->once() )
-            ->method( 'analyseLink' )
-            ->with( '/foo' )
-            ->will( $this->returnValue( '/bar/foo' ) );
+            ->expects($this->once())
+            ->method('analyseLink')
+            ->with('/foo')
+            ->will($this->returnValue('/bar/foo'));
 
-        $innerRenderer = $this->getMock( 'Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer' );
+        $innerRenderer = $this->getMock('Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer');
         $innerRenderer
-            ->expects( $this->once() )
-            ->method( 'setFragmentPath' )
-            ->with( '/bar/foo' );
-        $renderer = new DecoratedFragmentRenderer( $innerRenderer );
-        $renderer->setSiteAccess( $siteAccess );
-        $renderer->setFragmentPath( '/foo' );
+            ->expects($this->once())
+            ->method('setFragmentPath')
+            ->with('/bar/foo');
+        $renderer = new DecoratedFragmentRenderer($innerRenderer);
+        $renderer->setSiteAccess($siteAccess);
+        $renderer->setFragmentPath('/foo');
     }
 
     public function testGetName()
     {
         $name = 'test';
         $this->innerRenderer
-            ->expects( $this->once() )
-            ->method( 'getName' )
-            ->will( $this->returnValue( $name ) );
+            ->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue($name));
 
-        $renderer = new DecoratedFragmentRenderer( $this->innerRenderer );
-        $this->assertSame( $name, $renderer->getName() );
+        $renderer = new DecoratedFragmentRenderer($this->innerRenderer);
+        $this->assertSame($name, $renderer->getName());
     }
 
     public function testRendererAbsoluteUrl()
     {
         $url = 'http://phoenix-rises.fm/foo/bar';
         $request = new Request();
-        $options = array( 'foo' => 'bar' );
+        $options = array('foo' => 'bar');
         $expectedReturn = '/_fragment?foo=bar';
         $this->innerRenderer
-            ->expects( $this->once() )
-            ->method( 'render' )
-            ->with( $url, $request, $options )
-            ->will( $this->returnValue( $expectedReturn ) );
+            ->expects($this->once())
+            ->method('render')
+            ->with($url, $request, $options)
+            ->will($this->returnValue($expectedReturn));
 
-        $renderer = new DecoratedFragmentRenderer( $this->innerRenderer );
-        $this->assertSame( $expectedReturn, $renderer->render( $url, $request, $options ) );
+        $renderer = new DecoratedFragmentRenderer($this->innerRenderer);
+        $this->assertSame($expectedReturn, $renderer->render($url, $request, $options));
     }
 
     public function testRendererControllerReference()
     {
-        $reference = new ControllerReference( 'FooBundle:bar:baz' );
-        $siteAccess = new SiteAccess( 'test', 'test' );
+        $reference = new ControllerReference('FooBundle:bar:baz');
+        $siteAccess = new SiteAccess('test', 'test');
         $request = new Request();
-        $request->attributes->set( 'siteaccess', $siteAccess );
-        $options = array( 'foo' => 'bar' );
+        $request->attributes->set('siteaccess', $siteAccess);
+        $options = array('foo' => 'bar');
         $expectedReturn = '/_fragment?foo=bar';
         $this->innerRenderer
-            ->expects( $this->once() )
-            ->method( 'render' )
-            ->with( $reference, $request, $options )
-            ->will( $this->returnValue( $expectedReturn ) );
+            ->expects($this->once())
+            ->method('render')
+            ->with($reference, $request, $options)
+            ->will($this->returnValue($expectedReturn));
 
-        $renderer = new DecoratedFragmentRenderer( $this->innerRenderer );
-        $this->assertSame( $expectedReturn, $renderer->render( $reference, $request, $options ) );
-        $this->assertTrue( isset( $reference->attributes['serialized_siteaccess'] ) );
-        $this->assertSame( serialize( $siteAccess ), $reference->attributes['serialized_siteaccess'] );
+        $renderer = new DecoratedFragmentRenderer($this->innerRenderer);
+        $this->assertSame($expectedReturn, $renderer->render($reference, $request, $options));
+        $this->assertTrue(isset($reference->attributes['serialized_siteaccess']));
+        $this->assertSame(serialize($siteAccess), $reference->attributes['serialized_siteaccess']);
     }
 }

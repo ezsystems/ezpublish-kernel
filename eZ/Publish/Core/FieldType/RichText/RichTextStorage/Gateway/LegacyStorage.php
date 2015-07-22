@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RichText LegacyStorage class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,31 +23,29 @@ class LegacyStorage extends Gateway
     protected $dbHandler;
 
     /**
-     * Set database handler for this gateway
+     * Set database handler for this gateway.
      *
      * @param mixed $dbHandler
      *
-     * @return void
      * @throws \RuntimeException if $dbHandler is not an instance of
      *         {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler}
      */
-    public function setConnection( $dbHandler )
+    public function setConnection($dbHandler)
     {
         // This obviously violates the Liskov substitution Principle, but with
         // the given class design there is no sane other option. Actually the
         // dbHandler *should* be passed to the constructor, and there should
         // not be the need to post-inject it.
-        if ( !$dbHandler instanceof DatabaseHandler )
-        {
-            throw new RuntimeException( "Invalid dbHandler passed" );
+        if (!$dbHandler instanceof DatabaseHandler) {
+            throw new RuntimeException('Invalid dbHandler passed');
         }
 
-        $this->urlGateway->setConnection( $dbHandler );
+        $this->urlGateway->setConnection($dbHandler);
         $this->dbHandler = $dbHandler;
     }
 
     /**
-     * Returns the active connection
+     * Returns the active connection.
      *
      * @throws \RuntimeException if no connection has been set, yet.
      *
@@ -53,10 +53,10 @@ class LegacyStorage extends Gateway
      */
     protected function getConnection()
     {
-        if ( $this->dbHandler === null )
-        {
-            throw new \RuntimeException( "Missing database connection." );
+        if ($this->dbHandler === null) {
+            throw new \RuntimeException('Missing database connection.');
         }
+
         return $this->dbHandler;
     }
 
@@ -69,22 +69,20 @@ class LegacyStorage extends Gateway
      *
      * @return array An array of Content ids, with remote ids as keys
      */
-    public function getContentIds( array $remoteIds )
+    public function getContentIds(array $remoteIds)
     {
         $objectRemoteIdMap = array();
 
-        if ( !empty( $remoteIds ) )
-        {
+        if (!empty($remoteIds)) {
             $q = $this->getConnection()->createSelectQuery();
             $q
-                ->select( "id", "remote_id" )
-                ->from( "ezcontentobject" )
-                ->where( $q->expr->in( 'remote_id', $remoteIds ) );
+                ->select('id', 'remote_id')
+                ->from('ezcontentobject')
+                ->where($q->expr->in('remote_id', $remoteIds));
 
             $statement = $q->prepare();
             $statement->execute();
-            foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
-            {
+            foreach ($statement->fetchAll(\PDO::FETCH_ASSOC) as $row) {
                 $objectRemoteIdMap[$row['remote_id']] = $row['id'];
             }
         }

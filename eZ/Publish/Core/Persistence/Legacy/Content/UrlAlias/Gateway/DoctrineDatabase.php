@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the DoctrineDatabase UrlAlias Gateway class
+ * File containing the DoctrineDatabase UrlAlias Gateway class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,13 +17,13 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as Languag
 use eZ\Publish\Core\Persistence\Database\Query;
 
 /**
- * UrlAlias Gateway
+ * UrlAlias Gateway.
  */
 class DoctrineDatabase extends Gateway
 {
     /**
      * 2^30, since PHP_INT_MAX can cause overflows in DB systems, if PHP is run
-     * on 64 bit systems
+     * on 64 bit systems.
      */
     const MAX_LIMIT = 1073741824;
 
@@ -29,21 +31,22 @@ class DoctrineDatabase extends Gateway
      * Columns of database tables.
      *
      * @var array
+     *
      * @todo remove after testing
      */
     protected $columns = array(
-        "ezurlalias_ml" => array(
-            "action",
-            "action_type",
-            "alias_redirects",
-            "id",
-            "is_alias",
-            "is_original",
-            "lang_mask",
-            "link",
-            "parent",
-            "text",
-            "text_md5",
+        'ezurlalias_ml' => array(
+            'action',
+            'action_type',
+            'alias_redirects',
+            'id',
+            'is_alias',
+            'is_original',
+            'lang_mask',
+            'link',
+            'parent',
+            'text',
+            'text_md5',
         ),
     );
 
@@ -55,22 +58,22 @@ class DoctrineDatabase extends Gateway
     protected $dbHandler;
 
     /**
-     * Language mask generator
+     * Language mask generator.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
      */
     protected $languageMaskGenerator;
 
     /**
-     * Creates a new DoctrineDatabase UrlAlias Gateway
+     * Creates a new DoctrineDatabase UrlAlias Gateway.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
-    public function __construct (
+    public function __construct(
         DatabaseHandler $dbHandler,
-        LanguageMaskGenerator $languageMaskGenerator )
-    {
+        LanguageMaskGenerator $languageMaskGenerator
+    ) {
         $this->dbHandler = $dbHandler;
         $this->languageMaskGenerator = $languageMaskGenerator;
     }
@@ -79,55 +82,55 @@ class DoctrineDatabase extends Gateway
      * Loads list of aliases by given $locationId.
      *
      * @param mixed $locationId
-     * @param boolean $custom
+     * @param bool $custom
      * @param mixed $languageId
      *
      * @return array
      */
-    public function loadLocationEntries( $locationId, $custom = false, $languageId = false )
+    public function loadLocationEntries($locationId, $custom = false, $languageId = false)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $this->dbHandler->quoteColumn( "id" ),
-            $this->dbHandler->quoteColumn( "link" ),
-            $this->dbHandler->quoteColumn( "is_alias" ),
-            $this->dbHandler->quoteColumn( "alias_redirects" ),
-            $this->dbHandler->quoteColumn( "lang_mask" ),
-            $this->dbHandler->quoteColumn( "is_original" ),
-            $this->dbHandler->quoteColumn( "parent" ),
-            $this->dbHandler->quoteColumn( "text" ),
-            $this->dbHandler->quoteColumn( "text_md5" ),
-            $this->dbHandler->quoteColumn( "action" )
+            $this->dbHandler->quoteColumn('id'),
+            $this->dbHandler->quoteColumn('link'),
+            $this->dbHandler->quoteColumn('is_alias'),
+            $this->dbHandler->quoteColumn('alias_redirects'),
+            $this->dbHandler->quoteColumn('lang_mask'),
+            $this->dbHandler->quoteColumn('is_original'),
+            $this->dbHandler->quoteColumn('parent'),
+            $this->dbHandler->quoteColumn('text'),
+            $this->dbHandler->quoteColumn('text_md5'),
+            $this->dbHandler->quoteColumn('action')
         )->from(
-            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable('ezurlalias_ml')
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "action" ),
-                    $query->bindValue( "eznode:{$locationId}", null, \PDO::PARAM_STR )
+                    $this->dbHandler->quoteColumn('action'),
+                    $query->bindValue("eznode:{$locationId}", null, \PDO::PARAM_STR)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "is_original" ),
-                    $query->bindValue( 1, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('is_original'),
+                    $query->bindValue(1, null, \PDO::PARAM_INT)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "is_alias" ),
+                    $this->dbHandler->quoteColumn('is_alias'),
                     $query->bindValue(
                         $custom ? 1 : 0,
-                        null, \PDO::PARAM_INT
+                        null,
+                        \PDO::PARAM_INT
                     )
                 )
             )
         );
 
-        if ( $languageId !== false )
-        {
+        if ($languageId !== false) {
             $query->where(
                 $query->expr->gt(
                     $query->expr->bitAnd(
-                        $this->dbHandler->quoteColumn( "lang_mask" ),
-                        $query->bindValue( $languageId, null, \PDO::PARAM_INT )
+                        $this->dbHandler->quoteColumn('lang_mask'),
+                        $query->bindValue($languageId, null, \PDO::PARAM_INT)
                     ),
                     0
                 )
@@ -137,7 +140,7 @@ class DoctrineDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -149,51 +152,50 @@ class DoctrineDatabase extends Gateway
      *
      * @return array
      */
-    public function listGlobalEntries( $languageCode = null, $offset = 0, $limit = -1 )
+    public function listGlobalEntries($languageCode = null, $offset = 0, $limit = -1)
     {
         $limit = $limit === -1 ? self::MAX_LIMIT : $limit;
 
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $this->dbHandler->quoteColumn( "action" ),
-            $this->dbHandler->quoteColumn( "id" ),
-            $this->dbHandler->quoteColumn( "link" ),
-            $this->dbHandler->quoteColumn( "is_alias" ),
-            $this->dbHandler->quoteColumn( "alias_redirects" ),
-            $this->dbHandler->quoteColumn( "lang_mask" ),
-            $this->dbHandler->quoteColumn( "is_original" ),
-            $this->dbHandler->quoteColumn( "parent" ),
-            $this->dbHandler->quoteColumn( "text_md5" )
+            $this->dbHandler->quoteColumn('action'),
+            $this->dbHandler->quoteColumn('id'),
+            $this->dbHandler->quoteColumn('link'),
+            $this->dbHandler->quoteColumn('is_alias'),
+            $this->dbHandler->quoteColumn('alias_redirects'),
+            $this->dbHandler->quoteColumn('lang_mask'),
+            $this->dbHandler->quoteColumn('is_original'),
+            $this->dbHandler->quoteColumn('parent'),
+            $this->dbHandler->quoteColumn('text_md5')
         )->from(
-            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable('ezurlalias_ml')
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "action_type" ),
-                    $query->bindValue( "module", null, \PDO::PARAM_STR )
+                    $this->dbHandler->quoteColumn('action_type'),
+                    $query->bindValue('module', null, \PDO::PARAM_STR)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "is_original" ),
-                    $query->bindValue( 1, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('is_original'),
+                    $query->bindValue(1, null, \PDO::PARAM_INT)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "is_alias" ),
-                    $query->bindValue( 1, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('is_alias'),
+                    $query->bindValue(1, null, \PDO::PARAM_INT)
                 )
             )
         )->limit(
             $limit,
             $offset
         );
-        if ( isset( $languageCode ) )
-        {
+        if (isset($languageCode)) {
             $query->where(
                 $query->expr->gt(
                     $query->expr->bitAnd(
-                        $this->dbHandler->quoteColumn( "lang_mask" ),
+                        $this->dbHandler->quoteColumn('lang_mask'),
                         $query->bindValue(
-                            $this->languageMaskGenerator->generateLanguageIndicator( $languageCode, false ),
+                            $this->languageMaskGenerator->generateLanguageIndicator($languageCode, false),
                             null,
                             \PDO::PARAM_INT
                         )
@@ -205,7 +207,7 @@ class DoctrineDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -216,28 +218,28 @@ class DoctrineDatabase extends Gateway
      *
      * @param mixed $id
      *
-     * @return boolean
+     * @return bool
      */
-    public function isRootEntry( $id )
+    public function isRootEntry($id)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $this->dbHandler->quoteColumn( "text" ),
-            $this->dbHandler->quoteColumn( "parent" )
+            $this->dbHandler->quoteColumn('text'),
+            $this->dbHandler->quoteColumn('parent')
         )->from(
-            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable('ezurlalias_ml')
         )->where(
             $query->expr->eq(
-                $this->dbHandler->quoteColumn( "id" ),
-                $query->bindValue( $id, null, \PDO::PARAM_INT )
+                $this->dbHandler->quoteColumn('id'),
+                $query->bindValue($id, null, \PDO::PARAM_INT)
             )
         );
         $statement = $query->prepare();
         $statement->execute();
-        $row = $statement->fetch( \PDO::FETCH_ASSOC );
+        $row = $statement->fetch(\PDO::FETCH_ASSOC);
 
-        return strlen( $row["text"] ) == 0 && $row["parent"] == 0;
+        return strlen($row['text']) == 0 && $row['parent'] == 0;
     }
 
     /**
@@ -252,38 +254,36 @@ class DoctrineDatabase extends Gateway
      * @param mixed $newId
      * @param mixed $parentId
      * @param string $textMD5
-     *
-     * @return void
      */
-    public function cleanupAfterPublish( $action, $languageId, $newId, $parentId, $textMD5 )
+    public function cleanupAfterPublish($action, $languageId, $newId, $parentId, $textMD5)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            $this->dbHandler->quoteColumn( "parent" ),
-            $this->dbHandler->quoteColumn( "text_md5" ),
-            $this->dbHandler->quoteColumn( "lang_mask" )
+            $this->dbHandler->quoteColumn('parent'),
+            $this->dbHandler->quoteColumn('text_md5'),
+            $this->dbHandler->quoteColumn('lang_mask')
         )->from(
-            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable('ezurlalias_ml')
         )->where(
             $query->expr->lAnd(
                 // 1) Autogenerated aliases that match action and language...
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "action" ),
-                    $query->bindValue( $action, null, \PDO::PARAM_STR )
+                    $this->dbHandler->quoteColumn('action'),
+                    $query->bindValue($action, null, \PDO::PARAM_STR)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "is_original" ),
-                    $query->bindValue( 1, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('is_original'),
+                    $query->bindValue(1, null, \PDO::PARAM_INT)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "is_alias" ),
-                    $query->bindValue( 0, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('is_alias'),
+                    $query->bindValue(0, null, \PDO::PARAM_INT)
                 ),
                 $query->expr->gt(
                     $query->expr->bitAnd(
-                        $this->dbHandler->quoteColumn( "lang_mask" ),
-                        $query->bindValue( $languageId, null, \PDO::PARAM_INT )
+                        $this->dbHandler->quoteColumn('lang_mask'),
+                        $query->bindValue($languageId, null, \PDO::PARAM_INT)
                     ),
                     0
                 ),
@@ -291,12 +291,12 @@ class DoctrineDatabase extends Gateway
                 $query->expr->not(
                     $query->expr->lAnd(
                         $query->expr->eq(
-                            $this->dbHandler->quoteColumn( "parent" ),
-                            $query->bindValue( $parentId, null, \PDO::PARAM_INT )
+                            $this->dbHandler->quoteColumn('parent'),
+                            $query->bindValue($parentId, null, \PDO::PARAM_INT)
                         ),
                         $query->expr->eq(
-                            $this->dbHandler->quoteColumn( "text_md5" ),
-                            $query->bindValue( $textMD5, null, \PDO::PARAM_STR )
+                            $this->dbHandler->quoteColumn('text_md5'),
+                            $query->bindValue($textMD5, null, \PDO::PARAM_STR)
                         )
                     )
                 )
@@ -305,19 +305,14 @@ class DoctrineDatabase extends Gateway
 
         $statement = $query->prepare();
         $statement->execute();
-        $row = $statement->fetch( \PDO::FETCH_ASSOC );
+        $row = $statement->fetch(\PDO::FETCH_ASSOC);
 
-        if ( !empty( $row ) )
-        {
+        if (!empty($row)) {
             // If language mask is composite (consists of multiple languages) then remove given language from entry
-            if ( $row["lang_mask"] & ~( $languageId | 1 ) )
-            {
-                $this->removeTranslation( $row["parent"], $row["text_md5"], $languageId );
-            }
-            // Otherwise mark entry as history
-            else
-            {
-                $this->historize( $row["parent"], $row["text_md5"], $newId );
+            if ($row['lang_mask'] & ~($languageId | 1)) {
+                $this->removeTranslation($row['parent'], $row['text_md5'], $languageId);
+            } else { // Otherwise mark entry as history
+                $this->historize($row['parent'], $row['text_md5'], $newId);
             }
         }
     }
@@ -336,23 +331,21 @@ class DoctrineDatabase extends Gateway
      *
      * @param mixed $parentId
      * @param string $textMD5
-     *
-     * @return void
      */
-    protected function historize( $parentId, $textMD5, $newId )
+    protected function historize($parentId, $textMD5, $newId)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
-            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable('ezurlalias_ml')
         )->set(
-            $this->dbHandler->quoteColumn( "is_original" ),
-            $query->bindValue( 0, null, \PDO::PARAM_INT )
+            $this->dbHandler->quoteColumn('is_original'),
+            $query->bindValue(0, null, \PDO::PARAM_INT)
         )->set(
-            $this->dbHandler->quoteColumn( "link" ),
-            $query->bindValue( $newId, null, \PDO::PARAM_INT )
+            $this->dbHandler->quoteColumn('link'),
+            $query->bindValue($newId, null, \PDO::PARAM_INT)
         )->set(
-            $this->dbHandler->quoteColumn( "id" ),
+            $this->dbHandler->quoteColumn('id'),
             $query->bindValue(
                 $this->getNextId(),
                 null,
@@ -361,12 +354,12 @@ class DoctrineDatabase extends Gateway
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "parent" ),
-                    $query->bindValue( $parentId, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('parent'),
+                    $query->bindValue($parentId, null, \PDO::PARAM_INT)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "text_md5" ),
-                    $query->bindValue( $textMD5, null, \PDO::PARAM_STR )
+                    $this->dbHandler->quoteColumn('text_md5'),
+                    $query->bindValue($textMD5, null, \PDO::PARAM_STR)
                 )
             )
         );
@@ -381,30 +374,28 @@ class DoctrineDatabase extends Gateway
      * @param mixed $parentId
      * @param string $textMD5
      * @param mixed $languageId
-     *
-     * @return void
      */
-    protected function removeTranslation( $parentId, $textMD5, $languageId )
+    protected function removeTranslation($parentId, $textMD5, $languageId)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
-            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable('ezurlalias_ml')
         )->set(
-            $this->dbHandler->quoteColumn( "lang_mask" ),
+            $this->dbHandler->quoteColumn('lang_mask'),
             $query->expr->bitAnd(
-                $this->dbHandler->quoteColumn( "lang_mask" ),
-                $query->bindValue( ~$languageId, null, \PDO::PARAM_INT )
+                $this->dbHandler->quoteColumn('lang_mask'),
+                $query->bindValue(~$languageId, null, \PDO::PARAM_INT)
             )
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "parent" ),
-                    $query->bindValue( $parentId, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('parent'),
+                    $query->bindValue($parentId, null, \PDO::PARAM_INT)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "text_md5" ),
-                    $query->bindValue( $textMD5, null, \PDO::PARAM_STR )
+                    $this->dbHandler->quoteColumn('text_md5'),
+                    $query->bindValue($textMD5, null, \PDO::PARAM_STR)
                 )
             )
         );
@@ -420,39 +411,36 @@ class DoctrineDatabase extends Gateway
      *
      * @param mixed $id
      * @param mixed $link
-     *
-     * @return void
      */
-    public function historizeId( $id, $link )
+    public function historizeId($id, $link)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
-            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable('ezurlalias_ml')
         )->set(
-            $this->dbHandler->quoteColumn( "is_original" ),
-            $query->bindValue( 0, null, \PDO::PARAM_INT )
+            $this->dbHandler->quoteColumn('is_original'),
+            $query->bindValue(0, null, \PDO::PARAM_INT)
         )->set(
-            $this->dbHandler->quoteColumn( "link" ),
-            $query->bindValue( $link, null, \PDO::PARAM_INT )
+            $this->dbHandler->quoteColumn('link'),
+            $query->bindValue($link, null, \PDO::PARAM_INT)
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "is_alias" ),
-                    $query->bindValue( 0, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('is_alias'),
+                    $query->bindValue(0, null, \PDO::PARAM_INT)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "action_type" ),
-                    $query->bindValue( "eznode", null, \PDO::PARAM_STR )
+                    $this->dbHandler->quoteColumn('action_type'),
+                    $query->bindValue('eznode', null, \PDO::PARAM_STR)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "link" ),
-                    $query->bindValue( $id, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('link'),
+                    $query->bindValue($id, null, \PDO::PARAM_INT)
                 )
             )
         );
         $query->prepare()->execute();
-
     }
 
     /**
@@ -462,27 +450,25 @@ class DoctrineDatabase extends Gateway
      *
      * @param mixed $oldParentId
      * @param mixed $newParentId
-     *
-     * @return void
      */
-    public function reparent( $oldParentId, $newParentId )
+    public function reparent($oldParentId, $newParentId)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
-            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable('ezurlalias_ml')
         )->set(
-            $this->dbHandler->quoteColumn( "parent" ),
-            $query->bindValue( $newParentId, null, \PDO::PARAM_INT )
+            $this->dbHandler->quoteColumn('parent'),
+            $query->bindValue($newParentId, null, \PDO::PARAM_INT)
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "is_alias" ),
-                    $query->bindValue( 0, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('is_alias'),
+                    $query->bindValue(0, null, \PDO::PARAM_INT)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "parent" ),
-                    $query->bindValue( $oldParentId, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('parent'),
+                    $query->bindValue($oldParentId, null, \PDO::PARAM_INT)
                 )
             )
         );
@@ -498,24 +484,22 @@ class DoctrineDatabase extends Gateway
      * @param mixed $parentId
      * @param string $textMD5
      * @param array $values associative array with column names as keys and column values as values
-     *
-     * @return void
      */
-    public function updateRow( $parentId, $textMD5, array $values )
+    public function updateRow($parentId, $textMD5, array $values)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->dbHandler->createUpdateQuery();
-        $query->update( $this->dbHandler->quoteTable( "ezurlalias_ml" ) );
-        $this->setQueryValues( $query, $values );
+        $query->update($this->dbHandler->quoteTable('ezurlalias_ml'));
+        $this->setQueryValues($query, $values);
         $query->where(
             $query->expr->lAnd(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "parent" ),
-                    $query->bindValue( $parentId, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('parent'),
+                    $query->bindValue($parentId, null, \PDO::PARAM_INT)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "text_md5" ),
-                    $query->bindValue( $textMD5, null, \PDO::PARAM_STR )
+                    $this->dbHandler->quoteColumn('text_md5'),
+                    $query->bindValue($textMD5, null, \PDO::PARAM_STR)
                 )
             )
         );
@@ -529,38 +513,51 @@ class DoctrineDatabase extends Gateway
      *
      * @return mixed
      */
-    public function insertRow( array $values )
+    public function insertRow(array $values)
     {
         // @todo remove after testing
         if (
-            !isset( $values["text"] ) ||
-            !isset( $values["text_md5"] ) ||
-            !isset( $values["action"] ) ||
-            !isset( $values["parent"] ) ||
-            !isset( $values["lang_mask"] ) )
-        {
-            throw new \Exception( "value set is incomplete: " . var_export( $values, true ) . ", can't execute insert" );
+            !isset($values['text']) ||
+            !isset($values['text_md5']) ||
+            !isset($values['action']) ||
+            !isset($values['parent']) ||
+            !isset($values['lang_mask'])) {
+            throw new \Exception('value set is incomplete: ' . var_export($values, true) . ", can't execute insert");
         }
-        if ( !isset( $values["id"] ) ) $values["id"] = $this->getNextId();
-        if ( !isset( $values["link"] ) ) $values["link"] = $values["id"];
-        if ( !isset( $values["is_original"] ) ) $values["is_original"] = ( $values["id"] == $values["link"] ? 1 : 0 );
-        if ( !isset( $values["is_alias"] ) ) $values["is_alias"] = 0;
-        if ( !isset( $values["alias_redirects"] ) ) $values["alias_redirects"] = 0;
-        if ( !isset( $values["action_type"] ) )
-        {
-            if ( preg_match( "#^(.+):.*#", $values["action"], $matches ) )
-            $values["action_type"] = $matches[1];
+        if (!isset($values['id'])) {
+            $values['id'] = $this->getNextId();
         }
-        if ( $values["is_alias"] ) $values["is_original"] = 1;
-        if ( $values["action"] === "nop:" ) $values["is_original"] = 0;
+        if (!isset($values['link'])) {
+            $values['link'] = $values['id'];
+        }
+        if (!isset($values['is_original'])) {
+            $values['is_original'] = ($values['id'] == $values['link'] ? 1 : 0);
+        }
+        if (!isset($values['is_alias'])) {
+            $values['is_alias'] = 0;
+        }
+        if (!isset($values['alias_redirects'])) {
+            $values['alias_redirects'] = 0;
+        }
+        if (!isset($values['action_type'])) {
+            if (preg_match('#^(.+):.*#', $values['action'], $matches)) {
+                $values['action_type'] = $matches[1];
+            }
+        }
+        if ($values['is_alias']) {
+            $values['is_original'] = 1;
+        }
+        if ($values['action'] === 'nop:') {
+            $values['is_original'] = 0;
+        }
 
         /** @var $query \eZ\Publish\Core\Persistence\Database\InsertQuery */
         $query = $this->dbHandler->createInsertQuery();
-        $query->insertInto( $this->dbHandler->quoteTable( "ezurlalias_ml" ) );
-        $this->setQueryValues( $query, $values );
+        $query->insertInto($this->dbHandler->quoteTable('ezurlalias_ml'));
+        $this->setQueryValues($query, $values);
         $query->prepare()->execute();
 
-        return $values["id"];
+        return $values['id'];
     }
 
     /**
@@ -570,32 +567,27 @@ class DoctrineDatabase extends Gateway
      * @param array $values
      *
      * @throws \Exception
-     *
-     * @return void
      */
-    protected function setQueryValues( Query $query, $values )
+    protected function setQueryValues(Query $query, $values)
     {
-        foreach ( $values as $column => $value )
-        {
+        foreach ($values as $column => $value) {
             // @todo remove after testing
-            if ( !in_array( $column, $this->columns["ezurlalias_ml"] ) )
-            {
-                throw new \Exception( "unknown column '$column' for table 'ezurlalias_ml'" );
+            if (!in_array($column, $this->columns['ezurlalias_ml'])) {
+                throw new \Exception("unknown column '$column' for table 'ezurlalias_ml'");
             }
-            switch ( $column )
-            {
-                case "text":
-                case "action":
-                case "text_md5":
-                case "action_type":
+            switch ($column) {
+                case 'text':
+                case 'action':
+                case 'text_md5':
+                case 'action_type':
                     $pdoDataType = \PDO::PARAM_STR;
                     break;
                 default:
                     $pdoDataType = \PDO::PARAM_INT;
             }
             $query->set(
-                $this->dbHandler->quoteColumn( $column ),
-                $query->bindValue( $value, null, $pdoDataType )
+                $this->dbHandler->quoteColumn($column),
+                $query->bindValue($value, null, $pdoDataType)
             );
         }
     }
@@ -607,13 +599,11 @@ class DoctrineDatabase extends Gateway
      */
     public function getNextId()
     {
-        $sequence = $this->dbHandler->getSequenceName(
-            'ezurlalias_ml_incr', 'id'
-        );
+        $sequence = $this->dbHandler->getSequenceName('ezurlalias_ml_incr', 'id');
         /** @var $query \eZ\Publish\Core\Persistence\Database\InsertQuery */
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto(
-            $this->dbHandler->quoteTable( "ezurlalias_ml_incr" )
+            $this->dbHandler->quoteTable('ezurlalias_ml_incr')
         );
         // ezcDatabase does not abstract the "auto increment id"
         // INSERT INTO ezurlalias_ml_incr VALUES(DEFAULT) is not an option due
@@ -621,48 +611,45 @@ class DoctrineDatabase extends Gateway
         // as a result we are forced to check which database is currently used
         // to generate the correct SQL query
         // see https://jira.ez.no/browse/EZP-20652
-        if ( $this->dbHandler->useSequences() )
-        {
+        if ($this->dbHandler->useSequences()) {
             $query->set(
-                $this->dbHandler->quoteColumn( "id" ),
+                $this->dbHandler->quoteColumn('id'),
                 "nextval('{$sequence}')"
             );
-        }
-        else
-        {
+        } else {
             $query->set(
-                $this->dbHandler->quoteColumn( "id" ),
-                $query->bindValue( null, null, \PDO::PARAM_NULL )
+                $this->dbHandler->quoteColumn('id'),
+                $query->bindValue(null, null, \PDO::PARAM_NULL)
             );
         }
         $query->prepare()->execute();
 
-        return $this->dbHandler->lastInsertId( $sequence );
+        return $this->dbHandler->lastInsertId($sequence);
     }
 
     /**
-     * Loads single row data matched by composite primary key
+     * Loads single row data matched by composite primary key.
      *
      * @param mixed $parentId
      * @param string $textMD5
      *
      * @return array
      */
-    public function loadRow( $parentId, $textMD5 )
+    public function loadRow($parentId, $textMD5)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
-        $query->select( "*" )->from(
-            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+        $query->select('*')->from(
+            $this->dbHandler->quoteTable('ezurlalias_ml')
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "parent" ),
-                    $query->bindValue( $parentId, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('parent'),
+                    $query->bindValue($parentId, null, \PDO::PARAM_INT)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "text_md5" ),
-                    $query->bindValue( $textMD5, null, \PDO::PARAM_STR )
+                    $this->dbHandler->quoteColumn('text_md5'),
+                    $query->bindValue($textMD5, null, \PDO::PARAM_STR)
                 )
             )
         );
@@ -670,7 +657,7 @@ class DoctrineDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetch( \PDO::FETCH_ASSOC );
+        return $statement->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -680,77 +667,71 @@ class DoctrineDatabase extends Gateway
      *
      * @return array
      */
-    public function loadUrlAliasData( array $urlHashes )
+    public function loadUrlAliasData(array $urlHashes)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
 
-        $count = count( $urlHashes );
-        foreach ( $urlHashes as $level => $urlPartHash )
-        {
-            $tableName = "ezurlalias_ml" . ( $level === $count - 1 ? "" : $level );
+        $count = count($urlHashes);
+        foreach ($urlHashes as $level => $urlPartHash) {
+            $tableName = 'ezurlalias_ml' . ($level === $count - 1 ? '' : $level);
 
-            if ( $level === $count - 1 )
-            {
+            if ($level === $count - 1) {
                 $query->select(
-                    $this->dbHandler->quoteColumn( "id", $tableName ),
-                    $this->dbHandler->quoteColumn( "link", $tableName ),
-                    $this->dbHandler->quoteColumn( "is_alias", $tableName ),
-                    $this->dbHandler->quoteColumn( "alias_redirects", $tableName ),
-                    $this->dbHandler->quoteColumn( "is_original", $tableName ),
-                    $this->dbHandler->quoteColumn( "action", $tableName ),
-                    $this->dbHandler->quoteColumn( "action_type", $tableName ),
-                    $this->dbHandler->quoteColumn( "lang_mask", $tableName ),
-                    $this->dbHandler->quoteColumn( "text", $tableName ),
-                    $this->dbHandler->quoteColumn( "parent", $tableName ),
-                    $this->dbHandler->quoteColumn( "text_md5", $tableName )
+                    $this->dbHandler->quoteColumn('id', $tableName),
+                    $this->dbHandler->quoteColumn('link', $tableName),
+                    $this->dbHandler->quoteColumn('is_alias', $tableName),
+                    $this->dbHandler->quoteColumn('alias_redirects', $tableName),
+                    $this->dbHandler->quoteColumn('is_original', $tableName),
+                    $this->dbHandler->quoteColumn('action', $tableName),
+                    $this->dbHandler->quoteColumn('action_type', $tableName),
+                    $this->dbHandler->quoteColumn('lang_mask', $tableName),
+                    $this->dbHandler->quoteColumn('text', $tableName),
+                    $this->dbHandler->quoteColumn('parent', $tableName),
+                    $this->dbHandler->quoteColumn('text_md5', $tableName)
                 )->from(
-                    $this->dbHandler->quoteTable( "ezurlalias_ml" )
+                    $this->dbHandler->quoteTable('ezurlalias_ml')
                 );
-            }
-            else
-            {
+            } else {
                 $query->select(
-                    $this->dbHandler->aliasedColumn( $query, "id", $tableName ),
-                    $this->dbHandler->aliasedColumn( $query, "link", $tableName ),
-                    $this->dbHandler->aliasedColumn( $query, "is_alias", $tableName ),
-                    $this->dbHandler->aliasedColumn( $query, "alias_redirects", $tableName ),
-                    $this->dbHandler->aliasedColumn( $query, "is_original", $tableName ),
-                    $this->dbHandler->aliasedColumn( $query, "action", $tableName ),
-                    $this->dbHandler->aliasedColumn( $query, "action_type", $tableName ),
-                    $this->dbHandler->aliasedColumn( $query, "lang_mask", $tableName ),
-                    $this->dbHandler->aliasedColumn( $query, "text", $tableName ),
-                    $this->dbHandler->aliasedColumn( $query, "parent", $tableName ),
-                    $this->dbHandler->aliasedColumn( $query, "text_md5", $tableName )
+                    $this->dbHandler->aliasedColumn($query, 'id', $tableName),
+                    $this->dbHandler->aliasedColumn($query, 'link', $tableName),
+                    $this->dbHandler->aliasedColumn($query, 'is_alias', $tableName),
+                    $this->dbHandler->aliasedColumn($query, 'alias_redirects', $tableName),
+                    $this->dbHandler->aliasedColumn($query, 'is_original', $tableName),
+                    $this->dbHandler->aliasedColumn($query, 'action', $tableName),
+                    $this->dbHandler->aliasedColumn($query, 'action_type', $tableName),
+                    $this->dbHandler->aliasedColumn($query, 'lang_mask', $tableName),
+                    $this->dbHandler->aliasedColumn($query, 'text', $tableName),
+                    $this->dbHandler->aliasedColumn($query, 'parent', $tableName),
+                    $this->dbHandler->aliasedColumn($query, 'text_md5', $tableName)
                 )->from(
-                    $query->alias( "ezurlalias_ml", $tableName )
+                    $query->alias('ezurlalias_ml', $tableName)
                 );
             }
 
             $query->where(
                 $query->expr->lAnd(
                     $query->expr->eq(
-                        $this->dbHandler->quoteColumn( "text_md5", $tableName ),
-                        $query->bindValue( $urlPartHash, null, \PDO::PARAM_STR )
+                        $this->dbHandler->quoteColumn('text_md5', $tableName),
+                        $query->bindValue($urlPartHash, null, \PDO::PARAM_STR)
                     ),
                     $query->expr->eq(
-                        $this->dbHandler->quoteColumn( "parent", $tableName ),
+                        $this->dbHandler->quoteColumn('parent', $tableName),
                         // root entry has parent column set to 0
-                        isset( $previousTableName ) ?
-                            $this->dbHandler->quoteColumn( "link", $previousTableName ) :
-                            $query->bindValue( 0, null, \PDO::PARAM_INT )
+                        isset($previousTableName) ? $this->dbHandler->quoteColumn('link', $previousTableName) : $query->bindValue(0, null, \PDO::PARAM_INT)
                     )
                 )
             );
 
             $previousTableName = $tableName;
         }
-        $query->limit( 1 );
+        $query->limit(1);
 
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetch( \PDO::FETCH_ASSOC );
+        return $statement->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -761,37 +742,36 @@ class DoctrineDatabase extends Gateway
      *
      * @return array
      */
-    public function loadAutogeneratedEntry( $action, $parentId = null )
+    public function loadAutogeneratedEntry($action, $parentId = null)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            "*"
+            '*'
         )->from(
-            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable('ezurlalias_ml')
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "action" ),
-                    $query->bindValue( $action, null, \PDO::PARAM_STR )
+                    $this->dbHandler->quoteColumn('action'),
+                    $query->bindValue($action, null, \PDO::PARAM_STR)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "is_original" ),
-                    $query->bindValue( 1, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('is_original'),
+                    $query->bindValue(1, null, \PDO::PARAM_INT)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "is_alias" ),
-                    $query->bindValue( 0, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('is_alias'),
+                    $query->bindValue(0, null, \PDO::PARAM_INT)
                 )
             )
         );
 
-        if ( isset( $parentId ) )
-        {
+        if (isset($parentId)) {
             $query->where(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "parent" ),
-                    $query->bindValue( $parentId, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('parent'),
+                    $query->bindValue($parentId, null, \PDO::PARAM_INT)
                 )
             );
         }
@@ -799,7 +779,7 @@ class DoctrineDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetch( \PDO::FETCH_ASSOC );
+        return $statement->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -811,41 +791,39 @@ class DoctrineDatabase extends Gateway
      *
      * @return array
      */
-    public function loadPathData( $id )
+    public function loadPathData($id)
     {
         $pathData = array();
 
-        while ( $id != 0 )
-        {
+        while ($id != 0) {
             /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
             $query = $this->dbHandler->createSelectQuery();
             $query->select(
-                $this->dbHandler->quoteColumn( "parent" ),
-                $this->dbHandler->quoteColumn( "lang_mask" ),
-                $this->dbHandler->quoteColumn( "text" )
+                $this->dbHandler->quoteColumn('parent'),
+                $this->dbHandler->quoteColumn('lang_mask'),
+                $this->dbHandler->quoteColumn('text')
             )->from(
-                $this->dbHandler->quoteTable( "ezurlalias_ml" )
+                $this->dbHandler->quoteTable('ezurlalias_ml')
             )->where(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "id" ),
-                    $query->bindValue( $id, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('id'),
+                    $query->bindValue($id, null, \PDO::PARAM_INT)
                 )
             );
 
             $statement = $query->prepare();
             $statement->execute();
 
-            $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
-            if ( empty( $rows ) )
-            {
+            $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
+            if (empty($rows)) {
                 // Normally this should never happen
                 // @todo remove throw when tested
-                $path = join( "/", $pathData );
-                throw new \RuntimeException( "Path ({$path}...) is broken, last id is '{$id}': " . __METHOD__ );
+                $path = implode('/', $pathData);
+                throw new \RuntimeException("Path ({$path}...) is broken, last id is '{$id}': " . __METHOD__);
             }
 
-            $id = $rows[0]["parent"];
-            array_unshift( $pathData, $rows );
+            $id = $rows[0]['parent'];
+            array_unshift($pathData, $rows);
         }
 
         return $pathData;
@@ -863,35 +841,34 @@ class DoctrineDatabase extends Gateway
      *
      * @return array
      */
-    public function loadPathDataByHierarchy( array $hierarchyData )
+    public function loadPathDataByHierarchy(array $hierarchyData)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
 
         $hierarchyConditions = array();
-        foreach ( $hierarchyData as $levelData )
-        {
+        foreach ($hierarchyData as $levelData) {
             $hierarchyConditions[] = $query->expr->lAnd(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "parent" ),
+                    $this->dbHandler->quoteColumn('parent'),
                     $query->bindValue(
-                        $levelData["parent"],
+                        $levelData['parent'],
                         null,
                         \PDO::PARAM_INT
                     )
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "action" ),
+                    $this->dbHandler->quoteColumn('action'),
                     $query->bindValue(
-                        $levelData["action"],
+                        $levelData['action'],
                         null,
                         \PDO::PARAM_STR
                     )
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "id" ),
+                    $this->dbHandler->quoteColumn('id'),
                     $query->bindValue(
-                        $levelData["id"],
+                        $levelData['id'],
                         null,
                         \PDO::PARAM_INT
                     )
@@ -900,35 +877,33 @@ class DoctrineDatabase extends Gateway
         }
 
         $query->select(
-            $this->dbHandler->quoteColumn( "action" ),
-            $this->dbHandler->quoteColumn( "lang_mask" ),
-            $this->dbHandler->quoteColumn( "text" )
+            $this->dbHandler->quoteColumn('action'),
+            $this->dbHandler->quoteColumn('lang_mask'),
+            $this->dbHandler->quoteColumn('text')
         )->from(
-            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable('ezurlalias_ml')
         )->where(
-            $query->expr->lOr( $hierarchyConditions )
+            $query->expr->lOr($hierarchyConditions)
         );
 
         $statement = $query->prepare();
         $statement->execute();
 
-        $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
+        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
         $rowsMap = array();
-        foreach ( $rows as $row )
-        {
+        foreach ($rows as $row) {
             $rowsMap[$row['action']][] = $row;
         }
 
-        if ( count( $rowsMap ) !== count( $hierarchyData ) )
-        {
-            throw new \RuntimeException( "The path is corrupted." );
+        if (count($rowsMap) !== count($hierarchyData)) {
+            throw new \RuntimeException('The path is corrupted.');
         }
 
         $data = array();
-        foreach ( $hierarchyData as $levelData )
-        {
-            $data[] = $rowsMap[$levelData["action"]];
+        foreach ($hierarchyData as $levelData) {
+            $data[] = $rowsMap[$levelData['action']];
         }
+
         return $data;
     }
 
@@ -938,27 +913,27 @@ class DoctrineDatabase extends Gateway
      * @param mixed $parentId
      * @param string $textMD5
      *
-     * @return boolean
+     * @return bool
      */
-    public function removeCustomAlias( $parentId, $textMD5 )
+    public function removeCustomAlias($parentId, $textMD5)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\DeleteQuery */
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom(
-            $this->dbHandler->quoteTable( 'ezurlalias_ml' )
+            $this->dbHandler->quoteTable('ezurlalias_ml')
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "parent" ),
-                    $query->bindValue( $parentId, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('parent'),
+                    $query->bindValue($parentId, null, \PDO::PARAM_INT)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "text_md5" ),
-                    $query->bindValue( $textMD5, null, \PDO::PARAM_STR )
+                    $this->dbHandler->quoteColumn('text_md5'),
+                    $query->bindValue($textMD5, null, \PDO::PARAM_STR)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "is_alias" ),
-                    $query->bindValue( 1, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('is_alias'),
+                    $query->bindValue(1, null, \PDO::PARAM_INT)
                 )
             )
         );
@@ -976,32 +951,31 @@ class DoctrineDatabase extends Gateway
      * @param mixed $action
      * @param mixed|null $id
      *
-     * @return boolean
+     * @return bool
      */
-    public function remove( $action, $id = null )
+    public function remove($action, $id = null)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\DeleteQuery */
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom(
-            $this->dbHandler->quoteTable( 'ezurlalias_ml' )
+            $this->dbHandler->quoteTable('ezurlalias_ml')
         )->where(
             $query->expr->eq(
-                $this->dbHandler->quoteColumn( "action" ),
-                $query->bindValue( $action, null, \PDO::PARAM_STR )
+                $this->dbHandler->quoteColumn('action'),
+                $query->bindValue($action, null, \PDO::PARAM_STR)
             )
         );
 
-        if ( $id !== null )
-        {
+        if ($id !== null) {
             $query->where(
                 $query->expr->lAnd(
                     $query->expr->eq(
-                        $this->dbHandler->quoteColumn( "is_alias" ),
-                        $query->bindValue( 0, null, \PDO::PARAM_INT )
+                        $this->dbHandler->quoteColumn('is_alias'),
+                        $query->bindValue(0, null, \PDO::PARAM_INT)
                     ),
                     $query->expr->eq(
-                        $this->dbHandler->quoteColumn( "id" ),
-                        $query->bindValue( $id, null, \PDO::PARAM_INT )
+                        $this->dbHandler->quoteColumn('id'),
+                        $query->bindValue($id, null, \PDO::PARAM_INT)
                     )
                 )
             );
@@ -1014,41 +988,40 @@ class DoctrineDatabase extends Gateway
      * Loads all autogenerated entries with given $parentId with optionally included history entries.
      *
      * @param mixed $parentId
-     * @param boolean $includeHistory
+     * @param bool $includeHistory
      *
      * @return array
      */
-    public function loadAutogeneratedEntries( $parentId, $includeHistory = false )
+    public function loadAutogeneratedEntries($parentId, $includeHistory = false)
     {
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-            "*"
+            '*'
         )->from(
-            $this->dbHandler->quoteTable( "ezurlalias_ml" )
+            $this->dbHandler->quoteTable('ezurlalias_ml')
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "parent" ),
-                    $query->bindValue( $parentId, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('parent'),
+                    $query->bindValue($parentId, null, \PDO::PARAM_INT)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "action_type" ),
-                    $query->bindValue( "eznode", null, \PDO::PARAM_STR )
+                    $this->dbHandler->quoteColumn('action_type'),
+                    $query->bindValue('eznode', null, \PDO::PARAM_STR)
                 ),
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "is_alias" ),
-                    $query->bindValue( 0, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('is_alias'),
+                    $query->bindValue(0, null, \PDO::PARAM_INT)
                 )
             )
         );
 
-        if ( !$includeHistory )
-        {
+        if (!$includeHistory) {
             $query->where(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( "is_original" ),
-                    $query->bindValue( 1, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn('is_original'),
+                    $query->bindValue(1, null, \PDO::PARAM_INT)
                 )
             );
         }
@@ -1056,6 +1029,6 @@ class DoctrineDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the PropertyReadOnlyException class
+ * File containing the PropertyReadOnlyException class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,15 +15,13 @@ use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException as APIPropert
 
 /**
  * This Exception is thrown on a write attempt in a read only property in a value object.
- *
- * @package eZ\Publish\API\Repository\Exceptions
  */
 class PropertyReadOnlyException extends APIPropertyReadOnlyException
 {
-    public function __construct( $propertyName )
+    public function __construct($propertyName)
     {
         parent::__construct(
-            sprintf( 'Property "%s" is read-only.', $propertyName )
+            sprintf('Property "%s" is read-only.', $propertyName)
         );
     }
 }

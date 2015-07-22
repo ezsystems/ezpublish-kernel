@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the abstract Field sort clause visitor class
+ * File containing the abstract Field sort clause visitor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,12 +16,12 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\Core\Search\Common\FieldNameResolver;
 
 /**
- * Base class for Field sort clauses
+ * Base class for Field sort clauses.
  */
 abstract class FieldBase extends SortClauseVisitor
 {
     /**
-     * Field map
+     * Field map.
      *
      * @var \eZ\Publish\Core\Search\Common\FieldNameResolver
      */
@@ -28,13 +30,13 @@ abstract class FieldBase extends SortClauseVisitor
     /**
      * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
      */
-    public function __construct( FieldNameResolver $fieldNameResolver )
+    public function __construct(FieldNameResolver $fieldNameResolver)
     {
         $this->fieldNameResolver = $fieldNameResolver;
     }
 
     /**
-     * Get sort field name
+     * Get sort field name.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param string $contentTypeIdentifier
@@ -48,8 +50,7 @@ abstract class FieldBase extends SortClauseVisitor
         $contentTypeIdentifier,
         $fieldDefinitionIdentifier,
         $name = null
-    )
-    {
+    ) {
         return $this->fieldNameResolver->getSortFieldName(
             $sortClause,
             $contentTypeIdentifier,
@@ -68,17 +69,16 @@ abstract class FieldBase extends SortClauseVisitor
      *
      * @return mixed
      */
-    protected function getNestedFilterTerm( $languageCode )
+    protected function getNestedFilterTerm($languageCode)
     {
-        if ( $languageCode === null )
-        {
+        if ($languageCode === null) {
             return array(
-                "fields_doc.meta_is_main_translation_b" => true,
+                'fields_doc.meta_is_main_translation_b' => true,
             );
         }
 
         return array(
-            "fields_doc.meta_language_code_s" => $languageCode,
+            'fields_doc.meta_language_code_s' => $languageCode,
         );
     }
 }

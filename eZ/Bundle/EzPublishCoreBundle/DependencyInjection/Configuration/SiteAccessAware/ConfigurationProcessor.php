@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ScopeConfigurationProcessor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,14 +26,14 @@ class ConfigurationProcessor
      *
      * @var array
      */
-    static protected $availableSiteAccesses = array();
+    protected static $availableSiteAccesses = array();
 
     /**
      * Registered scope groups names, indexed by scope.
      *
      * @var array
      */
-    static protected $groupsBySiteAccess = array();
+    protected static $groupsBySiteAccess = array();
 
     /**
      * Name of the node under which scope based (semantic) configuration takes place.
@@ -45,9 +47,9 @@ class ConfigurationProcessor
      */
     protected $contextualizer;
 
-    public function __construct( ContainerInterface $containerBuilder, $namespace, $siteAcccessNodeName = 'system' )
+    public function __construct(ContainerInterface $containerBuilder, $namespace, $siteAcccessNodeName = 'system')
     {
-        $this->contextualizer = $this->buildContextualizer( $containerBuilder, $namespace, $siteAcccessNodeName );
+        $this->contextualizer = $this->buildContextualizer($containerBuilder, $namespace, $siteAcccessNodeName);
     }
 
     /**
@@ -58,7 +60,7 @@ class ConfigurationProcessor
      *
      * @param array $availableSiteAccesses
      */
-    static public function setAvailableSiteAccesses( array $availableSiteAccesses )
+    public static function setAvailableSiteAccesses(array $availableSiteAccesses)
     {
         static::$availableSiteAccesses = $availableSiteAccesses;
     }
@@ -71,7 +73,7 @@ class ConfigurationProcessor
      *
      * @param array $groupsBySiteAccess
      */
-    static public function setGroupsBySiteAccess( array $groupsBySiteAccess )
+    public static function setGroupsBySiteAccess(array $groupsBySiteAccess)
     {
         static::$groupsBySiteAccess = $groupsBySiteAccess;
     }
@@ -90,35 +92,28 @@ class ConfigurationProcessor
      *
      * @throws \InvalidArgumentException
      */
-    public function mapConfig( array $config, $mapper )
+    public function mapConfig(array $config, $mapper)
     {
-        $mapperCallable = is_callable( $mapper );
-        if ( !$mapperCallable && !$mapper instanceof ConfigurationMapperInterface )
-        {
-            throw new InvalidArgumentException( 'Configuration mapper must either be a callable or an instance of ConfigurationMapper.' );
+        $mapperCallable = is_callable($mapper);
+        if (!$mapperCallable && !$mapper instanceof ConfigurationMapperInterface) {
+            throw new InvalidArgumentException('Configuration mapper must either be a callable or an instance of ConfigurationMapper.');
         }
 
-        if ( $mapper instanceof HookableConfigurationMapperInterface )
-        {
-            $mapper->preMap( $config, $this->contextualizer );
+        if ($mapper instanceof HookableConfigurationMapperInterface) {
+            $mapper->preMap($config, $this->contextualizer);
         }
 
         $scopeNodeName = $this->contextualizer->getSiteAccessNodeName();
-        foreach ( $config[$scopeNodeName] as $currentScope => &$scopeSettings )
-        {
-            if ( $mapperCallable )
-            {
-                call_user_func_array( $mapper, array( $scopeSettings, $currentScope, $this->contextualizer ) );
-            }
-            else
-            {
-                $mapper->mapConfig( $scopeSettings, $currentScope, $this->contextualizer );
+        foreach ($config[$scopeNodeName] as $currentScope => &$scopeSettings) {
+            if ($mapperCallable) {
+                call_user_func_array($mapper, array($scopeSettings, $currentScope, $this->contextualizer));
+            } else {
+                $mapper->mapConfig($scopeSettings, $currentScope, $this->contextualizer);
             }
         }
 
-        if ( $mapper instanceof HookableConfigurationMapperInterface )
-        {
-            $mapper->postMap( $config, $this->contextualizer );
+        if ($mapper instanceof HookableConfigurationMapperInterface) {
+            $mapper->postMap($config, $this->contextualizer);
         }
     }
 
@@ -130,9 +125,9 @@ class ConfigurationProcessor
      * @param string $id Id of the setting to map.
      * @param array $config Full semantic configuration array for current bundle.
      */
-    public function mapSetting( $id, array $config )
+    public function mapSetting($id, array $config)
     {
-        $this->contextualizer->mapSetting( $id, $config );
+        $this->contextualizer->mapSetting($id, $config);
     }
 
     /**
@@ -144,9 +139,9 @@ class ConfigurationProcessor
      * @param array $config Full semantic configuration array for current bundle.
      * @param int $options Bit mask of options (See constants of `ContextualizerInterface`)
      */
-    public function mapConfigArray( $id, array $config, $options = 0 )
+    public function mapConfigArray($id, array $config, $options = 0)
     {
-        $this->contextualizer->mapConfigArray( $id, $config, $options );
+        $this->contextualizer->mapConfigArray($id, $config, $options);
     }
 
     /**
@@ -161,15 +156,15 @@ class ConfigurationProcessor
      *
      * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface
      */
-    protected function buildContextualizer( ContainerInterface $containerBuilder, $namespace, $siteAccessNodeName )
+    protected function buildContextualizer(ContainerInterface $containerBuilder, $namespace, $siteAccessNodeName)
     {
-        return new Contextualizer( $containerBuilder, $namespace, $siteAccessNodeName, static::$availableSiteAccesses, static::$groupsBySiteAccess );
+        return new Contextualizer($containerBuilder, $namespace, $siteAccessNodeName, static::$availableSiteAccesses, static::$groupsBySiteAccess);
     }
 
     /**
      * @param \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface $contextualizer
      */
-    public function setContextualizer( ContextualizerInterface $contextualizer )
+    public function setContextualizer(ContextualizerInterface $contextualizer)
     {
         $this->contextualizer = $contextualizer;
     }

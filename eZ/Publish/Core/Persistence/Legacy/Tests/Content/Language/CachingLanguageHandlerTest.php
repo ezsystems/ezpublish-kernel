@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\CachingLanguageHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\CachingLanguageHandlerTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,26 +17,26 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler;
 
 /**
- * Test case for caching Language Handler
+ * Test case for caching Language Handler.
  */
 class CachingLanguageHandlerTest extends TestCase
 {
     /**
-     * Language handler
+     * Language handler.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
      */
     protected $languageHandler;
 
     /**
-     * Inner language handler mock
+     * Inner language handler mock.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
      */
     protected $innerHandlerMock;
 
     /**
-     * Language cache mock
+     * Language cache mock.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
      */
@@ -42,8 +44,6 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::__construct
-     *
-     * @return void
      */
     public function testCtorPropertyInnerHandler()
     {
@@ -58,8 +58,6 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::__construct
-     *
-     * @return void
      */
     public function testCtorPropertyLanguageCache()
     {
@@ -74,8 +72,6 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::create
-     *
-     * @return void
      */
     public function testCreate()
     {
@@ -87,22 +83,22 @@ class CachingLanguageHandlerTest extends TestCase
 
         $languageFixture = $this->getLanguageFixture();
 
-        $innerHandlerMock->expects( $this->once() )
-            ->method( 'create' )
+        $innerHandlerMock->expects($this->once())
+            ->method('create')
             ->with(
                 $this->isInstanceOf(
                     'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\CreateStruct'
                 )
-            )->will( $this->returnValue( $languageFixture ) );
+            )->will($this->returnValue($languageFixture));
 
         // Cache has been initialized before
-        $cacheMock->expects( $this->at( 2 ) )
-            ->method( 'store' )
-            ->with( $this->equalTo( $languageFixture ) );
+        $cacheMock->expects($this->at(2))
+            ->method('store')
+            ->with($this->equalTo($languageFixture));
 
         $createStruct = $this->getCreateStructFixture();
 
-        $result = $handler->create( $createStruct );
+        $result = $handler->create($createStruct);
 
         $this->assertEquals(
             $languageFixture,
@@ -111,7 +107,7 @@ class CachingLanguageHandlerTest extends TestCase
     }
 
     /**
-     * Returns a Language CreateStruct
+     * Returns a Language CreateStruct.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct
      */
@@ -121,7 +117,7 @@ class CachingLanguageHandlerTest extends TestCase
     }
 
     /**
-     * Returns a Language
+     * Returns a Language.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
@@ -130,13 +126,12 @@ class CachingLanguageHandlerTest extends TestCase
         $language = new Language();
         $language->id = 8;
         $language->languageCode = 'de-DE';
+
         return $language;
     }
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::update
-     *
-     * @return void
      */
     public function testUpdate()
     {
@@ -147,22 +142,20 @@ class CachingLanguageHandlerTest extends TestCase
         $innerHandlerMock = $this->getInnerLanguageHandlerMock();
         $cacheMock = $this->getLanguageCacheMock();
 
-        $innerHandlerMock->expects( $this->once() )
-            ->method( 'update' )
-            ->with( $this->getLanguageFixture() );
+        $innerHandlerMock->expects($this->once())
+            ->method('update')
+            ->with($this->getLanguageFixture());
 
         // Cache has been initialized before
-        $cacheMock->expects( $this->at( 2 ) )
-            ->method( 'store' )
-            ->with( $this->getLanguageFixture() );
+        $cacheMock->expects($this->at(2))
+            ->method('store')
+            ->with($this->getLanguageFixture());
 
-        $handler->update( $this->getLanguageFixture() );
+        $handler->update($this->getLanguageFixture());
     }
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::load
-     *
-     * @return void
      */
     public function testLoad()
     {
@@ -171,12 +164,12 @@ class CachingLanguageHandlerTest extends TestCase
         $handler = $this->getLanguageHandler();
         $cacheMock = $this->getLanguageCacheMock();
 
-        $cacheMock->expects( $this->once() )
-            ->method( 'getById' )
-            ->with( $this->equalTo( 2 ) )
-            ->will( $this->returnValue( $this->getLanguageFixture() ) );
+        $cacheMock->expects($this->once())
+            ->method('getById')
+            ->with($this->equalTo(2))
+            ->will($this->returnValue($this->getLanguageFixture()));
 
-        $result = $handler->load( 2 );
+        $result = $handler->load(2);
 
         $this->assertEquals(
             $this->getLanguageFixture(),
@@ -185,7 +178,6 @@ class CachingLanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::load
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
@@ -196,22 +188,20 @@ class CachingLanguageHandlerTest extends TestCase
         $handler = $this->getLanguageHandler();
         $cacheMock = $this->getLanguageCacheMock();
 
-        $cacheMock->expects( $this->once() )
-            ->method( 'getById' )
-            ->with( $this->equalTo( 2 ) )
+        $cacheMock->expects($this->once())
+            ->method('getById')
+            ->with($this->equalTo(2))
             ->will(
                 $this->throwException(
-                    new NotFoundException( 'Language', 2 )
+                    new NotFoundException('Language', 2)
                 )
             );
 
-        $result = $handler->load( 2 );
+        $result = $handler->load(2);
     }
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::loadByLanguageCode
-     *
-     * @return void
      */
     public function testLoadByLanguageCode()
     {
@@ -220,12 +210,12 @@ class CachingLanguageHandlerTest extends TestCase
         $handler = $this->getLanguageHandler();
         $cacheMock = $this->getLanguageCacheMock();
 
-        $cacheMock->expects( $this->once() )
-            ->method( 'getByLocale' )
-            ->with( $this->equalTo( 'eng-US' ) )
-            ->will( $this->returnValue( $this->getLanguageFixture() ) );
+        $cacheMock->expects($this->once())
+            ->method('getByLocale')
+            ->with($this->equalTo('eng-US'))
+            ->will($this->returnValue($this->getLanguageFixture()));
 
-        $result = $handler->loadByLanguageCode( 'eng-US' );
+        $result = $handler->loadByLanguageCode('eng-US');
 
         $this->assertEquals(
             $this->getLanguageFixture(),
@@ -234,7 +224,6 @@ class CachingLanguageHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::loadByLanguageCode
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
@@ -245,22 +234,20 @@ class CachingLanguageHandlerTest extends TestCase
         $handler = $this->getLanguageHandler();
         $cacheMock = $this->getLanguageCacheMock();
 
-        $cacheMock->expects( $this->once() )
-            ->method( 'getByLocale' )
-            ->with( $this->equalTo( 'eng-US' ) )
+        $cacheMock->expects($this->once())
+            ->method('getByLocale')
+            ->with($this->equalTo('eng-US'))
             ->will(
                 $this->throwException(
-                    new NotFoundException( 'Language', 'eng-US' )
+                    new NotFoundException('Language', 'eng-US')
                 )
             );
 
-        $result = $handler->loadByLanguageCode( 'eng-US' );
+        $result = $handler->loadByLanguageCode('eng-US');
     }
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::loadAll
-     *
-     * @return void
      */
     public function testLoadAll()
     {
@@ -269,9 +256,9 @@ class CachingLanguageHandlerTest extends TestCase
         $handler = $this->getLanguageHandler();
         $cacheMock = $this->getLanguageCacheMock();
 
-        $cacheMock->expects( $this->once() )
-            ->method( 'getAll' )
-            ->will( $this->returnValue( array() ) );
+        $cacheMock->expects($this->once())
+            ->method('getAll')
+            ->will($this->returnValue(array()));
 
         $result = $handler->loadAll();
 
@@ -283,8 +270,6 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::delete
-     *
-     * @return void
      */
     public function testDelete()
     {
@@ -294,81 +279,79 @@ class CachingLanguageHandlerTest extends TestCase
         $cacheMock = $this->getLanguageCacheMock();
         $innerHandlerMock = $this->getInnerLanguageHandlerMock();
 
-        $innerHandlerMock->expects( $this->once() )
-            ->method( 'delete' )
-            ->with( $this->equalTo( 2 ) );
+        $innerHandlerMock->expects($this->once())
+            ->method('delete')
+            ->with($this->equalTo(2));
 
-        $cacheMock->expects( $this->once() )
-            ->method( 'remove' )
-            ->with( $this->equalTo( 2 ) );
+        $cacheMock->expects($this->once())
+            ->method('remove')
+            ->with($this->equalTo(2));
 
-        $result = $handler->delete( 2 );
+        $result = $handler->delete(2);
     }
 
     /**
-     * Returns the language handler to test
+     * Returns the language handler to test.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
      */
     protected function getLanguageHandler()
     {
-        if ( !isset( $this->languageHandler ) )
-        {
+        if (!isset($this->languageHandler)) {
             $this->languageHandler = new CachingHandler(
                 $this->getInnerLanguageHandlerMock(),
                 $this->getLanguageCacheMock()
             );
         }
+
         return $this->languageHandler;
     }
 
     /**
-     * Returns a mock for the inner language handler
+     * Returns a mock for the inner language handler.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language\Handler
      */
     protected function getInnerLanguageHandlerMock()
     {
-        if ( !isset( $this->innerHandlerMock ) )
-        {
+        if (!isset($this->innerHandlerMock)) {
             $this->innerHandlerMock = $this->getMock(
                 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler'
             );
         }
+
         return $this->innerHandlerMock;
     }
 
     /**
-     * Returns a mock for the language cache
+     * Returns a mock for the language cache.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
      */
     protected function getLanguageCacheMock()
     {
-        if ( !isset( $this->languageCacheMock ) )
-        {
+        if (!isset($this->languageCacheMock)) {
             $this->languageCacheMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Cache'
             );
         }
+
         return $this->languageCacheMock;
     }
 
     /**
-     * Adds expectation for cache initialize to mocks
-     *
-     * @return void
+     * Adds expectation for cache initialize to mocks.
      */
     protected function expectCacheInitialize()
     {
         $innerHandlerMock = $this->getInnerLanguageHandlerMock();
-        $innerHandlerMock->expects( $this->once() )
-            ->method( 'loadAll' )
-            ->will( $this->returnValue( $this->getLanguagesFixture() ) );
+        $innerHandlerMock->expects($this->once())
+            ->method('loadAll')
+            ->will($this->returnValue($this->getLanguagesFixture()));
     }
 
     /**
-     * Returns an array with 2 languages
+     * Returns an array with 2 languages.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language[]
      */
@@ -386,6 +369,6 @@ class CachingLanguageHandlerTest extends TestCase
         $langGb->name = 'English (United Kingdom)';
         $langGb->isEnabled = true;
 
-        return array( $langUs, $langGb );
+        return array($langUs, $langGb);
     }
 }

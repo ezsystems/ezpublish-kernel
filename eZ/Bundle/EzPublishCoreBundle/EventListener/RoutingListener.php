@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RoutingListener class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -36,7 +38,7 @@ class RoutingListener implements EventSubscriberInterface
      */
     private $urlAliasGenerator;
 
-    public function __construct( ConfigResolverInterface $configResolver, RouterInterface $urlAliasRouter, Generator $urlAliasGenerator )
+    public function __construct(ConfigResolverInterface $configResolver, RouterInterface $urlAliasRouter, Generator $urlAliasGenerator)
     {
         $this->configResolver = $configResolver;
         $this->urlAliasRouter = $urlAliasRouter;
@@ -46,15 +48,15 @@ class RoutingListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            MVCEvents::SITEACCESS => array( 'onSiteAccessMatch', 200 )
+            MVCEvents::SITEACCESS => array('onSiteAccessMatch', 200),
         );
     }
 
-    public function onSiteAccessMatch( PostSiteAccessMatchEvent $event )
+    public function onSiteAccessMatch(PostSiteAccessMatchEvent $event)
     {
-        $rootLocationId = $this->configResolver->getParameter( 'content.tree_root.location_id' );
-        $this->urlAliasRouter->setRootLocationId( $rootLocationId );
-        $this->urlAliasGenerator->setRootLocationId( $rootLocationId );
-        $this->urlAliasGenerator->setExcludedUriPrefixes( $this->configResolver->getParameter( 'content.tree_root.excluded_uri_prefixes' ) );
+        $rootLocationId = $this->configResolver->getParameter('content.tree_root.location_id');
+        $this->urlAliasRouter->setRootLocationId($rootLocationId);
+        $this->urlAliasGenerator->setRootLocationId($rootLocationId);
+        $this->urlAliasGenerator->setExcludedUriPrefixes($this->configResolver->getParameter('content.tree_root.excluded_uri_prefixes'));
     }
 }

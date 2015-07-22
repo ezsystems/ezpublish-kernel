@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Content class
+ * File containing the Content class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ namespace eZ\Publish\SPI\Persistence;
  * This object aggregates the following:
  *  - Version metadata
  *  - Content metadata
- *  - Fields
+ *  - Fields.
  */
 class Content extends ValueObject
 {

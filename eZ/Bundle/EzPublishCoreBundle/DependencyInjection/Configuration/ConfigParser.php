@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ConfigParser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\FieldTypeParserInterface;
 
 /**
  * Main configuration parser/mapper.
@@ -25,12 +26,10 @@ class ConfigParser implements ParserInterface
      */
     private $configParsers;
 
-    public function __construct( array $configParsers = array() )
+    public function __construct(array $configParsers = array())
     {
-        foreach ( $configParsers as $parser )
-        {
-            if ( !$parser instanceof ParserInterface )
-            {
+        foreach ($configParsers as $parser) {
+            if (!$parser instanceof ParserInterface) {
                 throw new InvalidArgumentType(
                     'Inner config parser',
                     'eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface',
@@ -45,7 +44,7 @@ class ConfigParser implements ParserInterface
     /**
      * @param \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface[] $configParsers
      */
-    public function setConfigParsers( $configParsers )
+    public function setConfigParsers($configParsers)
     {
         $this->configParsers = $configParsers;
     }
@@ -58,46 +57,39 @@ class ConfigParser implements ParserInterface
         return $this->configParsers;
     }
 
-    public function mapConfig( array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizer )
+    public function mapConfig(array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizer)
     {
-        foreach ( $this->configParsers as $parser )
-        {
-            $parser->mapConfig( $scopeSettings, $currentScope, $contextualizer );
+        foreach ($this->configParsers as $parser) {
+            $parser->mapConfig($scopeSettings, $currentScope, $contextualizer);
         }
     }
 
-    public function preMap( array $config, ContextualizerInterface $contextualizer )
+    public function preMap(array $config, ContextualizerInterface $contextualizer)
     {
-        foreach ( $this->configParsers as $parser )
-        {
-            $parser->preMap( $config, $contextualizer );
+        foreach ($this->configParsers as $parser) {
+            $parser->preMap($config, $contextualizer);
         }
     }
 
-    public function postMap( array $config, ContextualizerInterface $contextualizer )
+    public function postMap(array $config, ContextualizerInterface $contextualizer)
     {
-        foreach ( $this->configParsers as $parser )
-        {
-            $parser->postMap( $config, $contextualizer );
+        foreach ($this->configParsers as $parser) {
+            $parser->postMap($config, $contextualizer);
         }
     }
 
-    public function addSemanticConfig( NodeBuilder $nodeBuilder )
+    public function addSemanticConfig(NodeBuilder $nodeBuilder)
     {
         $fieldTypeNodeBuilder = $nodeBuilder
-            ->arrayNode( "fieldtypes" )
+            ->arrayNode('fieldtypes')
             ->children();
 
         // Delegate to configuration parsers
-        foreach ( $this->configParsers as $parser )
-        {
-            if ( $parser instanceof FieldTypeParserInterface )
-            {
-                $parser->addSemanticConfig( $fieldTypeNodeBuilder );
-            }
-            else
-            {
-                $parser->addSemanticConfig( $nodeBuilder );
+        foreach ($this->configParsers as $parser) {
+            if ($parser instanceof FieldTypeParserInterface) {
+                $parser->addSemanticConfig($fieldTypeNodeBuilder);
+            } else {
+                $parser->addSemanticConfig($nodeBuilder);
             }
         }
     }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\FieldType\RichText\Converter\Render\Template class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -28,34 +30,30 @@ class Template extends Render implements Converter
      *
      * @return \DOMDocument
      */
-    public function convert( DOMDocument $document )
+    public function convert(DOMDocument $document)
     {
-        $xpath = new DOMXPath( $document );
-        $xpath->registerNamespace( "docbook", "http://docbook.org/ns/docbook" );
-        $xpathExpression = "//docbook:eztemplate | //docbook:eztemplateinline";
+        $xpath = new DOMXPath($document);
+        $xpath->registerNamespace('docbook', 'http://docbook.org/ns/docbook');
+        $xpathExpression = '//docbook:eztemplate | //docbook:eztemplateinline';
 
-        $tags = $xpath->query( $xpathExpression );
+        $tags = $xpath->query($xpathExpression);
         /** @var \DOMElement[] $tagsSorted */
         $tagsSorted = array();
         $maxDepth = 0;
 
-        foreach ( $tags as $tag )
-        {
-            $depth = $this->getNodeDepth( $tag );
-            if ( $depth > $maxDepth )
-            {
+        foreach ($tags as $tag) {
+            $depth = $this->getNodeDepth($tag);
+            if ($depth > $maxDepth) {
                 $maxDepth = $depth;
             }
             $tagsSorted[$depth][] = $tag;
         }
 
-        krsort( $tagsSorted, SORT_NUMERIC );
+        krsort($tagsSorted, SORT_NUMERIC);
 
-        foreach ( $tagsSorted as $tags )
-        {
-            foreach ( $tags as $tag )
-            {
-                $this->processTag( $document, $tag );
+        foreach ($tagsSorted as $tags) {
+            foreach ($tags as $tag) {
+                $this->processTag($document, $tag);
             }
         }
 
@@ -68,50 +66,44 @@ class Template extends Render implements Converter
      * @param \DOMDocument $document
      * @param \DOMElement $tag
      */
-    protected function processTag( DOMDocument $document, DOMElement $tag )
+    protected function processTag(DOMDocument $document, DOMElement $tag)
     {
         $content = null;
-        $tagName = $tag->getAttribute( "name" );
+        $tagName = $tag->getAttribute('name');
         $parameters = array(
-            "name" => $tagName,
-            "params" => $this->extractConfiguration( $tag ),
+            'name' => $tagName,
+            'params' => $this->extractConfiguration($tag),
         );
 
-        if ( $tag->getElementsByTagName( "ezcontent" )->length > 0 )
-        {
-            $parameters["content"] = $this->saveNodeXML(
-                $tag->getElementsByTagName( "ezcontent" )->item( 0 )
+        if ($tag->getElementsByTagName('ezcontent')->length > 0) {
+            $parameters['content'] = $this->saveNodeXML(
+                $tag->getElementsByTagName('ezcontent')->item(0)
             );
         }
 
-        if ( $tag->hasAttribute( "xlink:align" ) )
-        {
-            $parameters["align"] = $tag->getAttribute( "xlink:align" );
+        if ($tag->hasAttribute('xlink:align')) {
+            $parameters['align'] = $tag->getAttribute('xlink:align');
         }
 
         $content = $this->renderer->renderTag(
             $tagName,
             $parameters,
-            $tag->localName === "eztemplateinline"
+            $tag->localName === 'eztemplateinline'
         );
 
-        if ( isset( $content ) )
-        {
+        if (isset($content)) {
             // If current tag is wrapped inside another template tag we can't use CDATA section
             // for its content as these can't be nested.
             // CDATA section will be used only for content of root wrapping tag, content of tags
             // inside it will be added as XML fragments.
-            if ( $this->isWrapped( $tag ) )
-            {
+            if ($this->isWrapped($tag)) {
                 $fragment = $document->createDocumentFragment();
-                $fragment->appendXML( $content );
-                $tag->parentNode->replaceChild( $fragment, $tag );
-            }
-            else
-            {
-                $payload = $document->createElement( "ezpayload" );
-                $payload->appendChild( $document->createCDATASection( $content ) );
-                $tag->appendChild( $payload );
+                $fragment->appendXML($content);
+                $tag->parentNode->replaceChild($fragment, $tag);
+            } else {
+                $payload = $document->createElement('ezpayload');
+                $payload->appendChild($document->createCDATASection($content));
+                $tag->appendChild($payload);
             }
         }
     }
@@ -123,12 +115,10 @@ class Template extends Render implements Converter
      *
      * @return bool
      */
-    protected function isWrapped( DomNode $node )
+    protected function isWrapped(DomNode $node)
     {
-        while ( $node = $node->parentNode )
-        {
-            if ( $node->localName === "eztemplate" || $node->localName === "eztemplateinline" )
-            {
+        while ($node = $node->parentNode) {
+            if ($node->localName === 'eztemplate' || $node->localName === 'eztemplateinline') {
                 return true;
             }
         }
@@ -143,13 +133,12 @@ class Template extends Render implements Converter
      *
      * @return int
      */
-    protected function getNodeDepth( DomNode $node )
+    protected function getNodeDepth(DomNode $node)
     {
         $depth = -2;
 
-        while ( $node )
-        {
-            $depth++;
+        while ($node) {
+            ++$depth;
             $node = $node->parentNode;
         }
 
@@ -163,14 +152,13 @@ class Template extends Render implements Converter
      *
      * @return string
      */
-    protected function saveNodeXML( DOMNode $node )
+    protected function saveNodeXML(DOMNode $node)
     {
-        $xmlString = "";
+        $xmlString = '';
 
         /** @var \DOMNode $child */
-        foreach ( $node->childNodes as $child )
-        {
-            $xmlString .= $node->ownerDocument->saveXML( $child );
+        foreach ($node->childNodes as $child) {
+            $xmlString .= $node->ownerDocument->saveXML($child);
         }
 
         return $xmlString;

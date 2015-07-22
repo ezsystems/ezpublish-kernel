@@ -1,20 +1,19 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server;
-use eZ\Publish\Core\REST\Common;
-
 use eZ\Publish\Core\Repository\Values;
 
 class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
@@ -37,25 +36,25 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
      */
     public function testVisitRestFieldDefinition()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $restFieldDefinition = $this->getBasicRestFieldDefinition();
 
-        $this->fieldTypeSerializerMock->expects( $this->once() )
-            ->method( 'serializeFieldDefaultValue' )
+        $this->fieldTypeSerializerMock->expects($this->once())
+            ->method('serializeFieldDefaultValue')
             ->with(
-                $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' ),
-                $this->equalTo( 'my-field-type' ),
+                $this->isInstanceOf('eZ\\Publish\\Core\\REST\\Common\\Output\\Generator'),
+                $this->equalTo('my-field-type'),
                 $this->equalTo(
                     'my default value text'
                 )
             );
 
         $this->addRouteExpectation(
-            "ezpublish_rest_loadContentTypeFieldDefinition",
+            'ezpublish_rest_loadContentTypeFieldDefinition',
             array(
                 'contentTypeId' => $restFieldDefinition->contentType->id,
                 'fieldDefinitionId' => $restFieldDefinition->fieldDefinition->id,
@@ -69,12 +68,12 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
             $restFieldDefinition
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         $dom = new \DOMDocument();
-        $dom->loadXml( $result );
+        $dom->loadXml($result);
 
         return $dom;
     }
@@ -92,8 +91,8 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
             new Values\ContentType\FieldDefinition(
                 array(
                     'id' => 'fieldDefinitionId_23',
-                    'fieldSettings' => array( 'setting' => 'foo' ),
-                    'validatorConfiguration' => array( 'validator' => 'bar' ),
+                    'fieldSettings' => array('setting' => 'foo'),
+                    'validatorConfiguration' => array('validator' => 'bar'),
                     'identifier' => 'title',
                     'fieldGroup' => 'abstract-field-group',
                     'position' => 2,
@@ -103,8 +102,8 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
                     'isSearchable' => true,
                     'isInfoCollector' => false,
                     'defaultValue' => 'my default value text',
-                    'names' => array( 'eng-US' => 'Sindelfingen' ),
-                    'descriptions' => array( 'eng-GB' => 'Bielefeld' ),
+                    'names' => array('eng-US' => 'Sindelfingen'),
+                    'descriptions' => array('eng-GB' => 'Bielefeld'),
                 )
             )
         );
@@ -130,9 +129,8 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
         );
 
         return array_map(
-            function ( $xpath )
-            {
-                return array( $xpath );
+            function ($xpath) {
+                return array($xpath);
             },
             $xpathAssertions
         );
@@ -145,18 +143,18 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
      * @depends testVisitRestFieldDefinition
      * @dataProvider provideXpathAssertions
      */
-    public function testGeneratedXml( $xpath, \DOMDocument $dom )
+    public function testGeneratedXml($xpath, \DOMDocument $dom)
     {
-        $this->assertXPath( $dom, $xpath );
+        $this->assertXPath($dom, $xpath);
     }
 
     /**
-     * Get the Content visitor
+     * Get the Content visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestFieldDefinition
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\RestFieldDefinition( $this->fieldTypeSerializerMock );
+        return new ValueObjectVisitor\RestFieldDefinition($this->fieldTypeSerializerMock);
     }
 }

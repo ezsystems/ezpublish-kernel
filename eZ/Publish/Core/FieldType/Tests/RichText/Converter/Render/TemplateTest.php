@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RichText Template Render converter test
+ * File containing the RichText Template Render converter test.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -37,14 +39,14 @@ class TemplateTest extends PHPUnit_Framework_TestCase
 </section>',
                 array(
                     array(
-                        "name" => "template1",
-                        "is_inline" => false,
-                        "params" => array(
-                            "name" => "template1",
-                            "params" => array(),
+                        'name' => 'template1',
+                        'is_inline' => false,
+                        'params' => array(
+                            'name' => 'template1',
+                            'params' => array(),
                         ),
                     ),
-                )
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -90,28 +92,28 @@ class TemplateTest extends PHPUnit_Framework_TestCase
 </section>',
                 array(
                     array(
-                        "name" => "template2",
-                        "is_inline" => false,
-                        "params" => array(
-                            "name" => "template2",
-                            "content" => "content2",
-                            "params" => array(
-                                "size" => "medium",
-                                "offset" => 10,
-                                "limit" => 5,
-                                "hey" => array(
-                                    "look" => array(
-                                        "at" => array(
-                                            "this" => "wohoo",
-                                            "that" => "weeee"
-                                        )
+                        'name' => 'template2',
+                        'is_inline' => false,
+                        'params' => array(
+                            'name' => 'template2',
+                            'content' => 'content2',
+                            'params' => array(
+                                'size' => 'medium',
+                                'offset' => 10,
+                                'limit' => 5,
+                                'hey' => array(
+                                    'look' => array(
+                                        'at' => array(
+                                            'this' => 'wohoo',
+                                            'that' => 'weeee',
+                                        ),
                                     ),
-                                    "what" => "get to the chopper"
-                                )
-                            )
+                                    'what' => 'get to the chopper',
+                                ),
+                            ),
                         ),
                     ),
-                )
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -130,22 +132,22 @@ class TemplateTest extends PHPUnit_Framework_TestCase
 </section>',
                 array(
                     array(
-                        "name" => "template3",
-                        "is_inline" => false,
-                        "params" => array(
-                            "name" => "template3",
-                            "params" => array()
+                        'name' => 'template3',
+                        'is_inline' => false,
+                        'params' => array(
+                            'name' => 'template3',
+                            'params' => array(),
                         ),
                     ),
                     array(
-                        "name" => "template4",
-                        "is_inline" => true,
-                        "params" => array(
-                            "name" => "template4",
-                            "params" => array()
+                        'name' => 'template4',
+                        'is_inline' => true,
+                        'params' => array(
+                            'name' => 'template4',
+                            'params' => array(),
                         ),
                     ),
-                )
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -160,14 +162,14 @@ class TemplateTest extends PHPUnit_Framework_TestCase
 </section>',
                 array(
                     array(
-                        "name" => "template5",
-                        "is_inline" => false,
-                        "params" => array(
-                            "name" => "template5",
-                            "params" => array()
+                        'name' => 'template5',
+                        'is_inline' => false,
+                        'params' => array(
+                            'name' => 'template5',
+                            'params' => array(),
                         ),
                     ),
-                )
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -182,14 +184,14 @@ class TemplateTest extends PHPUnit_Framework_TestCase
 </section>',
                 array(
                     array(
-                        "name" => "template6",
-                        "is_inline" => true,
-                        "params" => array(
-                            "name" => "template6",
-                            "params" => array()
+                        'name' => 'template6',
+                        'is_inline' => true,
+                        'params' => array(
+                            'name' => 'template6',
+                            'params' => array(),
                         ),
                     ),
-                )
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -209,24 +211,24 @@ class TemplateTest extends PHPUnit_Framework_TestCase
 </section>',
                 array(
                     array(
-                        "name" => "template8",
-                        "is_inline" => false,
-                        "params" => array(
-                            "name" => "template8",
-                            "content" => "content8",
-                            "params" => array()
+                        'name' => 'template8',
+                        'is_inline' => false,
+                        'params' => array(
+                            'name' => 'template8',
+                            'content' => 'content8',
+                            'params' => array(),
                         ),
                     ),
                     array(
-                        "name" => "template7",
-                        "is_inline" => false,
-                        "params" => array(
-                            "name" => "template7",
-                            "content" => "content7template8",
-                            "params" => array()
+                        'name' => 'template7',
+                        'is_inline' => false,
+                        'params' => array(
+                            'name' => 'template7',
+                            'content' => 'content7template8',
+                            'params' => array(),
                         ),
                     ),
-                )
+                ),
             ),
         );
     }
@@ -234,49 +236,45 @@ class TemplateTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider providerForTestConvert
      */
-    public function testConvert( $xmlString, $expectedXmlString, array $renderParams )
+    public function testConvert($xmlString, $expectedXmlString, array $renderParams)
     {
-        $this->rendererMock->expects( $this->never() )->method( "renderContentEmbed" );
-        $this->rendererMock->expects( $this->never() )->method( "renderLocationEmbed" );
+        $this->rendererMock->expects($this->never())->method('renderContentEmbed');
+        $this->rendererMock->expects($this->never())->method('renderLocationEmbed');
 
-        if ( !empty( $renderParams ) )
-        {
-            foreach ( $renderParams as $index => $params )
-            {
+        if (!empty($renderParams)) {
+            foreach ($renderParams as $index => $params) {
                 $this->rendererMock
-                    ->expects( $this->at( $index ) )
-                    ->method( "renderTag" )
+                    ->expects($this->at($index))
+                    ->method('renderTag')
                     ->with(
-                        $params["name"],
-                        $params["params"],
-                        $params["is_inline"]
+                        $params['name'],
+                        $params['params'],
+                        $params['is_inline']
                     )
-                    ->will( $this->returnValue( $params["name"] ) );
+                    ->will($this->returnValue($params['name']));
             }
-        }
-        else
-        {
-            $this->rendererMock->expects( $this->never() )->method( "renderTag" );
+        } else {
+            $this->rendererMock->expects($this->never())->method('renderTag');
         }
 
-        $document = new DOMDocument;
+        $document = new DOMDocument();
         $document->preserveWhiteSpace = false;
         $document->formatOutput = false;
-        $document->loadXML( $xmlString );
+        $document->loadXML($xmlString);
 
-        $document = $this->getConverter()->convert( $document );
+        $document = $this->getConverter()->convert($document);
 
-        $expectedDocument = new DOMDocument;
+        $expectedDocument = new DOMDocument();
         $expectedDocument->preserveWhiteSpace = false;
         $expectedDocument->formatOutput = false;
-        $expectedDocument->loadXML( $expectedXmlString );
+        $expectedDocument->loadXML($expectedXmlString);
 
-        $this->assertEquals( $expectedDocument, $document );
+        $this->assertEquals($expectedDocument, $document);
     }
 
     protected function getConverter()
     {
-        return new Template( $this->rendererMock );
+        return new Template($this->rendererMock);
     }
 
     /**
@@ -290,7 +288,7 @@ class TemplateTest extends PHPUnit_Framework_TestCase
     protected function getRendererMock()
     {
         return $this->getMock(
-            "eZ\\Publish\\Core\\FieldType\\RichText\\RendererInterface"
+            'eZ\\Publish\\Core\\FieldType\\RichText\\RendererInterface'
         );
     }
 }

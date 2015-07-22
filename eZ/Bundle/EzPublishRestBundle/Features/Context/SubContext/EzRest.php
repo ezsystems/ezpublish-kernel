@@ -1,16 +1,17 @@
 <?php
+
 /**
  * File containing the EzRest for RestContext.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
 use EzSystems\BehatBundle\Helper\ValueObject as ValueObjectHelper;
-use eZ\Bundle\EzPublishRestBundle\Features\Context\Helper;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\REST\Server\Values\SessionInput;
 use eZ\Publish\Core\REST\Common\Message;
@@ -18,7 +19,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use PHPUnit_Framework_Assert as Assertion;
 
 /**
- * EzRest is the responsible to have all the specific REST actions of eZ Publish
+ * EzRest is the responsible to have all the specific REST actions of eZ Publish.
  */
 trait EzRest
 {
@@ -29,7 +30,7 @@ trait EzRest
 
     /**
      * Since there is a need to prepare an object in several steps it needs to be
-     * hold until sent to the request body
+     * hold until sent to the request body.
      *
      * @var \eZ\Publish\API\Repository\Values\ValueObject
      */
@@ -37,7 +38,7 @@ trait EzRest
 
     /**
      * Same idea as the $requestObject, since we need to verify it step by step
-     * it need to be stored (as object) for testing
+     * it need to be stored (as object) for testing.
      *
      * @var \eZ\Publish\API\Repository\Values\ValueObject|\Exception
      */
@@ -46,19 +47,19 @@ trait EzRest
     /**
      * @When I set header :header with/for :object object
      */
-    public function setHeaderWithObject( $header, $object )
+    public function setHeaderWithObject($header, $object)
     {
-        $value = $this->makeObjectHeader( $object );
-        $this->restDriver->setHeader( $header, $value );
+        $value = $this->makeObjectHeader($object);
+        $this->restDriver->setHeader($header, $value);
     }
 
     /**
      * @Then response header :header has/contains :object (object)
      */
-    public function assertHeaderHasObject( $header, $object )
+    public function assertHeaderHasObject($header, $object)
     {
         Assertion::assertEquals(
-            $this->decomposeObjectHeader( $this->restDriver->getHeader( $header ) ),
+            $this->decomposeObjectHeader($this->restDriver->getHeader($header)),
             $object,
             $this->restDriver->getBody()
         );
@@ -67,9 +68,9 @@ trait EzRest
     /**
      * @Then response error status code is :code
      */
-    public function assertResponseErrorStatusCode( $code )
+    public function assertResponseErrorStatusCode($code)
     {
-        $errorStatusCode = $this->getResponseError( 'code' );
+        $errorStatusCode = $this->getResponseError('code');
 
         Assertion::assertEquals(
             $code,
@@ -81,12 +82,12 @@ trait EzRest
     /**
      * @Then response error description is :errorDescriptionRegEx
      */
-    public function assertResponseErrorDescription( $errorDescriptionRegEx )
+    public function assertResponseErrorDescription($errorDescriptionRegEx)
     {
-        $errorDescription = $this->getResponseError( 'description' );
+        $errorDescription = $this->getResponseError('description');
 
         Assertion::assertEquals(
-            preg_match( $errorDescriptionRegEx, $errorDescription ),
+            preg_match($errorDescriptionRegEx, $errorDescription),
             1,
             "Expected to find a description that matched '$errorDescriptionRegEx' RegEx but found '$errorDescription'"
         );
@@ -97,29 +98,29 @@ trait EzRest
      *
      * This will create an object of the type passed for step by step be filled
      */
-    public function makeObject( $type )
+    public function makeObject($type)
     {
-        $this->createRequestObject( $type );
+        $this->createRequestObject($type);
     }
 
     /**
      * @When I set field :field to :value
      */
-    public function setFieldToValue( $field, $value )
+    public function setFieldToValue($field, $value)
     {
         // normally fields are defined in lower camelCase
-        $field = lcfirst( $field );
+        $field = lcfirst($field);
 
-        ValueObjectHelper::setProperty( $this->getRequestObject(), $field, $value );
+        ValueObjectHelper::setProperty($this->getRequestObject(), $field, $value);
     }
 
     /**
      * @Then response object has field :field with :value
      */
-    public function assertObjectFieldHasValue( $field, $value )
+    public function assertObjectFieldHasValue($field, $value)
     {
         $responseObject = $this->getResponseObject();
-        $actualValue = ValueObjectHelper::getProperty( $responseObject, $field );
+        $actualValue = ValueObjectHelper::getProperty($responseObject, $field);
 
         Assertion::assertEquals(
             $actualValue,
@@ -133,38 +134,37 @@ trait EzRest
      *
      * @param string $object Object should be the object name with namespace
      */
-    public function assertResponseObject( $object )
+    public function assertResponseObject($object)
     {
         $responseObject = $this->getResponseObject();
 
         Assertion::assertTrue(
             $responseObject instanceof $object,
-            "Expect body object to be an instance of '$object' but got a '". get_class( $responseObject ) . "'"
+            "Expect body object to be an instance of '$object' but got a '" . get_class($responseObject) . "'"
         );
     }
 
     /**
-     * Set body type of requests and responses
+     * Set body type of requests and responses.
      *
      * @param string $type Type of the REST body
      */
-    protected function setRestBodyType( $type )
+    protected function setRestBodyType($type)
     {
-        $type = strtolower( $type );
-        switch ( $type )
-        {
+        $type = strtolower($type);
+        switch ($type) {
             case 'json':
             case 'xml':
                 $this->restBodyType = $type;
                 break;
 
             default:
-                throw new \Exception( "REST body type '$type' not suported" );
+                throw new \Exception("REST body type '$type' not suported");
         }
     }
 
     /**
-     * Get property from the returned Exception
+     * Get property from the returned Exception.
      *
      * @param string $property Property to return
      *
@@ -172,17 +172,15 @@ trait EzRest
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If property is not defined
      */
-    protected function getResponseError( $property )
+    protected function getResponseError($property)
     {
         $exception = $this->getResponseObject();
 
-        if ( !$exception instanceof \Exception )
-        {
-            throw new InvalidArgumentException( 'response object', 'is not an exception' );
+        if (!$exception instanceof \Exception) {
+            throw new InvalidArgumentException('response object', 'is not an exception');
         }
 
-        switch ( $property )
-        {
+        switch ($property) {
             case 'code':
                 return $exception->getCode();
 
@@ -191,41 +189,40 @@ trait EzRest
                 return $exception->getMessage();
         }
 
-        throw new InvalidArgumentException( $property, 'is invalid' );
+        throw new InvalidArgumentException($property, 'is invalid');
     }
 
     /**
-     * Make content-type/accept header with prefix and type
+     * Make content-type/accept header with prefix and type.
      */
-    protected function makeObjectHeader( $object )
+    protected function makeObjectHeader($object)
     {
         return 'application/vnd.ez.api.' . $object . '+' . $this->restBodyType;
     }
 
     /**
-     * Decompose the header to get only the object type of the accept/conten-type headers
+     * Decompose the header to get only the object type of the accept/conten-type headers.
      *
      * @return false|string Decomposed string if found, false other wise
      */
-    protected function decomposeObjectHeader( $header )
+    protected function decomposeObjectHeader($header)
     {
-        preg_match( '/application\/vnd\.ez\.api\.(.*)\+(?:json|xml)/i', $header, $match );
+        preg_match('/application\/vnd\.ez\.api\.(.*)\+(?:json|xml)/i', $header, $match);
 
-        return empty( $match ) ? false : $match[1];
+        return empty($match) ? false : $match[1];
     }
 
     /**
-     * Get the response object (if it's not converted do the conversion also)
+     * Get the response object (if it's not converted do the conversion also).
      *
      * @return \eZ\Publish\API\Repository\Values\ValueObject
      */
     public function getResponseObject()
     {
-        if ( empty( $this->responseObject ) )
-        {
+        if (empty($this->responseObject)) {
             $this->responseObject = $this->convertResponseBodyToObject(
                 $this->restDriver->getBody(),
-                $this->restDriver->getHeader( 'content-type' )
+                $this->restDriver->getHeader('content-type')
             );
         }
 
@@ -233,7 +230,7 @@ trait EzRest
     }
 
     /**
-     * Get the request object
+     * Get the request object.
      *
      * @return \eZ\Publish\API\Repository\Values\ValueObject
      */
@@ -243,20 +240,20 @@ trait EzRest
     }
 
     /**
-     * Convert an object and add it to the body/content of the request
+     * Convert an object and add it to the body/content of the request.
      *
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object Object to be converted
      * @param string $type Type for the body of the request (XML, JSON)
      */
-    protected function addObjectToRequestBody( ValueObject $object, $type )
+    protected function addObjectToRequestBody(ValueObject $object, $type)
     {
-        $request = $this->convertObjectTo( $object, $type );
+        $request = $this->convertObjectTo($object, $type);
 
-        $this->restDriver->setBody( $request->getContent() );
+        $this->restDriver->setBody($request->getContent());
     }
 
     /**
-     * Convert an object to a request
+     * Convert an object to a request.
      *
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object Object to be converted
      * @param string $type Type for conversion
@@ -265,46 +262,42 @@ trait EzRest
      *
      * @throws InvalidArgumentException If the type is not known
      */
-    protected function convertObjectTo( ValueObject $object, $type )
+    protected function convertObjectTo(ValueObject $object, $type)
     {
-        $type = strtolower( $type );
-        switch( $type )
-        {
+        $type = strtolower($type);
+        switch ($type) {
             case 'json':
             case 'xml':
-                $visitor = $this->getKernel()->getContainer()->get( 'ezpublish_rest.output.visitor.' . $type );
+                $visitor = $this->getKernel()->getContainer()->get('ezpublish_rest.output.visitor.' . $type);
                 break;
 
             default:
-                throw new InvalidArgumentException( 'rest body type', $type );
+                throw new InvalidArgumentException('rest body type', $type);
         }
 
-        return $visitor->visit( $object );
+        return $visitor->visit($object);
     }
 
     /**
-     * Convert the body/content of a response into an object
+     * Convert the body/content of a response into an object.
      *
      * @param string $responseBody Body/content of the response (with the object)
      * @param string $contentTypeHeader Value of the content-type header
      *
      * @return \eZ\Publish\API\Repository\Values\ValueObject
      */
-    protected function convertResponseBodyToObject( $responseBody, $contentTypeHeader )
+    protected function convertResponseBodyToObject($responseBody, $contentTypeHeader)
     {
-        try
-        {
-            $this->responseObject = $this->getKernel()->getContainer()->get( 'ezpublish_rest.input.dispatcher' )->parse(
+        try {
+            $this->responseObject = $this->getKernel()->getContainer()->get('ezpublish_rest.input.dispatcher')->parse(
                 new Message(
-                    array( 'Content-Type' => $contentTypeHeader ),
+                    array('Content-Type' => $contentTypeHeader),
                     $responseBody
                 )
             );
-        }
-        // when errors/exceptions popup on form the response we need also to
-        // test/verify them
-        catch ( \Exception $e )
-        {
+        } catch (\Exception $e) {
+            // when errors/exceptions popup on form the response we need also to
+            // test/verify them
             $this->responseObject = $e;
         }
 
@@ -312,37 +305,34 @@ trait EzRest
     }
 
     /**
-     * Create an object of the specified type
+     * Create an object of the specified type.
      *
      * @param string $objectType the name of the object to be created
      *
-     * @return void
-     *
      * @throws \Behat\Behat\Exception\PendingException When the object requested is not implemented yet
      */
-    protected function createRequestObject( $objectType )
+    protected function createRequestObject($objectType)
     {
         $repository = $this->getRepository();
 
-        switch( $objectType )
-        {
-            case "SessionInput":
+        switch ($objectType) {
+            case 'SessionInput':
                 $this->requestObject = new SessionInput();
                 break;
-            case "ContentTypeGroupCreateStruct":
+            case 'ContentTypeGroupCreateStruct':
                 $this->requestObject = $repository
                     ->getContentTypeService()
-                    ->newContentTypeGroupCreateStruct( 'identifier' );
+                    ->newContentTypeGroupCreateStruct('identifier');
                 break;
 
-            case "ContentTypeGroupUpdateStruct":
+            case 'ContentTypeGroupUpdateStruct':
                 $this->requestObject = $repository
                     ->getContentTypeService()
                     ->newContentTypeGroupUpdateStruct();
                 break;
 
             default:
-                throw new InvalidArgumentException( $objectType, 'type is not defined yet' );
+                throw new InvalidArgumentException($objectType, 'type is not defined yet');
         }
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the LocationServiceAuthorizationTest class
+ * File containing the LocationServiceAuthorizationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,7 +27,6 @@ class LocationServiceAuthorizationTest extends BaseTest
     /**
      * Test for the createLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
@@ -34,7 +35,7 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $editorsGroupId = $this->generateId( 'group', 13 );
+        $editorsGroupId = $this->generateId('group', 13);
 
         /* BEGIN: Use Case */
         $contentService = $repository->getContentService();
@@ -43,12 +44,12 @@ class LocationServiceAuthorizationTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // ContentInfo for "Editors" user group
-        $contentInfo = $contentService->loadContentInfo( $editorsGroupId );
+        $contentInfo = $contentService->loadContentInfo($editorsGroupId);
 
         // Set current user to newly created user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
-        $locationCreate = $locationService->newLocationCreateStruct( 1 );
+        $locationCreate = $locationService->newLocationCreateStruct(1);
         $locationCreate->priority = 23;
         $locationCreate->hidden = true;
         $locationCreate->remoteId = 'sindelfingen';
@@ -66,7 +67,6 @@ class LocationServiceAuthorizationTest extends BaseTest
     /**
      * Test for the loadLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
@@ -75,7 +75,7 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $editorsGroupId = $this->generateId( 'group', 13 );
+        $editorsGroupId = $this->generateId('group', 13);
 
         /* BEGIN: Use Case */
         $locationService = $repository->getLocationService();
@@ -83,17 +83,16 @@ class LocationServiceAuthorizationTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set current user to newly created user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         // This call will fail with an "UnauthorizedException"
-        $locationService->loadLocation( $editorsGroupId );
+        $locationService->loadLocation($editorsGroupId);
         /* END: Use Case */
     }
 
     /**
      * Test for the loadLocationByRemoteId() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
@@ -111,17 +110,16 @@ class LocationServiceAuthorizationTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set current user to newly created user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         // This call will fail with an "UnauthorizedException"
-        $locationService->loadLocationByRemoteId( $editorsRemoteId );
+        $locationService->loadLocationByRemoteId($editorsRemoteId);
         /* END: Use Case */
     }
 
     /**
      * Test for the updateLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testUpdateLocation
@@ -130,14 +128,14 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $editorsGroupId = $this->generateId( 'group', 13 );
+        $editorsGroupId = $this->generateId('group', 13);
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         $locationService = $repository->getLocationService();
 
-        $originalLocation = $locationService->loadLocation( $editorsGroupId );
+        $originalLocation = $locationService->loadLocation($editorsGroupId);
 
         $locationUpdateStruct = $locationService->newLocationUpdateStruct();
         $locationUpdateStruct->priority = 3;
@@ -146,7 +144,7 @@ class LocationServiceAuthorizationTest extends BaseTest
         $locationUpdateStruct->sortOrder = Location::SORT_ORDER_DESC;
 
         // Set current user to newly created user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         // This call will fail with an "UnauthorizedException"
         $locationService->updateLocation(
@@ -159,7 +157,6 @@ class LocationServiceAuthorizationTest extends BaseTest
     /**
      * Test for the swapLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::swapLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testSwapLocation
@@ -168,8 +165,8 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $mediaLocationId = $this->generateId( 'location', 43 );
-        $demoDesignLocationId = $this->generateId( 'location', 56 );
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
         /* BEGIN: Use Case */
         // $mediaLocationId is the ID of the "Media" Location in
         // an eZ Publish demo installation
@@ -180,26 +177,25 @@ class LocationServiceAuthorizationTest extends BaseTest
         // Load the location service
         $locationService = $repository->getLocationService();
 
-        $mediaLocation = $locationService->loadLocation( $mediaLocationId );
-        $demoDesignLocation = $locationService->loadLocation( $demoDesignLocationId );
+        $mediaLocation = $locationService->loadLocation($mediaLocationId);
+        $demoDesignLocation = $locationService->loadLocation($demoDesignLocationId);
 
         // Swaps the content referred to by the locations
-        $locationService->swapLocation( $mediaLocation, $demoDesignLocation );
+        $locationService->swapLocation($mediaLocation, $demoDesignLocation);
 
         $user = $this->createMediaUserVersion1();
 
         // Set media editor as current user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         // This call will fail with an "UnauthorizedException"
-        $locationService->swapLocation( $mediaLocation, $demoDesignLocation );
+        $locationService->swapLocation($mediaLocation, $demoDesignLocation);
         /* END: Use Case */
     }
 
     /**
      * Test for the hideLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::hideLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testHideLocation
@@ -208,27 +204,26 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $editorsGroupId = $this->generateId( 'group', 13 );
+        $editorsGroupId = $this->generateId('group', 13);
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         $locationService = $repository->getLocationService();
 
-        $visibleLocation = $locationService->loadLocation( $editorsGroupId );
+        $visibleLocation = $locationService->loadLocation($editorsGroupId);
 
         // Set current user to newly created user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         // This call will fail with an "UnauthorizedException"
-        $locationService->hideLocation( $visibleLocation );
+        $locationService->hideLocation($visibleLocation);
         /* END: Use Case */
     }
 
     /**
      * Test for the unhideLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::unhideLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testUnhideLocation
@@ -237,30 +232,29 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $editorsGroupId = $this->generateId( 'group', 13 );
+        $editorsGroupId = $this->generateId('group', 13);
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         $locationService = $repository->getLocationService();
 
-        $visibleLocation = $locationService->loadLocation( $editorsGroupId );
+        $visibleLocation = $locationService->loadLocation($editorsGroupId);
 
         // Hide location
-        $hiddenLocation = $locationService->hideLocation( $visibleLocation );
+        $hiddenLocation = $locationService->hideLocation($visibleLocation);
 
         // Set current user to newly created user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         // This call will fail with an "UnauthorizedException"
-        $locationService->unhideLocation( $hiddenLocation );
+        $locationService->unhideLocation($hiddenLocation);
         /* END: Use Case */
     }
 
     /**
      * Test for the deleteLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testDeleteLocation
@@ -269,27 +263,26 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $editorsGroupId = $this->generateId( 'group', 13 );
+        $editorsGroupId = $this->generateId('group', 13);
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         $locationService = $repository->getLocationService();
 
-        $location = $locationService->loadLocation( $editorsGroupId );
+        $location = $locationService->loadLocation($editorsGroupId);
 
         // Set current user to newly created user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         // This call will fail with an "UnauthorizedException"
-        $locationService->deleteLocation( $location );
+        $locationService->deleteLocation($location);
         /* END: Use Case */
     }
 
     /**
      * Test for the deleteLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @expectedExceptionMessage User does not have access to 'remove' 'content'
@@ -299,43 +292,40 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $parentLocationId = $this->generateId( 'location', 43 );
-        $administratorUserId = $this->generateId( 'user', 14 );
+        $parentLocationId = $this->generateId('location', 43);
+        $administratorUserId = $this->generateId('user', 14);
 
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         $roleService = $repository->getRoleService();
 
-        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+        $role = $roleService->loadRoleByIdentifier('Editor');
 
         $removePolicy = null;
-        foreach ( $role->getPolicies() as $policy )
-        {
-            if ( 'content' != $policy->module || 'remove' != $policy->function )
-            {
+        foreach ($role->getPolicies() as $policy) {
+            if ('content' != $policy->module || 'remove' != $policy->function) {
                 continue;
             }
             $removePolicy = $policy;
             break;
         }
 
-        if ( null === $removePolicy )
-        {
-            throw new \ErrorException( 'No content:remove policy found.' );
+        if (null === $removePolicy) {
+            throw new \ErrorException('No content:remove policy found.');
         }
 
         // Update content/remove policy to only allow removal of the user's own content
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new OwnerLimitation(
-                array( 'limitationValues' => array( 1 ) )
+                array('limitationValues' => array(1))
             )
         );
-        $roleService->updatePolicy( $removePolicy, $policyUpdate );
+        $roleService->updatePolicy($removePolicy, $policyUpdate);
 
         // Set current user to newly created user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $locationService = $repository->getLocationService();
         $contentService = $repository->getContentService();
@@ -343,44 +333,43 @@ class LocationServiceAuthorizationTest extends BaseTest
         $userService = $repository->getUserService();
 
         // Create and publish Content with Location under $parentLocationId
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
-        $contentCreateStruct->setField( 'name', 'My awesome possibly deletable folder' );
+        $contentCreateStruct = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreateStruct->setField('name', 'My awesome possibly deletable folder');
         $contentCreateStruct->alwaysAvailable = true;
 
-        $locationCreateStruct = $locationService->newLocationCreateStruct( $parentLocationId );
+        $locationCreateStruct = $locationService->newLocationCreateStruct($parentLocationId);
 
-        $contentDraft = $contentService->createContent( $contentCreateStruct, array( $locationCreateStruct ) );
-        $content = $contentService->publishVersion( $contentDraft->versionInfo );
+        $contentDraft = $contentService->createContent($contentCreateStruct, array($locationCreateStruct));
+        $content = $contentService->publishVersion($contentDraft->versionInfo);
 
         // New user will be able to delete this Location at this point
-        $firstLocation = $locationService->loadLocation( $content->contentInfo->mainLocationId );
+        $firstLocation = $locationService->loadLocation($content->contentInfo->mainLocationId);
 
         // Set current user to administrator user
-        $administratorUser = $userService->loadUser( $administratorUserId );
-        $repository->setCurrentUser( $administratorUser );
+        $administratorUser = $userService->loadUser($administratorUserId);
+        $repository->setCurrentUser($administratorUser);
 
         // Under newly created Location create Content with administrator user
         // After this created user will not be able to delete $firstLocation
-        $locationCreateStruct = $locationService->newLocationCreateStruct( $firstLocation->id );
-        $contentDraft = $contentService->createContent( $contentCreateStruct, array( $locationCreateStruct ) );
-        $content = $contentService->publishVersion( $contentDraft->versionInfo );
-        $secondLocation = $locationService->loadLocation( $content->contentInfo->mainLocationId );
+        $locationCreateStruct = $locationService->newLocationCreateStruct($firstLocation->id);
+        $contentDraft = $contentService->createContent($contentCreateStruct, array($locationCreateStruct));
+        $content = $contentService->publishVersion($contentDraft->versionInfo);
+        $secondLocation = $locationService->loadLocation($content->contentInfo->mainLocationId);
 
         // Set current user to newly created user again, and try to delete $firstLocation
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         // This call will fail with an "UnauthorizedException" because user does not have
         // permission to delete $secondLocation which is in the subtree of the $firstLocation
-        $locationService->deleteLocation( $firstLocation );
+        $locationService->deleteLocation($firstLocation);
         /* END: Use Case */
     }
 
     /**
      * Test for the copySubtree() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCopySubtree
@@ -389,8 +378,8 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $mediaLocationId = $this->generateId( 'location', 43 );
-        $demoDesignLocationId = $this->generateId( 'location', 56 );
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
         /* BEGIN: Use Case */
         $user = $this->createMediaUserVersion1();
 
@@ -404,13 +393,13 @@ class LocationServiceAuthorizationTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Load location to copy
-        $locationToCopy = $locationService->loadLocation( $mediaLocationId );
+        $locationToCopy = $locationService->loadLocation($mediaLocationId);
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation( $demoDesignLocationId );
+        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
 
         // Set media editor as current user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         // This call will fail with an "UnauthorizedException"
         $locationService->copySubtree(
@@ -423,7 +412,6 @@ class LocationServiceAuthorizationTest extends BaseTest
     /**
      * Test for the moveSubtree() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testMoveSubtree
@@ -432,8 +420,8 @@ class LocationServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $mediaLocationId = $this->generateId( 'location', 43 );
-        $demoDesignLocationId = $this->generateId( 'location', 56 );
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
         /* BEGIN: Use Case */
         $user = $this->createMediaUserVersion1();
 
@@ -447,13 +435,13 @@ class LocationServiceAuthorizationTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Load location to move
-        $locationToMove = $locationService->loadLocation( $mediaLocationId );
+        $locationToMove = $locationService->loadLocation($mediaLocationId);
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation( $demoDesignLocationId );
+        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
 
         // Set media editor as current user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         // This call will fail with an "UnauthorizedException"
         $locationService->moveSubtree(

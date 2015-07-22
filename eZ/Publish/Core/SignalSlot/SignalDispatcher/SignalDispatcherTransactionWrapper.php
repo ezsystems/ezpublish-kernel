@@ -1,6 +1,7 @@
 <?php
+
 /**
- * File is part of the eZ Publish package
+ * File is part of the eZ Publish package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -13,7 +14,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\SPI\Persistence\TransactionHandler;
 
 /**
- * Dispatches Signals to their assigned Slots, after transactions have successfully completed
+ * Dispatches Signals to their assigned Slots, after transactions have successfully completed.
  *
  * Wraps around a SignalDispatcher to add knowledge of transactions to be able to queue signals
  * if there is currently a transaction in progress. Signals which where part of transaction that
@@ -46,38 +47,33 @@ class SignalDispatcherTransactionWrapper extends SignalDispatcher implements Tra
     private $transactionCount = 0;
 
     /**
-     * Construct from factory
+     * Construct from factory.
      *
      * @param SignalDispatcher $signalDispatcher
      */
-    public function __construct( SignalDispatcher $signalDispatcher )
+    public function __construct(SignalDispatcher $signalDispatcher)
     {
         $this->signalDispatcher = $signalDispatcher;
     }
 
     /**
-     * Emits the given $signal or queue if in transaction
+     * Emits the given $signal or queue if in transaction.
      *
      * All assigned slots will eventually receive the $signal
      *
      * @param Signal $signal
-     *
-     * @return void
      */
-    public function emit( Signal $signal )
+    public function emit(Signal $signal)
     {
-        if ( $this->transactionDepth === 0 )
-        {
-            $this->signalDispatcher->emit( $signal );
-        }
-        else
-        {
+        if ($this->transactionDepth === 0) {
+            $this->signalDispatcher->emit($signal);
+        } else {
             $this->signalsQueue[$this->transactionCount][] = $signal;
         }
     }
 
     /**
-     * Captures Begin transaction call
+     * Captures Begin transaction call.
      */
     public function beginTransaction()
     {
@@ -86,22 +82,20 @@ class SignalDispatcherTransactionWrapper extends SignalDispatcher implements Tra
     }
 
     /**
-     * Captures Commit transaction call and emits queued signals
+     * Captures Commit transaction call and emits queued signals.
      */
     public function commit()
     {
         // Ignore if no transaction
-        if ( $this->transactionDepth === 0 )
+        if ($this->transactionDepth === 0) {
             return;
+        }
 
         --$this->transactionDepth;
-        if ( $this->transactionDepth === 0 )
-        {
-            foreach ( $this->signalsQueue as $signalsQueue )
-            {
-                foreach ( $signalsQueue as $signal )
-                {
-                    $this->signalDispatcher->emit( $signal );
+        if ($this->transactionDepth === 0) {
+            foreach ($this->signalsQueue as $signalsQueue) {
+                foreach ($signalsQueue as $signal) {
+                    $this->signalDispatcher->emit($signal);
                 }
             }
 
@@ -112,16 +106,17 @@ class SignalDispatcherTransactionWrapper extends SignalDispatcher implements Tra
     }
 
     /**
-     * Captures Rollback transaction call
+     * Captures Rollback transaction call.
      */
     public function rollback()
     {
         // Ignore if no transaction
-        if ( $this->transactionDepth === 0 )
+        if ($this->transactionDepth === 0) {
             return;
+        }
 
         --$this->transactionDepth;
-        unset( $this->signalsQueue[$this->transactionCount] );
+        unset($this->signalsQueue[$this->transactionCount]);
         --$this->transactionCount;// In case several rollbacks will happen on hierarchical transactions.
     }
 }

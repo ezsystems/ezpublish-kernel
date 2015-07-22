@@ -1,10 +1,12 @@
 <?php
+
 /**
- * File containing the ISBNTest class
+ * File containing the ISBNTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- * @version 
+ *
+ * @version
  */
 
 namespace eZ\Publish\Core\FieldType\Tests;
@@ -32,8 +34,8 @@ class ISBNTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        $fieldType = new ISBN( "9789722514095" );
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+        $fieldType = new ISBN('9789722514095');
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
     }
@@ -56,10 +58,10 @@ class ISBNTest extends FieldTypeTest
     protected function getSettingsSchemaExpectation()
     {
         return array(
-            "isISBN13" => array(
-                "type" => "boolean",
-                "default" => true
-            )
+            'isISBN13' => array(
+                'type' => 'boolean',
+                'default' => true,
+            ),
         );
     }
 
@@ -70,7 +72,7 @@ class ISBNTest extends FieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return new ISBNValue;
+        return new ISBNValue();
     }
 
     /**
@@ -151,22 +153,22 @@ class ISBNTest extends FieldTypeTest
     {
         return array(
             array(
-                "9789722514095",
-                new ISBNValue( "9789722514095" )
+                '9789722514095',
+                new ISBNValue('9789722514095'),
             ),
             array(
-                "978-972-25-1409-5",
-                new ISBNValue( "978-972-25-1409-5" )
+                '978-972-25-1409-5',
+                new ISBNValue('978-972-25-1409-5'),
             ),
             array(
-                "0-9752298-0-X",
-                new ISBNValue( "0-9752298-0-X" )
+                '0-9752298-0-X',
+                new ISBNValue('0-9752298-0-X'),
             ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -204,14 +206,14 @@ class ISBNTest extends FieldTypeTest
     {
         return array(
             array(
-                new ISBNValue( "9789722514095" ),
-                "9789722514095"
+                new ISBNValue('9789722514095'),
+                '9789722514095',
             ),
         );
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -249,8 +251,8 @@ class ISBNTest extends FieldTypeTest
     {
         return array(
             array(
-                "9789722514095",
-                new ISBNValue( "9789722514095" )
+                '9789722514095',
+                new ISBNValue('9789722514095'),
             ),
         );
     }
@@ -263,8 +265,8 @@ class ISBNTest extends FieldTypeTest
     public function provideDataForGetName()
     {
         return array(
-            array( $this->getEmptyValueExpectation(), "" ),
-            array( new ISBNValue( "9789722514095" ), "9789722514095" )
+            array($this->getEmptyValueExpectation(), ''),
+            array(new ISBNValue('9789722514095'), '9789722514095'),
         );
     }
 
@@ -279,35 +281,35 @@ class ISBNTest extends FieldTypeTest
         return array(
             array(
                 array(
-                    "fieldSettings" => array(
-                        'isISBN13' => true
+                    'fieldSettings' => array(
+                        'isISBN13' => true,
                     ),
                 ),
                 new ISBNValue(),
             ),
             array(
                 array(
-                    "fieldSettings" => array(
-                        'isISBN13' => false
+                    'fieldSettings' => array(
+                        'isISBN13' => false,
                     ),
                 ),
                 new ISBNValue(),
             ),
             array(
                 array(
-                    "fieldSettings" => array(
-                        'isISBN13' => true
+                    'fieldSettings' => array(
+                        'isISBN13' => true,
                     ),
                 ),
-                new ISBNValue( "9789722514095" ),
+                new ISBNValue('9789722514095'),
             ),
             array(
                 array(
-                    "fieldSettings" => array(
-                        'isISBN13' => false
+                    'fieldSettings' => array(
+                        'isISBN13' => false,
                     ),
                 ),
-                new ISBNValue( "0-9752298-0-X" ),
+                new ISBNValue('0-9752298-0-X'),
             ),
         );
     }
@@ -324,16 +326,13 @@ class ISBNTest extends FieldTypeTest
         return array(
             array(
                 array(
-                    "fieldSettings" => array(
-                        'isISBN13' => false
+                    'fieldSettings' => array(
+                        'isISBN13' => false,
                     ),
                 ),
-                new ISBNValue( "9789722514095" ),
+                new ISBNValue('9789722514095'),
                 array(
-                    new ValidationError(
-                        "ISBN-10 must be 10 character length",
-                        null, array(), 'isbn'
-                    )
+                    new ValidationError('ISBN-10 must be 10 character length', null, array(), 'isbn'),
                 ),
             ),
         );

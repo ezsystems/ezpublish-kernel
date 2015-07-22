@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the VarnishProxyClientFactory class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAw
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 /**
- * Factory for Varnish proxy client
+ * Factory for Varnish proxy client.
  */
 class VarnishProxyClientFactory
 {
@@ -38,8 +40,7 @@ class VarnishProxyClientFactory
         ConfigResolverInterface $configResolver,
         DynamicSettingParserInterface $dynamicSettingParser,
         $proxyClientClass
-    )
-    {
+    ) {
         $this->configResolver = $configResolver;
         $this->dynamicSettingParser = $dynamicSettingParser;
         $this->proxyClientClass = $proxyClientClass;
@@ -53,27 +54,26 @@ class VarnishProxyClientFactory
      *
      * @return \FOS\HttpCache\ProxyClient\Varnish
      */
-    public function buildProxyClient( array $servers, $baseUrl )
+    public function buildProxyClient(array $servers, $baseUrl)
     {
         $allServers = array();
-        foreach ( $servers as $server )
-        {
-            if ( !$this->dynamicSettingParser->isDynamicSetting( $server ) )
-            {
+        foreach ($servers as $server) {
+            if (!$this->dynamicSettingParser->isDynamicSetting($server)) {
                 $allServers[] = $server;
                 continue;
             }
 
-            $settings = $this->dynamicSettingParser->parseDynamicSetting( $server );
+            $settings = $this->dynamicSettingParser->parseDynamicSetting($server);
             $configuredServers = $this->configResolver->getParameter(
                 $settings['param'],
                 $settings['namespace'],
                 $settings['scope']
             );
-            $allServers = array_merge( $allServers, (array)$configuredServers );
+            $allServers = array_merge($allServers, (array)$configuredServers);
         }
 
         $class = $this->proxyClientClass;
-        return new $class( $allServers, $baseUrl );
+
+        return new $class($allServers, $baseUrl);
     }
 }

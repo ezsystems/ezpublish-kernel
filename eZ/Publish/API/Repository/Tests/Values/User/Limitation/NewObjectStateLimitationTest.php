@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the NewObjectStateLimitationTest class
+ * File containing the NewObjectStateLimitationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,16 +25,16 @@ use eZ\Publish\API\Repository\Values\User\Limitation\NewObjectStateLimitation;
 class NewObjectStateLimitationTest extends BaseLimitationTest
 {
     /**
-     * Tests a NewObjectStateLimitation
+     * Tests a NewObjectStateLimitation.
      *
-     * @return void
      * @see eZ\Publish\API\Repository\Values\User\Limitation\NewObjectStateLimitation
+     *
      * @throws \ErrorException if a mandatory test fixture not exists.
      */
     public function testNewObjectStateLimitationAllow()
     {
         $repository = $this->getRepository();
-        $notLockedState = $this->generateId( 'objectstate', 2 );
+        $notLockedState = $this->generateId('objectstate', 2);
 
         $objectStateService = $repository->getObjectStateService();
         /* BEGIN: Use Case */
@@ -42,45 +44,45 @@ class NewObjectStateLimitationTest extends BaseLimitationTest
         $roleService = $repository->getRoleService();
 
         // Create and assign limited state:assign policy
-        $policyCreate = $roleService->newPolicyCreateStruct( 'state', 'assign' );
+        $policyCreate = $roleService->newPolicyCreateStruct('state', 'assign');
         $policyCreate->addLimitation(
             new NewObjectStateLimitation(
                 array(
                     'limitationValues' => array(
-                        $notLockedState
-                    )
+                        $notLockedState,
+                    ),
                 )
             )
         );
 
         $role = $roleService->addPolicy(
-            $roleService->loadRoleByIdentifier( 'Editor' ),
+            $roleService->loadRoleByIdentifier('Editor'),
             $policyCreate
         );
 
-        $roleService->assignRoleToUser( $role, $user );
+        $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
-        $objectState = $objectStateService->loadObjectState( $notLockedState );
+        $objectState = $objectStateService->loadObjectState($notLockedState);
 
-        $objectStateService->setContentState( $draft->contentInfo, $objectState->getObjectStateGroup(), $objectState );
+        $objectStateService->setContentState($draft->contentInfo, $objectState->getObjectStateGroup(), $objectState);
         /* END: Use Case */
     }
 
     /**
-     * Tests a NewObjectStateLimitation
+     * Tests a NewObjectStateLimitation.
      *
-     * @return void
      * @see eZ\Publish\API\Repository\Values\User\Limitation\NewObjectStateLimitation
+     *
      * @throws \ErrorException if a mandatory test fixture not exists.
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testNewObjectStateLimitationForbid()
     {
         $repository = $this->getRepository();
-        $lockedState = $this->generateId( 'objectstate', 1 );
-        $notLockedState = $this->generateId( 'objectstate', 2 );
+        $lockedState = $this->generateId('objectstate', 1);
+        $notLockedState = $this->generateId('objectstate', 2);
 
         $objectStateService = $repository->getObjectStateService();
         /* BEGIN: Use Case */
@@ -90,29 +92,29 @@ class NewObjectStateLimitationTest extends BaseLimitationTest
         $roleService = $repository->getRoleService();
 
         // Create and assign limited state:assign policy
-        $policyCreate = $roleService->newPolicyCreateStruct( 'state', 'assign' );
+        $policyCreate = $roleService->newPolicyCreateStruct('state', 'assign');
         $policyCreate->addLimitation(
             new NewObjectStateLimitation(
                 array(
                     'limitationValues' => array(
-                        $lockedState
-                    )
+                        $lockedState,
+                    ),
                 )
             )
         );
 
         $role = $roleService->addPolicy(
-            $roleService->loadRoleByIdentifier( 'Editor' ),
+            $roleService->loadRoleByIdentifier('Editor'),
             $policyCreate
         );
 
-        $roleService->assignRoleToUser( $role, $user );
+        $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
-        $objectState = $objectStateService->loadObjectState( $notLockedState );
+        $objectState = $objectStateService->loadObjectState($notLockedState);
 
-        $objectStateService->setContentState( $draft->contentInfo, $objectState->getObjectStateGroup(), $objectState );
+        $objectStateService->setContentState($draft->contentInfo, $objectState->getObjectStateGroup(), $objectState);
         /* END: Use Case */
     }
 }

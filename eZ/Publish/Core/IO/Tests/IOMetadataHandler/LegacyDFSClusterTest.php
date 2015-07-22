@@ -1,10 +1,12 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Legacy package
+ * This file is part of the eZ Publish Legacy package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributd with this source code.
  */
+
 namespace eZ\Publish\Core\IO\Tests\IOMetadataHandler;
 
 use eZ\Publish\Core\IO\IOMetadataHandler\LegacyDFSCluster;
@@ -26,13 +28,13 @@ class LegacyDFSClusterTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->dbalMock = $this->getMockBuilder( 'Doctrine\DBAL\Connection' )->disableOriginalConstructor()->getMock();
-        $this->urlDecoratorMock = $this->getMock( 'eZ\Publish\Core\IO\UrlDecorator' );
+        $this->dbalMock = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
+        $this->urlDecoratorMock = $this->getMock('eZ\Publish\Core\IO\UrlDecorator');
 
         $this->handler = new LegacyDFSCluster(
             $this->dbalMock,
             $this->urlDecoratorMock,
-            [ 'prefix' => 'var/test']
+            ['prefix' => 'var/test']
         );
     }
 
@@ -40,15 +42,15 @@ class LegacyDFSClusterTest extends PHPUnit_Framework_TestCase
     {
         $statement = $this->createDbalStatementMock();
         $statement
-            ->expects( $this->once() )
-            ->method( 'rowCount' )
-            ->will( $this->returnValue( 1 ) );
+            ->expects($this->once())
+            ->method('rowCount')
+            ->will($this->returnValue(1));
 
         $this->dbalMock
-            ->expects( $this->once() )
-            ->method( 'prepare' )
-            ->with( $this->anything() )
-            ->will( $this->returnValue( $statement ) );
+            ->expects($this->once())
+            ->method('prepare')
+            ->with($this->anything())
+            ->will($this->returnValue($statement));
 
         $spiCreateStruct = new SPIBinaryFileCreateStruct();
         $spiCreateStruct->id = 'prefix/my/file.png';
@@ -58,7 +60,7 @@ class LegacyDFSClusterTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'eZ\Publish\SPI\IO\BinaryFile',
-            $this->handler->create( $spiCreateStruct )
+            $this->handler->create($spiCreateStruct)
         );
     }
 
@@ -66,17 +68,17 @@ class LegacyDFSClusterTest extends PHPUnit_Framework_TestCase
     {
         $statement = $this->createDbalStatementMock();
         $statement
-            ->expects( $this->once() )
-            ->method( 'rowCount' )
-            ->will( $this->returnValue( 1 ) );
+            ->expects($this->once())
+            ->method('rowCount')
+            ->will($this->returnValue(1));
 
         $this->dbalMock
-            ->expects( $this->once() )
-            ->method( 'prepare' )
-            ->with( $this->anything() )
-            ->will( $this->returnValue( $statement ) );
+            ->expects($this->once())
+            ->method('prepare')
+            ->with($this->anything())
+            ->will($this->returnValue($statement));
 
-        $this->handler->delete( 'prefix/my/file.png' );
+        $this->handler->delete('prefix/my/file.png');
     }
 
     /**
@@ -86,47 +88,47 @@ class LegacyDFSClusterTest extends PHPUnit_Framework_TestCase
     {
         $statement = $this->createDbalStatementMock();
         $statement
-            ->expects( $this->once() )
-            ->method( 'rowCount' )
-            ->will( $this->returnValue( 0 ) );
+            ->expects($this->once())
+            ->method('rowCount')
+            ->will($this->returnValue(0));
 
         $this->dbalMock
-            ->expects( $this->once() )
-            ->method( 'prepare' )
-            ->with( $this->anything() )
-            ->will( $this->returnValue( $statement ) );
+            ->expects($this->once())
+            ->method('prepare')
+            ->with($this->anything())
+            ->will($this->returnValue($statement));
 
-        $this->handler->delete( 'prefix/my/file.png' );
+        $this->handler->delete('prefix/my/file.png');
     }
 
     public function testLoad()
     {
         $statement = $this->createDbalStatementMock();
         $statement
-            ->expects( $this->once() )
-            ->method( 'rowCount' )
-            ->will( $this->returnValue( 1 ) );
+            ->expects($this->once())
+            ->method('rowCount')
+            ->will($this->returnValue(1));
 
         $statement
-            ->expects( $this->once() )
-            ->method( 'fetch' )
-            ->will( $this->returnValue( array( 'size' => 123, 'datatype' => 'image/png', 'mtime' => 1307155200 ) ) );
+            ->expects($this->once())
+            ->method('fetch')
+            ->will($this->returnValue(array('size' => 123, 'datatype' => 'image/png', 'mtime' => 1307155200)));
 
         $this->dbalMock
-            ->expects( $this->once() )
-            ->method( 'prepare' )
-            ->with( $this->anything() )
-            ->will( $this->returnValue( $statement ) );
+            ->expects($this->once())
+            ->method('prepare')
+            ->with($this->anything())
+            ->will($this->returnValue($statement));
 
         $expectedSpiBinaryFile = new SPIBinaryFile();
         $expectedSpiBinaryFile->id = 'prefix/my/file.png';
         $expectedSpiBinaryFile->size = 123;
-        $expectedSpiBinaryFile->mtime = new DateTime( '@1307155200' );
+        $expectedSpiBinaryFile->mtime = new DateTime('@1307155200');
         $expectedSpiBinaryFile->mimeType = 'image/png';
 
         self::assertEquals(
             $expectedSpiBinaryFile,
-            $this->handler->load( 'prefix/my/file.png' )
+            $this->handler->load('prefix/my/file.png')
         );
     }
 
@@ -137,68 +139,68 @@ class LegacyDFSClusterTest extends PHPUnit_Framework_TestCase
     {
         $statement = $this->createDbalStatementMock();
         $statement
-            ->expects( $this->once() )
-            ->method( 'rowCount' )
-            ->will( $this->returnValue( 0 ) );
+            ->expects($this->once())
+            ->method('rowCount')
+            ->will($this->returnValue(0));
 
         $this->dbalMock
-            ->expects( $this->once() )
-            ->method( 'prepare' )
-            ->with( $this->anything() )
-            ->will( $this->returnValue( $statement ) );
+            ->expects($this->once())
+            ->method('prepare')
+            ->with($this->anything())
+            ->will($this->returnValue($statement));
 
-        $this->handler->load( 'prefix/my/file.png' );
+        $this->handler->load('prefix/my/file.png');
     }
 
     public function testExists()
     {
         $statement = $this->createDbalStatementMock();
         $statement
-            ->expects( $this->once() )
-            ->method( 'rowCount' )
-            ->will( $this->returnValue( 1 ) );
+            ->expects($this->once())
+            ->method('rowCount')
+            ->will($this->returnValue(1));
 
         $this->dbalMock
-            ->expects( $this->once() )
-            ->method( 'prepare' )
-            ->with( $this->anything() )
-            ->will( $this->returnValue( $statement ) );
+            ->expects($this->once())
+            ->method('prepare')
+            ->with($this->anything())
+            ->will($this->returnValue($statement));
 
-        self::assertTrue( $this->handler->exists( 'prefix/my/file.png' ) );
+        self::assertTrue($this->handler->exists('prefix/my/file.png'));
     }
 
     public function testExistsNot()
     {
         $statement = $this->createDbalStatementMock();
         $statement
-            ->expects( $this->once() )
-            ->method( 'rowCount' )
-            ->will( $this->returnValue( 0 ) );
+            ->expects($this->once())
+            ->method('rowCount')
+            ->will($this->returnValue(0));
 
         $this->dbalMock
-            ->expects( $this->once() )
-            ->method( 'prepare' )
-            ->with( $this->anything() )
-            ->will( $this->returnValue( $statement ) );
+            ->expects($this->once())
+            ->method('prepare')
+            ->with($this->anything())
+            ->will($this->returnValue($statement));
 
-        self::assertFalse( $this->handler->exists( 'prefix/my/file.png' ) );
+        self::assertFalse($this->handler->exists('prefix/my/file.png'));
     }
 
     public function testDeletedirectory()
     {
         $statement = $this->createDbalStatementMock();
         $statement
-            ->expects( $this->once() )
-            ->method( 'bindValue' )
-            ->with( 1, 'folder/subfolder/%' );
+            ->expects($this->once())
+            ->method('bindValue')
+            ->with(1, 'folder/subfolder/%');
 
         $this->dbalMock
-            ->expects( $this->once() )
-            ->method( 'prepare' )
-            ->with( $this->anything() )
-            ->will( $this->returnValue( $statement ) );
+            ->expects($this->once())
+            ->method('prepare')
+            ->with($this->anything())
+            ->will($this->returnValue($statement));
 
-        $this->handler->deleteDirectory( 'folder/subfolder/' );
+        $this->handler->deleteDirectory('folder/subfolder/');
     }
 
     /**
@@ -206,6 +208,6 @@ class LegacyDFSClusterTest extends PHPUnit_Framework_TestCase
      */
     protected function createDbalStatementMock()
     {
-        return $this->getMock( 'Doctrine\DBAL\Driver\Statement' );
+        return $this->getMock('Doctrine\DBAL\Driver\Statement');
     }
 }

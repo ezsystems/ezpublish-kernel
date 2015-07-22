@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,5 +25,5 @@ abstract class CoreFilter
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param array $languageSettings
      */
-    abstract public function apply( Query $query, array $languageSettings );
+    abstract public function apply(Query $query, array $languageSettings);
 }

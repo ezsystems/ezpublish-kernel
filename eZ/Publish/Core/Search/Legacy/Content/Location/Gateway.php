@@ -1,15 +1,16 @@
 <?php
+
 /**
- * File containing the Search Location Gateway class
+ * File containing the Search Location Gateway class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\Search\Legacy\Content\Location;
 
-use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
@@ -28,5 +29,5 @@ abstract class Gateway
      *
      * @return mixed[][]
      */
-    abstract public function find( Criterion $criterion, $offset, $limit, array $sortClauses = null, $doCount = true );
+    abstract public function find(Criterion $criterion, $offset, $limit, array $sortClauses = null, $doCount = true);
 }

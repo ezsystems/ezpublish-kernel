@@ -1,24 +1,24 @@
 <?php
+
 /**
  * File containing the RestValueResponseListener class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
+
 namespace eZ\Bundle\EzPublishRestBundle\Tests\EventListener;
 
 use eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher;
 use PHPUnit_Framework_MockObject_MockObject;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use eZ\Bundle\EzPublishRestBundle\EventListener\ResponseListener;
 use stdClass;
-use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class ResponseListenerTest extends EventListenerTest
@@ -40,13 +40,13 @@ class ResponseListenerTest extends EventListenerTest
     public function setUp()
     {
         $this->eventValue = new stdClass();
-        $this->response = new Response( 'BODY', 406, array( 'foo' => 'bar' ) );
+        $this->response = new Response('BODY', 406, array('foo' => 'bar'));
     }
 
     public function provideExpectedSubscribedEventTypes()
     {
         return array(
-            array( array( KernelEvents::VIEW, KernelEvents::EXCEPTION ) )
+            array(array(KernelEvents::VIEW, KernelEvents::EXCEPTION)),
         );
     }
 
@@ -70,30 +70,30 @@ class ResponseListenerTest extends EventListenerTest
         );
     }
 
-    protected function onKernelViewIsNotRestRequest( $method, GetResponseEvent $event )
+    protected function onKernelViewIsNotRestRequest($method, GetResponseEvent $event)
     {
         $this->getVisitorDispatcherMock()
-            ->expects( $this->never() )
-            ->method( 'dispatch' );
+            ->expects($this->never())
+            ->method('dispatch');
 
-        $this->getEventListener()->$method( $event );
+        $this->getEventListener()->$method($event);
     }
 
     public function testOnKernelExceptionView()
     {
-        $this->onKernelView( 'onKernelExceptionView', $this->getExceptionEventMock() );
+        $this->onKernelView('onKernelExceptionView', $this->getExceptionEventMock());
     }
 
     public function testOnControllerResultView()
     {
-        $this->onKernelView( 'onKernelResultView', $this->getControllerResultEventMock() );
+        $this->onKernelView('onKernelResultView', $this->getControllerResultEventMock());
     }
 
-    protected function onKernelView( $method, $event )
+    protected function onKernelView($method, $event)
     {
         $this->getVisitorDispatcherMock()
-            ->expects( $this->once() )
-            ->method( 'dispatch' )
+            ->expects($this->once())
+            ->method('dispatch')
             ->with(
                 $this->getRequestMock(),
                 $this->eventValue
@@ -103,11 +103,11 @@ class ResponseListenerTest extends EventListenerTest
                 )
             );
 
-        $event->expects( $this->once() )
-            ->method( 'setResponse' )
-            ->with( $this->response );
+        $event->expects($this->once())
+            ->method('setResponse')
+            ->with($this->response);
 
-        $this->getEventListener()->$method( $event );
+        $this->getEventListener()->$method($event);
     }
 
     /**
@@ -115,12 +115,12 @@ class ResponseListenerTest extends EventListenerTest
      */
     public function getVisitorDispatcherMock()
     {
-        if ( !isset( $this->visitorDispatcherMock ) )
-        {
+        if (!isset($this->visitorDispatcherMock)) {
             $this->visitorDispatcherMock = $this->getMock(
                 'eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher'
             );
         }
+
         return $this->visitorDispatcherMock;
     }
 
@@ -139,14 +139,14 @@ class ResponseListenerTest extends EventListenerTest
      */
     protected function getControllerResultEventMock()
     {
-        if ( !isset( $this->eventMock ) )
-        {
-            $this->eventMock = parent::getEventMock( 'Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent' );
+        if (!isset($this->eventMock)) {
+            $this->eventMock = parent::getEventMock('Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent');
             $this->eventMock
-                ->expects( $this->any() )
-                ->method( 'getControllerResult' )
-                ->will( $this->returnValue( $this->eventValue ) );
+                ->expects($this->any())
+                ->method('getControllerResult')
+                ->will($this->returnValue($this->eventValue));
         }
+
         return $this->eventMock;
     }
 
@@ -155,15 +155,15 @@ class ResponseListenerTest extends EventListenerTest
      */
     protected function getExceptionEventMock()
     {
-        if ( !isset( $this->eventMock ) )
-        {
-            $this->eventMock = parent::getEventMock( 'Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent' );
+        if (!isset($this->eventMock)) {
+            $this->eventMock = parent::getEventMock('Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent');
 
             $this->eventMock
-                ->expects( $this->any() )
-                ->method( 'getException' )
-                ->will( $this->returnValue( $this->eventValue ) );
+                ->expects($this->any())
+                ->method('getException')
+                ->will($this->returnValue($this->eventValue));
         }
+
         return $this->eventMock;
     }
 }

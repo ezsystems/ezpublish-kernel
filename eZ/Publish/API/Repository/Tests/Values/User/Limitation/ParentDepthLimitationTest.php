@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ParentDepthLimitationTest class
+ * File containing the ParentDepthLimitationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,7 +28,6 @@ class ParentDepthLimitationTest extends BaseLimitationTest
     /**
      * Tests a combination of ParentDepthLimitation and ContentTypeLimitation.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation
      */
@@ -34,45 +35,44 @@ class ParentDepthLimitationTest extends BaseLimitationTest
     {
         $repository = $this->getRepository();
 
-        $contentTypeId = $this->generateId( 'contentType', 22 );
+        $contentTypeId = $this->generateId('contentType', 22);
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         $roleService = $repository->getRoleService();
 
-        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+        $role = $roleService->loadRoleByIdentifier('Editor');
 
-        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new ParentDepthLimitation(
-                array( 'limitationValues' => array( 2 ) )
+                array('limitationValues' => array(2))
             )
         );
         $policyCreate->addLimitation(
             new ContentTypeLimitation(
-                array( 'limitationValues' => array( $contentTypeId ) )
+                array('limitationValues' => array($contentTypeId))
             )
         );
 
-        $role = $roleService->addPolicy( $role, $policyCreate );
+        $role = $roleService->addPolicy($role, $policyCreate);
 
-        $roleService->assignRoleToUser( $role, $user );
+        $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $draft = $this->createWikiPageDraft();
         /* END: Use Case */
 
         $this->assertEquals(
             'An awesome wiki page',
-            $draft->getFieldValue( 'title' )->text
+            $draft->getFieldValue('title')->text
         );
     }
 
     /**
      * Tests a combination of ParentDepthLimitation and ContentTypeLimitation.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
@@ -81,31 +81,31 @@ class ParentDepthLimitationTest extends BaseLimitationTest
     {
         $repository = $this->getRepository();
 
-        $contentTypeId = $this->generateId( 'contentType', 22 );
+        $contentTypeId = $this->generateId('contentType', 22);
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         $roleService = $repository->getRoleService();
 
-        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+        $role = $roleService->loadRoleByIdentifier('Editor');
 
-        $policyCreate = $roleService->newPolicyCreateStruct( 'content', 'create' );
+        $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new ParentDepthLimitation(
-                array( 'limitationValues' => array( 1, 3, 4 ) )
+                array('limitationValues' => array(1, 3, 4))
             )
         );
         $policyCreate->addLimitation(
             new ContentTypeLimitation(
-                array( 'limitationValues' => array( $contentTypeId ) )
+                array('limitationValues' => array($contentTypeId))
             )
         );
 
-        $role = $roleService->addPolicy( $role, $policyCreate );
+        $role = $roleService->addPolicy($role, $policyCreate);
 
-        $roleService->assignRoleToUser( $role, $user );
+        $roleService->assignRoleToUser($role, $user);
 
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $this->createWikiPageDraft();
         /* END: Use Case */

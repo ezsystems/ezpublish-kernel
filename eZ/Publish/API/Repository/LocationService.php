@@ -1,11 +1,12 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\LocationService class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
- * @package eZ\Publish\API\Repository
  */
 
 namespace eZ\Publish\API\Repository;
@@ -16,16 +17,14 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
- * Location service, used for complex subtree operations
+ * Location service, used for complex subtree operations.
  *
  * @example Examples/location.php
- *
- * @package eZ\Publish\API\Repository
  */
 interface LocationService
 {
     /**
-     * Copies the subtree starting from $subtree as a new subtree of $targetLocation
+     * Copies the subtree starting from $subtree as a new subtree of $targetLocation.
      *
      * Only the items on which the user has read access are copied.
      *
@@ -38,10 +37,10 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location The newly created location of the copied subtree
      */
-    public function copySubtree( Location $subtree, Location $targetParentLocation );
+    public function copySubtree(Location $subtree, Location $targetParentLocation);
 
     /**
-     * Loads a location object from its $locationId
+     * Loads a location object from its $locationId.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
@@ -50,10 +49,10 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function loadLocation( $locationId );
+    public function loadLocation($locationId);
 
     /**
-     * Loads a location object from its $remoteId
+     * Loads a location object from its $remoteId.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
@@ -62,7 +61,7 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function loadLocationByRemoteId( $remoteId );
+    public function loadLocationByRemoteId($remoteId);
 
     /**
      * Loads the locations for the given content object.
@@ -77,10 +76,10 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[] An array of {@link Location}
      */
-    public function loadLocations( ContentInfo $contentInfo, Location $rootLocation = null );
+    public function loadLocations(ContentInfo $contentInfo, Location $rootLocation = null);
 
     /**
-     * Loads children which are readable by the current user of a location object sorted by sortField and sortOrder
+     * Loads children which are readable by the current user of a location object sorted by sortField and sortOrder.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param int $offset the start offset for paging
@@ -88,35 +87,34 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
-    public function loadLocationChildren( Location $location, $offset = 0, $limit = 10 );
+    public function loadLocationChildren(Location $location, $offset = 0, $limit = 10);
 
     /**
-     * Returns the number of children which are readable by the current user of a location object
+     * Returns the number of children which are readable by the current user of a location object.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
      * @return int
      */
-    public function getLocationChildCount( Location $location );
+    public function getLocationChildCount(Location $location);
 
     /**
-     * Creates the new $location in the content repository for the given content
+     * Creates the new $location in the content repository for the given content.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create this location
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the content is already below the specified parent
      *                                        or the parent is a sub location of the location of the content
      *                                        or if set the remoteId exists already
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $locationCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created Location
-     *
      */
-    public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct );
+    public function createLocation(ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct);
 
     /**
-     * Updates $location in the content repository
+     * Updates $location in the content repository.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to update this location
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException   if if set the remoteId exists already
@@ -126,17 +124,17 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the updated Location
      */
-    public function updateLocation( Location $location, LocationUpdateStruct $locationUpdateStruct );
+    public function updateLocation(Location $location, LocationUpdateStruct $locationUpdateStruct);
 
     /**
-     * Swaps the contents held by $location1 and $location2
+     * Swaps the contents held by $location1 and $location2.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to swap content
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location1
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location2
      */
-    public function swapLocation( Location $location1, Location $location2 );
+    public function swapLocation(Location $location1, Location $location2);
 
     /**
      * Hides the $location and marks invisible all descendants of $location.
@@ -147,7 +145,7 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location $location, with updated hidden value
      */
-    public function hideLocation( Location $location );
+    public function hideLocation(Location $location);
 
     /**
      * Unhides the $location.
@@ -161,10 +159,10 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location $location, with updated hidden value
      */
-    public function unhideLocation( Location $location );
+    public function unhideLocation(Location $location);
 
     /**
-     * Moves the subtree to $newParentLocation
+     * Moves the subtree to $newParentLocation.
      *
      * If a user has the permission to move the location to a target location
      * he can do it regardless of an existing descendant on which the user has no permission.
@@ -176,7 +174,7 @@ interface LocationService
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
      */
-    public function moveSubtree( Location $location, Location $newParentLocation );
+    public function moveSubtree(Location $location, Location $newParentLocation);
 
     /**
      * Deletes $location and all its descendants.
@@ -185,22 +183,21 @@ interface LocationService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      */
-    public function deleteLocation( Location $location );
+    public function deleteLocation(Location $location);
 
     /**
-     * Instantiates a new location create class
+     * Instantiates a new location create class.
      *
      * @param mixed $parentLocationId the parent under which the new location should be created
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      */
-    public function newLocationCreateStruct( $parentLocationId );
+    public function newLocationCreateStruct($parentLocationId);
 
     /**
-     * Instantiates a new location update class
+     * Instantiates a new location update class.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct
      */
     public function newLocationUpdateStruct();
 }
-

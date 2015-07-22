@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the PreContentViewEvent class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface;
 
 /**
  * The PreContentViewEvent allows you to inject additional parameters to a content view template.
- * To do this, get the ContentView object and add it what you need as params :
+ * To do this, get the ContentView object and add it what you need as params :.
  *
  * <code>
  * $contentView = $event->getContentView();
@@ -42,7 +44,7 @@ class PreContentViewEvent extends Event
      */
     private $contentView;
 
-    public function __construct( ContentViewInterface $contentView )
+    public function __construct(ContentViewInterface $contentView)
     {
         $this->contentView = $contentView;
     }

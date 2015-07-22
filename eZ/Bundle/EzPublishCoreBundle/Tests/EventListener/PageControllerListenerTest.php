@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the PageControllerListenerTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -56,29 +58,29 @@ class PageControllerListenerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->controllerResolver = $this->getMock( 'Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface' );
-        $this->controllerManager = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\Controller\\ManagerInterface' );
-        $this->pageService = $this->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\Page\\PageService' )
+        $this->controllerResolver = $this->getMock('Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface');
+        $this->controllerManager = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\Controller\\ManagerInterface');
+        $this->pageService = $this->getMockBuilder('eZ\\Publish\\Core\\FieldType\\Page\\PageService')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->logger = $this->getMock( 'Psr\\Log\\LoggerInterface' );
-        $this->controllerListener = new PageControllerListener( $this->controllerResolver, $this->controllerManager, $this->pageService, $this->logger );
+        $this->logger = $this->getMock('Psr\\Log\\LoggerInterface');
+        $this->controllerListener = new PageControllerListener($this->controllerResolver, $this->controllerManager, $this->pageService, $this->logger);
 
-        $this->request = new Request;
+        $this->request = new Request();
         $this->event = $this
-            ->getMockBuilder( 'Symfony\\Component\\HttpKernel\\Event\\FilterControllerEvent' )
+            ->getMockBuilder('Symfony\\Component\\HttpKernel\\Event\\FilterControllerEvent')
             ->disableOriginalConstructor()
             ->getMock();
         $this->event
-            ->expects( $this->any() )
-            ->method( 'getRequest' )
-            ->will( $this->returnValue( $this->request ) );
+            ->expects($this->any())
+            ->method('getRequest')
+            ->will($this->returnValue($this->request));
     }
 
     public function testGetSubscribedEvents()
     {
         $this->assertSame(
-            array( KernelEvents::CONTROLLER => 'getController' ),
+            array(KernelEvents::CONTROLLER => 'getController'),
             $this->controllerListener->getSubscribedEvents()
         );
     }
@@ -86,43 +88,43 @@ class PageControllerListenerTest extends PHPUnit_Framework_TestCase
     public function testGetControllerNonPageController()
     {
         $initialController = 'Foo::bar';
-        $this->request->attributes->set( '_controller', $initialController );
+        $this->request->attributes->set('_controller', $initialController);
         $this->pageService
-            ->expects( $this->never() )
-            ->method( 'loadBlock' );
+            ->expects($this->never())
+            ->method('loadBlock');
 
         $this->controllerResolver
-            ->expects( $this->never() )
-            ->method( 'getControllerReference' );
+            ->expects($this->never())
+            ->method('getControllerReference');
 
         $this->event
-            ->expects( $this->never() )
-            ->method( 'setController' );
+            ->expects($this->never())
+            ->method('setController');
 
-        $this->assertNull( $this->controllerListener->getController( $this->event ) );
+        $this->assertNull($this->controllerListener->getController($this->event));
     }
 
     public function testGetControllerInvalidParams()
     {
         // Don't add id / block to request attributes to enforce failure
-        $this->request->attributes->set( '_controller', 'ez_page:viewBlock' );
+        $this->request->attributes->set('_controller', 'ez_page:viewBlock');
         $this->pageService
-            ->expects( $this->never() )
-            ->method( 'loadBlock' );
+            ->expects($this->never())
+            ->method('loadBlock');
 
         $this->controllerResolver
-            ->expects( $this->never() )
-            ->method( 'getControllerReference' );
+            ->expects($this->never())
+            ->method('getControllerReference');
 
         $this->logger
-            ->expects( $this->once() )
-            ->method( 'error' );
+            ->expects($this->once())
+            ->method('error');
 
         $this->event
-            ->expects( $this->never() )
-            ->method( 'setController' );
+            ->expects($this->never())
+            ->method('setController');
 
-        $this->assertNull( $this->controllerListener->getController( $this->event ) );
+        $this->assertNull($this->controllerListener->getController($this->event));
     }
 
     public function testGetControllerNoMatchedController()
@@ -131,26 +133,26 @@ class PageControllerListenerTest extends PHPUnit_Framework_TestCase
         $this->request->attributes->add(
             array(
                 '_controller' => 'ez_page:viewBlock',
-                'id' => $id
+                'id' => $id,
             )
         );
 
-        $valueObject = $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Block' );
+        $valueObject = $this->getMock('eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Block');
         $this->pageService
-            ->expects( $this->once() )
-            ->method( 'loadBlock' )
-            ->with( $id )
-            ->will( $this->returnValue( $valueObject ) );
+            ->expects($this->once())
+            ->method('loadBlock')
+            ->with($id)
+            ->will($this->returnValue($valueObject));
         $this->controllerManager
-            ->expects( $this->once() )
-            ->method( 'getControllerReference' )
-            ->will( $this->returnValue( null ) );
+            ->expects($this->once())
+            ->method('getControllerReference')
+            ->will($this->returnValue(null));
 
         $this->event
-            ->expects( $this->never() )
-            ->method( 'setController' );
+            ->expects($this->never())
+            ->method('setController');
 
-        $this->assertNull( $this->controllerListener->getController( $this->event ) );
+        $this->assertNull($this->controllerListener->getController($this->event));
     }
 
     public function testGetControllerBlockId()
@@ -159,75 +161,75 @@ class PageControllerListenerTest extends PHPUnit_Framework_TestCase
         $this->request->attributes->add(
             array(
                 '_controller' => 'ez_page:viewBlockById',
-                'id' => $id
+                'id' => $id,
             )
         );
 
-        $valueObject = $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Block' );
+        $valueObject = $this->getMock('eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Block');
         $this->pageService
-            ->expects( $this->once() )
-            ->method( 'loadBlock' )
-            ->with( $id )
-            ->will( $this->returnValue( $valueObject ) );
+            ->expects($this->once())
+            ->method('loadBlock')
+            ->with($id)
+            ->will($this->returnValue($valueObject));
 
         $controllerIdentifier = 'AcmeTestBundle:Default:foo';
         $controllerCallable = 'DefaultController::fooAction';
-        $controllerReference = new ControllerReference( $controllerIdentifier );
+        $controllerReference = new ControllerReference($controllerIdentifier);
         $this->controllerManager
-            ->expects( $this->once() )
-            ->method( 'getControllerReference' )
-            ->will( $this->returnValue( $controllerReference ) );
+            ->expects($this->once())
+            ->method('getControllerReference')
+            ->will($this->returnValue($controllerReference));
         $this->controllerResolver
-            ->expects( $this->once() )
-            ->method( 'getController' )
-            ->with( $this->request )
-            ->will( $this->returnValue( $controllerCallable ) );
+            ->expects($this->once())
+            ->method('getController')
+            ->with($this->request)
+            ->will($this->returnValue($controllerCallable));
         $this->event
-            ->expects( $this->once() )
-            ->method( 'setController' )
-            ->with( $controllerCallable );
+            ->expects($this->once())
+            ->method('setController')
+            ->with($controllerCallable);
 
-        $this->assertNull( $this->controllerListener->getController( $this->event ) );
-        $this->assertSame( $controllerIdentifier, $this->request->attributes->get( '_controller' ) );
-        $this->assertSame( $valueObject, $this->request->attributes->get( 'block' ) );
+        $this->assertNull($this->controllerListener->getController($this->event));
+        $this->assertSame($controllerIdentifier, $this->request->attributes->get('_controller'));
+        $this->assertSame($valueObject, $this->request->attributes->get('block'));
     }
 
     public function testGetControllerBlock()
     {
         $id = 123;
         $block = $this
-            ->getMockBuilder( 'eZ\Publish\Core\FieldType\Page\Parts\Block' )
-            ->setConstructorArgs( array( array( 'id' => $id ) ) )
+            ->getMockBuilder('eZ\Publish\Core\FieldType\Page\Parts\Block')
+            ->setConstructorArgs(array(array('id' => $id)))
             ->getMockForAbstractClass();
         $viewType = 'block';
         $this->request->attributes->add(
             array(
                 '_controller' => 'ez_page:viewBlock',
-                'block' => $block
+                'block' => $block,
             )
         );
 
         $controllerIdentifier = 'AcmeTestBundle:Default:foo';
         $controllerCallable = 'DefaultController::fooAction';
-        $controllerReference = new ControllerReference( $controllerIdentifier );
+        $controllerReference = new ControllerReference($controllerIdentifier);
         $this->controllerManager
-            ->expects( $this->once() )
-            ->method( 'getControllerReference' )
-            ->with( $block, $viewType )
-            ->will( $this->returnValue( $controllerReference ) );
+            ->expects($this->once())
+            ->method('getControllerReference')
+            ->with($block, $viewType)
+            ->will($this->returnValue($controllerReference));
         $this->controllerResolver
-            ->expects( $this->once() )
-            ->method( 'getController' )
-            ->with( $this->request )
-            ->will( $this->returnValue( $controllerCallable ) );
+            ->expects($this->once())
+            ->method('getController')
+            ->with($this->request)
+            ->will($this->returnValue($controllerCallable));
         $this->event
-            ->expects( $this->once() )
-            ->method( 'setController' )
-            ->with( $controllerCallable );
+            ->expects($this->once())
+            ->method('setController')
+            ->with($controllerCallable);
 
-        $this->assertNull( $this->controllerListener->getController( $this->event ) );
-        $this->assertSame( $controllerIdentifier, $this->request->attributes->get( '_controller' ) );
-        $this->assertSame( $id, $this->request->attributes->get( 'id' ) );
+        $this->assertNull($this->controllerListener->getController($this->event));
+        $this->assertSame($controllerIdentifier, $this->request->attributes->get('_controller'));
+        $this->assertSame($id, $this->request->attributes->get('id'));
     }
 
     /**
@@ -239,16 +241,16 @@ class PageControllerListenerTest extends PHPUnit_Framework_TestCase
         $this->request->attributes->add(
             array(
                 '_controller' => 'ez_page:viewBlock',
-                'id' => $id
+                'id' => $id,
             )
         );
 
         $this->pageService
-            ->expects( $this->once() )
-            ->method( 'loadBlock' )
-            ->with( $id )
-            ->will( $this->throwException( new UnauthorizedException( 'foo', 'bar' ) ) );
+            ->expects($this->once())
+            ->method('loadBlock')
+            ->with($id)
+            ->will($this->throwException(new UnauthorizedException('foo', 'bar')));
 
-        $this->controllerListener->getController( $this->event );
+        $this->controllerListener->getController($this->event);
     }
 }

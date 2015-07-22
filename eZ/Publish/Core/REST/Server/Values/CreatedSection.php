@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the CreatedSection class
+ * File containing the CreatedSection class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,7 +19,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class CreatedSection extends ValueObject
 {
     /**
-     * The created section
+     * The created section.
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Section
      */

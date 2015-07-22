@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the UserInterface class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,5 +27,5 @@ interface UserInterface extends AdvancedUserInterface
     /**
      * @param \eZ\Publish\API\Repository\Values\User\User $apiUser
      */
-    public function setAPIUser( APIUser $apiUser );
+    public function setAPIUser(APIUser $apiUser);
 }

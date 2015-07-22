@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RouteReferenceGenerationEvent class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -28,7 +30,7 @@ class RouteReferenceGenerationEvent extends Event
      */
     private $request;
 
-    public function __construct( RouteReference $routeReference, Request $request )
+    public function __construct(RouteReference $routeReference, Request $request)
     {
         $this->routeReference = $routeReference;
         $this->request = $request;
@@ -53,7 +55,7 @@ class RouteReferenceGenerationEvent extends Event
     /**
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\RouteReference $routeReference
      */
-    public function setRouteReference( $routeReference )
+    public function setRouteReference($routeReference)
     {
         $this->routeReference = $routeReference;
     }

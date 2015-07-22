@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Url class
+ * File containing the Url class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,13 +25,13 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 class Type extends FieldType
 {
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
     public function getFieldTypeIdentifier()
     {
-        return "ezurl";
+        return 'ezurl';
     }
 
     /**
@@ -42,7 +44,7 @@ class Type extends FieldType
      *
      * @return string
      */
-    public function getName( SPIValue $value )
+    public function getName(SPIValue $value)
     {
         return (string)$value->text;
     }
@@ -55,7 +57,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value;
+        return new Value();
     }
 
     /**
@@ -65,11 +67,10 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\Url\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
-        if ( is_string( $inputValue ) )
-        {
-            $inputValue = new Value( $inputValue );
+        if (is_string($inputValue)) {
+            $inputValue = new Value($inputValue);
         }
 
         return $inputValue;
@@ -81,13 +82,10 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\Url\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
-        if ( !is_string( $value->link ) )
-        {
+        if (!is_string($value->link)) {
             throw new InvalidArgumentType(
                 '$value->link',
                 'string',
@@ -95,8 +93,7 @@ class Type extends FieldType
             );
         }
 
-        if ( isset( $value->text ) && !is_string( $value->text ) )
-        {
+        if (isset($value->text) && !is_string($value->text)) {
             throw new InvalidArgumentType(
                 '$value->text',
                 'string',
@@ -112,46 +109,45 @@ class Type extends FieldType
      *
      * @return array
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo(BaseValue $value)
     {
         return false;
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * @param mixed $hash
      *
      * @return \eZ\Publish\Core\FieldType\Url\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        if ( $hash === null )
-        {
+        if ($hash === null) {
             return $this->getEmptyValue();
         }
 
-        if ( isset( $hash["text"] ) )
-            return new Value( $hash["link"], $hash["text"] );
+        if (isset($hash['text'])) {
+            return new Value($hash['link'], $hash['text']);
+        }
 
-        return new Value( $hash["link"] );
+        return new Value($hash['link']);
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\Url\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
-        if ( $this->isEmptyValue( $value ) )
-        {
+        if ($this->isEmptyValue($value)) {
             return null;
         }
 
-        return array( "link" => $value->link, "text" => $value->text );
+        return array('link' => $value->link, 'text' => $value->text);
     }
 
     /**
@@ -176,33 +172,32 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue the value processed by the storage engine
      */
-    public function toPersistenceValue( SPIValue $value )
+    public function toPersistenceValue(SPIValue $value)
     {
-        if ( $value === null )
-        {
+        if ($value === null) {
             return new FieldValue(
                 array(
-                    "data" => array(),
-                    "externalData" => null,
-                    "sortKey" => null,
+                    'data' => array(),
+                    'externalData' => null,
+                    'sortKey' => null,
                 )
             );
         }
 
         return new FieldValue(
             array(
-                "data" => array(
+                'data' => array(
                     'urlId' => null,
-                    'text' => $value->text
+                    'text' => $value->text,
                 ),
-                "externalData" => $value->link,
-                "sortKey" => $this->getSortInfo( $value ),
+                'externalData' => $value->link,
+                'sortKey' => $this->getSortInfo($value),
             )
         );
     }
 
     /**
-     * Converts a persistence $fieldValue to a Value
+     * Converts a persistence $fieldValue to a Value.
      *
      * This method builds a field type value from the $data and $externalData properties.
      *
@@ -210,10 +205,9 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\Url\Value
      */
-    public function fromPersistenceValue( FieldValue $fieldValue )
+    public function fromPersistenceValue(FieldValue $fieldValue)
     {
-        if ( $fieldValue->externalData === null )
-        {
+        if ($fieldValue->externalData === null) {
             return $this->getEmptyValue();
         }
 

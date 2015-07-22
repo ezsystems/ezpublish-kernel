@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the BlockConfigured class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,11 +22,10 @@ class BlockConfigured extends Configured implements SiteAccessAware
      *
      * @param SiteAccess $siteAccess
      */
-    public function setSiteAccess( SiteAccess $siteAccess = null )
+    public function setSiteAccess(SiteAccess $siteAccess = null)
     {
-        if ( $this->matcherFactory instanceof SiteAccessAware )
-        {
-            $this->matcherFactory->setSiteAccess( $siteAccess );
+        if ($this->matcherFactory instanceof SiteAccessAware) {
+            $this->matcherFactory->setSiteAccess($siteAccess);
         }
     }
 }

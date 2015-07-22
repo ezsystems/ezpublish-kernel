@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RouteReferenceGeneratorInterface class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,5 +25,5 @@ interface RouteReferenceGeneratorInterface
      *
      * @return \eZ\Publish\Core\MVC\Symfony\Routing\RouteReference
      */
-    public function generate( $resource = null, array $params = array() );
+    public function generate($resource = null, array $params = array());
 }

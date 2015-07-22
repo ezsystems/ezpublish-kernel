@@ -1,16 +1,15 @@
 <?php
+
 /**
  * File containing the Exception context class for RestBundle.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
-
-use EzSystems\BehatBundle\Sentence\Exception as ExceptionSentences;
-use Behat\Behat\Context\Step;
 
 trait Exception
 {
@@ -20,8 +19,8 @@ trait Exception
      */
     public function iSeeNotAuthorizedException()
     {
-        $this->assertStatusCode( 401 );
-        $this->assertStatusMessage( 'Unauthorized' );
+        $this->assertStatusCode(401);
+        $this->assertStatusMessage('Unauthorized');
     }
 
     /**
@@ -29,25 +28,25 @@ trait Exception
      */
     public function assertInvalidFieldException()
     {
-        $this->assertStatusCode( 403 );
-        $this->assertStatusMessage( 'Forbidden' );
-        $this->assertHeaderHasObject( 'content-type', 'ErrorMessage' );
-        $this->assertResponseObject( 'eZ\\Publish\\Core\\REST\\Common\\Exceptions\\ForbiddenException' );
-        $this->assertResponseErrorStatusCode( 403 );
-        $this->assertResponseErrorDescription( "/^Argument '([^']+)' is invalid:(.+)\$/" );
+        $this->assertStatusCode(403);
+        $this->assertStatusMessage('Forbidden');
+        $this->assertHeaderHasObject('content-type', 'ErrorMessage');
+        $this->assertResponseObject('eZ\\Publish\\Core\\REST\\Common\\Exceptions\\ForbiddenException');
+        $this->assertResponseErrorStatusCode(403);
+        $this->assertResponseErrorDescription("/^Argument '([^']+)' is invalid:(.+)\$/");
     }
 
     /**
      * @Then response has a forbidden exception/error with message :message
      */
-    public function assertForbiddenExceptionWithMessage( $message )
+    public function assertForbiddenExceptionWithMessage($message)
     {
-        $this->assertStatusCode( 403 );
-        $this->assertStatusMessage( 'Forbidden' );
-        $this->assertHeaderHasObject( 'content-type', 'ErrorMessage' );
-        $this->assertResponseObject( 'eZ\\Publish\\Core\\REST\\Common\\Exceptions\\ForbiddenException' );
-        $this->assertResponseErrorStatusCode( 403 );
-        $this->assertResponseErrorDescription( "/^$message\$/" );
+        $this->assertStatusCode(403);
+        $this->assertStatusMessage('Forbidden');
+        $this->assertHeaderHasObject('content-type', 'ErrorMessage');
+        $this->assertResponseObject('eZ\\Publish\\Core\\REST\\Common\\Exceptions\\ForbiddenException');
+        $this->assertResponseErrorStatusCode(403);
+        $this->assertResponseErrorDescription("/^$message\$/");
     }
 
     /**
@@ -55,11 +54,11 @@ trait Exception
      */
     public function assertNotFoundException()
     {
-        $this->assertStatusCode( 404 );
-        $this->assertStatusMessage( 'Not Found' );
-        $this->assertHeaderHasObject( 'content-type', 'ErrorMessage' );
-        $this->assertResponseObject( 'eZ\\Publish\\Core\\REST\\Common\\Exceptions\\NotFoundException' );
-        $this->assertResponseErrorStatusCode( 404 );
-        $this->assertResponseErrorDescription( "/^Could not find '([^']+)' with identifier '([^']+)'\$/" );
+        $this->assertStatusCode(404);
+        $this->assertStatusMessage('Not Found');
+        $this->assertHeaderHasObject('content-type', 'ErrorMessage');
+        $this->assertResponseObject('eZ\\Publish\\Core\\REST\\Common\\Exceptions\\NotFoundException');
+        $this->assertResponseErrorStatusCode(404);
+        $this->assertResponseErrorDescription("/^Could not find '([^']+)' with identifier '([^']+)'\$/");
     }
 }

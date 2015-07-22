@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the UserStorage class
+ * File containing the UserStorage class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,25 +16,25 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\FieldType\Indexable;
 
 /**
- * Indexable definition for string field type
+ * Indexable definition for string field type.
  */
 class Unindexed implements Indexable
 {
     /**
-     * Get index data for field for search backend
+     * Get index data for field for search backend.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      *
      * @return \eZ\Publish\SPI\Search\Field[]
      */
-    public function getIndexData( Field $field, FieldDefinition $fieldDefinition )
+    public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
         return array();
     }
 
     /**
-     * Get index field types for search backend
+     * Get index field types for search backend.
      *
      * @return \eZ\Publish\SPI\Search\FieldType[]
      */
@@ -69,4 +71,3 @@ class Unindexed implements Indexable
         return null;
     }
 }
-

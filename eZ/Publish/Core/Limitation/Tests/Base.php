@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the eZ\Publish\Core\Limitation\Tests\Base class
+ * File containing the eZ\Publish\Core\Limitation\Tests\Base class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -28,13 +30,14 @@ abstract class Base extends PHPUnit_Framework_TestCase
      *
      * @return \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
      */
-    public function getPersistenceMock( array $mockMethods = array() )
+    public function getPersistenceMock(array $mockMethods = array())
     {
-        if ( $this->persistenceHandlerMock !== null )
+        if ($this->persistenceHandlerMock !== null) {
             return $this->persistenceHandlerMock;
+        }
 
         return $this->persistenceHandlerMock = $this->getMock(
-            "eZ\\Publish\\SPI\\Persistence\\Handler",
+            'eZ\\Publish\\SPI\\Persistence\\Handler',
             $mockMethods,
             array(),
             '',
@@ -47,13 +50,14 @@ abstract class Base extends PHPUnit_Framework_TestCase
      *
      * @return \eZ\Publish\API\Repository\Values\User\User|\PHPUnit_Framework_MockObject_MockObject
      */
-    public function getUserMock( array $mockMethods = array() )
+    public function getUserMock(array $mockMethods = array())
     {
-        if ( $this->userMock !== null )
+        if ($this->userMock !== null) {
             return $this->userMock;
+        }
 
         return $this->userMock = $this->getMock(
-            "eZ\\Publish\\API\\Repository\\Values\\User\\User",
+            'eZ\\Publish\\API\\Repository\\Values\\User\\User',
             $mockMethods,
             array(),
             '',
@@ -62,15 +66,17 @@ abstract class Base extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * unset properties
+     * unset properties.
      */
     public function tearDown()
     {
-        if ( $this->persistenceHandlerMock !== null )
-            unset( $this->persistenceHandlerMock );
+        if ($this->persistenceHandlerMock !== null) {
+            unset($this->persistenceHandlerMock);
+        }
 
-        if ( $this->userMock !== null )
-            unset( $this->userMock );
+        if ($this->userMock !== null) {
+            unset($this->userMock);
+        }
 
         parent::tearDown();
     }

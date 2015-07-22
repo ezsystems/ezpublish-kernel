@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the SwirlFilter class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,11 +21,11 @@ class SwirlFilter extends AbstractFilter
      *
      * @return ImageInterface
      */
-    public function apply( ImageInterface $image )
+    public function apply(ImageInterface $image)
     {
         /** @var \Gmagick $gmagick */
         $gmagick = $image->getGmagick();
-        $gmagick->swirlimage( (float)$this->getOption( 'degrees', 60 ) );
+        $gmagick->swirlimage((float)$this->getOption('degrees', 60));
 
         return $image;
     }

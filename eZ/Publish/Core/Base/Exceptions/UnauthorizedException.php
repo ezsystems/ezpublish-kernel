@@ -1,9 +1,11 @@
 <?php
+
 /**
- * Contains UnauthorizedException Exception implementation
+ * Contains UnauthorizedException Exception implementation.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,7 @@ use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorize
 use Exception;
 
 /**
- * UnauthorizedException Exception implementation
+ * UnauthorizedException Exception implementation.
  *
  * Use:
  *   throw new UnauthorizedException( 'content', 'read', array( 'contentId' => 42 ) );
@@ -21,7 +23,7 @@ use Exception;
 class UnauthorizedException extends APIUnauthorizedException implements Httpable
 {
     /**
-     * Generates: User does not have access to '{$function}' '{$module}'[ with: %property.key% '%property.value%']
+     * Generates: User does not have access to '{$function}' '{$module}'[ with: %property.key% '%property.value%'].
      *
      * Example: User does not have access to 'read' 'content' with: id '44', type 'article'
      *
@@ -30,13 +32,11 @@ class UnauthorizedException extends APIUnauthorizedException implements Httpable
      * @param array $properties Key value pair with non sensitive data on what kind of data user does not have access to
      * @param \Exception|null $previous
      */
-    public function __construct( $module, $function, array $properties = null, Exception $previous = null )
+    public function __construct($module, $function, array $properties = null, Exception $previous = null)
     {
         $identificationString = '';
-        if ( $properties !== null )
-        {
-            foreach ( $properties as $name => $value )
-            {
+        if ($properties !== null) {
+            foreach ($properties as $name => $value) {
                 $identificationString .= $identificationString === '' ? ' with:' : ',';
                 $identificationString .= " {$name} '{$value}'";
             }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the SessionInitByPostListenerTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -32,15 +34,15 @@ class SessionInitByPostListenerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->session = $this->getMock( 'Symfony\Component\HttpFoundation\Session\SessionInterface' );
-        $this->listener = new SessionInitByPostListener( $this->session );
+        $this->session = $this->getMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $this->listener = new SessionInitByPostListener($this->session);
     }
 
     public function testGetSubscribedEvents()
     {
         $this->assertSame(
             array(
-                MVCEvents::SITEACCESS => array( 'onSiteAccessMatch', 249 )
+                MVCEvents::SITEACCESS => array('onSiteAccessMatch', 249),
             ),
             SessionInitByPostListener::getSubscribedEvents()
         );
@@ -48,41 +50,41 @@ class SessionInitByPostListenerTest extends PHPUnit_Framework_TestCase
 
     public function testOnSiteAccessMatchNoSessionService()
     {
-        $event = new PostSiteAccessMatchEvent( new SiteAccess(), new Request(), HttpKernelInterface::MASTER_REQUEST );
-        $listener = new SessionInitByPostListener( null );
-        $this->assertNull( $listener->onSiteAccessMatch( $event ) );
+        $event = new PostSiteAccessMatchEvent(new SiteAccess(), new Request(), HttpKernelInterface::MASTER_REQUEST);
+        $listener = new SessionInitByPostListener(null);
+        $this->assertNull($listener->onSiteAccessMatch($event));
     }
 
     public function testOnSiteAccessMatchSubRequest()
     {
-        $event = new PostSiteAccessMatchEvent( new SiteAccess(), new Request(), HttpKernelInterface::SUB_REQUEST );
+        $event = new PostSiteAccessMatchEvent(new SiteAccess(), new Request(), HttpKernelInterface::SUB_REQUEST);
         $this->session
-            ->expects( $this->never() )
-            ->method( 'getName' );
-        $this->listener->onSiteAccessMatch( $event );
+            ->expects($this->never())
+            ->method('getName');
+        $this->listener->onSiteAccessMatch($event);
     }
 
     public function testOnSiteAccessMatchRequestNoSessionName()
     {
         $sessionName = 'eZSESSID';
-        $event = new PostSiteAccessMatchEvent( new SiteAccess(), new Request(), HttpKernelInterface::MASTER_REQUEST );
+        $event = new PostSiteAccessMatchEvent(new SiteAccess(), new Request(), HttpKernelInterface::MASTER_REQUEST);
 
         $this->session
-            ->expects( $this->once() )
-            ->method( 'getName' )
-            ->will( $this->returnValue( $sessionName ) );
+            ->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue($sessionName));
         $this->session
-            ->expects( $this->once() )
-            ->method( 'isStarted' )
-            ->will( $this->returnValue( false ) );
+            ->expects($this->once())
+            ->method('isStarted')
+            ->will($this->returnValue(false));
         $this->session
-            ->expects( $this->never() )
-            ->method( 'setId' );
+            ->expects($this->never())
+            ->method('setId');
         $this->session
-            ->expects( $this->never() )
-            ->method( 'start' );
+            ->expects($this->never())
+            ->method('start');
 
-        $this->listener->onSiteAccessMatch( $event );
+        $this->listener->onSiteAccessMatch($event);
     }
 
     public function testOnSiteAccessMatchNewSessionName()
@@ -90,25 +92,25 @@ class SessionInitByPostListenerTest extends PHPUnit_Framework_TestCase
         $sessionName = 'eZSESSID';
         $sessionId = 'foobar123';
         $request = new Request();
-        $request->request->set( $sessionName, $sessionId );
-        $event = new PostSiteAccessMatchEvent( new SiteAccess(), $request, HttpKernelInterface::MASTER_REQUEST );
+        $request->request->set($sessionName, $sessionId);
+        $event = new PostSiteAccessMatchEvent(new SiteAccess(), $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->session
-            ->expects( $this->once() )
-            ->method( 'getName' )
-            ->will( $this->returnValue( $sessionName ) );
+            ->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue($sessionName));
         $this->session
-            ->expects( $this->once() )
-            ->method( 'isStarted' )
-            ->will( $this->returnValue( false ) );
+            ->expects($this->once())
+            ->method('isStarted')
+            ->will($this->returnValue(false));
         $this->session
-            ->expects( $this->once() )
-            ->method( 'setId' )
-            ->with( $sessionId );
+            ->expects($this->once())
+            ->method('setId')
+            ->with($sessionId);
         $this->session
-            ->expects( $this->once() )
-            ->method( 'start' );
+            ->expects($this->once())
+            ->method('start');
 
-        $this->listener->onSiteAccessMatch( $event );
+        $this->listener->onSiteAccessMatch($event);
     }
 }

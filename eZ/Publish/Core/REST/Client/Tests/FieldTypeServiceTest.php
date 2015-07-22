@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the FieldTypeServiceTest class
+ * File containing the FieldTypeServiceTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,7 +21,7 @@ class FieldTypeServiceTest extends PHPUnit_Framework_TestCase
         $fieldTypeService = $this->getFieldTypeService();
 
         $this->assertFalse(
-            $fieldTypeService->hasFieldType( 'my-type' )
+            $fieldTypeService->hasFieldType('my-type')
         );
     }
 
@@ -32,16 +34,16 @@ class FieldTypeServiceTest extends PHPUnit_Framework_TestCase
             '',
             false
         );
-        $fieldTypeMock->expects( $this->once() )
-            ->method( 'getFieldTypeIdentifier' )
-            ->will( $this->returnValue( 'my-type' ) );
+        $fieldTypeMock->expects($this->once())
+            ->method('getFieldTypeIdentifier')
+            ->will($this->returnValue('my-type'));
 
         $fieldTypeService = $this->getFieldTypeService();
 
-        $fieldTypeService->addFieldType( $fieldTypeMock );
+        $fieldTypeService->addFieldType($fieldTypeMock);
 
         $this->assertTrue(
-            $fieldTypeService->hasFieldType( 'my-type' )
+            $fieldTypeService->hasFieldType('my-type')
         );
     }
 
@@ -54,17 +56,17 @@ class FieldTypeServiceTest extends PHPUnit_Framework_TestCase
             '',
             false
         );
-        $fieldTypeMock->expects( $this->once() )
-            ->method( 'getFieldTypeIdentifier' )
-            ->will( $this->returnValue( 'my-type' ) );
+        $fieldTypeMock->expects($this->once())
+            ->method('getFieldTypeIdentifier')
+            ->will($this->returnValue('my-type'));
 
         $fieldTypeService = $this->getFieldTypeService();
 
-        $fieldTypeService->addFieldType( $fieldTypeMock );
+        $fieldTypeService->addFieldType($fieldTypeMock);
 
         $this->assertSame(
             $fieldTypeMock,
-            $fieldTypeService->getFieldType( 'my-type' )
+            $fieldTypeService->getFieldType('my-type')
         );
     }
 
@@ -75,7 +77,7 @@ class FieldTypeServiceTest extends PHPUnit_Framework_TestCase
     {
         $fieldTypeService = $this->getFieldTypeService();
 
-        $fieldTypeService->getFieldType( 'my-type' );
+        $fieldTypeService->getFieldType('my-type');
     }
 
     public function testGetFieldTypes()
@@ -87,9 +89,9 @@ class FieldTypeServiceTest extends PHPUnit_Framework_TestCase
             '',
             false
         );
-        $myFieldTypeMock->expects( $this->once() )
-            ->method( 'getFieldTypeIdentifier' )
-            ->will( $this->returnValue( 'my-type' ) );
+        $myFieldTypeMock->expects($this->once())
+            ->method('getFieldTypeIdentifier')
+            ->will($this->returnValue('my-type'));
 
         $yourFieldTypeMock = $this->getMock(
             'eZ\\Publish\\Core\\REST\\Client\\FieldType',
@@ -98,18 +100,18 @@ class FieldTypeServiceTest extends PHPUnit_Framework_TestCase
             '',
             false
         );
-        $yourFieldTypeMock->expects( $this->once() )
-            ->method( 'getFieldTypeIdentifier' )
-            ->will( $this->returnValue( 'your-type' ) );
+        $yourFieldTypeMock->expects($this->once())
+            ->method('getFieldTypeIdentifier')
+            ->will($this->returnValue('your-type'));
 
         $fieldTypeService = $this->getFieldTypeService();
 
-        $fieldTypeService->addFieldType( $myFieldTypeMock );
-        $fieldTypeService->addFieldType( $yourFieldTypeMock );
+        $fieldTypeService->addFieldType($myFieldTypeMock);
+        $fieldTypeService->addFieldType($yourFieldTypeMock);
 
         $this->assertEquals(
             2,
-            count( $fieldTypeService->getFieldTypes() )
+            count($fieldTypeService->getFieldTypes())
         );
     }
 

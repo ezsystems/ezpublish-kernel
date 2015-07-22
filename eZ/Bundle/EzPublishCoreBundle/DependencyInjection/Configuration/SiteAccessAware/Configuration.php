@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the SiteAccess aware Configuration class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -42,27 +44,27 @@ abstract class Configuration implements ConfigurationInterface
      *
      * @return \Symfony\Component\Config\Definition\Builder\NodeBuilder
      */
-    public function generateScopeBaseNode( ArrayNodeDefinition $rootNode, $scopeNodeName = 'system' )
+    public function generateScopeBaseNode(ArrayNodeDefinition $rootNode, $scopeNodeName = 'system')
     {
         $contextNode = $rootNode
             ->children()
-                ->arrayNode( $scopeNodeName )
-                    ->info( 'System configuration. First key is always a siteaccess or siteaccess group name' )
+                ->arrayNode($scopeNodeName)
+                    ->info('System configuration. First key is always a siteaccess or siteaccess group name')
                     ->example(
                         array(
                             'my_siteaccess' => array(
                                 'preferred_quote' => 'Let there be Light!',
-                                'j_aime' => array( 'le_saucisson' )
+                                'j_aime' => array('le_saucisson'),
                             ),
                             'my_siteaccess_group' => array(
-                                'j_aime' => array( 'la_truite_a_la_vapeur' )
-                            )
+                                'j_aime' => array('la_truite_a_la_vapeur'),
+                            ),
                         )
                     )
-                    ->useAttributeAsKey( 'siteaccess_name' )
+                    ->useAttributeAsKey('siteaccess_name')
                     ->requiresAtLeastOneElement()
-                    ->normalizeKeys( false )
-                    ->prototype( 'array' )
+                    ->normalizeKeys(false)
+                    ->prototype('array')
                         ->children();
 
         return $contextNode;

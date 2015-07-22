@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Location\Path sort clause visitor class
+ * File containing the Location\Path sort clause visitor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,34 +15,34 @@ use eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
- * Visits the Location\Path sort clause
+ * Visits the Location\Path sort clause.
  */
 class Path extends SortClauseVisitor
 {
     /**
-     * Check if visitor is applicable to current SortClause
+     * Check if visitor is applicable to current SortClause.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
-     * @return boolean
+     * @return bool
      */
-    public function canVisit( SortClause $sortClause )
+    public function canVisit(SortClause $sortClause)
     {
         return $sortClause instanceof SortClause\Location\Path;
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation
+     * Map field value to a proper Elasticsearch representation.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
      * @return mixed
      */
-    public function visit( SortClause $sortClause )
+    public function visit(SortClause $sortClause)
     {
         return array(
-            "path_string_id" => array(
-                "order" => $this->getDirection( $sortClause ),
+            'path_string_id' => array(
+                'order' => $this->getDirection($sortClause),
             ),
         );
     }

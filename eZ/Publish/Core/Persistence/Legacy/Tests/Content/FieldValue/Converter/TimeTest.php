@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the TimeTest class
+ * File containing the TimeTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,7 +23,7 @@ use PHPUnit_Framework_TestCase;
 use DateTime;
 
 /**
- * Test case for Time converter in Legacy storage
+ * Test case for Time converter in Legacy storage.
  *
  * @group fieldType
  * @group time
@@ -41,7 +43,7 @@ class TimeTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->converter = new TimeConverter;
+        $this->converter = new TimeConverter();
         $this->time = 3661;
     }
 
@@ -50,15 +52,15 @@ class TimeTest extends PHPUnit_Framework_TestCase
      */
     public function testToStorageValue()
     {
-        $value = new FieldValue;
+        $value = new FieldValue();
         $value->data = $this->time;
         $value->sortKey = $this->time;
-        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue = new StorageFieldValue();
 
-        $this->converter->toStorageValue( $value, $storageFieldValue );
-        self::assertSame( $value->data, $storageFieldValue->dataInt );
-        self::assertSame( $value->sortKey, $storageFieldValue->sortKeyInt );
-        self::assertSame( "", $storageFieldValue->sortKeyString );
+        $this->converter->toStorageValue($value, $storageFieldValue);
+        self::assertSame($value->data, $storageFieldValue->dataInt);
+        self::assertSame($value->sortKey, $storageFieldValue->sortKeyInt);
+        self::assertSame('', $storageFieldValue->sortKeyString);
     }
 
     /**
@@ -66,16 +68,16 @@ class TimeTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldValue()
     {
-        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue = new StorageFieldValue();
         $storageFieldValue->dataInt = $this->time;
-        $storageFieldValue->sortKeyString = "";
+        $storageFieldValue->sortKeyString = '';
         $storageFieldValue->sortKeyInt = $this->time;
-        $fieldValue = new FieldValue;
+        $fieldValue = new FieldValue();
 
-        $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertSame( $this->time, $fieldValue->data );
-        self::assertSame( $storageFieldValue->dataInt, $fieldValue->data );
-        self::assertSame( $storageFieldValue->sortKeyInt, $fieldValue->sortKey );
+        $this->converter->toFieldValue($storageFieldValue, $fieldValue);
+        self::assertSame($this->time, $fieldValue->data);
+        self::assertSame($storageFieldValue->dataInt, $fieldValue->data);
+        self::assertSame($storageFieldValue->sortKeyInt, $fieldValue->sortKey);
     }
 
     /**
@@ -83,23 +85,23 @@ class TimeTest extends PHPUnit_Framework_TestCase
      */
     public function testToStorageFieldDefinitionDefaultEmpty()
     {
-        $storageFieldDef = new StorageFieldDefinition;
-        $fieldTypeConstraints = new FieldTypeConstraints;
+        $storageFieldDef = new StorageFieldDefinition();
+        $fieldTypeConstraints = new FieldTypeConstraints();
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                "useSeconds" => true,
-                "defaultType" => TimeType::DEFAULT_EMPTY
+                'useSeconds' => true,
+                'defaultType' => TimeType::DEFAULT_EMPTY,
             )
         );
         $fieldDef = new PersistenceFieldDefinition(
             array(
-                "fieldTypeConstraints" => $fieldTypeConstraints,
+                'fieldTypeConstraints' => $fieldTypeConstraints,
             )
         );
 
-        $this->converter->toStorageFieldDefinition( $fieldDef, $storageFieldDef );
-        self::assertSame( TimeType::DEFAULT_EMPTY, $storageFieldDef->dataInt1 );
-        self::assertSame( 1, $storageFieldDef->dataInt2 );
+        $this->converter->toStorageFieldDefinition($fieldDef, $storageFieldDef);
+        self::assertSame(TimeType::DEFAULT_EMPTY, $storageFieldDef->dataInt1);
+        self::assertSame(1, $storageFieldDef->dataInt2);
     }
 
     /**
@@ -107,23 +109,23 @@ class TimeTest extends PHPUnit_Framework_TestCase
      */
     public function testToStorageFieldDefinitionDefaultCurrentTime()
     {
-        $storageFieldDef = new StorageFieldDefinition;
-        $fieldTypeConstraints = new FieldTypeConstraints;
+        $storageFieldDef = new StorageFieldDefinition();
+        $fieldTypeConstraints = new FieldTypeConstraints();
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                "useSeconds" => false,
-                "defaultType" => TimeType::DEFAULT_CURRENT_TIME
+                'useSeconds' => false,
+                'defaultType' => TimeType::DEFAULT_CURRENT_TIME,
             )
         );
         $fieldDef = new PersistenceFieldDefinition(
             array(
-                "fieldTypeConstraints" => $fieldTypeConstraints,
+                'fieldTypeConstraints' => $fieldTypeConstraints,
             )
         );
 
-        $this->converter->toStorageFieldDefinition( $fieldDef, $storageFieldDef );
-        self::assertSame( TimeType::DEFAULT_CURRENT_TIME, $storageFieldDef->dataInt1 );
-        self::assertSame( 0, $storageFieldDef->dataInt2 );
+        $this->converter->toStorageFieldDefinition($fieldDef, $storageFieldDef);
+        self::assertSame(TimeType::DEFAULT_CURRENT_TIME, $storageFieldDef->dataInt1);
+        self::assertSame(0, $storageFieldDef->dataInt2);
     }
 
     /**
@@ -131,21 +133,21 @@ class TimeTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldDefinitionDefaultEmpty()
     {
-        $fieldDef = new PersistenceFieldDefinition;
+        $fieldDef = new PersistenceFieldDefinition();
         $storageDef = new StorageFieldDefinition(
             array(
-                "dataInt2" => 1,
-                "dataInt1" => TimeType::DEFAULT_EMPTY
+                'dataInt2' => 1,
+                'dataInt1' => TimeType::DEFAULT_EMPTY,
             )
         );
 
-        $this->converter->toFieldDefinition( $storageDef, $fieldDef );
-        self::assertNull( $fieldDef->defaultValue->data );
+        $this->converter->toFieldDefinition($storageDef, $fieldDef);
+        self::assertNull($fieldDef->defaultValue->data);
         self::assertEquals(
             new FieldSettings(
                 array(
-                    "useSeconds" => true,
-                    "defaultType" => TimeType::DEFAULT_EMPTY
+                    'useSeconds' => true,
+                    'defaultType' => TimeType::DEFAULT_EMPTY,
                 )
             ),
             $fieldDef->fieldTypeConstraints->fieldSettings
@@ -157,23 +159,23 @@ class TimeTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldDefinitionDefaultCurrentTime()
     {
-        $fieldDef = new PersistenceFieldDefinition;
+        $fieldDef = new PersistenceFieldDefinition();
         $storageDef = new StorageFieldDefinition(
             array(
-                "dataInt2" => 0,
-                "dataInt1" => TimeType::DEFAULT_CURRENT_TIME
+                'dataInt2' => 0,
+                'dataInt1' => TimeType::DEFAULT_CURRENT_TIME,
             )
         );
 
         $dateTime = new DateTime();
-        $dateTime->setTime( 0, 0, 0 );
-        $this->converter->toFieldDefinition( $storageDef, $fieldDef );
-        self::assertSame( time() - $dateTime->getTimestamp(), $fieldDef->defaultValue->data );
+        $dateTime->setTime(0, 0, 0);
+        $this->converter->toFieldDefinition($storageDef, $fieldDef);
+        self::assertSame(time() - $dateTime->getTimestamp(), $fieldDef->defaultValue->data);
         self::assertEquals(
             new FieldSettings(
                 array(
-                    "useSeconds" => false,
-                    "defaultType" => TimeType::DEFAULT_CURRENT_TIME
+                    'useSeconds' => false,
+                    'defaultType' => TimeType::DEFAULT_CURRENT_TIME,
                 )
             ),
             $fieldDef->fieldTypeConstraints->fieldSettings

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,12 +22,12 @@ class DataCollectorPassTest extends AbstractCompilerPassTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->setDefinition( 'ezpublish_debug.data_collector', new Definition() );
+        $this->setDefinition('ezpublish_debug.data_collector', new Definition());
     }
 
-    protected function registerCompilerPass( ContainerBuilder $container )
+    protected function registerCompilerPass(ContainerBuilder $container)
     {
-        $container->addCompilerPass( new DataCollectorPass() );
+        $container->addCompilerPass(new DataCollectorPass());
     }
 
     public function testAddCollector()
@@ -39,13 +41,13 @@ class DataCollectorPassTest extends AbstractCompilerPassTestCase
         );
 
         $serviceId = 'service_id';
-        $this->setDefinition( $serviceId, $definition );
+        $this->setDefinition($serviceId, $definition);
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish_debug.data_collector',
             'addCollector',
-            array( new Reference( $serviceId ), $panelTemplate, $toolbarTemplate )
+            array(new Reference($serviceId), $panelTemplate, $toolbarTemplate)
         );
     }
 }

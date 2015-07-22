@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RelationList parser class
+ * File containing the RelationList parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,12 +15,12 @@ use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
 /**
- * Parser for RelationList
+ * Parser for RelationList.
  */
 class RelationList extends BaseParser
 {
     /**
-     * Parse input structure
+     * Parse input structure.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -27,7 +29,7 @@ class RelationList extends BaseParser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
         // @todo: Implement
         return;

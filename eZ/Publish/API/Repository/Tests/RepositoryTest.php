@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RepositoryTest class
+ * File containing the RepositoryTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,9 +24,9 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the getContentService() method.
      *
-     * @return void
      * @group content
      * @group user
+     *
      * @see \eZ\Publish\API\Repository\Repository::getContentService()
      */
     public function testGetContentService()
@@ -39,8 +41,8 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the getContentLanguageService() method.
      *
-     * @return void
      * @group language
+     *
      * @see \eZ\Publish\API\Repository\Repository::getContentLanguageService()
      */
     public function testGetContentLanguageService()
@@ -55,12 +57,11 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the getContentTypeService() method.
      *
-     * @return void
      * @group content-type
      * @group field-type
      * @group user
-     * @see \eZ\Publish\API\Repository\Repository::getContentTypeService()
      *
+     * @see \eZ\Publish\API\Repository\Repository::getContentTypeService()
      */
     public function testGetContentTypeService()
     {
@@ -74,10 +75,9 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the getLocationService() method.
      *
-     * @return void
      * @group location
-     * @see \eZ\Publish\API\Repository\Repository::getLocationService()
      *
+     * @see \eZ\Publish\API\Repository\Repository::getLocationService()
      */
     public function testGetLocationService()
     {
@@ -91,8 +91,8 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the getSectionService() method.
      *
-     * @return void
      * @group section
+     *
      * @see \eZ\Publish\API\Repository\Repository::getSectionService()
      */
     public function testGetSectionService()
@@ -107,8 +107,8 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the getUserService() method.
      *
-     * @return void
      * @group user
+     *
      * @see \eZ\Publish\API\Repository\Repository::getUserService()
      */
     public function testGetUserService()
@@ -123,10 +123,9 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the getTrashService() method.
      *
-     * @return void
      * @group trash
-     * @see \eZ\Publish\API\Repository\Repository::getTrashService()
      *
+     * @see \eZ\Publish\API\Repository\Repository::getTrashService()
      */
     public function testGetTrashService()
     {
@@ -140,8 +139,8 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the getRoleService() method.
      *
-     * @return void
      * @group role
+     *
      * @see \eZ\Publish\API\Repository\Repository::getRoleService()
      */
     public function testGetRoleService()
@@ -156,8 +155,8 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the getURLAliasService() method.
      *
-     * @return void
      * @group url-alias
+     *
      * @see \eZ\Publish\API\Repository\Repository::getURLAliasService()
      */
     public function testGetURLAliasService()
@@ -172,8 +171,8 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the getUrlWildcardService() method.
      *
-     * @return void
      * @group url-wildcard
+     *
      * @see \eZ\Publish\API\Repository\Repository::getUrlWildcardService()
      */
     public function testGetURLWildcardService()
@@ -186,10 +185,10 @@ class RepositoryTest extends BaseTest
     }
 
     /**
-     * Test for the getObjectStateService()
+     * Test for the getObjectStateService().
      *
-     * @return void
      * @group object-state
+     *
      * @see \eZ\Publish\API\Repository\Repository::getObjectStateService()
      */
     public function testGetObjectStateService()
@@ -202,10 +201,10 @@ class RepositoryTest extends BaseTest
     }
 
     /**
-     * Test for the getFieldTypeService()
+     * Test for the getFieldTypeService().
      *
-     * @return void
      * @group object-state
+     *
      * @see \eZ\Publish\API\Repository\Repository::getFieldTypeService()
      */
     public function testGetFieldTypeService()
@@ -220,8 +219,8 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the getSearchService() method.
      *
-     * @return void
      * @group search
+     *
      * @see \eZ\Publish\API\Repository\Repository::getSearchService()
      */
     public function testGetSearchService()
@@ -238,20 +237,15 @@ class RepositoryTest extends BaseTest
      * Test for the commit() method.
      *
      * @see \eZ\Publish\API\Repository\Repository::commit()
-     *
-     * @return void
      */
     public function testCommit()
     {
         $repository = $this->getRepository();
 
-        try
-        {
+        try {
             $repository->beginTransaction();
             $repository->commit();
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             // Cleanup hanging transaction on error
             $repository->rollback();
             throw $e;
@@ -261,7 +255,6 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the commit() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\Repository::commit()
      * @expectedException \RuntimeException
      */
@@ -275,8 +268,6 @@ class RepositoryTest extends BaseTest
      * Test for the rollback() method.
      *
      * @see \eZ\Publish\API\Repository\Repository::rollback()
-     *
-     * @return void
      */
     public function testRollback()
     {
@@ -288,7 +279,6 @@ class RepositoryTest extends BaseTest
     /**
      * Test for the rollback() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\Repository::rollback()
      * @expectedException \RuntimeException
      */
@@ -300,44 +290,43 @@ class RepositoryTest extends BaseTest
 
     /**
      * @HACK this is a hack to get the Repository without current user being set
+     *
      * @todo find a way to do it differently
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      */
-    private function setNullAsCurrentUser( $repository )
+    private function setNullAsCurrentUser($repository)
     {
-        while ( true )
-        {
-            $repositoryReflection = new \ReflectionObject( $repository );
+        while (true) {
+            $repositoryReflection = new \ReflectionObject($repository);
             // If the repository is decorated, we need to recurse in the "repository" property
-            if ( !$repositoryReflection->hasProperty( "repository" ) )
-            {
+            if (!$repositoryReflection->hasProperty('repository')) {
                 break;
             }
 
-            $repositoryProperty = $repositoryReflection->getProperty( "repository" );
-            $repositoryProperty->setAccessible( true );
-            $repository = $repositoryProperty->getValue( $repository );
+            $repositoryProperty = $repositoryReflection->getProperty('repository');
+            $repositoryProperty->setAccessible(true);
+            $repository = $repositoryProperty->getValue($repository);
         }
-        $currentUserProperty = new \ReflectionProperty( $repository, 'currentUser' );
-        $currentUserProperty->setAccessible( true );
-        $currentUserProperty->setValue( $repository, null );
+        $currentUserProperty = new \ReflectionProperty($repository, 'currentUser');
+        $currentUserProperty->setAccessible(true);
+        $currentUserProperty->setValue($repository, null);
     }
 
     /**
      * Test for the getCurrentUser() method.
      *
-     * @return void
      * @group content
      * @group user
+     *
      * @see \eZ\Publish\API\Repository\Repository::getCurrentUser()
      */
     public function testGetCurrentUserReturnsAnonymousUser()
     {
         $repository = $this->getRepository();
-        $this->setNullAsCurrentUser( $repository );
+        $this->setNullAsCurrentUser($repository);
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
@@ -351,25 +340,25 @@ class RepositoryTest extends BaseTest
         );
         $this->assertEquals(
             $anonymousUser->id,
-            $repository->getUserService()->loadUser( $anonymousUserId )->id
+            $repository->getUserService()->loadUser($anonymousUserId)->id
         );
     }
 
     /**
      * Test for the setCurrentUser() method.
      *
-     * @return void
      * @group content
      * @group user
+     *
      * @see \eZ\Publish\API\Repository\Repository::setCurrentUser()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      */
     public function testSetCurrentUser()
     {
         $repository = $this->getRepository();
-        $this->setNullAsCurrentUser( $repository );
+        $this->setNullAsCurrentUser($repository);
 
-        $administratorUserId = $this->generateId( 'user', 14 );
+        $administratorUserId = $this->generateId('user', 14);
 
         /* BEGIN: Use Case */
         // $administratorUserId contains the ID of the administrator user
@@ -377,10 +366,10 @@ class RepositoryTest extends BaseTest
         $userService = $repository->getUserService();
 
         // Load administrator user
-        $administratorUser = $userService->loadUser( $administratorUserId );
+        $administratorUser = $userService->loadUser($administratorUserId);
 
         // Set administrator user as current user
-        $repository->setCurrentUser( $administratorUser );
+        $repository->setCurrentUser($administratorUser);
         /* END: Use Case */
 
         $this->assertSame(
@@ -399,21 +388,21 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
         $userService = $repository->getUserService();
 
         // Load anonymous user
-        $anonymousUser = $userService->loadUser( $anonymousUserId );
+        $anonymousUser = $userService->loadUser($anonymousUserId);
 
         // This call will return false because anonymous user does not have access
         // to content removal
-        $hasAccess = $repository->hasAccess( "content", "remove", $anonymousUser );
+        $hasAccess = $repository->hasAccess('content', 'remove', $anonymousUser);
         /* END: Use Case */
 
-        $this->assertFalse( $hasAccess );
+        $this->assertFalse($hasAccess);
     }
 
     /**
@@ -427,24 +416,24 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
         $userService = $repository->getUserService();
 
         // Load anonymous user
-        $anonymousUser = $userService->loadUser( $anonymousUserId );
+        $anonymousUser = $userService->loadUser($anonymousUserId);
 
         // Set anonymous user as current user
-        $repository->setCurrentUser( $anonymousUser );
+        $repository->setCurrentUser($anonymousUser);
 
         // This call will return false because anonymous user does not have access
         // to content removal
-        $hasAccess = $repository->hasAccess( "content", "remove" );
+        $hasAccess = $repository->hasAccess('content', 'remove');
         /* END: Use Case */
 
-        $this->assertFalse( $hasAccess );
+        $this->assertFalse($hasAccess);
     }
 
     /**
@@ -457,7 +446,7 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $administratorUserId = $this->generateId( 'user', 14 );
+        $administratorUserId = $this->generateId('user', 14);
 
         /* BEGIN: Use Case */
         // $administratorUserId contains the ID of the administrator user
@@ -465,13 +454,13 @@ class RepositoryTest extends BaseTest
         $userService = $repository->getUserService();
 
         // Load administrator user
-        $administratorUser = $userService->loadUser( $administratorUserId );
+        $administratorUser = $userService->loadUser($administratorUserId);
 
         // This call will return true
-        $hasAccess = $repository->hasAccess( "content", "read", $administratorUser );
+        $hasAccess = $repository->hasAccess('content', 'read', $administratorUser);
         /* END: Use Case */
 
-        $this->assertTrue( $hasAccess );
+        $this->assertTrue($hasAccess);
     }
 
     /**
@@ -486,7 +475,7 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $administratorUserId = $this->generateId( 'user', 14 );
+        $administratorUserId = $this->generateId('user', 14);
 
         /* BEGIN: Use Case */
         // $administratorUserId contains the ID of the administrator user
@@ -494,16 +483,16 @@ class RepositoryTest extends BaseTest
         $userService = $repository->getUserService();
 
         // Load administrator user
-        $administratorUser = $userService->loadUser( $administratorUserId );
+        $administratorUser = $userService->loadUser($administratorUserId);
 
         // Set administrator user as current user
-        $repository->setCurrentUser( $administratorUser );
+        $repository->setCurrentUser($administratorUser);
 
         // This call will return true
-        $hasAccess = $repository->hasAccess( "content", "read" );
+        $hasAccess = $repository->hasAccess('content', 'read');
         /* END: Use Case */
 
-        $this->assertTrue( $hasAccess );
+        $this->assertTrue($hasAccess);
     }
 
     /**
@@ -521,18 +510,18 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         // This call will return an array of permission sets describing user's access
         // to reading content
-        $permissionSets = $repository->hasAccess( "content", "read" );
+        $permissionSets = $repository->hasAccess('content', 'read');
         /* END: Use Case */
 
         $this->assertInternalType(
-            "array",
+            'array',
             $permissionSets
         );
-        $this->assertNotEmpty( $permissionSets );
+        $this->assertNotEmpty($permissionSets);
     }
 
     /**
@@ -548,9 +537,9 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $homeId = $this->generateId( 'object', 57 );
+        $homeId = $this->generateId('object', 57);
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
@@ -560,22 +549,21 @@ class RepositoryTest extends BaseTest
         $userService = $repository->getUserService();
 
         // Load anonymous user
-        $anonymousUser = $userService->loadUser( $anonymousUserId );
+        $anonymousUser = $userService->loadUser($anonymousUserId);
 
         // Set anonymous user as current user
-        $repository->setCurrentUser( $anonymousUser );
+        $repository->setCurrentUser($anonymousUser);
 
         // Load the ContentInfo for "Home" frontpage
-        $contentInfo = $contentService->loadContentInfo( $homeId );
+        $contentInfo = $contentService->loadContentInfo($homeId);
 
         // This call will return false because anonymous user does not have access
         // to content removal and hence no permission to remove given content
-        $canUser = $repository->canUser( "content", "remove", $contentInfo );
+        $canUser = $repository->canUser('content', 'remove', $contentInfo);
 
         // Performing an action without necessary permissions will fail with "UnauthorizedException"
-        if ( !$canUser )
-        {
-            $contentService->deleteContent( $contentInfo );
+        if (!$canUser) {
+            $contentService->deleteContent($contentInfo);
         }
         /* END: Use Case */
     }
@@ -593,8 +581,8 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $administratorUserId = $this->generateId( 'user', 14 );
-        $homeId = $this->generateId( 'object', 57 );
+        $administratorUserId = $this->generateId('user', 14);
+        $homeId = $this->generateId('object', 57);
 
         /* BEGIN: Use Case */
         // $administratorUserId contains the ID of the administrator user
@@ -604,23 +592,23 @@ class RepositoryTest extends BaseTest
         $userService = $repository->getUserService();
 
         // Load administrator user
-        $administratorUser = $userService->loadUser( $administratorUserId );
+        $administratorUser = $userService->loadUser($administratorUserId);
 
         // Set administrator user as current user
-        $repository->setCurrentUser( $administratorUser );
+        $repository->setCurrentUser($administratorUser);
 
         // Load the ContentInfo for "Home" frontpage
-        $contentInfo = $contentService->loadContentInfo( $homeId );
+        $contentInfo = $contentService->loadContentInfo($homeId);
 
         // This call will return true
-        $canUser = $repository->canUser( "content", "remove", $contentInfo );
+        $canUser = $repository->canUser('content', 'remove', $contentInfo);
 
         // Performing an action having necessary permissions will succeed
-        $contentService->deleteContent( $contentInfo );
+        $contentService->deleteContent($contentInfo);
         /* END: Use Case */
 
-        $this->assertTrue( $canUser );
-        $contentService->loadContent( $homeId );
+        $this->assertTrue($canUser);
+        $contentService->loadContent($homeId);
     }
 
     /**
@@ -635,7 +623,7 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $imagesFolderId = $this->generateId( 'object', 49 );
+        $imagesFolderId = $this->generateId('object', 49);
 
         /* BEGIN: Use Case */
         // $imagesFolderId contains the ID of the "Images" folder
@@ -643,18 +631,18 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $contentService = $repository->getContentService();
 
         // Performing an action having necessary permissions will succeed
-        $imagesFolder = $contentService->loadContent( $imagesFolderId );
+        $imagesFolder = $contentService->loadContent($imagesFolderId);
 
         // This call will return true
-        $canUser = $repository->canUser( "content", "read", $imagesFolder );
+        $canUser = $repository->canUser('content', 'read', $imagesFolder);
         /* END: Use Case */
 
-        $this->assertTrue( $canUser );
+        $this->assertTrue($canUser);
     }
 
     /**
@@ -670,7 +658,7 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $administratorUserId = $this->generateId( 'user', 14 );
+        $administratorUserId = $this->generateId('user', 14);
 
         /* BEGIN: Use Case */
         // $administratorUserId contains the ID of the administrator user
@@ -678,23 +666,22 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $userService = $repository->getUserService();
 
         // Load administrator user using UserService, this does not check for permissions
-        $administratorUser = $userService->loadUser( $administratorUserId );
+        $administratorUser = $userService->loadUser($administratorUserId);
 
         // This call will return false as user with Editor role does not have
         // permission to read "Users" subtree
-        $canUser = $repository->canUser( "content", "read", $administratorUser );
+        $canUser = $repository->canUser('content', 'read', $administratorUser);
 
         $contentService = $repository->getContentService();
 
         // Performing an action without necessary permissions will fail with "UnauthorizedException"
-        if ( !$canUser )
-        {
-            $content = $contentService->loadContent( $administratorUserId );
+        if (!$canUser) {
+            $content = $contentService->loadContent($administratorUserId);
         }
         /* END: Use Case */
     }
@@ -713,7 +700,7 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $userGroupContentTypeId = $this->generateId( 'type', 3 );
+        $userGroupContentTypeId = $this->generateId('type', 3);
 
         /* BEGIN: Use Case */
         // $userGroupContentTypeId contains the ID of the "UserGroup" ContentType
@@ -721,17 +708,17 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $contentTypeService = $repository->getContentTypeService();
 
         // Load the "UserGroup" ContentType
-        $userGroupContentType = $contentTypeService->loadContentType( $userGroupContentTypeId );
+        $userGroupContentType = $contentTypeService->loadContentType($userGroupContentTypeId);
 
         // This call will throw "InvalidArgumentException" because $userGroupContentType
         // is an instance of \eZ\Publish\API\Repository\Values\ContentType\ContentType,
         // which can not be checked for user access
-        $canUser = $repository->canUser( "content", "create", $userGroupContentType );
+        $canUser = $repository->canUser('content', 'create', $userGroupContentType);
         /* END: Use Case */
     }
 
@@ -748,7 +735,7 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $homeLocationId = $this->generateId( 'location', 2 );
+        $homeLocationId = $this->generateId('location', 2);
 
         /* BEGIN: Use Case */
         // $homeLocationId contains the ID of the "Home" location
@@ -756,26 +743,26 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forums' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('forums');
 
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
-        $contentCreateStruct->setField( 'title', 'My awesome forums' );
+        $contentCreateStruct = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreateStruct->setField('title', 'My awesome forums');
         $contentCreateStruct->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreateStruct->alwaysAvailable = true;
 
         $locationService = $repository->getLocationService();
-        $locationCreateStruct = $locationService->newLocationCreateStruct( $homeLocationId );
+        $locationCreateStruct = $locationService->newLocationCreateStruct($homeLocationId);
 
         // This call will return true
         $canUser = $repository->canUser(
-            "content",
-            "create",
+            'content',
+            'create',
             $contentCreateStruct,
             $locationCreateStruct
         );
@@ -783,14 +770,14 @@ class RepositoryTest extends BaseTest
         // Performing an action having necessary permissions will succeed
         $contentDraft = $contentService->createContent(
             $contentCreateStruct,
-            array( $locationCreateStruct )
+            array($locationCreateStruct)
         );
         /* END: Use Case */
 
-        $this->assertTrue( $canUser );
+        $this->assertTrue($canUser);
         $this->assertEquals(
             'My awesome forums',
-            $contentDraft->getFieldValue( 'title' )->text
+            $contentDraft->getFieldValue('title')->text
         );
     }
 
@@ -808,7 +795,7 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $homeLocationId = $this->generateId( 'location', 2 );
+        $homeLocationId = $this->generateId('location', 2);
 
         /* BEGIN: Use Case */
         // $homeLocationId contains the ID of the "Home" frontpage location
@@ -816,37 +803,36 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('forum');
 
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
-        $contentCreateStruct->setField( 'name', 'My awesome forum' );
+        $contentCreateStruct = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreateStruct->setField('name', 'My awesome forum');
         $contentCreateStruct->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreateStruct->alwaysAvailable = true;
 
         $locationService = $repository->getLocationService();
-        $locationCreateStruct = $locationService->newLocationCreateStruct( $homeLocationId );
+        $locationCreateStruct = $locationService->newLocationCreateStruct($homeLocationId);
 
         // This call will return false because user with Editor role has permission to
         // create "forum" type content only under "folder" type content.
         $canUser = $repository->canUser(
-            "content",
-            "create",
+            'content',
+            'create',
             $contentCreateStruct,
             $locationCreateStruct
         );
 
         // Performing an action without necessary permissions will fail with "UnauthorizedException"
-        if ( !$canUser )
-        {
+        if (!$canUser) {
             $contentDraft = $contentService->createContent(
                 $contentCreateStruct,
-                array( $locationCreateStruct )
+                array($locationCreateStruct)
             );
         }
         /* END: Use Case */
@@ -865,8 +851,8 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $imagesLocationId = $this->generateId( 'location', 51 );
-        $filesLocationId = $this->generateId( 'location', 52 );
+        $imagesLocationId = $this->generateId('location', 51);
+        $filesLocationId = $this->generateId('location', 52);
 
         /* BEGIN: Use Case */
         // $imagesLocationId contains the ID of the "Images" location
@@ -875,40 +861,40 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
 
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
-        $contentCreateStruct->setField( 'name', 'My multipurpose folder' );
+        $contentCreateStruct = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreateStruct->setField('name', 'My multipurpose folder');
         $contentCreateStruct->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreateStruct->alwaysAvailable = true;
 
         $locationService = $repository->getLocationService();
-        $locationCreateStruct1 = $locationService->newLocationCreateStruct( $imagesLocationId );
-        $locationCreateStruct2 = $locationService->newLocationCreateStruct( $filesLocationId );
-        $locationCreateStructs = array( $locationCreateStruct1, $locationCreateStruct2 );
+        $locationCreateStruct1 = $locationService->newLocationCreateStruct($imagesLocationId);
+        $locationCreateStruct2 = $locationService->newLocationCreateStruct($filesLocationId);
+        $locationCreateStructs = array($locationCreateStruct1, $locationCreateStruct2);
 
         // This call will return true
         $canUser = $repository->canUser(
-            "content",
-            "create",
+            'content',
+            'create',
             $contentCreateStruct,
             $locationCreateStructs
         );
 
         // Performing an action having necessary permissions will succeed
-        $contentDraft = $contentService->createContent( $contentCreateStruct, $locationCreateStructs );
+        $contentDraft = $contentService->createContent($contentCreateStruct, $locationCreateStructs);
         /* END: Use Case */
 
-        $this->assertTrue( $canUser );
+        $this->assertTrue($canUser);
         $this->assertEquals(
             'My multipurpose folder',
-            $contentDraft->getFieldValue( 'name' )->text
+            $contentDraft->getFieldValue('name')->text
         );
     }
 
@@ -926,8 +912,8 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $homeLocationId = $this->generateId( 'location', 2 );
-        $administratorUsersLocationId = $this->generateId( 'location', 13 );
+        $homeLocationId = $this->generateId('location', 2);
+        $administratorUsersLocationId = $this->generateId('location', 13);
 
         /* BEGIN: Use Case */
         // $homeLocationId contains the ID of the "Home" location
@@ -936,37 +922,36 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forums' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('forums');
 
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
-        $contentCreateStruct->setField( 'name', 'My awesome forums' );
+        $contentCreateStruct = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreateStruct->setField('name', 'My awesome forums');
         $contentCreateStruct->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreateStruct->alwaysAvailable = true;
 
         $locationService = $repository->getLocationService();
-        $locationCreateStruct1 = $locationService->newLocationCreateStruct( $homeLocationId );
-        $locationCreateStruct2 = $locationService->newLocationCreateStruct( $administratorUsersLocationId );
-        $locationCreateStructs = array( $locationCreateStruct1, $locationCreateStruct2 );
+        $locationCreateStruct1 = $locationService->newLocationCreateStruct($homeLocationId);
+        $locationCreateStruct2 = $locationService->newLocationCreateStruct($administratorUsersLocationId);
+        $locationCreateStructs = array($locationCreateStruct1, $locationCreateStruct2);
 
         // This call will return false because user with Editor role does not have permission to
         // create content in the "Administrator users" location subtree
         $canUser = $repository->canUser(
-            "content",
-            "create",
+            'content',
+            'create',
             $contentCreateStruct,
             $locationCreateStructs
         );
 
         // Performing an action without necessary permissions will fail with "UnauthorizedException"
-        if ( !$canUser )
-        {
-            $contentDraft = $contentService->createContent( $contentCreateStruct, $locationCreateStructs );
+        if (!$canUser) {
+            $contentDraft = $contentService->createContent($contentCreateStruct, $locationCreateStructs);
         }
         /* END: Use Case */
     }
@@ -985,7 +970,7 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $homeId = $this->generateId( 'object', 57 );
+        $homeId = $this->generateId('object', 57);
 
         /* BEGIN: Use Case */
         // $homeId contains the ID of the "Home" frontpage
@@ -993,18 +978,18 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $contentService = $repository->getContentService();
 
         // Load the ContentInfo for "Home" frontpage
-        $contentInfo = $contentService->loadContentInfo( $homeId );
+        $contentInfo = $contentService->loadContentInfo($homeId);
 
         // This call will throw "InvalidArgumentException" because $targets argument must be an
         // instance of \eZ\Publish\API\Repository\Values\ValueObject class or an array of the same
         $canUser = $repository->canUser(
-            "content",
-            "remove",
+            'content',
+            'remove',
             $contentInfo,
             new \stdClass()
         );
@@ -1031,26 +1016,26 @@ class RepositoryTest extends BaseTest
         $user = $this->createUserVersion1();
 
         // Set created user as current user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $contentTypeService = $repository->getContentTypeService();
 
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('forum');
 
         $contentService = $repository->getContentService();
 
-        $contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
-        $contentCreateStruct->setField( 'name', 'My awesome forum' );
+        $contentCreateStruct = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreateStruct->setField('name', 'My awesome forum');
         $contentCreateStruct->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreateStruct->alwaysAvailable = true;
 
         $urlAliasService = $repository->getURLAliasService();
-        $rootUrlAlias = $urlAliasService->lookUp( "/" );
+        $rootUrlAlias = $urlAliasService->lookUp('/');
 
         // This call will throw "InvalidArgumentException" because $rootAlias is not a valid target object
         $canUser = $repository->canUser(
-            "content",
-            "create",
+            'content',
+            'create',
             $contentCreateStruct,
             $rootUrlAlias
         );
@@ -1066,7 +1051,7 @@ class RepositoryTest extends BaseTest
     public function testCanUserThrowsBadStateException()
     {
         $this->markTestIncomplete(
-            "Cannot be tested on current fixture since policy with unsupported limitation value is not available."
+            'Cannot be tested on current fixture since policy with unsupported limitation value is not available.'
         );
     }
 }

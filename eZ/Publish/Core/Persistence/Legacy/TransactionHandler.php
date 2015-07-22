@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Legacy Storage TransactionHandler
+ * File containing the Legacy Storage TransactionHandler.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,7 +19,7 @@ use Exception;
 use RuntimeException;
 
 /**
- * The Transaction handler for Legacy Storage Engine
+ * The Transaction handler for Legacy Storage Engine.
  *
  * @since 5.3
  */
@@ -47,15 +49,14 @@ class TransactionHandler implements TransactionHandlerInterface
         DatabaseHandler $dbHandler,
         CachingContentTypeHandler $contentTypeHandler = null,
         CachingLanguageHandler $languageHandler = null
-    )
-    {
+    ) {
         $this->dbHandler = $dbHandler;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->languageHandler = $languageHandler;
     }
 
     /**
-     * Begin transaction
+     * Begin transaction.
      */
     public function beginTransaction()
     {
@@ -63,7 +64,7 @@ class TransactionHandler implements TransactionHandlerInterface
     }
 
     /**
-     * Commit transaction
+     * Commit transaction.
      *
      * Commit transaction, or throw exceptions if no transactions has been started.
      *
@@ -71,18 +72,15 @@ class TransactionHandler implements TransactionHandlerInterface
      */
     public function commit()
     {
-        try
-        {
+        try {
             $this->dbHandler->commit();
-        }
-        catch ( Exception $e )
-        {
-            throw new RuntimeException( $e->getMessage() );
+        } catch (Exception $e) {
+            throw new RuntimeException($e->getMessage());
         }
     }
 
     /**
-     * Rollback transaction
+     * Rollback transaction.
      *
      * Rollback transaction, or throw exceptions if no transactions has been started.
      *
@@ -90,24 +88,19 @@ class TransactionHandler implements TransactionHandlerInterface
      */
     public function rollback()
     {
-        try
-        {
+        try {
             $this->dbHandler->rollback();
 
             // Clear all caches after rollback
-            if ( $this->contentTypeHandler instanceof CachingContentTypeHandler )
-            {
+            if ($this->contentTypeHandler instanceof CachingContentTypeHandler) {
                 $this->contentTypeHandler->clearCache();
             }
 
-            if ( $this->languageHandler instanceof CachingLanguageHandler )
-            {
+            if ($this->languageHandler instanceof CachingLanguageHandler) {
                 $this->languageHandler->clearCache();
             }
-        }
-        catch ( Exception $e )
-        {
-            throw new RuntimeException( $e->getMessage() );
+        } catch (Exception $e) {
+            throw new RuntimeException($e->getMessage());
         }
     }
 }

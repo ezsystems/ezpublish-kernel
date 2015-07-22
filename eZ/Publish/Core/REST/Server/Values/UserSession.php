@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the UserSession class
+ * File containing the UserSession class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,39 +15,42 @@ use eZ\Publish\Core\REST\Common\Value as RestValue;
 use eZ\Publish\API\Repository\Values\User\User;
 
 /**
- * User list view model
+ * User list view model.
  */
 class UserSession extends RestValue
 {
     /**
-     * User
+     * User.
      *
      * @var \eZ\Publish\API\Repository\Values\User\User
      */
     public $user;
 
     /**
-     * Session name
+     * Session name.
      *
      * @var string
      */
     public $sessionName;
 
     /**
-     * Session ID
+     * Session ID.
+     *
      * @var string
      */
     public $sessionId;
 
     /**
-     * CSRF token value
+     * CSRF token value.
+     *
      * @var string
      */
     public $csrfToken;
 
     /**
-     * True if session exists
-     * @var boolean
+     * True if session exists.
+     *
+     * @var bool
      */
     public $exists;
     /**
@@ -54,7 +59,7 @@ class UserSession extends RestValue
      * @param string $sessionId
      * @param string $csrfToken
      */
-    public function __construct( User $user, $sessionName, $sessionId, $csrfToken, $created )
+    public function __construct(User $user, $sessionName, $sessionId, $csrfToken, $created)
     {
         $this->user = $user;
         $this->sessionName = $sessionName;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the eZ Publish package.
  *
@@ -19,7 +20,7 @@ use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 
 /**
- * Test Case for LimitationType
+ * Test Case for LimitationType.
  */
 class BlockingLimitationTypeTest extends Base
 {
@@ -28,7 +29,7 @@ class BlockingLimitationTypeTest extends Base
      */
     public function testConstruct()
     {
-        return new BlockingLimitationType( 'Test' );
+        return new BlockingLimitationType('Test');
     }
 
     /**
@@ -37,8 +38,8 @@ class BlockingLimitationTypeTest extends Base
     public function providerForTestAcceptValue()
     {
         return array(
-            array( new BlockingLimitation( 'Test', array() ) ),
-            array( new BlockingLimitation( 'FunctionList', array() ) )
+            array(new BlockingLimitation('Test', array())),
+            array(new BlockingLimitation('FunctionList', array())),
         );
     }
 
@@ -49,9 +50,9 @@ class BlockingLimitationTypeTest extends Base
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\BlockingLimitation $limitation
      * @param \eZ\Publish\Core\Limitation\BlockingLimitationType $limitationType
      */
-    public function testAcceptValue( BlockingLimitation $limitation, BlockingLimitationType $limitationType )
+    public function testAcceptValue(BlockingLimitation $limitation, BlockingLimitationType $limitationType)
     {
-        $limitationType->acceptValue( $limitation );
+        $limitationType->acceptValue($limitation);
     }
 
     /**
@@ -60,7 +61,7 @@ class BlockingLimitationTypeTest extends Base
     public function providerForTestAcceptValueException()
     {
         return array(
-            array( new ObjectStateLimitation() )
+            array(new ObjectStateLimitation()),
         );
     }
 
@@ -72,9 +73,9 @@ class BlockingLimitationTypeTest extends Base
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
      * @param \eZ\Publish\Core\Limitation\BlockingLimitationType $limitationType
      */
-    public function testAcceptValueException( Limitation $limitation, BlockingLimitationType $limitationType )
+    public function testAcceptValueException(Limitation $limitation, BlockingLimitationType $limitationType)
     {
-        $limitationType->acceptValue( $limitation );
+        $limitationType->acceptValue($limitation);
     }
 
     /**
@@ -83,8 +84,8 @@ class BlockingLimitationTypeTest extends Base
     public function providerForTestValidatePass()
     {
         return array(
-            array( new BlockingLimitation( 'Test', array( 'limitationValues' => array( 'ezjscore::call' ) ) ) ),
-            array( new BlockingLimitation( 'Test', array( 'limitationValues' => array( 'ezjscore::call', 'my::call' ) ) ) ),
+            array(new BlockingLimitation('Test', array('limitationValues' => array('ezjscore::call')))),
+            array(new BlockingLimitation('Test', array('limitationValues' => array('ezjscore::call', 'my::call')))),
         );
     }
 
@@ -93,13 +94,13 @@ class BlockingLimitationTypeTest extends Base
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\BlockingLimitation $limitation
      */
-    public function testValidatePass( BlockingLimitation $limitation )
+    public function testValidatePass(BlockingLimitation $limitation)
     {
         // Need to create inline instead of depending on testConstruct() to get correct mock instance
         $limitationType = $this->testConstruct();
 
-        $validationErrors = $limitationType->validate( $limitation );
-        self::assertEmpty( $validationErrors );
+        $validationErrors = $limitationType->validate($limitation);
+        self::assertEmpty($validationErrors);
     }
 
     /**
@@ -108,9 +109,9 @@ class BlockingLimitationTypeTest extends Base
     public function providerForTestValidateError()
     {
         return array(
-            array( new BlockingLimitation( 'Test', array() ), 1 ),
-            array( new BlockingLimitation( 'Test', array( 'limitationValues' => array( 0 ) ) ), 0 ),
-            array( new BlockingLimitation( 'Test', array( 'limitationValues' => array( 0, PHP_INT_MAX ) ) ), 0 ),
+            array(new BlockingLimitation('Test', array()), 1),
+            array(new BlockingLimitation('Test', array('limitationValues' => array(0))), 0),
+            array(new BlockingLimitation('Test', array('limitationValues' => array(0, PHP_INT_MAX))), 0),
         );
     }
 
@@ -120,17 +121,17 @@ class BlockingLimitationTypeTest extends Base
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\BlockingLimitation $limitation
      * @param int $errorCount
      */
-    public function testValidateError( BlockingLimitation $limitation, $errorCount )
+    public function testValidateError(BlockingLimitation $limitation, $errorCount)
     {
         $this->getPersistenceMock()
-                ->expects( $this->never() )
-                ->method( $this->anything() );
+                ->expects($this->never())
+                ->method($this->anything());
 
         // Need to create inline instead of depending on testConstruct() to get correct mock instance
         $limitationType = $this->testConstruct();
 
-        $validationErrors = $limitationType->validate( $limitation );
-        self::assertCount( $errorCount, $validationErrors );
+        $validationErrors = $limitationType->validate($limitation);
+        self::assertCount($errorCount, $validationErrors);
     }
 
     /**
@@ -138,14 +139,14 @@ class BlockingLimitationTypeTest extends Base
      *
      * @param \eZ\Publish\Core\Limitation\BlockingLimitationType $limitationType
      */
-    public function testBuildValue( BlockingLimitationType $limitationType )
+    public function testBuildValue(BlockingLimitationType $limitationType)
     {
-        $expected = array( 'test', 'test' => 9 );
-        $value = $limitationType->buildValue( $expected );
+        $expected = array('test', 'test' => 9);
+        $value = $limitationType->buildValue($expected);
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\Limitation\BlockingLimitation', $value );
-        self::assertInternalType( 'array', $value->limitationValues );
-        self::assertEquals( $expected, $value->limitationValues );
+        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\User\Limitation\BlockingLimitation', $value);
+        self::assertInternalType('array', $value->limitationValues);
+        self::assertEquals($expected, $value->limitationValues);
     }
 
     /**
@@ -156,33 +157,33 @@ class BlockingLimitationTypeTest extends Base
         return array(
             // ContentInfo, no access
             array(
-                'limitation' => new BlockingLimitation( 'Test', array() ),
+                'limitation' => new BlockingLimitation('Test', array()),
                 'object' => new ContentInfo(),
-                'targets' => array()
+                'targets' => array(),
             ),
             // ContentInfo, no access
             array(
-                'limitation' => new BlockingLimitation( 'Test', array( 'limitationValues' => array( 2 ) ) ),
+                'limitation' => new BlockingLimitation('Test', array('limitationValues' => array(2))),
                 'object' => new ContentInfo(),
-                'targets' => array()
+                'targets' => array(),
             ),
             // ContentInfo, with access
             array(
-                'limitation' => new BlockingLimitation( 'Test', array( 'limitationValues' => array( 66 ) ) ),
-                'object' => new ContentInfo( array( 'contentTypeId' => 66 ) ),
-                'targets' => array()
+                'limitation' => new BlockingLimitation('Test', array('limitationValues' => array(66))),
+                'object' => new ContentInfo(array('contentTypeId' => 66)),
+                'targets' => array(),
             ),
             // ContentCreateStruct, no access
             array(
-                'limitation' => new BlockingLimitation( 'Test', array( 'limitationValues' => array( 2 ) ) ),
-                'object' => new ContentCreateStruct( array( 'contentType' => ((object)array( 'id' => 22 ) ) ) ),
-                'targets' => array()
+                'limitation' => new BlockingLimitation('Test', array('limitationValues' => array(2))),
+                'object' => new ContentCreateStruct(array('contentType' => ((object)array('id' => 22)))),
+                'targets' => array(),
             ),
             // ContentCreateStruct, with access
             array(
-                'limitation' => new BlockingLimitation( 'Test', array( 'limitationValues' => array( 2, 43 ) ) ),
-                'object' => new ContentCreateStruct( array( 'contentType' => ((object)array( 'id' => 43 ) ) ) ),
-                'targets' => array()
+                'limitation' => new BlockingLimitation('Test', array('limitationValues' => array(2, 43))),
+                'object' => new ContentCreateStruct(array('contentType' => ((object)array('id' => 43)))),
+                'targets' => array(),
             ),
         );
     }
@@ -194,20 +195,19 @@ class BlockingLimitationTypeTest extends Base
         BlockingLimitation $limitation,
         ValueObject $object,
         array $targets
-    )
-    {
+    ) {
         // Need to create inline instead of depending on testConstruct() to get correct mock instance
         $limitationType = $this->testConstruct();
 
         $userMock = $this->getUserMock();
         $userMock
-            ->expects( $this->never() )
-            ->method( $this->anything() );
+            ->expects($this->never())
+            ->method($this->anything());
 
         $persistenceMock = $this->getPersistenceMock();
         $persistenceMock
-            ->expects( $this->never() )
-            ->method( $this->anything() );
+            ->expects($this->never())
+            ->method($this->anything());
 
         $value = $limitationType->evaluate(
             $limitation,
@@ -216,7 +216,7 @@ class BlockingLimitationTypeTest extends Base
             $targets
         );
 
-        self::assertFalse( $value );
+        self::assertFalse($value);
     }
 
     /**
@@ -229,8 +229,8 @@ class BlockingLimitationTypeTest extends Base
             array(
                 'limitation' => new ObjectStateLimitation(),
                 'object' => new ContentInfo(),
-                'targets' => array( new Location() ),
-            )
+                'targets' => array(new Location()),
+            ),
         );
     }
 
@@ -242,20 +242,19 @@ class BlockingLimitationTypeTest extends Base
         Limitation $limitation,
         ValueObject $object,
         array $targets
-    )
-    {
+    ) {
         // Need to create inline instead of depending on testConstruct() to get correct mock instance
         $limitationType = $this->testConstruct();
 
         $userMock = $this->getUserMock();
         $userMock
-            ->expects( $this->never() )
-            ->method( $this->anything() );
+            ->expects($this->never())
+            ->method($this->anything());
 
         $persistenceMock = $this->getPersistenceMock();
         $persistenceMock
-            ->expects( $this->never() )
-            ->method( $this->anything() );
+            ->expects($this->never())
+            ->method($this->anything());
 
         $v = $limitationType->evaluate(
             $limitation,
@@ -263,7 +262,7 @@ class BlockingLimitationTypeTest extends Base
             $object,
             $targets
         );
-        var_dump( $v );// intentional, debug in case no exception above
+        var_dump($v);// intentional, debug in case no exception above
     }
 
     /**
@@ -271,16 +270,16 @@ class BlockingLimitationTypeTest extends Base
      *
      * @param \eZ\Publish\Core\Limitation\BlockingLimitationType $limitationType
      */
-    public function testGetCriterion( BlockingLimitationType $limitationType )
+    public function testGetCriterion(BlockingLimitationType $limitationType)
     {
         $criterion = $limitationType->getCriterion(
-            new BlockingLimitation( 'Test', array() ),
+            new BlockingLimitation('Test', array()),
             $this->getUserMock()
         );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Query\Criterion\MatchNone', $criterion );
-        self::assertInternalType( 'null', $criterion->value );
-        self::assertInternalType( 'null', $criterion->operator );
+        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\Content\Query\Criterion\MatchNone', $criterion);
+        self::assertInternalType('null', $criterion->value);
+        self::assertInternalType('null', $criterion->operator);
     }
 
     /**
@@ -289,7 +288,7 @@ class BlockingLimitationTypeTest extends Base
      *
      * @param \eZ\Publish\Core\Limitation\BlockingLimitationType $limitationType
      */
-    public function testValueSchema( BlockingLimitationType $limitationType )
+    public function testValueSchema(BlockingLimitationType $limitationType)
     {
         self::assertEquals(
             array(),

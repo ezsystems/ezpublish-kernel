@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a ContentTypeGroupTest class
+ * File containing a ContentTypeGroupTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,12 +13,11 @@ namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
-use eZ\Publish\API\Repository\Values;
 
 class ContentTypeGroupTest extends BaseTest
 {
     /**
-     * Tests the ContentTypeGroup parser
+     * Tests the ContentTypeGroup parser.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
@@ -41,9 +42,9 @@ class ContentTypeGroupTest extends BaseTest
             ),
         );
 
-        $result = $contentTypeGroupParser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $contentTypeGroupParser->parse($inputArray, $this->getParsingDispatcherMock());
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
@@ -52,7 +53,7 @@ class ContentTypeGroupTest extends BaseTest
      * @dataProvider provideExpectedContentTypeGroupProperties
      * @depends testParse
      */
-    public function testParsedProperties( $propertyName, $expectedValue, $parsedContentTypeGroup )
+    public function testParsedProperties($propertyName, $expectedValue, $parsedContentTypeGroup)
     {
         $this->assertEquals(
             $expectedValue,
@@ -74,11 +75,11 @@ class ContentTypeGroupTest extends BaseTest
             ),
             array(
                 'creationDate',
-                new \DateTime( '2002-06-18T11:21:38+02:00' ),
+                new \DateTime('2002-06-18T11:21:38+02:00'),
             ),
             array(
                 'modificationDate',
-                new \DateTime( '2004-04-20T11:54:35+02:00' ),
+                new \DateTime('2004-04-20T11:54:35+02:00'),
             ),
             array(
                 'creatorId',
@@ -92,7 +93,7 @@ class ContentTypeGroupTest extends BaseTest
     }
 
     /**
-     * Gets the ContentTypeGroup parser
+     * Gets the ContentTypeGroup parser.
      *
      * @return \eZ\Publish\Core\REST\Client\Input\Parser\ContentTypeGroup
      */

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Xml handler class
+ * File containing the Xml handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,12 +15,12 @@ use eZ\Publish\Core\REST\Common\Input\Handler;
 use eZ\Publish\Core\REST\Common\Exceptions;
 
 /**
- * Input format handler base class
+ * Input format handler base class.
  */
 class Xml extends Handler
 {
     /**
-     * Force list for those items
+     * Force list for those items.
      *
      * The key defines the item in which a list is formed. A list is then
      * formed for every value in the value array.
@@ -45,29 +47,29 @@ class Xml extends Handler
             'Policy',
         ),
         'LocationList' => array(
-            'Location'
+            'Location',
         ),
         'ContentObjectStates' => array(
-            'ObjectState'
+            'ObjectState',
         ),
         'FieldDefinitions' => array(
-            'FieldDefinition'
+            'FieldDefinition',
         ),
         'names' => array(
-            'value'
+            'value',
         ),
         'descriptions' => array(
-            'value'
+            'value',
         ),
         'fields' => array(
-            'field'
+            'field',
         ),
         'limitations' => array(
-            'limitation'
+            'limitation',
         ),
         'values' => array(
-            'ref'
-        )
+            'ref',
+        ),
     );
 
     protected $fieldTypeHashElements = array(
@@ -78,30 +80,28 @@ class Xml extends Handler
     );
 
     /**
-     * Converts the given string to an array structure
+     * Converts the given string to an array structure.
      *
      * @param string $string
      *
      * @return array
      */
-    public function convert( $string )
+    public function convert($string)
     {
-        $oldXmlErrorHandling = libxml_use_internal_errors( true );
+        $oldXmlErrorHandling = libxml_use_internal_errors(true);
         libxml_clear_errors();
 
         $dom = new \DOMDocument();
-        $dom->loadXml( $string );
+        $dom->loadXml($string);
 
         $errors = libxml_get_errors();
 
         libxml_clear_errors();
-        libxml_use_internal_errors( $oldXmlErrorHandling );
+        libxml_use_internal_errors($oldXmlErrorHandling);
 
-        if ( $errors )
-        {
+        if ($errors) {
             $message = "Detected errors in input XML:\n";
-            foreach ( $errors as $error )
-            {
+            foreach ($errors as $error) {
                 $message .= sprintf(
                     " - In line %d character %d: %s\n",
                     $error->line,
@@ -111,71 +111,57 @@ class Xml extends Handler
             }
             $message .= "\nIn XML: \n\n" . $string;
 
-            throw new Exceptions\Parser( $message );
+            throw new Exceptions\Parser($message);
         }
 
-        return $this->convertDom( $dom );
+        return $this->convertDom($dom);
     }
 
     /**
-     * Converts DOM nodes to array structures
+     * Converts DOM nodes to array structures.
      *
      * @param \DOMNode $node
      *
      * @return array
      */
-    protected function convertDom( \DOMNode $node )
+    protected function convertDom(\DOMNode $node)
     {
         $isArray = false;
         $current = array();
-        $text    = '';
+        $text = '';
 
-        if ( $node instanceof \DOMElement )
-        {
-            foreach ( $node->attributes as $name => $attribute )
-            {
+        if ($node instanceof \DOMElement) {
+            foreach ($node->attributes as $name => $attribute) {
                 $current["_{$name}"] = $attribute->value;
             }
         }
 
         $parentTagName = $node instanceof \DOMElement ? $node->tagName : false;
-        foreach ( $node->childNodes as $childNode )
-        {
-            switch ( $childNode->nodeType )
-            {
+        foreach ($node->childNodes as $childNode) {
+            switch ($childNode->nodeType) {
                 case XML_ELEMENT_NODE:
                     $tagName = $childNode->tagName;
 
-                    if ( in_array( $tagName, $this->fieldTypeHashElements ) )
-                    {
-                        $current[$tagName] = $this->parseFieldTypeHash( $childNode );
-                    }
-                    else if ( !isset( $current[$tagName]  ) )
-                    {
-                        if ( isset( $this->forceList[$parentTagName] ) &&
-                             in_array( $tagName, $this->forceList[$parentTagName], true ) )
-                        {
+                    if (in_array($tagName, $this->fieldTypeHashElements)) {
+                        $current[$tagName] = $this->parseFieldTypeHash($childNode);
+                    } elseif (!isset($current[$tagName])) {
+                        if (isset($this->forceList[$parentTagName]) &&
+                             in_array($tagName, $this->forceList[$parentTagName], true)) {
                             $isArray = true;
                             $current[$tagName] = array(
-                                $this->convertDom( $childNode )
+                                $this->convertDom($childNode),
                             );
+                        } else {
+                            $current[$tagName] = $this->convertDom($childNode);
                         }
-                        else
-                        {
-                            $current[$tagName] = $this->convertDom( $childNode );
-                        }
-                    }
-                    else if ( !$isArray )
-                    {
+                    } elseif (!$isArray) {
                         $current[$tagName] = array(
                             $current[$tagName],
-                            $this->convertDom( $childNode )
+                            $this->convertDom($childNode),
                         );
                         $isArray = true;
-                    }
-                    else
-                    {
-                        $current[$tagName][] = $this->convertDom( $childNode );
+                    } else {
+                        $current[$tagName][] = $this->convertDom($childNode);
                     }
 
                     break;
@@ -190,18 +176,13 @@ class Xml extends Handler
             }
         }
 
-        $text = trim( $text );
+        $text = trim($text);
 
-        if ( $text !== '' && count( $current ) )
-        {
-            $current["#text"] = $text;
-        }
-        else if ( $text !== '' )
-        {
+        if ($text !== '' && count($current)) {
+            $current['#text'] = $text;
+        } elseif ($text !== '') {
             $current = $text;
-        }
-        else if ( !count( $current ) )
-        {
+        } elseif (!count($current)) {
             return null;
         }
 
@@ -213,12 +194,11 @@ class Xml extends Handler
      *
      * @return array|string|null
      */
-    protected function parseFieldTypeHash( \DOMElement $domElement )
+    protected function parseFieldTypeHash(\DOMElement $domElement)
     {
-        $result = $this->parseFieldTypeValues( $domElement->childNodes );
+        $result = $this->parseFieldTypeValues($domElement->childNodes);
 
-        if ( is_array( $result ) && empty( $result ) )
-        {
+        if (is_array($result) && empty($result)) {
             // No child values means null
             return null;
         }
@@ -227,24 +207,21 @@ class Xml extends Handler
     }
 
     /**
-     * Parses a node list of <value> elements
+     * Parses a node list of <value> elements.
      *
      * @param \DOMNodeList $valueNodes
      *
      * @return array|string
      */
-    protected function parseFieldTypeValues( \DOMNodeList $valueNodes )
+    protected function parseFieldTypeValues(\DOMNodeList $valueNodes)
     {
         $resultValues = array();
         $resultString = '';
 
-        foreach ( $valueNodes as $valueNode )
-        {
-            switch ( $valueNode->nodeType )
-            {
+        foreach ($valueNodes as $valueNode) {
+            switch ($valueNode->nodeType) {
                 case XML_ELEMENT_NODE:
-                    if ( $valueNode->tagName !== 'value' )
-                    {
+                    if ($valueNode->tagName !== 'value') {
                         throw new \RuntimeException(
                             sprintf(
                                 'Invalid value tag: <%s>.',
@@ -253,13 +230,10 @@ class Xml extends Handler
                         );
                     }
 
-                    $parsedValue = $this->parseFieldTypeValues( $valueNode->childNodes );
-                    if ( $valueNode->hasAttribute( 'key' ) )
-                    {
-                        $resultValues[$valueNode->getAttribute( 'key' )] = $parsedValue;
-                    }
-                    else
-                    {
+                    $parsedValue = $this->parseFieldTypeValues($valueNode->childNodes);
+                    if ($valueNode->hasAttribute('key')) {
+                        $resultValues[$valueNode->getAttribute('key')] = $parsedValue;
+                    } else {
                         $resultValues[] = $parsedValue;
                     }
                     break;
@@ -274,37 +248,37 @@ class Xml extends Handler
             }
         }
 
-        $resultString = trim( $resultString );
-        if ( $resultString !== '' )
-        {
-            return $this->castScalarValue( $resultString );
+        $resultString = trim($resultString);
+        if ($resultString !== '') {
+            return $this->castScalarValue($resultString);
         }
+
         return $resultValues;
     }
 
     /**
-     * Attempts to cast the given $stringValue into a sensible scalar type
+     * Attempts to cast the given $stringValue into a sensible scalar type.
      *
      * @param string $stringValue
      *
      * @return mixed
      */
-    protected function castScalarValue( $stringValue )
+    protected function castScalarValue($stringValue)
     {
-        switch ( true )
-        {
-            case ( ctype_digit( $stringValue ) ):
+        switch (true) {
+            case (ctype_digit($stringValue)):
                 return (int)$stringValue;
 
-            case ( preg_match( '(^[0-9\.]+$)', $stringValue ) === 1 ):
+            case (preg_match('(^[0-9\.]+$)', $stringValue) === 1):
                 return (float)$stringValue;
 
-            case ( strtolower( $stringValue ) === 'true' ):
+            case (strtolower($stringValue) === 'true'):
                 return true;
 
-            case ( strtolower( $stringValue ) === 'false' ):
+            case (strtolower($stringValue) === 'false'):
                 return false;
         }
+
         return $stringValue;
     }
 }

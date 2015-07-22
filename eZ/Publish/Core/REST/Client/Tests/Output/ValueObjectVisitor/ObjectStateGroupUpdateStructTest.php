@@ -1,40 +1,39 @@
 <?php
+
 /**
- * File containing a ObjectStateGroupUpdateStructTest class
+ * File containing a ObjectStateGroupUpdateStructTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\API\Repository\Values\ObjectState;
-
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Common;
 
 class ObjectStateGroupUpdateStructTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Tests the ObjectStateGroupUpdateStruct visitor
+     * Tests the ObjectStateGroupUpdateStruct visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $objectStateGroupUpdateStruct = new ObjectState\ObjectStateGroupUpdateStruct();
         $objectStateGroupUpdateStruct->identifier = 'some-group';
         $objectStateGroupUpdateStruct->defaultLanguageCode = 'eng-GB';
-        $objectStateGroupUpdateStruct->names = array( 'eng-GB' => 'Some group EN', 'fre-FR' => 'Some group FR' );
-        $objectStateGroupUpdateStruct->descriptions = array( 'eng-GB' => 'Description EN', 'fre-FR' => 'Description FR' );
+        $objectStateGroupUpdateStruct->names = array('eng-GB' => 'Some group EN', 'fre-FR' => 'Some group FR');
+        $objectStateGroupUpdateStruct->descriptions = array('eng-GB' => 'Description EN', 'fre-FR' => 'Description FR');
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -42,28 +41,28 @@ class ObjectStateGroupUpdateStructTest extends ValueObjectVisitorBaseTest
             $objectStateGroupUpdateStruct
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Tests that the result contains names element
+     * Tests that the result contains names element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsNamesElement( $result )
+    public function testResultContainsNamesElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'names',
+                'tag' => 'names',
                 'children' => array(
-                    'count' => 2
-                )
+                    'count' => 2,
+                ),
             ),
             $result,
             'Invalid <names> element.',
@@ -72,20 +71,20 @@ class ObjectStateGroupUpdateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains descriptions element
+     * Tests that the result contains descriptions element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsDescriptionsElement( $result )
+    public function testResultContainsDescriptionsElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'descriptions',
+                'tag' => 'descriptions',
                 'children' => array(
-                    'count' => 2
-                )
+                    'count' => 2,
+                ),
             ),
             $result,
             'Invalid <descriptions> element.',
@@ -94,18 +93,18 @@ class ObjectStateGroupUpdateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains identifier value element
+     * Tests that the result contains identifier value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsIdentifierValueElement( $result )
+    public function testResultContainsIdentifierValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'identifier',
-                'content'  => 'some-group',
+                'tag' => 'identifier',
+                'content' => 'some-group',
             ),
             $result,
             'Invalid or non-existing <ObjectStateGroupUpdate> identifier value element.',
@@ -114,18 +113,18 @@ class ObjectStateGroupUpdateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains defaultLanguageCode value element
+     * Tests that the result contains defaultLanguageCode value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsDefaultLanguageCodeValueElement( $result )
+    public function testResultContainsDefaultLanguageCodeValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'defaultLanguageCode',
-                'content'  => 'eng-GB',
+                'tag' => 'defaultLanguageCode',
+                'content' => 'eng-GB',
             ),
             $result,
             'Invalid or non-existing <ObjectStateGroupUpdate> defaultLanguageCode value element.',
@@ -134,12 +133,12 @@ class ObjectStateGroupUpdateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Gets the ObjectStateGroupUpdateStruct visitor
+     * Gets the ObjectStateGroupUpdateStruct visitor.
      *
      * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\ObjectStateGroupUpdateStruct
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\ObjectStateGroupUpdateStruct;
+        return new ValueObjectVisitor\ObjectStateGroupUpdateStruct();
     }
 }

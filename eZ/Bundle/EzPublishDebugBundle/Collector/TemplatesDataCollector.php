@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,7 +20,7 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
  */
 class TemplatesDataCollector extends DataCollector
 {
-    public function collect( Request $request, Response $response, \Exception $exception = null )
+    public function collect(Request $request, Response $response, \Exception $exception = null)
     {
         $this->data = ['templates' => TemplateDebugInfo::getTemplatesList()];
     }
@@ -29,7 +31,7 @@ class TemplatesDataCollector extends DataCollector
     }
 
     /**
-     * Returns templates list
+     * Returns templates list.
      *
      * @return array
      */

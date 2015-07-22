@@ -1,36 +1,36 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\PolicyList;
 use eZ\Publish\Core\Repository\Values\User;
-use eZ\Publish\Core\REST\Common;
 
 class PolicyListTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the PolicyList visitor
+     * Test the PolicyList visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
-        $policyList = new PolicyList( array(), '/user/roles/42/policies' );
+        $policyList = new PolicyList(array(), '/user/roles/42/policies');
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -38,25 +38,25 @@ class PolicyListTest extends ValueObjectVisitorBaseTest
             $policyList
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains PolicyList element
+     * Test if result contains PolicyList element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsPolicyListElement( $result )
+    public function testResultContainsPolicyListElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'PolicyList',
+                'tag' => 'PolicyList',
             ),
             $result,
             'Invalid <PolicyList> element.',
@@ -65,21 +65,21 @@ class PolicyListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains PolicyList element attributes
+     * Test if result contains PolicyList element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsPolicyListAttributes( $result )
+    public function testResultContainsPolicyListAttributes($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'PolicyList',
+                'tag' => 'PolicyList',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.PolicyList+xml',
-                    'href'       => '/user/roles/42/policies',
-                )
+                    'href' => '/user/roles/42/policies',
+                ),
             ),
             $result,
             'Invalid <PolicyList> attributes.',
@@ -88,14 +88,14 @@ class PolicyListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if PolicyList visitor visits the children
+     * Test if PolicyList visitor visits the children.
      */
     public function testPolicyListVisitsChildren()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $policyList = new PolicyList(
             array(
@@ -105,9 +105,9 @@ class PolicyListTest extends ValueObjectVisitorBaseTest
             42
         );
 
-        $this->getVisitorMock()->expects( $this->exactly( 2 ) )
-            ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\User\\Policy' ) );
+        $this->getVisitorMock()->expects($this->exactly(2))
+            ->method('visitValueObject')
+            ->with($this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\User\\Policy'));
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -117,12 +117,12 @@ class PolicyListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the PolicyList visitor
+     * Get the PolicyList visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\PolicyList
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\PolicyList;
+        return new ValueObjectVisitor\PolicyList();
     }
 }

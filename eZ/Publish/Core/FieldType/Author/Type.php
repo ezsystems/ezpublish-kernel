@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Author class
+ * File containing the Author class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,13 +25,13 @@ use eZ\Publish\SPI\FieldType\Value as SPIValue;
 class Type extends FieldType
 {
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
     public function getFieldTypeIdentifier()
     {
-        return "ezauthor";
+        return 'ezauthor';
     }
 
     /**
@@ -42,9 +44,9 @@ class Type extends FieldType
      *
      * @return string
      */
-    public function getName( SPIValue $value )
+    public function getName(SPIValue $value)
     {
-        return isset( $value->authors[0] ) ? $value->authors[0]->name : "";
+        return isset($value->authors[0]) ? $value->authors[0]->name : '';
     }
 
     /**
@@ -65,11 +67,10 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\Author\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
-        if ( is_array( $inputValue ) )
-        {
-            $inputValue = new Value( $inputValue );
+        if (is_array($inputValue)) {
+            $inputValue = new Value($inputValue);
         }
 
         return $inputValue;
@@ -81,13 +82,10 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\Author\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
-        if ( !$value->authors instanceof AuthorCollection )
-        {
+        if (!$value->authors instanceof AuthorCollection) {
             throw new InvalidArgumentType(
                 '$value->authors',
                 'eZ\\Publish\\Core\\FieldType\\Author\\AuthorCollection',
@@ -103,25 +101,24 @@ class Type extends FieldType
      *
      * @return array
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo(BaseValue $value)
     {
         return false;
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * @param mixed $hash
      *
      * @return \eZ\Publish\Core\FieldType\Author\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
         return new Value(
             array_map(
-                function ( $author )
-                {
-                    return new Author( $author );
+                function ($author) {
+                    return new Author($author);
                 },
                 $hash
             )
@@ -129,17 +126,16 @@ class Type extends FieldType
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\Author\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
         return array_map(
-            function ( $author )
-            {
+            function ($author) {
                 return (array)$author;
             },
             $value->authors->getArrayCopy()
@@ -147,9 +143,9 @@ class Type extends FieldType
     }
 
     /**
-     * Returns whether the field type is searchable
+     * Returns whether the field type is searchable.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSearchable()
     {

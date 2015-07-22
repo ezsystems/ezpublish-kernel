@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ConfigScopeListener class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -31,8 +33,7 @@ class ConfigScopeListener implements EventSubscriberInterface
     public function __construct(
         VersatileScopeInterface $configResolver,
         ViewManagerInterface $viewManager
-    )
-    {
+    ) {
         $this->configResolver = $configResolver;
         $this->viewManager = $viewManager;
     }
@@ -40,18 +41,17 @@ class ConfigScopeListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            MVCEvents::CONFIG_SCOPE_CHANGE => array( 'onConfigScopeChange', 100 ),
-            MVCEvents::CONFIG_SCOPE_RESTORE => array( 'onConfigScopeChange', 100 )
+            MVCEvents::CONFIG_SCOPE_CHANGE => array('onConfigScopeChange', 100),
+            MVCEvents::CONFIG_SCOPE_RESTORE => array('onConfigScopeChange', 100),
         );
     }
 
-    public function onConfigScopeChange( ScopeChangeEvent $event )
+    public function onConfigScopeChange(ScopeChangeEvent $event)
     {
         $siteAccess = $event->getSiteAccess();
-        $this->configResolver->setDefaultScope( $siteAccess->name );
-        if ( $this->viewManager instanceof SiteAccessAware )
-        {
-            $this->viewManager->setSiteAccess( $siteAccess );
+        $this->configResolver->setDefaultScope($siteAccess->name);
+        if ($this->viewManager instanceof SiteAccessAware) {
+            $this->viewManager->setSiteAccess($siteAccess);
         }
     }
 }

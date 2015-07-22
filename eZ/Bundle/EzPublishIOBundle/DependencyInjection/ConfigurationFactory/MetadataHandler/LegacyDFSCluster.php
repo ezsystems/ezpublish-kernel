@@ -1,10 +1,12 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Legacy package
+ * This file is part of the eZ Publish Legacy package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributd with this source code.
  */
+
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory\MetadataHandler;
 
 use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
@@ -19,21 +21,21 @@ class LegacyDFSCluster implements ConfigurationFactory
         return 'ezpublish.core.io.metadata_handler.legacy_dfs_cluster';
     }
 
-    public function configureHandler( ServiceDefinition $definition, array $config )
+    public function configureHandler(ServiceDefinition $definition, array $config)
     {
-        $definition->replaceArgument( 0, new Reference( $config['connection'] ) );
+        $definition->replaceArgument(0, new Reference($config['connection']));
     }
 
-    public function addConfiguration( ArrayNodeDefinition $node )
+    public function addConfiguration(ArrayNodeDefinition $node)
     {
         $node
             ->info(
                 'A MySQL based handler, compatible with the legacy DFS one, that stores metadata in the ezdfsfile table'
             )
             ->children()
-                ->scalarNode( 'connection' )
-                    ->info( 'Doctrine connection service' )
-                    ->example( 'doctrine.dbal.cluster_connection' )
+                ->scalarNode('connection')
+                    ->info('Doctrine connection service')
+                    ->example('doctrine.dbal.cluster_connection')
                 ->end()
             ->end();
     }

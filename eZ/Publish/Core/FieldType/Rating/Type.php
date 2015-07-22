@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Rating field type
+ * File containing the Rating field type.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
- * Rating field types
+ * Rating field types.
  *
  * Represents rating.
  */
@@ -33,13 +35,13 @@ class Type extends FieldType
     }
 
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
     public function getFieldTypeIdentifier()
     {
-        return "ezsrrating";
+        return 'ezsrrating';
     }
 
     /**
@@ -52,19 +54,19 @@ class Type extends FieldType
      *
      * @return string
      */
-    public function getName( SPIValue $value )
+    public function getName(SPIValue $value)
     {
-        throw new \RuntimeException( 'Implement this method' );
+        throw new \RuntimeException('Implement this method');
     }
 
     /**
-     * Returns if the given $value is considered empty by the field type
+     * Returns if the given $value is considered empty by the field type.
      *
      * @param mixed $value
      *
-     * @return boolean
+     * @return bool
      */
-    public function isEmptyValue( SPIValue $value )
+    public function isEmptyValue(SPIValue $value)
     {
         return false;
     }
@@ -72,15 +74,14 @@ class Type extends FieldType
     /**
      * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
-     * @param boolean|\eZ\Publish\Core\FieldType\Rating\Value $inputValue
+     * @param bool|\eZ\Publish\Core\FieldType\Rating\Value $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\Rating\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
-        if ( is_bool( $inputValue ) )
-        {
-            $inputValue = new Value( $inputValue );
+        if (is_bool($inputValue)) {
+            $inputValue = new Value($inputValue);
         }
 
         return $inputValue;
@@ -92,13 +93,10 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\Rating\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
-        if ( !is_bool( $value->isDisabled ) )
-        {
+        if (!is_bool($value->isDisabled)) {
             throw new InvalidArgumentType(
                 '$value->isDisabled',
                 'boolean',
@@ -114,39 +112,39 @@ class Type extends FieldType
      *
      * @return array
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo(BaseValue $value)
     {
         return false;
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * @param mixed $hash
      *
      * @return \eZ\Publish\Core\FieldType\Rating\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        return new Value( $hash );
+        return new Value($hash);
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\Rating\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
         return $value->isDisabled;
     }
 
     /**
-     * Returns whether the field type is searchable
+     * Returns whether the field type is searchable.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSearchable()
     {

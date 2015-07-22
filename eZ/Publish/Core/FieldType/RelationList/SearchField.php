@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,36 +17,36 @@ use eZ\Publish\SPI\FieldType\Indexable;
 use eZ\Publish\SPI\Search;
 
 /**
- * Indexable definition for RelationList field type
+ * Indexable definition for RelationList field type.
  */
 class SearchField implements Indexable
 {
     /**
-     * Get index data for field for search backend
+     * Get index data for field for search backend.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      *
      * @return \eZ\Publish\SPI\Search\Field[]
      */
-    public function getIndexData( Field $field, FieldDefinition $fieldDefinition )
+    public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
         return array(
             new Search\Field(
                 'value',
-                $field->value->data["destinationContentIds"],
+                $field->value->data['destinationContentIds'],
                 new Search\FieldType\MultipleStringField()
             ),
             new Search\Field(
                 'sort_value',
-                implode( "-", $field->value->data["destinationContentIds"] ),
+                implode('-', $field->value->data['destinationContentIds']),
                 new Search\FieldType\StringField()
             ),
         );
     }
 
     /**
-     * Get index field types for search backend
+     * Get index field types for search backend.
      *
      * @return \eZ\Publish\SPI\Search\FieldType[]
      */
@@ -67,7 +69,7 @@ class SearchField implements Indexable
      */
     public function getDefaultMatchField()
     {
-        return "value";
+        return 'value';
     }
 
     /**
@@ -81,6 +83,6 @@ class SearchField implements Indexable
      */
     public function getDefaultSortField()
     {
-        return "sort_value";
+        return 'sort_value';
     }
 }

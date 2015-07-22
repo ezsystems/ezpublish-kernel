@@ -1,34 +1,34 @@
 <?php
+
 /**
- * File containing a LocationCreateStructTest class
+ * File containing a LocationCreateStructTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\REST\Common;
 
 class LocationCreateStructTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Tests the LocationCreateStruct visitor
+     * Tests the LocationCreateStruct visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $locationCreateStruct = new LocationCreateStruct();
         $locationCreateStruct->hidden = false;
@@ -44,28 +44,28 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
             $locationCreateStruct
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Tests that the result contains LocationCreate element
+     * Tests that the result contains LocationCreate element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsLocationCreateElement( $result )
+    public function testResultContainsLocationCreateElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'LocationCreate',
+                'tag' => 'LocationCreate',
                 'children' => array(
-                    'count' => 5
-                )
+                    'count' => 5,
+                ),
             ),
             $result,
             'Invalid <LocationCreate> element.',
@@ -74,20 +74,20 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains LocationCreate attributes
+     * Tests that the result contains LocationCreate attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsLocationCreateAttributes( $result )
+    public function testResultContainsLocationCreateAttributes($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'LocationCreate',
+                'tag' => 'LocationCreate',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.LocationCreate+xml',
-                )
+                ),
             ),
             $result,
             'Invalid <LocationCreate> attributes.',
@@ -96,17 +96,17 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains ParentLocation element
+     * Tests that the result contains ParentLocation element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsParentLocationElement( $result )
+    public function testResultContainsParentLocationElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'ParentLocation'
+                'tag' => 'ParentLocation',
             ),
             $result,
             'Invalid <ParentLocation> element.',
@@ -115,21 +115,21 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains ParentLocation attributes
+     * Tests that the result contains ParentLocation attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsParentLocationAttributes( $result )
+    public function testResultContainsParentLocationAttributes($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'ParentLocation',
+                'tag' => 'ParentLocation',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Location+xml',
-                    'href' => '/content/locations/1/2/42'
-                )
+                    'href' => '/content/locations/1/2/42',
+                ),
             ),
             $result,
             'Invalid <ParentLocation> attributes.',
@@ -138,18 +138,18 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains priority value element
+     * Tests that the result contains priority value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsPriorityValueElement( $result )
+    public function testResultContainsPriorityValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'priority',
-                'content'  => '0',
+                'tag' => 'priority',
+                'content' => '0',
             ),
             $result,
             'Invalid or non-existing <LocationCreate> priority value element.',
@@ -158,18 +158,18 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains hidden value element
+     * Tests that the result contains hidden value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsHiddenValueElement( $result )
+    public function testResultContainsHiddenValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'hidden',
-                'content'  => 'false',
+                'tag' => 'hidden',
+                'content' => 'false',
             ),
             $result,
             'Invalid or non-existing <LocationCreate> hidden value element.',
@@ -178,18 +178,18 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains sortField value element
+     * Tests that the result contains sortField value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsSortFieldValueElement( $result )
+    public function testResultContainsSortFieldValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'sortField',
-                'content'  => 'PATH',
+                'tag' => 'sortField',
+                'content' => 'PATH',
             ),
             $result,
             'Invalid or non-existing <LocationCreate> sortField value element.',
@@ -198,18 +198,18 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Tests that the result contains sortOrder value element
+     * Tests that the result contains sortOrder value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsSortOrderValueElement( $result )
+    public function testResultContainsSortOrderValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'sortOrder',
-                'content'  => 'ASC',
+                'tag' => 'sortOrder',
+                'content' => 'ASC',
             ),
             $result,
             'Invalid or non-existing <LocationCreate> sortOrder value element.',
@@ -218,12 +218,12 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Gets the LocationCreateStruct visitor
+     * Gets the LocationCreateStruct visitor.
      *
      * @return \eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\LocationCreateStruct
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\LocationCreateStruct;
+        return new ValueObjectVisitor\LocationCreateStruct();
     }
 }

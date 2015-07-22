@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\SPI\Tests\FieldType\TextBlockIntegrationTest class
+ * File contains: eZ\Publish\SPI\Tests\FieldType\TextBlockIntegrationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
 
 /**
- * Integration test for legacy storage field types
+ * Integration test for legacy storage field types.
  *
  * This abstract base test case is supposed to be the base for field type
  * integration tests. It basically calls all involved methods in the field type
@@ -36,7 +38,7 @@ use eZ\Publish\SPI\Persistence\Content;
 class TextBlockIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -46,14 +48,14 @@ class TextBlockIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get handler with required custom field types registered
+     * Get handler with required custom field types registered.
      *
      * @return Handler
      */
     public function getCustomHandler()
     {
         $fieldType = new FieldType\TextBlock\Type();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
         return $this->getHandler(
             'eztext',
@@ -75,7 +77,7 @@ class TextBlockIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field definition data values
+     * Get field definition data values.
      *
      * This is a PHPUnit data provider
      *
@@ -86,7 +88,7 @@ class TextBlockIntegrationTest extends BaseIntegrationTest
         return array(
             // The eztext field type does not have any special field definition
             // properties
-            array( 'fieldType', 'eztext' ),
+            array('fieldType', 'eztext'),
             array(
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(
@@ -95,15 +97,15 @@ class TextBlockIntegrationTest extends BaseIntegrationTest
                             array(
                                 'textRows' => 0,
                             )
-                        )
+                        ),
                     )
-                )
+                ),
             ),
         );
     }
 
     /**
-     * Get initial field value
+     * Get initial field value.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -111,9 +113,9 @@ class TextBlockIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => 'Some longish text…',
+                'data' => 'Some longish text…',
                 'externalData' => null,
-                'sortKey'      => 'some longish text',
+                'sortKey' => 'some longish text',
             )
         );
     }
@@ -129,9 +131,9 @@ class TextBlockIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => 'A different longish text now…',
+                'data' => 'A different longish text now…',
                 'externalData' => null,
-                'sortKey'      => 'a different longish text now',
+                'sortKey' => 'a different longish text now',
             )
         );
     }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the VersionInfo class
+ * File containing the VersionInfo class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,12 +14,13 @@ namespace eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
- * This class holds version information data
+ * This class holds version information data.
  */
 class VersionInfo extends ValueObject
 {
     /**
-     * Version status constants
+     * Version status constants.
+     *
      * @var int
      */
     const STATUS_DRAFT = 0;
@@ -55,20 +58,21 @@ class VersionInfo extends ValueObject
 
     /**
      * Returns the names computed from the name schema in the available languages.
-     * Eg. array( 'eng-GB' => "New Article" )
+     * Eg. array( 'eng-GB' => "New Article" ).
      *
      * @return string[]
      */
     public $names;
 
     /**
-     * Creation date of this version, as a UNIX timestamp
+     * Creation date of this version, as a UNIX timestamp.
+     *
      * @var int
      */
     public $creationDate;
 
     /**
-     * Last modified date of this version, as a UNIX timestamp
+     * Last modified date of this version, as a UNIX timestamp.
      *
      * @var int
      */
@@ -84,7 +88,7 @@ class VersionInfo extends ValueObject
     public $creatorId;
 
     /**
-     * One of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED
+     * One of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED.
      *
      * @var int
      */

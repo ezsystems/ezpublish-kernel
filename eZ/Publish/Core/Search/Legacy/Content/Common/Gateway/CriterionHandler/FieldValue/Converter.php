@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ValueConverter class
+ * File containing the ValueConverter class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,33 +21,33 @@ use RuntimeException;
 class Converter
 {
     /**
-     * Criterion field value handler registry
+     * Criterion field value handler registry.
      *
      * @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\HandlerRegistry
      */
     protected $registry;
 
     /**
-     * Default Criterion field value handler
+     * Default Criterion field value handler.
      *
      * @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler
      */
     protected $defaultHandler;
 
     /**
-     * Construct from an array of Criterion field value handlers
+     * Construct from an array of Criterion field value handlers.
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\HandlerRegistry $registry
      * @param null|\eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler $defaultHandler
      */
-    public function __construct( HandlerRegistry $registry, Handler $defaultHandler = null )
+    public function __construct(HandlerRegistry $registry, Handler $defaultHandler = null)
     {
         $this->registry = $registry;
         $this->defaultHandler = $defaultHandler;
     }
 
     /**
-     * Converts the criteria into query fragments
+     * Converts the criteria into query fragments.
      *
      * @throws \RuntimeException if Criterion is not applicable to its target
      *
@@ -56,18 +58,16 @@ class Converter
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function convertCriteria( $fieldTypeIdentifier, SelectQuery $query, Criterion $criterion, $column )
+    public function convertCriteria($fieldTypeIdentifier, SelectQuery $query, Criterion $criterion, $column)
     {
-        if ( $this->registry->has( $fieldTypeIdentifier ) )
-        {
-            return $this->registry->get( $fieldTypeIdentifier )->handle( $query, $criterion, $column );
+        if ($this->registry->has($fieldTypeIdentifier)) {
+            return $this->registry->get($fieldTypeIdentifier)->handle($query, $criterion, $column);
         }
 
-        if ( $this->defaultHandler === null )
-        {
-            throw new RuntimeException( "No conversion for a field type '$fieldTypeIdentifier' found." );
+        if ($this->defaultHandler === null) {
+            throw new RuntimeException("No conversion for a field type '$fieldTypeIdentifier' found.");
         }
 
-        return $this->defaultHandler->handle( $query, $criterion, $column );
+        return $this->defaultHandler->handle($query, $criterion, $column);
     }
 }

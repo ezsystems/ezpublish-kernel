@@ -1,9 +1,11 @@
 <?php
+
 /**
- * UnassignRoleFromUserSignal class
+ * UnassignRoleFromUserSignal class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,20 +14,19 @@ namespace eZ\Publish\Core\SignalSlot\Signal\RoleService;
 use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
- * UnassignRoleFromUserSignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\RoleService
+ * UnassignRoleFromUserSignal class.
  */
 class UnassignRoleFromUserSignal extends Signal
 {
     /**
-     * RoleId
+     * RoleId.
      *
      * @var mixed
      */
     public $roleId;
 
     /**
-     * UserId
+     * UserId.
      *
      * @var mixed
      */

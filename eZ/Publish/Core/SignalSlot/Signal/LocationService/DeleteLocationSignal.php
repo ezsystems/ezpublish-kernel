@@ -1,9 +1,11 @@
 <?php
+
 /**
- * DeleteLocationSignal class
+ * DeleteLocationSignal class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,20 +14,19 @@ namespace eZ\Publish\Core\SignalSlot\Signal\LocationService;
 use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
- * DeleteLocationSignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\LocationService
+ * DeleteLocationSignal class.
  */
 class DeleteLocationSignal extends Signal
 {
     /**
-     * ContentId
+     * ContentId.
      *
      * @var mixed
      */
     public $contentId;
 
     /**
-     * Location ID
+     * Location ID.
      *
      * @var mixed
      */

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the Depth matcher class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,11 +22,11 @@ class Depth extends MultipleValued
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchLocation( Location $location )
+    public function matchLocation(Location $location)
     {
-        return isset( $this->values[$location->depth] );
+        return isset($this->values[$location->depth]);
     }
 
     /**
@@ -32,16 +34,16 @@ class Depth extends MultipleValued
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @return boolean
+     * @return bool
      */
-    public function matchContentInfo( ContentInfo $contentInfo )
+    public function matchContentInfo(ContentInfo $contentInfo)
     {
         $location = $this->repository->sudo(
-            function ( Repository $repository ) use ( $contentInfo )
-            {
-                return $repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
+            function (Repository $repository) use ($contentInfo) {
+                return $repository->getLocationService()->loadLocation($contentInfo->mainLocationId);
             }
         );
-        return isset( $this->values[$location->depth] );
+
+        return isset($this->values[$location->depth]);
     }
 }

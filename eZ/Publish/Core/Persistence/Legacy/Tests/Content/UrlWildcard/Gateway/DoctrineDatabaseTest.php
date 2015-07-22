@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlWildcard\Gateway\DoctrineDatabaseTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlWildcard\Gateway\DoctrineDatabaseTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -58,7 +60,7 @@ class DoctrineDatabaseTest extends TestCase
 
         $this->assertAttributeSame(
             $dbHandler,
-            "dbHandler",
+            'dbHandler',
             $gateway
         );
     }
@@ -70,10 +72,10 @@ class DoctrineDatabaseTest extends TestCase
      */
     public function testLoadUrlWildcardData()
     {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlwildcards.php" );
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlwildcards.php');
         $gateway = $this->getGateway();
 
-        $row = $gateway->loadUrlWildcardData( 1 );
+        $row = $gateway->loadUrlWildcardData(1);
 
         self::assertEquals(
             $this->fixtureData[0],
@@ -88,7 +90,7 @@ class DoctrineDatabaseTest extends TestCase
      */
     public function testLoadUrlWildcardsData()
     {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlwildcards.php" );
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlwildcards.php');
         $gateway = $this->getGateway();
 
         $rows = $gateway->loadUrlWildcardsData();
@@ -106,10 +108,10 @@ class DoctrineDatabaseTest extends TestCase
      */
     public function testLoadUrlWildcardsDataWithOffset()
     {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlwildcards.php" );
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlwildcards.php');
         $gateway = $this->getGateway();
 
-        $row = $gateway->loadUrlWildcardsData( 1 );
+        $row = $gateway->loadUrlWildcardsData(1);
 
         self::assertEquals(
             array(
@@ -127,10 +129,10 @@ class DoctrineDatabaseTest extends TestCase
      */
     public function testLoadUrlWildcardsDataWithOffsetAndLimit()
     {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlwildcards.php" );
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlwildcards.php');
         $gateway = $this->getGateway();
 
-        $row = $gateway->loadUrlWildcardsData( 1, 1 );
+        $row = $gateway->loadUrlWildcardsData(1, 1);
 
         self::assertEquals(
             array(
@@ -148,27 +150,27 @@ class DoctrineDatabaseTest extends TestCase
      */
     public function testInsertUrlWildcard()
     {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlwildcards.php" );
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlwildcards.php');
         $gateway = $this->getGateway();
 
         $id = $gateway->insertUrlWildcard(
             new UrlWildcard(
                 array(
-                    "sourceUrl" => "/contact-information/*",
-                    "destinationUrl" => "/contact/{1}",
-                    "forward" => true,
+                    'sourceUrl' => '/contact-information/*',
+                    'destinationUrl' => '/contact/{1}',
+                    'forward' => true,
                 )
             )
         );
 
         self::assertEquals(
             array(
-                "id" => $id,
-                "source_url" => "contact-information/*",
-                "destination_url" => "contact/{1}",
-                "type" => "1",
+                'id' => $id,
+                'source_url' => 'contact-information/*',
+                'destination_url' => 'contact/{1}',
+                'type' => '1',
             ),
-            $gateway->loadUrlWildcardData( $id )
+            $gateway->loadUrlWildcardData($id)
         );
     }
 
@@ -180,25 +182,25 @@ class DoctrineDatabaseTest extends TestCase
      */
     public function testDeleteUrlWildcard()
     {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urlwildcards.php" );
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlwildcards.php');
         $gateway = $this->getGateway();
 
-        $gateway->deleteUrlWildcard( 1 );
+        $gateway->deleteUrlWildcard(1);
 
-        self::assertEmpty( $gateway->loadUrlWildcardData( 1 ) );
+        self::assertEmpty($gateway->loadUrlWildcardData(1));
     }
 
     /**
-     * Returns the DoctrineDatabase gateway to test
+     * Returns the DoctrineDatabase gateway to test.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase
      */
     protected function getGateway()
     {
-        if ( !isset( $this->gateway ) )
-        {
-            $this->gateway = new DoctrineDatabase( $this->getDatabaseHandler() );
+        if (!isset($this->gateway)) {
+            $this->gateway = new DoctrineDatabase($this->getDatabaseHandler());
         }
+
         return $this->gateway;
     }
 }

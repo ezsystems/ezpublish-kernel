@@ -2,213 +2,212 @@
 
 return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state(array(
    'facets' =>
-  array (
+  array(
   ),
    'searchHits' =>
-  array (
+  array(
     0 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 57,
         'title' => 'Home',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     1 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 4,
         'title' => 'Users',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     2 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 11,
         'title' => 'Members',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     3 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 12,
         'title' => 'Administrator users',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     4 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 13,
         'title' => 'Editors',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     5 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 14,
         'title' => 'Administrator User',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     6 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 41,
         'title' => 'Media',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     7 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 42,
         'title' => 'Anonymous Users',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     8 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 10,
         'title' => 'Anonymous User',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     9 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 45,
         'title' => 'Setup',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     10 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 49,
         'title' => 'Images',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     11 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 50,
         'title' => 'Files',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     12 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 51,
         'title' => 'Multimedia',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     13 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 52,
         'title' => 'Common INI settings',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     14 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 54,
         'title' => 'eZ Publish Demo Design (without demo content)',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     15 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 56,
         'title' => 'Design',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     16 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 58,
         'title' => 'Contact Us',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
     17 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>
-      array (
+      array(
         'id' => 59,
         'title' => 'Partners',
       ),
-       'score' => NULL,
-       'index' => NULL,
-       'highlight' => NULL,
+       'score' => null,
+       'index' => null,
+       'highlight' => null,
     )),
   ),
-   'spellSuggestion' => NULL,
+   'spellSuggestion' => null,
    'time' => 1,
-   'timedOut' => NULL,
-   'maxScore' => NULL,
+   'timedOut' => null,
+   'maxScore' => null,
    'totalCount' => 19,
 ));
-

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing an interface for the Doctrine database abstractions
+ * File containing an interface for the Doctrine database abstractions.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 class PostgresConnectionHandler extends ConnectionHandler
 {
     /**
-     * Get auto increment value
+     * Get auto increment value.
      *
      * Returns the value used for autoincrement tables. Usually this will just
      * be null. In case for sequence based RDBMS this method can return a
@@ -25,31 +27,32 @@ class PostgresConnectionHandler extends ConnectionHandler
      *
      * @return mixed
      */
-    public function getAutoIncrementValue( $table, $column )
+    public function getAutoIncrementValue($table, $column)
     {
-        return "nextval('"  . $this->getSequenceName( $table, $column ) . "')";
+        return "nextval('"  . $this->getSequenceName($table, $column) . "')";
     }
 
     /**
-     * Returns the name of the affected sequence
+     * Returns the name of the affected sequence.
      *
      * @param string $table
      * @param string $column
      *
      * @return string
      */
-    public function getSequenceName( $table, $column )
+    public function getSequenceName($table, $column)
     {
         return $table . '_s';
     }
 
     /**
-     * Custom quote identifier method
+     * Custom quote identifier method.
      *
      * @param string $identifier
+     *
      * @return string
      */
-    public function quoteIdentifier( $identifier )
+    public function quoteIdentifier($identifier)
     {
         return '"' . $identifier . '"';
     }

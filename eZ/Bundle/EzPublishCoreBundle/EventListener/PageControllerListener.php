@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the PageControllerListener class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -48,8 +50,7 @@ class PageControllerListener implements EventSubscriberInterface
         ControllerManagerInterface $controllerManager,
         PageService $pageService,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->controllerManager = $controllerManager;
         $this->controllerResolver = $controllerResolver;
         $this->pageService = $pageService;
@@ -58,7 +59,7 @@ class PageControllerListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array( KernelEvents::CONTROLLER => 'getController' );
+        return array(KernelEvents::CONTROLLER => 'getController');
     }
 
     /**
@@ -68,37 +69,30 @@ class PageControllerListener implements EventSubscriberInterface
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
-    public function getController( FilterControllerEvent $event )
+    public function getController(FilterControllerEvent $event)
     {
         $request = $event->getRequest();
         // Only taking page related controller (i.e. ez_page:viewBlock or ez_page:viewBlockById)
-        if ( strpos( $request->attributes->get( '_controller' ), 'ez_page:' ) === false )
-        {
+        if (strpos($request->attributes->get('_controller'), 'ez_page:') === false) {
             return;
         }
-        try
-        {
-            if ( $request->attributes->has( 'id' ) )
-            {
+        try {
+            if ($request->attributes->has('id')) {
                 $valueObject = $this->pageService->loadBlock(
-                    $request->attributes->get( 'id' )
+                    $request->attributes->get('id')
                 );
-                $request->attributes->set( 'block', $valueObject );
+                $request->attributes->set('block', $valueObject);
+            } elseif ($request->attributes->get('block') instanceof Block) {
+                $valueObject = $request->attributes->get('block');
+                $request->attributes->set('id', $valueObject->id);
             }
-            else if ( $request->attributes->get( 'block' ) instanceof Block )
-            {
-                $valueObject = $request->attributes->get( 'block' );
-                $request->attributes->set( 'id', $valueObject->id );
-            }
-        }
-        catch ( UnauthorizedException $e)
-        {
+        } catch (UnauthorizedException $e) {
             throw new AccessDeniedException();
         }
 
-        if ( !isset( $valueObject ) )
-        {
-            $this->logger->error( 'Could not resolve a page controller, invalid value object to match.' );
+        if (!isset($valueObject)) {
+            $this->logger->error('Could not resolve a page controller, invalid value object to match.');
+
             return;
         }
 
@@ -107,10 +101,11 @@ class PageControllerListener implements EventSubscriberInterface
             'block'
         );
 
-        if ( !$controllerReference instanceof ControllerReference )
+        if (!$controllerReference instanceof ControllerReference) {
             return;
+        }
 
-        $request->attributes->set( '_controller', $controllerReference->controller );
-        $event->setController( $this->controllerResolver->getController( $request ) );
+        $request->attributes->set('_controller', $controllerReference->controller);
+        $event->setController($this->controllerResolver->getController($request));
     }
 }

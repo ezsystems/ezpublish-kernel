@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\SPI\Tests\FieldType\RichTextIntegrationTest class
+ * File contains: eZ\Publish\SPI\Tests\FieldType\RichTextIntegrationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,7 +20,7 @@ use eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\LegacyStorage;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlGateway;
 
 /**
- * Integration test for legacy storage field types
+ * Integration test for legacy storage field types.
  *
  * This abstract base test case is supposed to be the base for field type
  * integration tests. It basically calls all involved methods in the field type
@@ -40,7 +42,7 @@ use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlGateway
 class RichTextIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -50,26 +52,26 @@ class RichTextIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get handler with required custom field types registered
+     * Get handler with required custom field types registered.
      *
      * @return Handler
      */
     public function getCustomHandler()
     {
         $fieldType = new FieldType\RichText\Type(
-            new FieldType\RichText\ConverterDispatcher( array() ),
+            new FieldType\RichText\ConverterDispatcher(array()),
             new FieldType\RichText\ValidatorDispatcher(
                 array(
-                    "http://docbook.org/ns/docbook" => new FieldType\RichText\Validator(
+                    'http://docbook.org/ns/docbook' => new FieldType\RichText\Validator(
                         array(
-                            $this->getAbsolutePath( "eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng" ),
-                            $this->getAbsolutePath( "eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl" )
+                            $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng'),
+                            $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl'),
                         )
-                    )
+                    ),
                 )
             )
         );
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
         return $this->getHandler(
             'ezrichtext',
@@ -77,7 +79,7 @@ class RichTextIntegrationTest extends BaseIntegrationTest
             new RichTextConverter(),
             new FieldType\RichText\RichTextStorage(
                 array(
-                    'LegacyStorage' => new LegacyStorage( new UrlGateway() )
+                    'LegacyStorage' => new LegacyStorage(new UrlGateway()),
                 )
             )
         );
@@ -95,7 +97,7 @@ class RichTextIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field definition data values
+     * Get field definition data values.
      *
      * This is a PHPUnit data provider
      *
@@ -106,7 +108,7 @@ class RichTextIntegrationTest extends BaseIntegrationTest
         return array(
             // The ezrichtext field type does not have any special field definition
             // properties
-            array( 'fieldType', 'ezrichtext' ),
+            array('fieldType', 'ezrichtext'),
             array(
                 'fieldTypeConstraints',
                 new FieldTypeConstraints(
@@ -115,15 +117,15 @@ class RichTextIntegrationTest extends BaseIntegrationTest
                             array(
                                 'numRows' => 0,
                             )
-                        )
+                        ),
                     )
-                )
+                ),
             ),
         );
     }
 
     /**
-     * Get initial field value
+     * Get initial field value.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
@@ -135,6 +137,7 @@ class RichTextIntegrationTest extends BaseIntegrationTest
   <para>This is a paragraph.</para>
 </section>
 ';
+
         return new FieldValue(
             array(
                 'data' => $xml,
@@ -159,6 +162,7 @@ class RichTextIntegrationTest extends BaseIntegrationTest
   <para>This is an updated paragraph.</para>
 </section>
 ';
+
         return new FieldValue(
             array(
                 'data' => $xml,
@@ -173,23 +177,22 @@ class RichTextIntegrationTest extends BaseIntegrationTest
      *
      * @return string
      */
-    protected function getAbsolutePath( $relativePath )
+    protected function getAbsolutePath($relativePath)
     {
-        return self::getInstallationDir() . "/" . $relativePath;
+        return self::getInstallationDir() . '/' . $relativePath;
     }
 
     /**
      * @return string
      */
-    static protected function getInstallationDir()
+    protected static function getInstallationDir()
     {
         static $installDir = null;
-        if ( $installDir === null )
-        {
+        if ($installDir === null) {
             $config = require 'config.php';
             $installDir = $config['install_dir'];
         }
+
         return $installDir;
     }
 }
-

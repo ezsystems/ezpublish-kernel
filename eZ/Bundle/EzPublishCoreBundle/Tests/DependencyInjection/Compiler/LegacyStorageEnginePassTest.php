@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the LegacyStorageEnginePassTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,18 +22,18 @@ class LegacyStorageEnginePassTest extends AbstractCompilerPassTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->setDefinition( 'ezpublish.api.storage_engine.legacy.factory', new Definition() );
+        $this->setDefinition('ezpublish.api.storage_engine.legacy.factory', new Definition());
     }
 
     /**
      * Register the compiler pass under test, just like you would do inside a bundle's load()
-     * method:
+     * method:.
      *
      *   $container->addCompilerPass(new MyCompilerPass());
      */
-    protected function registerCompilerPass( ContainerBuilder $container )
+    protected function registerCompilerPass(ContainerBuilder $container)
     {
-        $container->addCompilerPass( new LegacyStorageEnginePass() );
+        $container->addCompilerPass(new LegacyStorageEnginePass());
     }
 
     /**
@@ -42,15 +44,15 @@ class LegacyStorageEnginePassTest extends AbstractCompilerPassTestCase
         $def = new Definition();
         $fieldTypeIdentifier = 'fieldtype_identifier';
         $serviceId = 'some_service_id';
-        $def->addTag( 'ezpublish.fieldType', array( 'alias' => $fieldTypeIdentifier ) );
-        $this->setDefinition( $serviceId, $def );
+        $def->addTag('ezpublish.fieldType', array('alias' => $fieldTypeIdentifier));
+        $this->setDefinition($serviceId, $def);
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.api.storage_engine.legacy.factory',
             'registerFieldType',
-            array( $serviceId, $fieldTypeIdentifier )
+            array($serviceId, $fieldTypeIdentifier)
         );
     }
 
@@ -64,15 +66,15 @@ class LegacyStorageEnginePassTest extends AbstractCompilerPassTestCase
         $def = new Definition();
         $fieldTypeIdentifier = 'fieldtype_identifier';
         $serviceId = 'some_service_id';
-        $def->addTag( 'ezpublish.fieldType' );
-        $this->setDefinition( $serviceId, $def );
+        $def->addTag('ezpublish.fieldType');
+        $this->setDefinition($serviceId, $def);
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.api.storage_engine.legacy.factory',
             'registerFieldType',
-            array( $serviceId, $fieldTypeIdentifier )
+            array($serviceId, $fieldTypeIdentifier)
         );
     }
 
@@ -87,23 +89,23 @@ class LegacyStorageEnginePassTest extends AbstractCompilerPassTestCase
         $callback = '::foobar';
 
         $def = new Definition();
-        $def->setClass( $class );
+        $def->setClass($class);
         $def->addTag(
             'ezpublish.storageEngine.legacy.converter',
             array(
                 'alias' => $fieldTypeIdentifier,
                 'lazy' => true,
-                'callback' => $callback
+                'callback' => $callback,
             )
         );
-        $this->setDefinition( $serviceId, $def );
+        $this->setDefinition($serviceId, $def);
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.api.storage_engine.legacy.factory',
             'registerFieldTypeConverter',
-            array( $fieldTypeIdentifier, $class . $callback )
+            array($fieldTypeIdentifier, $class . $callback)
         );
     }
 
@@ -120,22 +122,22 @@ class LegacyStorageEnginePassTest extends AbstractCompilerPassTestCase
         $callback = '::foobar';
 
         $def = new Definition();
-        $def->setClass( $class );
+        $def->setClass($class);
         $def->addTag(
             'ezpublish.storageEngine.legacy.converter',
             array(
                 'lazy' => true,
-                'callback' => $callback
+                'callback' => $callback,
             )
         );
-        $this->setDefinition( $serviceId, $def );
+        $this->setDefinition($serviceId, $def);
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.api.storage_engine.legacy.factory',
             'registerFieldTypeConverter',
-            array( $fieldTypeIdentifier, $class . $callback )
+            array($fieldTypeIdentifier, $class . $callback)
         );
     }
 
@@ -152,7 +154,7 @@ class LegacyStorageEnginePassTest extends AbstractCompilerPassTestCase
         $callback = '::foobar';
 
         $def = new Definition();
-        $def->setClass( $class );
+        $def->setClass($class);
         $def->addTag(
             'ezpublish.storageEngine.legacy.converter',
             array(
@@ -160,14 +162,14 @@ class LegacyStorageEnginePassTest extends AbstractCompilerPassTestCase
                 'lazy' => true,
             )
         );
-        $this->setDefinition( $serviceId, $def );
+        $this->setDefinition($serviceId, $def);
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.api.storage_engine.legacy.factory',
             'registerFieldTypeConverter',
-            array( $fieldTypeIdentifier, $class . $callback )
+            array($fieldTypeIdentifier, $class . $callback)
         );
     }
 
@@ -181,19 +183,19 @@ class LegacyStorageEnginePassTest extends AbstractCompilerPassTestCase
         $class = 'Some\Class';
 
         $def = new Definition();
-        $def->setClass( $class );
+        $def->setClass($class);
         $def->addTag(
             'ezpublish.storageEngine.legacy.converter',
-            array( 'alias' => $fieldTypeIdentifier )
+            array('alias' => $fieldTypeIdentifier)
         );
-        $this->setDefinition( $serviceId, $def );
+        $this->setDefinition($serviceId, $def);
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.api.storage_engine.legacy.factory',
             'registerFieldTypeConverter',
-            array( $fieldTypeIdentifier, new Reference( $serviceId ) )
+            array($fieldTypeIdentifier, new Reference($serviceId))
         );
     }
 }

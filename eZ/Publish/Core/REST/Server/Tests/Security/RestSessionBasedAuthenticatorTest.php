@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RestSessionBasedAuthenticatorTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -59,12 +61,12 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->tokenStorage = $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface' );
-        $this->authenticationManager = $this->getMock( 'Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface' );
-        $this->eventDispatcher = $this->getMock( 'Symfony\Component\EventDispatcher\EventDispatcherInterface' );
-        $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
-        $this->sessionStorage = $this->getMock( 'Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface' );
-        $this->logger = $this->getMock( 'Psr\Log\LoggerInterface' );
+        $this->tokenStorage = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
+        $this->authenticationManager = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface');
+        $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->sessionStorage = $this->getMock('Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface');
+        $this->logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->authenticator = new RestAuthenticator(
             $this->tokenStorage,
             $this->authenticationManager,
@@ -81,26 +83,26 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $username = 'foo_user';
         $password = 'publish';
 
-        $existingToken = $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface' );
+        $existingToken = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $this->tokenStorage
-            ->expects( $this->once() )
-            ->method( 'getToken' )
-            ->will( $this->returnValue( $existingToken ) );
+            ->expects($this->once())
+            ->method('getToken')
+            ->will($this->returnValue($existingToken));
 
         $existingToken
-            ->expects( $this->once() )
-            ->method( 'getUsername' )
-            ->will( $this->returnValue( $username ) );
+            ->expects($this->once())
+            ->method('getUsername')
+            ->will($this->returnValue($username));
         $existingToken
-            ->expects( $this->once() )
-            ->method( 'setAttribute' )
-            ->with( 'isFromSession', true );
+            ->expects($this->once())
+            ->method('setAttribute')
+            ->with('isFromSession', true);
 
         $request = new Request();
-        $request->attributes->set( 'username', $username );
-        $request->attributes->set( 'password', $password );
+        $request->attributes->set('username', $username);
+        $request->attributes->set('password', $password);
 
-        $this->assertSame( $existingToken, $this->authenticator->authenticate( $request ) );
+        $this->assertSame($existingToken, $this->authenticator->authenticate($request));
     }
 
     /**
@@ -111,33 +113,33 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $username = 'foo_user';
         $password = 'publish';
 
-        $existingToken = $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface' );
+        $existingToken = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $this->tokenStorage
-            ->expects( $this->once() )
-            ->method( 'getToken' )
-            ->will( $this->returnValue( $existingToken ) );
+            ->expects($this->once())
+            ->method('getToken')
+            ->will($this->returnValue($existingToken));
 
         $existingToken
-            ->expects( $this->once() )
-            ->method( 'getUsername' )
-            ->will( $this->returnValue( __METHOD__ ) );
+            ->expects($this->once())
+            ->method('getUsername')
+            ->will($this->returnValue(__METHOD__));
 
         $request = new Request();
-        $request->attributes->set( 'username', $username );
-        $request->attributes->set( 'password', $password );
+        $request->attributes->set('username', $username);
+        $request->attributes->set('password', $password);
 
-        $usernamePasswordToken = new UsernamePasswordToken( $username, $password, self::PROVIDER_KEY );
+        $usernamePasswordToken = new UsernamePasswordToken($username, $password, self::PROVIDER_KEY);
         $this->authenticationManager
-            ->expects( $this->once() )
-            ->method( 'authenticate' )
-            ->with( $this->equalTo( $usernamePasswordToken ) )
-            ->will( $this->returnValue( null ) );
+            ->expects($this->once())
+            ->method('authenticate')
+            ->with($this->equalTo($usernamePasswordToken))
+            ->will($this->returnValue(null));
 
         $this->logger
-            ->expects( $this->once() )
-            ->method( 'error' );
+            ->expects($this->once())
+            ->method('error');
 
-        $this->authenticator->authenticate( $request );
+        $this->authenticator->authenticate($request);
     }
 
     /**
@@ -148,57 +150,57 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $username = 'foo_user';
         $password = 'publish';
 
-        $existingToken = $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface' );
+        $existingToken = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $existingToken
-            ->expects( $this->once() )
-            ->method( 'getUsername' )
-            ->will( $this->returnValue( __METHOD__ ) );
+            ->expects($this->once())
+            ->method('getUsername')
+            ->will($this->returnValue(__METHOD__));
 
         $request = new Request();
-        $request->attributes->set( 'username', $username );
-        $request->attributes->set( 'password', $password );
+        $request->attributes->set('username', $username);
+        $request->attributes->set('password', $password);
 
-        $usernamePasswordToken = new UsernamePasswordToken( $username, $password, self::PROVIDER_KEY );
+        $usernamePasswordToken = new UsernamePasswordToken($username, $password, self::PROVIDER_KEY);
         $authenticatedToken = $this
-            ->getMockBuilder( 'Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken' )
+            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
             ->disableOriginalConstructor()
             ->getMock();
         $this->authenticationManager
-            ->expects( $this->once() )
-            ->method( 'authenticate' )
-            ->with( $this->equalTo( $usernamePasswordToken ) )
-            ->will( $this->returnValue( $authenticatedToken ) );
+            ->expects($this->once())
+            ->method('authenticate')
+            ->with($this->equalTo($usernamePasswordToken))
+            ->will($this->returnValue($authenticatedToken));
 
         $this->tokenStorage
-            ->expects( $this->once() )
-            ->method( 'setToken' )
-            ->with( $authenticatedToken );
+            ->expects($this->once())
+            ->method('setToken')
+            ->with($authenticatedToken);
 
         $this->eventDispatcher
-            ->expects( $this->once() )
-            ->method( 'dispatch' )
+            ->expects($this->once())
+            ->method('dispatch')
             ->with(
                 SecurityEvents::INTERACTIVE_LOGIN,
-                $this->equalTo( new InteractiveLoginEvent( $request, $authenticatedToken ) )
+                $this->equalTo(new InteractiveLoginEvent($request, $authenticatedToken))
             );
 
         $this->tokenStorage
-            ->expects( $this->exactly( 2 ) )
-            ->method( 'getToken' )
+            ->expects($this->exactly(2))
+            ->method('getToken')
             ->will(
-                $this->onConsecutiveCalls( $existingToken, $authenticatedToken )
+                $this->onConsecutiveCalls($existingToken, $authenticatedToken)
             );
 
         $authenticatedToken
-            ->expects( $this->once() )
-            ->method( 'getUser' )
-            ->will( $this->returnValue( 'not_an_ez_user' ) );
+            ->expects($this->once())
+            ->method('getUser')
+            ->will($this->returnValue('not_an_ez_user'));
 
         $this->logger
-            ->expects( $this->once() )
-            ->method( 'error' );
+            ->expects($this->once())
+            ->method('error');
 
-        $this->authenticator->authenticate( $request );
+        $this->authenticator->authenticate($request);
     }
 
     /**
@@ -206,16 +208,16 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
      *
      * @return EzUser
      */
-    private function createUser( $userId )
+    private function createUser($userId)
     {
-        $apiUser = $this->getMock( 'eZ\Publish\API\Repository\Values\User\User' );
+        $apiUser = $this->getMock('eZ\Publish\API\Repository\Values\User\User');
         $apiUser
-            ->expects( $this->any() )
-            ->method( '__get' )
-            ->with( 'id' )
-            ->will( $this->returnValue( $userId ) );
+            ->expects($this->any())
+            ->method('__get')
+            ->with('id')
+            ->will($this->returnValue($userId));
 
-        return new EzUser( $apiUser );
+        return new EzUser($apiUser);
     }
 
     /**
@@ -226,73 +228,73 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $username = 'foo_user';
         $password = 'publish';
 
-        $existingUser = $this->createUser( 123 );
+        $existingUser = $this->createUser(123);
         $existingToken = $this
-            ->getMockBuilder( 'Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken' )
+            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
             ->disableOriginalConstructor()
             ->getMock();
         $existingToken
-            ->expects( $this->once() )
-            ->method( 'getUsername' )
-            ->will( $this->returnValue( __METHOD__ ) );
+            ->expects($this->once())
+            ->method('getUsername')
+            ->will($this->returnValue(__METHOD__));
         $existingToken
-            ->expects( $this->once() )
-            ->method( 'getUser' )
-            ->will( $this->returnValue( $existingUser ) );
+            ->expects($this->once())
+            ->method('getUser')
+            ->will($this->returnValue($existingUser));
 
         $request = new Request();
-        $request->attributes->set( 'username', $username );
-        $request->attributes->set( 'password', $password );
+        $request->attributes->set('username', $username);
+        $request->attributes->set('password', $password);
 
-        $usernamePasswordToken = new UsernamePasswordToken( $username, $password, self::PROVIDER_KEY );
+        $usernamePasswordToken = new UsernamePasswordToken($username, $password, self::PROVIDER_KEY);
         $authenticatedToken = $this
-            ->getMockBuilder( 'Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken' )
+            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
             ->disableOriginalConstructor()
             ->getMock();
         $this->authenticationManager
-            ->expects( $this->once() )
-            ->method( 'authenticate' )
-            ->with( $this->equalTo( $usernamePasswordToken ) )
-            ->will( $this->returnValue( $authenticatedToken ) );
+            ->expects($this->once())
+            ->method('authenticate')
+            ->with($this->equalTo($usernamePasswordToken))
+            ->will($this->returnValue($authenticatedToken));
 
         $this->eventDispatcher
-            ->expects( $this->once() )
-            ->method( 'dispatch' )
+            ->expects($this->once())
+            ->method('dispatch')
             ->with(
                 SecurityEvents::INTERACTIVE_LOGIN,
-                $this->equalTo( new InteractiveLoginEvent( $request, $authenticatedToken ) )
+                $this->equalTo(new InteractiveLoginEvent($request, $authenticatedToken))
             );
 
         $this->tokenStorage
-            ->expects( $this->at( 0 ) )
-            ->method( 'getToken' )
-            ->will( $this->returnValue( $existingToken ) );
+            ->expects($this->at(0))
+            ->method('getToken')
+            ->will($this->returnValue($existingToken));
         $this->tokenStorage
-            ->expects( $this->at( 1 ) )
-            ->method( 'setToken' )
-            ->with( $authenticatedToken );
+            ->expects($this->at(1))
+            ->method('setToken')
+            ->with($authenticatedToken);
         $this->tokenStorage
-            ->expects( $this->at( 2 ) )
-            ->method( 'getToken' )
-            ->will( $this->returnValue( $authenticatedToken ) );
+            ->expects($this->at(2))
+            ->method('getToken')
+            ->will($this->returnValue($authenticatedToken));
         $this->tokenStorage
-            ->expects( $this->at( 3 ) )
-            ->method( 'setToken' )
-            ->with( $existingToken );
+            ->expects($this->at(3))
+            ->method('setToken')
+            ->with($existingToken);
 
-        $authenticatedUser = $this->createUser( 456 );
+        $authenticatedUser = $this->createUser(456);
         $authenticatedToken
-            ->expects( $this->once() )
-            ->method( 'getUser' )
-            ->will( $this->returnValue( $authenticatedUser ) );
+            ->expects($this->once())
+            ->method('getUser')
+            ->will($this->returnValue($authenticatedUser));
 
         $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'anonymous_user_id' )
-            ->will( $this->returnValue( 10 ) );
+            ->expects($this->once())
+            ->method('getParameter')
+            ->with('anonymous_user_id')
+            ->will($this->returnValue(10));
 
-        $this->authenticator->authenticate( $request );
+        $this->authenticator->authenticate($request);
     }
 
     public function testAuthenticatePreviouslyAnonymous()
@@ -301,69 +303,69 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $password = 'publish';
 
         $anonymousUserId = 10;
-        $existingUser = $this->createUser( $anonymousUserId );
+        $existingUser = $this->createUser($anonymousUserId);
         $existingToken = $this
-            ->getMockBuilder( 'Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken' )
+            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
             ->disableOriginalConstructor()
             ->getMock();
         $existingToken
-            ->expects( $this->once() )
-            ->method( 'getUsername' )
-            ->will( $this->returnValue( __METHOD__ ) );
+            ->expects($this->once())
+            ->method('getUsername')
+            ->will($this->returnValue(__METHOD__));
         $existingToken
-            ->expects( $this->once() )
-            ->method( 'getUser' )
-            ->will( $this->returnValue( $existingUser ) );
+            ->expects($this->once())
+            ->method('getUser')
+            ->will($this->returnValue($existingUser));
 
         $request = new Request();
-        $request->attributes->set( 'username', $username );
-        $request->attributes->set( 'password', $password );
+        $request->attributes->set('username', $username);
+        $request->attributes->set('password', $password);
 
-        $usernamePasswordToken = new UsernamePasswordToken( $username, $password, self::PROVIDER_KEY );
+        $usernamePasswordToken = new UsernamePasswordToken($username, $password, self::PROVIDER_KEY);
         $authenticatedToken = $this
-            ->getMockBuilder( 'Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken' )
+            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
             ->disableOriginalConstructor()
             ->getMock();
         $this->authenticationManager
-            ->expects( $this->once() )
-            ->method( 'authenticate' )
-            ->with( $this->equalTo( $usernamePasswordToken ) )
-            ->will( $this->returnValue( $authenticatedToken ) );
+            ->expects($this->once())
+            ->method('authenticate')
+            ->with($this->equalTo($usernamePasswordToken))
+            ->will($this->returnValue($authenticatedToken));
 
         $this->eventDispatcher
-            ->expects( $this->once() )
-            ->method( 'dispatch' )
+            ->expects($this->once())
+            ->method('dispatch')
             ->with(
                 SecurityEvents::INTERACTIVE_LOGIN,
-                $this->equalTo( new InteractiveLoginEvent( $request, $authenticatedToken ) )
+                $this->equalTo(new InteractiveLoginEvent($request, $authenticatedToken))
             );
 
         $this->tokenStorage
-            ->expects( $this->at( 0 ) )
-            ->method( 'getToken' )
-            ->will( $this->returnValue( $existingToken ) );
+            ->expects($this->at(0))
+            ->method('getToken')
+            ->will($this->returnValue($existingToken));
         $this->tokenStorage
-            ->expects( $this->at( 1 ) )
-            ->method( 'setToken' )
-            ->with( $authenticatedToken );
+            ->expects($this->at(1))
+            ->method('setToken')
+            ->with($authenticatedToken);
         $this->tokenStorage
-            ->expects( $this->at( 2 ) )
-            ->method( 'getToken' )
-            ->will( $this->returnValue( $authenticatedToken ) );
+            ->expects($this->at(2))
+            ->method('getToken')
+            ->will($this->returnValue($authenticatedToken));
 
-        $authenticatedUser = $this->createUser( 456 );
+        $authenticatedUser = $this->createUser(456);
         $authenticatedToken
-            ->expects( $this->once() )
-            ->method( 'getUser' )
-            ->will( $this->returnValue( $authenticatedUser ) );
+            ->expects($this->once())
+            ->method('getUser')
+            ->will($this->returnValue($authenticatedUser));
 
         $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'anonymous_user_id' )
-            ->will( $this->returnValue( $anonymousUserId ) );
+            ->expects($this->once())
+            ->method('getParameter')
+            ->with('anonymous_user_id')
+            ->will($this->returnValue($anonymousUserId));
 
-        $this->assertSame( $authenticatedToken, $this->authenticator->authenticate( $request ) );
+        $this->assertSame($authenticatedToken, $this->authenticator->authenticate($request));
     }
 
     public function testAuthenticate()
@@ -371,55 +373,55 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $username = 'foo_user';
         $password = 'publish';
 
-        $existingToken = $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface' );
+        $existingToken = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $existingToken
-            ->expects( $this->once() )
-            ->method( 'getUsername' )
-            ->will( $this->returnValue( __METHOD__ ) );
+            ->expects($this->once())
+            ->method('getUsername')
+            ->will($this->returnValue(__METHOD__));
 
         $request = new Request();
-        $request->attributes->set( 'username', $username );
-        $request->attributes->set( 'password', $password );
+        $request->attributes->set('username', $username);
+        $request->attributes->set('password', $password);
 
-        $usernamePasswordToken = new UsernamePasswordToken( $username, $password, self::PROVIDER_KEY );
+        $usernamePasswordToken = new UsernamePasswordToken($username, $password, self::PROVIDER_KEY);
         $authenticatedToken = $this
-            ->getMockBuilder( 'Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken' )
+            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
             ->disableOriginalConstructor()
             ->getMock();
         $this->authenticationManager
-            ->expects( $this->once() )
-            ->method( 'authenticate' )
-            ->with( $this->equalTo( $usernamePasswordToken ) )
-            ->will( $this->returnValue( $authenticatedToken ) );
+            ->expects($this->once())
+            ->method('authenticate')
+            ->with($this->equalTo($usernamePasswordToken))
+            ->will($this->returnValue($authenticatedToken));
 
         $this->eventDispatcher
-            ->expects( $this->once() )
-            ->method( 'dispatch' )
+            ->expects($this->once())
+            ->method('dispatch')
             ->with(
                 SecurityEvents::INTERACTIVE_LOGIN,
-                $this->equalTo( new InteractiveLoginEvent( $request, $authenticatedToken ) )
+                $this->equalTo(new InteractiveLoginEvent($request, $authenticatedToken))
             );
 
         $this->tokenStorage
-            ->expects( $this->at( 0 ) )
-            ->method( 'getToken' )
-            ->will( $this->returnValue( $existingToken ) );
+            ->expects($this->at(0))
+            ->method('getToken')
+            ->will($this->returnValue($existingToken));
         $this->tokenStorage
-            ->expects( $this->at( 1 ) )
-            ->method( 'setToken' )
-            ->with( $authenticatedToken );
+            ->expects($this->at(1))
+            ->method('setToken')
+            ->with($authenticatedToken);
         $this->tokenStorage
-            ->expects( $this->at( 2 ) )
-            ->method( 'getToken' )
-            ->will( $this->returnValue( $authenticatedToken ) );
+            ->expects($this->at(2))
+            ->method('getToken')
+            ->will($this->returnValue($authenticatedToken));
 
-        $authenticatedUser = $this->createUser( 456 );
+        $authenticatedUser = $this->createUser(456);
         $authenticatedToken
-            ->expects( $this->once() )
-            ->method( 'getUser' )
-            ->will( $this->returnValue( $authenticatedUser ) );
+            ->expects($this->once())
+            ->method('getUser')
+            ->will($this->returnValue($authenticatedUser));
 
-        $this->assertSame( $authenticatedToken, $this->authenticator->authenticate( $request ) );
+        $this->assertSame($authenticatedToken, $this->authenticator->authenticate($request));
     }
 
     public function testAuthenticatePreviousUserNonEz()
@@ -427,63 +429,63 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $username = 'foo_user';
         $password = 'publish';
 
-        $existingUser = $this->getMock( 'Symfony\Component\Security\Core\User\UserInterface' );
+        $existingUser = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
         $existingToken = $this
-            ->getMockBuilder( 'Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken' )
+            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
             ->disableOriginalConstructor()
             ->getMock();
         $existingToken
-            ->expects( $this->once() )
-            ->method( 'getUsername' )
-            ->will( $this->returnValue( __METHOD__ ) );
+            ->expects($this->once())
+            ->method('getUsername')
+            ->will($this->returnValue(__METHOD__));
         $existingToken
-            ->expects( $this->once() )
-            ->method( 'getUser' )
-            ->will( $this->returnValue( $existingUser ) );
+            ->expects($this->once())
+            ->method('getUser')
+            ->will($this->returnValue($existingUser));
 
         $request = new Request();
-        $request->attributes->set( 'username', $username );
-        $request->attributes->set( 'password', $password );
+        $request->attributes->set('username', $username);
+        $request->attributes->set('password', $password);
 
-        $usernamePasswordToken = new UsernamePasswordToken( $username, $password, self::PROVIDER_KEY );
+        $usernamePasswordToken = new UsernamePasswordToken($username, $password, self::PROVIDER_KEY);
         $authenticatedToken = $this
-            ->getMockBuilder( 'Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken' )
+            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
             ->disableOriginalConstructor()
             ->getMock();
         $this->authenticationManager
-            ->expects( $this->once() )
-            ->method( 'authenticate' )
-            ->with( $this->equalTo( $usernamePasswordToken ) )
-            ->will( $this->returnValue( $authenticatedToken ) );
+            ->expects($this->once())
+            ->method('authenticate')
+            ->with($this->equalTo($usernamePasswordToken))
+            ->will($this->returnValue($authenticatedToken));
 
         $this->eventDispatcher
-            ->expects( $this->once() )
-            ->method( 'dispatch' )
+            ->expects($this->once())
+            ->method('dispatch')
             ->with(
                 SecurityEvents::INTERACTIVE_LOGIN,
-                $this->equalTo( new InteractiveLoginEvent( $request, $authenticatedToken ) )
+                $this->equalTo(new InteractiveLoginEvent($request, $authenticatedToken))
             );
 
         $this->tokenStorage
-            ->expects( $this->at( 0 ) )
-            ->method( 'getToken' )
-            ->will( $this->returnValue( $existingToken ) );
+            ->expects($this->at(0))
+            ->method('getToken')
+            ->will($this->returnValue($existingToken));
         $this->tokenStorage
-            ->expects( $this->at( 1 ) )
-            ->method( 'setToken' )
-            ->with( $authenticatedToken );
+            ->expects($this->at(1))
+            ->method('setToken')
+            ->with($authenticatedToken);
         $this->tokenStorage
-            ->expects( $this->at( 2 ) )
-            ->method( 'getToken' )
-            ->will( $this->returnValue( $authenticatedToken ) );
+            ->expects($this->at(2))
+            ->method('getToken')
+            ->will($this->returnValue($authenticatedToken));
 
-        $authenticatedUser = $this->createUser( 456 );
+        $authenticatedUser = $this->createUser(456);
         $authenticatedToken
-            ->expects( $this->once() )
-            ->method( 'getUser' )
-            ->will( $this->returnValue( $authenticatedUser ) );
+            ->expects($this->once())
+            ->method('getUser')
+            ->will($this->returnValue($authenticatedUser));
 
-        $this->assertSame( $authenticatedToken, $this->authenticator->authenticate( $request ) );
+        $this->assertSame($authenticatedToken, $this->authenticator->authenticate($request));
     }
 
     public function testAuthenticatePreviousTokenNotUsernamePassword()
@@ -491,97 +493,97 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $username = 'foo_user';
         $password = 'publish';
 
-        $existingToken = $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface' );
+        $existingToken = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $existingToken
-            ->expects( $this->once() )
-            ->method( 'getUsername' )
-            ->will( $this->returnValue( __METHOD__ ) );
+            ->expects($this->once())
+            ->method('getUsername')
+            ->will($this->returnValue(__METHOD__));
 
         $request = new Request();
-        $request->attributes->set( 'username', $username );
-        $request->attributes->set( 'password', $password );
+        $request->attributes->set('username', $username);
+        $request->attributes->set('password', $password);
 
-        $usernamePasswordToken = new UsernamePasswordToken( $username, $password, self::PROVIDER_KEY );
+        $usernamePasswordToken = new UsernamePasswordToken($username, $password, self::PROVIDER_KEY);
         $authenticatedToken = $this
-            ->getMockBuilder( 'Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken' )
+            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
             ->disableOriginalConstructor()
             ->getMock();
         $this->authenticationManager
-            ->expects( $this->once() )
-            ->method( 'authenticate' )
-            ->with( $this->equalTo( $usernamePasswordToken ) )
-            ->will( $this->returnValue( $authenticatedToken ) );
+            ->expects($this->once())
+            ->method('authenticate')
+            ->with($this->equalTo($usernamePasswordToken))
+            ->will($this->returnValue($authenticatedToken));
 
         $this->eventDispatcher
-            ->expects( $this->once() )
-            ->method( 'dispatch' )
+            ->expects($this->once())
+            ->method('dispatch')
             ->with(
                 SecurityEvents::INTERACTIVE_LOGIN,
-                $this->equalTo( new InteractiveLoginEvent( $request, $authenticatedToken ) )
+                $this->equalTo(new InteractiveLoginEvent($request, $authenticatedToken))
             );
 
         $this->tokenStorage
-            ->expects( $this->at( 0 ) )
-            ->method( 'getToken' )
-            ->will( $this->returnValue( $existingToken ) );
+            ->expects($this->at(0))
+            ->method('getToken')
+            ->will($this->returnValue($existingToken));
         $this->tokenStorage
-            ->expects( $this->at( 1 ) )
-            ->method( 'setToken' )
-            ->with( $authenticatedToken );
+            ->expects($this->at(1))
+            ->method('setToken')
+            ->with($authenticatedToken);
         $this->tokenStorage
-            ->expects( $this->at( 2 ) )
-            ->method( 'getToken' )
-            ->will( $this->returnValue( $authenticatedToken ) );
+            ->expects($this->at(2))
+            ->method('getToken')
+            ->will($this->returnValue($authenticatedToken));
 
-        $authenticatedUser = $this->createUser( 456 );
+        $authenticatedUser = $this->createUser(456);
         $authenticatedToken
-            ->expects( $this->once() )
-            ->method( 'getUser' )
-            ->will( $this->returnValue( $authenticatedUser ) );
+            ->expects($this->once())
+            ->method('getUser')
+            ->will($this->returnValue($authenticatedUser));
 
-        $this->assertSame( $authenticatedToken, $this->authenticator->authenticate( $request ) );
+        $this->assertSame($authenticatedToken, $this->authenticator->authenticate($request));
     }
 
     public function testLogout()
     {
-        $sessionLogoutHandler = $this->getMock( 'Symfony\Component\Security\Http\Logout\SessionLogoutHandler' );
+        $sessionLogoutHandler = $this->getMock('Symfony\Component\Security\Http\Logout\SessionLogoutHandler');
         $sessionLogoutHandler
-            ->expects( $this->never() )
-            ->method( 'logout' );
+            ->expects($this->never())
+            ->method('logout');
 
-        $token = $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface' );
+        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $this->tokenStorage
-            ->expects( $this->once() )
-            ->method( 'getToken' )
-            ->will( $this->returnValue( $token ) );
+            ->expects($this->once())
+            ->method('getToken')
+            ->will($this->returnValue($token));
 
         $request = new Request();
-        $logoutHandler1 = $this->getMock( 'Symfony\Component\Security\Http\Logout\LogoutHandlerInterface' );
+        $logoutHandler1 = $this->getMock('Symfony\Component\Security\Http\Logout\LogoutHandlerInterface');
         $logoutHandler1
-            ->expects( $this->once() )
-            ->method( 'logout' )
+            ->expects($this->once())
+            ->method('logout')
             ->with(
                 $request,
-                $this->isInstanceOf( 'Symfony\Component\HttpFoundation\Response' ),
+                $this->isInstanceOf('Symfony\Component\HttpFoundation\Response'),
                 $token
             );
-        $logoutHandler2 = $this->getMock( 'Symfony\Component\Security\Http\Logout\LogoutHandlerInterface' );
+        $logoutHandler2 = $this->getMock('Symfony\Component\Security\Http\Logout\LogoutHandlerInterface');
         $logoutHandler2
-            ->expects( $this->once() )
-            ->method( 'logout' )
+            ->expects($this->once())
+            ->method('logout')
             ->with(
                 $request,
-                $this->isInstanceOf( 'Symfony\Component\HttpFoundation\Response' ),
+                $this->isInstanceOf('Symfony\Component\HttpFoundation\Response'),
                 $token
             );
 
-        $this->authenticator->addLogoutHandler( $sessionLogoutHandler );
-        $this->authenticator->addLogoutHandler( $logoutHandler1 );
-        $this->authenticator->addLogoutHandler( $logoutHandler2 );
+        $this->authenticator->addLogoutHandler($sessionLogoutHandler);
+        $this->authenticator->addLogoutHandler($logoutHandler1);
+        $this->authenticator->addLogoutHandler($logoutHandler2);
 
         $this->assertInstanceOf(
             'Symfony\Component\HttpFoundation\Response',
-            $this->authenticator->logout( $request )
+            $this->authenticator->logout($request)
         );
     }
 }

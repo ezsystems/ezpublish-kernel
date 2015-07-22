@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Url LegacyStorage Gateway
+ * File containing the Url LegacyStorage Gateway.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,41 +21,39 @@ use PDO;
  */
 class LegacyStorage extends Gateway
 {
-    const URL_TABLE = "ezurl";
-    const URL_LINK_TABLE = "ezurl_object_link";
+    const URL_TABLE = 'ezurl';
+    const URL_LINK_TABLE = 'ezurl_object_link';
 
     /**
-     * Connection
+     * Connection.
      *
      * @var mixed
      */
     protected $dbHandler;
 
     /**
-     * Set database handler for this gateway
+     * Set database handler for this gateway.
      *
      * @param mixed $dbHandler
      *
-     * @return void
      * @throws \RuntimeException if $dbHandler is not an instance of
      *         {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler}
      */
-    public function setConnection( $dbHandler )
+    public function setConnection($dbHandler)
     {
         // This obviously violates the Liskov substitution Principle, but with
         // the given class design there is no sane other option. Actually the
         // dbHandler *should* be passed to the constructor, and there should
         // not be the need to post-inject it.
-        if ( !( $dbHandler instanceof DatabaseHandler ) )
-        {
-            throw new RuntimeException( "Invalid dbHandler passed" );
+        if (!($dbHandler instanceof DatabaseHandler)) {
+            throw new RuntimeException('Invalid dbHandler passed');
         }
 
         $this->dbHandler = $dbHandler;
     }
 
     /**
-     * Returns the active connection
+     * Returns the active connection.
      *
      * @throws \RuntimeException if no connection has been set, yet.
      *
@@ -61,10 +61,10 @@ class LegacyStorage extends Gateway
      */
     protected function getConnection()
     {
-        if ( $this->dbHandler === null )
-        {
-            throw new RuntimeException( "Missing database connection." );
+        if ($this->dbHandler === null) {
+            throw new RuntimeException('Missing database connection.');
         }
+
         return $this->dbHandler;
     }
 
@@ -77,22 +77,20 @@ class LegacyStorage extends Gateway
      *
      * @return array An array of URLs, with ids as keys
      */
-    public function getIdUrlMap( array $ids )
+    public function getIdUrlMap(array $ids)
     {
         $map = array();
 
-        if ( !empty( $ids ) )
-        {
+        if (!empty($ids)) {
             $q = $this->getConnection()->createSelectQuery();
             $q
-                ->select( "id", "url" )
-                ->from( self::URL_TABLE )
-                ->where( $q->expr->in( 'id', $ids ) );
+                ->select('id', 'url')
+                ->from(self::URL_TABLE)
+                ->where($q->expr->in('id', $ids));
 
             $statement = $q->prepare();
             $statement->execute();
-            foreach ( $statement->fetchAll( PDO::FETCH_ASSOC ) as $row )
-            {
+            foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
                 $map[$row['id']] = $row['url'];
             }
         }
@@ -109,22 +107,20 @@ class LegacyStorage extends Gateway
      *
      * @return array An array of URL ids, with URLs as keys
      */
-    public function getUrlIdMap( array $urls )
+    public function getUrlIdMap(array $urls)
     {
         $map = array();
 
-        if ( !empty( $urls ) )
-        {
+        if (!empty($urls)) {
             $q = $this->getConnection()->createSelectQuery();
             $q
-                ->select( "id", "url" )
-                ->from( self::URL_TABLE )
-                ->where( $q->expr->in( 'url', $urls ) );
+                ->select('id', 'url')
+                ->from(self::URL_TABLE)
+                ->where($q->expr->in('url', $urls));
 
             $statement = $q->prepare();
             $statement->execute();
-            foreach ( $statement->fetchAll( PDO::FETCH_ASSOC ) as $row )
-            {
+            foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
                 $map[$row['url']] = $row['id'];
             }
         }
@@ -139,7 +135,7 @@ class LegacyStorage extends Gateway
      *
      * @return int
      */
-    public function insertUrl( $url )
+    public function insertUrl($url)
     {
         $dbHandler = $this->getConnection();
 
@@ -147,25 +143,25 @@ class LegacyStorage extends Gateway
 
         $q = $dbHandler->createInsertQuery();
         $q->insertInto(
-            $dbHandler->quoteTable( self::URL_TABLE )
+            $dbHandler->quoteTable(self::URL_TABLE)
         )->set(
-            $dbHandler->quoteColumn( "created" ),
-            $q->bindValue( $time, null, PDO::PARAM_INT )
+            $dbHandler->quoteColumn('created'),
+            $q->bindValue($time, null, PDO::PARAM_INT)
         )->set(
-            $dbHandler->quoteColumn( "modified" ),
-            $q->bindValue( $time, null, PDO::PARAM_INT )
+            $dbHandler->quoteColumn('modified'),
+            $q->bindValue($time, null, PDO::PARAM_INT)
         )->set(
-            $dbHandler->quoteColumn( "original_url_md5" ),
-            $q->bindValue( md5( $url ) )
+            $dbHandler->quoteColumn('original_url_md5'),
+            $q->bindValue(md5($url))
         )->set(
-            $dbHandler->quoteColumn( "url" ),
-            $q->bindValue( $url )
+            $dbHandler->quoteColumn('url'),
+            $q->bindValue($url)
         );
 
         $q->prepare()->execute();
 
         return $dbHandler->lastInsertId(
-            $dbHandler->getSequenceName( self::URL_TABLE, "id" )
+            $dbHandler->getSequenceName(self::URL_TABLE, 'id')
         );
     }
 
@@ -176,22 +172,22 @@ class LegacyStorage extends Gateway
      * @param int $fieldId
      * @param int $versionNo
      */
-    public function linkUrl( $urlId, $fieldId, $versionNo )
+    public function linkUrl($urlId, $fieldId, $versionNo)
     {
         $dbHandler = $this->getConnection();
 
         $q = $dbHandler->createInsertQuery();
         $q->insertInto(
-            $dbHandler->quoteTable( self::URL_LINK_TABLE )
+            $dbHandler->quoteTable(self::URL_LINK_TABLE)
         )->set(
-            $dbHandler->quoteColumn( "contentobject_attribute_id" ),
-            $q->bindValue( $fieldId, null, PDO::PARAM_INT )
+            $dbHandler->quoteColumn('contentobject_attribute_id'),
+            $q->bindValue($fieldId, null, PDO::PARAM_INT)
         )->set(
-            $dbHandler->quoteColumn( "contentobject_attribute_version" ),
-            $q->bindValue( $versionNo, null, PDO::PARAM_INT )
+            $dbHandler->quoteColumn('contentobject_attribute_version'),
+            $q->bindValue($versionNo, null, PDO::PARAM_INT)
         )->set(
-            $dbHandler->quoteColumn( "url_id" ),
-            $q->bindValue( $urlId, null, PDO::PARAM_INT )
+            $dbHandler->quoteColumn('url_id'),
+            $q->bindValue($urlId, null, PDO::PARAM_INT)
         );
 
         $q->prepare()->execute();
@@ -203,17 +199,17 @@ class LegacyStorage extends Gateway
      * @param int $fieldId
      * @param int $versionNo
      */
-    public function unlinkUrl( $fieldId, $versionNo )
+    public function unlinkUrl($fieldId, $versionNo)
     {
         $dbHandler = $this->getConnection();
 
         $deleteQuery = $dbHandler->createDeleteQuery();
         $deleteQuery->deleteFrom(
-            $dbHandler->quoteTable( self::URL_LINK_TABLE )
+            $dbHandler->quoteTable(self::URL_LINK_TABLE)
         )->where(
             $deleteQuery->expr->lAnd(
-                $deleteQuery->expr->in( $dbHandler->quoteColumn( "contentobject_attribute_id" ), $fieldId ),
-                $deleteQuery->expr->in( $dbHandler->quoteColumn( "contentobject_attribute_version" ), $versionNo )
+                $deleteQuery->expr->in($dbHandler->quoteColumn('contentobject_attribute_id'), $fieldId),
+                $deleteQuery->expr->in($dbHandler->quoteColumn('contentobject_attribute_version'), $versionNo)
             )
         );
 
@@ -236,35 +232,34 @@ class LegacyStorage extends Gateway
 
         $query = $dbHandler->createSelectQuery();
         $query->select(
-            $dbHandler->quoteColumn( "id", self::URL_TABLE )
+            $dbHandler->quoteColumn('id', self::URL_TABLE)
         )->from(
-            $dbHandler->quoteTable( self::URL_TABLE )
+            $dbHandler->quoteTable(self::URL_TABLE)
         )->leftJoin(
-            $dbHandler->quoteTable( self::URL_LINK_TABLE ),
+            $dbHandler->quoteTable(self::URL_LINK_TABLE),
             $query->expr->eq(
-                $dbHandler->quoteColumn( "url_id", self::URL_LINK_TABLE ),
-                $dbHandler->quoteColumn( "id", self::URL_TABLE )
+                $dbHandler->quoteColumn('url_id', self::URL_LINK_TABLE),
+                $dbHandler->quoteColumn('id', self::URL_TABLE)
             )
         )->where(
             $query->expr->isNull(
-                $dbHandler->quoteColumn( "url_id", self::URL_LINK_TABLE )
+                $dbHandler->quoteColumn('url_id', self::URL_LINK_TABLE)
             )
         );
 
         $statement = $query->prepare();
         $statement->execute();
-        $ids = $statement->fetchAll( PDO::FETCH_COLUMN );
+        $ids = $statement->fetchAll(PDO::FETCH_COLUMN);
 
-        if ( empty( $ids ) )
-        {
+        if (empty($ids)) {
             return;
         }
 
         $deleteQuery = $dbHandler->createDeleteQuery();
         $deleteQuery->deleteFrom(
-            $dbHandler->quoteTable( self::URL_TABLE )
+            $dbHandler->quoteTable(self::URL_TABLE)
         )->where(
-            $deleteQuery->expr->in( $dbHandler->quoteColumn( "id" ), $ids )
+            $deleteQuery->expr->in($dbHandler->quoteColumn('id'), $ids)
         );
 
         $deleteQuery->prepare()->execute();

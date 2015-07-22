@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the base CriterionVisitor class
+ * File containing the base CriterionVisitor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,16 +21,16 @@ use RuntimeException;
 abstract class CriterionVisitor
 {
     /**
-     * Check if visitor is applicable to current criterion
+     * Check if visitor is applicable to current criterion.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return boolean
+     * @return bool
      */
-    abstract public function canVisit( Criterion $criterion );
+    abstract public function canVisit(Criterion $criterion);
 
     /**
-     * Map field value to a proper Elasticsearch filter representation
+     * Map field value to a proper Elasticsearch filter representation.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
@@ -43,7 +45,7 @@ abstract class CriterionVisitor
     );
 
     /**
-     * Map field value to a proper Elasticsearch query representation
+     * Map field value to a proper Elasticsearch query representation.
      *
      * By default this method fallbacks on {@link self::visitFilter()}, override it as needed.
      *
@@ -53,13 +55,13 @@ abstract class CriterionVisitor
      *
      * @return mixed Hash representation of Elasticsearch query abstract syntax tree
      */
-    public function visitQuery( Criterion $criterion, CriterionVisitorDispatcher $dispatcher, array $fieldFilters )
+    public function visitQuery(Criterion $criterion, CriterionVisitorDispatcher $dispatcher, array $fieldFilters)
     {
-        return $this->visitFilter( $criterion, $dispatcher, $fieldFilters );
+        return $this->visitFilter($criterion, $dispatcher, $fieldFilters);
     }
 
     /**
-     * Get Elasticsearch range query
+     * Get Elasticsearch range query.
      *
      * Start and end are optional, depending on the respective operator. Pass
      * null in this case. The operator may be one of:
@@ -78,21 +80,20 @@ abstract class CriterionVisitor
      *
      * @return string
      */
-    protected function getQueryRange( $operator, $start, $end )
+    protected function getQueryRange($operator, $start, $end)
     {
-        $start = $this->prepareValue( $start );
-        $end = $this->prepareValue( $end );
+        $start = $this->prepareValue($start);
+        $end = $this->prepareValue($end);
 
         $startBrace = '[';
         $startValue = '*';
-        $endValue   = '*';
-        $endBrace   = ']';
+        $endValue = '*';
+        $endBrace = ']';
 
-        switch ( $operator )
-        {
+        switch ($operator) {
             case Operator::GT:
                 $startBrace = '{';
-                $endBrace   = '}';
+                $endBrace = '}';
                 // Intentionally omitted break
 
             case Operator::GTE:
@@ -101,7 +102,7 @@ abstract class CriterionVisitor
 
             case Operator::LT:
                 $startBrace = '{';
-                $endBrace   = '}';
+                $endBrace = '}';
                 // Intentionally omitted break
 
             case Operator::LTE:
@@ -110,18 +111,18 @@ abstract class CriterionVisitor
 
             case Operator::BETWEEN:
                 $startValue = $start;
-                $endValue   = $end;
+                $endValue = $end;
                 break;
 
             default:
-                throw new \RuntimeException( "Unknown operator: $operator" );
+                throw new \RuntimeException("Unknown operator: $operator");
         }
 
         return "$startBrace$startValue TO $endValue$endBrace";
     }
 
     /**
-     * Get Elasticsearch range filter
+     * Get Elasticsearch range filter.
      *
      * Start and end are optional, depending on the respective operator. Pass
      * null in this case. The operator may be one of:
@@ -140,49 +141,47 @@ abstract class CriterionVisitor
      *
      * @return string
      */
-    protected function getFilterRange( $operator, $start, $end )
+    protected function getFilterRange($operator, $start, $end)
     {
-        if ( ( $operator === Operator::LT ) || ( $operator === Operator::LTE ) )
-        {
+        if (($operator === Operator::LT) || ($operator === Operator::LTE)) {
             $end = $start;
             $start = null;
         }
 
-        switch ( $operator )
-        {
+        switch ($operator) {
             case Operator::GT:
                 $range = array(
-                    "gt" => $start,
+                    'gt' => $start,
                 );
                 break;
 
             case Operator::GTE:
                 $range = array(
-                    "gte" => $start,
+                    'gte' => $start,
                 );
                 break;
 
             case Operator::LT:
                 $range = array(
-                    "lt" => $end,
+                    'lt' => $end,
                 );
                 break;
 
             case Operator::LTE:
                 $range = array(
-                    "lte" => $end,
+                    'lte' => $end,
                 );
                 break;
 
             case Operator::BETWEEN:
                 $range = array(
-                    "gte" => $start,
-                    "lte" => $end,
+                    'gte' => $start,
+                    'lte' => $end,
                 );
                 break;
 
             default:
-                throw new RuntimeException( "Unknown operator '{$operator}'" );
+                throw new RuntimeException("Unknown operator '{$operator}'");
         }
 
         return $range;
@@ -197,15 +196,14 @@ abstract class CriterionVisitor
      *
      * @return string
      */
-    protected function prepareValue( $value )
+    protected function prepareValue($value)
     {
-        switch ( gettype( $value ) )
-        {
-            case "boolean":
-                return ( $value ? "true" : "false" );
+        switch (gettype($value)) {
+            case 'boolean':
+                return ($value ? 'true' : 'false');
 
-            case "string":
-                return '"' . preg_replace( '/("|\\\)/', '\\\$1', $value ) . '"';
+            case 'string':
+                return '"' . preg_replace('/("|\\\)/', '\\\$1', $value) . '"';
 
             default:
                 return (string)$value;

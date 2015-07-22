@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentTypeIdentifier criterion visitor class
+ * File containing the ContentTypeIdentifier criterion visitor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,53 +17,53 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler;
 
 /**
- * Visits the ContentTypeIdentifier criterion
+ * Visits the ContentTypeIdentifier criterion.
  */
 class ContentTypeIdentifierIn extends CriterionVisitor
 {
     /**
-     * ContentType handler
+     * ContentType handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
      */
     protected $contentTypeHandler;
 
     /**
-     * Create from content type handler and field registry
+     * Create from content type handler and field registry.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      */
-    public function __construct( Handler $contentTypeHandler )
+    public function __construct(Handler $contentTypeHandler)
     {
         $this->contentTypeHandler = $contentTypeHandler;
     }
 
     /**
-     * CHeck if visitor is applicable to current criterion
+     * CHeck if visitor is applicable to current criterion.
      *
      * @param Criterion $criterion
      *
-     * @return boolean
+     * @return bool
      */
-    public function canVisit( Criterion $criterion )
+    public function canVisit(Criterion $criterion)
     {
         return
             $criterion instanceof Criterion\ContentTypeIdentifier
             && (
-                ( $criterion->operator ?: Operator::IN ) === Operator::IN ||
+                ($criterion->operator ?: Operator::IN) === Operator::IN ||
                 $criterion->operator === Operator::EQ
             );
     }
 
     /**
-     * Map field value to a proper Solr representation
+     * Map field value to a proper Solr representation.
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
         $contentTypeHandler = $this->contentTypeHandler;
 
@@ -69,9 +71,8 @@ class ContentTypeIdentifierIn extends CriterionVisitor
             implode(
                 ' OR ',
                 array_map(
-                    function ( $value ) use ( $contentTypeHandler )
-                    {
-                        return 'type_id:"' . $contentTypeHandler->loadByIdentifier( $value )->id . '"';
+                    function ($value) use ($contentTypeHandler) {
+                        return 'type_id:"' . $contentTypeHandler->loadByIdentifier($value)->id . '"';
                     },
                     $criterion->value
                 )

@@ -1,16 +1,18 @@
 <?php
+
 /**
- * File contains Test class
+ * File contains Test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
 /**
- * Test case for Persistence\Cache\TransactionHandler
+ * Test case for Persistence\Cache\TransactionHandler.
  */
 class TransactionHandlerTest extends HandlerTest
 {
@@ -20,22 +22,22 @@ class TransactionHandlerTest extends HandlerTest
     public function testBeginTransaction()
     {
         $this->loggerMock
-            ->expects( $this->once() )
-            ->method( 'logCall' );
+            ->expects($this->once())
+            ->method('logCall');
 
         $this->cacheMock
-            ->expects( $this->never() )
-            ->method( $this->anything() );
+            ->expects($this->never())
+            ->method($this->anything());
 
-        $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\TransactionHandler' );
+        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\TransactionHandler');
         $this->persistenceHandlerMock
-            ->expects( $this->once() )
-            ->method( 'transactionHandler' )
-            ->will( $this->returnValue( $innerHandlerMock ) );
+            ->expects($this->once())
+            ->method('transactionHandler')
+            ->will($this->returnValue($innerHandlerMock));
 
         $innerHandlerMock
-            ->expects( $this->once() )
-            ->method( 'beginTransaction' );
+            ->expects($this->once())
+            ->method('beginTransaction');
 
         $handler = $this->persistenceCacheHandler->transactionHandler();
         $handler->beginTransaction();
@@ -47,22 +49,22 @@ class TransactionHandlerTest extends HandlerTest
     public function testCommit()
     {
         $this->loggerMock
-            ->expects( $this->once() )
-            ->method( 'logCall' );
+            ->expects($this->once())
+            ->method('logCall');
 
         $this->cacheMock
-            ->expects( $this->never() )
-            ->method( $this->anything() );
+            ->expects($this->never())
+            ->method($this->anything());
 
-        $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\TransactionHandler' );
+        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\TransactionHandler');
         $this->persistenceHandlerMock
-            ->expects( $this->once() )
-            ->method( 'transactionHandler' )
-            ->will( $this->returnValue( $innerHandlerMock ) );
+            ->expects($this->once())
+            ->method('transactionHandler')
+            ->will($this->returnValue($innerHandlerMock));
 
         $innerHandlerMock
-            ->expects( $this->once() )
-            ->method( 'commit' );
+            ->expects($this->once())
+            ->method('commit');
 
         $handler = $this->persistenceCacheHandler->transactionHandler();
         $handler->commit();
@@ -74,22 +76,22 @@ class TransactionHandlerTest extends HandlerTest
     public function testRollback()
     {
         $this->loggerMock
-            ->expects( $this->once() )
-            ->method( 'logCall' );
+            ->expects($this->once())
+            ->method('logCall');
 
         $this->cacheMock
-            ->expects( $this->once() )
-            ->method( 'clear' );
+            ->expects($this->once())
+            ->method('clear');
 
-        $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\TransactionHandler' );
+        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\TransactionHandler');
         $this->persistenceHandlerMock
-            ->expects( $this->once() )
-            ->method( 'transactionHandler' )
-            ->will( $this->returnValue( $innerHandlerMock ) );
+            ->expects($this->once())
+            ->method('transactionHandler')
+            ->will($this->returnValue($innerHandlerMock));
 
         $innerHandlerMock
-            ->expects( $this->once() )
-            ->method( 'rollback' );
+            ->expects($this->once())
+            ->method('rollback');
 
         $handler = $this->persistenceCacheHandler->transactionHandler();
         $handler->rollback();

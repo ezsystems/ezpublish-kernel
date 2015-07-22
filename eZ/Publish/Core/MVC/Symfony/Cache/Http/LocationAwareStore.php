@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the LocationAwareStore class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -36,7 +38,7 @@ class LocationAwareStore extends Store implements ContentPurger
      *
      * @param \Symfony\Component\Filesystem\Filesystem $fs
      */
-    public function setFilesystem( Filesystem $fs )
+    public function setFilesystem(Filesystem $fs)
     {
         $this->fs = $fs;
     }
@@ -46,15 +48,16 @@ class LocationAwareStore extends Store implements ContentPurger
      */
     public function getFilesystem()
     {
-        if ( !isset( $this->fs ) )
+        if (!isset($this->fs)) {
             $this->fs = new Filesystem();
+        }
 
         return $this->fs;
     }
 
     /**
      * Injects eZ Publish specific information in the content digest if needed.
-     * X-Location-Id response header is set in the ViewController
+     * X-Location-Id response header is set in the ViewController.
      *
      * @see \eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController::viewLocation()
      *
@@ -62,15 +65,14 @@ class LocationAwareStore extends Store implements ContentPurger
      *
      * @return string
      */
-    protected function generateContentDigest( Response $response )
+    protected function generateContentDigest(Response $response)
     {
-        $digest = parent::generateContentDigest( $response );
-        if ( !$response->headers->has( 'X-Location-Id' ) )
-        {
+        $digest = parent::generateContentDigest($response);
+        if (!$response->headers->has('X-Location-Id')) {
             return $digest;
         }
 
-        return static::LOCATION_CACHE_DIR . "/{$response->headers->get( 'X-Location-Id' )}/$digest";
+        return static::LOCATION_CACHE_DIR . "/{$response->headers->get('X-Location-Id')}/$digest";
     }
 
     /**
@@ -81,47 +83,43 @@ class LocationAwareStore extends Store implements ContentPurger
      *
      * @return string
      */
-    public function getPath( $key )
+    public function getPath($key)
     {
-        if ( strpos( $key, static::LOCATION_CACHE_DIR ) === false )
-            return parent::getPath( $key );
+        if (strpos($key, static::LOCATION_CACHE_DIR) === false) {
+            return parent::getPath($key);
+        }
 
         $prefix = '';
-        if ( ( $pos = strrpos( $key, '/' ) ) !== false )
-        {
-            $prefix = substr( $key, 0, $pos ) . DIRECTORY_SEPARATOR;
-            $key = substr( $key, $pos + 1 );
+        if (($pos = strrpos($key, '/')) !== false) {
+            $prefix = substr($key, 0, $pos) . DIRECTORY_SEPARATOR;
+            $key = substr($key, $pos + 1);
 
-            list( $locationCacheDir, $locationId ) = explode( '/', $prefix );
-            unset( $locationCacheDir );
+            list($locationCacheDir, $locationId) = explode('/', $prefix);
+            unset($locationCacheDir);
             // If cache purge is in progress, serve stale cache instead of regular cache.
             // We first check for a global cache purge, then for the current location.
-            foreach ( array( $this->getLocationCacheLockName(), $this->getLocationCacheLockName( $locationId ) ) as $cacheLockFile )
-            {
-                if ( is_file( $cacheLockFile ) )
-                {
-                    if ( function_exists( 'posix_kill' ) )
-                    {
+            foreach (array($this->getLocationCacheLockName(), $this->getLocationCacheLockName($locationId)) as $cacheLockFile) {
+                if (is_file($cacheLockFile)) {
+                    if (function_exists('posix_kill')) {
                         // Check if purge process is still running. If not, remove the lock file to unblock future cache purge
-                        if ( !posix_kill( file_get_contents( $cacheLockFile ), 0 ) )
-                        {
+                        if (!posix_kill(file_get_contents($cacheLockFile), 0)) {
                             $fs = $this->getFilesystem();
-                            $fs->remove( array( $cacheLockFile, $this->getLocationCacheDir( $locationId ) ) );
+                            $fs->remove(array($cacheLockFile, $this->getLocationCacheDir($locationId)));
                             goto returnCachePath;
                         }
                     }
 
-                    $prefix = str_replace( static::LOCATION_CACHE_DIR, static::LOCATION_STALE_CACHE_DIR, $prefix );
+                    $prefix = str_replace(static::LOCATION_CACHE_DIR, static::LOCATION_STALE_CACHE_DIR, $prefix);
                 }
             }
         }
 
         returnCachePath:
         return $this->root . DIRECTORY_SEPARATOR . $prefix .
-           substr( $key, 0, 2 ) . DIRECTORY_SEPARATOR .
-           substr( $key, 2, 2 ) . DIRECTORY_SEPARATOR .
-           substr( $key, 4, 2 ) . DIRECTORY_SEPARATOR .
-           substr( $key, 6 );
+           substr($key, 0, 2) . DIRECTORY_SEPARATOR .
+           substr($key, 2, 2) . DIRECTORY_SEPARATOR .
+           substr($key, 4, 2) . DIRECTORY_SEPARATOR .
+           substr($key, 6);
     }
 
     /**
@@ -131,94 +129,85 @@ class LocationAwareStore extends Store implements ContentPurger
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return boolean True if purge was successful. False otherwise
+     * @return bool True if purge was successful. False otherwise
      */
-    public function purgeByRequest( Request $request )
+    public function purgeByRequest(Request $request)
     {
-        if ( !$request->headers->has( 'X-Location-Id' ) && !$request->headers->has( 'X-Group-Location-Id' ) )
-        {
-            return $this->purge( $request->getUri() );
+        if (!$request->headers->has('X-Location-Id') && !$request->headers->has('X-Group-Location-Id')) {
+            return $this->purge($request->getUri());
         }
 
         // Purge everything
-        $locationId = $request->headers->get( 'X-Location-Id' );
-        if ( $locationId === '*' || $locationId === '.*' )
-        {
+        $locationId = $request->headers->get('X-Location-Id');
+        if ($locationId === '*' || $locationId === '.*') {
             return $this->purgeAllContent();
         }
 
         // Usage of X-Group-Location-Id is deprecated.
-        if ( $request->headers->has( 'X-Group-Location-Id' ) )
-        {
-            $aLocationId = explode( '; ', $request->headers->get( 'X-Group-Location-Id' ) );
-        }
-        // Equivalent to X-Group-Location-Id, using a simple Regexp:
-        // (123|456|789) => Purge for #123, #456 and #789 location IDs.
-        else if ( $locationId[0] === '(' && substr( $locationId, -1 ) === ')' )
-        {
-            $aLocationId = explode( '|', substr( $locationId, 1, -1 ) );
-        }
-        else
-        {
-            $aLocationId = array( $locationId );
+        if ($request->headers->has('X-Group-Location-Id')) {
+            $aLocationId = explode('; ', $request->headers->get('X-Group-Location-Id'));
+        } elseif ($locationId[0] === '(' && substr($locationId, -1) === ')') {
+            // Equivalent to X-Group-Location-Id, using a simple Regexp:
+            // (123|456|789) => Purge for #123, #456 and #789 location IDs.
+            $aLocationId = explode('|', substr($locationId, 1, -1));
+        } else {
+            $aLocationId = array($locationId);
         }
 
-        if ( empty( $aLocationId ) )
+        if (empty($aLocationId)) {
             return false;
+        }
 
-        foreach ( $aLocationId as $locationId )
-        {
-            $this->purgeLocation( $locationId );
+        foreach ($aLocationId as $locationId) {
+            $this->purgeLocation($locationId);
         }
 
         return true;
     }
 
     /**
-     * Purges all cached content
+     * Purges all cached content.
      *
-     * @return boolean
+     * @return bool
      */
     public function purgeAllContent()
     {
-        return $this->purgeLocation( null );
+        return $this->purgeLocation(null);
     }
 
     /**
-     * Purges cache for $locationId
+     * Purges cache for $locationId.
      *
      * @param int|null $locationId. If null, all locations will be purged.
      *
-     * @return boolean
+     * @return bool
      */
-    private function purgeLocation( $locationId )
+    private function purgeLocation($locationId)
     {
         $fs = $this->getFilesystem();
-        $locationCacheDir = $this->getLocationCacheDir( $locationId );
-        if ( $fs->exists( $locationCacheDir ) )
-        {
+        $locationCacheDir = $this->getLocationCacheDir($locationId);
+        if ($fs->exists($locationCacheDir)) {
             // 1. Copy cache files to stale cache dir
             // 2. Place a lock file indicating to use the stale cache
             // 3. Remove real cache dir
             // 4. Remove lock file
             // 5. Remove stale cache dir
             // Note that there is no need to remove the meta-file
-            $staleCacheDir = str_replace( static::LOCATION_CACHE_DIR, static::LOCATION_STALE_CACHE_DIR, $locationCacheDir );
-            $fs->mkdir( $staleCacheDir );
-            $fs->mirror( $locationCacheDir, $staleCacheDir );
-            $lockFile = $this->getLocationCacheLockName( $locationId );
-            file_put_contents( $lockFile, getmypid() );
-            try
-            {
+            $staleCacheDir = str_replace(static::LOCATION_CACHE_DIR, static::LOCATION_STALE_CACHE_DIR, $locationCacheDir);
+            $fs->mkdir($staleCacheDir);
+            $fs->mirror($locationCacheDir, $staleCacheDir);
+            $lockFile = $this->getLocationCacheLockName($locationId);
+            file_put_contents($lockFile, getmypid());
+            try {
                 // array of removal is in reverse order on purpose since remove() starts from the end.
-                $fs->remove( array( $staleCacheDir, $lockFile, $locationCacheDir ) );
+                $fs->remove(array($staleCacheDir, $lockFile, $locationCacheDir));
+
                 return true;
-            }
-            catch ( IOException $e )
-            {
+            } catch (IOException $e) {
                 // Log the error in the standard error log and at least try to remove the lock file
-                error_log( $e->getMessage() );
-                @unlink( $lockFile );
+                error_log($e->getMessage());
+                @unlink($lockFile);
+
                 return false;
             }
         }
@@ -238,9 +227,10 @@ class LocationAwareStore extends Store implements ContentPurger
      *
      * @return string
      */
-    public function getLocationCacheLockName( $locationId = null )
+    public function getLocationCacheLockName($locationId = null)
     {
         $locationId = $locationId ?: 'all';
+
         return "$this->root/_ezloc_$locationId.purging";
     }
 
@@ -256,11 +246,12 @@ class LocationAwareStore extends Store implements ContentPurger
      *
      * @return string
      */
-    public function getLocationCacheDir( $locationId = null )
+    public function getLocationCacheDir($locationId = null)
     {
         $cacheDir = "$this->root/" . static::LOCATION_CACHE_DIR;
-        if ( $locationId )
+        if ($locationId) {
             $cacheDir .= "/$locationId";
+        }
 
         return $cacheDir;
     }

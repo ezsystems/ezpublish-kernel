@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the TextLine class
+ * File containing the TextLine class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -27,53 +29,48 @@ class Type extends FieldType
         'StringLengthValidator' => array(
             'minStringLength' => array(
                 'type' => 'int',
-                'default' => 0
+                'default' => 0,
             ),
             'maxStringLength' => array(
                 'type' => 'int',
-                'default' => null
-            )
-        )
+                'default' => null,
+            ),
+        ),
     );
 
     /**
-     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
      * @param mixed $validatorConfiguration
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateValidatorConfiguration( $validatorConfiguration )
+    public function validateValidatorConfiguration($validatorConfiguration)
     {
         $validationErrors = array();
 
-        foreach ( $validatorConfiguration as $validatorIdentifier => $constraints )
-        {
-            if ( $validatorIdentifier !== 'StringLengthValidator' )
-            {
+        foreach ($validatorConfiguration as $validatorIdentifier => $constraints) {
+            if ($validatorIdentifier !== 'StringLengthValidator') {
                 $validationErrors[] = new ValidationError(
                     "Validator '%validator%' is unknown",
                     null,
                     array(
-                        "validator" => $validatorIdentifier
+                        'validator' => $validatorIdentifier,
                     )
                 );
 
                 continue;
             }
-            foreach ( $constraints as $name => $value )
-            {
-                switch ( $name )
-                {
-                    case "minStringLength":
-                    case "maxStringLength":
-                        if ( $value !== null && !is_integer( $value ) )
-                        {
+            foreach ($constraints as $name => $value) {
+                switch ($name) {
+                    case 'minStringLength':
+                    case 'maxStringLength':
+                        if ($value !== null && !is_integer($value)) {
                             $validationErrors[] = new ValidationError(
                                 "Validator parameter '%parameter%' value must be of integer type",
                                 null,
                                 array(
-                                    "parameter" => $name
+                                    'parameter' => $name,
                                 ),
                                 "[$validatorIdentifier][$name]"
                             );
@@ -84,7 +81,7 @@ class Type extends FieldType
                             "Validator parameter '%parameter%' is unknown",
                             null,
                             array(
-                                "parameter" => $name
+                                'parameter' => $name,
                             )
                         );
                 }
@@ -95,7 +92,7 @@ class Type extends FieldType
     }
 
     /**
-     * Validates a field based on the validators in the field definition
+     * Validates a field based on the validators in the field definition.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
@@ -104,45 +101,42 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( FieldDefinition $fieldDefinition, SPIValue $fieldValue )
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
     {
         $validationErrors = array();
 
-        if ( $this->isEmptyValue( $fieldValue ) )
-        {
+        if ($this->isEmptyValue($fieldValue)) {
             return $validationErrors;
         }
 
         $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
-        $constraints = isset( $validatorConfiguration['StringLengthValidator'] )
+        $constraints = isset($validatorConfiguration['StringLengthValidator'])
             ? $validatorConfiguration['StringLengthValidator']
             : array();
 
-        if ( isset( $constraints['maxStringLength'] ) &&
+        if (isset($constraints['maxStringLength']) &&
             $constraints['maxStringLength'] !== false &&
             $constraints['maxStringLength'] !== 0 &&
-            strlen( $fieldValue->text ) > $constraints['maxStringLength'] )
-        {
+            strlen($fieldValue->text) > $constraints['maxStringLength']) {
             $validationErrors[] = new ValidationError(
-                "The string can not exceed %size% character.",
-                "The string can not exceed %size% characters.",
+                'The string can not exceed %size% character.',
+                'The string can not exceed %size% characters.',
                 array(
-                    "size" => $constraints['maxStringLength']
+                    'size' => $constraints['maxStringLength'],
                 ),
                 'text'
             );
         }
 
-        if ( isset( $constraints['minStringLength'] ) &&
+        if (isset($constraints['minStringLength']) &&
             $constraints['minStringLength'] !== false &&
             $constraints['minStringLength'] !== 0 &&
-            strlen( $fieldValue->text ) < $constraints['minStringLength'] )
-        {
+            strlen($fieldValue->text) < $constraints['minStringLength']) {
             $validationErrors[] = new ValidationError(
-                "The string can not be shorter than %size% character.",
-                "The string can not be shorter than %size% characters.",
+                'The string can not be shorter than %size% character.',
+                'The string can not be shorter than %size% characters.',
                 array(
-                    "size" => $constraints['minStringLength']
+                    'size' => $constraints['minStringLength'],
                 ),
                 'text'
             );
@@ -152,13 +146,13 @@ class Type extends FieldType
     }
 
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
     public function getFieldTypeIdentifier()
     {
-        return "ezstring";
+        return 'ezstring';
     }
 
     /**
@@ -171,7 +165,7 @@ class Type extends FieldType
      *
      * @return string
      */
-    public function getName( SPIValue $value )
+    public function getName(SPIValue $value)
     {
         return (string)$value->text;
     }
@@ -184,19 +178,19 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value;
+        return new Value();
     }
 
     /**
-     * Returns if the given $value is considered empty by the field type
+     * Returns if the given $value is considered empty by the field type.
      *
      * @param mixed $value
      *
-     * @return boolean
+     * @return bool
      */
-    public function isEmptyValue( SPIValue $value )
+    public function isEmptyValue(SPIValue $value)
     {
-        return $value->text === null || trim( $value->text ) === "";
+        return $value->text === null || trim($value->text) === '';
     }
 
     /**
@@ -206,11 +200,10 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\TextLine\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
-        if ( is_string( $inputValue ) )
-        {
-            $inputValue = new Value( $inputValue );
+        if (is_string($inputValue)) {
+            $inputValue = new Value($inputValue);
         }
 
         return $inputValue;
@@ -222,13 +215,10 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\TextLine\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
-        if ( !is_string( $value->text ) )
-        {
+        if (!is_string($value->text)) {
             throw new InvalidArgumentType(
                 '$value->text',
                 'string',
@@ -244,47 +234,47 @@ class Type extends FieldType
      *
      * @return array
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo(BaseValue $value)
     {
-        return $this->transformationProcessor->transformByGroup( (string)$value, "lowercase" );
+        return $this->transformationProcessor->transformByGroup((string)$value, 'lowercase');
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * @param mixed $hash
      *
      * @return \eZ\Publish\Core\FieldType\TextLine\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        if ( $hash === null )
-        {
+        if ($hash === null) {
             return $this->getEmptyValue();
         }
-        return new Value( $hash );
+
+        return new Value($hash);
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\TextLine\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
-        if ( $this->isEmptyValue( $value ) )
-        {
+        if ($this->isEmptyValue($value)) {
             return null;
         }
+
         return $value->text;
     }
 
     /**
-     * Returns whether the field type is searchable
+     * Returns whether the field type is searchable.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSearchable()
     {

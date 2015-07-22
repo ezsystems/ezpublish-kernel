@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the FieldTypeRegistry class
+ * File containing the FieldTypeRegistry class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -43,7 +45,7 @@ class FieldTypeRegistry
      * @param array $fieldTypeMap A map where key is field type identifier and value is
      *              a callable factory to get FieldType OR FieldType object.
      */
-    public function __construct( array $fieldTypeMap )
+    public function __construct(array $fieldTypeMap)
     {
         $this->coreFieldTypeMap = $fieldTypeMap;
     }
@@ -58,11 +60,10 @@ class FieldTypeRegistry
      *
      * @return \eZ\Publish\SPI\Persistence\FieldType
      */
-    public function getFieldType( $identifier )
+    public function getFieldType($identifier)
     {
-        if ( !isset( $this->fieldTypeMap[$identifier] ) )
-        {
-            $this->fieldTypeMap[$identifier] = new FieldType( $this->getCoreFieldType( $identifier ) );
+        if (!isset($this->fieldTypeMap[$identifier])) {
+            $this->fieldTypeMap[$identifier] = new FieldType($this->getCoreFieldType($identifier));
         }
 
         return $this->fieldTypeMap[$identifier];
@@ -77,10 +78,8 @@ class FieldTypeRegistry
      *
      * @param $identifier
      * @param mixed $fieldType Callable or FieldType instance.
-     *
-     * @return void
      */
-    public function register( $identifier, $fieldType )
+    public function register($identifier, $fieldType)
     {
         $this->coreFieldTypeMap[$identifier] = $fieldType;
     }
@@ -95,20 +94,17 @@ class FieldTypeRegistry
      *
      * @return \eZ\Publish\SPI\FieldType\FieldType
      */
-    protected function getCoreFieldType( $identifier )
+    protected function getCoreFieldType($identifier)
     {
-        if ( !isset( $this->coreFieldTypeMap[$identifier] ) )
-        {
-            throw new FieldTypeNotFoundException( $identifier );
+        if (!isset($this->coreFieldTypeMap[$identifier])) {
+            throw new FieldTypeNotFoundException($identifier);
         }
 
         $fieldType = $this->coreFieldTypeMap[$identifier];
 
-        if ( !$this->coreFieldTypeMap[$identifier] instanceof FieldTypeInterface )
-        {
-            if ( !is_callable( $this->coreFieldTypeMap[$identifier] ) )
-            {
-                throw new RuntimeException( "FieldType '$identifier' is not callable or instance" );
+        if (!$this->coreFieldTypeMap[$identifier] instanceof FieldTypeInterface) {
+            if (!is_callable($this->coreFieldTypeMap[$identifier])) {
+                throw new RuntimeException("FieldType '$identifier' is not callable or instance");
             }
 
             /** @var $fieldType \Closure */

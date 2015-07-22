@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the LanguageLimitationTest class
+ * File containing the LanguageLimitationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,62 +24,58 @@ use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
  */
 class LanguageLimitationTest extends BaseLimitationTest
 {
-
     /**
-     * Test for the LanguageLimitation
+     * Test for the LanguageLimitation.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation
+     *
      * @throws \ErrorException
      */
     public function testLanguageLimitationAllow()
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId( 'content', 58 );
+        $contentId = $this->generateId('content', 58);
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         $roleService = $repository->getRoleService();
 
-        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+        $role = $roleService->loadRoleByIdentifier('Editor');
 
         $editPolicy = null;
-        foreach ( $role->getPolicies() as $policy )
-        {
-            if ( 'content' != $policy->module || 'edit' != $policy->function )
-            {
+        foreach ($role->getPolicies() as $policy) {
+            if ('content' != $policy->module || 'edit' != $policy->function) {
                 continue;
             }
             $editPolicy = $policy;
             break;
         }
 
-        if ( null === $editPolicy )
-        {
-            throw new \ErrorException( 'No content:edit policy found.' );
+        if (null === $editPolicy) {
+            throw new \ErrorException('No content:edit policy found.');
         }
 
         // Only allow eng-GB content
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new LanguageLimitation(
-                array( 'limitationValues' => array( 'eng-GB' ) )
+                array('limitationValues' => array('eng-GB'))
             )
         );
-        $roleService->updatePolicy( $editPolicy, $policyUpdate );
+        $roleService->updatePolicy($editPolicy, $policyUpdate);
 
-        $roleService->assignRoleToUser( $role, $user );
+        $roleService->assignRoleToUser($role, $user);
 
         $contentService = $repository->getContentService();
 
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $contentUpdate = $contentService->newContentUpdateStruct();
-        $contentUpdate->setField( 'name', 'Contact Me' );
+        $contentUpdate->setField('name', 'Contact Me');
 
         $draft = $contentService->createContentDraft(
-            $contentService->loadContentInfo( $contentId )
+            $contentService->loadContentInfo($contentId)
         );
 
         // Update content object
@@ -86,73 +84,70 @@ class LanguageLimitationTest extends BaseLimitationTest
             $contentUpdate
         );
 
-        $contentService->publishVersion( $draft->versionInfo );
+        $contentService->publishVersion($draft->versionInfo);
         /* END: Use Case */
 
         $this->assertEquals(
             'Contact Me',
-            $contentService->loadContent( $contentId )
-                ->getFieldValue( 'name' )->text
+            $contentService->loadContent($contentId)
+                ->getFieldValue('name')->text
         );
     }
 
     /**
-     * Test for the LanguageLimitation
+     * Test for the LanguageLimitation.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     *
      * @throws \ErrorException
      */
     public function testLanguageLimitationForbid()
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId( 'content', 58 );
+        $contentId = $this->generateId('content', 58);
         /* BEGIN: Use Case */
         $user = $this->createUserVersion1();
 
         $roleService = $repository->getRoleService();
 
-        $role = $roleService->loadRoleByIdentifier( 'Editor' );
+        $role = $roleService->loadRoleByIdentifier('Editor');
 
         $editPolicy = null;
-        foreach ( $role->getPolicies() as $policy )
-        {
-            if ( 'content' != $policy->module || 'edit' != $policy->function )
-            {
+        foreach ($role->getPolicies() as $policy) {
+            if ('content' != $policy->module || 'edit' != $policy->function) {
                 continue;
             }
             $editPolicy = $policy;
             break;
         }
 
-        if ( null === $editPolicy )
-        {
-            throw new \ErrorException( 'No content:edit policy found.' );
+        if (null === $editPolicy) {
+            throw new \ErrorException('No content:edit policy found.');
         }
 
         // Only allow eng-US content
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new LanguageLimitation(
-                array( 'limitationValues' => array( 'eng-US' ) )
+                array('limitationValues' => array('eng-US'))
             )
         );
-        $roleService->updatePolicy( $editPolicy, $policyUpdate );
+        $roleService->updatePolicy($editPolicy, $policyUpdate);
 
-        $roleService->assignRoleToUser( $role, $user );
+        $roleService->assignRoleToUser($role, $user);
 
         $contentService = $repository->getContentService();
 
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $contentUpdate = $contentService->newContentUpdateStruct();
-        $contentUpdate->setField( 'name', 'Contact Me' );
+        $contentUpdate->setField('name', 'Contact Me');
 
         // This call will fail with an UnauthorizedException
         $contentService->createContentDraft(
-            $contentService->loadContentInfo( $contentId )
+            $contentService->loadContentInfo($contentId)
         );
         /* END: Use Case */
     }

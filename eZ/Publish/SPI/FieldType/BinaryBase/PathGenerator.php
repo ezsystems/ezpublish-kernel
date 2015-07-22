@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the PathGenerator interface
+ * File containing the PathGenerator interface.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,5 +16,5 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 
 abstract class PathGenerator
 {
-    abstract public function getStoragePathForField( Field $field, VersionInfo $versionInfo );
+    abstract public function getStoragePathForField(Field $field, VersionInfo $versionInfo);
 }

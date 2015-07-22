@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,7 +18,7 @@ class ContentParamConverter extends RepositoryParamConverter
     /** @var \eZ\Publish\API\Repository\ContentService */
     private $contentService;
 
-    public function __construct( ContentService $contentService )
+    public function __construct(ContentService $contentService)
     {
         $this->contentService = $contentService;
     }
@@ -31,8 +33,8 @@ class ContentParamConverter extends RepositoryParamConverter
         return 'contentId';
     }
 
-    protected function loadValueObject( $id )
+    protected function loadValueObject($id)
     {
-        return $this->contentService->loadContent( $id );
+        return $this->contentService->loadContent($id);
     }
 }

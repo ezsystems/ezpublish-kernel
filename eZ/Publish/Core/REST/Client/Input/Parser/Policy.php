@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Policy parser class
+ * File containing the Policy parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,12 +16,12 @@ use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Client;
 
 /**
- * Parser for Policy
+ * Parser for Policy.
  */
 class Policy extends BaseParser
 {
     /**
-     * Parse input structure
+     * Parse input structure.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -28,14 +30,12 @@ class Policy extends BaseParser
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
         $limitations = array();
 
-        if ( array_key_exists( 'limitations', $data ) )
-        {
-            foreach ( $data['limitations']['limitation'] as $limitation )
-            {
+        if (array_key_exists('limitations', $data)) {
+            foreach ($data['limitations']['limitation'] as $limitation) {
                 $limitations[] = $parsingDispatcher->parse(
                     $limitation,
                     $limitation['_media-type']
@@ -48,7 +48,7 @@ class Policy extends BaseParser
                 'id' => $data['id'],
                 'module' => $data['module'],
                 'function' => $data['function'],
-                'limitations' => $limitations
+                'limitations' => $limitations,
             )
         );
     }

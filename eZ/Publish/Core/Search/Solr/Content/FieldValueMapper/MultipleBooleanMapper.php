@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the MultipleBooleanMapper class
+ * File containing the MultipleBooleanMapper class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,30 +21,29 @@ use eZ\Publish\SPI\Search\FieldType;
 class MultipleBooleanMapper extends FieldValueMapper
 {
     /**
-     * Check if field can be mapped
+     * Check if field can be mapped.
      *
      * @param Field $field
      *
-     * @return boolean
+     * @return bool
      */
-    public function canMap( Field $field )
+    public function canMap(Field $field)
     {
         return $field->type instanceof FieldType\MultipleBooleanField;
     }
 
     /**
-     * Map field value to a proper Solr representation
+     * Map field value to a proper Solr representation.
      *
      * @param Field $field
      *
      * @return mixed
      */
-    public function map( Field $field )
+    public function map(Field $field)
     {
         $values = array();
 
-        foreach ( (array)$field->value as $value )
-        {
+        foreach ((array)$field->value as $value) {
             $values[] = (boolean)$value;
         }
 

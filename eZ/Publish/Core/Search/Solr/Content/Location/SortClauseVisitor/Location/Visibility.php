@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the SortClauseVisitor\Location\Visibility class
+ * File containing the SortClauseVisitor\Location\Visibility class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,31 +15,31 @@ use eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
- * Visits the sortClause tree into a Solr query
+ * Visits the sortClause tree into a Solr query.
  */
 class Visibility extends SortClauseVisitor
 {
     /**
-     * Check if visitor is applicable to current sortClause
+     * Check if visitor is applicable to current sortClause.
      *
      * @param SortClause $sortClause
      *
-     * @return boolean
+     * @return bool
      */
-    public function canVisit( SortClause $sortClause )
+    public function canVisit(SortClause $sortClause)
     {
         return $sortClause instanceof SortClause\Location\Visibility;
     }
 
     /**
-     * Map field value to a proper Solr representation
+     * Map field value to a proper Solr representation.
      *
      * @param SortClause $sortClause
      *
      * @return string
      */
-    public function visit( SortClause $sortClause )
+    public function visit(SortClause $sortClause)
     {
-        return 'hidden_b' . $this->getDirection( $sortClause );
+        return 'hidden_b' . $this->getDirection($sortClause);
     }
 }

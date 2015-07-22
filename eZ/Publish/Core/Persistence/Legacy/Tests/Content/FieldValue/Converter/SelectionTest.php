@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the SelectionTest class
+ * File containing the SelectionTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,7 +21,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Test case for Selection converter in Legacy storage
+ * Test case for Selection converter in Legacy storage.
  */
 class SelectionTest extends PHPUnit_Framework_TestCase
 {
@@ -31,7 +33,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->converter = new SelectionConverter;
+        $this->converter = new SelectionConverter();
     }
 
     /**
@@ -42,7 +44,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     public function testToStorageValue()
     {
         $fieldValue = new FieldValue();
-        $fieldValue->data = array( 1, 3 );
+        $fieldValue->data = array(1, 3);
         $fieldValue->sortKey = '1-3';
 
         $expectedStorageFieldValue = new StorageFieldValue();
@@ -51,7 +53,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
 
         $actualStorageFieldValue = new StorageFieldValue();
 
-        $this->converter->toStorageValue( $fieldValue, $actualStorageFieldValue );
+        $this->converter->toStorageValue($fieldValue, $actualStorageFieldValue);
 
         $this->assertEquals(
             $expectedStorageFieldValue,
@@ -76,7 +78,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
 
         $actualStorageFieldValue = new StorageFieldValue();
 
-        $this->converter->toStorageValue( $fieldValue, $actualStorageFieldValue );
+        $this->converter->toStorageValue($fieldValue, $actualStorageFieldValue);
 
         $this->assertEquals(
             $expectedStorageFieldValue,
@@ -96,12 +98,12 @@ class SelectionTest extends PHPUnit_Framework_TestCase
         $storageFieldValue->sortKeyString = '1-3';
 
         $expectedFieldValue = new FieldValue();
-        $expectedFieldValue->data = array( 1, 3 );
+        $expectedFieldValue->data = array(1, 3);
         $expectedFieldValue->sortKey = '1-3';
 
         $actualFieldValue = new FieldValue();
 
-        $this->converter->toFieldValue( $storageFieldValue, $actualFieldValue );
+        $this->converter->toFieldValue($storageFieldValue, $actualFieldValue);
 
         $this->assertEquals(
             $expectedFieldValue,
@@ -126,7 +128,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
 
         $actualFieldValue = new FieldValue();
 
-        $this->converter->toFieldValue( $storageFieldValue, $actualFieldValue );
+        $this->converter->toFieldValue($storageFieldValue, $actualFieldValue);
 
         $this->assertEquals(
             $expectedFieldValue,
@@ -151,12 +153,12 @@ class SelectionTest extends PHPUnit_Framework_TestCase
                                 'options' => array(
                                     0 => 'First',
                                     1 => 'Second',
-                                    2 => 'Third'
-                                )
+                                    2 => 'Third',
+                                ),
                             )
-                        )
+                        ),
                     )
-                )
+                ),
             )
         );
 
@@ -170,9 +172,9 @@ EOT;
 
         $actualStorageFieldDefinition = new StorageFieldDefinition();
 
-        $this->converter->toStorageFieldDefinition( $fieldDefinition, $actualStorageFieldDefinition );
+        $this->converter->toStorageFieldDefinition($fieldDefinition, $actualStorageFieldDefinition);
 
-        $this->assertEquals( $expectedStorageFieldDefinition, $actualStorageFieldDefinition );
+        $this->assertEquals($expectedStorageFieldDefinition, $actualStorageFieldDefinition);
     }
 
     /**
@@ -191,11 +193,11 @@ EOT;
                                 'isMultiple' => false,
                                 'options' => array(
                                     0 => 'First',
-                                )
+                                ),
                             )
-                        )
+                        ),
                     )
-                )
+                ),
             )
         );
 
@@ -209,9 +211,9 @@ EOT;
 
         $actualStorageFieldDefinition = new StorageFieldDefinition();
 
-        $this->converter->toStorageFieldDefinition( $fieldDefinition, $actualStorageFieldDefinition );
+        $this->converter->toStorageFieldDefinition($fieldDefinition, $actualStorageFieldDefinition);
 
-        $this->assertEquals( $expectedStorageFieldDefinition, $actualStorageFieldDefinition );
+        $this->assertEquals($expectedStorageFieldDefinition, $actualStorageFieldDefinition);
     }
 
     /**
@@ -244,26 +246,26 @@ EOT;
                                 'options' => array(
                                     0 => 'First',
                                     1 => 'Second',
-                                    2 => 'Third'
-                                )
+                                    2 => 'Third',
+                                ),
                             )
-                        )
+                        ),
                     )
                 ),
                 'defaultValue' => new FieldValue(
                     array(
                         'data' => array(),
-                        'sortKey' => ''
+                        'sortKey' => '',
                     )
-                )
+                ),
             )
         );
 
         $actualFieldDefinition = new PersistenceFieldDefinition();
 
-        $this->converter->toFieldDefinition( $storageFieldDefinition, $actualFieldDefinition );
+        $this->converter->toFieldDefinition($storageFieldDefinition, $actualFieldDefinition);
 
-        $this->assertEquals( $expectedFieldDefinition, $actualFieldDefinition );
+        $this->assertEquals($expectedFieldDefinition, $actualFieldDefinition);
     }
 
     /**
@@ -290,19 +292,19 @@ EOT;
                         'fieldSettings' => new FieldSettings(
                             array(
                                 'isMultiple' => false,
-                                'options' => array()
+                                'options' => array(),
                             )
-                        )
+                        ),
                     )
                 ),
-                'defaultValue' => new FieldValue( array( 'data' => array() ) )
+                'defaultValue' => new FieldValue(array('data' => array())),
             )
         );
 
         $actualFieldDefinition = new PersistenceFieldDefinition();
 
-        $this->converter->toFieldDefinition( $storageFieldDefinition, $actualFieldDefinition );
+        $this->converter->toFieldDefinition($storageFieldDefinition, $actualFieldDefinition);
 
-        $this->assertEquals( $expectedFieldDefinition, $actualFieldDefinition );
+        $this->assertEquals($expectedFieldDefinition, $actualFieldDefinition);
     }
 }

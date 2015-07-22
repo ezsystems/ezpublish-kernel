@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RichText field type Symfony Renderer class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,7 +25,7 @@ use Exception;
 use Psr\Log\LoggerInterface;
 
 /**
- * Symfony implementation of RichText field type embed renderer
+ * Symfony implementation of RichText field type embed renderer.
  */
 class Renderer implements RendererInterface
 {
@@ -82,8 +84,7 @@ class Renderer implements RendererInterface
         $tagConfigurationNamespace,
         $embedConfigurationNamespace,
         LoggerInterface $logger = null
-    )
-    {
+    ) {
         $this->repository = $repository;
         $this->authorizationChecker = $authorizationChecker;
         $this->configResolver = $configResolver;
@@ -93,14 +94,12 @@ class Renderer implements RendererInterface
         $this->logger = $logger;
     }
 
-    public function renderTag( $name, array $parameters, $isInline )
+    public function renderTag($name, array $parameters, $isInline)
     {
-        $templateName = $this->getTagTemplateName( $name, $isInline );
+        $templateName = $this->getTagTemplateName($name, $isInline);
 
-        if ( $templateName === null )
-        {
-            if ( isset( $this->logger ) )
-            {
+        if ($templateName === null) {
+            if (isset($this->logger)) {
                 $this->logger->error(
                     "Could not render template tag '{$name}': no template configured"
                 );
@@ -109,10 +108,8 @@ class Renderer implements RendererInterface
             return null;
         }
 
-        if ( !$this->templateEngine->exists( $templateName ) )
-        {
-            if ( isset( $this->logger ) )
-            {
+        if (!$this->templateEngine->exists($templateName)) {
+            if (isset($this->logger)) {
                 $this->logger->error(
                     "Could not render template tag '{$name}': template '{$templateName}' does not exists"
                 );
@@ -121,43 +118,33 @@ class Renderer implements RendererInterface
             return null;
         }
 
-        return $this->render( $templateName, $parameters );
+        return $this->render($templateName, $parameters);
     }
 
-    public function renderContentEmbed( $contentId, $viewType, array $parameters, $isInline )
+    public function renderContentEmbed($contentId, $viewType, array $parameters, $isInline)
     {
         $isDenied = false;
 
-        try
-        {
-            $this->checkContent( $contentId );
-        }
-        catch ( AccessDeniedException $e )
-        {
-            if ( isset( $this->logger ) )
-            {
+        try {
+            $this->checkContent($contentId);
+        } catch (AccessDeniedException $e) {
+            if (isset($this->logger)) {
                 $this->logger->error(
                     "Could not render embedded resource: access denied to embed Content #{$contentId}"
                 );
             }
 
             $isDenied = true;
-        }
-        catch ( Exception $e )
-        {
-            if ( $e instanceof NotFoundHttpException || $e instanceof NotFoundException )
-            {
-                if ( isset( $this->logger ) )
-                {
+        } catch (Exception $e) {
+            if ($e instanceof NotFoundHttpException || $e instanceof NotFoundException) {
+                if (isset($this->logger)) {
                     $this->logger->error(
                         "Could not render embedded resource: Content #{$contentId} not found"
                     );
                 }
 
                 return null;
-            }
-            else
-            {
+            } else {
                 throw $e;
             }
         }
@@ -168,19 +155,16 @@ class Renderer implements RendererInterface
             $isDenied
         );
 
-        if ( $templateName === null )
-        {
+        if ($templateName === null) {
             $this->logger->error(
-                "Could not render embedded resource: no template configured"
+                'Could not render embedded resource: no template configured'
             );
 
             return null;
         }
 
-        if ( !$this->templateEngine->exists( $templateName ) )
-        {
-            if ( isset( $this->logger ) )
-            {
+        if (!$this->templateEngine->exists($templateName)) {
+            if (isset($this->logger)) {
                 $this->logger->error(
                     "Could not render embedded resource: template '{$templateName}' does not exists"
                 );
@@ -189,21 +173,18 @@ class Renderer implements RendererInterface
             return null;
         }
 
-        return $this->render( $templateName, $parameters );
+        return $this->render($templateName, $parameters);
     }
 
-    public function renderLocationEmbed( $locationId, $viewType, array $parameters, $isInline )
+    public function renderLocationEmbed($locationId, $viewType, array $parameters, $isInline)
     {
         $isDenied = false;
 
-        try
-        {
-            $location = $this->checkLocation( $locationId );
+        try {
+            $location = $this->checkLocation($locationId);
 
-            if ( $location->invisible )
-            {
-                if ( isset( $this->logger ) )
-                {
+            if ($location->invisible) {
+                if (isset($this->logger)) {
                     $this->logger->error(
                         "Could not render embedded resource: Location #{$locationId} is not visible"
                     );
@@ -211,33 +192,24 @@ class Renderer implements RendererInterface
 
                 return null;
             }
-        }
-        catch ( AccessDeniedException $e )
-        {
-            if ( isset( $this->logger ) )
-            {
+        } catch (AccessDeniedException $e) {
+            if (isset($this->logger)) {
                 $this->logger->error(
                     "Could not render embedded resource: access denied to embed Location #{$locationId}"
                 );
             }
 
             $isDenied = true;
-        }
-        catch ( Exception $e )
-        {
-            if ( $e instanceof NotFoundHttpException || $e instanceof NotFoundException )
-            {
-                if ( isset( $this->logger ) )
-                {
+        } catch (Exception $e) {
+            if ($e instanceof NotFoundHttpException || $e instanceof NotFoundException) {
+                if (isset($this->logger)) {
                     $this->logger->error(
                         "Could not render embedded resource: Location #{$locationId} not found"
                     );
                 }
 
                 return null;
-            }
-            else
-            {
+            } else {
                 throw $e;
             }
         }
@@ -248,19 +220,16 @@ class Renderer implements RendererInterface
             $isDenied
         );
 
-        if ( $templateName === null )
-        {
+        if ($templateName === null) {
             $this->logger->error(
-                "Could not render embedded resource: no template configured"
+                'Could not render embedded resource: no template configured'
             );
 
             return null;
         }
 
-        if ( !$this->templateEngine->exists( $templateName ) )
-        {
-            if ( isset( $this->logger ) )
-            {
+        if (!$this->templateEngine->exists($templateName)) {
+            if (isset($this->logger)) {
                 $this->logger->error(
                     "Could not render embedded resource: template '{$templateName}' does not exists"
                 );
@@ -269,18 +238,18 @@ class Renderer implements RendererInterface
             return null;
         }
 
-        return $this->render( $templateName, $parameters );
+        return $this->render($templateName, $parameters);
     }
 
     /**
-     * Renders template $templateReference with given $parameters
+     * Renders template $templateReference with given $parameters.
      *
      * @param string $templateReference
      * @param array $parameters
      *
      * @return string
      */
-    protected function render( $templateReference, array $parameters )
+    protected function render($templateReference, array $parameters)
     {
         return $this->templateEngine->render(
             $templateReference,
@@ -289,47 +258,42 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * Returns configured template name for the given template tag identifier
+     * Returns configured template name for the given template tag identifier.
      *
      * @param string $identifier
-     * @param boolean $isInline
+     * @param bool $isInline
      *
      * @return null|string
      */
-    protected function getTagTemplateName( $identifier, $isInline )
+    protected function getTagTemplateName($identifier, $isInline)
     {
-        $configurationReference = $this->tagConfigurationNamespace . "." . $identifier;
+        $configurationReference = $this->tagConfigurationNamespace . '.' . $identifier;
 
-        if ( $this->configResolver->hasParameter( $configurationReference ) )
-        {
-            $configuration = $this->configResolver->getParameter( $configurationReference );
-            return $configuration["template"];
+        if ($this->configResolver->hasParameter($configurationReference)) {
+            $configuration = $this->configResolver->getParameter($configurationReference);
+
+            return $configuration['template'];
         }
 
-        if ( isset( $this->logger ) )
-        {
+        if (isset($this->logger)) {
             $this->logger->warning(
                 "Template tag '{$identifier}' configuration was not found"
             );
         }
 
-        if ( $isInline )
-        {
-            $configurationReference = $this->tagConfigurationNamespace . ".default_inline";
-        }
-        else
-        {
-            $configurationReference = $this->tagConfigurationNamespace . ".default";
+        if ($isInline) {
+            $configurationReference = $this->tagConfigurationNamespace . '.default_inline';
+        } else {
+            $configurationReference = $this->tagConfigurationNamespace . '.default';
         }
 
-        if ( $this->configResolver->hasParameter( $configurationReference ) )
-        {
-            $configuration = $this->configResolver->getParameter( $configurationReference );
-            return $configuration["template"];
+        if ($this->configResolver->hasParameter($configurationReference)) {
+            $configuration = $this->configResolver->getParameter($configurationReference);
+
+            return $configuration['template'];
         }
 
-        if ( isset( $this->logger ) )
-        {
+        if (isset($this->logger)) {
             $this->logger->warning(
                 "Template tag '{$identifier}' default configuration was not found"
             );
@@ -339,7 +303,7 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * Returns configured template reference for the given embed parameters
+     * Returns configured template reference for the given embed parameters.
      *
      * @param $resourceType
      * @param $isInline
@@ -347,37 +311,31 @@ class Renderer implements RendererInterface
      *
      * @return null|string
      */
-    protected function getEmbedTemplateName( $resourceType, $isInline, $isDenied )
+    protected function getEmbedTemplateName($resourceType, $isInline, $isDenied)
     {
         $configurationReference = $this->embedConfigurationNamespace;
 
-        if ( $resourceType === static::RESOURCE_TYPE_CONTENT )
-        {
-            $configurationReference .= ".content";
-        }
-        else
-        {
-            $configurationReference .= ".location";
+        if ($resourceType === static::RESOURCE_TYPE_CONTENT) {
+            $configurationReference .= '.content';
+        } else {
+            $configurationReference .= '.location';
         }
 
-        if ( $isInline )
-        {
-            $configurationReference .= "_inline";
+        if ($isInline) {
+            $configurationReference .= '_inline';
         }
 
-        if ( $isDenied )
-        {
-            $configurationReference .= "_denied";
+        if ($isDenied) {
+            $configurationReference .= '_denied';
         }
 
-        if ( $this->configResolver->hasParameter( $configurationReference ) )
-        {
-            $configuration = $this->configResolver->getParameter( $configurationReference );
-            return $configuration["template"];
+        if ($this->configResolver->hasParameter($configurationReference)) {
+            $configuration = $this->configResolver->getParameter($configurationReference);
+
+            return $configuration['template'];
         }
 
-        if ( isset( $this->logger ) )
-        {
+        if (isset($this->logger)) {
             $this->logger->warning(
                 "Embed tag configuration '{$configurationReference}' was not found"
             );
@@ -385,21 +343,19 @@ class Renderer implements RendererInterface
 
         $configurationReference = $this->embedConfigurationNamespace;
 
-        $configurationReference .= ".default";
+        $configurationReference .= '.default';
 
-        if ( $isInline )
-        {
-            $configurationReference .= "_inline";
+        if ($isInline) {
+            $configurationReference .= '_inline';
         }
 
-        if ( $this->configResolver->hasParameter( $configurationReference ) )
-        {
-            $configuration = $this->configResolver->getParameter( $configurationReference );
-            return $configuration["template"];
+        if ($this->configResolver->hasParameter($configurationReference)) {
+            $configuration = $this->configResolver->getParameter($configurationReference);
+
+            return $configuration['template'];
         }
 
-        if ( isset( $this->logger ) )
-        {
+        if (isset($this->logger)) {
             $this->logger->warning(
                 "Embed tag default configuration '{$configurationReference}' was not found"
             );
@@ -409,32 +365,30 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * Check embed permissions for the given Content $id
+     * Check embed permissions for the given Content $id.
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      *
      * @param int|string $id
      */
-    protected function checkContent( $id )
+    protected function checkContent($id)
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
         $content = $this->repository->sudo(
-            function ( Repository $repository ) use ( $id )
-            {
-                return $repository->getContentService()->loadContent( $id );
+            function (Repository $repository) use ($id) {
+                return $repository->getContentService()->loadContent($id);
             }
         );
 
         // Check both 'content/read' and 'content/view_embed'.
         if (
             !$this->authorizationChecker->isGranted(
-                new AuthorizationAttribute( 'content', 'read', array( 'valueObject' => $content ) )
+                new AuthorizationAttribute('content', 'read', array('valueObject' => $content))
             )
             && !$this->authorizationChecker->isGranted(
-                new AuthorizationAttribute( 'content', 'view_embed', array( 'valueObject' => $content ) )
+                new AuthorizationAttribute('content', 'view_embed', array('valueObject' => $content))
             )
-        )
-        {
+        ) {
             throw new AccessDeniedException();
         }
 
@@ -442,16 +396,15 @@ class Renderer implements RendererInterface
         if (
             $content->getVersionInfo()->status !== VersionInfo::STATUS_PUBLISHED
             && !$this->authorizationChecker->isGranted(
-                new AuthorizationAttribute( 'content', 'versionread', array( 'valueObject' => $content ) )
+                new AuthorizationAttribute('content', 'versionread', array('valueObject' => $content))
             )
-        )
-        {
+        ) {
             throw new AccessDeniedException();
         }
     }
 
     /**
-     * Checks embed permissions for the given Location $id and returns the Location
+     * Checks embed permissions for the given Location $id and returns the Location.
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      *
@@ -459,13 +412,12 @@ class Renderer implements RendererInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    protected function checkLocation( $id )
+    protected function checkLocation($id)
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Location $location */
         $location = $this->repository->sudo(
-            function ( Repository $repository ) use ( $id )
-            {
-                return $repository->getLocationService()->loadLocation( $id );
+            function (Repository $repository) use ($id) {
+                return $repository->getLocationService()->loadLocation($id);
             }
         );
 
@@ -475,18 +427,17 @@ class Renderer implements RendererInterface
                 new AuthorizationAttribute(
                     'content',
                     'read',
-                    array( 'valueObject' => $location->contentInfo, 'targets' => $location )
+                    array('valueObject' => $location->contentInfo, 'targets' => $location)
                 )
             )
             && !$this->authorizationChecker->isGranted(
                 new AuthorizationAttribute(
                     'content',
                     'view_embed',
-                    array( 'valueObject' => $location->contentInfo, 'targets' => $location )
+                    array('valueObject' => $location->contentInfo, 'targets' => $location)
                 )
             )
-        )
-        {
+        ) {
             throw new AccessDeniedException();
         }
 

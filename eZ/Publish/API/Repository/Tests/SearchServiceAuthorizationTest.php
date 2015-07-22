@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the SearchServiceAuthorizationTest class
+ * File containing the SearchServiceAuthorizationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,7 +27,6 @@ class SearchServiceAuthorizationTest extends BaseTest
     /**
      * Test for the findContent() method but with anonymous user.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testFindContentFiltered
      */
@@ -33,7 +34,7 @@ class SearchServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
@@ -41,21 +42,20 @@ class SearchServiceAuthorizationTest extends BaseTest
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // Should return Content with location id: 2 as the anonymous user should have access to standard section
-        $searchResult = $searchService->findContent( new Query( array( 'filter' => new Criterion\LocationId( 2 ) ) ) );
+        $searchResult = $searchService->findContent(new Query(array('filter' => new Criterion\LocationId(2))));
         /* END: Use Case */
 
-        self::assertEquals( 1, $searchResult->totalCount, "Search query should return totalCount of 1" );
-        self::assertNotEmpty( $searchResult->searchHits, "\$searchResult->searchHits should not be empty" );
-        self::assertEquals( "Home", $searchResult->searchHits[0]->valueObject->contentInfo->name );
+        self::assertEquals(1, $searchResult->totalCount, 'Search query should return totalCount of 1');
+        self::assertNotEmpty($searchResult->searchHits, "\$searchResult->searchHits should not be empty");
+        self::assertEquals('Home', $searchResult->searchHits[0]->valueObject->contentInfo->name);
     }
 
     /**
      * Test for the findContent() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testFindContentFiltered
      */
@@ -63,7 +63,7 @@ class SearchServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
@@ -71,24 +71,23 @@ class SearchServiceAuthorizationTest extends BaseTest
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will return an empty search result
-        $searchResult = $searchService->findContent( new Query( array( 'filter' => new Criterion\LocationId( 5 ) ) ) );
+        $searchResult = $searchService->findContent(new Query(array('filter' => new Criterion\LocationId(5))));
         /* END: Use Case */
 
         self::assertEmpty(
             $searchResult->searchHits,
-            "Expected Not Found exception, got content with name: " .
+            'Expected Not Found exception, got content with name: ' .
             (!empty($searchResult->searchHits) ? $searchResult->searchHits[0]->valueObject->contentInfo->name : '')
         );
-        self::assertEquals( 0, $searchResult->totalCount, "Search query should return totalCount of 0" );
+        self::assertEquals(0, $searchResult->totalCount, 'Search query should return totalCount of 0');
     }
 
     /**
      * Test for the findSingle() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\SearchService::findSingle()
      * @expectedException eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testFindSingle
@@ -97,7 +96,7 @@ class SearchServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $anonymousUserId = $this->generateId( 'user', 10 );
+        $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
@@ -105,21 +104,20 @@ class SearchServiceAuthorizationTest extends BaseTest
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
+        $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will fail with a "NotFoundException" as user does not have access
         $searchService->findSingle(
             new Criterion\ContentId(
-                array( 4 )
+                array(4)
             )
         );
         /* END: Use Case */
     }
 
     /**
-     * Test for the findContent() method, verifying disabling permissions
+     * Test for the findContent() method, verifying disabling permissions.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentService::findContent($query, $fieldFilters, $filterOnUserPermissions)
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceAuthorizationTest::testFindContent
      */
@@ -131,7 +129,7 @@ class SearchServiceAuthorizationTest extends BaseTest
         $user = $this->createMediaUserVersion1();
 
         // Set new media editor as current user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $searchService = $repository->getSearchService();
 
@@ -139,25 +137,24 @@ class SearchServiceAuthorizationTest extends BaseTest
         $query = new Query();
         $query->filter = new Criterion\LogicalAnd(
             array(
-                new Criterion\ContentId( 12 ),
+                new Criterion\ContentId(12),
             )
         );
 
         // Search for matching content
-        $searchResultWithoutPermissions = $searchService->findContent( $query, array(), false );
+        $searchResultWithoutPermissions = $searchService->findContent($query, array(), false);
 
         // Search for matching content
-        $searchResultWithPermissions = $searchService->findContent( $query, array() );
+        $searchResultWithPermissions = $searchService->findContent($query, array());
         /* END: Use Case */
 
-        $this->assertEquals( 1, $searchResultWithoutPermissions->totalCount );
-        $this->assertEquals( 0, $searchResultWithPermissions->totalCount );
+        $this->assertEquals(1, $searchResultWithoutPermissions->totalCount);
+        $this->assertEquals(0, $searchResultWithPermissions->totalCount);
     }
 
     /**
-     * Test for the findSingle() method disabling permission filtering
+     * Test for the findSingle() method disabling permission filtering.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentService::findSingle($query, $fieldFilters, $filterOnUserPermissions)
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceAuthorizationTest::testFindContent
      */
@@ -169,11 +166,11 @@ class SearchServiceAuthorizationTest extends BaseTest
         $user = $this->createMediaUserVersion1();
 
         // Set new media editor as current user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         // Search for "Admin Users" user group which user normally does not have access to
         $content = $repository->getSearchService()->findSingle(
-            new Criterion\ContentId( 12 ),
+            new Criterion\ContentId(12),
             array(),
             false
         );
@@ -188,7 +185,6 @@ class SearchServiceAuthorizationTest extends BaseTest
     /**
      * Test for the findSingle() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentService::findSingle($query, $fieldFilters, $filterOnUserPermissions)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceAuthorizationTest::testFindContent
@@ -201,14 +197,14 @@ class SearchServiceAuthorizationTest extends BaseTest
         $user = $this->createMediaUserVersion1();
 
         // Set new media editor as current user
-        $repository->setCurrentUser( $user );
+        $repository->setCurrentUser($user);
 
         $searchService = $repository->getSearchService();
 
         // This call will fail with a "NotFoundException", because the current
         // user has no access to the "Admin Users" user group
         $searchService->findSingle(
-            new Criterion\ContentId( 12 )
+            new Criterion\ContentId(12)
         );
         /* END: Use Case */
     }

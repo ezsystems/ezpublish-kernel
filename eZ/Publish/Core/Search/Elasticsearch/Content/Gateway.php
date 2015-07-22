@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Elasticsearch Gateway class
+ * File containing the Elasticsearch Gateway class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,14 +24,14 @@ abstract class Gateway
      *
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Document $document
      */
-    abstract public function index( Document $document );
+    abstract public function index(Document $document);
 
     /**
      * Performs bulk index of a given array of documents.
      *
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Document[] $documents
      */
-    abstract public function bulkIndex( array $documents );
+    abstract public function bulkIndex(array $documents);
 
     /**
      * Finds and returns documents of a given $type for a given $query object.
@@ -40,7 +42,7 @@ abstract class Gateway
      *
      * @return mixed
      */
-    abstract public function find( Query $query, $type, array $fieldFilters = array() );
+    abstract public function find(Query $query, $type, array $fieldFilters = array());
 
     /**
      * Finds and returns documents of a given $type for a given $query string.
@@ -50,14 +52,14 @@ abstract class Gateway
      *
      * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\Message
      */
-    abstract public function findRaw( $query, $type );
+    abstract public function findRaw($query, $type);
 
     /**
      * Deletes all documents of a given $type from the index.
      *
      * @param string $type
      */
-    abstract public function purgeIndex( $type );
+    abstract public function purgeIndex($type);
 
     /**
      * Deletes a single document of the given $type by given document $id.
@@ -65,7 +67,7 @@ abstract class Gateway
      * @param int|string $id
      * @param string $type
      */
-    abstract public function delete( $id, $type );
+    abstract public function delete($id, $type);
 
     /**
      * Deletes a document(s) of the given $type by given $query string.
@@ -73,7 +75,7 @@ abstract class Gateway
      * @param string $query
      * @param string $type
      */
-    abstract public function deleteByQuery( $query, $type );
+    abstract public function deleteByQuery($query, $type);
 
     /**
      * Flushes data from memory to the index storage.

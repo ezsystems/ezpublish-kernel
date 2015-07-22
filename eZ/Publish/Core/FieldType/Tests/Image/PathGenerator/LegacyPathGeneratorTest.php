@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the LegacyPathGeneratorTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,16 +20,13 @@ use PHPUnit_Framework_TestCase;
  */
 class LegacyPathGeneratorTest extends PHPUnit_Framework_TestCase
 {
-
     /**
      * @param mixed $data
      * @param mixed $expectedPath
      *
      * @dataProvider provideStoragePathForFieldData
-     *
-     * @return void
      */
-    public function testGetStoragePathForField( $data, $expectedPath )
+    public function testGetStoragePathForField($data, $expectedPath)
     {
         $pathGenerator = new LegacyPathGenerator();
 
@@ -48,7 +47,7 @@ class LegacyPathGeneratorTest extends PHPUnit_Framework_TestCase
                 array(
                     'fieldId' => 42,
                     'versionNo' => 1,
-                    'languageCode' => 'eng-US'
+                    'languageCode' => 'eng-US',
                 ),
                 '2/4/0/0/42-1-eng-US',
             ),
@@ -56,7 +55,7 @@ class LegacyPathGeneratorTest extends PHPUnit_Framework_TestCase
                 array(
                     'fieldId' => 23,
                     'versionNo' => 42,
-                    'languageCode' => 'ger-DE'
+                    'languageCode' => 'ger-DE',
                 ),
                 '3/2/0/0/23-42-ger-DE',
             ),
@@ -64,7 +63,7 @@ class LegacyPathGeneratorTest extends PHPUnit_Framework_TestCase
                 array(
                     'fieldId' => 123456,
                     'versionNo' => 2,
-                    'languageCode' => 'eng-GB'
+                    'languageCode' => 'eng-GB',
                 ),
                 '6/5/4/3/123456-2-eng-GB',
             ),

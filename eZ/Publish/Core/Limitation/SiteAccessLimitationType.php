@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\User\Limitation\SiteAccessLimitation class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,7 +21,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 
 /**
- * SiteAccessLimitation is a User limitation
+ * SiteAccessLimitation is a User limitation.
  */
 class SiteAccessLimitationType implements SPILimitationTypeInterface
 {
@@ -32,22 +34,17 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
      */
-    public function acceptValue( APILimitationValue $limitationValue )
+    public function acceptValue(APILimitationValue $limitationValue)
     {
-        if ( !$limitationValue instanceof APISiteAccessLimitation )
-        {
-            throw new InvalidArgumentType( "\$limitationValue", "APISiteAccessLimitation", $limitationValue );
-        }
-        else if ( !is_array( $limitationValue->limitationValues ) )
-        {
-            throw new InvalidArgumentType( "\$limitationValue->limitationValues", "array", $limitationValue->limitationValues );
+        if (!$limitationValue instanceof APISiteAccessLimitation) {
+            throw new InvalidArgumentType("\$limitationValue", 'APISiteAccessLimitation', $limitationValue);
+        } elseif (!is_array($limitationValue->limitationValues)) {
+            throw new InvalidArgumentType("\$limitationValue->limitationValues", 'array', $limitationValue->limitationValues);
         }
 
-        foreach ( $limitationValue->limitationValues as $key => $value )
-        {
-            if ( !is_string( $value ) )
-            {
-                throw new InvalidArgumentType( "\$limitationValue->limitationValues[{$key}]", "string", $value );
+        foreach ($limitationValue->limitationValues as $key => $value) {
+            if (!is_string($value)) {
+                throw new InvalidArgumentType("\$limitationValue->limitationValues[{$key}]", 'string', $value);
             }
         }
     }
@@ -61,7 +58,7 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( APILimitationValue $limitationValue )
+    public function validate(APILimitationValue $limitationValue)
     {
         $validationErrors = array();
         // @todo make sure value exists using config
@@ -69,19 +66,19 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
     }
 
     /**
-     * Create the Limitation Value
+     * Create the Limitation Value.
      *
      * @param mixed[] $limitationValues
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation
      */
-    public function buildValue( array $limitationValues )
+    public function buildValue(array $limitationValues)
     {
-        return new APISiteAccessLimitation( array( 'limitationValues' => $limitationValues ) );
+        return new APISiteAccessLimitation(array('limitationValues' => $limitationValues));
     }
 
     /**
-     * Evaluate permission against content & target(placement/parent/assignment)
+     * Evaluate permission against content & target(placement/parent/assignment).
      *
      * SiteAccess limitation takes a SiteAccess as ValueObject, and is hence like in legacy only suitable for user/login
      * and similar policies.
@@ -96,55 +93,52 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
      * @param \eZ\Publish\API\Repository\Values\ValueObject[]|null $targets The context of the $object, like Location of Content, if null none where provided by caller
      *
-     * @return boolean
+     * @return bool
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = null )
+    public function evaluate(APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = null)
     {
-        if ( !$value instanceof APISiteAccessLimitation )
-        {
-            throw new InvalidArgumentException( '$value', 'Must be of type: APISiteAccessLimitation' );
+        if (!$value instanceof APISiteAccessLimitation) {
+            throw new InvalidArgumentException('$value', 'Must be of type: APISiteAccessLimitation');
         }
 
-        if ( !$object instanceof SiteAccess )
-        {
-            throw new InvalidArgumentException( '$object', 'Must be of type: SiteAccess' );
+        if (!$object instanceof SiteAccess) {
+            throw new InvalidArgumentException('$object', 'Must be of type: SiteAccess');
         }
 
-        if ( empty( $value->limitationValues ) )
-        {
+        if (empty($value->limitationValues)) {
             return false;
         }
 
-        if ( empty( $object->name ) )
-        {
+        if (empty($object->name)) {
             return false;
         }
 
-        $currentSiteAccessHash = sprintf( '%u', crc32( $object->name ) );
-        return in_array( $currentSiteAccessHash, $value->limitationValues );
+        $currentSiteAccessHash = sprintf('%u', crc32($object->name));
+
+        return in_array($currentSiteAccessHash, $value->limitationValues);
     }
 
     /**
-     * Returns Criterion for use in find() query
+     * Returns Criterion for use in find() query.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
      */
-    public function getCriterion( APILimitationValue $value, APIUser $currentUser )
+    public function getCriterion(APILimitationValue $value, APIUser $currentUser)
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException(__METHOD__);
     }
 
     /**
-     * Returns info on valid $limitationValues
+     * Returns info on valid $limitationValues.
      *
      * @return mixed[]|int In case of array, a hash with key as valid limitations value and value as human readable name
      *                     of that option, in case of int on of VALUE_SCHEMA_ constants.
      */
     public function valueSchema()
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException(__METHOD__);
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-return array (
+return array(
   'element' =>
-  array (
+  array(
     'value' => array(
         array(
             '_attribute' => 'attribute value 1',
@@ -15,4 +15,3 @@ return array (
     ),
   ),
 );
-

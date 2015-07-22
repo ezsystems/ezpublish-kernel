@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use FileSystemIterator;
 use UnexpectedValueException;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
@@ -23,34 +25,35 @@ use UnexpectedValueException;
 abstract class FileSearchBaseIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
-     * Base install dir
+     * Base install dir.
      *
      * @var string
      */
     protected static $installDir;
 
     /**
-     * Root directory for IO files
+     * Root directory for IO files.
      *
      * @var string
      */
     protected static $ioRootDir;
 
     /**
-     * Storage directory used by the IOHandler
+     * Storage directory used by the IOHandler.
+     *
      * @var string
      */
     protected static $storageDir;
 
     /**
-     * Storage dir settings key
+     * Storage dir settings key.
      */
     protected static $storageDirConfigKey = 'storage_dir';
 
     /**
-     * If storage data should not be cleaned up
+     * If storage data should not be cleaned up.
      *
-     * @var boolean
+     * @var bool
      */
     protected static $leaveStorageData = false;
 
@@ -58,12 +61,13 @@ abstract class FileSearchBaseIntegrationTest extends SearchBaseIntegrationTest
      * List of path in config:storage_dir that must not be deleted, and must be ignored in these tests
      * Workaround for FieldType vs. Repository tests. The repository tests require those files since they
      * match the ones referenced in the database fixtures used by Services tests.
+     *
      * @var array
      */
     protected static $ignoredPathList;
 
     /**
-     * Returns the install dir used by the test
+     * Returns the install dir used by the test.
      *
      * @return string
      */
@@ -73,7 +77,7 @@ abstract class FileSearchBaseIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Returns the storage dir used by the test
+     * Returns the storage dir used by the test.
      *
      * @return string
      */
@@ -83,21 +87,18 @@ abstract class FileSearchBaseIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Perform storage directory setup on first execution
-     *
-     * @return void
+     * Perform storage directory setup on first execution.
      */
     public function setUp()
     {
         parent::setUp();
 
-        if ( !isset( self::$installDir ) )
-        {
-            self::$installDir = $this->getConfigValue( 'ezpublish.kernel.root_dir' );
-            self::$storageDir = $this->getConfigValue( static::$storageDirConfigKey );
-            self::$ioRootDir = $this->getConfigValue( 'io_root_dir' );
+        if (!isset(self::$installDir)) {
+            self::$installDir = $this->getConfigValue('ezpublish.kernel.root_dir');
+            self::$storageDir = $this->getConfigValue(static::$storageDirConfigKey);
+            self::$ioRootDir = $this->getConfigValue('io_root_dir');
 
-            self::setUpIgnoredPath( $this->getConfigValue( 'ignored_storage_files' ) );
+            self::setUpIgnoredPath($this->getConfigValue('ignored_storage_files'));
         }
     }
 
@@ -105,8 +106,6 @@ abstract class FileSearchBaseIntegrationTest extends SearchBaseIntegrationTest
      * Tears down the test.
      *
      * Cleans up the storage directory, if it was used
-     *
-     * @return void
      */
     public static function tearDownAfterClass()
     {
@@ -131,75 +130,68 @@ abstract class FileSearchBaseIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Removes the given directory path recursively
+     * Removes the given directory path recursively.
      *
      * @param string $dir
-     *
-     * @return void
      */
     protected static function cleanupStorageDir()
     {
-        if ( self::$installDir == null || self::$storageDir == null || self::$leaveStorageData )
-        {
+        if (self::$installDir == null || self::$storageDir == null || self::$leaveStorageData) {
             // Nothing to do
             return;
         }
 
-        try
-        {
+        try {
             $iterator = self::getStorageDirIterator();
 
-            foreach ( $iterator as $path => $fileInfo )
-            {
-                if ( $fileInfo->isDir() )
-                {
-                    if ( !self::isIgnoredPath( dirname( $path ) ) )
-                        rmdir( $path );
-                }
-                else if ( !self::isIgnoredPath( $path ) )
-                {
-                    unlink( $path );
+            foreach ($iterator as $path => $fileInfo) {
+                if ($fileInfo->isDir()) {
+                    if (!self::isIgnoredPath(dirname($path))) {
+                        rmdir($path);
+                    }
+                } elseif (!self::isIgnoredPath($path)) {
+                    unlink($path);
                 }
             }
-        }
-        catch ( UnexpectedValueException $e )
-        {
+        } catch (UnexpectedValueException $e) {
             // The directory to cleanup just doesn't exist
         }
     }
 
-    protected static function setUpIgnoredPath( $ignoredFiles )
+    protected static function setUpIgnoredPath($ignoredFiles)
     {
-        foreach ( $ignoredFiles as $ignoredFile )
-        {
-            $pathPartsArray = explode( DIRECTORY_SEPARATOR, $ignoredFile );
-            foreach ( $pathPartsArray as $index => $directoryPart )
-            {
-                if ( $directoryPart == '' )
+        foreach ($ignoredFiles as $ignoredFile) {
+            $pathPartsArray = explode(DIRECTORY_SEPARATOR, $ignoredFile);
+            foreach ($pathPartsArray as $index => $directoryPart) {
+                if ($directoryPart == '') {
                     continue;
+                }
                 $partPath = implode(
                     DIRECTORY_SEPARATOR,
-                    array_slice( $pathPartsArray, 0, $index + 1 )
+                    array_slice($pathPartsArray, 0, $index + 1)
                 );
-                self::$ignoredPathList[realpath( $partPath )] = true;
+                self::$ignoredPathList[realpath($partPath)] = true;
             }
         }
     }
 
     /**
-     * Checks if $path must be excluded from filesystem cleanup
+     * Checks if $path must be excluded from filesystem cleanup.
+     *
      * @param string $path
+     *
      * @return bool
      */
-    protected static function isIgnoredPath( $path )
+    protected static function isIgnoredPath($path)
     {
-        return isset( self::$ignoredPathList[realpath( $path )] );
+        return isset(self::$ignoredPathList[realpath($path)]);
     }
 
-    protected function uriExistsOnIO( $uri )
+    protected function uriExistsOnIO($uri)
     {
-        $spiId = str_replace( self::$storageDir, '', ltrim( $uri, '/' ) );
+        $spiId = str_replace(self::$storageDir, '', ltrim($uri, '/'));
         $path = self::$ioRootDir . '/' . $spiId;
-        return file_exists( $path );
+
+        return file_exists($path);
     }
 }

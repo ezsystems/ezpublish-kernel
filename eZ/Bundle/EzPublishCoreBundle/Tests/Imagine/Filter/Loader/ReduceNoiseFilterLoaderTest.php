@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ReduceNoiseFilterLoaderTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -27,8 +29,8 @@ class ReduceNoiseFilterLoaderTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->filter = $this->getMock( '\eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterInterface' );
-        $this->loader = new ReduceNoiseFilterLoader( $this->filter );
+        $this->filter = $this->getMock('\eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterInterface');
+        $this->loader = new ReduceNoiseFilterLoader($this->filter);
     }
 
     /**
@@ -36,6 +38,6 @@ class ReduceNoiseFilterLoaderTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadInvalidDriver()
     {
-        $this->loader->load( $this->getMock( '\Imagine\Image\ImageInterface' ) );
+        $this->loader->load($this->getMock('\Imagine\Image\ImageInterface'));
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIText class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -30,13 +32,13 @@ class URIText extends Regex implements VersatileMatcher, URILexer
      *
      * @param array $siteAccessesConfiguration SiteAccesses configuration.
      */
-    public function __construct( array $siteAccessesConfiguration )
+    public function __construct(array $siteAccessesConfiguration)
     {
-        $this->prefix = isset( $siteAccessesConfiguration['prefix'] ) ? $siteAccessesConfiguration['prefix'] : '';
-        $this->suffix = isset( $siteAccessesConfiguration['suffix'] ) ? $siteAccessesConfiguration['suffix'] : '';
+        $this->prefix = isset($siteAccessesConfiguration['prefix']) ? $siteAccessesConfiguration['prefix'] : '';
+        $this->suffix = isset($siteAccessesConfiguration['suffix']) ? $siteAccessesConfiguration['suffix'] : '';
 
         parent::__construct(
-            '^(/' . preg_quote( $this->prefix, '@' ) . '(\w+)' . preg_quote( $this->suffix, '@' ) . ')',
+            '^(/' . preg_quote($this->prefix, '@') . '(\w+)' . preg_quote($this->suffix, '@') . ')',
             2
         );
     }
@@ -51,14 +53,13 @@ class URIText extends Regex implements VersatileMatcher, URILexer
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
      */
-    public function setRequest( SimplifiedRequest $request )
+    public function setRequest(SimplifiedRequest $request)
     {
-        if ( !$this->element )
-        {
-            $this->setMatchElement( $request->pathinfo );
+        if (!$this->element) {
+            $this->setMatchElement($request->pathinfo);
         }
 
-        parent::setRequest( $request );
+        parent::setRequest($request);
     }
 
     /**
@@ -68,10 +69,11 @@ class URIText extends Regex implements VersatileMatcher, URILexer
      *
      * @return string The modified URI
      */
-    public function analyseURI( $uri )
+    public function analyseURI($uri)
     {
-        $uri = '/' . ltrim( $uri, '/' );
-        return preg_replace( "@$this->regex@", '', $uri );
+        $uri = '/' . ltrim($uri, '/');
+
+        return preg_replace("@$this->regex@", '', $uri);
     }
 
     /**
@@ -81,16 +83,18 @@ class URIText extends Regex implements VersatileMatcher, URILexer
      *
      * @return string The modified link URI
      */
-    public function analyseLink( $linkUri )
+    public function analyseLink($linkUri)
     {
-        $linkUri = '/' . ltrim( $linkUri, '/' );
+        $linkUri = '/' . ltrim($linkUri, '/');
         $siteAccessUri = "/$this->prefix" . $this->match() . $this->suffix;
+
         return $siteAccessUri . $linkUri;
     }
 
-    public function reverseMatch( $siteAccessName )
+    public function reverseMatch($siteAccessName)
     {
-        $this->request->setPathinfo( "/{$this->prefix}{$siteAccessName}{$this->suffix}{$this->request->pathinfo}" );
+        $this->request->setPathinfo("/{$this->prefix}{$siteAccessName}{$this->suffix}{$this->request->pathinfo}");
+
         return $this;
     }
 

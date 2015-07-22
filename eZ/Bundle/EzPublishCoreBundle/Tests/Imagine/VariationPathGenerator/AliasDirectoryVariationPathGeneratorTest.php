@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -15,7 +16,7 @@ class AliasDirectoryVariationPathGeneratorTest extends \PHPUnit_Framework_TestCa
 
         self::assertEquals(
             '_aliases/large/path/to/original.png',
-            $generator->getVariationPath( 'path/to/original.png', 'large' )
+            $generator->getVariationPath('path/to/original.png', 'large')
         );
     }
 }

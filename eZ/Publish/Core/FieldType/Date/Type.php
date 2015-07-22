@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Date class
+ * File containing the Date class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -30,20 +32,20 @@ class Type extends FieldType
 
     protected $settingsSchema = array(
         // One of the DEFAULT_* class constants
-        "defaultType" => array(
-            "type" => "choice",
-            "default" => self::DEFAULT_EMPTY
-        )
+        'defaultType' => array(
+            'type' => 'choice',
+            'default' => self::DEFAULT_EMPTY,
+        ),
     );
 
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
     public function getFieldTypeIdentifier()
     {
-        return "ezdate";
+        return 'ezdate';
     }
 
     /**
@@ -56,14 +58,13 @@ class Type extends FieldType
      *
      * @return string
      */
-    public function getName( SPIValue $value )
+    public function getName(SPIValue $value)
     {
-        if ( $this->isEmptyValue( $value ) )
-        {
-            return "";
+        if ($this->isEmptyValue($value)) {
+            return '';
         }
 
-        return $value->date->format( "l d F Y" );
+        return $value->date->format('l d F Y');
     }
 
     /**
@@ -74,7 +75,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value;
+        return new Value();
     }
 
     /**
@@ -84,21 +85,18 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\Date\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
-        if ( is_string( $inputValue ) )
-        {
-            $inputValue = Value::fromString( $inputValue );
+        if (is_string($inputValue)) {
+            $inputValue = Value::fromString($inputValue);
         }
 
-        if ( is_int( $inputValue ) )
-        {
-            $inputValue = Value::fromTimestamp( $inputValue );
+        if (is_int($inputValue)) {
+            $inputValue = Value::fromTimestamp($inputValue);
         }
 
-        if ( $inputValue instanceof DateTime )
-        {
-            $inputValue = new Value( $inputValue );
+        if ($inputValue instanceof DateTime) {
+            $inputValue = new Value($inputValue);
         }
 
         return $inputValue;
@@ -110,16 +108,13 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\Date\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
-        if ( !$value->date instanceof DateTime )
-        {
+        if (!$value->date instanceof DateTime) {
             throw new InvalidArgumentType(
                 "$value->date",
-                "DateTime",
+                'DateTime',
                 $value->date
             );
         }
@@ -132,69 +127,65 @@ class Type extends FieldType
      *
      * @return array
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo(BaseValue $value)
     {
-        if ( $value->date === null )
-        {
+        if ($value->date === null) {
             return null;
         }
+
         return $value->date->getTimestamp();
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * @param mixed $hash Null or associative array containing timestamp and optionally date in RFC850 format.
      *
      * @return \eZ\Publish\Core\FieldType\Date\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        if ( $hash === null )
-        {
+        if ($hash === null) {
             return $this->getEmptyValue();
         }
 
-        if ( isset( $hash["rfc850"] ) && $hash["rfc850"] )
-        {
-            return Value::fromString( $hash["rfc850"] );
+        if (isset($hash['rfc850']) && $hash['rfc850']) {
+            return Value::fromString($hash['rfc850']);
         }
 
-        return Value::fromTimestamp( (int)$hash["timestamp"] );
+        return Value::fromTimestamp((int)$hash['timestamp']);
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\Date\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
-        if ( $this->isEmptyValue( $value ) )
-        {
+        if ($this->isEmptyValue($value)) {
             return null;
         }
 
-        if ( $value->date instanceof DateTime )
-        {
+        if ($value->date instanceof DateTime) {
             return array(
-                "timestamp" => $value->date->getTimestamp(),
-                "rfc850"    => $value->date->format( DateTime::RFC850  ),
+                'timestamp' => $value->date->getTimestamp(),
+                'rfc850' => $value->date->format(DateTime::RFC850),
             );
         }
 
         return array(
-            "timestamp" => 0,
-            "rfc850"    => null,
+            'timestamp' => 0,
+            'rfc850' => null,
         );
     }
 
     /**
-     * Returns whether the field type is searchable
+     * Returns whether the field type is searchable.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSearchable()
     {
@@ -202,45 +193,41 @@ class Type extends FieldType
     }
 
     /**
-     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
      * @param mixed $fieldSettings
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateFieldSettings( $fieldSettings )
+    public function validateFieldSettings($fieldSettings)
     {
         $validationErrors = array();
 
-        foreach ( $fieldSettings as $name => $value )
-        {
-            if ( !isset( $this->settingsSchema[$name] ) )
-            {
+        foreach ($fieldSettings as $name => $value) {
+            if (!isset($this->settingsSchema[$name])) {
                 $validationErrors[] = new ValidationError(
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        "setting" => $name
+                        'setting' => $name,
                     ),
                     "[$name]"
                 );
                 continue;
             }
 
-            switch ( $name )
-            {
-                case "defaultType":
+            switch ($name) {
+                case 'defaultType':
                     $definedTypes = array(
                         self::DEFAULT_EMPTY,
-                        self::DEFAULT_CURRENT_DATE
+                        self::DEFAULT_CURRENT_DATE,
                     );
-                    if ( !in_array( $value, $definedTypes, true ) )
-                    {
+                    if (!in_array($value, $definedTypes, true)) {
                         $validationErrors[] = new ValidationError(
                             "Setting '%setting%' is of unknown type",
                             null,
                             array(
-                                "setting" => $name
+                                'setting' => $name,
                             ),
                             "[$name]"
                         );

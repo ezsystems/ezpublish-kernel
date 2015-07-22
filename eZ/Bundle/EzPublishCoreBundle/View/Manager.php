@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the Manager class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,25 +24,20 @@ class Manager extends BaseManager implements SiteAccessAware
      *
      * @param SiteAccess $siteAccess
      */
-    public function setSiteAccess( SiteAccess $siteAccess = null )
+    public function setSiteAccess(SiteAccess $siteAccess = null)
     {
-        if ( $this->logger )
-        {
-            $this->logger->debug( 'Changing SiteAccess in view providers' );
+        if ($this->logger) {
+            $this->logger->debug('Changing SiteAccess in view providers');
         }
 
-        foreach (
-            array_merge(
-                $this->getAllLocationViewProviders(),
-                $this->getAllContentViewProviders(),
-                $this->getAllBlockViewProviders()
-            )
-            as $provider
-        )
-        {
-            if ( $provider instanceof SiteAccessAware )
-            {
-                $provider->setSiteAccess( $siteAccess );
+        $providers = array_merge(
+            $this->getAllLocationViewProviders(),
+            $this->getAllContentViewProviders(),
+            $this->getAllBlockViewProviders()
+        );
+        foreach ($providers as $provider) {
+            if ($provider instanceof SiteAccessAware) {
+                $provider->setSiteAccess($siteAccess);
             }
         }
     }

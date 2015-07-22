@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the SecurityPass class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,54 +21,51 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class SecurityPass implements CompilerPassInterface
 {
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
-        if ( !( $container->hasDefinition( 'security.authentication.provider.dao' ) && $container->hasDefinition( 'security.authentication.provider.anonymous' ) ) )
-        {
+        if (!($container->hasDefinition('security.authentication.provider.dao') && $container->hasDefinition('security.authentication.provider.anonymous'))) {
             return;
         }
 
-        $configResolverRef = new Reference( 'ezpublish.config.resolver' );
-        $repositoryReference = new Reference( 'ezpublish.api.repository' );
+        $configResolverRef = new Reference('ezpublish.config.resolver');
+        $repositoryReference = new Reference('ezpublish.api.repository');
         // Inject the Repository in the authentication provider.
         // We need it for checking user credentials
-        $daoAuthenticationProviderDef = $container->findDefinition( 'security.authentication.provider.dao' );
+        $daoAuthenticationProviderDef = $container->findDefinition('security.authentication.provider.dao');
         $daoAuthenticationProviderDef->addMethodCall(
             'setRepository',
-            array( $repositoryReference )
+            array($repositoryReference)
         );
 
-        $anonymousAuthenticationProviderDef = $container->findDefinition( 'security.authentication.provider.anonymous' );
+        $anonymousAuthenticationProviderDef = $container->findDefinition('security.authentication.provider.anonymous');
         $anonymousAuthenticationProviderDef->addMethodCall(
             'setRepository',
-            array( $repositoryReference )
+            array($repositoryReference)
         );
 
         $anonymousAuthenticationProviderDef->addMethodCall(
             'setConfigResolver',
-            array( $configResolverRef )
+            array($configResolverRef)
         );
 
-        if ( !$container->hasDefinition( 'security.http_utils' ) )
-        {
+        if (!$container->hasDefinition('security.http_utils')) {
             return;
         }
 
-        $httpUtilsDef = $container->findDefinition( 'security.http_utils' );
+        $httpUtilsDef = $container->findDefinition('security.http_utils');
         $httpUtilsDef->addMethodCall(
             'setSiteAccess',
-            array( new Reference( 'ezpublish.siteaccess' ) )
+            array(new Reference('ezpublish.siteaccess'))
         );
 
-        if ( !$container->hasDefinition( 'security.authentication.success_handler' ) )
-        {
+        if (!$container->hasDefinition('security.authentication.success_handler')) {
             return;
         }
 
-        $successHandlerDef = $container->getDefinition( 'security.authentication.success_handler' );
+        $successHandlerDef = $container->getDefinition('security.authentication.success_handler');
         $successHandlerDef->addMethodCall(
             'setConfigResolver',
-            array( $configResolverRef )
+            array($configResolverRef)
         );
     }
 }

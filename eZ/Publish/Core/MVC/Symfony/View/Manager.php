@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the view Manager class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -102,8 +104,7 @@ class Manager implements ViewManagerInterface
         ConfigResolverInterface $configResolver,
         $viewBaseLayout,
         LoggerInterface $logger = null
-    )
-    {
+    ) {
         $this->templateEngine = $templateEngine;
         $this->eventDispatcher = $eventDispatcher;
         $this->repository = $repository;
@@ -113,16 +114,18 @@ class Manager implements ViewManagerInterface
     }
 
     /**
-     * Helper for {@see addContentViewProvider()} and {@see addLocationViewProvider()}
+     * Helper for {@see addContentViewProvider()} and {@see addLocationViewProvider()}.
+     *
      * @param array $property
      * @param \eZ\Publish\Core\MVC\Symfony\View\Provider\Content $viewProvider
      * @param int $priority
      */
-    private function addViewProvider( &$property, $viewProvider, $priority )
+    private function addViewProvider(&$property, $viewProvider, $priority)
     {
         $priority = (int)$priority;
-        if ( !isset( $property[$priority] ) )
+        if (!isset($property[$priority])) {
             $property[$priority] = array();
+        }
 
         $property[$priority][] = $viewProvider;
     }
@@ -134,9 +137,9 @@ class Manager implements ViewManagerInterface
      * @param \eZ\Publish\Core\MVC\Symfony\View\Provider\Content $viewProvider
      * @param int $priority
      */
-    public function addContentViewProvider( ContentViewProvider $viewProvider, $priority = 0 )
+    public function addContentViewProvider(ContentViewProvider $viewProvider, $priority = 0)
     {
-        $this->addViewProvider( $this->contentViewProviders, $viewProvider, $priority );
+        $this->addViewProvider($this->contentViewProviders, $viewProvider, $priority);
     }
 
     /**
@@ -146,9 +149,9 @@ class Manager implements ViewManagerInterface
      * @param \eZ\Publish\Core\MVC\Symfony\View\Provider\Location $viewProvider
      * @param int $priority
      */
-    public function addLocationViewProvider( LocationViewProvider $viewProvider, $priority = 0 )
+    public function addLocationViewProvider(LocationViewProvider $viewProvider, $priority = 0)
     {
-        $this->addViewProvider( $this->locationViewProviders, $viewProvider, $priority );
+        $this->addViewProvider($this->locationViewProviders, $viewProvider, $priority);
     }
 
     /**
@@ -158,9 +161,9 @@ class Manager implements ViewManagerInterface
      * @param \eZ\Publish\Core\MVC\Symfony\View\Provider\Block $viewProvider
      * @param int $priority
      */
-    public function addBlockViewProvider( BlockViewProvider $viewProvider, $priority = 0 )
+    public function addBlockViewProvider(BlockViewProvider $viewProvider, $priority = 0)
     {
-        $this->addViewProvider( $this->blockViewProviders, $viewProvider, $priority );
+        $this->addViewProvider($this->blockViewProviders, $viewProvider, $priority);
     }
 
     /**
@@ -168,8 +171,9 @@ class Manager implements ViewManagerInterface
      */
     public function getAllContentViewProviders()
     {
-        if ( empty( $this->sortedContentViewProviders ) )
-            $this->sortedContentViewProviders = $this->sortViewProviders( $this->contentViewProviders );
+        if (empty($this->sortedContentViewProviders)) {
+            $this->sortedContentViewProviders = $this->sortViewProviders($this->contentViewProviders);
+        }
 
         return $this->sortedContentViewProviders;
     }
@@ -179,8 +183,9 @@ class Manager implements ViewManagerInterface
      */
     public function getAllLocationViewProviders()
     {
-        if ( empty( $this->sortedLocationViewProviders ) )
-            $this->sortedLocationViewProviders = $this->sortViewProviders( $this->locationViewProviders );
+        if (empty($this->sortedLocationViewProviders)) {
+            $this->sortedLocationViewProviders = $this->sortViewProviders($this->locationViewProviders);
+        }
 
         return $this->sortedLocationViewProviders;
     }
@@ -190,27 +195,28 @@ class Manager implements ViewManagerInterface
      */
     public function getAllBlockViewProviders()
     {
-        if ( empty( $this->sortedBlockViewProviders ) )
-            $this->sortedBlockViewProviders = $this->sortViewProviders( $this->blockViewProviders );
+        if (empty($this->sortedBlockViewProviders)) {
+            $this->sortedBlockViewProviders = $this->sortViewProviders($this->blockViewProviders);
+        }
 
         return $this->sortedBlockViewProviders;
     }
 
     /**
      * Sort the registered view providers by priority.
-     * The highest priority number is the highest priority (reverse sorting)
+     * The highest priority number is the highest priority (reverse sorting).
      *
      * @param array $property view providers to sort
+     *
      * @return \eZ\Publish\Core\MVC\Symfony\View\Provider\Content[]|\eZ\Publish\Core\MVC\Symfony\View\Provider\Location[]|\eZ\Publish\Core\MVC\Symfony\View\Provider\Block[]
      */
-    protected function sortViewProviders( $property )
+    protected function sortViewProviders($property)
     {
         $sortedViewProviders = array();
-        krsort( $property );
+        krsort($property);
 
-        foreach ( $property as $viewProvider )
-        {
-            $sortedViewProviders = array_merge( $sortedViewProviders, $viewProvider );
+        foreach ($property as $viewProvider) {
+            $sortedViewProviders = array_merge($sortedViewProviders, $viewProvider);
         }
 
         return $sortedViewProviders;
@@ -225,24 +231,24 @@ class Manager implements ViewManagerInterface
      * @param array $parameters Parameters to pass to the template called to
      *        render the view. By default, it's empty. 'content' entry is
      *        reserved for the Content that is rendered.
+     *
      * @throws \RuntimeException
      *
      * @return string
      */
-    public function renderContent( Content $content, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array() )
+    public function renderContent(Content $content, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array())
     {
         $contentInfo = $content->getVersionInfo()->getContentInfo();
-        foreach ( $this->getAllContentViewProviders() as $viewProvider )
-        {
-            $view = $viewProvider->getView( $contentInfo, $viewType );
-            if ( $view instanceof ContentViewInterface )
-            {
+        foreach ($this->getAllContentViewProviders() as $viewProvider) {
+            $view = $viewProvider->getView($contentInfo, $viewType);
+            if ($view instanceof ContentViewInterface) {
                 $parameters['content'] = $content;
-                return $this->renderContentView( $view, $parameters );
+
+                return $this->renderContentView($view, $parameters);
             }
         }
 
-        throw new RuntimeException( "Unable to find a template for #$contentInfo->id" );
+        throw new RuntimeException("Unable to find a template for #$contentInfo->id");
     }
 
     /**
@@ -255,31 +261,31 @@ class Manager implements ViewManagerInterface
      *        render the view. By default, it's empty. 'location' and 'content'
      *        entries are reserved for the Location (and its Content) that is
      *        viewed.
+     *
      * @throws \RuntimeException
      *
      * @return string
      */
-    public function renderLocation( Location $location, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array() )
+    public function renderLocation(Location $location, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array())
     {
-        foreach ( $this->getAllLocationViewProviders() as $viewProvider )
-        {
-            $view = $viewProvider->getView( $location, $viewType );
-            if ( $view instanceof ContentViewInterface )
-            {
+        foreach ($this->getAllLocationViewProviders() as $viewProvider) {
+            $view = $viewProvider->getView($location, $viewType);
+            if ($view instanceof ContentViewInterface) {
                 $parameters['location'] = $location;
+
                 return $this->renderContentView(
                     $view,
                     $parameters + array(
                         'content' => $this->repository->getContentService()->loadContentByContentInfo(
                             $location->getContentInfo(),
-                            $this->configResolver->getParameter( 'languages' )
-                        )
+                            $this->configResolver->getParameter('languages')
+                        ),
                     )
                 );
             }
         }
 
-        throw new RuntimeException( "Unable to find a view for location #$location->id" );
+        throw new RuntimeException("Unable to find a view for location #$location->id");
     }
 
     /**
@@ -290,23 +296,23 @@ class Manager implements ViewManagerInterface
      * @param array $parameters Parameters to pass to the template called to
      *        render the view. By default, it's empty.
      *        'block' entry is reserved for the Block that is viewed.
+     *
      * @throws \RuntimeException
      *
      * @return string
      */
-    public function renderBlock( Block $block, $parameters = array() )
+    public function renderBlock(Block $block, $parameters = array())
     {
-        foreach ( $this->getAllBlockViewProviders() as $viewProvider )
-        {
-            $view = $viewProvider->getView( $block );
-            if ( $view instanceof ContentViewInterface )
-            {
+        foreach ($this->getAllBlockViewProviders() as $viewProvider) {
+            $view = $viewProvider->getView($block);
+            if ($view instanceof ContentViewInterface) {
                 $parameters['block'] = $block;
-                return $this->renderContentView( $view, $parameters );
+
+                return $this->renderContentView($view, $parameters);
             }
         }
 
-        throw new RuntimeException( "Unable to find a view for location #$block->id" );
+        throw new RuntimeException("Unable to find a view for location #$block->id");
     }
 
     /**
@@ -318,20 +324,21 @@ class Manager implements ViewManagerInterface
      *
      * @return string
      */
-    public function renderContentView( ContentViewInterface $view, array $defaultParams = array() )
+    public function renderContentView(ContentViewInterface $view, array $defaultParams = array())
     {
         $defaultParams['viewbaseLayout'] = $this->viewBaseLayout;
-        $view->addParameters( $defaultParams );
+        $view->addParameters($defaultParams);
         $this->eventDispatcher->dispatch(
             MVCEvents::PRE_CONTENT_VIEW,
-            new PreContentViewEvent( $view )
+            new PreContentViewEvent($view)
         );
 
         $templateIdentifier = $view->getTemplateIdentifier();
         $params = $view->getParameters();
-        if ( $templateIdentifier instanceof \Closure )
-            return $templateIdentifier( $params );
+        if ($templateIdentifier instanceof \Closure) {
+            return $templateIdentifier($params);
+        }
 
-        return $this->templateEngine->render( $templateIdentifier, $params );
+        return $this->templateEngine->render($templateIdentifier, $params);
     }
 }

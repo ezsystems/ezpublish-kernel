@@ -1,13 +1,12 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
- *
- *
- * @package eZ\Publish\API\Repository\Values\Content\Query
  */
 
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value;
@@ -15,20 +14,19 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value;
 
 /**
- * Struct that stores extra value information for a MapLocationDistance Criterion object
- * @package eZ\Publish\API\Repository\Values\Content\Query
+ * Struct that stores extra value information for a MapLocationDistance Criterion object.
  */
 class MapLocationValue extends Value
 {
     /**
-     * Latitude of a geographical location
+     * Latitude of a geographical location.
      *
      * @var float
      */
     public $latitude;
 
     /**
-     * Longitude of a geographical location
+     * Longitude of a geographical location.
      *
      * @var float
      */
@@ -38,7 +36,7 @@ class MapLocationValue extends Value
      * @param float $latitude
      * @param float $longitude
      */
-    public function __construct( $latitude, $longitude )
+    public function __construct($latitude, $longitude)
     {
         $this->latitude = $latitude;
         $this->longitude = $longitude;

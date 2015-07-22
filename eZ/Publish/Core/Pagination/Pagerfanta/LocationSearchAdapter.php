@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the LocationSearchAdapter class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,16 +20,15 @@ class LocationSearchAdapter extends LocationSearchHitAdapter
     /**
      * Returns a slice of the results as Location objects.
      *
-     * @param integer $offset The offset.
-     * @param integer $length The length.
+     * @param int $offset The offset.
+     * @param int $length The length.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      */
-    public function getSlice( $offset, $length )
+    public function getSlice($offset, $length)
     {
         $list = array();
-        foreach ( parent::getSlice( $offset, $length ) as $hit )
-        {
+        foreach (parent::getSlice($offset, $length) as $hit) {
             $list[] = $hit->valueObject;
         }
 

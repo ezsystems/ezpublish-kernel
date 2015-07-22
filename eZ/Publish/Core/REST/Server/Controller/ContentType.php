@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentType controller class
+ * File containing the ContentType controller class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,9 +20,7 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\ContentTypeValidationException;
 use eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
-
 use eZ\Publish\Core\REST\Server\Values;
-
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
@@ -28,150 +28,144 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * ContentType controller
+ * ContentType controller.
  */
 class ContentType extends RestController
 {
     /**
-     * Content type service
+     * Content type service.
      *
      * @var \eZ\Publish\API\Repository\ContentTypeService
      */
     protected $contentTypeService;
 
     /**
-     * Construct controller
+     * Construct controller.
      *
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      */
-    public function __construct( ContentTypeService $contentTypeService )
+    public function __construct(ContentTypeService $contentTypeService)
     {
         $this->contentTypeService = $contentTypeService;
     }
 
     /**
-     * Creates a new content type group
+     * Creates a new content type group.
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedContentTypeGroup
      */
-    public function createContentTypeGroup( Request $request )
+    public function createContentTypeGroup(Request $request)
     {
         $createStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $request->headers->get( 'Content-Type' ) ),
+                array('Content-Type' => $request->headers->get('Content-Type')),
                 $request->getContent()
             )
         );
 
-        try
-        {
+        try {
             return new Values\CreatedContentTypeGroup(
                 array(
-                    'contentTypeGroup' => $this->contentTypeService->createContentTypeGroup( $createStruct )
+                    'contentTypeGroup' => $this->contentTypeService->createContentTypeGroup($createStruct),
                 )
             );
-        }
-        catch ( InvalidArgumentException $e )
-        {
-            throw new ForbiddenException( $e->getMessage() );
+        } catch (InvalidArgumentException $e) {
+            throw new ForbiddenException($e->getMessage());
         }
     }
 
     /**
-     * Updates a content type group
+     * Updates a content type group.
      *
      * @param $contentTypeGroupId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function updateContentTypeGroup( $contentTypeGroupId, Request $request )
+    public function updateContentTypeGroup($contentTypeGroupId, Request $request)
     {
         $createStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $request->headers->get( 'Content-Type' ) ),
+                array('Content-Type' => $request->headers->get('Content-Type')),
                 $request->getContent()
             )
         );
 
-        try
-        {
+        try {
             $this->contentTypeService->updateContentTypeGroup(
-                $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId ),
-                $this->mapToGroupUpdateStruct( $createStruct )
+                $this->contentTypeService->loadContentTypeGroup($contentTypeGroupId),
+                $this->mapToGroupUpdateStruct($createStruct)
             );
 
-            return $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
-        }
-        catch ( InvalidArgumentException $e )
-        {
-            throw new ForbiddenException( $e->getMessage() );
+            return $this->contentTypeService->loadContentTypeGroup($contentTypeGroupId);
+        } catch (InvalidArgumentException $e) {
+            throw new ForbiddenException($e->getMessage());
         }
     }
 
     /**
-     * Returns a list of content types of the group
+     * Returns a list of content types of the group.
      *
      * @param string $contentTypeGroupId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeList|\eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList
      */
-    public function listContentTypesForGroup( $contentTypeGroupId, Request $request )
+    public function listContentTypesForGroup($contentTypeGroupId, Request $request)
     {
         $contentTypes = $this->contentTypeService->loadContentTypes(
-            $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId )
+            $this->contentTypeService->loadContentTypeGroup($contentTypeGroupId)
         );
 
-        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.contenttypelist' )
-        {
-            return new Values\ContentTypeList( $contentTypes, $request->getPathInfo() );
+        if ($this->getMediaType($request) === 'application/vnd.ez.api.contenttypelist') {
+            return new Values\ContentTypeList($contentTypes, $request->getPathInfo());
         }
 
-        return new Values\ContentTypeInfoList( $contentTypes, $request->getPathInfo() );
+        return new Values\ContentTypeInfoList($contentTypes, $request->getPathInfo());
     }
 
     /**
-     * The given content type group is deleted
+     * The given content type group is deleted.
      *
      * @param mixed $contentTypeGroupId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function deleteContentTypeGroup( $contentTypeGroupId )
+    public function deleteContentTypeGroup($contentTypeGroupId)
     {
-        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
+        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup($contentTypeGroupId);
 
-        $contentTypes = $this->contentTypeService->loadContentTypes( $contentTypeGroup );
-        if ( !empty( $contentTypes ) )
-        {
-            throw new ForbiddenException( 'Only empty content type groups can be deleted' );
+        $contentTypes = $this->contentTypeService->loadContentTypes($contentTypeGroup);
+        if (!empty($contentTypes)) {
+            throw new ForbiddenException('Only empty content type groups can be deleted');
         }
 
-        $this->contentTypeService->deleteContentTypeGroup( $contentTypeGroup );
+        $this->contentTypeService->deleteContentTypeGroup($contentTypeGroup);
 
         return new Values\NoContent();
     }
 
     /**
-     * Returns a list of all content type groups
+     * Returns a list of all content type groups.
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeGroupList
      */
-    public function loadContentTypeGroupList( Request $request )
+    public function loadContentTypeGroupList(Request $request)
     {
-        if ( $request->query->has( 'identifier' ) )
-        {
+        if ($request->query->has('identifier')) {
             $contentTypeGroup = $this->contentTypeService->loadContentTypeGroupByIdentifier(
-                $request->query->get( 'identifier' )
+                $request->query->get('identifier')
             );
 
             return new Values\TemporaryRedirect(
                 $this->router->generate(
                     'ezpublish_rest_loadContentTypeGroup',
                     array(
-                        'contentTypeGroupId' => $contentTypeGroup->id
+                        'contentTypeGroupId' => $contentTypeGroup->id,
                     )
                 )
             );
@@ -183,27 +177,27 @@ class ContentType extends RestController
     }
 
     /**
-     * Returns the content type group given by id
+     * Returns the content type group given by id.
      *
      * @param $contentTypeGroupId
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function loadContentTypeGroup( $contentTypeGroupId )
+    public function loadContentTypeGroup($contentTypeGroupId)
     {
-        return $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
+        return $this->contentTypeService->loadContentTypeGroup($contentTypeGroupId);
     }
 
     /**
-     * Loads a content type
+     * Loads a content type.
      *
      * @param $contentTypeId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RestContentType
      */
-    public function loadContentType( $contentTypeId )
+    public function loadContentType($contentTypeId)
     {
-        $contentType = $this->contentTypeService->loadContentType( $contentTypeId );
+        $contentType = $this->contentTypeService->loadContentType($contentTypeId);
 
         return new Values\RestContentType(
             $contentType,
@@ -212,138 +206,125 @@ class ContentType extends RestController
     }
 
     /**
-     * Returns a list of content types
+     * Returns a list of content types.
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeList|\eZ\Publish\Core\REST\Server\Values\ContentTypeInfoList
      */
-    public function listContentTypes( Request $request )
+    public function listContentTypes(Request $request)
     {
-        if ( $this->getMediaType( $request ) === 'application/vnd.ez.api.contenttypelist' )
-        {
-            $return = new Values\ContentTypeList( array(), $request->getPathInfo() );
-        }
-        else
-        {
-            $return = new Values\ContentTypeInfoList( array(), $request->getPathInfo() );
+        if ($this->getMediaType($request) === 'application/vnd.ez.api.contenttypelist') {
+            $return = new Values\ContentTypeList(array(), $request->getPathInfo());
+        } else {
+            $return = new Values\ContentTypeInfoList(array(), $request->getPathInfo());
         }
 
-        if ( $request->query->has( 'identifier' ) )
-        {
-            $return->contentTypes = array( $this->loadContentTypeByIdentifier( $request ) );
+        if ($request->query->has('identifier')) {
+            $return->contentTypes = array($this->loadContentTypeByIdentifier($request));
+
             return $return;
         }
 
-        if ( $request->query->has( 'remoteId' ) )
-        {
+        if ($request->query->has('remoteId')) {
             $return->contentTypes = array(
-                $this->loadContentTypeByRemoteId( $request )
+                $this->loadContentTypeByRemoteId($request),
             );
+
             return $return;
         }
 
         $limit = null;
-        if ( $request->query->has( 'limit' ) )
-        {
-            $limit = (int)$request->query->get( 'limit', null );
-            if ( $limit <= 0 )
-            {
-                throw new BadRequestException( 'wrong value for limit parameter' );
+        if ($request->query->has('limit')) {
+            $limit = (int)$request->query->get('limit', null);
+            if ($limit <= 0) {
+                throw new BadRequestException('wrong value for limit parameter');
             }
         }
         $contentTypes = $this->getContentTypeList();
-        $sort = $request->query->get( 'sort' );
-        if ( $request->query->has( 'orderby' ) )
-        {
-            $orderby = $request->query->get( 'orderby' );
-            $this->sortContentTypeList( $contentTypes, $orderby, $sort );
+        $sort = $request->query->get('sort');
+        if ($request->query->has('orderby')) {
+            $orderby = $request->query->get('orderby');
+            $this->sortContentTypeList($contentTypes, $orderby, $sort);
         }
-        $offset = $request->query->get( 'offset', 0 );
-        $return->contentTypes = array_slice( $contentTypes, $offset, $limit );
+        $offset = $request->query->get('offset', 0);
+        $return->contentTypes = array_slice($contentTypes, $offset, $limit);
+
         return $return;
     }
 
     /**
-     * Loads a content type by its identifier
+     * Loads a content type by its identifier.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function loadContentTypeByIdentifier( Request $request )
+    public function loadContentTypeByIdentifier(Request $request)
     {
         return $this->contentTypeService->loadContentTypeByIdentifier(
-            $request->query->get( 'identifier' )
+            $request->query->get('identifier')
         );
     }
 
     /**
-     * Loads a content type by its remote ID
+     * Loads a content type by its remote ID.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function loadContentTypeByRemoteId( Request $request )
+    public function loadContentTypeByRemoteId(Request $request)
     {
         return $this->contentTypeService->loadContentTypeByRemoteId(
-            $request->query->get( 'remoteId' )
+            $request->query->get('remoteId')
         );
     }
 
     /**
-     * Creates a new content type draft in the given content type group
+     * Creates a new content type draft in the given content type group.
      *
      * @param $contentTypeGroupId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedContentType
      */
-    public function createContentType( $contentTypeGroupId, Request $request )
+    public function createContentType($contentTypeGroupId, Request $request)
     {
-        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
-        $publish = ( $request->query->has( 'publish' ) && $request->query->get( 'publish' ) === 'true' );
+        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup($contentTypeGroupId);
+        $publish = ($request->query->has('publish') && $request->query->get('publish') === 'true');
 
-        try
-        {
+        try {
             $contentTypeDraft = $this->contentTypeService->createContentType(
                 $this->inputDispatcher->parse(
                     new Message(
                         array(
-                            'Content-Type' => $request->headers->get( 'Content-Type' ),
+                            'Content-Type' => $request->headers->get('Content-Type'),
                             // @todo Needs refactoring! Temporary solution so parser has access to get parameters
-                            '__publish' => $publish
+                            '__publish' => $publish,
                         ),
                         $request->getContent()
                     )
                 ),
-                array( $contentTypeGroup )
+                array($contentTypeGroup)
             );
-        }
-        catch ( InvalidArgumentException $e )
-        {
-            throw new ForbiddenException( $e->getMessage() );
-        }
-        catch ( ContentTypeValidationException $e )
-        {
-            throw new BadRequestException( $e->getMessage() );
-        }
-        catch ( ContentTypeFieldDefinitionValidationException $e )
-        {
-            throw new BadRequestException( $e->getMessage() );
-        }
-        catch ( Exceptions\Parser $e )
-        {
-            throw new BadRequestException( $e->getMessage() );
+        } catch (InvalidArgumentException $e) {
+            throw new ForbiddenException($e->getMessage());
+        } catch (ContentTypeValidationException $e) {
+            throw new BadRequestException($e->getMessage());
+        } catch (ContentTypeFieldDefinitionValidationException $e) {
+            throw new BadRequestException($e->getMessage());
+        } catch (Exceptions\Parser $e) {
+            throw new BadRequestException($e->getMessage());
         }
 
-        if ( $publish )
-        {
-            $this->contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+        if ($publish) {
+            $this->contentTypeService->publishContentTypeDraft($contentTypeDraft);
 
-            $contentType = $this->contentTypeService->loadContentType( $contentTypeDraft->id );
+            $contentType = $this->contentTypeService->loadContentType($contentTypeDraft->id);
+
             return new Values\CreatedContentType(
                 array(
                     'contentType' => new Values\RestContentType(
                         $contentType,
                         $contentType->getFieldDefinitions()
-                    )
+                    ),
                 )
             );
         }
@@ -353,7 +334,7 @@ class ContentType extends RestController
                 'contentType' => new Values\RestContentType(
                     $contentTypeDraft,
                     $contentTypeDraft->getFieldDefinitions()
-                )
+                ),
             )
         );
     }
@@ -366,62 +347,57 @@ class ContentType extends RestController
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
-    public function copyContentType( $contentTypeId )
+    public function copyContentType($contentTypeId)
     {
         $copiedContentType = $this->contentTypeService->copyContentType(
-            $this->contentTypeService->loadContentType( $contentTypeId )
+            $this->contentTypeService->loadContentType($contentTypeId)
         );
 
         return new Values\ResourceCreated(
             $this->router->generate(
                 'ezpublish_rest_loadContentType',
-                array( 'contentTypeId' => $copiedContentType->id )
+                array('contentTypeId' => $copiedContentType->id)
             )
         );
     }
 
     /**
-     * Creates a draft and updates it with the given data
+     * Creates a draft and updates it with the given data.
      *
      * @param $contentTypeId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedContentType
      */
-    public function createContentTypeDraft( $contentTypeId, Request $request )
+    public function createContentTypeDraft($contentTypeId, Request $request)
     {
-        $contentType = $this->contentTypeService->loadContentType( $contentTypeId );
+        $contentType = $this->contentTypeService->loadContentType($contentTypeId);
 
-        try
-        {
+        try {
             $contentTypeDraft = $this->contentTypeService->createContentTypeDraft(
                 $contentType
             );
-        }
-        catch ( BadStateException $e )
-        {
-            throw new ForbiddenException( $e->getMessage() );
+        } catch (BadStateException $e) {
+            throw new ForbiddenException($e->getMessage());
         }
 
         $contentTypeUpdateStruct = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $request->headers->get( 'Content-Type' ),
+                    'Content-Type' => $request->headers->get('Content-Type'),
                 ),
                 $request->getContent()
             )
         );
 
-        try
-        {
+        try {
             $this->contentTypeService->updateContentTypeDraft(
                 $contentTypeDraft,
                 $contentTypeUpdateStruct
             );
-        }
-        catch ( InvalidArgumentException $e )
-        {
-            throw new ForbiddenException( $e->getMessage() );
+        } catch (InvalidArgumentException $e) {
+            throw new ForbiddenException($e->getMessage());
         }
 
         return new Values\CreatedContentType(
@@ -431,21 +407,21 @@ class ContentType extends RestController
                     $this->contentTypeService->loadContentTypeDraft(
                         $contentTypeDraft->id
                     )
-                )
+                ),
             )
         );
     }
 
     /**
-     * Loads a content type draft
+     * Loads a content type draft.
      *
      * @param $contentTypeId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RestContentType
      */
-    public function loadContentTypeDraft( $contentTypeId )
+    public function loadContentTypeDraft($contentTypeId)
     {
-        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $contentTypeId );
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft($contentTypeId);
 
         return new Values\RestContentType(
             $contentTypeDraft,
@@ -454,35 +430,33 @@ class ContentType extends RestController
     }
 
     /**
-     * Updates meta data of a draft. This method does not handle field definitions
+     * Updates meta data of a draft. This method does not handle field definitions.
      *
      * @param $contentTypeId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\RestContentType
      */
-    public function updateContentTypeDraft( $contentTypeId, Request $request )
+    public function updateContentTypeDraft($contentTypeId, Request $request)
     {
-        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $contentTypeId );
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft($contentTypeId);
         $contentTypeUpdateStruct = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $request->headers->get( 'Content-Type' ),
+                    'Content-Type' => $request->headers->get('Content-Type'),
                 ),
                 $request->getContent()
             )
         );
 
-        try
-        {
+        try {
             $this->contentTypeService->updateContentTypeDraft(
                 $contentTypeDraft,
                 $contentTypeUpdateStruct
             );
-        }
-        catch ( InvalidArgumentException $e )
-        {
-            throw new ForbiddenException( $e->getMessage() );
+        } catch (InvalidArgumentException $e) {
+            throw new ForbiddenException($e->getMessage());
         }
 
         return new Values\RestContentType(
@@ -494,75 +468,66 @@ class ContentType extends RestController
     }
 
     /**
-     * Creates a new field definition for the given content type draft
+     * Creates a new field definition for the given content type draft.
      *
      * @param $contentTypeId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedFieldDefinition
      */
-    public function addContentTypeDraftFieldDefinition( $contentTypeId, Request $request )
+    public function addContentTypeDraftFieldDefinition($contentTypeId, Request $request)
     {
-        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $contentTypeId );
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft($contentTypeId);
         $fieldDefinitionCreate = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $request->headers->get( 'Content-Type' ),
+                    'Content-Type' => $request->headers->get('Content-Type'),
                 ),
                 $request->getContent()
             )
         );
 
-        try
-        {
+        try {
             $this->contentTypeService->addFieldDefinition(
                 $contentTypeDraft,
                 $fieldDefinitionCreate
             );
-        }
-        catch ( InvalidArgumentException $e )
-        {
-            throw new ForbiddenException( $e->getMessage() );
-        }
-        catch ( ContentTypeFieldDefinitionValidationException $e )
-        {
-            throw new BadRequestException( $e->getMessage() );
-        }
-        catch ( BadStateException $e )
-        {
-            throw new ForbiddenException( $e->getMessage() );
+        } catch (InvalidArgumentException $e) {
+            throw new ForbiddenException($e->getMessage());
+        } catch (ContentTypeFieldDefinitionValidationException $e) {
+            throw new BadRequestException($e->getMessage());
+        } catch (BadStateException $e) {
+            throw new ForbiddenException($e->getMessage());
         }
 
-        $updatedDraft = $this->contentTypeService->loadContentTypeDraft( $contentTypeId );
-        foreach ( $updatedDraft->getFieldDefinitions() as $fieldDefinition )
-        {
-            if ( $fieldDefinition->identifier == $fieldDefinitionCreate->identifier )
-            {
+        $updatedDraft = $this->contentTypeService->loadContentTypeDraft($contentTypeId);
+        foreach ($updatedDraft->getFieldDefinitions() as $fieldDefinition) {
+            if ($fieldDefinition->identifier == $fieldDefinitionCreate->identifier) {
                 return new Values\CreatedFieldDefinition(
                     array(
-                        'fieldDefinition' => new Values\RestFieldDefinition(
-                            $updatedDraft, $fieldDefinition
-                        )
+                        'fieldDefinition' => new Values\RestFieldDefinition($updatedDraft, $fieldDefinition),
                     )
                 );
             }
         }
 
-        throw new Exceptions\NotFoundException( "Field definition not found: '{$request->getPathInfo()}'." );
+        throw new Exceptions\NotFoundException("Field definition not found: '{$request->getPathInfo()}'.");
     }
 
     /**
-     * Loads field definitions for a given content type
+     * Loads field definitions for a given content type.
      *
      * @param $contentTypeId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\FieldDefinitionList
+     *
      * @todo Check why this isn't in the specs
      */
-    public function loadContentTypeFieldDefinitionList( $contentTypeId )
+    public function loadContentTypeFieldDefinitionList($contentTypeId)
     {
-        $contentType = $this->contentTypeService->loadContentType( $contentTypeId );
+        $contentType = $this->contentTypeService->loadContentType($contentTypeId);
 
         return new Values\FieldDefinitionList(
             $contentType,
@@ -571,22 +536,21 @@ class ContentType extends RestController
     }
 
     /**
-     * Returns the field definition given by id
+     * Returns the field definition given by id.
      *
      * @param $contentTypeId
      * @param $fieldDefinitionId
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\RestFieldDefinition
      */
-    public function loadContentTypeFieldDefinition( $contentTypeId, $fieldDefinitionId, Request $request )
+    public function loadContentTypeFieldDefinition($contentTypeId, $fieldDefinitionId, Request $request)
     {
-        $contentType = $this->contentTypeService->loadContentType( $contentTypeId );
+        $contentType = $this->contentTypeService->loadContentType($contentTypeId);
 
-        foreach ( $contentType->getFieldDefinitions() as $fieldDefinition )
-        {
-            if ( $fieldDefinition->id == $fieldDefinitionId )
-            {
+        foreach ($contentType->getFieldDefinitions() as $fieldDefinition) {
+            if ($fieldDefinition->id == $fieldDefinitionId) {
                 return new Values\RestFieldDefinition(
                     $contentType,
                     $fieldDefinition
@@ -594,19 +558,19 @@ class ContentType extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Field definition not found: '{$request->getPathInfo()}'." );
+        throw new Exceptions\NotFoundException("Field definition not found: '{$request->getPathInfo()}'.");
     }
 
     /**
-     * Loads field definitions for a given content type draft
+     * Loads field definitions for a given content type draft.
      *
      * @param $contentTypeId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\FieldDefinitionList
      */
-    public function loadContentTypeDraftFieldDefinitionList( $contentTypeId )
+    public function loadContentTypeDraftFieldDefinitionList($contentTypeId)
     {
-        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $contentTypeId );
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft($contentTypeId);
 
         return new Values\FieldDefinitionList(
             $contentTypeDraft,
@@ -615,22 +579,21 @@ class ContentType extends RestController
     }
 
     /**
-     * Returns the draft field definition given by id
+     * Returns the draft field definition given by id.
      *
      * @param $contentTypeId
      * @param $fieldDefinitionId
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\RestFieldDefinition
      */
-    public function loadContentTypeDraftFieldDefinition( $contentTypeId, $fieldDefinitionId, Request $request )
+    public function loadContentTypeDraftFieldDefinition($contentTypeId, $fieldDefinitionId, Request $request)
     {
-        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $contentTypeId );
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft($contentTypeId);
 
-        foreach ( $contentTypeDraft->getFieldDefinitions() as $fieldDefinition )
-        {
-            if ( $fieldDefinition->id == $fieldDefinitionId )
-            {
+        foreach ($contentTypeDraft->getFieldDefinitions() as $fieldDefinition) {
+            if ($fieldDefinition->id == $fieldDefinitionId) {
                 return new Values\RestFieldDefinition(
                     $contentTypeDraft,
                     $fieldDefinition
@@ -638,99 +601,88 @@ class ContentType extends RestController
             }
         }
 
-        throw new Exceptions\NotFoundException( "Field definition not found: '{$request->getPathInfo()}'." );
+        throw new Exceptions\NotFoundException("Field definition not found: '{$request->getPathInfo()}'.");
     }
 
     /**
-     * Updates the attributes of a field definition
+     * Updates the attributes of a field definition.
      *
      * @param $contentTypeId
      * @param $fieldDefinitionId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\FieldDefinitionList
      */
-    public function updateContentTypeDraftFieldDefinition( $contentTypeId, $fieldDefinitionId, Request $request )
+    public function updateContentTypeDraftFieldDefinition($contentTypeId, $fieldDefinitionId, Request $request)
     {
-        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $contentTypeId );
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft($contentTypeId);
         $fieldDefinitionUpdate = $this->inputDispatcher->parse(
             new Message(
                 array(
-                    'Content-Type' => $request->headers->get( 'Content-Type' ),
+                    'Content-Type' => $request->headers->get('Content-Type'),
                     // @todo Needs refactoring! Temporary solution so parser has access to URL
-                    'Url' => $request->getPathInfo()
+                    'Url' => $request->getPathInfo(),
                 ),
                 $request->getContent()
             )
         );
 
         $fieldDefinition = null;
-        foreach ( $contentTypeDraft->getFieldDefinitions() as $fieldDef )
-        {
-            if ( $fieldDef->id == $fieldDefinitionId )
-            {
+        foreach ($contentTypeDraft->getFieldDefinitions() as $fieldDef) {
+            if ($fieldDef->id == $fieldDefinitionId) {
                 $fieldDefinition = $fieldDef;
             }
         }
 
-        if ( $fieldDefinition === null )
-        {
-            throw new Exceptions\NotFoundException( "Field definition not found: '{$request->getPathInfo()}'." );
+        if ($fieldDefinition === null) {
+            throw new Exceptions\NotFoundException("Field definition not found: '{$request->getPathInfo()}'.");
         }
 
-        try
-        {
+        try {
             $this->contentTypeService->updateFieldDefinition(
                 $contentTypeDraft,
                 $fieldDefinition,
                 $fieldDefinitionUpdate
             );
-        }
-        catch ( InvalidArgumentException $e )
-        {
-            throw new ForbiddenException( $e->getMessage() );
+        } catch (InvalidArgumentException $e) {
+            throw new ForbiddenException($e->getMessage());
         }
 
-        $updatedDraft = $this->contentTypeService->loadContentTypeDraft( $contentTypeId );
-        foreach ( $updatedDraft->getFieldDefinitions() as $fieldDef )
-        {
-            if ( $fieldDef->id == $fieldDefinitionId )
-            {
-                return new Values\RestFieldDefinition(
-                    $updatedDraft, $fieldDef
-                );
+        $updatedDraft = $this->contentTypeService->loadContentTypeDraft($contentTypeId);
+        foreach ($updatedDraft->getFieldDefinitions() as $fieldDef) {
+            if ($fieldDef->id == $fieldDefinitionId) {
+                return new Values\RestFieldDefinition($updatedDraft, $fieldDef);
             }
         }
 
-        throw new Exceptions\NotFoundException( "Field definition not found: '{$request->getPathInfo()}'." );
+        throw new Exceptions\NotFoundException("Field definition not found: '{$request->getPathInfo()}'.");
     }
 
     /**
-     * Deletes a field definition from a content type draft
+     * Deletes a field definition from a content type draft.
      *
      * @param $contentTypeId
      * @param $fieldDefinitionId
      *
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function removeContentTypeDraftFieldDefinition( $contentTypeId, $fieldDefinitionId, Request $request )
+    public function removeContentTypeDraftFieldDefinition($contentTypeId, $fieldDefinitionId, Request $request)
     {
-        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $contentTypeId );
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft($contentTypeId);
 
         $fieldDefinition = null;
-        foreach ( $contentTypeDraft->getFieldDefinitions() as $fieldDef )
-        {
-            if ( $fieldDef->id == $fieldDefinitionId )
-            {
+        foreach ($contentTypeDraft->getFieldDefinitions() as $fieldDef) {
+            if ($fieldDef->id == $fieldDefinitionId) {
                 $fieldDefinition = $fieldDef;
             }
         }
 
-        if ( $fieldDefinition === null )
-        {
-            throw new Exceptions\NotFoundException( "Field definition not found: '{$request->getPathInfo()}'." );
+        if ($fieldDefinition === null) {
+            throw new Exceptions\NotFoundException("Field definition not found: '{$request->getPathInfo()}'.");
         }
 
         $this->contentTypeService->removeFieldDefinition(
@@ -742,26 +694,27 @@ class ContentType extends RestController
     }
 
     /**
-     * Publishes a content type draft
+     * Publishes a content type draft.
      *
      * @param $contentTypeId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\RestContentType
      */
-    public function publishContentTypeDraft( $contentTypeId )
+    public function publishContentTypeDraft($contentTypeId)
     {
-        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $contentTypeId );
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft($contentTypeId);
 
         $fieldDefinitions = $contentTypeDraft->getFieldDefinitions();
-        if ( empty( $fieldDefinitions ) )
-        {
-            throw new ForbiddenException( 'Empty content type draft cannot be published' );
+        if (empty($fieldDefinitions)) {
+            throw new ForbiddenException('Empty content type draft cannot be published');
         }
 
-        $this->contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+        $this->contentTypeService->publishContentTypeDraft($contentTypeDraft);
 
-        $publishedContentType = $this->contentTypeService->loadContentType( $contentTypeDraft->id );
+        $publishedContentType = $this->contentTypeService->loadContentType($contentTypeDraft->id);
+
         return new Values\RestContentType(
             $publishedContentType,
             $publishedContentType->getFieldDefinitions()
@@ -769,54 +722,53 @@ class ContentType extends RestController
     }
 
     /**
-     * The given content type is deleted
+     * The given content type is deleted.
      *
      * @param $contentTypeId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function deleteContentType( $contentTypeId )
+    public function deleteContentType($contentTypeId)
     {
-        $contentType = $this->contentTypeService->loadContentType( $contentTypeId );
+        $contentType = $this->contentTypeService->loadContentType($contentTypeId);
 
-        try
-        {
-            $this->contentTypeService->deleteContentType( $contentType );
-        }
-        catch ( BadStateException $e )
-        {
-            throw new ForbiddenException( $e->getMessage() );
+        try {
+            $this->contentTypeService->deleteContentType($contentType);
+        } catch (BadStateException $e) {
+            throw new ForbiddenException($e->getMessage());
         }
 
         return new Values\NoContent();
     }
 
     /**
-     * The given content type draft is deleted
+     * The given content type draft is deleted.
      *
      * @param $contentTypeId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function deleteContentTypeDraft( $contentTypeId )
+    public function deleteContentTypeDraft($contentTypeId)
     {
-        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft( $contentTypeId );
-        $this->contentTypeService->deleteContentType( $contentTypeDraft );
+        $contentTypeDraft = $this->contentTypeService->loadContentTypeDraft($contentTypeId);
+        $this->contentTypeService->deleteContentType($contentTypeDraft);
 
         return new Values\NoContent();
     }
 
     /**
-     * Returns the content type groups the content type belongs to
+     * Returns the content type groups the content type belongs to.
      *
      * @param $contentTypeId
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeGroupRefList
      */
-    public function loadGroupsOfContentType( $contentTypeId )
+    public function loadGroupsOfContentType($contentTypeId)
     {
-        $contentType = $this->contentTypeService->loadContentType( $contentTypeId );
+        $contentType = $this->contentTypeService->loadContentType($contentTypeId);
+
         return new Values\ContentTypeGroupRefList(
             $contentType,
             $contentType->getContentTypeGroups()
@@ -824,47 +776,42 @@ class ContentType extends RestController
     }
 
     /**
-     * Links a content type group to the content type and returns the updated group list
+     * Links a content type group to the content type and returns the updated group list.
      *
      * @param mixed $contentTypeId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeGroupRefList
      */
-    public function linkContentTypeToGroup( $contentTypeId, Request $request )
+    public function linkContentTypeToGroup($contentTypeId, Request $request)
     {
-        $contentType = $this->contentTypeService->loadContentType( $contentTypeId );
+        $contentType = $this->contentTypeService->loadContentType($contentTypeId);
 
-        try
-        {
+        try {
             $contentTypeGroupId = $this->requestParser->parseHref(
-                $request->query->get( 'group' ),
+                $request->query->get('group'),
                 'contentTypeGroupId'
             );
-        }
-        catch ( Exceptions\InvalidArgumentException $e )
-        {
+        } catch (Exceptions\InvalidArgumentException $e) {
             // Group URI does not match the required value
-            throw new BadRequestException( $e->getMessage() );
+            throw new BadRequestException($e->getMessage());
         }
 
-        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
+        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup($contentTypeGroupId);
 
         $existingContentTypeGroups = $contentType->getContentTypeGroups();
         $contentTypeInGroup = false;
-        foreach ( $existingContentTypeGroups as $existingGroup )
-        {
-            if ( $existingGroup->id == $contentTypeGroup->id )
-            {
+        foreach ($existingContentTypeGroups as $existingGroup) {
+            if ($existingGroup->id == $contentTypeGroup->id) {
                 $contentTypeInGroup = true;
                 break;
             }
         }
 
-        if ( $contentTypeInGroup )
-        {
-            throw new ForbiddenException( 'Content type is already linked to provided group' );
+        if ($contentTypeInGroup) {
+            throw new ForbiddenException('Content type is already linked to provided group');
         }
 
         $this->contentTypeService->assignContentTypeGroup(
@@ -873,6 +820,7 @@ class ContentType extends RestController
         );
 
         $existingContentTypeGroups[] = $contentTypeGroup;
+
         return new Values\ContentTypeGroupRefList(
             $contentType,
             $existingContentTypeGroups
@@ -880,39 +828,36 @@ class ContentType extends RestController
     }
 
     /**
-     * Removes the given group from the content type and returns the updated group list
+     * Removes the given group from the content type and returns the updated group list.
      *
      * @param $contentTypeId
      * @param $contentTypeGroupId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeGroupRefList
      */
-    public function unlinkContentTypeFromGroup( $contentTypeId, $contentTypeGroupId )
+    public function unlinkContentTypeFromGroup($contentTypeId, $contentTypeGroupId)
     {
-        $contentType = $this->contentTypeService->loadContentType( $contentTypeId );
-        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId );
+        $contentType = $this->contentTypeService->loadContentType($contentTypeId);
+        $contentTypeGroup = $this->contentTypeService->loadContentTypeGroup($contentTypeGroupId);
 
         $existingContentTypeGroups = $contentType->getContentTypeGroups();
         $contentTypeInGroup = false;
-        foreach ( $existingContentTypeGroups as $existingGroup )
-        {
-            if ( $existingGroup->id == $contentTypeGroup->id )
-            {
+        foreach ($existingContentTypeGroups as $existingGroup) {
+            if ($existingGroup->id == $contentTypeGroup->id) {
                 $contentTypeInGroup = true;
                 break;
             }
         }
 
-        if ( !$contentTypeInGroup )
-        {
-            throw new Exceptions\NotFoundException( 'Content type is not in the given group' );
+        if (!$contentTypeInGroup) {
+            throw new Exceptions\NotFoundException('Content type is not in the given group');
         }
 
-        if ( count( $existingContentTypeGroups ) == 1 )
-        {
-            throw new ForbiddenException( 'Content type cannot be unlinked from the only remaining group' );
+        if (count($existingContentTypeGroups) == 1) {
+            throw new ForbiddenException('Content type cannot be unlinked from the only remaining group');
         }
 
         $this->contentTypeService->unassignContentTypeGroup(
@@ -920,7 +865,8 @@ class ContentType extends RestController
             $contentTypeGroup
         );
 
-        $contentType = $this->contentTypeService->loadContentType( $contentTypeId );
+        $contentType = $this->contentTypeService->loadContentType($contentTypeId);
+
         return new Values\ContentTypeGroupRefList(
             $contentType,
             $contentType->getContentTypeGroups()
@@ -928,13 +874,13 @@ class ContentType extends RestController
     }
 
     /**
-     * Converts the provided ContentTypeGroupCreateStruct to ContentTypeGroupUpdateStruct
+     * Converts the provided ContentTypeGroupCreateStruct to ContentTypeGroupUpdateStruct.
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $createStruct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct
      */
-    private function mapToGroupUpdateStruct( ContentTypeGroupCreateStruct $createStruct )
+    private function mapToGroupUpdateStruct(ContentTypeGroupCreateStruct $createStruct)
     {
         return new ContentTypeGroupUpdateStruct(
             array(
@@ -948,67 +894,60 @@ class ContentType extends RestController
     /**
      * @param array &$contentTypes
      * @param string $orderby
+     *
      * @return mixed
+     *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException
      */
-    protected function sortContentTypeList( array &$contentTypes, $orderby, $sort = "asc" )
+    protected function sortContentTypeList(array &$contentTypes, $orderby, $sort = 'asc')
     {
-        Switch ( $orderby )
-        {
+        switch ($orderby) {
             case 'name':
-                if ( $sort === 'asc' || $sort === null )
-                {
+                if ($sort === 'asc' || $sort === null) {
                     usort(
-                        $contentTypes, function ( APIContentType $contentType1, APIContentType $contentType2 )
-                        {
-                            return strcasecmp( $contentType1->identifier, $contentType2->identifier );
+                        $contentTypes,
+                        function (APIContentType $contentType1, APIContentType $contentType2) {
+                            return strcasecmp($contentType1->identifier, $contentType2->identifier);
                         }
                     );
-                }
-                else if ( $sort === 'desc' )
-                {
+                } elseif ($sort === 'desc') {
                     usort(
-                        $contentTypes, function ( APIContentType $contentType1, APIContentType $contentType2 )
-                        {
-                            return strcasecmp( $contentType1->identifier, $contentType2->identifier ) * - 1;
+                        $contentTypes,
+                        function (APIContentType $contentType1, APIContentType $contentType2) {
+                            return strcasecmp($contentType1->identifier, $contentType2->identifier) * -1;
                         }
                     );
-                }
-                else
-                {
-                    throw new BadRequestException( 'wrong value for sort parameter' );
+                } else {
+                    throw new BadRequestException('wrong value for sort parameter');
                 }
                 break;
             case 'lastmodified':
-                if ( $sort === 'asc' || $sort === null )
-                {
+                if ($sort === 'asc' || $sort === null) {
                     usort(
-                        $contentTypes, function ($timeObj3, $timeObj4)
-                        {
-                            $timeObj3 = strtotime( $timeObj3->modificationDate->format( "Y-m-d H:i:s" ) );
-                            $timeObj4 = strtotime( $timeObj4->modificationDate->format( "Y-m-d H:i:s" ) );
+                        $contentTypes,
+                        function ($timeObj3, $timeObj4) {
+                            $timeObj3 = strtotime($timeObj3->modificationDate->format('Y-m-d H:i:s'));
+                            $timeObj4 = strtotime($timeObj4->modificationDate->format('Y-m-d H:i:s'));
+
                             return $timeObj3 > $timeObj4;
                         }
                     );
-                }
-                else if ( $sort === 'desc' )
-                {
+                } elseif ($sort === 'desc') {
                     usort(
-                        $contentTypes, function ($timeObj3, $timeObj4)
-                        {
-                            $timeObj3 = strtotime( $timeObj3->modificationDate->format( "Y-m-d H:i:s" ) );
-                            $timeObj4 = strtotime( $timeObj4->modificationDate->format( "Y-m-d H:i:s" ) );
+                        $contentTypes,
+                        function ($timeObj3, $timeObj4) {
+                            $timeObj3 = strtotime($timeObj3->modificationDate->format('Y-m-d H:i:s'));
+                            $timeObj4 = strtotime($timeObj4->modificationDate->format('Y-m-d H:i:s'));
+
                             return $timeObj3 < $timeObj4;
                         }
                     );
-                }
-                else
-                {
-                    throw new BadRequestException( 'wrong value for sort parameter' );
+                } else {
+                    throw new BadRequestException('wrong value for sort parameter');
                 }
                 break;
             default:
-                throw new BadRequestException( 'wrong value for orderby parameter' );
+                throw new BadRequestException('wrong value for orderby parameter');
                 break;
         }
     }
@@ -1019,13 +958,13 @@ class ContentType extends RestController
     protected function getContentTypeList()
     {
         $contentTypes = array();
-        foreach ( $this->contentTypeService->loadContentTypeGroups() as $contentTypeGroup )
-        {
+        foreach ($this->contentTypeService->loadContentTypeGroups() as $contentTypeGroup) {
             $contentTypes = array_merge(
                 $contentTypes,
-                $this->contentTypeService->loadContentTypes( $contentTypeGroup )
+                $this->contentTypeService->loadContentTypes($contentTypeGroup)
             );
         }
+
         return $contentTypes;
     }
 }

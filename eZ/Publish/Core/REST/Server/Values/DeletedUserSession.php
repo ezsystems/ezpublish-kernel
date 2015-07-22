@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the SessionDeleted class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ *
  * @version //autogentag//
  */
 
@@ -23,7 +25,7 @@ class DeletedUserSession extends RestValue
      */
     public $response;
 
-    public function __construct( Response $response )
+    public function __construct(Response $response)
     {
         $this->response = $response;
     }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the InstantCachePurger class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -37,8 +39,7 @@ class InstantCachePurger implements GatewayCachePurger
         PurgeClientInterface $purgeClient,
         ContentService $contentService,
         EventDispatcherInterface $eventDispatcher
-    )
-    {
+    ) {
         $this->purgeClient = $purgeClient;
         $this->contentService = $contentService;
         $this->eventDispatcher = $eventDispatcher;
@@ -51,9 +52,10 @@ class InstantCachePurger implements GatewayCachePurger
      *
      * @return mixed
      */
-    public function purge( $cacheElements )
+    public function purge($cacheElements)
     {
-        $this->purgeClient->purge( (array)$cacheElements );
+        $this->purgeClient->purge((array)$cacheElements);
+
         return $cacheElements;
     }
 
@@ -62,18 +64,17 @@ class InstantCachePurger implements GatewayCachePurger
         $this->purgeClient->purgeAll();
     }
 
-    public function purgeForContent( $contentId )
+    public function purgeForContent($contentId)
     {
-        $contentInfo = $this->contentService->loadContentInfo( $contentId );
-        $event = new ContentCacheClearEvent( $contentInfo );
-        $this->eventDispatcher->dispatch( MVCEvents::CACHE_CLEAR_CONTENT, $event );
+        $contentInfo = $this->contentService->loadContentInfo($contentId);
+        $event = new ContentCacheClearEvent($contentInfo);
+        $this->eventDispatcher->dispatch(MVCEvents::CACHE_CLEAR_CONTENT, $event);
 
         $locationIds = [];
-        foreach ( $event->getLocationsToClear() as $location )
-        {
+        foreach ($event->getLocationsToClear() as $location) {
             $locationIds[] = $location->id;
         }
 
-        $this->purgeClient->purge( array_unique( $locationIds ) );
+        $this->purgeClient->purge(array_unique($locationIds));
     }
 }

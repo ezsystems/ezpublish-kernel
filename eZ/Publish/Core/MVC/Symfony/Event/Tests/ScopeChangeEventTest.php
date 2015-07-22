@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ScopeChangeEventTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,8 +19,8 @@ class ScopeChangeEventTest extends PHPUnit_Framework_TestCase
 {
     public function testGetSiteAccess()
     {
-        $siteAccess = new SiteAccess( 'foo', 'test' );
-        $event = new ScopeChangeEvent( $siteAccess );
-        $this->assertSame( $siteAccess, $event->getSiteAccess() );
+        $siteAccess = new SiteAccess('foo', 'test');
+        $event = new ScopeChangeEvent($siteAccess);
+        $this->assertSame($siteAccess, $event->getSiteAccess());
     }
 }

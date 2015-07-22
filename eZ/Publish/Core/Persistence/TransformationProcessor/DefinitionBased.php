@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the TransformationProcessor\DefinitionBased class
+ * File containing the TransformationProcessor\DefinitionBased class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,19 +15,19 @@ use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased\Parser;
 
 /**
- * Class for processing a set of transformations, loaded from .tr files, on a string
+ * Class for processing a set of transformations, loaded from .tr files, on a string.
  */
 class DefinitionBased extends TransformationProcessor
 {
     /**
-     * Transformation parser
+     * Transformation parser.
      *
      * @var \eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased\Parser
      */
     protected $parser = null;
 
     /**
-     * Construct instance of TransformationProcessor\DefinitionBased
+     * Construct instance of TransformationProcessor\DefinitionBased.
      *
      * Through the $ruleFiles array, a list of files with full text
      * transformation rules is given. These files are parsed by
@@ -38,31 +40,29 @@ class DefinitionBased extends TransformationProcessor
      *
      * @return \eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased
      */
-    public function __construct( Parser $parser, PcreCompiler $compiler, array $ruleFiles = array() )
+    public function __construct(Parser $parser, PcreCompiler $compiler, array $ruleFiles = array())
     {
-        parent::__construct( $compiler, $ruleFiles );
+        parent::__construct($compiler, $ruleFiles);
         $this->parser = $parser;
     }
 
     /**
-     * Loads rules
+     * Loads rules.
      *
      * @return array
      */
     protected function getRules()
     {
-        if ( $this->compiledRules === null )
-        {
+        if ($this->compiledRules === null) {
             $rules = array();
-            foreach ( $this->ruleFiles as $file )
-            {
+            foreach ($this->ruleFiles as $file) {
                 $rules = array_merge(
                     $rules,
-                    $this->parser->parse( $file )
+                    $this->parser->parse($file)
                 );
             }
 
-            $this->compiledRules = $this->compiler->compile( $rules );
+            $this->compiledRules = $this->compiler->compile($rules);
         }
 
         return $this->compiledRules;

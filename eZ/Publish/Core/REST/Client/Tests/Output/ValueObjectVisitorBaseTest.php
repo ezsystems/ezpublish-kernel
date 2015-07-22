@@ -1,19 +1,18 @@
 <?php
+
 /**
- * File containing ValueObjectVisitorBaseTest class
+ * File containing ValueObjectVisitorBaseTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output;
 
 use eZ\Publish\Core\REST\Common\Tests\AssertXmlTagTrait;
-use eZ\Publish\Core\REST\Server\Tests;
-
-use eZ\Publish\Core\REST\Common\Output\Generator;
-use eZ\Publish\Core\REST\Common\RequestParser\eZPublish as EzPublishRequestParser;
+use eZ\Publish\Core\REST\Common\RequestParser\EzPublish as EzPublishRequestParser;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest as CommonValueObjectVisitorBaseTest;
 
 abstract class ValueObjectVisitorBaseTest extends CommonValueObjectVisitorBaseTest
@@ -21,17 +20,16 @@ abstract class ValueObjectVisitorBaseTest extends CommonValueObjectVisitorBaseTe
     use AssertXmlTagTrait;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\RequestParser\eZPublish
+     * @var \eZ\Publish\Core\REST\Common\RequestParser\EzPublish
      */
     protected $requestParser;
 
     /**
-     * @return \eZ\Publish\Core\REST\Common\RequestParser\eZPublish
+     * @return \eZ\Publish\Core\REST\Common\RequestParser\EzPublish
      */
     protected function getRequestParser()
     {
-        if ( !isset($this->requestParser) )
-        {
+        if (!isset($this->requestParser)) {
             $this->requestParser = new EzPublishRequestParser();
         }
 

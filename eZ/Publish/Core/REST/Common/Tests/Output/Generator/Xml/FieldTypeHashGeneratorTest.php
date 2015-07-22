@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the  class
+ * File containing the  class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,7 +17,7 @@ use eZ\Publish\Core\REST\Common\Tests\Output\Generator\FieldTypeHashGeneratorBas
 class FieldTypeHashGeneratorTest extends FieldTypeHashGeneratorBaseTest
 {
     /**
-     * Initializes the field type hash generator
+     * Initializes the field type hash generator.
      *
      * @return \eZ\Publish\Core\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator
      */
@@ -25,7 +27,7 @@ class FieldTypeHashGeneratorTest extends FieldTypeHashGeneratorBaseTest
     }
 
     /**
-     * Initializes the generator
+     * Initializes the generator.
      *
      * @return \eZ\Publish\Core\REST\Common\Output\Generator
      */
@@ -34,7 +36,8 @@ class FieldTypeHashGeneratorTest extends FieldTypeHashGeneratorBaseTest
         $generator = new Common\Output\Generator\Xml(
             $this->getFieldTypeHashGenerator()
         );
-        $generator->setFormatOutput( true );
+        $generator->setFormatOutput(true);
+
         return $generator;
     }
 }

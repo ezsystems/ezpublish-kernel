@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5 class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,33 +23,34 @@ use Psr\Log\LoggerInterface;
 use DOMElement;
 
 /**
- * Converts embedded elements from internal XmlText representation to HTML5
+ * Converts embedded elements from internal XmlText representation to HTML5.
  */
 class EmbedToHtml5 implements Converter
 {
     /**
-     * Content link resource
+     * Content link resource.
      *
      * @const string
      */
-    const LINK_RESOURCE_CONTENT = "CONTENT";
+    const LINK_RESOURCE_CONTENT = 'CONTENT';
 
     /**
-     * Location link resource
+     * Location link resource.
      *
      * @const string
      */
-    const LINK_RESOURCE_LOCATION = "LOCATION";
+    const LINK_RESOURCE_LOCATION = 'LOCATION';
 
     /**
-     * URL link resource
+     * URL link resource.
      *
      * @const string
      */
-    const LINK_RESOURCE_URL = "URL";
+    const LINK_RESOURCE_URL = 'URL';
 
     /**
-     * List of disallowed attributes
+     * List of disallowed attributes.
+     *
      * @var array
      */
     protected $excludedAttributes = array();
@@ -72,59 +75,52 @@ class EmbedToHtml5 implements Converter
         Repository $repository,
         array $excludedAttributes,
         LoggerInterface $logger = null
-    )
-    {
+    ) {
         $this->fragmentHandler = $fragmentHandler;
         $this->repository = $repository;
-        $this->excludedAttributes = array_fill_keys( $excludedAttributes, true );
+        $this->excludedAttributes = array_fill_keys($excludedAttributes, true);
         $this->logger = $logger;
     }
 
     /**
-     * Process embed tags for a single tag type (embed or embed-inline)
+     * Process embed tags for a single tag type (embed or embed-inline).
+     *
      * @param \DOMDocument $xmlDoc
      * @param $tagName string name of the tag to extract
      */
-    protected function processTag( DOMDocument $xmlDoc, $tagName )
+    protected function processTag(DOMDocument $xmlDoc, $tagName)
     {
         /** @var $embed \DOMElement */
-        foreach ( $xmlDoc->getElementsByTagName( $tagName ) as $embed )
-        {
-            if ( !$view = $embed->getAttribute( "view" ) )
-            {
+        foreach ($xmlDoc->getElementsByTagName($tagName) as $embed) {
+            if (!$view = $embed->getAttribute('view')) {
                 $view = $tagName;
             }
 
             $embedContent = null;
-            $parameters = $this->getParameters( $embed );
+            $parameters = $this->getParameters($embed);
 
-            if ( $contentId = $embed->getAttribute( "object_id" ) )
-            {
-                try
-                {
+            if ($contentId = $embed->getAttribute('object_id')) {
+                try {
                     /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
                     $content = $this->repository->sudo(
-                        function ( Repository $repository ) use ( $contentId )
-                        {
-                            return $repository->getContentService()->loadContent( $contentId );
+                        function (Repository $repository) use ($contentId) {
+                            return $repository->getContentService()->loadContent($contentId);
                         }
                     );
 
                     if (
-                        !$this->repository->canUser( 'content', 'read', $content )
-                        && !$this->repository->canUser( 'content', 'view_embed', $content )
-                    )
-                    {
-                        throw new UnauthorizedException( 'content', 'read', array( 'contentId' => $contentId ) );
+                        !$this->repository->canUser('content', 'read', $content)
+                        && !$this->repository->canUser('content', 'view_embed', $content)
+                    ) {
+                        throw new UnauthorizedException('content', 'read', array('contentId' => $contentId));
                     }
 
                     // Check published status of the Content
                     if (
                         $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
-                        && !$this->repository->canUser( 'content', 'versionread', $content )
-                    )
-                    {
-                        throw new UnauthorizedException( 'content', 'versionread', array( 'contentId' => $contentId ) );
+                        && !$this->repository->canUser('content', 'versionread', $content)
+                    ) {
+                        throw new UnauthorizedException('content', 'versionread', array('contentId' => $contentId));
                     }
 
                     $embedContent = $this->fragmentHandler->render(
@@ -134,40 +130,32 @@ class EmbedToHtml5 implements Converter
                                 'contentId' => $contentId,
                                 'viewType' => $view,
                                 'layout' => false,
-                                'params' => $parameters
+                                'params' => $parameters,
                             )
                         )
                     );
-                }
-                catch ( APINotFoundException $e )
-                {
-                    if ( $this->logger )
-                    {
+                } catch (APINotFoundException $e) {
+                    if ($this->logger) {
                         $this->logger->error(
-                            "While generating embed for xmltext, could not locate " .
-                            "Content object with ID " . $contentId
+                            'While generating embed for xmltext, could not locate ' .
+                            'Content object with ID ' . $contentId
                         );
                     }
                 }
-            }
-            else if ( $locationId = $embed->getAttribute( "node_id" ) )
-            {
-                try
-                {
+            } elseif ($locationId = $embed->getAttribute('node_id')) {
+                try {
                     /** @var \eZ\Publish\API\Repository\Values\Content\Location $location */
                     $location = $this->repository->sudo(
-                        function ( Repository $repository ) use ( $locationId )
-                        {
-                            return $repository->getLocationService()->loadLocation( $locationId );
+                        function (Repository $repository) use ($locationId) {
+                            return $repository->getLocationService()->loadLocation($locationId);
                         }
                     );
 
                     if (
-                        !$this->repository->canUser( 'content', 'read', $location->getContentInfo(), $location )
-                        && !$this->repository->canUser( 'content', 'view_embed', $location->getContentInfo(), $location )
-                    )
-                    {
-                        throw new UnauthorizedException( 'content', 'read', array( 'locationId' => $location->id ) );
+                        !$this->repository->canUser('content', 'read', $location->getContentInfo(), $location)
+                        && !$this->repository->canUser('content', 'view_embed', $location->getContentInfo(), $location)
+                    ) {
+                        throw new UnauthorizedException('content', 'read', array('locationId' => $location->id));
                     }
 
                     $embedContent = $this->fragmentHandler->render(
@@ -177,31 +165,25 @@ class EmbedToHtml5 implements Converter
                                 'locationId' => $locationId,
                                 'viewType' => $view,
                                 'layout' => false,
-                                'params' => $parameters
+                                'params' => $parameters,
                             )
                         )
                     );
-                }
-                catch ( APINotFoundException $e )
-                {
-                    if ( $this->logger )
-                    {
+                } catch (APINotFoundException $e) {
+                    if ($this->logger) {
                         $this->logger->error(
-                            "While generating embed for xmltext, could not locate " .
-                            "Location with ID " . $locationId
+                            'While generating embed for xmltext, could not locate ' .
+                            'Location with ID ' . $locationId
                         );
                     }
                 }
             }
 
-            if ( $embedContent === null )
-            {
+            if ($embedContent === null) {
                 // Remove empty embed
-                $embed->parentNode->removeChild( $embed );
-            }
-            else
-            {
-                $embed->appendChild( $xmlDoc->createCDATASection( $embedContent ) );
+                $embed->parentNode->removeChild($embed);
+            } else {
+                $embed->appendChild($xmlDoc->createCDATASection($embedContent));
             }
         }
     }
@@ -213,30 +195,27 @@ class EmbedToHtml5 implements Converter
      *
      * @return array
      */
-    protected function getParameters( DOMElement $embed )
+    protected function getParameters(DOMElement $embed)
     {
         $parameters = array(
-            "noLayout" => true,
-            "objectParameters" => array(),
+            'noLayout' => true,
+            'objectParameters' => array(),
         );
 
-        $linkParameters = $this->getLinkParameters( $embed );
+        $linkParameters = $this->getLinkParameters($embed);
 
-        if ( $linkParameters !== null )
-        {
-            $parameters["linkParameters"] = $linkParameters;
+        if ($linkParameters !== null) {
+            $parameters['linkParameters'] = $linkParameters;
         }
 
-        foreach ( $embed->attributes as $attribute )
-        {
+        foreach ($embed->attributes as $attribute) {
             // We only consider tags in the custom namespace, and skip disallowed names
             if (
-                !isset( $this->excludedAttributes[$attribute->localName] )
+                !isset($this->excludedAttributes[$attribute->localName])
                 && $attribute->localName !== 'url'
-                && strpos( $attribute->localName, EmbedLinking::TEMP_PREFIX ) !== 0
-            )
-            {
-                $parameters["objectParameters"][$attribute->localName] = $attribute->nodeValue;
+                && strpos($attribute->localName, EmbedLinking::TEMP_PREFIX) !== 0
+            ) {
+                $parameters['objectParameters'][$attribute->localName] = $attribute->nodeValue;
             }
         }
 
@@ -250,73 +229,60 @@ class EmbedToHtml5 implements Converter
      *
      * @return array|null
      */
-    protected function getLinkParameters( DOMElement $embed )
+    protected function getLinkParameters(DOMElement $embed)
     {
-        if ( !$embed->hasAttribute( "url" ) )
-        {
+        if (!$embed->hasAttribute('url')) {
             return null;
         }
 
-        $target = $embed->getAttribute( EmbedLinking::TEMP_PREFIX . "target" );
-        $title = $embed->getAttribute( EmbedLinking::TEMP_PREFIX . "title" );
-        $id = $embed->getAttribute( EmbedLinking::TEMP_PREFIX . "id" );
-        $class = $embed->getAttribute( EmbedLinking::TEMP_PREFIX . "class" );
-        $resourceFragmentIdentifier = $embed->getAttribute( EmbedLinking::TEMP_PREFIX . "anchor_name" );
+        $target = $embed->getAttribute(EmbedLinking::TEMP_PREFIX . 'target');
+        $title = $embed->getAttribute(EmbedLinking::TEMP_PREFIX . 'title');
+        $id = $embed->getAttribute(EmbedLinking::TEMP_PREFIX . 'id');
+        $class = $embed->getAttribute(EmbedLinking::TEMP_PREFIX . 'class');
+        $resourceFragmentIdentifier = $embed->getAttribute(EmbedLinking::TEMP_PREFIX . 'anchor_name');
         $resourceType = null;
         $resourceId = null;
 
-        if ( $embed->hasAttribute( EmbedLinking::TEMP_PREFIX . "object_id" ) )
-        {
+        if ($embed->hasAttribute(EmbedLinking::TEMP_PREFIX . 'object_id')) {
             $resourceType = static::LINK_RESOURCE_CONTENT;
-            $resourceId = $embed->getAttribute( EmbedLinking::TEMP_PREFIX . "object_id" );
-        }
-        else if ( $embed->hasAttribute( EmbedLinking::TEMP_PREFIX . "node_id" ) )
-        {
+            $resourceId = $embed->getAttribute(EmbedLinking::TEMP_PREFIX . 'object_id');
+        } elseif ($embed->hasAttribute(EmbedLinking::TEMP_PREFIX . 'node_id')) {
             $resourceType = static::LINK_RESOURCE_LOCATION;
-            $resourceId = $embed->getAttribute( EmbedLinking::TEMP_PREFIX . "node_id" );
-        }
-        else if ( $embed->hasAttribute( EmbedLinking::TEMP_PREFIX . "url_id" ) )
-        {
+            $resourceId = $embed->getAttribute(EmbedLinking::TEMP_PREFIX . 'node_id');
+        } elseif ($embed->hasAttribute(EmbedLinking::TEMP_PREFIX . 'url_id')) {
             $resourceType = static::LINK_RESOURCE_URL;
-            $resourceId = $embed->getAttribute( EmbedLinking::TEMP_PREFIX . "url_id" );
-        }
-        else
-        {
+            $resourceId = $embed->getAttribute(EmbedLinking::TEMP_PREFIX . 'url_id');
+        } else {
             $this->logger->error(
-                "Could not resolve XmlText embed link resource type and ID"
+                'Could not resolve XmlText embed link resource type and ID'
             );
         }
 
         $parameters = array(
-            "href" => $embed->getAttribute( "url" ),
-            "resourceType" => $resourceType,
-            "resourceId" => $resourceId,
-            "wrapped" => $this->isLinkWrapped( $embed ),
+            'href' => $embed->getAttribute('url'),
+            'resourceType' => $resourceType,
+            'resourceId' => $resourceId,
+            'wrapped' => $this->isLinkWrapped($embed),
         );
 
-        if ( !empty( $resourceFragmentIdentifier ) )
-        {
-            $parameters["resourceFragmentIdentifier"] = $resourceFragmentIdentifier;
+        if (!empty($resourceFragmentIdentifier)) {
+            $parameters['resourceFragmentIdentifier'] = $resourceFragmentIdentifier;
         }
 
-        if ( !empty( $target ) )
-        {
-            $parameters["target"] = $target;
+        if (!empty($target)) {
+            $parameters['target'] = $target;
         }
 
-        if ( !empty( $title ) )
-        {
-            $parameters["title"] = $title;
+        if (!empty($title)) {
+            $parameters['title'] = $title;
         }
 
-        if ( !empty( $id ) )
-        {
-            $parameters["id"] = $id;
+        if (!empty($id)) {
+            $parameters['id'] = $id;
         }
 
-        if ( !empty( $class ) )
-        {
-            $parameters["class"] = $class;
+        if (!empty($class)) {
+            $parameters['class'] = $class;
         }
 
         return $parameters;
@@ -329,25 +295,20 @@ class EmbedToHtml5 implements Converter
      *
      * @param \DOMElement $element
      *
-     * @return boolean
+     * @return bool
      */
-    protected function isLinkWrapped( DOMElement $element )
+    protected function isLinkWrapped(DOMElement $element)
     {
         $parentNode = $element->parentNode;
 
-        if ( $parentNode instanceof DOMDocument )
-        {
+        if ($parentNode instanceof DOMDocument) {
             return false;
-        }
-        else if ( $parentNode->localName === "link" )
-        {
+        } elseif ($parentNode->localName === 'link') {
             $childCount = 0;
 
             /** @var \DOMText|\DOMElement $node */
-            foreach ( $parentNode->childNodes as $node )
-            {
-                if ( !( $node->nodeType === XML_TEXT_NODE && $node->isWhitespaceInElementContent() ) )
-                {
+            foreach ($parentNode->childNodes as $node) {
+                if (!($node->nodeType === XML_TEXT_NODE && $node->isWhitespaceInElementContent())) {
                     $childCount += 1;
                 }
             }
@@ -355,19 +316,17 @@ class EmbedToHtml5 implements Converter
             return $childCount !== 1;
         }
 
-        return $this->isLinkWrapped( $parentNode );
+        return $this->isLinkWrapped($parentNode);
     }
 
     /**
-     * Converts embed elements in $xmlDoc from internal representation to HTML5
+     * Converts embed elements in $xmlDoc from internal representation to HTML5.
      *
      * @param \DOMDocument $xmlDoc
-     *
-     * @return null
      */
-    public function convert( DOMDocument $xmlDoc )
+    public function convert(DOMDocument $xmlDoc)
     {
-        $this->processTag( $xmlDoc, 'embed' );
-        $this->processTag( $xmlDoc, 'embed-inline' );
+        $this->processTag($xmlDoc, 'embed');
+        $this->processTag($xmlDoc, 'embed-inline');
     }
 }

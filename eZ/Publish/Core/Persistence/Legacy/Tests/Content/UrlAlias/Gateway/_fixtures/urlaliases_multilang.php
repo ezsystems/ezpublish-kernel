@@ -1,8 +1,8 @@
 <?php
 
-return array (
-    'ezurlalias_ml' => array (
-        0 => array (
+return array(
+    'ezurlalias_ml' => array(
+        0 => array(
             'action' => 'eznode:2',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -15,7 +15,7 @@ return array (
             'text' => '',
             'text_md5' => 'd41d8cd98f00b204e9800998ecf8427e',
         ),
-        1 => array (
+        1 => array(
             'action' => 'eznode:314',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -28,7 +28,7 @@ return array (
             'text' => 'jedan',
             'text_md5' => '6896260129051a949051c3847c34466f',
         ),
-        3 => array (
+        3 => array(
             'action' => 'eznode:315',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -41,7 +41,7 @@ return array (
             'text' => 'dva',
             'text_md5' => 'c67ed9a09ab136fae610b6a087d82e21',
         ),
-        4 => array (
+        4 => array(
             'action' => 'eznode:316',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -54,7 +54,7 @@ return array (
             'text' => 'three',
             'text_md5' => '35d6d33467aae9a2e3dccb4b6b027878',
         ),
-        5 => array (
+        5 => array(
             'action' => 'eznode:316',
             'action_type' => 'eznode',
             'alias_redirects' => '1',
@@ -68,7 +68,7 @@ return array (
             'text_md5' => 'd2cfe69af2d64330670e08efb2c86df7',
         ),
     ),
-    'ezcontent_language' => array (
+    'ezcontent_language' => array(
         0 => array(
             'disabled' => 0,
             'id' => 2,
@@ -82,17 +82,17 @@ return array (
             'name' => 'English (United Kingdom)'
         ),
     ),
-    'ezurlalias_ml_incr' => array (
-        0 => array (
+    'ezurlalias_ml_incr' => array(
+        0 => array(
             'id' => '1',
         ),
-        1 => array (
+        1 => array(
             'id' => '2',
         ),
-        2 => array (
+        2 => array(
             'id' => '3',
         ),
-        3 => array (
+        3 => array(
             'id' => '4',
         ),
     ),

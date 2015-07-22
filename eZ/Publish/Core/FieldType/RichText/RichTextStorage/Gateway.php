@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RichText Gateway abstract class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway as UrlGateway;
 
 /**
  * Abstract gateway class for RichText type.
- * Handles data that is not directly included in raw XML value from the field (i.e. URLs)
+ * Handles data that is not directly included in raw XML value from the field (i.e. URLs).
  */
 abstract class Gateway extends StorageGateway
 {
@@ -23,7 +25,7 @@ abstract class Gateway extends StorageGateway
      */
     protected $urlGateway;
 
-    public function __construct( UrlGateway $urlGateway )
+    public function __construct(UrlGateway $urlGateway)
     {
         $this->urlGateway = $urlGateway;
     }
@@ -37,7 +39,7 @@ abstract class Gateway extends StorageGateway
      *
      * @return array An array of Content ids, with remote ids as keys
      */
-    abstract public function getContentIds( array $remoteIds );
+    abstract public function getContentIds(array $remoteIds);
 
     /**
      * Returns a list of URLs for a list of URL ids.
@@ -48,9 +50,9 @@ abstract class Gateway extends StorageGateway
      *
      * @return array An array of URLs, with ids as keys
      */
-    public function getIdUrlMap( array $ids )
+    public function getIdUrlMap(array $ids)
     {
-        return $this->urlGateway->getIdUrlMap( $ids );
+        return $this->urlGateway->getIdUrlMap($ids);
     }
 
     /**
@@ -62,9 +64,9 @@ abstract class Gateway extends StorageGateway
      *
      * @return array An array of URL ids, with URLs as keys
      */
-    public function getUrlIdMap( array $urls )
+    public function getUrlIdMap(array $urls)
     {
-        return $this->urlGateway->getUrlIdMap( $urls );
+        return $this->urlGateway->getUrlIdMap($urls);
     }
 
     /**
@@ -74,9 +76,9 @@ abstract class Gateway extends StorageGateway
      *
      * @return int|string
      */
-    public function insertUrl( $url )
+    public function insertUrl($url)
     {
-        return $this->urlGateway->insertUrl( $url );
+        return $this->urlGateway->insertUrl($url);
     }
 
     /**
@@ -86,9 +88,9 @@ abstract class Gateway extends StorageGateway
      * @param int|string $fieldId
      * @param int $versionNo
      */
-    public function linkUrl( $urlId, $fieldId, $versionNo )
+    public function linkUrl($urlId, $fieldId, $versionNo)
     {
-        $this->urlGateway->linkUrl( $urlId, $fieldId, $versionNo );
+        $this->urlGateway->linkUrl($urlId, $fieldId, $versionNo);
     }
 
     /**
@@ -97,8 +99,8 @@ abstract class Gateway extends StorageGateway
      * @param int|string $fieldId
      * @param int $versionNo
      */
-    public function unlinkUrl( $fieldId, $versionNo )
+    public function unlinkUrl($fieldId, $versionNo)
     {
-        $this->urlGateway->unlinkUrl( $fieldId, $versionNo );
+        $this->urlGateway->unlinkUrl($fieldId, $versionNo);
     }
 }

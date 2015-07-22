@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the GatewayCachePurger interface.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,7 +26,7 @@ interface GatewayCachePurger
      *
      * @return mixed
      */
-    public function purge( $cacheElements );
+    public function purge($cacheElements);
 
     /**
      * Triggers cache purge for given content.
@@ -32,7 +34,7 @@ interface GatewayCachePurger
      *
      * @param mixed $contentId Content ID.
      */
-    public function purgeForContent( $contentId );
+    public function purgeForContent($contentId);
 
     /**
      * Triggers the cache purge for all content in cache.

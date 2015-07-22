@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing an interface for the Doctrine database abstractions
+ * File containing an interface for the Doctrine database abstractions.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -30,9 +32,10 @@ class InsertDoctrineQuery extends AbstractDoctrineQuery implements InsertQuery
      * insertInto() returns a pointer to $this.
      *
      * @param string $table
+     *
      * @return \eZ\Publish\Core\Persistence\Database\InsertQuery
      */
-    public function insertInto( $table )
+    public function insertInto($table)
     {
         $this->table = $table;
 
@@ -46,9 +49,10 @@ class InsertDoctrineQuery extends AbstractDoctrineQuery implements InsertQuery
      *
      * @param string $column
      * @param string $expression
+     *
      * @return \eZ\Publish\Core\Persistence\Database\InsertQuery
      */
-    public function set( $column, $expression )
+    public function set($column, $expression)
     {
         $this->values[$column] = $expression;
 
@@ -60,18 +64,16 @@ class InsertDoctrineQuery extends AbstractDoctrineQuery implements InsertQuery
      */
     public function getQuery()
     {
-        if ( strlen( $this->table ) === 0 )
-        {
-            throw new QueryException( 'Missing table name' );
+        if (strlen($this->table) === 0) {
+            throw new QueryException('Missing table name');
         }
 
-        if ( count( $this->values ) === 0 )
-        {
-            throw new QueryException( 'Missing values' );
+        if (count($this->values) === 0) {
+            throw new QueryException('Missing values');
         }
 
         return 'INSERT INTO ' . $this->table
-               . ' (' . implode( ', ', array_keys( $this->values ) ) . ')'
-               . ' VALUES (' . implode( ', ', $this->values ) . ')';
+               . ' (' . implode(', ', array_keys($this->values)) . ')'
+               . ' VALUES (' . implode(', ', $this->values) . ')';
     }
 }

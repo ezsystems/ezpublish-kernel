@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Functional\UrlWildcardTest class
+ * File containing the Functional\UrlWildcardTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,10 +21,10 @@ class UrlWildcardTest extends RESTFunctionalTestCase
     public function testListURLWildcards()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", "/api/ezp/v2/content/urlwildcards" )
+            $this->createHttpRequest('GET', '/api/ezp/v2/content/urlwildcards')
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
@@ -31,7 +33,7 @@ class UrlWildcardTest extends RESTFunctionalTestCase
      */
     public function testCreateUrlWildcard()
     {
-        $text = $this->addTestSuffix( __FUNCTION__ );
+        $text = $this->addTestSuffix(__FUNCTION__);
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <UrlWildcardCreate>
@@ -41,16 +43,17 @@ class UrlWildcardTest extends RESTFunctionalTestCase
 </UrlWildcardCreate>
 XML;
 
-        $request = $this->createHttpRequest( "POST", "/api/ezp/v2/content/urlwildcards", 'UrlWildcardCreate+xml', 'UrlWildcard+json' );
-        $request->setContent( $xml );
+        $request = $this->createHttpRequest('POST', '/api/ezp/v2/content/urlwildcards', 'UrlWildcardCreate+xml', 'UrlWildcard+json');
+        $request->setContent($xml);
 
-        $response = $this->sendHttpRequest( $request );
+        $response = $this->sendHttpRequest($request);
 
-        self::assertHttpResponseCodeEquals( $response, 201 );
-        self::assertHttpResponseHasHeader( $response, 'Location' );
+        self::assertHttpResponseCodeEquals($response, 201);
+        self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader( 'Location' );
-        $this->addCreatedElement( $href );
+        $href = $response->getHeader('Location');
+        $this->addCreatedElement($href);
+
         return $href;
     }
 
@@ -59,25 +62,25 @@ XML;
      * @covers GET /content/urlwildcards/{urlWildcardId}
      * @depends testCreateUrlWildcard
      */
-    public function testLoadUrlWildcard( $urlWildcardHref )
+    public function testLoadUrlWildcard($urlWildcardHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "GET", $urlWildcardHref )
+            $this->createHttpRequest('GET', $urlWildcardHref)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 200 );
+        self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
      * @param $urlWildcardHref
      * @depends testCreateUrlWildcard
      */
-    public function testDeleteURLWildcard( $urlWildcardHref )
+    public function testDeleteURLWildcard($urlWildcardHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest( "DELETE", $urlWildcardHref )
+            $this->createHttpRequest('DELETE', $urlWildcardHref)
         );
 
-        self::assertHttpResponseCodeEquals( $response, 204 );
+        self::assertHttpResponseCodeEquals($response, 204);
     }
 }

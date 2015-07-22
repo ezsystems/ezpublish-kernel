@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the FieldType\RichTextTypeTest class
+ * File containing the FieldType\RichTextTypeTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -32,19 +34,19 @@ class RichTextTest extends PHPUnit_Framework_TestCase
     protected function getFieldType()
     {
         $fieldType = new RichTextType(
-            new ConverterDispatcher( array( "http://docbook.org/ns/docbook" => null ) ),
+            new ConverterDispatcher(array('http://docbook.org/ns/docbook' => null)),
             new ValidatorDispatcher(
                 array(
-                    "http://docbook.org/ns/docbook" => new Validator(
+                    'http://docbook.org/ns/docbook' => new Validator(
                         array(
-                            $this->getAbsolutePath( "eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng" ),
-                            $this->getAbsolutePath( "eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl" )
+                            $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng'),
+                            $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl'),
                         )
-                    )
+                    ),
                 )
             )
         );
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
     }
@@ -55,7 +57,7 @@ class RichTextTest extends PHPUnit_Framework_TestCase
     protected function getTransformationProcessorMock()
     {
         return $this->getMockForAbstractClass(
-            "eZ\\Publish\\Core\\Persistence\\TransformationProcessor",
+            'eZ\\Publish\\Core\\Persistence\\TransformationProcessor',
             array(),
             '',
             false,
@@ -72,7 +74,7 @@ class RichTextTest extends PHPUnit_Framework_TestCase
         $fieldType = $this->getFieldType();
         self::assertEmpty(
             $fieldType->getValidatorConfigurationSchema(),
-            "The validator configuration schema does not match what is expected."
+            'The validator configuration schema does not match what is expected.'
         );
     }
 
@@ -84,13 +86,13 @@ class RichTextTest extends PHPUnit_Framework_TestCase
         $fieldType = $this->getFieldType();
         self::assertSame(
             array(
-                "numRows" => array(
-                    "type" => "int",
-                    "default" => 10
+                'numRows' => array(
+                    'type' => 'int',
+                    'default' => 10,
                 ),
             ),
             $fieldType->getSettingsSchema(),
-            "The settings schema does not match what is expected."
+            'The settings schema does not match what is expected.'
         );
     }
 
@@ -100,7 +102,7 @@ class RichTextTest extends PHPUnit_Framework_TestCase
      */
     public function testAcceptValueInvalidType()
     {
-        $this->getFieldType()->acceptValue( $this->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\Value' )->disableOriginalConstructor()->getMock() );
+        $this->getFieldType()->acceptValue($this->getMockBuilder('eZ\\Publish\\Core\\FieldType\\Value')->disableOriginalConstructor()->getMock());
     }
 
     public static function providerForTestAcceptValueValidFormat()
@@ -113,7 +115,7 @@ class RichTextTest extends PHPUnit_Framework_TestCase
   <title>This is a heading.</title>
   <para>This is a paragraph.</para>
 </section>
-'
+',
             ),
         );
     }
@@ -122,10 +124,10 @@ class RichTextTest extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
      * @dataProvider providerForTestAcceptValueValidFormat
      */
-    public function testAcceptValueValidFormat( $input )
+    public function testAcceptValueValidFormat($input)
     {
         $fieldType = $this->getFieldType();
-        $fieldType->acceptValue( $input );
+        $fieldType->acceptValue($input);
     }
 
     public static function providerForTestAcceptValueInvalidFormat()
@@ -138,8 +140,8 @@ class RichTextTest extends PHPUnit_Framework_TestCase
 </section>',
                 new InvalidArgumentException(
                     "\$inputValue",
-                    "Validation of XML content failed: Error in 3:0: Element section has extra content: h1"
-                )
+                    'Validation of XML content failed: Error in 3:0: Element section has extra content: h1'
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -149,21 +151,21 @@ class RichTextTest extends PHPUnit_Framework_TestCase
                 new InvalidArgumentException(
                     "\$inputValue",
                     "Validation of XML content failed: /*[local-name()='section' and namespace-uri()='http://docbook.org/ns/docbook']: The root element must have a version attribute."
-                )
+                ),
             ),
             array(
                 'This is not XML at all!',
                 new InvalidArgumentException(
                     "\$inputValue",
                     "Could not create XML document: Start tag expected, '<' not found"
-                )
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?><unknown xmlns="http://www.w3.org/2013/foobar"><format /></unknown>',
                 new NotFoundException(
-                    "Validator",
-                    "http://www.w3.org/2013/foobar"
-                )
+                    'Validator',
+                    'http://www.w3.org/2013/foobar'
+                ),
             ),
         );
     }
@@ -172,26 +174,19 @@ class RichTextTest extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
      * @dataProvider providerForTestAcceptValueInvalidFormat
      */
-    public function testAcceptValueInvalidFormat( $input, Exception $expectedException )
+    public function testAcceptValueInvalidFormat($input, Exception $expectedException)
     {
-        try
-        {
+        try {
             $fieldType = $this->getFieldType();
-            $fieldType->acceptValue( $input );
-            $this->fail( "An InvalidArgumentException was expected! None thrown." );
-        }
-        catch ( InvalidArgumentException $e )
-        {
-            $this->assertEquals( $expectedException->getMessage(), $e->getMessage() );
-        }
-        catch ( NotFoundException $e )
-        {
-            $this->assertEquals( $expectedException->getMessage(), $e->getMessage() );
-        }
-        catch ( Exception $e )
-        {
+            $fieldType->acceptValue($input);
+            $this->fail('An InvalidArgumentException was expected! None thrown.');
+        } catch (InvalidArgumentException $e) {
+            $this->assertEquals($expectedException->getMessage(), $e->getMessage());
+        } catch (NotFoundException $e) {
+            $this->assertEquals($expectedException->getMessage(), $e->getMessage());
+        } catch (Exception $e) {
             $this->fail(
-                "Unexpected exception thrown! " . get_class( $e ) . " thrown with message: " . $e->getMessage()
+                'Unexpected exception thrown! ' . get_class($e) . ' thrown with message: ' . $e->getMessage()
             );
         }
     }
@@ -209,24 +204,24 @@ class RichTextTest extends PHPUnit_Framework_TestCase
 ';
 
         $fieldType = $this->getFieldType();
-        $fieldValue = $fieldType->toPersistenceValue( $fieldType->acceptValue( $xmlString ) );
+        $fieldValue = $fieldType->toPersistenceValue($fieldType->acceptValue($xmlString));
 
-        self::assertInternalType( 'string', $fieldValue->data );
-        self::assertSame( $xmlString, $fieldValue->data );
+        self::assertInternalType('string', $fieldValue->data);
+        self::assertSame($xmlString, $fieldValue->data);
     }
 
     /**
      * @covers \eZ\Publish\Core\FieldType\RichText\Type::getName
      * @dataProvider providerForTestGetName
      */
-    public function testGetName( $xmlString, $expectedName )
+    public function testGetName($xmlString, $expectedName)
     {
-        $value = new Value( $xmlString );
+        $value = new Value($xmlString);
 
         $fieldType = $this->getFieldType();
         $this->assertEquals(
             $expectedName,
-            $fieldType->getName( $value )
+            $fieldType->getName($value)
         );
     }
 
@@ -243,7 +238,7 @@ class RichTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of text</header></section>',
-                "This is a piece of text"
+                'This is a piece of text',
             ),
 
             array(
@@ -251,8 +246,8 @@ class RichTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of <emphasize>text</emphasize></header></section>',
-                /** @todo FIXME: should probably be "This is a piece of text" */
-                "This is a piece of"
+                /* @todo FIXME: should probably be "This is a piece of text" */
+                'This is a piece of',
             ),
 
             array(
@@ -260,8 +255,8 @@ class RichTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1"><strong>This is a piece</strong> of text</header></section>',
-                /** @todo FIXME: should probably be "This is a piece of text" */
-                "This is a piece"
+                /* @todo FIXME: should probably be "This is a piece of text" */
+                'This is a piece',
             ),
 
             array(
@@ -269,8 +264,8 @@ class RichTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1"><strong><emphasize>This is</emphasize> a piece</strong> of text</header></section>',
-                /** @todo FIXME: should probably be "This is a piece of text" */
-                "This is"
+                /* @todo FIXME: should probably be "This is a piece of text" */
+                'This is',
             ),
 
             array(
@@ -278,8 +273,8 @@ class RichTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph><table class="default" border="0" width="100%" custom:summary="wai" custom:caption=""><tr><td><paragraph>First cell</paragraph></td><td><paragraph>Second cell</paragraph></td></tr><tr><td><paragraph>Third cell</paragraph></td><td><paragraph>Fourth cell</paragraph></td></tr></table></paragraph><paragraph>Text after table</paragraph></section>',
-                /** @todo FIXME: should probably be "First cell" */
-                "First cellSecond cell"
+                /* @todo FIXME: should probably be "First cell" */
+                'First cellSecond cell',
             ),
 
             array(
@@ -287,7 +282,7 @@ class RichTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><ul><li><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">List item</paragraph></li></ul></paragraph></section>',
-                "List item"
+                'List item',
             ),
 
             array(
@@ -295,7 +290,7 @@ class RichTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><ul><li><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">List <emphasize>item</emphasize></paragraph></li></ul></paragraph></section>',
-                "List item"
+                'List item',
             ),
 
             array(
@@ -303,7 +298,7 @@ class RichTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
-                ""
+                '',
             ),
 
             array(
@@ -311,12 +306,12 @@ class RichTextTest extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph><strong><emphasize>A simple</emphasize></strong> paragraph!</paragraph></section>',
-                "A simple"
+                'A simple',
             ),
 
-            array( '<section><paragraph>test</paragraph></section>', "test" ),
+            array('<section><paragraph>test</paragraph></section>', 'test'),
 
-            array( '<section><paragraph><link node_id="1">test</link><link object_id="1">test</link></paragraph></section>', "test" ),
+            array('<section><paragraph><link node_id="1">test</link><link object_id="1">test</link></paragraph></section>', 'test'),
         );
     }
 
@@ -326,8 +321,7 @@ class RichTextTest extends PHPUnit_Framework_TestCase
      */
     public function testGetRelations()
     {
-        $xml =
-<<<EOT
+        $xml = <<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
     <title>Some text</title>
@@ -344,15 +338,15 @@ EOT;
         $this->assertEquals(
             array(
                 Relation::LINK => array(
-                    "locationIds" => array( 72, 61 ),
-                    "contentIds" => array( 70, 75 ),
+                    'locationIds' => array(72, 61),
+                    'contentIds' => array(70, 75),
                 ),
                 Relation::EMBED => array(
-                    "locationIds" => array(),
-                    "contentIds" => array(),
+                    'locationIds' => array(),
+                    'contentIds' => array(),
                 ),
             ),
-            $fieldType->getRelations( $fieldType->acceptValue( $xml ) )
+            $fieldType->getRelations($fieldType->acceptValue($xml))
         );
     }
 
@@ -361,22 +355,22 @@ EOT;
      *
      * @return string
      */
-    protected function getAbsolutePath( $relativePath )
+    protected function getAbsolutePath($relativePath)
     {
-        return self::getInstallationDir() . "/" . $relativePath;
+        return self::getInstallationDir() . '/' . $relativePath;
     }
 
     /**
      * @return string
      */
-    static protected function getInstallationDir()
+    protected static function getInstallationDir()
     {
         static $installDir = null;
-        if ( $installDir === null )
-        {
+        if ($installDir === null) {
             $config = require 'config.php';
             $installDir = $config['install_dir'];
         }
+
         return $installDir;
     }
 

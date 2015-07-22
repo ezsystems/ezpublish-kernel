@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the MediaTest class
+ * File containing the MediaTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,7 +20,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Test case for MediaType converter in Legacy storage
+ * Test case for MediaType converter in Legacy storage.
  */
 class MediaTest extends PHPUnit_Framework_TestCase
 {
@@ -36,31 +38,31 @@ class MediaTest extends PHPUnit_Framework_TestCase
      */
     public function testToStorageFieldDefinition()
     {
-        $storageFieldDef = new StorageFieldDefinition;
+        $storageFieldDef = new StorageFieldDefinition();
 
-        $fieldTypeConstraints = new FieldTypeConstraints;
+        $fieldTypeConstraints = new FieldTypeConstraints();
         $fieldTypeConstraints->validators = array(
             // Setting max file size to 1MB (1.048.576 bytes)
-            'FileSizeValidator' => array( 'maxFileSize' => 1048576 )
+            'FileSizeValidator' => array('maxFileSize' => 1048576),
         );
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                'mediaType' => MediaType::TYPE_HTML5_VIDEO
+                'mediaType' => MediaType::TYPE_HTML5_VIDEO,
             )
         );
 
         $fieldDef = new PersistenceFieldDefinition(
             array(
                 'fieldTypeConstraints' => $fieldTypeConstraints,
-                'defaultValue' => null
+                'defaultValue' => null,
             )
         );
 
-        $this->converter->toStorageFieldDefinition( $fieldDef, $storageFieldDef );
+        $this->converter->toStorageFieldDefinition($fieldDef, $storageFieldDef);
 
         self::assertSame(
             $fieldDef->fieldTypeConstraints->validators['FileSizeValidator'],
-            array( 'maxFileSize' => $storageFieldDef->dataInt1 )
+            array('maxFileSize' => $storageFieldDef->dataInt1)
         );
         self::assertSame(
             $fieldDef->fieldTypeConstraints->fieldSettings['mediaType'],
@@ -75,24 +77,24 @@ class MediaTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldDefinition()
     {
-        $fieldDef = new PersistenceFieldDefinition;
+        $fieldDef = new PersistenceFieldDefinition();
         $storageDef = new StorageFieldDefinition(
             array(
                 'dataInt1' => 1048576,
-                'dataText1' => MediaType::TYPE_HTML5_VIDEO
+                'dataText1' => MediaType::TYPE_HTML5_VIDEO,
             )
         );
 
-        $this->converter->toFieldDefinition( $storageDef, $fieldDef );
+        $this->converter->toFieldDefinition($storageDef, $fieldDef);
         self::assertSame(
             array(
-                'FileSizeValidator' => array( 'maxFileSize' => $storageDef->dataInt1 )
+                'FileSizeValidator' => array('maxFileSize' => $storageDef->dataInt1),
             ),
             $fieldDef->fieldTypeConstraints->validators
         );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertInstanceOf('eZ\\Publish\\Core\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings);
         self::assertSame(
-            array( 'mediaType' => MediaType::TYPE_HTML5_VIDEO ),
+            array('mediaType' => MediaType::TYPE_HTML5_VIDEO),
             $fieldDef->fieldTypeConstraints->fieldSettings->getArrayCopy()
         );
     }

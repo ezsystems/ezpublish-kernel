@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Relation converter
+ * File containing the Relation converter.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -27,137 +29,135 @@ class RelationListConverter implements Converter
     private $db;
 
     /**
-     * Create instance of RelationList converter
+     * Create instance of RelationList converter.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $db
      */
-    public function __construct( DatabaseHandler $db )
+    public function __construct(DatabaseHandler $db)
     {
         $this->db = $db;
     }
 
     /**
-     * Converts data from $value to $storageFieldValue
+     * Converts data from $value to $storageFieldValue.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
      */
-    public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
+    public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
     {
-        $doc = new DOMDocument( '1.0', 'utf-8' );
-        $root = $doc->createElement( 'related-objects' );
-        $doc->appendChild( $root );
+        $doc = new DOMDocument('1.0', 'utf-8');
+        $root = $doc->createElement('related-objects');
+        $doc->appendChild($root);
 
-        $relationList = $doc->createElement( 'relation-list' );
-        $data = $this->getRelationXmlHashFromDB( $value->data['destinationContentIds'] );
+        $relationList = $doc->createElement('relation-list');
+        $data = $this->getRelationXmlHashFromDB($value->data['destinationContentIds']);
         $priority = 0;
 
-        foreach ( $value->data['destinationContentIds'] as $id )
-        {
+        foreach ($value->data['destinationContentIds'] as $id) {
             $row = $data[$id][0];
-            $row["ezcontentobject_id"] = $id;
-            $row["priority"] = ( $priority += 1 );
+            $row['ezcontentobject_id'] = $id;
+            $row['priority'] = ($priority += 1);
 
-            $relationItem = $doc->createElement( 'relation-item' );
-            foreach ( self::dbAttributeMap() as $domAttrKey => $propertyKey )
-            {
-                if ( !isset( $row[$propertyKey] ) )
-                    throw new \RuntimeException( "Missing relation-item external data property: $propertyKey" );
+            $relationItem = $doc->createElement('relation-item');
+            foreach (self::dbAttributeMap() as $domAttrKey => $propertyKey) {
+                if (!isset($row[$propertyKey])) {
+                    throw new \RuntimeException("Missing relation-item external data property: $propertyKey");
+                }
 
-                $relationItem->setAttribute( $domAttrKey, $row[$propertyKey] );
+                $relationItem->setAttribute($domAttrKey, $row[$propertyKey]);
             }
-            $relationList->appendChild( $relationItem );
-            unset( $relationItem );
+            $relationList->appendChild($relationItem);
+            unset($relationItem);
         }
 
-        $root->appendChild( $relationList );
-        $doc->appendChild( $root );
+        $root->appendChild($relationList);
+        $doc->appendChild($root);
 
         $storageFieldValue->dataText = $doc->saveXML();
     }
 
     /**
-     * Converts data from $value to $fieldValue
+     * Converts data from $value to $fieldValue.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      */
-    public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
+    public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
     {
-        $fieldValue->data = array( 'destinationContentIds' => array() );
-        if ( $value->dataText === null )
+        $fieldValue->data = array('destinationContentIds' => array());
+        if ($value->dataText === null) {
             return;
+        }
 
         $priorityByContentId = array();
 
-        $dom = new DOMDocument( '1.0', 'utf-8' );
-        if ( $dom->loadXML( $value->dataText ) === true )
-        {
-            foreach ( $dom->getElementsByTagName( 'relation-item' ) as $relationItem )
-            {
-                /** @var \DOMElement $relationItem */
-                $priorityByContentId[$relationItem->getAttribute( 'contentobject-id' )] =
-                    $relationItem->getAttribute( 'priority' );
+        $dom = new DOMDocument('1.0', 'utf-8');
+        if ($dom->loadXML($value->dataText) === true) {
+            foreach ($dom->getElementsByTagName('relation-item') as $relationItem) {
+                /* @var \DOMElement $relationItem */
+                $priorityByContentId[$relationItem->getAttribute('contentobject-id')] =
+                    $relationItem->getAttribute('priority');
             }
         }
 
-        asort( $priorityByContentId, SORT_NUMERIC );
+        asort($priorityByContentId, SORT_NUMERIC);
 
-        $fieldValue->data['destinationContentIds'] = array_keys( $priorityByContentId );
+        $fieldValue->data['destinationContentIds'] = array_keys($priorityByContentId);
     }
 
     /**
-     * Converts field definition data in $fieldDef into $storageFieldDef
+     * Converts field definition data in $fieldDef into $storageFieldDef.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      */
-    public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
+    public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
         $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
-        $doc = new DOMDocument( '1.0', 'utf-8' );
-        $root = $doc->createElement( 'related-objects' );
-        $doc->appendChild( $root );
+        $doc = new DOMDocument('1.0', 'utf-8');
+        $root = $doc->createElement('related-objects');
+        $doc->appendChild($root);
 
-        $constraints = $doc->createElement( 'constraints' );
-        if ( !empty( $fieldSettings['selectionContentTypes'] ) )
-        {
-            foreach ( $fieldSettings['selectionContentTypes'] as $typeIdentifier )
-            {
-                $allowedClass = $doc->createElement( 'allowed-class' );
-                $allowedClass->setAttribute( 'contentclass-identifier', $typeIdentifier );
-                $constraints->appendChild( $allowedClass );
-                unset( $allowedClass );
+        $constraints = $doc->createElement('constraints');
+        if (!empty($fieldSettings['selectionContentTypes'])) {
+            foreach ($fieldSettings['selectionContentTypes'] as $typeIdentifier) {
+                $allowedClass = $doc->createElement('allowed-class');
+                $allowedClass->setAttribute('contentclass-identifier', $typeIdentifier);
+                $constraints->appendChild($allowedClass);
+                unset($allowedClass);
             }
         }
-        $root->appendChild( $constraints );
+        $root->appendChild($constraints);
 
-        $type = $doc->createElement( 'type' );
-        $type->setAttribute( 'value', 2 );//Deprecated advance object relation list type, set since 4.x does
-        $root->appendChild( $type );
+        $type = $doc->createElement('type');
+        $type->setAttribute('value', 2);//Deprecated advance object relation list type, set since 4.x does
+        $root->appendChild($type);
 
-        $objectClass = $doc->createElement( 'object_class' );
-        $objectClass->setAttribute( 'value', '' );//Deprecated advance object relation class type, set since 4.x does
-        $root->appendChild( $objectClass );
+        $objectClass = $doc->createElement('object_class');
+        $objectClass->setAttribute('value', '');//Deprecated advance object relation class type, set since 4.x does
+        $root->appendChild($objectClass);
 
-        $selectionType = $doc->createElement( 'selection_type' );
-        if ( isset( $fieldSettings['selectionMethod'] ) )
-            $selectionType->setAttribute( 'value', (int)$fieldSettings['selectionMethod'] );
-        else
-            $selectionType->setAttribute( 'value', 0 );
-        $root->appendChild( $selectionType );
+        $selectionType = $doc->createElement('selection_type');
+        if (isset($fieldSettings['selectionMethod'])) {
+            $selectionType->setAttribute('value', (int)$fieldSettings['selectionMethod']);
+        } else {
+            $selectionType->setAttribute('value', 0);
+        }
+        $root->appendChild($selectionType);
 
-        $defaultLocation = $doc->createElement( 'contentobject-placement' );
-        if ( !empty( $fieldSettings['selectionDefaultLocation'] ) )
-            $defaultLocation->setAttribute( 'node-id', (int)$fieldSettings['selectionDefaultLocation'] );
-        $root->appendChild( $defaultLocation );
+        $defaultLocation = $doc->createElement('contentobject-placement');
+        if (!empty($fieldSettings['selectionDefaultLocation'])) {
+            $defaultLocation->setAttribute('node-id', (int)$fieldSettings['selectionDefaultLocation']);
+        }
+        $root->appendChild($defaultLocation);
 
-        $doc->appendChild( $root );
+        $doc->appendChild($root);
         $storageDef->dataText5 = $doc->saveXML();
     }
 
     /**
-     * Converts field definition data in $storageDef into $fieldDef
+     * Converts field definition data in $storageDef into $fieldDef.
      *
      * <?xml version="1.0" encoding="utf-8"?>
      * <related-objects>
@@ -182,52 +182,58 @@ class RelationListConverter implements Converter
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      */
-    public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
+    public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         // default settings
         $fieldDef->fieldTypeConstraints->fieldSettings = array(
             'selectionMethod' => 0,
             'selectionDefaultLocation' => null,
-            'selectionContentTypes' => array()
+            'selectionContentTypes' => array(),
         );
 
         // default value
         $fieldDef->defaultValue = new FieldValue();
-        $fieldDef->defaultValue->data = array( 'destinationContentIds' => array() );
+        $fieldDef->defaultValue->data = array('destinationContentIds' => array());
 
-        if ( $storageDef->dataText5 === null )
+        if ($storageDef->dataText5 === null) {
             return;
+        }
 
         // read settings from storage
-        $fieldSettings =& $fieldDef->fieldTypeConstraints->fieldSettings;
-        $dom = new DOMDocument( '1.0', 'utf-8' );
-        if ( $dom->loadXML( $storageDef->dataText5 ) !== true )
+        $fieldSettings = &$fieldDef->fieldTypeConstraints->fieldSettings;
+        $dom = new DOMDocument('1.0', 'utf-8');
+        if ($dom->loadXML($storageDef->dataText5) !== true) {
             return;
+        }
 
-        if ( $selectionType = $dom->getElementsByTagName( 'selection_type' ) )
-            $fieldSettings['selectionMethod'] = (int)$selectionType->item( 0 )->getAttribute( 'value' );
+        if ($selectionType = $dom->getElementsByTagName('selection_type')) {
+            $fieldSettings['selectionMethod'] = (int)$selectionType->item(0)->getAttribute('value');
+        }
 
         if (
-            ( $defaultLocation = $dom->getElementsByTagName( 'contentobject-placement' ) ) &&
-            $defaultLocation->item( 0 )->hasAttribute( 'node-id' )
-        )
-            $fieldSettings['selectionDefaultLocation'] = (int)$defaultLocation->item( 0 )->getAttribute( 'node-id' );
+            ($defaultLocation = $dom->getElementsByTagName('contentobject-placement')) &&
+            $defaultLocation->item(0)->hasAttribute('node-id')
+        ) {
+            $fieldSettings['selectionDefaultLocation'] = (int)$defaultLocation->item(0)->getAttribute('node-id');
+        }
 
-        if ( !( $constraints = $dom->getElementsByTagName( 'constraints' ) ) )
+        if (!($constraints = $dom->getElementsByTagName('constraints'))) {
             return;
+        }
 
-        foreach ( $constraints->item( 0 )->getElementsByTagName( 'allowed-class' ) as $allowedClass )
-            $fieldSettings['selectionContentTypes'][] = $allowedClass->getAttribute( 'contentclass-identifier' );
+        foreach ($constraints->item(0)->getElementsByTagName('allowed-class') as $allowedClass) {
+            $fieldSettings['selectionContentTypes'][] = $allowedClass->getAttribute('contentclass-identifier');
+        }
     }
 
     /**
-     * Returns the name of the index column in the attribute table
+     * Returns the name of the index column in the attribute table.
      *
      * Returns the name of the index column the datatype uses, which is either
      * "sort_key_int" or "sort_key_string". This column is then used for
      * filtering and sorting for this type.
      *
-     * @return boolean
+     * @return bool
      */
     public function getIndexColumn()
     {
@@ -241,63 +247,65 @@ class RelationListConverter implements Converter
      *
      * @return array
      */
-    protected function getRelationXmlHashFromDB( array $destinationContentIds )
+    protected function getRelationXmlHashFromDB(array $destinationContentIds)
     {
-        if ( empty( $destinationContentIds ) )
+        if (empty($destinationContentIds)) {
             return array();
+        }
 
         $q = $this->db->createSelectQuery();
         $q
             ->select(
-                $this->db->aliasedColumn( $q, 'id', 'ezcontentobject' ),
-                $this->db->aliasedColumn( $q, 'remote_id', 'ezcontentobject' ),
-                $this->db->aliasedColumn( $q, 'current_version', 'ezcontentobject' ),
-                $this->db->aliasedColumn( $q, 'contentclass_id', 'ezcontentobject' ),
-                $this->db->aliasedColumn( $q, 'node_id', 'ezcontentobject_tree' ),
-                $this->db->aliasedColumn( $q, 'parent_node_id', 'ezcontentobject_tree' ),
-                $this->db->aliasedColumn( $q, 'identifier', 'ezcontentclass' )
+                $this->db->aliasedColumn($q, 'id', 'ezcontentobject'),
+                $this->db->aliasedColumn($q, 'remote_id', 'ezcontentobject'),
+                $this->db->aliasedColumn($q, 'current_version', 'ezcontentobject'),
+                $this->db->aliasedColumn($q, 'contentclass_id', 'ezcontentobject'),
+                $this->db->aliasedColumn($q, 'node_id', 'ezcontentobject_tree'),
+                $this->db->aliasedColumn($q, 'parent_node_id', 'ezcontentobject_tree'),
+                $this->db->aliasedColumn($q, 'identifier', 'ezcontentclass')
             )
-            ->from( $this->db->quoteTable( 'ezcontentobject' ) )
+            ->from($this->db->quoteTable('ezcontentobject'))
             ->leftJoin(
-                $this->db->quoteTable( 'ezcontentobject_tree' ),
+                $this->db->quoteTable('ezcontentobject_tree'),
                 $q->expr->lAnd(
                     $q->expr->eq(
-                        $this->db->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' ),
-                        $this->db->quoteColumn( 'id', 'ezcontentobject' )
+                        $this->db->quoteColumn('contentobject_id', 'ezcontentobject_tree'),
+                        $this->db->quoteColumn('id', 'ezcontentobject')
                     ),
                     $q->expr->eq(
-                        $this->db->quoteColumn( 'node_id', 'ezcontentobject_tree' ),
-                        $this->db->quoteColumn( 'main_node_id', 'ezcontentobject_tree' )
+                        $this->db->quoteColumn('node_id', 'ezcontentobject_tree'),
+                        $this->db->quoteColumn('main_node_id', 'ezcontentobject_tree')
                     )
                 )
             )
             ->leftJoin(
-                $this->db->quoteTable( 'ezcontentclass' ),
+                $this->db->quoteTable('ezcontentclass'),
                 $q->expr->lAnd(
                     $q->expr->eq(
-                        $this->db->quoteColumn( 'id', 'ezcontentclass' ),
-                        $this->db->quoteColumn( 'contentclass_id', 'ezcontentobject' )
+                        $this->db->quoteColumn('id', 'ezcontentclass'),
+                        $this->db->quoteColumn('contentclass_id', 'ezcontentobject')
                     ),
                     $q->expr->eq(
-                        $this->db->quoteColumn( 'version', 'ezcontentclass' ),
-                        $q->bindValue( ContentType::STATUS_DEFINED, null, PDO::PARAM_INT )
+                        $this->db->quoteColumn('version', 'ezcontentclass'),
+                        $q->bindValue(ContentType::STATUS_DEFINED, null, PDO::PARAM_INT)
                     )
                 )
             )
             ->where(
                 $q->expr->in(
-                    $this->db->quoteColumn( 'id', 'ezcontentobject' ),
+                    $this->db->quoteColumn('id', 'ezcontentobject'),
                     $destinationContentIds
                 )
             );
         $stmt = $q->prepare();
         $stmt->execute();
-        $rows = $stmt->fetchAll( PDO::FETCH_ASSOC | PDO::FETCH_GROUP );
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC | PDO::FETCH_GROUP);
 
-        if ( empty( $rows ) )
-            throw new \Exception( "Could find Content with id's" . var_export( $destinationContentIds, true ) );
-        else if ( count( $rows ) !== count( $destinationContentIds ) )
-            throw new \Exception( "Miss match of rows & id count:" . var_export( $destinationContentIds, true ) );
+        if (empty($rows)) {
+            throw new \Exception("Could find Content with id's" . var_export($destinationContentIds, true));
+        } elseif (count($rows) !== count($destinationContentIds)) {
+            throw new \Exception('Miss match of rows & id count:' . var_export($destinationContentIds, true));
+        }
 
         return $rows;
     }
@@ -305,7 +313,7 @@ class RelationListConverter implements Converter
     /**
      * @return array
      */
-    static private function dbAttributeMap()
+    private static function dbAttributeMap()
     {
         return array(
             // 'identifier' => 'identifier',// not used
@@ -318,7 +326,7 @@ class RelationListConverter implements Converter
             'contentclass-id' => 'ezcontentobject_contentclass_id',
             'contentclass-identifier' => 'ezcontentclass_identifier',
             // 'is-modified' => 'is_modified',// deprecated and not used
-            'contentobject-remote-id' => 'ezcontentobject_remote_id'
+            'contentobject-remote-id' => 'ezcontentobject_remote_id',
         );
     }
 }

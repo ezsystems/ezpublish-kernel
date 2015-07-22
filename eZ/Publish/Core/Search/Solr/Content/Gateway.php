@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Content Search Gateway class
+ * File containing the Content Search Gateway class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -28,7 +30,7 @@ abstract class Gateway
      *
      * @return mixed
      */
-    abstract public function find( Query $query, array $fieldFilters = array() );
+    abstract public function find(Query $query, array $fieldFilters = array());
 
     /**
      * Indexes an array of documents.
@@ -38,28 +40,26 @@ abstract class Gateway
      *
      * @param \eZ\Publish\SPI\Search\Document[][] $documents
      */
-    abstract public function bulkIndexDocuments( array $documents );
+    abstract public function bulkIndexDocuments(array $documents);
 
     /**
      * Deletes documents by the given $query.
      *
      * @param string $query
      */
-    abstract public function deleteByQuery( $query );
+    abstract public function deleteByQuery($query);
 
     /**
-     * Purges all contents from the index
-     *
-     * @return void
+     * Purges all contents from the index.
      */
     abstract public function purgeIndex();
 
     /**
-     * Set if index/delete actions should commit or if several actions is to be expected
+     * Set if index/delete actions should commit or if several actions is to be expected.
      *
      * This should be set to false before group of actions and true before the last one
      *
      * @param bool $commit
      */
-    abstract public function setCommit( $commit );
+    abstract public function setCommit($commit);
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Image Value class
+ * File containing the Image Value class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 
 /**
- * Value for Image field type
+ * Value for Image field type.
  *
  * @property string $path @deprecated BC with 5.0 (EZP-20948). Equivalent to $id or $inputUri, depending on which one is set
  * .
@@ -25,7 +27,7 @@ use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 class Value extends BaseValue
 {
     /**
-     * Image id
+     * Image id.
      *
      * @var mixed
      * @required
@@ -40,7 +42,7 @@ class Value extends BaseValue
     public $alternativeText;
 
     /**
-     * Display file name of the image
+     * Display file name of the image.
      *
      * @var string
      * @required
@@ -48,7 +50,7 @@ class Value extends BaseValue
     public $fileName;
 
     /**
-     * Size of the image file
+     * Size of the image file.
      *
      * @var int
      * @required
@@ -56,31 +58,36 @@ class Value extends BaseValue
     public $fileSize;
 
     /**
-     * The image's HTTP URI
+     * The image's HTTP URI.
+     *
      * @var string
      */
     public $uri;
 
     /**
-     * External image ID (required by REST for now, see https://jira.ez.no/browse/EZP-20831)
+     * External image ID (required by REST for now, see https://jira.ez.no/browse/EZP-20831).
+     *
      * @var mixed
      */
     public $imageId;
 
     /**
-     * Input image file URI
+     * Input image file URI.
+     *
      * @var string
      */
     public $inputUri;
 
     /**
-     * Original image width
+     * Original image width.
+     *
      * @var int
-    */
+     */
     public $width;
 
     /**
-     * Original image height
+     * Original image height.
+     *
      * @var int
      */
     public $height;
@@ -90,18 +97,14 @@ class Value extends BaseValue
      *
      * @param array $imageData
      */
-    public function __construct( array $imageData = array() )
+    public function __construct(array $imageData = array())
     {
-        foreach ( $imageData as $key => $value )
-        {
-            try
-            {
+        foreach ($imageData as $key => $value) {
+            try {
                 $this->$key = $value;
-            }
-            catch ( PropertyNotFoundException $e )
-            {
+            } catch (PropertyNotFoundException $e) {
                 throw new InvalidArgumentType(
-                    sprintf( 'Image\Value::$%s', $key ),
+                    sprintf('Image\Value::$%s', $key),
                     'Existing property',
                     $value
                 );
@@ -110,37 +113,39 @@ class Value extends BaseValue
     }
 
     /**
-     * Creates a value only from a file path
+     * Creates a value only from a file path.
      *
      * @param string $path
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
+     *
      * @return Value
+     *
      * @deprecated Starting with 5.3.3, handled by Image\Type::acceptValue()
      */
-    public static function fromString( $path )
+    public static function fromString($path)
     {
-        if ( !file_exists( $path ) )
-        {
+        if (!file_exists($path)) {
             throw new InvalidArgumentType(
                 '$path',
                 'existing file',
                 $path
             );
         }
+
         return new static(
             array(
                 'inputUri' => $path,
-                'fileName' => basename( $path ),
-                'fileSize' => filesize( $path )
+                'fileName' => basename($path),
+                'fileSize' => filesize($path),
             )
         );
     }
 
     /**
-     * Returns the image file size in byte
+     * Returns the image file size in byte.
      *
-     * @return integer
+     * @return int
      */
     public function getFileSize()
     {
@@ -155,24 +160,23 @@ class Value extends BaseValue
         return (string)$this->fileName;
     }
 
-    public function __get( $propertyName )
+    public function __get($propertyName)
     {
-        if ( $propertyName === 'path' )
-        {
+        if ($propertyName === 'path') {
             return $this->inputUri ?: $this->id;
         }
 
-        throw new PropertyNotFoundException( $propertyName, get_class( $this ) );
+        throw new PropertyNotFoundException($propertyName, get_class($this));
     }
 
-    public function __set( $propertyName, $propertyValue )
+    public function __set($propertyName, $propertyValue)
     {
-        if ( $propertyName === 'path' )
-        {
+        if ($propertyName === 'path') {
             $this->inputUri = $propertyValue;
+
             return;
         }
 
-        throw new PropertyNotFoundException( $propertyName, get_class( $this ) );
+        throw new PropertyNotFoundException($propertyName, get_class($this));
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ReduceNoiseFilter class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,11 +21,11 @@ class ReduceNoiseFilter extends AbstractFilter
      *
      * @return ImageInterface
      */
-    public function apply( ImageInterface $image )
+    public function apply(ImageInterface $image)
     {
         /** @var \Imagick $imagick */
         $imagick = $image->getImagick();
-        $imagick->reduceNoiseImage( (float)$this->getOption( 'radius', 0 ) );
+        $imagick->reduceNoiseImage((float)$this->getOption('radius', 0));
 
         return $image;
     }

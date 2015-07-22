@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\Depth class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,7 +25,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 class Depth extends Criterion implements CriterionInterface
 {
     /**
-     * Creates a new Depth criterion
+     * Creates a new Depth criterion.
      *
      * @throws \InvalidArgumentException if a non numeric id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator
@@ -33,9 +35,9 @@ class Depth extends Criterion implements CriterionInterface
      *
      * @deprecated Since 5.3, use Location search instead
      */
-    public function __construct( $operator, $value )
+    public function __construct($operator, $value)
     {
-        parent::__construct( null, $operator, $value );
+        parent::__construct(null, $operator, $value);
     }
 
     public function getSpecifications()

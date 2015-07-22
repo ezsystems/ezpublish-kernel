@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RoleAssignmentList class
+ * File containing the RoleAssignmentList class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,39 +14,39 @@ namespace eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
- * RoleAssignment list view model
+ * RoleAssignment list view model.
  */
 class RoleAssignmentList extends RestValue
 {
     /**
-     * Role assignments
+     * Role assignments.
      *
      * @var \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
      */
     public $roleAssignments;
 
     /**
-     * User or user group ID to which the roles are assigned
+     * User or user group ID to which the roles are assigned.
      *
      * @var mixed
      */
     public $id;
 
     /**
-     * Indicator if the role assignment is for user group
+     * Indicator if the role assignment is for user group.
      *
-     * @var boolean
+     * @var bool
      */
     public $isGroupAssignment;
 
     /**
-     * Construct
+     * Construct.
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleAssignment[] $roleAssignments
      * @param mixed $id
-     * @param boolean $isGroupAssignment
+     * @param bool $isGroupAssignment
      */
-    public function __construct( array $roleAssignments, $id, $isGroupAssignment = false )
+    public function __construct(array $roleAssignments, $id, $isGroupAssignment = false)
     {
         $this->roleAssignments = $roleAssignments;
         $this->id = $id;

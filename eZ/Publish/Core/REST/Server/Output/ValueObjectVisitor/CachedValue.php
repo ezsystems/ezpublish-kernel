@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentList ValueObjectVisitor class
+ * File containing the ContentList ValueObjectVisitor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,10 +16,9 @@ use eZ\Publish\Core\MVC\Symfony\RequestStackAware;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
- * CachedValue value object visitor
+ * CachedValue value object visitor.
  */
 class CachedValue extends ValueObjectVisitor
 {
@@ -26,7 +27,7 @@ class CachedValue extends ValueObjectVisitor
     /** @var ConfigResolverInterface */
     protected $configResolver;
 
-    public function __construct( ConfigResolverInterface $configResolver )
+    public function __construct(ConfigResolverInterface $configResolver)
     {
         $this->configResolver = $configResolver;
     }
@@ -36,39 +37,36 @@ class CachedValue extends ValueObjectVisitor
      * @param Generator $generator
      * @param \eZ\Publish\Core\REST\Server\Values\CachedValue $data
      */
-    public function visit( Visitor $visitor, Generator $generator, $data )
+    public function visit(Visitor $visitor, Generator $generator, $data)
     {
-        $visitor->visitValueObject( $data->value );
+        $visitor->visitValueObject($data->value);
 
-        if ( $this->getParameter( 'content.view_cache' ) !== true )
-        {
+        if ($this->getParameter('content.view_cache') !== true) {
             return;
         }
 
         $response = $visitor->getResponse();
         $response->setPublic();
-        $response->setVary( 'Accept' );
+        $response->setVary('Accept');
 
-        if ( $this->getParameter( 'content.ttl_cache' ) === true )
-        {
-            $response->setSharedMaxAge( $this->getParameter( 'content.default_ttl' ) );
+        if ($this->getParameter('content.ttl_cache') === true) {
+            $response->setSharedMaxAge($this->getParameter('content.default_ttl'));
             $request = $this->getCurrentRequest();
-            if ( isset( $request ) && $request->headers->has( 'X-User-Hash' ) )
-            {
-                $response->setVary( 'X-User-Hash', false );
+            if (isset($request) && $request->headers->has('X-User-Hash')) {
+                $response->setVary('X-User-Hash', false);
             }
         }
 
-        if ( isset( $data->cacheTags['locationId'] ) )
-        {
-            $visitor->getResponse()->headers->set( 'X-Location-Id', $data->cacheTags['locationId'] );
+        if (isset($data->cacheTags['locationId'])) {
+            $visitor->getResponse()->headers->set('X-Location-Id', $data->cacheTags['locationId']);
         }
     }
 
-    public function getParameter( $parameterName, $defaultValue = null )
+    public function getParameter($parameterName, $defaultValue = null)
     {
-        if ( $this->configResolver->hasParameter( $parameterName ) )
-            return $this->configResolver->getParameter( $parameterName );
+        if ($this->configResolver->hasParameter($parameterName)) {
+            return $this->configResolver->getParameter($parameterName);
+        }
 
         return $defaultValue;
     }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the CacheFactoryTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,42 +28,42 @@ class CacheFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
-        $this->container = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
+        $this->configResolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $this->container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
     }
 
     /**
      * @return array
      */
-    function providerGetService()
+    public function providerGetService()
     {
         return array(
-            array( 'default', 'stash.default_cache' ),
-            array( 'ez_site1', 'stash.ez_site1_cache' ),
-            array( 'xyZ', 'stash.xyZ_cache' )
+            array('default', 'stash.default_cache'),
+            array('ez_site1', 'stash.ez_site1_cache'),
+            array('xyZ', 'stash.xyZ_cache'),
         );
     }
 
     /**
      * @dataProvider providerGetService
      */
-    public function testGetService( $name, $expected )
+    public function testGetService($name, $expected)
     {
         $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'cache_pool_name' )
-            ->will( $this->returnValue( $name ) );
+            ->expects($this->once())
+            ->method('getParameter')
+            ->with('cache_pool_name')
+            ->will($this->returnValue($name));
 
         $this->container
-            ->expects( $this->once() )
-            ->method( 'get' )
-            ->with( $expected )
-            ->will( $this->returnValue( false ) );
+            ->expects($this->once())
+            ->method('get')
+            ->with($expected)
+            ->will($this->returnValue(false));
 
-        $factory = new CacheFactory;
-        $factory->setContainer( $this->container );
+        $factory = new CacheFactory();
+        $factory->setContainer($this->container);
 
-        $this->assertFalse( $factory->getCachePool( $this->configResolver ) );
+        $this->assertFalse($factory->getCachePool($this->configResolver));
     }
 }

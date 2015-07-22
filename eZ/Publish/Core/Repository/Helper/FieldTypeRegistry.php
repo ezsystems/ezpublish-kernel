@@ -1,11 +1,12 @@
 <?php
+
 /**
  * File containing FieldTypeService class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
- * @package eZ\Publish\API\Repository
  */
 
 namespace eZ\Publish\Core\Repository\Helper;
@@ -15,7 +16,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException;
 use RuntimeException;
 
 /**
- * Registry for SPI FieldTypes
+ * Registry for SPI FieldTypes.
  */
 class FieldTypeRegistry
 {
@@ -27,7 +28,7 @@ class FieldTypeRegistry
     /**
      * @param \eZ\Publish\SPI\FieldType\FieldType[]|\Closure $fieldTypes Hash of SPI FieldTypes where key is identifier
      */
-    public function __construct( array $fieldTypes = array() )
+    public function __construct(array $fieldTypes = array())
     {
         $this->fieldTypes = $fieldTypes;
     }
@@ -40,18 +41,17 @@ class FieldTypeRegistry
     public function getFieldTypes()
     {
         // First make sure all items are correct type (call closures)
-        foreach ( $this->fieldTypes as $identifier => $value )
-        {
-            if ( !$value instanceof SPIFieldType )
-            {
-                return $this->getFieldType( $identifier );
+        foreach ($this->fieldTypes as $identifier => $value) {
+            if (!$value instanceof SPIFieldType) {
+                return $this->getFieldType($identifier);
             }
         }
+
         return $this->fieldTypes;
     }
 
     /**
-     * Return a SPI FieldType object
+     * Return a SPI FieldType object.
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException If $identifier was not found
      *
@@ -59,36 +59,33 @@ class FieldTypeRegistry
      *
      * @return \eZ\Publish\SPI\FieldType\FieldType
      */
-    public function getFieldType( $identifier )
+    public function getFieldType($identifier)
     {
-        if ( !isset( $this->fieldTypes[$identifier] ) )
-        {
-            throw new FieldTypeNotFoundException( $identifier );
+        if (!isset($this->fieldTypes[$identifier])) {
+            throw new FieldTypeNotFoundException($identifier);
         }
 
-        if ( $this->fieldTypes[$identifier] instanceof SPIFieldType )
-        {
+        if ($this->fieldTypes[$identifier] instanceof SPIFieldType) {
             return $this->fieldTypes[$identifier];
-        }
-        else if ( !is_callable( $this->fieldTypes[$identifier] ) )
-        {
-            throw new RuntimeException( "\$fieldTypes[$identifier] must be instance of SPI\\FieldType\\FieldType or callable" );
+        } elseif (!is_callable($this->fieldTypes[$identifier])) {
+            throw new RuntimeException("\$fieldTypes[$identifier] must be instance of SPI\\FieldType\\FieldType or callable");
         }
 
         /** @var $closure \Closure */
         $closure = $this->fieldTypes[$identifier];
+
         return $this->fieldTypes[$identifier] = $closure();
     }
 
     /**
-     * Returns if there is a SPI FieldType registered under $identifier
+     * Returns if there is a SPI FieldType registered under $identifier.
      *
      * @param string $identifier
      *
-     * @return boolean
+     * @return bool
      */
-    public function hasFieldType( $identifier )
+    public function hasFieldType($identifier)
     {
-        return isset( $this->fieldTypes[$identifier] );
+        return isset($this->fieldTypes[$identifier]);
     }
 }

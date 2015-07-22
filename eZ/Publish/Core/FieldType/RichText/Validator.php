@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\FieldType\RichText\Validator class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,7 +23,7 @@ use RuntimeException;
 class Validator extends XmlBase
 {
     /**
-     * Paths to the schema files
+     * Paths to the schema files.
      *
      * @var string[]
      */
@@ -30,7 +32,7 @@ class Validator extends XmlBase
     /**
      * @param string[] $schemas Paths to schema files to use for validation
      */
-    public function __construct( array $schemas )
+    public function __construct(array $schemas)
     {
         $this->schemas = $schemas;
     }
@@ -46,24 +48,21 @@ class Validator extends XmlBase
      *
      * @return string[] An array of validation errors
      */
-    public function validate( DOMDocument $document )
+    public function validate(DOMDocument $document)
     {
         $this->startRecordingErrors();
         $additionalErrors = array();
 
-        foreach ( $this->schemas as $schema )
-        {
-            $errors = $this->validateBySchema( $document, $schema );
-            if ( !empty( $errors ) )
-            {
-                $additionalErrors = array_merge( $additionalErrors, $errors );
+        foreach ($this->schemas as $schema) {
+            $errors = $this->validateBySchema($document, $schema);
+            if (!empty($errors)) {
+                $additionalErrors = array_merge($additionalErrors, $errors);
             }
         }
 
         $errors = $this->collectErrors();
-        if ( isset( $additionalErrors ) )
-        {
-            $errors = array_merge( $errors, $additionalErrors );
+        if (isset($additionalErrors)) {
+            $errors = array_merge($errors, $additionalErrors);
         }
 
         return $errors;
@@ -79,31 +78,29 @@ class Validator extends XmlBase
      *
      * @return string[]
      */
-    protected function validateBySchema( DOMDocument $document, $schema )
+    protected function validateBySchema(DOMDocument $document, $schema)
     {
-        if ( !file_exists( $schema ) || !is_file( $schema ) )
-        {
+        if (!file_exists($schema) || !is_file($schema)) {
             throw new RuntimeException(
                 "Validation of XML document cannot be performed, file '{$schema}' does not exist."
             );
         }
 
         $additionalErrors = array();
-        $pathInfo = pathinfo( $schema );
-        switch ( $pathInfo["extension"] )
-        {
-            case "xsd";
-                $document->schemaValidate( $schema );
+        $pathInfo = pathinfo($schema);
+        switch ($pathInfo['extension']) {
+            case 'xsd':
+                $document->schemaValidate($schema);
                 break;
-            case "rng";
-                $document->relaxNGValidate( $schema );
+            case 'rng':
+                $document->relaxNGValidate($schema);
                 break;
-            case "xsl";
-                $additionalErrors = $this->schematronValidate( $document, $schema );
+            case 'xsl':
+                $additionalErrors = $this->schematronValidate($document, $schema);
                 break;
             default:
                 throw new RuntimeException(
-                    "Validator is capable of handling ISO Schematron (as XSLT stylesheet), " .
+                    'Validator is capable of handling ISO Schematron (as XSLT stylesheet), ' .
                     "XSD and RELAX NG schema files, ending in .xsl, .xsd or .rng.\n" .
                     "File '{$schema}' does not seem to be either of these."
                 );
@@ -121,24 +118,23 @@ class Validator extends XmlBase
      *
      * @return string[]
      */
-    protected function schematronValidate( DOMDocument $document, $filename )
+    protected function schematronValidate(DOMDocument $document, $filename)
     {
-        $stylesheet = $this->loadFile( $filename );
+        $stylesheet = $this->loadFile($filename);
         $xsltProcessor = new XSLTProcessor();
-        $xsltProcessor->importStyleSheet( $stylesheet );
+        $xsltProcessor->importStyleSheet($stylesheet);
 
-        $result = $xsltProcessor->transformToDoc( $document );
+        $result = $xsltProcessor->transformToDoc($document);
 
-        $xpath = new DOMXPath( $result );
-        $xpath->registerNamespace( "svrl", "http://purl.oclc.org/dsdl/svrl" );
-        $xpathExpression = "//svrl:failed-assert";
+        $xpath = new DOMXPath($result);
+        $xpath->registerNamespace('svrl', 'http://purl.oclc.org/dsdl/svrl');
+        $xpathExpression = '//svrl:failed-assert';
 
         $failures = array();
-        $failedAsserts = $xpath->query( $xpathExpression );
+        $failedAsserts = $xpath->query($xpathExpression);
 
-        foreach ( $failedAsserts as $failedAssert )
-        {
-            $failures[] = $this->formatSVRLFailure( $failedAssert );
+        foreach ($failedAsserts as $failedAssert) {
+            $failures[] = $this->formatSVRLFailure($failedAssert);
         }
 
         return $failures;
@@ -151,10 +147,10 @@ class Validator extends XmlBase
      *
      * @return string
      */
-    protected function formatSVRLFailure( DOMElement $failedAssert )
+    protected function formatSVRLFailure(DOMElement $failedAssert)
     {
-        $location = $failedAssert->getAttribute( "location" );
+        $location = $failedAssert->getAttribute('location');
 
-        return ( strlen( $location ) ? $location . ": " : "" ) . $failedAssert->textContent;
+        return (strlen($location) ? $location . ': ' : '') . $failedAssert->textContent;
     }
 }

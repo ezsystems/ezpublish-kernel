@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the SecurityPassTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,15 +22,15 @@ class SecurityPassTest extends AbstractCompilerPassTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->setDefinition( 'security.authentication.provider.dao', new Definition() );
-        $this->setDefinition( 'security.authentication.provider.anonymous', new Definition() );
-        $this->setDefinition( 'security.http_utils', new Definition() );
-        $this->setDefinition( 'security.authentication.success_handler', new Definition() );
+        $this->setDefinition('security.authentication.provider.dao', new Definition());
+        $this->setDefinition('security.authentication.provider.anonymous', new Definition());
+        $this->setDefinition('security.http_utils', new Definition());
+        $this->setDefinition('security.authentication.success_handler', new Definition());
     }
 
-    protected function registerCompilerPass( ContainerBuilder $container )
+    protected function registerCompilerPass(ContainerBuilder $container)
     {
-        $container->addCompilerPass( new SecurityPass() );
+        $container->addCompilerPass(new SecurityPass());
     }
 
     public function testAlteredDaoAuthenticationProvider()
@@ -37,22 +39,22 @@ class SecurityPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'security.authentication.provider.dao',
             'setRepository',
-            array( new Reference( 'ezpublish.api.repository' ) )
+            array(new Reference('ezpublish.api.repository'))
         );
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'security.authentication.provider.anonymous',
             'setRepository',
-            array( new Reference( 'ezpublish.api.repository' ) )
+            array(new Reference('ezpublish.api.repository'))
         );
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'security.http_utils',
             'setSiteAccess',
-            array( new Reference( 'ezpublish.siteaccess' ) )
+            array(new Reference('ezpublish.siteaccess'))
         );
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'security.authentication.success_handler',
             'setConfigResolver',
-            array( new Reference( 'ezpublish.config.resolver' ) )
+            array(new Reference('ezpublish.config.resolver'))
         );
     }
 }

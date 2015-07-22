@@ -1,35 +1,35 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Values\Root;
-use eZ\Publish\Core\REST\Common;
 
 class RootTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the Role visitor
+     * Test the Role visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
-        $role = new Root;
+        $role = new Root();
 
         $this->addRouteExpectation(
             'ezpublish_rest_createContent',
@@ -38,60 +38,60 @@ class RootTest extends ValueObjectVisitorBaseTest
         );
         $this->addTemplatedRouteExpectation(
             'ezpublish_rest_redirectContent',
-            array( 'remoteId' => '{remoteId}' ),
+            array('remoteId' => '{remoteId}'),
             '/content/objects'
         );
-        $this->addRouteExpectation( 'ezpublish_rest_listContentTypes', array(), '/content/types' );
+        $this->addRouteExpectation('ezpublish_rest_listContentTypes', array(), '/content/types');
         $this->addTemplatedRouteExpectation(
             'ezpublish_rest_listContentTypes',
-            array( 'identifier' => '{identifier}' ),
+            array('identifier' => '{identifier}'),
             '/content/types?{&identifier}'
         );
-        $this->addRouteExpectation( 'ezpublish_rest_createContentTypeGroup', array(), '/content/typegroups' );
+        $this->addRouteExpectation('ezpublish_rest_createContentTypeGroup', array(), '/content/typegroups');
         $this->addTemplatedRouteExpectation(
             'ezpublish_rest_loadContentTypeGroupList',
-            array( 'identifier' => '{identifier}' ),
+            array('identifier' => '{identifier}'),
             '/content/typegroups?{&identifier}'
         );
-        $this->addRouteExpectation( 'ezpublish_rest_loadUsers', array(), '/user/users' );
-        $this->addRouteExpectation( 'ezpublish_rest_listRoles', array(), '/user/roles' );
+        $this->addRouteExpectation('ezpublish_rest_loadUsers', array(), '/user/users');
+        $this->addRouteExpectation('ezpublish_rest_listRoles', array(), '/user/roles');
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocation',
-            array( 'locationPath' => '1/2' ),
+            array('locationPath' => '1/2'),
             '/content/locations/1/2'
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadUserGroup',
-            array( 'groupPath' => '1/5' ),
+            array('groupPath' => '1/5'),
             '/user/groups/1/5'
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocation',
-            array( 'locationPath' => '1/43' ),
+            array('locationPath' => '1/43'),
             '/content/locations/1/43'
         );
         $this->addTemplatedRouteExpectation(
             'ezpublish_rest_redirectLocation',
-            array( 'remoteId' => '{remoteId}' ),
+            array('remoteId' => '{remoteId}'),
             '/content/locations?{&remoteId}'
         );
         $this->addTemplatedRouteExpectation(
             'ezpublish_rest_redirectLocation',
-            array( 'locationPath' => '{locationPath}' ),
+            array('locationPath' => '{locationPath}'),
             '/content/locations?{&locationPath}'
         );
-        $this->addRouteExpectation( 'ezpublish_rest_loadTrashItems', array(), '/content/trash' );
-        $this->addRouteExpectation( 'ezpublish_rest_listSections', array(), '/content/sections' );
-        $this->addRouteExpectation( 'ezpublish_rest_createView', array(), '/content/views' );
-        $this->addRouteExpectation( 'ezpublish_rest_loadObjectStateGroups', array(), '/content/objectstategroups' );
+        $this->addRouteExpectation('ezpublish_rest_loadTrashItems', array(), '/content/trash');
+        $this->addRouteExpectation('ezpublish_rest_listSections', array(), '/content/sections');
+        $this->addRouteExpectation('ezpublish_rest_createView', array(), '/content/views');
+        $this->addRouteExpectation('ezpublish_rest_loadObjectStateGroups', array(), '/content/objectstategroups');
         $this->addTemplatedRouteExpectation(
             'ezpublish_rest_loadObjectStates',
-            array( 'objectStateGroupId' => '{objectStateGroupId}' ),
+            array('objectStateGroupId' => '{objectStateGroupId}'),
             '/content/objectstategroups/{objectStateGroupId}/objectstates'
         );
-        $this->addRouteExpectation( 'ezpublish_rest_listGlobalURLAliases', array(), '/content/urlaliases' );
-        $this->addRouteExpectation( 'ezpublish_rest_listURLWildcards', array(), '/content/urlwildcards' );
-        $this->addRouteExpectation( 'ezpublish_rest_createSession', array(), '/user/sessions' );
+        $this->addRouteExpectation('ezpublish_rest_listGlobalURLAliases', array(), '/content/urlaliases');
+        $this->addRouteExpectation('ezpublish_rest_listURLWildcards', array(), '/content/urlwildcards');
+        $this->addRouteExpectation('ezpublish_rest_createSession', array(), '/user/sessions');
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -99,9 +99,9 @@ class RootTest extends ValueObjectVisitorBaseTest
             $role
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
@@ -109,10 +109,10 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsRootElement( $result )
+    public function testResultContainsRootElement($result)
     {
         $this->assertXMLTag(
-            array( 'tag' => 'Root' ),
+            array('tag' => 'Root'),
             $result,
             'Invalid <Root> element.',
             false
@@ -120,20 +120,20 @@ class RootTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains Role element attributes
+     * Test if result contains Role element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsRootAttributes( $result )
+    public function testResultContainsRootAttributes($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'Root',
+                'tag' => 'Root',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Root+xml',
-                )
+                ),
             ),
             $result,
             'Invalid <Root> attributes.',
@@ -144,11 +144,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsContentTag( $result )
+    public function testResultContainsContentTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'content'
+                'tag' => 'content',
             ),
             $result,
             'Invalid <content> element.',
@@ -159,15 +159,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsContentTagAttributes( $result )
+    public function testResultContainsContentTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'content',
                 'attributes' => array(
                     'media-type' => '',
-                    'href' => '/content/objects'
-                )
+                    'href' => '/content/objects',
+                ),
             ),
             $result,
             'Invalid <content> element.',
@@ -178,11 +178,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsContentByRemoteIdTag( $result )
+    public function testResultContainsContentByRemoteIdTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'contentByRemoteId'
+                'tag' => 'contentByRemoteId',
             ),
             $result,
             'Missing <contentByRemoteId> element.',
@@ -193,15 +193,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsContentByRemoteIdTagAttributes( $result )
+    public function testResultContainsContentByRemoteIdTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'contentByRemoteId',
                 'attributes' => array(
                     'media-type' => '',
-                    'href' => '/content/objects'
-                )
+                    'href' => '/content/objects',
+                ),
             ),
             $result,
             'Invalid <contentByRemoteId> tag attributes.',
@@ -212,11 +212,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsContentTypesTag( $result )
+    public function testResultContainsContentTypesTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'contentTypes'
+                'tag' => 'contentTypes',
             ),
             $result,
             'Invalid <contentTypes> element.',
@@ -227,15 +227,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsContentTypesTagAttributes( $result )
+    public function testResultContainsContentTypesTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'contentTypes',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ContentTypeInfoList+xml',
-                    'href' => '/content/types'
-                )
+                    'href' => '/content/types',
+                ),
             ),
             $result,
             'Invalid <content> element.',
@@ -246,11 +246,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsContentTypeByIdentifierTag( $result )
+    public function testResultContainsContentTypeByIdentifierTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'contentTypeByIdentifier'
+                'tag' => 'contentTypeByIdentifier',
             ),
             $result,
             'Invalid <contentTypeByIdentifier> element.',
@@ -261,15 +261,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsContentTypeByIdentifierTagAttributes( $result )
+    public function testResultContainsContentTypeByIdentifierTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'contentTypeByIdentifier',
                 'attributes' => array(
                     'media-type' => '',
-                    'href' => '/content/types?{&identifier}'
-                )
+                    'href' => '/content/types?{&identifier}',
+                ),
             ),
             $result,
             'Invalid <contentTypeByIdentifier> tag attributes.',
@@ -280,11 +280,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsContentTypeGroupsTag( $result )
+    public function testResultContainsContentTypeGroupsTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'contentTypeGroups'
+                'tag' => 'contentTypeGroups',
             ),
             $result,
             'Missing <contentTypeGroups> element.',
@@ -295,15 +295,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsContentTypeGroupsTagAttributes( $result )
+    public function testResultContainsContentTypeGroupsTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'contentTypeGroups',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ContentTypeGroupList+xml',
-                    'href' => '/content/typegroups'
-                )
+                    'href' => '/content/typegroups',
+                ),
             ),
             $result,
             'Invalid <contentTypeGroups> tag attributes.',
@@ -314,11 +314,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsContentTypeGroupByIdentifierTag( $result )
+    public function testResultContainsContentTypeGroupByIdentifierTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'contentTypeGroupByIdentifier'
+                'tag' => 'contentTypeGroupByIdentifier',
             ),
             $result,
             'Missing <ContentTypeGroupByIdentifier> element.',
@@ -329,15 +329,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsContentTypeGroupByIdentifierTagAttributes( $result )
+    public function testResultContainsContentTypeGroupByIdentifierTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'contentTypeGroupByIdentifier',
                 'attributes' => array(
                     'media-type' => '',
-                    'href' => '/content/typegroups?{&identifier}'
-                )
+                    'href' => '/content/typegroups?{&identifier}',
+                ),
             ),
             $result,
             'Invalid <contentTypeGroupByIdentifier> tag attributes.',
@@ -348,11 +348,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsUsersTag( $result )
+    public function testResultContainsUsersTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'users'
+                'tag' => 'users',
             ),
             $result,
             'Invalid <users> tag.',
@@ -363,15 +363,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsUsersTagAttributes( $result )
+    public function testResultContainsUsersTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'users',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.UserRefList+xml',
-                    'href' => '/user/users'
-                )
+                    'href' => '/user/users',
+                ),
             ),
             $result,
             'Invalid <users> tag attributes.',
@@ -382,11 +382,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsRolesTag( $result )
+    public function testResultContainsRolesTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'roles'
+                'tag' => 'roles',
             ),
             $result,
             'Invalid <contentTypes> tag.',
@@ -397,15 +397,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsRolesTagAttributes( $result )
+    public function testResultContainsRolesTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'roles',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.RoleList+xml',
-                    'href' => '/user/roles'
-                )
+                    'href' => '/user/roles',
+                ),
             ),
             $result,
             'Invalid <roles> tag attributes.',
@@ -416,11 +416,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsRootLocationTag( $result )
+    public function testResultContainsRootLocationTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'rootLocation'
+                'tag' => 'rootLocation',
             ),
             $result,
             'Invalid <rootLocation> tag.',
@@ -431,15 +431,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsRootLocationTagAttributes( $result )
+    public function testResultContainsRootLocationTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'rootLocation',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Location+xml',
-                    'href' => '/content/locations/1/2'
-                )
+                    'href' => '/content/locations/1/2',
+                ),
             ),
             $result,
             'Invalid <rootLocation> tag attributes.',
@@ -450,11 +450,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsRootUserGroupTag( $result )
+    public function testResultContainsRootUserGroupTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'rootUserGroup'
+                'tag' => 'rootUserGroup',
             ),
             $result,
             'Invalid <rootUserGroup> tag.',
@@ -465,15 +465,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsRootUserGroupTagAttributes( $result )
+    public function testResultContainsRootUserGroupTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'rootUserGroup',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.UserGroup+xml',
-                    'href' => '/user/groups/1/5'
-                )
+                    'href' => '/user/groups/1/5',
+                ),
             ),
             $result,
             'Invalid <rootUserGroup> tag attributes.',
@@ -484,11 +484,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsRootMediaFolderTag( $result )
+    public function testResultContainsRootMediaFolderTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'rootMediaFolder'
+                'tag' => 'rootMediaFolder',
             ),
             $result,
             'Invalid <rootMediaFolder> tag.',
@@ -499,15 +499,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsRootMediaFolderTagAttributes( $result )
+    public function testResultContainsRootMediaFolderTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'rootMediaFolder',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Location+xml',
-                    'href' => '/content/locations/1/43'
-                )
+                    'href' => '/content/locations/1/43',
+                ),
             ),
             $result,
             'Invalid <rootMediaFolder> tag attributes.',
@@ -518,11 +518,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsLocationByRemoteIdTag( $result )
+    public function testResultContainsLocationByRemoteIdTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'locationByRemoteId'
+                'tag' => 'locationByRemoteId',
             ),
             $result,
             'Missing <locationByRemoteId> tag.',
@@ -533,15 +533,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsLocationByRemoteIdTagAttributes( $result )
+    public function testResultContainsLocationByRemoteIdTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'locationByRemoteId',
                 'attributes' => array(
                     'media-type' => '',
-                    'href' => '/content/locations?{&remoteId}'
-                )
+                    'href' => '/content/locations?{&remoteId}',
+                ),
             ),
             $result,
             'Invalid <locationByRemoteId> tag attributes.',
@@ -552,11 +552,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsLocationByPathTag( $result )
+    public function testResultContainsLocationByPathTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'locationByPath'
+                'tag' => 'locationByPath',
             ),
             $result,
             'Missing <locationByPath> tag.',
@@ -567,15 +567,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsLocationByPathTagAttributes( $result )
+    public function testResultContainsLocationByPathTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'locationByPath',
                 'attributes' => array(
                     'media-type' => '',
-                    'href' => '/content/locations?{&locationPath}'
-                )
+                    'href' => '/content/locations?{&locationPath}',
+                ),
             ),
             $result,
             'Invalid <locationByPath> tag attributes.',
@@ -586,11 +586,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsTrashTag( $result )
+    public function testResultContainsTrashTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'trash'
+                'tag' => 'trash',
             ),
             $result,
             'Invalid <trash> tag.',
@@ -601,15 +601,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsTrashTagAttributes( $result )
+    public function testResultContainsTrashTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'trash',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.Trash+xml',
-                    'href' => '/content/trash'
-                )
+                    'href' => '/content/trash',
+                ),
             ),
             $result,
             'Invalid <trash> tag attributes.',
@@ -620,11 +620,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsSectionsTag( $result )
+    public function testResultContainsSectionsTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'sections'
+                'tag' => 'sections',
             ),
             $result,
             'Invalid <sections> tag.',
@@ -635,15 +635,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsSectionTagAttributes( $result )
+    public function testResultContainsSectionTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'sections',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.SectionList+xml',
-                    'href' => '/content/sections'
-                )
+                    'href' => '/content/sections',
+                ),
             ),
             $result,
             'Invalid <sections> tag attributes.',
@@ -654,11 +654,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsViewsTag( $result )
+    public function testResultContainsViewsTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'views'
+                'tag' => 'views',
             ),
             $result,
             'Invalid <views> tag.',
@@ -669,15 +669,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsViewsTagAttributes( $result )
+    public function testResultContainsViewsTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'views',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.RefList+xml',
-                    'href' => '/content/views'
-                )
+                    'href' => '/content/views',
+                ),
             ),
             $result,
             'Invalid <views> tag attributes.',
@@ -688,11 +688,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsObjectStateGroupsTag( $result )
+    public function testResultContainsObjectStateGroupsTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'objectStateGroups'
+                'tag' => 'objectStateGroups',
             ),
             $result,
             'Missing <objectStateGroups> tag.',
@@ -703,15 +703,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsObjectStateGroupsTagAttributes( $result )
+    public function testResultContainsObjectStateGroupsTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'objectStateGroups',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ObjectStateGroupList+xml',
-                    'href' => '/content/objectstategroups'
-                )
+                    'href' => '/content/objectstategroups',
+                ),
             ),
             $result,
             'Invalid <objectStateGroups> tag attributes.',
@@ -722,11 +722,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsObjectStatesTag( $result )
+    public function testResultContainsObjectStatesTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'objectStates'
+                'tag' => 'objectStates',
             ),
             $result,
             'Missing <objectStates> tag.',
@@ -737,15 +737,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsObjectStatesTagAttributes( $result )
+    public function testResultContainsObjectStatesTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'objectStates',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ObjectStateList+xml',
-                    'href' => '/content/objectstategroups/{objectStateGroupId}/objectstates'
-                )
+                    'href' => '/content/objectstategroups/{objectStateGroupId}/objectstates',
+                ),
             ),
             $result,
             'Invalid <objectStates> tag attributes.',
@@ -756,11 +756,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsGlobalUrlAliasesTag( $result )
+    public function testResultContainsGlobalUrlAliasesTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'globalUrlAliases'
+                'tag' => 'globalUrlAliases',
             ),
             $result,
             'Missing <globalUrlAliases> tag.',
@@ -771,15 +771,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsGlobalUrlAliasesTagAttributes( $result )
+    public function testResultContainsGlobalUrlAliasesTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'globalUrlAliases',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.UrlAliasRefList+xml',
-                    'href' => '/content/urlaliases'
-                )
+                    'href' => '/content/urlaliases',
+                ),
             ),
             $result,
             'Invalid <globalUrlAliases> tag attributes.',
@@ -790,11 +790,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsUrlWildcardsTag( $result )
+    public function testResultContainsUrlWildcardsTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'urlWildcards'
+                'tag' => 'urlWildcards',
             ),
             $result,
             'Missing <urlWildcards> tag.',
@@ -805,15 +805,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsUrlWildcardsTagAttributes( $result )
+    public function testResultContainsUrlWildcardsTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'urlWildcards',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.UrlWildcardList+xml',
-                    'href' => '/content/urlwildcards'
-                )
+                    'href' => '/content/urlwildcards',
+                ),
             ),
             $result,
             'Invalid <globalUrlAliases> tag attributes.',
@@ -824,11 +824,11 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsCreateSessionTag( $result )
+    public function testResultContainsCreateSessionTag($result)
     {
         $this->assertXMLTag(
             array(
-                'tag' => 'createSession'
+                'tag' => 'createSession',
             ),
             $result,
             'Missing <createSession> tag.',
@@ -839,15 +839,15 @@ class RootTest extends ValueObjectVisitorBaseTest
     /**
      * @depends testVisit
      */
-    public function testResultContainsCreateSessionTagAttributes( $result )
+    public function testResultContainsCreateSessionTagAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'createSession',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.UserSession+xml',
-                    'href' => '/user/sessions'
-                )
+                    'href' => '/user/sessions',
+                ),
             ),
             $result,
             'Invalid <createSession> tag attributes.',
@@ -856,12 +856,12 @@ class RootTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the Role visitor
+     * Get the Role visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Root
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\Root;
+        return new ValueObjectVisitor\Root();
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContextualizerTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,12 +28,12 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
 
     private $saNodeName = 'heyho';
 
-    private $availableSAs = array( 'sa1', 'sa2', 'sa3' );
+    private $availableSAs = array('sa1', 'sa2', 'sa3');
 
     private $groupsBySA = array(
-        'sa1' => array( 'sa_group1', 'sa_group2' ),
-        'sa2' => array( 'sa_group1' ),
-        'sa3' => array( 'sa_group1' )
+        'sa1' => array('sa_group1', 'sa_group2'),
+        'sa2' => array('sa_group1'),
+        'sa3' => array('sa_group1'),
     );
 
     /**
@@ -42,39 +44,39 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->container = $this->getMock( 'Symfony\Component\DependencyInjection\ContainerInterface' );
-        $this->contextualizer = new Contextualizer( $this->container, $this->namespace, $this->saNodeName, $this->availableSAs, $this->groupsBySA );
+        $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $this->contextualizer = new Contextualizer($this->container, $this->namespace, $this->saNodeName, $this->availableSAs, $this->groupsBySA);
     }
 
     /**
      * @dataProvider setContextualParameterProvider
      */
-    public function testSetContextualParameter( $parameterName, $scope, $value )
+    public function testSetContextualParameter($parameterName, $scope, $value)
     {
         $this->container
-            ->expects( $this->once() )
-            ->method( 'setParameter' )
-            ->with( "$this->namespace.$scope.$parameterName", $value );
+            ->expects($this->once())
+            ->method('setParameter')
+            ->with("$this->namespace.$scope.$parameterName", $value);
 
-        $this->contextualizer->setContextualParameter( $parameterName, $scope, $value );
+        $this->contextualizer->setContextualParameter($parameterName, $scope, $value);
     }
 
     public function setContextualParameterProvider()
     {
         return array(
-            array( 'my_parameter', 'sa1', 'foobar' ),
-            array( 'some', 'sa1', 'thing' ),
-            array( 'my_array', 'sa3', array( 'foo', 'bar' ) ),
-            array( 'my_hash', 'sa2', array( 'foo' => 'bar', 'hey' => array( 'ho' ), 'enabled' => true ) ),
-            array( 'my_integer', 'sa3', 123 ),
-            array( 'my_bool', 'sa2', false ),
+            array('my_parameter', 'sa1', 'foobar'),
+            array('some', 'sa1', 'thing'),
+            array('my_array', 'sa3', array('foo', 'bar')),
+            array('my_hash', 'sa2', array('foo' => 'bar', 'hey' => array('ho'), 'enabled' => true)),
+            array('my_integer', 'sa3', 123),
+            array('my_bool', 'sa2', false),
         );
     }
 
     public function testMapSetting()
     {
         $fooSa1 = 'bar';
-        $planetsSa1 = array( 'Earth' );
+        $planetsSa1 = array('Earth');
         $intSa1 = 123;
         $boolSa1 = true;
         $sa1Config = array(
@@ -84,7 +86,7 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
             'a_bool' => $boolSa1,
         );
         $fooSa2 = 'bar2';
-        $planetsSa2 = array( 'Earth', 'Mars', 'Venus' );
+        $planetsSa2 = array('Earth', 'Mars', 'Venus');
         $intSa2 = 456;
         $boolSa2 = false;
         $sa2Config = array(
@@ -98,298 +100,298 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
             $this->saNodeName => array(
                 'sa1' => $sa1Config,
                 'sa2' => $sa2Config,
-            )
+            ),
         );
 
         $container = new ContainerBuilder();
-        $this->contextualizer->setContainer( $container );
-        $this->contextualizer->mapSetting( 'foo', $config );
-        $this->contextualizer->mapSetting( 'planets', $config );
-        $this->contextualizer->mapSetting( 'an_integer', $config );
-        $this->contextualizer->mapSetting( 'a_bool', $config );
+        $this->contextualizer->setContainer($container);
+        $this->contextualizer->mapSetting('foo', $config);
+        $this->contextualizer->mapSetting('planets', $config);
+        $this->contextualizer->mapSetting('an_integer', $config);
+        $this->contextualizer->mapSetting('a_bool', $config);
 
-        $this->assertSame( $fooSa1, $container->getParameter( "$this->namespace.sa1.foo" ) );
-        $this->assertSame( $planetsSa1, $container->getParameter( "$this->namespace.sa1.planets" ) );
-        $this->assertSame( $intSa1, $container->getParameter( "$this->namespace.sa1.an_integer" ) );
-        $this->assertSame( $boolSa1, $container->getParameter( "$this->namespace.sa1.a_bool" ) );
+        $this->assertSame($fooSa1, $container->getParameter("$this->namespace.sa1.foo"));
+        $this->assertSame($planetsSa1, $container->getParameter("$this->namespace.sa1.planets"));
+        $this->assertSame($intSa1, $container->getParameter("$this->namespace.sa1.an_integer"));
+        $this->assertSame($boolSa1, $container->getParameter("$this->namespace.sa1.a_bool"));
 
-        $this->assertSame( $fooSa2, $container->getParameter( "$this->namespace.sa2.foo" ) );
-        $this->assertSame( $planetsSa2, $container->getParameter( "$this->namespace.sa2.planets" ) );
-        $this->assertSame( $intSa2, $container->getParameter( "$this->namespace.sa2.an_integer" ) );
-        $this->assertSame( $boolSa2, $container->getParameter( "$this->namespace.sa2.a_bool" ) );
+        $this->assertSame($fooSa2, $container->getParameter("$this->namespace.sa2.foo"));
+        $this->assertSame($planetsSa2, $container->getParameter("$this->namespace.sa2.planets"));
+        $this->assertSame($intSa2, $container->getParameter("$this->namespace.sa2.an_integer"));
+        $this->assertSame($boolSa2, $container->getParameter("$this->namespace.sa2.a_bool"));
     }
 
     public function testMapConfigArray()
     {
         $containerBuilder = new ContainerBuilder();
-        $this->contextualizer->setContainer( $containerBuilder );
+        $this->contextualizer->setContainer($containerBuilder);
         $defaultConfig = array(
             'foo' => null,
             'some' => null,
-            'planets' => array( 'Earth' ),
+            'planets' => array('Earth'),
             'an_integer' => 0,
             'enabled' => false,
-            'j_adore' => 'les_sushis'
+            'j_adore' => 'les_sushis',
         );
 
         $config = array(
             $this->saNodeName => array(
                 'default' => array(
-                    'foo_setting' => $defaultConfig
+                    'foo_setting' => $defaultConfig,
                 ),
                 'sa_group1' => array(
                     'foo_setting' => array(
                         'foo' => 'bar',
                         'some' => 'thing',
                         'an_integer' => 123,
-                    )
+                    ),
                 ),
                 'sa1' => array(
                     'foo_setting' => array(
                         'an_integer' => 456,
                         'enabled' => true,
-                        'j_adore' => 'le_saucisson'
-                    )
+                        'j_adore' => 'le_saucisson',
+                    ),
                 ),
                 'sa2' => array(
                     'foo_setting' => array(
                         'foo' => 'baz',
-                        'planets' => array( 'Mars', 'Venus' ),
-                        'an_integer' => 789
-                    )
+                        'planets' => array('Mars', 'Venus'),
+                        'an_integer' => 789,
+                    ),
                 ),
                 'global' => array(
                     'foo_setting' => array(
-                        'j_adore' => 'la_truite_a_la_vapeur'
-                    )
-                )
-            )
+                        'j_adore' => 'la_truite_a_la_vapeur',
+                    ),
+                ),
+            ),
         );
 
         $expectedMergedSettings = array(
             'sa1' => array(
                 'foo' => 'bar',
                 'some' => 'thing',
-                'planets' => array( 'Earth' ),
+                'planets' => array('Earth'),
                 'an_integer' => 456,
                 'enabled' => true,
-                'j_adore' => 'la_truite_a_la_vapeur'
+                'j_adore' => 'la_truite_a_la_vapeur',
             ),
             'sa2' => array(
                 'foo' => 'baz',
                 'some' => 'thing',
-                'planets' => array( 'Mars', 'Venus' ),
+                'planets' => array('Mars', 'Venus'),
                 'an_integer' => 789,
                 'enabled' => false,
-                'j_adore' => 'la_truite_a_la_vapeur'
+                'j_adore' => 'la_truite_a_la_vapeur',
             ),
             'sa3' => array(
                 'foo' => 'bar',
                 'some' => 'thing',
-                'planets' => array( 'Earth' ),
+                'planets' => array('Earth'),
                 'an_integer' => 123,
                 'enabled' => false,
-                'j_adore' => 'la_truite_a_la_vapeur'
-            )
+                'j_adore' => 'la_truite_a_la_vapeur',
+            ),
         );
 
-        $this->contextualizer->mapConfigArray( 'foo_setting', $config );
+        $this->contextualizer->mapConfigArray('foo_setting', $config);
 
         $this->assertSame(
             $expectedMergedSettings['sa1'],
-            $containerBuilder->getParameter( "$this->namespace.sa1.foo_setting" )
+            $containerBuilder->getParameter("$this->namespace.sa1.foo_setting")
         );
         $this->assertSame(
             $expectedMergedSettings['sa2'],
-            $containerBuilder->getParameter( "$this->namespace.sa2.foo_setting" )
+            $containerBuilder->getParameter("$this->namespace.sa2.foo_setting")
         );
         $this->assertSame(
             $expectedMergedSettings['sa3'],
-            $containerBuilder->getParameter( "$this->namespace.sa3.foo_setting" )
+            $containerBuilder->getParameter("$this->namespace.sa3.foo_setting")
         );
     }
 
     public function testMapConfigArraySecondLevel()
     {
         $containerBuilder = new ContainerBuilder();
-        $this->contextualizer->setContainer( $containerBuilder );
+        $this->contextualizer->setContainer($containerBuilder);
         $defaultConfig = array(
             'foo' => null,
             'some' => null,
-            'planets' => array( 'Earth' ),
+            'planets' => array('Earth'),
             'an_integer' => 0,
             'enabled' => false,
-            'j_adore' => array( 'les_sushis' )
+            'j_adore' => array('les_sushis'),
         );
 
         $config = array(
             $this->saNodeName => array(
                 'default' => array(
-                    'foo_setting' => $defaultConfig
+                    'foo_setting' => $defaultConfig,
                 ),
                 'sa_group1' => array(
                     'foo_setting' => array(
                         'foo' => 'bar',
                         'some' => 'thing',
                         'an_integer' => 123,
-                    )
+                    ),
                 ),
                 'sa1' => array(
                     'foo_setting' => array(
                         'an_integer' => 456,
                         'enabled' => true,
-                        'j_adore' => array( 'le_saucisson' )
-                    )
+                        'j_adore' => array('le_saucisson'),
+                    ),
                 ),
                 'sa2' => array(
                     'foo_setting' => array(
                         'foo' => 'baz',
-                        'planets' => array( 'Mars', 'Venus' ),
-                        'an_integer' => 789
-                    )
+                        'planets' => array('Mars', 'Venus'),
+                        'an_integer' => 789,
+                    ),
                 ),
                 'sa3' => array(
                     'foo_setting' => array(
-                        'planets' => array( 'Earth', 'Jupiter' )
-                    )
+                        'planets' => array('Earth', 'Jupiter'),
+                    ),
                 ),
                 'global' => array(
                     'foo_setting' => array(
-                        'j_adore' => array( 'la_truite_a_la_vapeur' )
-                    )
-                )
-            )
+                        'j_adore' => array('la_truite_a_la_vapeur'),
+                    ),
+                ),
+            ),
         );
 
         $expectedMergedSettings = array(
             'sa1' => array(
                 'foo' => 'bar',
                 'some' => 'thing',
-                'planets' => array( 'Earth' ),
+                'planets' => array('Earth'),
                 'an_integer' => 456,
                 'enabled' => true,
-                'j_adore' => array( 'les_sushis', 'le_saucisson', 'la_truite_a_la_vapeur' )
+                'j_adore' => array('les_sushis', 'le_saucisson', 'la_truite_a_la_vapeur'),
             ),
             'sa2' => array(
                 'foo' => 'baz',
                 'some' => 'thing',
-                'planets' => array( 'Earth', 'Mars', 'Venus' ),
+                'planets' => array('Earth', 'Mars', 'Venus'),
                 'an_integer' => 789,
                 'enabled' => false,
-                'j_adore' => array( 'les_sushis', 'la_truite_a_la_vapeur' )
+                'j_adore' => array('les_sushis', 'la_truite_a_la_vapeur'),
             ),
             'sa3' => array(
                 'foo' => 'bar',
                 'some' => 'thing',
-                'planets' => array( 'Earth', 'Earth', 'Jupiter' ),
+                'planets' => array('Earth', 'Earth', 'Jupiter'),
                 'an_integer' => 123,
                 'enabled' => false,
-                'j_adore' => array( 'les_sushis', 'la_truite_a_la_vapeur' )
-            )
+                'j_adore' => array('les_sushis', 'la_truite_a_la_vapeur'),
+            ),
         );
 
-        $this->contextualizer->mapConfigArray( 'foo_setting', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL );
+        $this->contextualizer->mapConfigArray('foo_setting', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL);
 
         $this->assertSame(
             $expectedMergedSettings['sa1'],
-            $containerBuilder->getParameter( "$this->namespace.sa1.foo_setting" )
+            $containerBuilder->getParameter("$this->namespace.sa1.foo_setting")
         );
         $this->assertSame(
             $expectedMergedSettings['sa2'],
-            $containerBuilder->getParameter( "$this->namespace.sa2.foo_setting" )
+            $containerBuilder->getParameter("$this->namespace.sa2.foo_setting")
         );
         $this->assertSame(
             $expectedMergedSettings['sa3'],
-            $containerBuilder->getParameter( "$this->namespace.sa3.foo_setting" )
+            $containerBuilder->getParameter("$this->namespace.sa3.foo_setting")
         );
     }
 
     public function testMapConfigArrayUnique()
     {
         $containerBuilder = new ContainerBuilder();
-        $this->contextualizer->setContainer( $containerBuilder );
-        $defaultConfig = array( 'Earth' );
+        $this->contextualizer->setContainer($containerBuilder);
+        $defaultConfig = array('Earth');
 
         $config = array(
             $this->saNodeName => array(
                 'default' => array(
-                    'foo_setting' => $defaultConfig
+                    'foo_setting' => $defaultConfig,
                 ),
                 'sa_group1' => array(
-                    'foo_setting' => array( 'Mars' )
+                    'foo_setting' => array('Mars'),
                 ),
                 'sa1' => array(
-                    'foo_setting' => array( 'Earth' )
+                    'foo_setting' => array('Earth'),
                 ),
                 'sa2' => array(
-                    'foo_setting' => array( 'Mars', 'Venus' ),
+                    'foo_setting' => array('Mars', 'Venus'),
                 ),
                 'sa3' => array(
-                    'foo_setting' => array( 'Earth', 'Jupiter' )
-                )
-            )
+                    'foo_setting' => array('Earth', 'Jupiter'),
+                ),
+            ),
         );
 
         $expectedMergedSettings = array(
-            'sa1' => array( 'Earth', 'Mars' ),
-            'sa2' => array( 'Earth', 'Mars', 'Venus' ),
-            'sa3' => array( 'Earth', 'Mars', 'Jupiter' ),
+            'sa1' => array('Earth', 'Mars'),
+            'sa2' => array('Earth', 'Mars', 'Venus'),
+            'sa3' => array('Earth', 'Mars', 'Jupiter'),
         );
 
-        $this->contextualizer->mapConfigArray( 'foo_setting', $config, ContextualizerInterface::UNIQUE );
+        $this->contextualizer->mapConfigArray('foo_setting', $config, ContextualizerInterface::UNIQUE);
 
         $this->assertSame(
             $expectedMergedSettings['sa1'],
-            $containerBuilder->getParameter( "$this->namespace.sa1.foo_setting" )
+            $containerBuilder->getParameter("$this->namespace.sa1.foo_setting")
         );
         $this->assertSame(
             $expectedMergedSettings['sa2'],
-            $containerBuilder->getParameter( "$this->namespace.sa2.foo_setting" )
+            $containerBuilder->getParameter("$this->namespace.sa2.foo_setting")
         );
         $this->assertSame(
             $expectedMergedSettings['sa3'],
-            $containerBuilder->getParameter( "$this->namespace.sa3.foo_setting" )
+            $containerBuilder->getParameter("$this->namespace.sa3.foo_setting")
         );
     }
 
     public function testGetSetContainer()
     {
-        $this->assertSame( $this->container, $this->contextualizer->getContainer() );
+        $this->assertSame($this->container, $this->contextualizer->getContainer());
         $containerBuilder = new ContainerBuilder();
-        $this->contextualizer->setContainer( $containerBuilder );
-        $this->assertSame( $containerBuilder, $this->contextualizer->getContainer() );
+        $this->contextualizer->setContainer($containerBuilder);
+        $this->assertSame($containerBuilder, $this->contextualizer->getContainer());
     }
 
     public function testGetSetSANodeName()
     {
         $nodeName = 'foobarbaz';
-        $this->assertSame( $this->saNodeName, $this->contextualizer->getSiteAccessNodeName() );
-        $this->contextualizer->setSiteAccessNodeName( $nodeName );
-        $this->assertSame( $nodeName, $this->contextualizer->getSiteAccessNodeName() );
+        $this->assertSame($this->saNodeName, $this->contextualizer->getSiteAccessNodeName());
+        $this->contextualizer->setSiteAccessNodeName($nodeName);
+        $this->assertSame($nodeName, $this->contextualizer->getSiteAccessNodeName());
     }
 
     public function testGetSetNamespace()
     {
         $ns = 'ezpublish';
-        $this->assertSame( $this->namespace, $this->contextualizer->getNamespace() );
-        $this->contextualizer->setNamespace( $ns );
-        $this->assertSame( $ns, $this->contextualizer->getNamespace() );
+        $this->assertSame($this->namespace, $this->contextualizer->getNamespace());
+        $this->contextualizer->setNamespace($ns);
+        $this->assertSame($ns, $this->contextualizer->getNamespace());
     }
 
     public function testGetSetAvailableSiteAccesses()
     {
-        $this->assertSame( $this->availableSAs, $this->contextualizer->getAvailableSiteAccesses() );
-        $sa = array( 'foo', 'bar', 'baz' );
-        $this->contextualizer->setAvailableSiteAccesses( $sa );
-        $this->assertSame( $sa, $this->contextualizer->getAvailableSiteAccesses() );
+        $this->assertSame($this->availableSAs, $this->contextualizer->getAvailableSiteAccesses());
+        $sa = array('foo', 'bar', 'baz');
+        $this->contextualizer->setAvailableSiteAccesses($sa);
+        $this->assertSame($sa, $this->contextualizer->getAvailableSiteAccesses());
     }
 
     public function testGetSetGroupsBySA()
     {
-        $this->assertSame( $this->groupsBySA, $this->contextualizer->getGroupsBySiteAccess() );
-        $groups = array( 'foo' => array( 'bar', 'baz' ), 'group2' => array( 'some', 'thing' ) );
-        $this->contextualizer->setGroupsBySiteAccess( $groups );
-        $this->assertSame( $groups, $this->contextualizer->getGroupsBySiteAccess() );
+        $this->assertSame($this->groupsBySA, $this->contextualizer->getGroupsBySiteAccess());
+        $groups = array('foo' => array('bar', 'baz'), 'group2' => array('some', 'thing'));
+        $this->contextualizer->setGroupsBySiteAccess($groups);
+        $this->assertSame($groups, $this->contextualizer->getGroupsBySiteAccess());
     }
 
     /**
@@ -399,59 +401,63 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
      * @dataProvider fullMapConfigArrayProvider
      */
     public function testFullMapConfigArray(
-        $testId, $siteaccess, array $groups, array $defaultValue,
-        array $globalValue, array $config, $options, array $expected,
+        $testId,
+        $siteaccess,
+        array $groups,
+        array $defaultValue,
+        array $globalValue,
+        array $config,
+        $options,
+        array $expected,
         $customSANodeKey = null
-    )
-    {
-        $this->contextualizer->setAvailableSiteAccesses( $config['siteaccess']['list'] );
-        $this->contextualizer->setGroupsBySiteAccess( array( $siteaccess => $groups ) );
+    ) {
+        $this->contextualizer->setAvailableSiteAccesses($config['siteaccess']['list']);
+        $this->contextualizer->setGroupsBySiteAccess(array($siteaccess => $groups));
 
         $hasParameterMap = array(
             array(
                 $this->namespace . '.' . ConfigResolver::SCOPE_DEFAULT . '.' . $testId,
-                true
+                true,
             ),
             array(
                 $this->namespace . '.' . ConfigResolver::SCOPE_GLOBAL . '.' . $testId,
-                true
-            )
+                true,
+            ),
         );
 
         $getParameterMap = array(
             array(
                 $this->namespace . '.' . ConfigResolver::SCOPE_DEFAULT . '.' . $testId,
-                $defaultValue
+                $defaultValue,
             ),
             array(
                 $this->namespace . '.' . ConfigResolver::SCOPE_GLOBAL . '.' . $testId,
-                $globalValue
-            )
+                $globalValue,
+            ),
         );
 
         $this->container
-            ->expects( $this->any() )
-            ->method( 'hasParameter' )
-            ->will( $this->returnValueMap( $hasParameterMap ) );
+            ->expects($this->any())
+            ->method('hasParameter')
+            ->will($this->returnValueMap($hasParameterMap));
 
         $this->container
-            ->expects( $this->any() )
-            ->method( 'getParameter' )
-            ->will( $this->returnValueMap( $getParameterMap ) );
+            ->expects($this->any())
+            ->method('getParameter')
+            ->will($this->returnValueMap($getParameterMap));
 
         $this->container
-            ->expects( $this->any() )
-            ->method( 'setParameter' )
+            ->expects($this->any())
+            ->method('setParameter')
             ->with(
-                $this->equalTo( "$this->namespace.$siteaccess.$testId" ),
-                $this->equalTo( $expected )
+                $this->equalTo("$this->namespace.$siteaccess.$testId"),
+                $this->equalTo($expected)
             );
 
-        if ( $customSANodeKey !== null )
-        {
-            $this->contextualizer->setSiteAccessNodeName( $customSANodeKey );
+        if ($customSANodeKey !== null) {
+            $this->contextualizer->setSiteAccessNodeName($customSANodeKey);
         }
-        $this->contextualizer->mapConfigArray( $testId, $config, $options );
+        $this->contextualizer->mapConfigArray($testId, $config, $options);
     }
 
     public function fullMapConfigArrayProvider()
@@ -460,121 +466,121 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
         $siteaccess = 'krondor';
         $group1 = 'midkemia';
         $group2 = 'triagia';
-        $all = array( 'Kulgan', 'Macros the Black', 'Pug', 'Rogen', 'William' );
+        $all = array('Kulgan', 'Macros the Black', 'Pug', 'Rogen', 'William');
         $siteaccessConfig = array(
-            'list' => array( $siteaccess ),
+            'list' => array($siteaccess),
             'groups' => array(
-                $group1 => array( $siteaccess ),
-                $group2 => array( $siteaccess ),
-            )
+                $group1 => array($siteaccess),
+                $group2 => array($siteaccess),
+            ),
         );
         $testIdHash = 'location_view';
         $locationView1 = array(
             'full' => array(
                 'Wizard' => array(
-                    'template' => 'wizard.html.twig'
+                    'template' => 'wizard.html.twig',
                 ),
                 'Sorcerer' => array(
-                    'template' => 'sorcerer.html.twig'
-                )
-            )
+                    'template' => 'sorcerer.html.twig',
+                ),
+            ),
         );
 
         $locationView2 = array(
             'full' => array(
                 'Dwarve' => array(
-                    'template' => 'dwarve.html.twig'
+                    'template' => 'dwarve.html.twig',
                 ),
                 'Sorcerer' => array(
-                    'template' => 'sorcerer2.html.twig'
-                )
-            )
+                    'template' => 'sorcerer2.html.twig',
+                ),
+            ),
         );
 
         $locationView3 = array(
             'full' => array(
                 'Moredhel' => array(
-                    'template' => 'moredhel.html.twig'
+                    'template' => 'moredhel.html.twig',
                 ),
                 'Sorcerer' => array(
-                    'template' => 'sorcerer3.html.twig'
+                    'template' => 'sorcerer3.html.twig',
                 ),
-            )
+            ),
         );
         $locationView4 = array(
             'full' => array(
                 'Moredhel' => array(
-                    'template' => 'moredhel2.html.twig'
+                    'template' => 'moredhel2.html.twig',
                 ),
                 'Warrior' => array(
-                    'template' => 'warrior.html.twig'
+                    'template' => 'warrior.html.twig',
                 ),
-            )
+            ),
         );
 
         $locationView12 = array(
             'full' => array(
                 'Wizard' => array(
-                    'template' => 'wizard.html.twig'
+                    'template' => 'wizard.html.twig',
                 ),
                 'Sorcerer' => array(
-                    'template' => 'sorcerer2.html.twig'
+                    'template' => 'sorcerer2.html.twig',
                 ),
                 'Dwarve' => array(
-                    'template' => 'dwarve.html.twig'
+                    'template' => 'dwarve.html.twig',
                 ),
-            )
+            ),
         );
 
         $locationView123 = array(
             'full' => array(
                 'Wizard' => array(
-                    'template' => 'wizard.html.twig'
+                    'template' => 'wizard.html.twig',
                 ),
                 'Sorcerer' => array(
-                    'template' => 'sorcerer3.html.twig'
+                    'template' => 'sorcerer3.html.twig',
                 ),
                 'Dwarve' => array(
-                    'template' => 'dwarve.html.twig'
+                    'template' => 'dwarve.html.twig',
                 ),
                 'Moredhel' => array(
-                    'template' => 'moredhel.html.twig'
-                )
-            )
+                    'template' => 'moredhel.html.twig',
+                ),
+            ),
         );
 
         $locationView1234 = array(
             'full' => array(
                 'Wizard' => array(
-                    'template' => 'wizard.html.twig'
+                    'template' => 'wizard.html.twig',
                 ),
                 'Sorcerer' => array(
-                    'template' => 'sorcerer3.html.twig'
+                    'template' => 'sorcerer3.html.twig',
                 ),
                 'Dwarve' => array(
-                    'template' => 'dwarve.html.twig'
+                    'template' => 'dwarve.html.twig',
                 ),
                 'Moredhel' => array(
-                    'template' => 'moredhel2.html.twig'
+                    'template' => 'moredhel2.html.twig',
                 ),
                 'Warrior' => array(
-                    'template' => 'warrior.html.twig'
+                    'template' => 'warrior.html.twig',
                 ),
-            )
+            ),
         );
 
         $locationView21 = array(
             'full' => array(
                 'Dwarve' => array(
-                    'template' => 'dwarve.html.twig'
+                    'template' => 'dwarve.html.twig',
                 ),
                 'Sorcerer' => array(
-                    'template' => 'sorcerer.html.twig'
+                    'template' => 'sorcerer.html.twig',
                 ),
                 'Wizard' => array(
-                    'template' => 'wizard.html.twig'
+                    'template' => 'wizard.html.twig',
                 ),
-            )
+            ),
         );
 
         $cases = array(
@@ -585,12 +591,12 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // everything in default scope
                 $testId,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 $all,
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array()
+                    $this->saNodeName => array(),
                 ),
                 0,
                 $all,
@@ -599,12 +605,12 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // everything in global scope
                 $testId,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 $all,
                 array(
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array()
+                    $this->saNodeName => array(),
                 ),
                 0,
                 $all,
@@ -613,14 +619,14 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // everything in a group
                 $testId,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group2 => array( $testId => $all )
-                    )
+                        $group2 => array($testId => $all),
+                    ),
                 ),
                 0,
                 $all,
@@ -629,14 +635,14 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // everything in a siteaccess
                 $testId,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $siteaccess => array( $testId => $all )
-                    )
+                        $siteaccess => array($testId => $all),
+                    ),
                 ),
                 0,
                 $all,
@@ -645,14 +651,14 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // default scope + one group
                 $testId,
                 $siteaccess,
-                array( $group1, $group2 ),
-                array( 'Kulgan', 'Macros the Black' ),
+                array($group1, $group2),
+                array('Kulgan', 'Macros the Black'),
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testId => array( 'Pug', 'Rogen', 'William' ) ),
-                    )
+                        $group1 => array($testId => array('Pug', 'Rogen', 'William')),
+                    ),
                 ),
                 0,
                 $all,
@@ -661,14 +667,14 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // one group + global scope
                 $testId,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
-                array( 'Pug', 'Rogen', 'William' ),
+                array('Pug', 'Rogen', 'William'),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testId => array( 'Kulgan', 'Macros the Black' ) ),
-                    )
+                        $group1 => array($testId => array('Kulgan', 'Macros the Black')),
+                    ),
                 ),
                 0,
                 $all,
@@ -677,15 +683,15 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // default scope + two groups
                 $testId,
                 $siteaccess,
-                array( $group1, $group2 ),
-                array( 'Kulgan', 'Macros the Black' ),
+                array($group1, $group2),
+                array('Kulgan', 'Macros the Black'),
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testId => array( 'Pug', 'Rogen' ) ),
-                        $group2 => array( $testId => array( 'William' ) ),
-                    )
+                        $group1 => array($testId => array('Pug', 'Rogen')),
+                        $group2 => array($testId => array('William')),
+                    ),
                 ),
                 0,
                 $all,
@@ -694,33 +700,33 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // two groups + global scope
                 $testId,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
-                array( 'Kulgan', 'Macros the Black' ),
+                array('Kulgan', 'Macros the Black'),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testId => array( 'Pug', 'Rogen' ) ),
-                        $group2 => array( $testId => array( 'William' ) ),
-                    )
+                        $group1 => array($testId => array('Pug', 'Rogen')),
+                        $group2 => array($testId => array('William')),
+                    ),
                 ),
                 0,
-                array( 'Pug', 'Rogen', 'William', 'Kulgan', 'Macros the Black' ),
+                array('Pug', 'Rogen', 'William', 'Kulgan', 'Macros the Black'),
             ),
             array(
                 // default scope + two groups + siteaccess
                 $testId,
                 $siteaccess,
-                array( $group1, $group2 ),
-                array( 'Kulgan', 'Macros the Black' ),
+                array($group1, $group2),
+                array('Kulgan', 'Macros the Black'),
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testId => array( 'Pug' ) ),
-                        $group2 => array( $testId => array( 'Rogen' ) ),
-                        $siteaccess => array( $testId => array( 'William' ) ),
-                    )
+                        $group1 => array($testId => array('Pug')),
+                        $group2 => array($testId => array('Rogen')),
+                        $siteaccess => array($testId => array('William')),
+                    ),
                 ),
                 0,
                 $all,
@@ -729,33 +735,33 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // global scope + two groups + siteaccess
                 $testId,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
-                array( 'Kulgan', 'Macros the Black' ),
+                array('Kulgan', 'Macros the Black'),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testId => array( 'Pug' ) ),
-                        $group2 => array( $testId => array( 'Rogen' ) ),
-                        $siteaccess => array( $testId => array( 'William' ) ),
-                    )
+                        $group1 => array($testId => array('Pug')),
+                        $group2 => array($testId => array('Rogen')),
+                        $siteaccess => array($testId => array('William')),
+                    ),
                 ),
                 0,
-                array( 'Pug', 'Rogen', 'William', 'Kulgan', 'Macros the Black' ),
+                array('Pug', 'Rogen', 'William', 'Kulgan', 'Macros the Black'),
             ),
             array(
                 // default scope + two groups +  global
                 $testId,
                 $siteaccess,
-                array( $group1, $group2 ),
-                array( 'Kulgan', 'Macros the Black' ),
-                array( 'William' ),
+                array($group1, $group2),
+                array('Kulgan', 'Macros the Black'),
+                array('William'),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testId => array( 'Pug' ) ),
-                        $group2 => array( $testId => array( 'Rogen' ) ),
-                    )
+                        $group1 => array($testId => array('Pug')),
+                        $group2 => array($testId => array('Rogen')),
+                    ),
                 ),
                 0,
                 $all,
@@ -764,16 +770,16 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // default scope + two groups + siteaccess + global
                 $testId,
                 $siteaccess,
-                array( $group1, $group2 ),
-                array( 'Kulgan' ),
-                array( 'William' ),
+                array($group1, $group2),
+                array('Kulgan'),
+                array('William'),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testId => array( 'Macros the Black' ) ),
-                        $group2 => array( $testId => array( 'Pug' ) ),
-                        $siteaccess => array( $testId => array( 'Rogen' ) ),
-                    )
+                        $group1 => array($testId => array('Macros the Black')),
+                        $group2 => array($testId => array('Pug')),
+                        $siteaccess => array($testId => array('Rogen')),
+                    ),
                 ),
                 0,
                 $all,
@@ -784,36 +790,36 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
             array(
                 $testId,
                 $siteaccess,
-                array( $group1, $group2 ),
-                array( 'Kulgan', 'Kulgan' ),
-                array( 'William' ),
+                array($group1, $group2),
+                array('Kulgan', 'Kulgan'),
+                array('William'),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testId => array( 'Macros the Black' ) ),
-                        $group2 => array( $testId => array( 'Pug' ) ),
-                        $siteaccess => array( $testId => array( 'Rogen', 'Pug' ) ),
-                    )
+                        $group1 => array($testId => array('Macros the Black')),
+                        $group2 => array($testId => array('Pug')),
+                        $siteaccess => array($testId => array('Rogen', 'Pug')),
+                    ),
                 ),
                 ContextualizerInterface::UNIQUE,
-                array( 'Kulgan', 'Macros the Black', 'Pug', 'Rogen', 'William' )
+                array('Kulgan', 'Macros the Black', 'Pug', 'Rogen', 'William'),
             ),
             array(
                 $testId,
                 $siteaccess,
-                array( $group1, $group2 ),
-                array( 'Kulgan', 'Kulgan' ),
-                array( 'William', 'Kulgan', 'Pug' ),
+                array($group1, $group2),
+                array('Kulgan', 'Kulgan'),
+                array('William', 'Kulgan', 'Pug'),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testId => array( 'Macros the Black' ) ),
-                        $group2 => array( $testId => array( 'Pug', 'William', 'Kulgan' ) ),
-                        $siteaccess => array( $testId => array( 'Rogen', 'Pug', 'Rogen', 'Macros the Black' ) ),
-                    )
+                        $group1 => array($testId => array('Macros the Black')),
+                        $group2 => array($testId => array('Pug', 'William', 'Kulgan')),
+                        $siteaccess => array($testId => array('Rogen', 'Pug', 'Rogen', 'Macros the Black')),
+                    ),
                 ),
                 ContextualizerInterface::UNIQUE,
-                array( 'Kulgan', 'Macros the Black', 'Pug', 'William', 'Rogen' )
+                array('Kulgan', 'Macros the Black', 'Pug', 'William', 'Rogen'),
             ),
             //
             // MERGING HASH TESTS with MERGE_FROM_SECOND_LEVEL
@@ -822,12 +828,12 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // everything in default scope
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 $locationView1,
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array()
+                    $this->saNodeName => array(),
                 ),
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView1,
@@ -836,12 +842,12 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // everything in global scope
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 $locationView1,
                 array(
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array()
+                    $this->saNodeName => array(),
                 ),
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView1,
@@ -850,14 +856,14 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // everything in a group
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView1 )
-                    )
+                        $group1 => array($testIdHash => $locationView1),
+                    ),
                 ),
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView1,
@@ -866,14 +872,14 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // everything in a siteaccess
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $siteaccess => array( $testIdHash => $locationView1 )
-                    )
+                        $siteaccess => array($testIdHash => $locationView1),
+                    ),
                 ),
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView1,
@@ -883,14 +889,14 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // default scope + one group
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 $locationView1,
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView2 ),
-                    )
+                        $group1 => array($testIdHash => $locationView2),
+                    ),
                 ),
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView12,
@@ -899,14 +905,14 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // one group + global scope
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 $locationView1,
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView2 ),
-                    )
+                        $group1 => array($testIdHash => $locationView2),
+                    ),
                 ),
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView21,
@@ -915,15 +921,15 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // default scope + two groups
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 $locationView1,
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView2 ),
-                        $group2 => array( $testIdHash => $locationView3 ),
-                    )
+                        $group1 => array($testIdHash => $locationView2),
+                        $group2 => array($testIdHash => $locationView3),
+                    ),
                 ),
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView123,
@@ -932,16 +938,16 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // default scope + two groups + siteaccess
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 $locationView1,
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView2 ),
-                        $group2 => array( $testIdHash => $locationView3 ),
-                        $siteaccess => array( $testIdHash => $locationView4 )
-                    )
+                        $group1 => array($testIdHash => $locationView2),
+                        $group2 => array($testIdHash => $locationView3),
+                        $siteaccess => array($testIdHash => $locationView4),
+                    ),
                 ),
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView1234,
@@ -950,15 +956,15 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // two groups
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView1 ),
-                        $group2 => array( $testIdHash => $locationView2 ),
-                    )
+                        $group1 => array($testIdHash => $locationView1),
+                        $group2 => array($testIdHash => $locationView2),
+                    ),
                 ),
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView12,
@@ -967,69 +973,69 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // two groups + global scope
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 $locationView3,
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView1 ),
-                        $group2 => array( $testIdHash => $locationView2 ),
-                    )
+                        $group1 => array($testIdHash => $locationView1),
+                        $group2 => array($testIdHash => $locationView2),
+                    ),
                 ),
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
-                $locationView123
+                $locationView123,
             ),
             array(
                 // two groups + siteaccess + global scope
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 $locationView4,
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView1 ),
-                        $group2 => array( $testIdHash => $locationView2 ),
-                        $siteaccess => array( $testIdHash => $locationView3 ),
-                    )
+                        $group1 => array($testIdHash => $locationView1),
+                        $group2 => array($testIdHash => $locationView2),
+                        $siteaccess => array($testIdHash => $locationView3),
+                    ),
                 ),
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
-                $locationView1234
+                $locationView1234,
             ),
 
             array(
                 // two groups + siteaccess
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $siteaccess => array( $testIdHash => $locationView3 ),
-                        $group1 => array( $testIdHash => $locationView1 ),
-                        $group2 => array( $testIdHash => $locationView2 ),
-                    )
+                        $siteaccess => array($testIdHash => $locationView3),
+                        $group1 => array($testIdHash => $locationView1),
+                        $group2 => array($testIdHash => $locationView2),
+                    ),
                 ),
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
-                $locationView123
+                $locationView123,
             ),
             array(
                 // default scope + group + siteaccess
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 $locationView1,
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView2 ),
-                        $siteaccess => array( $testIdHash => $locationView3 ),
-                    )
+                        $group1 => array($testIdHash => $locationView2),
+                        $siteaccess => array($testIdHash => $locationView3),
+                    ),
                 ),
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView123,
@@ -1038,15 +1044,15 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // default scope + group + siteaccess + global scope
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 $locationView1,
                 $locationView4,
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView2 ),
-                        $siteaccess => array( $testIdHash => $locationView3 ),
-                    )
+                        $group1 => array($testIdHash => $locationView2),
+                        $siteaccess => array($testIdHash => $locationView3),
+                    ),
                 ),
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView1234,
@@ -1055,31 +1061,31 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // global scope + group + siteaccess
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 $locationView3,
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group2 => array( $testIdHash => $locationView1 ),
-                        $siteaccess => array( $testIdHash => $locationView2 ),
-                    )
+                        $group2 => array($testIdHash => $locationView1),
+                        $siteaccess => array($testIdHash => $locationView2),
+                    ),
                 ),
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
-                $locationView123
+                $locationView123,
             ),
             array(
                 // default scope + group +  global
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 $locationView1,
                 $locationView3,
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group2 => array( $testIdHash => $locationView2 ),
-                    )
+                        $group2 => array($testIdHash => $locationView2),
+                    ),
                 ),
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView123,
@@ -1092,12 +1098,12 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // everything in default scope
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 $locationView1,
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array()
+                    $this->saNodeName => array(),
                 ),
                 0,
                 $locationView1,
@@ -1106,12 +1112,12 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // everything in global scope
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 $locationView1,
                 array(
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array()
+                    $this->saNodeName => array(),
                 ),
                 0,
                 $locationView1,
@@ -1120,14 +1126,14 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // everything in a group
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView1 )
-                    )
+                        $group1 => array($testIdHash => $locationView1),
+                    ),
                 ),
                 0,
                 $locationView1,
@@ -1136,14 +1142,14 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // everything in a siteaccess
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $siteaccess => array( $testIdHash => $locationView1 )
-                    )
+                        $siteaccess => array($testIdHash => $locationView1),
+                    ),
                 ),
                 0,
                 $locationView1,
@@ -1152,14 +1158,14 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // default scope + one group
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 $locationView1,
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView2 ),
-                    )
+                        $group1 => array($testIdHash => $locationView2),
+                    ),
                 ),
                 0,
                 $locationView2,
@@ -1168,14 +1174,14 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // one group + global scope
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 $locationView1,
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView2 ),
-                    )
+                        $group1 => array($testIdHash => $locationView2),
+                    ),
                 ),
                 0,
                 $locationView1,
@@ -1184,15 +1190,15 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // default scope + two groups
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 $locationView1,
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView2 ),
-                        $group2 => array( $testIdHash => $locationView3 ),
-                    )
+                        $group1 => array($testIdHash => $locationView2),
+                        $group2 => array($testIdHash => $locationView3),
+                    ),
                 ),
                 0,
                 $locationView3,
@@ -1201,16 +1207,16 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // default scope + two groups + siteaccess
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 $locationView1,
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView2 ),
-                        $group2 => array( $testIdHash => $locationView3 ),
-                        $siteaccess => array( $testIdHash => $locationView4 ),
-                    )
+                        $group1 => array($testIdHash => $locationView2),
+                        $group2 => array($testIdHash => $locationView3),
+                        $siteaccess => array($testIdHash => $locationView4),
+                    ),
                 ),
                 0,
                 $locationView4,
@@ -1219,15 +1225,15 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // default scope + two groups + global scope
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 $locationView1,
                 $locationView4,
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView2 ),
-                        $group2 => array( $testIdHash => $locationView3 ),
-                    )
+                        $group1 => array($testIdHash => $locationView2),
+                        $group2 => array($testIdHash => $locationView3),
+                    ),
                 ),
                 0,
                 $locationView4,
@@ -1236,15 +1242,15 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // two groups
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView1 ),
-                        $group2 => array( $testIdHash => $locationView2 ),
-                    )
+                        $group1 => array($testIdHash => $locationView1),
+                        $group2 => array($testIdHash => $locationView2),
+                    ),
                 ),
                 0,
                 $locationView2,
@@ -1253,68 +1259,68 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // two groups + global scope
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 $locationView3,
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView1 ),
-                        $group2 => array( $testIdHash => $locationView2 ),
-                    )
+                        $group1 => array($testIdHash => $locationView1),
+                        $group2 => array($testIdHash => $locationView2),
+                    ),
                 ),
                 0,
-                $locationView3
+                $locationView3,
             ),
             array(
                 // two groups + siteaccess
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $siteaccess => array( $testIdHash => $locationView3 ),
-                        $group1 => array( $testIdHash => $locationView1 ),
-                        $group2 => array( $testIdHash => $locationView2 ),
-                    )
+                        $siteaccess => array($testIdHash => $locationView3),
+                        $group1 => array($testIdHash => $locationView1),
+                        $group2 => array($testIdHash => $locationView2),
+                    ),
                 ),
                 0,
-                $locationView3
+                $locationView3,
             ),
             array(
                 // two groups + siteaccess + global scope
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 $locationView4,
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $siteaccess => array( $testIdHash => $locationView3 ),
-                        $group1 => array( $testIdHash => $locationView1 ),
-                        $group2 => array( $testIdHash => $locationView2 ),
-                    )
+                        $siteaccess => array($testIdHash => $locationView3),
+                        $group1 => array($testIdHash => $locationView1),
+                        $group2 => array($testIdHash => $locationView2),
+                    ),
                 ),
                 0,
-                $locationView4
+                $locationView4,
             ),
             array(
                 // default scope + group + siteaccess
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 $locationView1,
                 array(),
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group1 => array( $testIdHash => $locationView2 ),
-                        $siteaccess => array( $testIdHash => $locationView3 ),
-                    )
+                        $group1 => array($testIdHash => $locationView2),
+                        $siteaccess => array($testIdHash => $locationView3),
+                    ),
                 ),
                 0,
                 $locationView3,
@@ -1323,48 +1329,47 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
                 // global scope + group + siteaccess
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 array(),
                 $locationView3,
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group2 => array( $testIdHash => $locationView1 ),
-                        $siteaccess => array( $testIdHash => $locationView2 ),
-                    )
+                        $group2 => array($testIdHash => $locationView1),
+                        $siteaccess => array($testIdHash => $locationView2),
+                    ),
                 ),
                 0,
-                $locationView3
+                $locationView3,
             ),
             array(
                 // default scope + group +  global
                 $testIdHash,
                 $siteaccess,
-                array( $group1, $group2 ),
+                array($group1, $group2),
                 $locationView1,
                 $locationView3,
                 array(
                     'siteaccess' => $siteaccessConfig,
                     $this->saNodeName => array(
-                        $group2 => array( $testIdHash => $locationView2 ),
-                    )
+                        $group2 => array($testIdHash => $locationView2),
+                    ),
                 ),
                 0,
                 $locationView3,
-            )
+            ),
         );
 
-        foreach ( $cases as $k => $newcase )
-        {
+        foreach ($cases as $k => $newcase) {
             // run the same tests with another baseKey than the default one
-            if ( isset( $newcase[5][$this->saNodeName] ) )
-            {
+            if (isset($newcase[5][$this->saNodeName])) {
                 $newcase[5]['customBaseKey'] = $newcase[5][$this->saNodeName];
-                unset( $newcase[5][$this->saNodeName] );
+                unset($newcase[5][$this->saNodeName]);
                 $newcase[] = 'customBaseKey';
                 $cases[] = $newcase;
             }
         }
+
         return $cases;
     }
 }

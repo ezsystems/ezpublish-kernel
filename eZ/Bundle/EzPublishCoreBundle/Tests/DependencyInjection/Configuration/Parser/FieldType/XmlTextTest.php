@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the XmlTextTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,31 +28,30 @@ class XmlTextTest extends AbstractParserTestCase
     protected function getContainerExtensions()
     {
         return array(
-            new EzPublishCoreExtension( array( new XmlTextConfigParser ) )
+            new EzPublishCoreExtension(array(new XmlTextConfigParser())),
         );
     }
 
     protected function getMinimalConfiguration()
     {
-        return Yaml::parse( file_get_contents( __DIR__ . '/../../../Fixtures/ezpublish_minimal.yml' ) );
+        return Yaml::parse(file_get_contents(__DIR__ . '/../../../Fixtures/ezpublish_minimal.yml'));
     }
 
     /**
      * @dataProvider xmlTextSettingsProvider
      */
-    public function testXmlTextSettings( array $config, array $expected )
+    public function testXmlTextSettings(array $config, array $expected)
     {
         $this->load(
             array(
                 'system' => array(
-                    'ezdemo_site' => $config
-                )
+                    'ezdemo_site' => $config,
+                ),
             )
         );
 
-        foreach ( $expected as $key => $val )
-        {
-            $this->assertConfigResolverParameterValue( $key, $val, 'ezdemo_site' );
+        foreach ($expected as $key => $val) {
+            $this->assertConfigResolverParameterValue($key, $val, 'ezdemo_site');
         }
     }
 
@@ -62,23 +63,23 @@ class XmlTextTest extends AbstractParserTestCase
                     'fieldtypes' => array(
                         'ezxml' => array(
                             'custom_tags' => array(
-                                array( 'path' => '/foo/bar.xsl', 'priority' => 123 ),
-                                array( 'path' => '/foo/custom.xsl', 'priority' => -10 ),
-                                array( 'path' => '/another/custom.xsl', 'priority' => 27 ),
-                            )
-                        )
-                    )
+                                array('path' => '/foo/bar.xsl', 'priority' => 123),
+                                array('path' => '/foo/custom.xsl', 'priority' => -10),
+                                array('path' => '/another/custom.xsl', 'priority' => 27),
+                            ),
+                        ),
+                    ),
                 ),
                 array(
                     'fieldtypes.ezxml.custom_xsl' => array(
                         // Default settings will be added
-                        array( 'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_core.xsl', 'priority' => 0 ),
-                        array( 'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_custom.xsl', 'priority' => 0 ),
-                        array( 'path' => '/foo/bar.xsl', 'priority' => 123 ),
-                        array( 'path' => '/foo/custom.xsl', 'priority' => -10 ),
-                        array( 'path' => '/another/custom.xsl', 'priority' => 27 ),
+                        array('path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_core.xsl', 'priority' => 0),
+                        array('path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_custom.xsl', 'priority' => 0),
+                        array('path' => '/foo/bar.xsl', 'priority' => 123),
+                        array('path' => '/foo/custom.xsl', 'priority' => -10),
+                        array('path' => '/another/custom.xsl', 'priority' => 27),
                     ),
-                )
+                ),
             ),
         );
     }

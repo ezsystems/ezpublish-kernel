@@ -1,9 +1,11 @@
 <?php
+
 /**
- * SectionService class
+ * SectionService class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,27 +22,26 @@ use eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal;
 use eZ\Publish\Core\SignalSlot\Signal\SectionService\DeleteSectionSignal;
 
 /**
- * SectionService class
- * @package eZ\Publish\Core\SignalSlot
+ * SectionService class.
  */
 class SectionService implements SectionServiceInterface
 {
     /**
-     * Aggregated service
+     * Aggregated service.
      *
      * @var \eZ\Publish\API\Repository\SectionService
      */
     protected $service;
 
     /**
-     * SignalDispatcher
+     * SignalDispatcher.
      *
      * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * Construct service object from aggregated service and signal
      * dispatcher
@@ -48,14 +49,14 @@ class SectionService implements SectionServiceInterface
      * @param \eZ\Publish\API\Repository\SectionService $service
      * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
      */
-    public function __construct( SectionServiceInterface $service, SignalDispatcher $signalDispatcher )
+    public function __construct(SectionServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->signalDispatcher = $signalDispatcher;
     }
 
     /**
-     * Creates the a new Section in the content repository
+     * Creates the a new Section in the content repository.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create a section
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the new identifier in $sectionCreateStruct already exists
@@ -64,9 +65,9 @@ class SectionService implements SectionServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section The newly create section
      */
-    public function createSection( SectionCreateStruct $sectionCreateStruct )
+    public function createSection(SectionCreateStruct $sectionCreateStruct)
     {
-        $returnValue = $this->service->createSection( $sectionCreateStruct );
+        $returnValue = $this->service->createSection($sectionCreateStruct);
         $this->signalDispatcher->emit(
             new CreateSectionSignal(
                 array(
@@ -74,11 +75,12 @@ class SectionService implements SectionServiceInterface
                 )
             )
         );
+
         return $returnValue;
     }
 
     /**
-     * Updates the given in the content repository
+     * Updates the given in the content repository.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create a section
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the new identifier already exists (if set in the update struct)
@@ -88,9 +90,9 @@ class SectionService implements SectionServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function updateSection( Section $section, SectionUpdateStruct $sectionUpdateStruct )
+    public function updateSection(Section $section, SectionUpdateStruct $sectionUpdateStruct)
     {
-        $returnValue = $this->service->updateSection( $section, $sectionUpdateStruct );
+        $returnValue = $this->service->updateSection($section, $sectionUpdateStruct);
         $this->signalDispatcher->emit(
             new UpdateSectionSignal(
                 array(
@@ -98,11 +100,12 @@ class SectionService implements SectionServiceInterface
                 )
             )
         );
+
         return $returnValue;
     }
 
     /**
-     * Loads a Section from its id ($sectionId)
+     * Loads a Section from its id ($sectionId).
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if section could not be found
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
@@ -111,13 +114,13 @@ class SectionService implements SectionServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function loadSection( $sectionId )
+    public function loadSection($sectionId)
     {
-        return $this->service->loadSection( $sectionId );
+        return $this->service->loadSection($sectionId);
     }
 
     /**
-     * Loads all sections
+     * Loads all sections.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
      *
@@ -129,7 +132,7 @@ class SectionService implements SectionServiceInterface
     }
 
     /**
-     * Loads a Section from its identifier ($sectionIdentifier)
+     * Loads a Section from its identifier ($sectionIdentifier).
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if section could not be found
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
@@ -138,35 +141,35 @@ class SectionService implements SectionServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function loadSectionByIdentifier( $sectionIdentifier )
+    public function loadSectionByIdentifier($sectionIdentifier)
     {
-        return $this->service->loadSectionByIdentifier( $sectionIdentifier );
+        return $this->service->loadSectionByIdentifier($sectionIdentifier);
     }
 
     /**
-     * Counts the contents which $section is assigned to
+     * Counts the contents which $section is assigned to.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      *
      * @return int
      */
-    public function countAssignedContents( Section $section )
+    public function countAssignedContents(Section $section)
     {
-        return $this->service->countAssignedContents( $section );
+        return $this->service->countAssignedContents($section);
     }
 
     /**
      * Assigns the content to the given section
-     * this method overrides the current assigned section
+     * this method overrides the current assigned section.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to view provided object
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      */
-    public function assignSection( ContentInfo $contentInfo, Section $section )
+    public function assignSection(ContentInfo $contentInfo, Section $section)
     {
-        $returnValue = $this->service->assignSection( $contentInfo, $section );
+        $returnValue = $this->service->assignSection($contentInfo, $section);
         $this->signalDispatcher->emit(
             new AssignSectionSignal(
                 array(
@@ -175,11 +178,12 @@ class SectionService implements SectionServiceInterface
                 )
             )
         );
+
         return $returnValue;
     }
 
     /**
-     * Deletes $section from content repository
+     * Deletes $section from content repository.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified section is not found
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to delete a section
@@ -188,9 +192,9 @@ class SectionService implements SectionServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      */
-    public function deleteSection( Section $section )
+    public function deleteSection(Section $section)
     {
-        $returnValue = $this->service->deleteSection( $section );
+        $returnValue = $this->service->deleteSection($section);
         $this->signalDispatcher->emit(
             new DeleteSectionSignal(
                 array(
@@ -198,11 +202,12 @@ class SectionService implements SectionServiceInterface
                 )
             )
         );
+
         return $returnValue;
     }
 
     /**
-     * Instantiates a new SectionCreateStruct
+     * Instantiates a new SectionCreateStruct.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */
@@ -212,7 +217,7 @@ class SectionService implements SectionServiceInterface
     }
 
     /**
-     * Instantiates a new SectionUpdateStruct
+     * Instantiates a new SectionUpdateStruct.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */

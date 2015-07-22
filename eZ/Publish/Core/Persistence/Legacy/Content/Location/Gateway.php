@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Location Gateway class
+ * File containing the Location Gateway class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,7 +20,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 abstract class Gateway
 {
     /**
-     * Constants for node assignment op codes
+     * Constants for node assignment op codes.
      */
     const NODE_ASSIGNMENT_OP_CODE_NOP = 0;
     const NODE_ASSIGNMENT_OP_CODE_EXECUTE = 1;
@@ -32,38 +34,40 @@ abstract class Gateway
     const NODE_ASSIGNMENT_OP_CODE_SET = 9;
 
     /**
-     * Returns an array with basic node data
+     * Returns an array with basic node data.
      *
      * We might want to cache this, since this method is used by about every
      * method in the location handler.
      *
      * @todo optimize
+     *
      * @param mixed $nodeId
      *
      * @return array
      */
-    abstract public function getBasicNodeData( $nodeId );
+    abstract public function getBasicNodeData($nodeId);
 
     /**
-     * Returns an array with basic node data for the node with $remoteId
+     * Returns an array with basic node data for the node with $remoteId.
      *
      * @todo optimize
+     *
      * @param mixed $remoteId
      *
      * @return array
      */
-    abstract public function getBasicNodeDataByRemoteId( $remoteId );
+    abstract public function getBasicNodeDataByRemoteId($remoteId);
 
     /**
      * Loads data for all Locations for $contentId, optionally only in the
-     * subtree starting at $rootLocationId
+     * subtree starting at $rootLocationId.
      *
      * @param int $contentId
      * @param int $rootLocationId
      *
      * @return array
      */
-    abstract public function loadLocationDataByContent( $contentId, $rootLocationId = null );
+    abstract public function loadLocationDataByContent($contentId, $rootLocationId = null);
 
     /**
      * Loads data for all parent Locations for unpublished Content by given $contentId.
@@ -72,91 +76,82 @@ abstract class Gateway
      *
      * @return array
      */
-    abstract public function loadParentLocationsDataForDraftContent( $contentId );
+    abstract public function loadParentLocationsDataForDraftContent($contentId);
 
     /**
-     * Find all content in the given subtree
+     * Find all content in the given subtree.
      *
      * @param mixed $sourceId
      * @param bool $onlyIds
      *
      * @return array
      */
-    abstract public function getSubtreeContent( $sourceId, $onlyIds = false );
+    abstract public function getSubtreeContent($sourceId, $onlyIds = false);
 
     /**
-     * Returns data for the first level children of the location identified by given $locationId
+     * Returns data for the first level children of the location identified by given $locationId.
      *
      * @param mixed $locationId
      *
      * @return array
      */
-    abstract public function getChildren( $locationId );
+    abstract public function getChildren($locationId);
 
     /**
-     * Update path strings to move nodes in the ezcontentobject_tree table
+     * Update path strings to move nodes in the ezcontentobject_tree table.
      *
      * This query can likely be optimized to use some more advanced string
      * operations, which then depend on the respective database.
      *
      * @todo optimize
+     *
      * @param array $fromPathString
      * @param array $toPathString
-     *
-     * @return void
      */
-    abstract public function moveSubtreeNodes( array $fromPathString, array $toPathString );
+    abstract public function moveSubtreeNodes(array $fromPathString, array $toPathString);
 
     /**
-     * Updated subtree modification time for all nodes on path
+     * Updated subtree modification time for all nodes on path.
      *
      * @param string $pathString
      * @param int|null $timestamp
-     *
-     * @return void
      */
-    abstract public function updateSubtreeModificationTime( $pathString, $timestamp = null );
+    abstract public function updateSubtreeModificationTime($pathString, $timestamp = null);
 
     /**
-     * Update node assignment table
+     * Update node assignment table.
      *
      * @param int $contentObjectId
      * @param int $oldParent
      * @param int $newParent
      * @param int $opcode
-     *
-     * @return void
      */
-    abstract public function updateNodeAssignment( $contentObjectId, $oldParent, $newParent, $opcode );
+    abstract public function updateNodeAssignment($contentObjectId, $oldParent, $newParent, $opcode);
 
     /**
-     * Create locations from node assignments
+     * Create locations from node assignments.
      *
      * Convert existing node assignments into real locations.
      *
      * @param mixed $contentId
      * @param mixed $versionNo
-     *
-     * @return void
      */
-    abstract public function createLocationsFromNodeAssignments( $contentId, $versionNo );
+    abstract public function createLocationsFromNodeAssignments($contentId, $versionNo);
 
     /**
-     * Updates all Locations of content identified with $contentId with $versionNo
+     * Updates all Locations of content identified with $contentId with $versionNo.
      *
      * @param mixed $contentId
      * @param mixed $versionNo
-     *
-     * @return void
      */
-    abstract public function updateLocationsContentVersionNo( $contentId, $versionNo );
+    abstract public function updateLocationsContentVersionNo($contentId, $versionNo);
 
     /**
      * Sets a location to be hidden, and it self + all children to invisible.
      *
      * @param string $pathString
      */
-    abstract public function hideSubtree( $pathString );
+    abstract public function hideSubtree($pathString);
 
     /**
      * Sets a location to be unhidden, and self + children to visible unless a parent is hiding the tree.
@@ -164,7 +159,7 @@ abstract class Gateway
      *
      * @param string $pathString
      */
-    abstract public function unHideSubtree( $pathString );
+    abstract public function unHideSubtree($pathString);
 
     /**
      * Swaps the content object being pointed to by a location object.
@@ -175,40 +170,36 @@ abstract class Gateway
      * @param mixed $locationId1
      * @param mixed $locationId2
      *
-     * @return boolean
+     * @return bool
      */
-    abstract public function swap( $locationId1, $locationId2 );
+    abstract public function swap($locationId1, $locationId2);
 
     /**
-     * Creates a new location in given $parentNode
+     * Creates a new location in given $parentNode.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param array $parentNode
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    abstract public function create( CreateStruct $createStruct, array $parentNode );
+    abstract public function create(CreateStruct $createStruct, array $parentNode);
 
     /**
-     * Create an entry in the node assignment table
+     * Create an entry in the node assignment table.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param mixed $parentNodeId
      * @param int $type
-     *
-     * @return void
      */
-    abstract public function createNodeAssignment( CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP );
+    abstract public function createNodeAssignment(CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP);
 
     /**
-     * Deletes node assignment for given $contentId and $versionNo
+     * Deletes node assignment for given $contentId and $versionNo.
      *
      * @param int $contentId
      * @param int $versionNo
-     *
-     * @return void
      */
-    abstract public function deleteNodeAssignment( $contentId, $versionNo = null );
+    abstract public function deleteNodeAssignment($contentId, $versionNo = null);
 
     /**
      * Updates an existing location.
@@ -217,10 +208,8 @@ abstract class Gateway
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
-     *
-     * @return void
      */
-    abstract public function update( UpdateStruct $location, $locationId );
+    abstract public function update(UpdateStruct $location, $locationId);
 
     /**
      * Updates path identification string for given $locationId.
@@ -228,20 +217,18 @@ abstract class Gateway
      * @param mixed $locationId
      * @param mixed $parentLocationId
      * @param string $text
-     *
-     * @return void
      */
-    abstract public function updatePathIdentificationString( $locationId, $parentLocationId, $text );
+    abstract public function updatePathIdentificationString($locationId, $parentLocationId, $text);
 
     /**
-     * Deletes ezcontentobject_tree row for given $locationId (node_id)
+     * Deletes ezcontentobject_tree row for given $locationId (node_id).
      *
      * @param mixed $locationId
      */
-    abstract public function removeLocation( $locationId );
+    abstract public function removeLocation($locationId);
 
     /**
-     * Returns id of the next in line node to be set as a new main node
+     * Returns id of the next in line node to be set as a new main node.
      *
      * This returns lowest node id for content identified by $contentId, and not of
      * the node identified by given $locationId (current main node).
@@ -252,7 +239,7 @@ abstract class Gateway
      *
      * @return array
      */
-    abstract public function getFallbackMainNodeData( $contentId, $locationId );
+    abstract public function getFallbackMainNodeData($contentId, $locationId);
 
     /**
      * Sends a single location identified by given $locationId to the trash.
@@ -261,9 +248,9 @@ abstract class Gateway
      *
      * @param mixed $locationId
      *
-     * @return boolean
+     * @return bool
      */
-    abstract public function trashLocation( $locationId );
+    abstract public function trashLocation($locationId);
 
     /**
      * Returns a trashed location to normal state.
@@ -278,24 +265,22 @@ abstract class Gateway
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    abstract public function untrashLocation( $locationId, $newParentId = null );
+    abstract public function untrashLocation($locationId, $newParentId = null);
 
     /**
-     * Loads trash data specified by location ID
+     * Loads trash data specified by location ID.
      *
      * @param mixed $locationId
      *
      * @return array
      */
-    abstract public function loadTrashByLocation( $locationId );
+    abstract public function loadTrashByLocation($locationId);
 
     /**
      * Removes every entries in the trash.
      * Will NOT remove associated content objects nor attributes.
      *
      * Basically truncates ezcontentobject_trash table.
-     *
-     * @return void
      */
     abstract public function cleanupTrash();
 
@@ -309,39 +294,37 @@ abstract class Gateway
      *
      * @return array
      */
-    abstract public function listTrashed( $offset, $limit, array $sort = null );
+    abstract public function listTrashed($offset, $limit, array $sort = null);
 
     /**
      * Removes trashed element identified by $id from trash.
      * Will NOT remove associated content object nor attributes.
      *
      * @param int $id The trashed location Id
-     *
-     * @return void
      */
-    abstract public function removeElementFromTrash( $id );
+    abstract public function removeElementFromTrash($id);
 
     /**
-     * Set section on all content objects in the subtree
+     * Set section on all content objects in the subtree.
      *
      * @param mixed $pathString
      * @param mixed $sectionId
      *
-     * @return boolean
+     * @return bool
      */
-    abstract public function setSectionForSubtree( $pathString, $sectionId );
+    abstract public function setSectionForSubtree($pathString, $sectionId);
 
     /**
-     * Returns how many locations given content object identified by $contentId has
+     * Returns how many locations given content object identified by $contentId has.
      *
      * @param int $contentId
      *
      * @return int
      */
-    abstract public function countLocationsByContentId( $contentId );
+    abstract public function countLocationsByContentId($contentId);
 
     /**
-     * Changes main location of content identified by given $contentId to location identified by given $locationId
+     * Changes main location of content identified by given $contentId to location identified by given $locationId.
      *
      * Updates ezcontentobject_tree table for the given $contentId and eznode_assignment table for the given
      * $contentId, $parentLocationId and $versionNo
@@ -351,8 +334,6 @@ abstract class Gateway
      * @param mixed $versionNo version number, needed to update eznode_assignment table
      * @param mixed $parentLocationId parent location of location identified by $locationId, needed to update
      *        eznode_assignment table
-     *
-     * @return void
      */
-    abstract public function changeMainLocation( $contentId, $locationId, $versionNo, $parentLocationId );
+    abstract public function changeMainLocation($contentId, $locationId, $versionNo, $parentLocationId);
 }

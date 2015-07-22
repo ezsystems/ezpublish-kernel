@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the DoctrineDatabase field criterion handler class
+ * File containing the DoctrineDatabase field criterion handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,36 +23,35 @@ use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
-use RuntimeException;
 
 /**
- * Field criterion handler
+ * Field criterion handler.
  */
 class Field extends FieldBase
 {
     /**
-     * Field converter registry
+     * Field converter registry.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $fieldConverterRegistry;
 
     /**
-     * Field value converter
+     * Field value converter.
      *
      * @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Converter
      */
     protected $fieldValueConverter;
 
     /**
-     * Transformation processor
+     * Transformation processor.
      *
      * @var \eZ\Publish\Core\Persistence\TransformationProcessor
      */
     protected $transformationProcessor;
 
     /**
-     * Construct from handler handler
+     * Construct from handler handler.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
@@ -66,9 +67,8 @@ class Field extends FieldBase
         Registry $fieldConverterRegistry,
         FieldValueConverter $fieldValueConverter,
         TransformationProcessor $transformationProcessor
-    )
-    {
-        parent::__construct( $dbHandler, $contentTypeHandler, $languageHandler );
+    ) {
+        parent::__construct($dbHandler, $contentTypeHandler, $languageHandler);
 
         $this->fieldConverterRegistry = $fieldConverterRegistry;
         $this->fieldValueConverter = $fieldValueConverter;
@@ -80,15 +80,15 @@ class Field extends FieldBase
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return boolean
+     * @return bool
      */
-    public function accept( Criterion $criterion )
+    public function accept(Criterion $criterion)
     {
         return $criterion instanceof Criterion\Field;
     }
 
     /**
-     * Returns relevant field information for the specified field
+     * Returns relevant field information for the specified field.
      *
      * The returned information is returned as an array of the attribute
      * identifier and the sort column, which should be used.
@@ -97,33 +97,30 @@ class Field extends FieldBase
      * @throws \RuntimeException if no converter is found
      *
      * @caching
+     *
      * @param string $fieldIdentifier
      *
      * @return array
      */
-    protected function getFieldsInformation( $fieldIdentifier )
+    protected function getFieldsInformation($fieldIdentifier)
     {
         $fieldMapArray = array();
         $fieldMap = $this->contentTypeHandler->getSearchableFieldMap();
 
-        foreach ( $fieldMap as $contentTypeIdentifier => $fieldIdentifierMap )
-        {
+        foreach ($fieldMap as $contentTypeIdentifier => $fieldIdentifierMap) {
             // First check if field exists in the current ContentType, there is nothing to do if it doesn't
-            if ( !isset( $fieldIdentifierMap[$fieldIdentifier] ) )
-            {
+            if (!isset($fieldIdentifierMap[$fieldIdentifier])) {
                 continue;
             }
 
-            $fieldTypeIdentifier = $fieldIdentifierMap[$fieldIdentifier]["field_type_identifier"];
-            $fieldMapArray[$fieldTypeIdentifier]['ids'][] = $fieldIdentifierMap[$fieldIdentifier]["field_definition_id"];
-            if ( !isset( $fieldMapArray[$fieldTypeIdentifier]['column'] ) )
-            {
-                $fieldMapArray[$fieldTypeIdentifier]['column'] = $this->fieldConverterRegistry->getConverter( $fieldTypeIdentifier )->getIndexColumn();
+            $fieldTypeIdentifier = $fieldIdentifierMap[$fieldIdentifier]['field_type_identifier'];
+            $fieldMapArray[$fieldTypeIdentifier]['ids'][] = $fieldIdentifierMap[$fieldIdentifier]['field_definition_id'];
+            if (!isset($fieldMapArray[$fieldTypeIdentifier]['column'])) {
+                $fieldMapArray[$fieldTypeIdentifier]['column'] = $this->fieldConverterRegistry->getConverter($fieldTypeIdentifier)->getIndexColumn();
             }
         }
 
-        if ( empty( $fieldMapArray ) )
-        {
+        if (empty($fieldMapArray)) {
             throw new InvalidArgumentException(
                 "\$criterion->target",
                 "No searchable fields found for the given criterion target '{$fieldIdentifier}'."
@@ -134,7 +131,7 @@ class Field extends FieldBase
     }
 
     /**
-     * Generate query expression for a Criterion this handler accepts
+     * Generate query expression for a Criterion this handler accepts.
      *
      * accept() must be called before calling this method.
      *
@@ -152,22 +149,19 @@ class Field extends FieldBase
         SelectQuery $query,
         Criterion $criterion,
         array $fieldFilters
-    )
-    {
-        $fieldsInformation = $this->getFieldsInformation( $criterion->target );
+    ) {
+        $fieldsInformation = $this->getFieldsInformation($criterion->target);
 
         $subSelect = $query->subSelect();
         $subSelect->select(
-            $this->dbHandler->quoteColumn( 'contentobject_id' )
+            $this->dbHandler->quoteColumn('contentobject_id')
         )->from(
-            $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
+            $this->dbHandler->quoteTable('ezcontentobject_attribute')
         );
 
         $whereExpressions = array();
-        foreach ( $fieldsInformation as $fieldTypeIdentifier => $fieldsInfo )
-        {
-            if ( $fieldsInfo['column'] === false )
-            {
+        foreach ($fieldsInformation as $fieldTypeIdentifier => $fieldsInfo) {
+            if ($fieldsInfo['column'] === false) {
                 throw new NotImplementedException(
                     "A field of type '{$fieldTypeIdentifier}' is not searchable in the legacy search engine."
                 );
@@ -182,7 +176,7 @@ class Field extends FieldBase
 
             $whereExpressions[] = $subSelect->expr->lAnd(
                 $subSelect->expr->in(
-                    $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
+                    $this->dbHandler->quoteColumn('contentclassattribute_id'),
                     $fieldsInfo['ids']
                 ),
                 $filter
@@ -192,18 +186,18 @@ class Field extends FieldBase
         $subSelect->where(
             $subSelect->expr->lAnd(
                 $subSelect->expr->eq(
-                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_attribute' ),
-                    $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' )
+                    $this->dbHandler->quoteColumn('version', 'ezcontentobject_attribute'),
+                    $this->dbHandler->quoteColumn('current_version', 'ezcontentobject')
                 ),
                 // Join conditions with a logical OR if several conditions exist
-                count( $whereExpressions ) > 1 ? $subSelect->expr->lOr( $whereExpressions ) : $whereExpressions[0]
+                count($whereExpressions) > 1 ? $subSelect->expr->lOr($whereExpressions) : $whereExpressions[0]
             )
         );
 
-        $this->addFieldFiltersConditions( $subSelect, $fieldFilters );
+        $this->addFieldFiltersConditions($subSelect, $fieldFilters);
 
         return $query->expr->in(
-            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
+            $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
             $subSelect
         );
     }

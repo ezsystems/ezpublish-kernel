@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing an interface for the Doctrine database abstractions
+ * File containing an interface for the Doctrine database abstractions.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -35,9 +37,10 @@ class UpdateDoctrineQuery extends AbstractDoctrineQuery implements UpdateQuery
      * update() returns a pointer to $this.
      *
      * @param string $table
+     *
      * @return \eZ\Publish\Core\Persistence\Database\UpdateQuery
      */
-    public function update( $table )
+    public function update($table)
     {
         $this->table = $table;
 
@@ -49,9 +52,10 @@ class UpdateDoctrineQuery extends AbstractDoctrineQuery implements UpdateQuery
      *
      * @param string $column
      * @param string $expression
+     *
      * @return \eZ\Publish\Core\Persistence\Database\UpdateQuery
      */
-    public function set( $column, $expression )
+    public function set($column, $expression)
     {
         $this->values[$column] = $expression;
 
@@ -75,16 +79,17 @@ class UpdateDoctrineQuery extends AbstractDoctrineQuery implements UpdateQuery
      * </code>
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
+     *
      * @param string|array(string) $... Either a string with a logical expression name
      * or an array with logical expressions.
+     *
      * @return \eZ\Publish\Core\Persistence\Database\UpdateQuery
      */
     public function where()
     {
-        $args = $this->parseArguments( func_get_args() );
+        $args = $this->parseArguments(func_get_args());
 
-        foreach ( $args as $whereExpression )
-        {
+        foreach ($args as $whereExpression) {
             $this->where[] = $whereExpression;
         }
 
@@ -96,29 +101,25 @@ class UpdateDoctrineQuery extends AbstractDoctrineQuery implements UpdateQuery
      */
     public function getQuery()
     {
-        if ( strlen( $this->table ) === 0 )
-        {
-            throw new QueryException( 'Missing table name' );
+        if (strlen($this->table) === 0) {
+            throw new QueryException('Missing table name');
         }
 
-        if ( count( $this->values ) === 0 )
-        {
-            throw new QueryException( 'Missing values' );
+        if (count($this->values) === 0) {
+            throw new QueryException('Missing values');
         }
 
-        if ( count( $this->where ) === 0 )
-        {
-            throw new QueryException( 'Executing update without where clause is not allowed' );
+        if (count($this->where) === 0) {
+            throw new QueryException('Executing update without where clause is not allowed');
         }
 
         $set = array();
 
-        foreach ( $this->values as $column => $expression )
-        {
+        foreach ($this->values as $column => $expression) {
             $set[] = $column . ' = ' . $expression;
         }
 
-        return 'UPDATE ' . $this->table . ' SET ' . implode( ', ', $set )
-             . ' WHERE ' . implode( ' AND ', $this->where );
+        return 'UPDATE ' . $this->table . ' SET ' . implode(', ', $set)
+             . ' WHERE ' . implode(' AND ', $this->where);
     }
 }

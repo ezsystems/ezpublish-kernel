@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway\DoctrineDatabaseTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway\DoctrineDatabaseTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,6 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase;
 // For SORT_ORDER_* constants
 use eZ\Publish\SPI\Persistence\Content\Location;
-
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
@@ -27,7 +28,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 class DoctrineDatabaseTest extends LanguageAwareTestCase
 {
     /**
-     * The DoctrineDatabase gateway to test
+     * The DoctrineDatabase gateway to test.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase
      */
@@ -37,13 +38,11 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     {
         parent::setUp();
 
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/languages.php' );
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/languages.php');
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::__construct
-     *
-     * @return void
      */
     public function testCtor()
     {
@@ -59,8 +58,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertGroup
-     *
-     * @return void
      */
     public function testInsertGroup()
     {
@@ -68,7 +65,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $group = $this->getGroupFixture();
 
-        $id = $gateway->insertGroup( $group );
+        $id = $gateway->insertGroup($group);
 
         $this->assertQueryResult(
             array(
@@ -79,7 +76,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'modified' => '1033922120',
                     'modifier_id' => '14',
                     'name' => 'Media',
-                )
+                ),
             ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
@@ -91,7 +88,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'modifier_id',
                     'name'
                 )
-                ->from( 'ezcontentclassgroup' )
+                ->from('ezcontentclassgroup')
         );
     }
 
@@ -123,8 +120,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::updateGroup
-     *
-     * @return void
      */
     public function testUpdateGroup()
     {
@@ -136,16 +131,16 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $struct = $this->getGroupUpdateStructFixture();
 
-        $res = $gateway->updateGroup( $struct );
+        $res = $gateway->updateGroup($struct);
 
         $this->assertQueryResult(
             array(
-                array( '3' )
+                array('3'),
             ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
-                ->select( 'COUNT(*)' )
-                ->from( 'ezcontentclassgroup' )
+                ->select('COUNT(*)')
+                ->from('ezcontentclassgroup')
         );
 
         $q = $this->getDatabaseHandler()->createSelectQuery();
@@ -158,8 +153,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                 'modifier_id',
                 'name'
             )
-            ->from( 'ezcontentclassgroup' )
-            ->orderBy( 'id' );
+            ->from('ezcontentclassgroup')
+            ->orderBy('id');
         $this->assertQueryResult(
             array(
                 array(
@@ -218,8 +213,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::countTypesInGroup
-     *
-     * @return void
      */
     public function testCountTypesInGroup()
     {
@@ -231,18 +224,16 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $this->assertEquals(
             3,
-            $gateway->countTypesInGroup( 1 )
+            $gateway->countTypesInGroup(1)
         );
         $this->assertEquals(
             0,
-            $gateway->countTypesInGroup( 23 )
+            $gateway->countTypesInGroup(23)
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::countGroupsForType
-     *
-     * @return void
      */
     public function testCountGroupsForType()
     {
@@ -254,18 +245,16 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $this->assertEquals(
             1,
-            $gateway->countGroupsForType( 1, 1 )
+            $gateway->countGroupsForType(1, 1)
         );
         $this->assertEquals(
             0,
-            $gateway->countGroupsForType( 23, 0 )
+            $gateway->countGroupsForType(23, 0)
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteGroup
-     *
-     * @return void
      */
     public function testDeleteGroup()
     {
@@ -275,25 +264,23 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
 
-        $gateway->deleteGroup( 2 );
+        $gateway->deleteGroup(2);
 
         $this->assertQueryResult(
             array(
-                array( '1' ),
-                array( '3' ),
+                array('1'),
+                array('3'),
             ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
-                ->select( 'id' )
-                ->from( 'ezcontentclassgroup' )
+                ->select('id')
+                ->from('ezcontentclassgroup')
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadGroupData
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::createGroupLoadQuery
-     *
-     * @return void
      */
     public function testLoadGroupData()
     {
@@ -302,7 +289,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getGateway();
-        $data = $gateway->loadGroupData( 2 );
+        $data = $gateway->loadGroupData(2);
 
         $this->assertEquals(
             array(
@@ -313,7 +300,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'modified' => '1033922113',
                     'modifier_id' => '14',
                     'name' => 'Users',
-                )
+                ),
             ),
             $data
         );
@@ -322,8 +309,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadGroupDataByIdentifier
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::createGroupLoadQuery
-     *
-     * @return void
      */
     public function testLoadGroupDataByIdentifier()
     {
@@ -332,7 +317,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getGateway();
-        $data = $gateway->loadGroupDataByIdentifier( 'Users' );
+        $data = $gateway->loadGroupDataByIdentifier('Users');
 
         $this->assertEquals(
             array(
@@ -343,7 +328,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'modified' => '1033922113',
                     'modifier_id' => '14',
                     'name' => 'Users',
-                )
+                ),
             ),
             $data
         );
@@ -352,8 +337,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadAllGroupsData
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::createGroupLoadQuery
-     *
-     * @return void
      */
     public function testLoadAllGroupsData()
     {
@@ -366,7 +349,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $this->assertEquals(
             3,
-            count( $data )
+            count($data)
         );
 
         $this->assertEquals(
@@ -384,8 +367,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadTypesDataForGroup
-     *
-     * @return void
      */
     public function testLoadTypesDataForGroup()
     {
@@ -394,16 +375,15 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getGateway();
-        $rows = $gateway->loadTypesDataForGroup( 1, 0 );
+        $rows = $gateway->loadTypesDataForGroup(1, 0);
 
         $this->assertEquals(
             6,
-            count( $rows )
+            count($rows)
         );
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadTypeData
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::getLoadTypeQuery
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::selectColumns
@@ -415,15 +395,15 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getGateway();
-        $rows = $gateway->loadTypeData( 1, 0 );
+        $rows = $gateway->loadTypeData(1, 0);
 
         $this->assertEquals(
             5,
-            count( $rows )
+            count($rows)
         );
         $this->assertEquals(
             45,
-            count( $rows[0] )
+            count($rows[0])
         );
 
         /*
@@ -437,7 +417,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadTypeDataByIdentifier
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::getLoadTypeQuery
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::selectColumns
@@ -449,20 +428,19 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getGateway();
-        $rows = $gateway->loadTypeDataByIdentifier( 'folder', 0 );
+        $rows = $gateway->loadTypeDataByIdentifier('folder', 0);
 
         $this->assertEquals(
             5,
-            count( $rows )
+            count($rows)
         );
         $this->assertEquals(
             45,
-            count( $rows[0] )
+            count($rows[0])
         );
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadTypeDataByRemoteId
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::getLoadTypeQuery
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::selectColumns
@@ -474,15 +452,15 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getGateway();
-        $rows = $gateway->loadTypeDataByRemoteId( 'a3d405b81be900468eb153d774f4f0d2', 0 );
+        $rows = $gateway->loadTypeDataByRemoteId('a3d405b81be900468eb153d774f4f0d2', 0);
 
         $this->assertEquals(
             5,
-            count( $rows )
+            count($rows)
         );
         $this->assertEquals(
             45,
-            count( $rows[0] )
+            count($rows[0])
         );
     }
 
@@ -494,23 +472,23 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public static function getTypeCreationExpectations()
     {
         return array(
-            array( 'always_available', 0 ),
-            array( 'contentobject_name', '<short_name|name>' ),
-            array( 'created', '1024392098' ),
-            array( 'creator_id', '14' ),
-            array( 'identifier', 'folder' ),
-            array( 'initial_language_id', '2' ),
-            array( 'is_container', '1' ),
-            array( 'language_mask', 7 ),
-            array( 'modified', '1082454875' ),
-            array( 'modifier_id', '14' ),
-            array( 'remote_id', 'a3d405b81be900468eb153d774f4f0d2' ),
-            array( 'serialized_description_list', 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}' ),
-            array( 'serialized_name_list', 'a:3:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:6:"Folder";s:6:"eng-GB";s:11:"Folder (GB)";}' ),
-            array( 'sort_field', 7 ),
-            array( 'sort_order', 1 ),
-            array( 'url_alias_name', '' ),
-            array( 'version', '0' ),
+            array('always_available', 0),
+            array('contentobject_name', '<short_name|name>'),
+            array('created', '1024392098'),
+            array('creator_id', '14'),
+            array('identifier', 'folder'),
+            array('initial_language_id', '2'),
+            array('is_container', '1'),
+            array('language_mask', 7),
+            array('modified', '1082454875'),
+            array('modifier_id', '14'),
+            array('remote_id', 'a3d405b81be900468eb153d774f4f0d2'),
+            array('serialized_description_list', 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}'),
+            array('serialized_name_list', 'a:3:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:6:"Folder";s:6:"eng-GB";s:11:"Folder (GB)";}'),
+            array('sort_field', 7),
+            array('sort_order', 1),
+            array('url_alias_name', ''),
+            array('version', '0'),
         );
     }
 
@@ -520,19 +498,19 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonTypeColumns
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertTypeNameData
      */
-    public function testInsertType( $column, $expectation )
+    public function testInsertType($column, $expectation)
     {
         $gateway = $this->getGateway();
         $type = $this->getTypeFixture();
 
-        $gateway->insertType( $type );
+        $gateway->insertType($type);
 
         $this->assertQueryResult(
-            array( array( $expectation ) ),
+            array(array($expectation)),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
-                ->select( $column )
-                ->from( 'ezcontentclass' ),
+                ->select($column)
+                ->from('ezcontentclass'),
             'Inserted Type data incorrect in column ' . $column
         );
     }
@@ -545,11 +523,11 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public static function getTypeCreationContentClassNameExpectations()
     {
         return array(
-            array( 'contentclass_id', array( 1, 1 ) ),
-            array( 'contentclass_version', array( 0, 0 ) ),
-            array( 'language_id', array( 3, 4 ) ),
-            array( 'language_locale', array( 'eng-US', 'eng-GB' ) ),
-            array( 'name', array( 'Folder', 'Folder (GB)' ) ),
+            array('contentclass_id', array(1, 1)),
+            array('contentclass_version', array(0, 0)),
+            array('language_id', array(3, 4)),
+            array('language_locale', array('eng-US', 'eng-GB')),
+            array('name', array('Folder', 'Folder (GB)')),
         );
     }
 
@@ -558,25 +536,24 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertType
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonTypeColumns
      */
-    public function testInsertTypeContentClassName( $column, $expectation )
+    public function testInsertTypeContentClassName($column, $expectation)
     {
         $gateway = $this->getGateway();
         $type = $this->getTypeFixture();
 
-        $gateway->insertType( $type );
+        $gateway->insertType($type);
 
         $this->assertQueryResult(
             array_map(
-                function ( $value )
-                {
-                    return array( $value );
+                function ($value) {
+                    return array($value);
                 },
                 $expectation
             ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
-                ->select( $column )
-                ->from( 'ezcontentclass_name' ),
+                ->select($column)
+                ->from('ezcontentclass_name'),
             'Inserted Type data incorrect in column ' . $column
         );
     }
@@ -617,7 +594,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertFieldDefinition
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonFieldColumns
      */
@@ -628,7 +604,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $field = $this->getFieldDefinitionFixture();
         $storageField = $this->getStorageFieldDefinitionFixture();
 
-        $gateway->insertFieldDefinition( 23, 1, $field, $storageField );
+        $gateway->insertFieldDefinition(23, 1, $field, $storageField);
 
         $this->assertQueryResult(
             array(
@@ -659,7 +635,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'data_text3' => 'c',
                     'data_text4' => 'd',
                     'data_text5' => 'e',
-                    'serialized_data_text' => 'a:2:{i:0;s:3:"foo";i:1;s:3:"bar";}'
+                    'serialized_data_text' => 'a:2:{i:0;s:3:"foo";i:1;s:3:"bar";}',
                 ),
             ),
             $this->getDatabaseHandler()
@@ -677,7 +653,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'is_information_collector',
                     'serialized_data_text',
                     'version',
-
                     'data_float1',
                     'data_float2',
                     'data_float3',
@@ -693,7 +668,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'data_text5',
                     'serialized_data_text'
                 )
-                ->from( 'ezcontentclass_attribute' ),
+                ->from('ezcontentclass_attribute'),
             'FieldDefinition not inserted correctly'
         );
     }
@@ -732,7 +707,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a StorageFieldDefinition fixture
+     * Returns a StorageFieldDefinition fixture.
      *
      * @return StorageFieldDefinition
      */
@@ -757,7 +732,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $fieldDef->dataText5 = 'e';
 
         $fieldDef->serializedDataText = array(
-            'foo', 'bar'
+            'foo', 'bar',
         );
 
         return $fieldDef;
@@ -765,8 +740,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteFieldDefinition
-     *
-     * @return void
      */
     public function testDeleteFieldDefinition()
     {
@@ -776,19 +749,18 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
 
-        $gateway->deleteFieldDefinition( 1, 0, 119 );
+        $gateway->deleteFieldDefinition(1, 0, 119);
 
         $this->assertQueryResult(
-            array( array( 6 ) ),
+            array(array(6)),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
-                ->select( 'COUNT(*)' )
-                ->from( 'ezcontentclass_attribute' )
+                ->select('COUNT(*)')
+                ->from('ezcontentclass_attribute')
         );
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::updateFieldDefinition
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonFieldColumns
      */
@@ -802,7 +774,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $storageFieldDefinitionFixture = $this->getStorageFieldDefinitionFixture();
 
         $gateway = $this->getGateway();
-        $gateway->updateFieldDefinition( 2, 0, $fieldDefinitionFixture, $storageFieldDefinitionFixture );
+        $gateway->updateFieldDefinition(2, 0, $fieldDefinitionFixture, $storageFieldDefinitionFixture);
 
         $this->assertQueryResult(
             array(
@@ -830,7 +802,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'data_text3' => 'c',
                     'data_text4' => 'd',
                     'data_text5' => 'e',
-                    'serialized_data_text' => 'a:2:{i:0;s:3:"foo";i:1;s:3:"bar";}'
+                    'serialized_data_text' => 'a:2:{i:0;s:3:"foo";i:1;s:3:"bar";}',
                 ),
             ),
             $this->getDatabaseHandler()
@@ -844,7 +816,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'is_information_collector',
                     'placement',
                     'serialized_description_list',
-
                     'data_float1',
                     'data_float2',
                     'data_float3',
@@ -860,15 +831,13 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'data_text5',
                     'serialized_data_text'
                 )
-                ->from( 'ezcontentclass_attribute' )
-                ->where( 'id = 160' ),
+                ->from('ezcontentclass_attribute')
+                ->where('id = 160'),
             'FieldDefinition not updated correctly'
         );
-
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertGroupAssignment
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadGroupData
      */
@@ -880,7 +849,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
 
-        $gateway->insertGroupAssignment( 3, 42, 1 );
+        $gateway->insertGroupAssignment(3, 42, 1);
 
         $this->assertQueryResult(
             array(
@@ -889,7 +858,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'contentclass_version' => '1',
                     'group_id' => '3',
                     'group_name' => 'Media',
-                )
+                ),
             ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
@@ -898,14 +867,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'contentclass_version',
                     'group_id',
                     'group_name'
-                )->from( 'ezcontentclass_classgroup' )
+                )->from('ezcontentclass_classgroup')
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteGroupAssignment
-     *
-     * @return void
      */
     public function testDeleteGroupAssignment()
     {
@@ -915,26 +882,25 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
 
-        $gateway->deleteGroupAssignment( 1, 1, 0 );
+        $gateway->deleteGroupAssignment(1, 1, 0);
 
         $this->assertQueryResult(
-            array( array( '1' ) ),
+            array(array('1')),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select(
                     'COUNT(*)'
-                )->from( 'ezcontentclass_classgroup' )
-                ->where( 'contentclass_id = 1' )
+                )->from('ezcontentclass_classgroup')
+                ->where('contentclass_id = 1')
         );
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::updateType
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonTypeColumns
      * @dataProvider getTypeUpdateExpectations
      */
-    public function testUpdateType( $fieldName, $expectedValue )
+    public function testUpdateType($fieldName, $expectedValue)
     {
         $this->insertDatabaseFixture(
             __DIR__ . '/_fixtures/existing_types.php'
@@ -944,26 +910,25 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $updateStruct = $this->getTypeUpdateFixture();
 
-        $gateway->updateType( 1, 0, $updateStruct );
+        $gateway->updateType(1, 0, $updateStruct);
 
         $this->assertQueryResult(
             array(
                 array(
-                    $fieldName => $expectedValue
-                )
+                    $fieldName => $expectedValue,
+                ),
             ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select(
                     $fieldName
-                )->from( 'ezcontentclass' )
-                ->where( 'id = 1 AND version = 0' ),
+                )->from('ezcontentclass')
+                ->where('id = 1 AND version = 0'),
             "Incorrect value stored for '{$fieldName}'."
         );
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteTypeNameData
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertTypeNameData
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::updateType
@@ -978,7 +943,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $updateStruct = $this->getTypeUpdateFixture();
 
-        $gateway->updateType( 1, 0, $updateStruct );
+        $gateway->updateType(1, 0, $updateStruct);
 
         $this->assertQueryResult(
             array(
@@ -987,26 +952,26 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'contentclass_version' => 0,
                     'language_id' => 3,
                     'language_locale' => 'eng-US',
-                    'name' => 'New Folder'
+                    'name' => 'New Folder',
                 ),
                 array(
                     'contentclass_id' => 1,
                     'contentclass_version' => 0,
                     'language_id' => 4,
                     'language_locale' => 'eng-GB',
-                    'name' => 'New Folder for you'
-                )
+                    'name' => 'New Folder for you',
+                ),
             ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
-                ->select( '*' )
-                ->from( 'ezcontentclass_name' )
-                ->where( 'contentclass_id = 1 AND contentclass_version = 0' )
+                ->select('*')
+                ->from('ezcontentclass_name')
+                ->where('contentclass_id = 1 AND contentclass_version = 0')
         );
     }
 
     /**
-     * Returns expected data after update
+     * Returns expected data after update.
      *
      * Data provider for {@link testUpdateType()}.
      *
@@ -1015,19 +980,19 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     public static function getTypeUpdateExpectations()
     {
         return array(
-            array( 'serialized_name_list', 'a:3:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:10:"New Folder";s:6:"eng-GB";s:18:"New Folder for you";}' ),
-            array( 'serialized_description_list', 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}' ),
-            array( 'identifier', 'new_folder' ),
-            array( 'modified', '1311621548' ),
-            array( 'modifier_id', '42' ),
-            array( 'remote_id', 'foobar' ),
-            array( 'url_alias_name', 'some scheke' ),
-            array( 'contentobject_name', '<short_name>' ),
-            array( 'is_container', '0' ),
-            array( 'initial_language_id', '23' ),
-            array( 'sort_field', '3' ),
-            array( 'sort_order', '0' ),
-            array( 'always_available', '1' ),
+            array('serialized_name_list', 'a:3:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:10:"New Folder";s:6:"eng-GB";s:18:"New Folder for you";}'),
+            array('serialized_description_list', 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}'),
+            array('identifier', 'new_folder'),
+            array('modified', '1311621548'),
+            array('modifier_id', '42'),
+            array('remote_id', 'foobar'),
+            array('url_alias_name', 'some scheke'),
+            array('contentobject_name', '<short_name>'),
+            array('is_container', '0'),
+            array('initial_language_id', '23'),
+            array('sort_field', '3'),
+            array('sort_order', '0'),
+            array('always_available', '1'),
         );
     }
 
@@ -1066,8 +1031,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::countInstancesOfType
-     *
-     * @return void
      */
     public function testCountInstancesOfTypeExist()
     {
@@ -1077,7 +1040,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getGateway();
-        $res = $gateway->countInstancesOfType( 3, 0 );
+        $res = $gateway->countInstancesOfType(3, 0);
 
         $this->assertEquals(
             6,
@@ -1087,8 +1050,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::countInstancesOfType
-     *
-     * @return void
      */
     public function testCountInstancesOfTypeNotExist()
     {
@@ -1098,7 +1059,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getGateway();
-        $res = $gateway->countInstancesOfType( 23422342, 1 );
+        $res = $gateway->countInstancesOfType(23422342, 1);
 
         $this->assertEquals(
             0,
@@ -1108,8 +1069,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteFieldDefinitionsForType
-     *
-     * @return void
      */
     public function testDeleteFieldDefinitionsForTypeExisting()
     {
@@ -1119,13 +1078,13 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
 
-        $gateway->deleteFieldDefinitionsForType( 1, 0 );
+        $gateway->deleteFieldDefinitionsForType(1, 0);
 
         $countAffectedAttr = $this->getDatabaseHandler()
             ->createSelectQuery();
         $countAffectedAttr
-            ->select( 'COUNT(*)' )
-            ->from( 'ezcontentclass_attribute' )
+            ->select('COUNT(*)')
+            ->from('ezcontentclass_attribute')
             ->where(
                 $countAffectedAttr->expr->eq(
                     'contentclass_id',
@@ -1134,25 +1093,23 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             );
         // 1 left with version 1
         $this->assertQueryResult(
-            array( array( 1 ) ),
+            array(array(1)),
             $countAffectedAttr
         );
 
         $countNotAffectedAttr = $this->getDatabaseHandler()
             ->createSelectQuery();
-        $countNotAffectedAttr->select( 'COUNT(*)' )
-            ->from( 'ezcontentclass_attribute' );
+        $countNotAffectedAttr->select('COUNT(*)')
+            ->from('ezcontentclass_attribute');
 
         $this->assertQueryResult(
-            array( array( 2 ) ),
+            array(array(2)),
             $countNotAffectedAttr
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteFieldDefinitionsForType
-     *
-     * @return void
      */
     public function testDeleteFieldDefinitionsForTypeNotExisting()
     {
@@ -1162,23 +1119,21 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
 
-        $gateway->deleteFieldDefinitionsForType( 23, 1 );
+        $gateway->deleteFieldDefinitionsForType(23, 1);
 
         $countNotAffectedAttr = $this->getDatabaseHandler()
             ->createSelectQuery();
-        $countNotAffectedAttr->select( 'COUNT(*)' )
-            ->from( 'ezcontentclass_attribute' );
+        $countNotAffectedAttr->select('COUNT(*)')
+            ->from('ezcontentclass_attribute');
 
         $this->assertQueryResult(
-            array( array( 7 ) ),
+            array(array(7)),
             $countNotAffectedAttr
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteGroupAssignmentsForType
-     *
-     * @return void
      */
     public function testDeleteGroupAssignmentsForTypeExisting()
     {
@@ -1188,23 +1143,21 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
 
-        $gateway->deleteGroupAssignmentsForType( 1, 0 );
+        $gateway->deleteGroupAssignmentsForType(1, 0);
 
         $countAffectedAttr = $this->getDatabaseHandler()
             ->createSelectQuery();
-        $countAffectedAttr->select( 'COUNT(*)' )
-            ->from( 'ezcontentclass_classgroup' );
+        $countAffectedAttr->select('COUNT(*)')
+            ->from('ezcontentclass_classgroup');
 
         $this->assertQueryResult(
-            array( array( 2 ) ),
+            array(array(2)),
             $countAffectedAttr
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteGroupAssignmentsForType
-     *
-     * @return void
      */
     public function testDeleteGroupAssignmentsForTypeNotExisting()
     {
@@ -1214,23 +1167,21 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
 
-        $gateway->deleteType( 23, 1 );
+        $gateway->deleteType(23, 1);
 
         $countAffectedAttr = $this->getDatabaseHandler()
             ->createSelectQuery();
-        $countAffectedAttr->select( 'COUNT(*)' )
-            ->from( 'ezcontentclass_classgroup' );
+        $countAffectedAttr->select('COUNT(*)')
+            ->from('ezcontentclass_classgroup');
 
         $this->assertQueryResult(
-            array( array( 3 ) ),
+            array(array(3)),
             $countAffectedAttr
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteType
-     *
-     * @return void
      */
     public function testDeleteTypeExisting()
     {
@@ -1240,23 +1191,21 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
 
-        $gateway->deleteType( 1, 0 );
+        $gateway->deleteType(1, 0);
 
         $countAffectedAttr = $this->getDatabaseHandler()
             ->createSelectQuery();
-        $countAffectedAttr->select( 'COUNT(*)' )
-            ->from( 'ezcontentclass' );
+        $countAffectedAttr->select('COUNT(*)')
+            ->from('ezcontentclass');
 
         $this->assertQueryResult(
-            array( array( 1 ) ),
+            array(array(1)),
             $countAffectedAttr
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteType
-     *
-     * @return void
      */
     public function testDeleteTypeNotExisting()
     {
@@ -1266,23 +1215,21 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
 
-        $gateway->deleteType( 23, 1 );
+        $gateway->deleteType(23, 1);
 
         $countAffectedAttr = $this->getDatabaseHandler()
             ->createSelectQuery();
-        $countAffectedAttr->select( 'COUNT(*)' )
-            ->from( 'ezcontentclass' );
+        $countAffectedAttr->select('COUNT(*)')
+            ->from('ezcontentclass');
 
         $this->assertQueryResult(
-            array( array( 2 ) ),
+            array(array(2)),
             $countAffectedAttr
         );
     }
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::publishTypeAndFields
-     *
-     * @return void
      */
     public function testPublishTypeAndFields()
     {
@@ -1291,55 +1238,55 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getGateway();
-        $gateway->publishTypeAndFields( 1, 1, 0 );
+        $gateway->publishTypeAndFields(1, 1, 0);
 
         $this->assertQueryResult(
-            array( array( 1 ) ),
+            array(array(1)),
             $this->getDatabaseHandler()->createSelectQuery()
-                ->select( 'COUNT( * )' )
-                ->from( 'ezcontentclass' )
-                ->where( 'id = 1 AND version = 0' )
+                ->select('COUNT( * )')
+                ->from('ezcontentclass')
+                ->where('id = 1 AND version = 0')
         );
 
         $this->assertQueryResult(
-            array( array( 2 ) ),
+            array(array(2)),
             $this->getDatabaseHandler()->createSelectQuery()
-                ->select( 'COUNT( * )' )
-                ->from( 'ezcontentclass_classgroup' )
-                ->where( 'contentclass_id = 1 AND contentclass_version = 0' )
+                ->select('COUNT( * )')
+                ->from('ezcontentclass_classgroup')
+                ->where('contentclass_id = 1 AND contentclass_version = 0')
         );
 
         $this->assertQueryResult(
-            array( array( 5 ) ),
+            array(array(5)),
             $this->getDatabaseHandler()->createSelectQuery()
-                ->select( 'COUNT( * )' )
-                ->from( 'ezcontentclass_attribute' )
-                ->where( 'contentclass_id = 1 AND version = 0' )
+                ->select('COUNT( * )')
+                ->from('ezcontentclass_attribute')
+                ->where('contentclass_id = 1 AND version = 0')
         );
 
         $this->assertQueryResult(
-            array( array( 1 ) ),
+            array(array(1)),
             $this->getDatabaseHandler()->createSelectQuery()
-                ->select( 'COUNT( * )' )
-                ->from( 'ezcontentclass_name' )
-                ->where( 'contentclass_id = 1 AND contentclass_version = 0' )
+                ->select('COUNT( * )')
+                ->from('ezcontentclass_name')
+                ->where('contentclass_id = 1 AND contentclass_version = 0')
         );
     }
 
     /**
-     * Returns the DoctrineDatabase gateway to test
+     * Returns the DoctrineDatabase gateway to test.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase
      */
     protected function getGateway()
     {
-        if ( !isset( $this->gateway ) )
-        {
+        if (!isset($this->gateway)) {
             $this->gateway = new DoctrineDatabase(
                 $this->getDatabaseHandler(),
                 $this->getLanguageMaskGenerator()
             );
         }
+
         return $this->gateway;
     }
 }

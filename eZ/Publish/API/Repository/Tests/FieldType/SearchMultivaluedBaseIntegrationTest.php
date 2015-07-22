@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -98,23 +100,21 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
     }
 
     protected $legacyUnsupportedOperators = array(
-        Operator::EQ => "EQ",
-        Operator::IN => "IN",
-        Operator::GT => "GT",
-        Operator::GTE => "GTE",
-        Operator::LT => "LT",
-        Operator::LTE => "LTE",
-        Operator::BETWEEN => "BETWEEN",
+        Operator::EQ => 'EQ',
+        Operator::IN => 'IN',
+        Operator::GT => 'GT',
+        Operator::GTE => 'GTE',
+        Operator::LT => 'LT',
+        Operator::LTE => 'LTE',
+        Operator::BETWEEN => 'BETWEEN',
     );
 
-    protected function checkOperatorSupport( $operator )
+    protected function checkOperatorSupport($operator)
     {
-        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy' )
-        {
-            if ( isset( $this->legacyUnsupportedOperators[$operator] ) )
-            {
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
+            if (isset($this->legacyUnsupportedOperators[$operator])) {
                 $this->markTestSkipped(
-                    "Legacy Search Engine does not properly support multivalued fields " .
+                    'Legacy Search Engine does not properly support multivalued fields ' .
                     "with '{$this->legacyUnsupportedOperators[$operator]}' operator"
                 );
             }
@@ -122,7 +122,7 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
     }
 
     /**
-     * Creates test Content and Locations and returns the context for subsequent testing
+     * Creates test Content and Locations and returns the context for subsequent testing.
      *
      * Context consists of repository instance and created Content IDs.
      *
@@ -132,11 +132,10 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
     {
         $repository = $this->getRepository();
         $fieldTypeService = $repository->getFieldTypeService();
-        $fieldType = $fieldTypeService->getFieldType( $this->getTypeName() );
+        $fieldType = $fieldTypeService->getFieldType($this->getTypeName());
 
-        if ( !$fieldType->isSearchable() )
-        {
-            $this->markTestSkipped( "Field type '{$this->getTypeName()}' is not searchable." );
+        if (!$fieldType->isSearchable()) {
+            $this->markTestSkipped("Field type '{$this->getTypeName()}' is not searchable.");
         }
 
         $this->checkSearchEngineSupport();
@@ -174,21 +173,19 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
             $this->getMultivaluedSearchTargetValuesTwo(),
         );
         $templates = array(
-            array( true, true ),
-            array( true, false ),
-            array( false, true ),
-            array( false, false ),
+            array(true, true),
+            array(true, false),
+            array(false, true),
+            array(false, false),
         );
 
         $fixture = array();
 
-        foreach ( $additionalFields as $additionalField )
-        {
-            foreach ( $templates as $template )
-            {
-                array_push( $template, $additionalField[0] );
-                array_unshift( $template, $additionalField[2] );
-                array_unshift( $template, $additionalField[1] );
+        foreach ($additionalFields as $additionalField) {
+            foreach ($templates as $template) {
+                array_push($template, $additionalField[0]);
+                array_unshift($template, $additionalField[2]);
+                array_unshift($template, $additionalField[1]);
 
                 $fixture[] = $template;
             }
@@ -209,15 +206,14 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedEqualsOne( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedEqualsOne($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::EQ );
+        $this->checkOperatorSupport(Operator::EQ);
 
-        foreach ( $valuesOne as $value )
-        {
-            $criteria = new Field( "data", Operator::EQ, $value );
+        foreach ($valuesOne as $value) {
+            $criteria = new Field('data', Operator::EQ, $value);
 
-            $this->assertFindResult( $context, $criteria, true, false, $filter, $content, $modifyField );
+            $this->assertFindResult($context, $criteria, true, false, $filter, $content, $modifyField);
         }
     }
 
@@ -233,15 +229,14 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedNotEqualsOne( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedNotEqualsOne($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::EQ );
+        $this->checkOperatorSupport(Operator::EQ);
 
-        foreach ( $valuesOne as $value )
-        {
-            $criteria = new LogicalNot( new Field( "data", Operator::EQ, $value ) );
+        foreach ($valuesOne as $value) {
+            $criteria = new LogicalNot(new Field('data', Operator::EQ, $value));
 
-            $this->assertFindResult( $context, $criteria, false, true, $filter, $content, $modifyField );
+            $this->assertFindResult($context, $criteria, false, true, $filter, $content, $modifyField);
         }
     }
 
@@ -257,13 +252,13 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedInOne( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedInOne($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::IN );
+        $this->checkOperatorSupport(Operator::IN);
 
-        $criteria = new Field( "data", Operator::IN, $valuesOne );
+        $criteria = new Field('data', Operator::IN, $valuesOne);
 
-        $this->assertFindResult( $context, $criteria, true, false, $filter, $content, $modifyField );
+        $this->assertFindResult($context, $criteria, true, false, $filter, $content, $modifyField);
     }
 
     /**
@@ -278,15 +273,15 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedNotInOne( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedNotInOne($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::IN );
+        $this->checkOperatorSupport(Operator::IN);
 
         $criteria = new LogicalNot(
-            new Field( "data", Operator::IN, $valuesOne )
+            new Field('data', Operator::IN, $valuesOne)
         );
 
-        $this->assertFindResult( $context, $criteria, false, true, $filter, $content, $modifyField );
+        $this->assertFindResult($context, $criteria, false, true, $filter, $content, $modifyField);
     }
 
     /**
@@ -301,13 +296,13 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedInOneTwo( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedInOneTwo($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::IN );
+        $this->checkOperatorSupport(Operator::IN);
 
-        $criteria = new Field( "data", Operator::IN, array_merge( $valuesOne, $valuesTwo ) );
+        $criteria = new Field('data', Operator::IN, array_merge($valuesOne, $valuesTwo));
 
-        $this->assertFindResult( $context, $criteria, true, true, $filter, $content, $modifyField );
+        $this->assertFindResult($context, $criteria, true, true, $filter, $content, $modifyField);
     }
 
     /**
@@ -322,15 +317,15 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedNotInOneTwo( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedNotInOneTwo($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::IN );
+        $this->checkOperatorSupport(Operator::IN);
 
         $criteria = new LogicalNot(
-            new Field( "data", Operator::IN, array_merge( $valuesOne, $valuesTwo ) )
+            new Field('data', Operator::IN, array_merge($valuesOne, $valuesTwo))
         );
 
-        $this->assertFindResult( $context, $criteria, false, false, $filter, $content, $modifyField );
+        $this->assertFindResult($context, $criteria, false, false, $filter, $content, $modifyField);
     }
 
     /**
@@ -345,15 +340,14 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedContainsOne( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedContainsOne($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::CONTAINS );
+        $this->checkOperatorSupport(Operator::CONTAINS);
 
-        foreach ( $valuesOne as $value )
-        {
-            $criteria = new Field( "data", Operator::CONTAINS, $value );
+        foreach ($valuesOne as $value) {
+            $criteria = new Field('data', Operator::CONTAINS, $value);
 
-            $this->assertFindResult( $context, $criteria, true, false, $filter, $content, $modifyField );
+            $this->assertFindResult($context, $criteria, true, false, $filter, $content, $modifyField);
         }
     }
 
@@ -369,15 +363,14 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedNotContainsOne( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedNotContainsOne($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::CONTAINS );
+        $this->checkOperatorSupport(Operator::CONTAINS);
 
-        foreach ( $valuesOne as $value )
-        {
-            $criteria = new LogicalNot( new Field( "data", Operator::CONTAINS, $value ) );
+        foreach ($valuesOne as $value) {
+            $criteria = new LogicalNot(new Field('data', Operator::CONTAINS, $value));
 
-            $this->assertFindResult( $context, $criteria, false, true, $filter, $content, $modifyField );
+            $this->assertFindResult($context, $criteria, false, true, $filter, $content, $modifyField);
         }
     }
 
@@ -393,13 +386,13 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedGreaterThanOneFindsOneTwo( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedGreaterThanOneFindsOneTwo($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::GT );
+        $this->checkOperatorSupport(Operator::GT);
 
-        $criteria = new Field( "data", Operator::GT, reset( $valuesOne ) );
+        $criteria = new Field('data', Operator::GT, reset($valuesOne));
 
-        $this->assertFindResult( $context, $criteria, true, true, $filter, $content, $modifyField );
+        $this->assertFindResult($context, $criteria, true, true, $filter, $content, $modifyField);
     }
 
     /**
@@ -414,13 +407,13 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedGreaterThanOneFindsTwo( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedGreaterThanOneFindsTwo($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::GT );
+        $this->checkOperatorSupport(Operator::GT);
 
-        $criteria = new Field( "data", Operator::GT, end( $valuesOne ) );
+        $criteria = new Field('data', Operator::GT, end($valuesOne));
 
-        $this->assertFindResult( $context, $criteria, false, true, $filter, $content, $modifyField );
+        $this->assertFindResult($context, $criteria, false, true, $filter, $content, $modifyField);
     }
 
     /**
@@ -435,13 +428,13 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedNotGreaterThanOneFindsOneTwo( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedNotGreaterThanOneFindsOneTwo($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::GT );
+        $this->checkOperatorSupport(Operator::GT);
 
-        $criteria = new LogicalNot( new Field( "data", Operator::GT, reset( $valuesOne ) ) );
+        $criteria = new LogicalNot(new Field('data', Operator::GT, reset($valuesOne)));
 
-        $this->assertFindResult( $context, $criteria, false, false, $filter, $content, $modifyField );
+        $this->assertFindResult($context, $criteria, false, false, $filter, $content, $modifyField);
     }
 
     /**
@@ -456,13 +449,13 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedNotGreaterThanOneFindsTwo( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedNotGreaterThanOneFindsTwo($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::GT );
+        $this->checkOperatorSupport(Operator::GT);
 
-        $criteria = new LogicalNot( new Field( "data", Operator::GT, end( $valuesOne ) ) );
+        $criteria = new LogicalNot(new Field('data', Operator::GT, end($valuesOne)));
 
-        $this->assertFindResult( $context, $criteria, true, false, $filter, $content, $modifyField );
+        $this->assertFindResult($context, $criteria, true, false, $filter, $content, $modifyField);
     }
 
     /**
@@ -477,15 +470,14 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedGreaterThanOrEqualOne( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedGreaterThanOrEqualOne($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::GTE );
+        $this->checkOperatorSupport(Operator::GTE);
 
-        foreach ( $valuesOne as $value )
-        {
-            $criteria = new Field( "data", Operator::GTE, $value );
+        foreach ($valuesOne as $value) {
+            $criteria = new Field('data', Operator::GTE, $value);
 
-            $this->assertFindResult( $context, $criteria, true, true, $filter, $content, $modifyField );
+            $this->assertFindResult($context, $criteria, true, true, $filter, $content, $modifyField);
         }
     }
 
@@ -501,15 +493,14 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedNotGreaterThanOrEqual( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedNotGreaterThanOrEqual($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::GTE );
+        $this->checkOperatorSupport(Operator::GTE);
 
-        foreach ( $valuesOne as $value )
-        {
-            $criteria = new LogicalNot( new Field( "data", Operator::GTE, $value ) );
+        foreach ($valuesOne as $value) {
+            $criteria = new LogicalNot(new Field('data', Operator::GTE, $value));
 
-            $this->assertFindResult( $context, $criteria, false, false, $filter, $content, $modifyField );
+            $this->assertFindResult($context, $criteria, false, false, $filter, $content, $modifyField);
         }
     }
 
@@ -525,13 +516,13 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedLowerThanOneEmpty( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedLowerThanOneEmpty($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::LT );
+        $this->checkOperatorSupport(Operator::LT);
 
-        $criteria = new Field( "data", Operator::LT, reset( $valuesOne ) );
+        $criteria = new Field('data', Operator::LT, reset($valuesOne));
 
-        $this->assertFindResult( $context, $criteria, false, false, $filter, $content, $modifyField );
+        $this->assertFindResult($context, $criteria, false, false, $filter, $content, $modifyField);
     }
 
     /**
@@ -546,13 +537,13 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedLowerThanOneFindsOne( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedLowerThanOneFindsOne($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::LT );
+        $this->checkOperatorSupport(Operator::LT);
 
-        $criteria = new Field( "data", Operator::LT, end( $valuesOne ) );
+        $criteria = new Field('data', Operator::LT, end($valuesOne));
 
-        $this->assertFindResult( $context, $criteria, true, false, $filter, $content, $modifyField );
+        $this->assertFindResult($context, $criteria, true, false, $filter, $content, $modifyField);
     }
 
     /**
@@ -567,13 +558,13 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedNotLowerThanOneEmpty( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedNotLowerThanOneEmpty($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::LT );
+        $this->checkOperatorSupport(Operator::LT);
 
-        $criteria = new LogicalNot( new Field( "data", Operator::LT, reset( $valuesOne ) ) );
+        $criteria = new LogicalNot(new Field('data', Operator::LT, reset($valuesOne)));
 
-        $this->assertFindResult( $context, $criteria, true, true, $filter, $content, $modifyField );
+        $this->assertFindResult($context, $criteria, true, true, $filter, $content, $modifyField);
     }
 
     /**
@@ -588,13 +579,13 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedNotLowerThanOneFindsOne( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedNotLowerThanOneFindsOne($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::LT );
+        $this->checkOperatorSupport(Operator::LT);
 
-        $criteria = new LogicalNot( new Field( "data", Operator::LT, end( $valuesOne ) ) );
+        $criteria = new LogicalNot(new Field('data', Operator::LT, end($valuesOne)));
 
-        $this->assertFindResult( $context, $criteria, false, true, $filter, $content, $modifyField );
+        $this->assertFindResult($context, $criteria, false, true, $filter, $content, $modifyField);
     }
 
     /**
@@ -609,15 +600,14 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedLowerThanOrEqualOne( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedLowerThanOrEqualOne($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::LTE );
+        $this->checkOperatorSupport(Operator::LTE);
 
-        foreach ( $valuesOne as $value )
-        {
-            $criteria = new Field( "data", Operator::LTE, $value );
+        foreach ($valuesOne as $value) {
+            $criteria = new Field('data', Operator::LTE, $value);
 
-            $this->assertFindResult( $context, $criteria, true, false, $filter, $content, $modifyField );
+            $this->assertFindResult($context, $criteria, true, false, $filter, $content, $modifyField);
         }
     }
 
@@ -633,15 +623,14 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedNotLowerThanOrEqualOne( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedNotLowerThanOrEqualOne($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::LTE );
+        $this->checkOperatorSupport(Operator::LTE);
 
-        foreach ( $valuesOne as $value )
-        {
-            $criteria = new LogicalNot( new Field( "data", Operator::LTE, $value ) );
+        foreach ($valuesOne as $value) {
+            $criteria = new LogicalNot(new Field('data', Operator::LTE, $value));
 
-            $this->assertFindResult( $context, $criteria, false, true, $filter, $content, $modifyField );
+            $this->assertFindResult($context, $criteria, false, true, $filter, $content, $modifyField);
         }
     }
 
@@ -657,16 +646,14 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedBetweenOneTwo( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedBetweenOneTwo($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::BETWEEN );
+        $this->checkOperatorSupport(Operator::BETWEEN);
 
-        foreach ( $valuesOne as $valueOne )
-        {
-            foreach ( $valuesTwo as $valueTwo )
-            {
+        foreach ($valuesOne as $valueOne) {
+            foreach ($valuesTwo as $valueTwo) {
                 $criteria = new Field(
-                    "data",
+                    'data',
                     Operator::BETWEEN,
                     array(
                         $valueOne,
@@ -674,7 +661,7 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
                     )
                 );
 
-                $this->assertFindResult( $context, $criteria, true, true, $filter, $content, $modifyField );
+                $this->assertFindResult($context, $criteria, true, true, $filter, $content, $modifyField);
             }
         }
     }
@@ -691,17 +678,15 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedNotBetweenOneTwo( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedNotBetweenOneTwo($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::BETWEEN );
+        $this->checkOperatorSupport(Operator::BETWEEN);
 
-        foreach ( $valuesOne as $valueOne )
-        {
-            foreach ( $valuesTwo as $valueTwo )
-            {
+        foreach ($valuesOne as $valueOne) {
+            foreach ($valuesTwo as $valueTwo) {
                 $criteria = new LogicalNot(
                     new Field(
-                        "data",
+                        'data',
                         Operator::BETWEEN,
                         array(
                             $valueOne,
@@ -710,7 +695,7 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
                     )
                 );
 
-                $this->assertFindResult( $context, $criteria, false, false, $filter, $content, $modifyField );
+                $this->assertFindResult($context, $criteria, false, false, $filter, $content, $modifyField);
             }
         }
     }
@@ -727,16 +712,14 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedBetweenTwoOne( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedBetweenTwoOne($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::BETWEEN );
+        $this->checkOperatorSupport(Operator::BETWEEN);
 
-        foreach ( $valuesOne as $valueOne )
-        {
-            foreach ( $valuesTwo as $valueTwo )
-            {
+        foreach ($valuesOne as $valueOne) {
+            foreach ($valuesTwo as $valueTwo) {
                 $criteria = new Field(
-                    "data",
+                    'data',
                     Operator::BETWEEN,
                     array(
                         $valueTwo,
@@ -744,7 +727,7 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
                     )
                 );
 
-                $this->assertFindResult( $context, $criteria, false, false, $filter, $content, $modifyField );
+                $this->assertFindResult($context, $criteria, false, false, $filter, $content, $modifyField);
             }
         }
     }
@@ -761,17 +744,15 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
      * @dataProvider findMultivaluedProvider
      * @depends testCreateMultivaluedTestContent
      */
-    public function testFindMultivaluedNotBetweenTwoOne( $valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context )
+    public function testFindMultivaluedNotBetweenTwoOne($valuesOne, $valuesTwo, $filter, $content, $modifyField, array $context)
     {
-        $this->checkOperatorSupport( Operator::BETWEEN );
+        $this->checkOperatorSupport(Operator::BETWEEN);
 
-        foreach ( $valuesOne as $valueOne )
-        {
-            foreach ( $valuesTwo as $valueTwo )
-            {
+        foreach ($valuesOne as $valueOne) {
+            foreach ($valuesTwo as $valueTwo) {
                 $criteria = new LogicalNot(
                     new Field(
-                        "data",
+                        'data',
                         Operator::BETWEEN,
                         array(
                             $valueTwo,
@@ -780,7 +761,7 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
                     )
                 );
 
-                $this->assertFindResult( $context, $criteria, true, true, $filter, $content, $modifyField );
+                $this->assertFindResult($context, $criteria, true, true, $filter, $content, $modifyField);
             }
         }
     }

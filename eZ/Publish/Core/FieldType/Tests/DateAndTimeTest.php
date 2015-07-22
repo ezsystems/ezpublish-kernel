@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the DateAndTimeTest class
+ * File containing the DateAndTimeTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -11,7 +13,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTime;
 use eZ\Publish\Core\FieldType\DateAndTime\Value as DateAndTimeValue;
-use DateTime;
 use DateInterval;
 use stdClass;
 
@@ -35,7 +36,7 @@ class DateAndTimeTest extends FieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         $fieldType = new DateAndTime();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
     }
@@ -58,29 +59,27 @@ class DateAndTimeTest extends FieldTypeTest
     protected function getSettingsSchemaExpectation()
     {
         return array(
-            "useSeconds" => array(
-                "type" => "bool",
-                "default" => false
+            'useSeconds' => array(
+                'type' => 'bool',
+                'default' => false,
             ),
-            "defaultType" => array(
-                "type" => "choice",
-                "default" => DateAndTime::DEFAULT_EMPTY
+            'defaultType' => array(
+                'type' => 'choice',
+                'default' => DateAndTime::DEFAULT_EMPTY,
             ),
-            "dateInterval" => array(
-                "type" => "dateInterval",
-                "default" => null
-            )
+            'dateInterval' => array(
+                'type' => 'dateInterval',
+                'default' => null,
+            ),
         );
     }
 
     /**
      * Returns the empty value expected from the field type.
-     *
-     * @return void
      */
     protected function getEmptyValueExpectation()
     {
-        return new DateAndTimeValue;
+        return new DateAndTimeValue();
     }
 
     /**
@@ -150,25 +149,25 @@ class DateAndTimeTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new DateAndTimeValue,
+                new DateAndTimeValue(),
             ),
             array(
                 '2012-08-28 12:20 Europe/Berlin',
-                DateAndTimeValue::fromString( '2012-08-28 12:20 Europe/Berlin' ),
+                DateAndTimeValue::fromString('2012-08-28 12:20 Europe/Berlin'),
             ),
             array(
                 1346149200,
-                DateAndTimeValue::fromTimestamp( 1346149200 )
+                DateAndTimeValue::fromTimestamp(1346149200),
             ),
             array(
-                ( $dateTime = new \DateTime() ),
-                new DateAndTimeValue( $dateTime ),
+                ($dateTime = new \DateTime()),
+                new DateAndTimeValue($dateTime),
             ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -206,13 +205,13 @@ class DateAndTimeTest extends FieldTypeTest
     {
         return array(
             array(
-                new DateAndTimeValue,
+                new DateAndTimeValue(),
                 null,
             ),
             array(
-                new DateAndTimeValue( $date = new \DateTime( 'Tue, 28 Aug 2012 12:20:00 +0200' ) ),
+                new DateAndTimeValue($date = new \DateTime('Tue, 28 Aug 2012 12:20:00 +0200')),
                 array(
-                    'rfc850' => $date->format( \DateTime::RFC850 ),
+                    'rfc850' => $date->format(\DateTime::RFC850),
                     'timestamp' => $date->getTimeStamp(),
                 ),
             ),
@@ -220,7 +219,7 @@ class DateAndTimeTest extends FieldTypeTest
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -256,25 +255,25 @@ class DateAndTimeTest extends FieldTypeTest
      */
     public function provideInputForFromHash()
     {
-        $date = new \DateTime( 'Tue, 28 Aug 2012 12:20:00 +0200' );
+        $date = new \DateTime('Tue, 28 Aug 2012 12:20:00 +0200');
 
         return array(
             array(
                 null,
-                new DateAndTimeValue,
+                new DateAndTimeValue(),
             ),
             array(
                 array(
-                    'rfc850' => $date->format( \DateTime::RFC850 ),
+                    'rfc850' => $date->format(\DateTime::RFC850),
                     'timestamp' => $date->getTimeStamp(),
                 ),
-                new DateAndTimeValue( $date ),
+                new DateAndTimeValue($date),
             ),
             array(
                 array(
                     'timestamp' => $date->getTimeStamp(),
                 ),
-                DateAndTimeValue::fromTimestamp( $date->getTimeStamp() ),
+                DateAndTimeValue::fromTimestamp($date->getTimeStamp()),
             ),
         );
     }
@@ -305,26 +304,26 @@ class DateAndTimeTest extends FieldTypeTest
     {
         return array(
             array(
-                array()
+                array(),
             ),
             array(
                 array(
                     'useSeconds' => true,
                     'defaultType' => DateAndTime::DEFAULT_EMPTY,
-                )
+                ),
             ),
             array(
                 array(
                     'useSeconds' => false,
                     'defaultType' => DateAndTime::DEFAULT_CURRENT_DATE,
-                )
+                ),
             ),
             array(
                 array(
                     'useSeconds' => false,
                     'defaultType' => DateAndTime::DEFAULT_CURRENT_DATE_ADJUSTED,
-                    'dateInterval' => new DateInterval( 'P2Y' ),
-                )
+                    'dateInterval' => new DateInterval('P2Y'),
+                ),
             ),
         );
     }
@@ -359,27 +358,27 @@ class DateAndTimeTest extends FieldTypeTest
                 array(
                     // useSeconds must be bool
                     'useSeconds' => 23,
-                )
+                ),
             ),
             array(
                 array(
                     // defaultType must be constant
                     'defaultType' => 42,
-                )
+                ),
             ),
             array(
                 array(
                     // No dateInterval allowed with this defaultType
                     'defaultType' => DateAndTime::DEFAULT_EMPTY,
-                    'dateInterval' => new DateInterval( 'P2Y' ),
-                )
+                    'dateInterval' => new DateInterval('P2Y'),
+                ),
             ),
             array(
                 array(
                     // dateInterval must be a \DateInterval
                     'defaultType' => DateAndTime::DEFAULT_CURRENT_DATE_ADJUSTED,
                     'dateInterval' => new stdClass(),
-                )
+                ),
             ),
         );
     }
@@ -394,12 +393,12 @@ class DateAndTimeTest extends FieldTypeTest
         return array(
             array(
                 $this->getEmptyValueExpectation(),
-                ''
+                '',
             ),
             array(
-                DateAndTimeValue::fromTimestamp( 438512400 ),
-                'Thu 1983-24-11 09:00:00'
-            )
+                DateAndTimeValue::fromTimestamp(438512400),
+                'Thu 1983-24-11 09:00:00',
+            ),
         );
     }
 }

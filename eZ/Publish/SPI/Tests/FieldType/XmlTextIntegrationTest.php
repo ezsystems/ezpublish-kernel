@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\SPI\Tests\FieldType\XmlTextIntegrationTest class
+ * File contains: eZ\Publish\SPI\Tests\FieldType\XmlTextIntegrationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,7 +21,7 @@ use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway\LegacyStorage;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlGateway;
 
 /**
- * Integration test for legacy storage field types
+ * Integration test for legacy storage field types.
  *
  * This abstract base test case is supposed to be the base for field type
  * integration tests. It basically calls all involved methods in the field type
@@ -41,7 +43,7 @@ use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlGateway
 class XmlTextIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -51,14 +53,14 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get handler with required custom field types registered
+     * Get handler with required custom field types registered.
      *
      * @return Handler
      */
     public function getCustomHandler()
     {
         $fieldType = new FieldType\XmlText\Type();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
         return $this->getHandler(
             'ezxmltext',
@@ -66,7 +68,7 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
             new XmlTextConverter(),
             new FieldType\XmlText\XmlTextStorage(
                 array(
-                    'LegacyStorage' => new LegacyStorage( new UrlGateway() )
+                    'LegacyStorage' => new LegacyStorage(new UrlGateway()),
                 )
             )
         );
@@ -84,7 +86,7 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
     }
 
     /**
-     * Get field definition data values
+     * Get field definition data values.
      *
      * This is a PHPUnit data provider
      *
@@ -95,7 +97,7 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
         return array(
             // The ezxmltext field type does not have any special field definition
             // properties
-            array( 'fieldType', 'ezxmltext' ),
+            array('fieldType', 'ezxmltext'),
             array(
                 'fieldTypeConstraints',
                 new FieldTypeConstraints(
@@ -105,22 +107,23 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
                                 'numRows' => 0,
                                 'tagPreset' => null,
                             )
-                        )
+                        ),
                     )
-                )
+                ),
             ),
         );
     }
 
     /**
-     * Get initial field value
+     * Get initial field value.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
     public function getInitialValue()
     {
-        $xml = new DOMDocument;
-        $xml->loadXML( '<?xml version="1.0" encoding="utf-8"?><section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Paragraph content…</paragraph></section>' );
+        $xml = new DOMDocument();
+        $xml->loadXML('<?xml version="1.0" encoding="utf-8"?><section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Paragraph content…</paragraph></section>');
+
         return new FieldValue(
             array(
                 'data' => $xml,
@@ -139,8 +142,9 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        $xml = new DOMDocument;
-        $xml->loadXML( '<?xml version="1.0" encoding="utf-8"?><section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Some different content…</paragraph></section>' );
+        $xml = new DOMDocument();
+        $xml->loadXML('<?xml version="1.0" encoding="utf-8"?><section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Some different content…</paragraph></section>');
+
         return new FieldValue(
             array(
                 'data' => $xml,
@@ -150,4 +154,3 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
         );
     }
 }
-

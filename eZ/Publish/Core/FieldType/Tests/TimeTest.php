@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the TimeTest class
+ * File containing the TimeTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -33,7 +35,7 @@ class TimeTest extends FieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         $fieldType = new Time();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
     }
@@ -56,25 +58,23 @@ class TimeTest extends FieldTypeTest
     protected function getSettingsSchemaExpectation()
     {
         return array(
-            "useSeconds" => array(
-                "type" => "bool",
-                "default" => false
+            'useSeconds' => array(
+                'type' => 'bool',
+                'default' => false,
             ),
-            "defaultType" => array(
-                "type" => "choice",
-                "default" => Time::DEFAULT_EMPTY
-            )
+            'defaultType' => array(
+                'type' => 'choice',
+                'default' => Time::DEFAULT_EMPTY,
+            ),
         );
     }
 
     /**
      * Returns the empty value expected from the field type.
-     *
-     * @return void
      */
     protected function getEmptyValueExpectation()
     {
-        return new TimeValue;
+        return new TimeValue();
     }
 
     /**
@@ -151,39 +151,39 @@ class TimeTest extends FieldTypeTest
             ),
             array(
                 '2012-08-28 12:20',
-                new TimeValue( 44400 ),
+                new TimeValue(44400),
             ),
             array(
                 '2012-08-28 12:20 Europe/Berlin',
-                new TimeValue( 44400 ),
+                new TimeValue(44400),
             ),
             array(
                 '2012-08-28 12:20 Asia/Sakhalin',
-                new TimeValue( 44400 ),
+                new TimeValue(44400),
             ),
             array(
                 // Set $dateTime to proper time for correct offset
-                $dateTime->setTimestamp( 1372896001 )->getTimestamp(),
+                $dateTime->setTimestamp(1372896001)->getTimestamp(),
                 // Correct for negative offset
-                new TimeValue( ( $secondsInDay + $dateTime->getOffset() + 1 ) % $secondsInDay ),
+                new TimeValue(($secondsInDay + $dateTime->getOffset() + 1) % $secondsInDay),
             ),
             array(
-                TimeValue::fromTimestamp( $timestamp = 1346149200 ),
+                TimeValue::fromTimestamp($timestamp = 1346149200),
                 new TimeValue(
-                    $dateTime->setTimestamp( $timestamp )->getTimestamp() - $dateTime->setTime( 0, 0, 0 )->getTimestamp()
+                    $dateTime->setTimestamp($timestamp)->getTimestamp() - $dateTime->setTime(0, 0, 0)->getTimestamp()
                 ),
             ),
             array(
                 clone $dateTime,
                 new TimeValue(
-                    $dateTime->getTimestamp() - $dateTime->setTime( 0, 0, 0 )->getTimestamp()
+                    $dateTime->getTimestamp() - $dateTime->setTime(0, 0, 0)->getTimestamp()
                 ),
             ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -225,14 +225,14 @@ class TimeTest extends FieldTypeTest
                 null,
             ),
             array(
-                new TimeValue( 200 ),
+                new TimeValue(200),
                 200,
             ),
         );
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -275,7 +275,7 @@ class TimeTest extends FieldTypeTest
             ),
             array(
                 200,
-                new TimeValue( 200 ),
+                new TimeValue(200),
             ),
         );
     }
@@ -306,19 +306,19 @@ class TimeTest extends FieldTypeTest
     {
         return array(
             array(
-                array()
+                array(),
             ),
             array(
                 array(
                     'useSeconds' => true,
                     'defaultType' => Time::DEFAULT_EMPTY,
-                )
+                ),
             ),
             array(
                 array(
                     'useSeconds' => false,
                     'defaultType' => Time::DEFAULT_CURRENT_TIME,
-                )
+                ),
             ),
         );
     }
@@ -353,13 +353,13 @@ class TimeTest extends FieldTypeTest
                 array(
                     // useSeconds must be bool
                     'useSeconds' => 23,
-                )
+                ),
             ),
             array(
                 array(
                     // defaultType must be constant
                     'defaultType' => 42,
-                )
+                ),
             ),
         );
     }
@@ -372,8 +372,8 @@ class TimeTest extends FieldTypeTest
     public function provideDataForGetName()
     {
         return array(
-            array( $this->getEmptyValueExpectation(), '' ),
-            array( new TimeValue( 200 ), '12:03:20 am' )
+            array($this->getEmptyValueExpectation(), ''),
+            array(new TimeValue(200), '12:03:20 am'),
         );
     }
 }

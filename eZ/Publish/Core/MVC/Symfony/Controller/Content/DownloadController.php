@@ -1,7 +1,9 @@
 <?php
+
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
@@ -25,7 +27,7 @@ class DownloadController extends Controller
     /** @var \eZ\Publish\Core\Helper\TranslationHelper */
     private $translationHelper;
 
-    public function __construct( ContentService $contentService, IOService $ioService, TranslationHelper $translationHelper )
+    public function __construct(ContentService $contentService, IOService $ioService, TranslationHelper $translationHelper)
     {
         $this->contentService = $contentService;
         $this->ioService = $ioService;
@@ -40,30 +42,28 @@ class DownloadController extends Controller
      *
      * @return \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
      */
-    public function downloadBinaryFileAction( $contentId, $fieldIdentifier, $filename, Request $request )
+    public function downloadBinaryFileAction($contentId, $fieldIdentifier, $filename, Request $request)
     {
-        if ( $request->query->has( 'version' ) )
-        {
-            $content = $this->contentService->loadContent( $contentId, null, $request->query->get( 'version' ) );
-        }
-        else
-        {
-            $content = $this->contentService->loadContent( $contentId );
+        if ($request->query->has('version')) {
+            $content = $this->contentService->loadContent($contentId, null, $request->query->get('version'));
+        } else {
+            $content = $this->contentService->loadContent($contentId);
         }
 
         $field = $this->translationHelper->getTranslatedField(
-            $content, $fieldIdentifier,
-            $request->query->has( 'inLanguage' ) ? $request->query->get( 'inLanguage' ) : null
+            $content,
+            $fieldIdentifier,
+            $request->query->has('inLanguage') ? $request->query->get('inLanguage') : null
         );
-        if ( !$field instanceof Field )
-        {
+        if (!$field instanceof Field) {
             throw new InvalidArgumentException(
                 "'{$fieldIdentifier}' field not present on content #{$content->contentInfo->id} '{$content->contentInfo->name}'"
             );
         }
 
-        $response = new BinaryStreamResponse( $this->ioService->loadBinaryFile( $field->value->id ), $this->ioService );
-        $response->setContentDisposition( ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename );
+        $response = new BinaryStreamResponse($this->ioService->loadBinaryFile($field->value->id), $this->ioService);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
+
         return $response;
     }
 }

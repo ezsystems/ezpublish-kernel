@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,27 +17,27 @@ use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 class SectionInputTest extends BaseTest
 {
     /**
-     * Tests the SectionInput parser
+     * Tests the SectionInput parser.
      */
     public function testParse()
     {
         $inputArray = array(
-            'name'       => 'Name Foo',
+            'name' => 'Name Foo',
             'identifier' => 'Identifier Bar',
         );
 
         $sectionInput = $this->getParser();
-        $result = $sectionInput->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $sectionInput->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertEquals(
-            new SectionCreateStruct( $inputArray ),
+            new SectionCreateStruct($inputArray),
             $result,
             'SectionCreateStruct not created correctly.'
         );
     }
 
     /**
-     * Test SectionInput parser throwing exception on missing identifier
+     * Test SectionInput parser throwing exception on missing identifier.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'identifier' attribute for SectionInput.
@@ -43,15 +45,15 @@ class SectionInputTest extends BaseTest
     public function testParseExceptionOnMissingIdentifier()
     {
         $inputArray = array(
-            'name'       => 'Name Foo',
+            'name' => 'Name Foo',
         );
 
         $sectionInput = $this->getParser();
-        $sectionInput->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $sectionInput->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test SectionInput parser throwing exception on missing name
+     * Test SectionInput parser throwing exception on missing name.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'name' attribute for SectionInput.
@@ -63,11 +65,11 @@ class SectionInputTest extends BaseTest
         );
 
         $sectionInput = $this->getParser();
-        $sectionInput->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $sectionInput->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Returns the section input parser
+     * Returns the section input parser.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\SectionInput
      */
@@ -79,7 +81,7 @@ class SectionInputTest extends BaseTest
     }
 
     /**
-     * Get the section service mock object
+     * Get the section service mock object.
      *
      * @return \eZ\Publish\API\Repository\SectionService
      */
@@ -93,10 +95,10 @@ class SectionInputTest extends BaseTest
             false
         );
 
-        $sectionServiceMock->expects( $this->any() )
-            ->method( 'newSectionCreateStruct' )
+        $sectionServiceMock->expects($this->any())
+            ->method('newSectionCreateStruct')
             ->will(
-                $this->returnValue( new SectionCreateStruct() )
+                $this->returnValue(new SectionCreateStruct())
             );
 
         return $sectionServiceMock;

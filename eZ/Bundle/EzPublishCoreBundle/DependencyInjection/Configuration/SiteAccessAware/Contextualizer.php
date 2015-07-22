@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the Contextualizer class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -47,8 +49,7 @@ class Contextualizer implements ContextualizerInterface
         $siteAccessNodeName,
         array $availableSiteAccesses,
         array $groupsBySiteAccess
-    )
-    {
+    ) {
         $this->container = $containerBuilder;
         $this->namespace = $namespace;
         $this->siteAccessNodeName = $siteAccessNodeName;
@@ -56,26 +57,24 @@ class Contextualizer implements ContextualizerInterface
         $this->groupsBySiteAccess = $groupsBySiteAccess;
     }
 
-    public function setContextualParameter( $parameterName, $scope, $value )
+    public function setContextualParameter($parameterName, $scope, $value)
     {
-        $this->container->setParameter( "$this->namespace.$scope.$parameterName", $value );
+        $this->container->setParameter("$this->namespace.$scope.$parameterName", $value);
     }
 
-    public function mapSetting( $id, array $config )
+    public function mapSetting($id, array $config)
     {
-        foreach ( $config[$this->siteAccessNodeName] as $currentScope => $scopeSettings )
-        {
-            if ( isset( $scopeSettings[$id] ) )
-            {
-                $this->setContextualParameter( $id, $currentScope, $scopeSettings[$id] );
+        foreach ($config[$this->siteAccessNodeName] as $currentScope => $scopeSettings) {
+            if (isset($scopeSettings[$id])) {
+                $this->setContextualParameter($id, $currentScope, $scopeSettings[$id]);
             }
         }
     }
 
-    public function mapConfigArray( $id, array $config, $options = 0 )
+    public function mapConfigArray($id, array $config, $options = 0)
     {
-        $this->mapReservedScopeArray( $id, $config, ConfigResolver::SCOPE_DEFAULT );
-        $this->mapReservedScopeArray( $id, $config, ConfigResolver::SCOPE_GLOBAL );
+        $this->mapReservedScopeArray($id, $config, ConfigResolver::SCOPE_DEFAULT);
+        $this->mapReservedScopeArray($id, $config, ConfigResolver::SCOPE_GLOBAL);
         $defaultSettings = $this->getContainerParameter(
             $this->namespace . '.' . ConfigResolver::SCOPE_DEFAULT . '.' . $id,
             array()
@@ -85,41 +84,38 @@ class Contextualizer implements ContextualizerInterface
             array()
         );
 
-        foreach ( $this->availableSiteAccesses as $scope )
-        {
+        foreach ($this->availableSiteAccesses as $scope) {
             // for a siteaccess, we have to merge the default value,
             // the group value(s), the siteaccess value and the global
             // value of the settings.
             $groupsSettings = array();
-            if ( isset( $this->groupsBySiteAccess[$scope] ) && is_array( $this->groupsBySiteAccess[$scope] ) )
-            {
+            if (isset($this->groupsBySiteAccess[$scope]) && is_array($this->groupsBySiteAccess[$scope])) {
                 $groupsSettings = $this->groupsArraySetting(
-                    $this->groupsBySiteAccess[$scope], $id,
-                    $config, $options & static::MERGE_FROM_SECOND_LEVEL
+                    $this->groupsBySiteAccess[$scope],
+                    $id,
+                    $config,
+                    $options & static::MERGE_FROM_SECOND_LEVEL
                 );
             }
 
             $scopeSettings = array();
-            if ( isset( $config[$this->siteAccessNodeName][$scope][$id] ) )
-            {
+            if (isset($config[$this->siteAccessNodeName][$scope][$id])) {
                 $scopeSettings = $config[$this->siteAccessNodeName][$scope][$id];
             }
 
-            if ( $options & static::MERGE_FROM_SECOND_LEVEL )
-            {
+            if ($options & static::MERGE_FROM_SECOND_LEVEL) {
                 // array_merge() has to be used because we don't
                 // know whether we have a hash or a plain array
                 $keys1 = array_unique(
                     array_merge(
-                        array_keys( $defaultSettings ),
-                        array_keys( $groupsSettings ),
-                        array_keys( $scopeSettings ),
-                        array_keys( $globalSettings )
+                        array_keys($defaultSettings),
+                        array_keys($groupsSettings),
+                        array_keys($scopeSettings),
+                        array_keys($globalSettings)
                     )
                 );
                 $mergedSettings = array();
-                foreach ( $keys1 as $key )
-                {
+                foreach ($keys1 as $key) {
                     // Only merge if actual setting is an array.
                     // We assume default setting to be a clear reference for this.
                     // If the setting is not an array, we copy the right value, in respect to the precedence:
@@ -127,38 +123,26 @@ class Contextualizer implements ContextualizerInterface
                     // 2. SiteAccess
                     // 3. Group
                     // 4. default
-                    if ( array_key_exists( $key, $defaultSettings ) && !is_array( $defaultSettings[$key] ) )
-                    {
-                        if ( array_key_exists( $key, $globalSettings ) )
-                        {
+                    if (array_key_exists($key, $defaultSettings) && !is_array($defaultSettings[$key])) {
+                        if (array_key_exists($key, $globalSettings)) {
                             $mergedSettings[$key] = $globalSettings[$key];
-                        }
-                        else if ( array_key_exists( $key, $scopeSettings ) )
-                        {
+                        } elseif (array_key_exists($key, $scopeSettings)) {
                             $mergedSettings[$key] = $scopeSettings[$key];
-                        }
-                        else if ( array_key_exists( $key, $groupsSettings ) )
-                        {
+                        } elseif (array_key_exists($key, $groupsSettings)) {
                             $mergedSettings[$key] = $groupsSettings[$key];
-                        }
-                        else
-                        {
+                        } else {
                             $mergedSettings[$key] = $defaultSettings[$key];
                         }
-                    }
-                    else
-                    {
+                    } else {
                         $mergedSettings[$key] = array_merge(
-                            isset( $defaultSettings[$key] ) ? $defaultSettings[$key] : array(),
-                            isset( $groupsSettings[$key] ) ? $groupsSettings[$key] : array(),
-                            isset( $scopeSettings[$key] ) ? $scopeSettings[$key] : array(),
-                            isset( $globalSettings[$key] ) ? $globalSettings[$key] : array()
+                            isset($defaultSettings[$key]) ? $defaultSettings[$key] : array(),
+                            isset($groupsSettings[$key]) ? $groupsSettings[$key] : array(),
+                            isset($scopeSettings[$key]) ? $scopeSettings[$key] : array(),
+                            isset($globalSettings[$key]) ? $globalSettings[$key] : array()
                         );
                     }
                 }
-            }
-            else
-            {
+            } else {
                 $mergedSettings = array_merge(
                     $defaultSettings,
                     $groupsSettings,
@@ -167,31 +151,29 @@ class Contextualizer implements ContextualizerInterface
                 );
             }
 
-            if ( $options & static::UNIQUE )
-            {
+            if ($options & static::UNIQUE) {
                 $mergedSettings = array_values(
-                    array_unique( $mergedSettings )
+                    array_unique($mergedSettings)
                 );
             }
 
-            $this->container->setParameter( "$this->namespace.$scope.$id", $mergedSettings );
+            $this->container->setParameter("$this->namespace.$scope.$id", $mergedSettings);
         }
     }
 
     /**
      * Returns the value under the $id in the $container. if the container does
-     * not known this $id, returns $default
+     * not known this $id, returns $default.
      *
      * @param string $id
      * @param mixed $default
      *
      * @return mixed
      */
-    protected function getContainerParameter( $id, $default = null )
+    protected function getContainerParameter($id, $default = null)
     {
-        if ( $this->container->hasParameter( $id ) )
-        {
-            return $this->container->getParameter( $id );
+        if ($this->container->hasParameter($id)) {
+            return $this->container->getParameter($id);
         }
 
         return $default;
@@ -207,24 +189,17 @@ class Contextualizer implements ContextualizerInterface
      *
      * @return array
      */
-    private function groupsArraySetting( array $groups, $id, array $config, $options = 0 )
+    private function groupsArraySetting(array $groups, $id, array $config, $options = 0)
     {
         $groupsSettings = array();
-        sort( $groups );
-        foreach ( $groups as $group )
-        {
-            if ( isset( $config[$this->siteAccessNodeName][$group][$id] ) )
-            {
-                if ( $options & static::MERGE_FROM_SECOND_LEVEL )
-                {
-                    foreach ( array_keys( $config[$this->siteAccessNodeName][$group][$id] ) as $key )
-                    {
-                        if ( !isset( $groupsSettings[$key] ) )
-                        {
+        sort($groups);
+        foreach ($groups as $group) {
+            if (isset($config[$this->siteAccessNodeName][$group][$id])) {
+                if ($options & static::MERGE_FROM_SECOND_LEVEL) {
+                    foreach (array_keys($config[$this->siteAccessNodeName][$group][$id]) as $key) {
+                        if (!isset($groupsSettings[$key])) {
                             $groupsSettings[$key] = $config[$this->siteAccessNodeName][$group][$id][$key];
-                        }
-                        else
-                        {
+                        } else {
                             // array_merge() has to be used because we don't
                             // know whether we have a hash or a plain array
                             $groupsSettings[$key] = array_merge(
@@ -233,9 +208,7 @@ class Contextualizer implements ContextualizerInterface
                             );
                         }
                     }
-                }
-                else
-                {
+                } else {
                     // array_merge() has to be used because we don't
                     // know whether we have a hash or a plain array
                     $groupsSettings = array_merge(
@@ -245,6 +218,7 @@ class Contextualizer implements ContextualizerInterface
                 }
             }
         }
+
         return $groupsSettings;
     }
 
@@ -256,27 +230,25 @@ class Contextualizer implements ContextualizerInterface
      * @param array $config
      * @param string $scope
      */
-    private function mapReservedScopeArray( $id, array $config, $scope )
+    private function mapReservedScopeArray($id, array $config, $scope)
     {
         if (
-            isset( $config[$this->siteAccessNodeName][$scope][$id] )
-            && !empty( $config[$this->siteAccessNodeName][$scope][$id] )
-        )
-        {
+            isset($config[$this->siteAccessNodeName][$scope][$id])
+            && !empty($config[$this->siteAccessNodeName][$scope][$id])
+        ) {
             $key = "$this->namespace.$scope.$id";
             $value = $config[$this->siteAccessNodeName][$scope][$id];
-            if ( $this->container->hasParameter( $key ) )
-            {
+            if ($this->container->hasParameter($key)) {
                 $value = array_merge(
-                    $this->container->getParameter( $key ),
+                    $this->container->getParameter($key),
                     $value
                 );
             }
-            $this->container->setParameter( $key, $value );
+            $this->container->setParameter($key, $value);
         }
     }
 
-    public function setContainer( ContainerInterface $container )
+    public function setContainer(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -286,7 +258,7 @@ class Contextualizer implements ContextualizerInterface
         return $this->container;
     }
 
-    public function setSiteAccessNodeName( $scopeNodeName )
+    public function setSiteAccessNodeName($scopeNodeName)
     {
         $this->siteAccessNodeName = $scopeNodeName;
     }
@@ -296,7 +268,7 @@ class Contextualizer implements ContextualizerInterface
         return $this->siteAccessNodeName;
     }
 
-    public function setNamespace( $namespace )
+    public function setNamespace($namespace)
     {
         $this->namespace = $namespace;
     }
@@ -306,7 +278,7 @@ class Contextualizer implements ContextualizerInterface
         return $this->namespace;
     }
 
-    public function setAvailableSiteAccesses( array $availableSiteAccesses )
+    public function setAvailableSiteAccesses(array $availableSiteAccesses)
     {
         $this->availableSiteAccesses = $availableSiteAccesses;
     }
@@ -316,7 +288,7 @@ class Contextualizer implements ContextualizerInterface
         return $this->availableSiteAccesses;
     }
 
-    public function setGroupsBySiteAccess( array $groupsBySiteAccess )
+    public function setGroupsBySiteAccess(array $groupsBySiteAccess)
     {
         $this->groupsBySiteAccess = $groupsBySiteAccess;
     }

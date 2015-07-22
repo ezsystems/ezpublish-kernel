@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\TrashBase class
+ * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\TrashBase class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,12 +22,13 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
 
 /**
- * Test case for Trash Service
+ * Test case for Trash Service.
  */
 abstract class TrashBase extends BaseServiceTest
 {
     /**
-     * Test a new class and default values on properties
+     * Test a new class and default values on properties.
+     *
      * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::__construct
      */
     public function testNewClass()
@@ -50,72 +53,68 @@ abstract class TrashBase extends BaseServiceTest
     }
 
     /**
-     * Test retrieving missing property
+     * Test retrieving missing property.
+     *
      * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::__get
      */
     public function testMissingProperty()
     {
-        try
-        {
+        try {
             $trashItem = new TrashItem();
             $value = $trashItem->notDefined;
-            self::fail( "Succeeded getting non existing property" );
-        }
-        catch ( PropertyNotFound $e )
-        {
+            self::fail('Succeeded getting non existing property');
+        } catch (PropertyNotFound $e) {
         }
     }
 
     /**
-     * Test setting read only property
+     * Test setting read only property.
+     *
      * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::__set
      */
     public function testReadOnlyProperty()
     {
-        try
-        {
+        try {
             $trashItem = new TrashItem();
             $trashItem->id = 42;
-            self::fail( "Succeeded setting read only property" );
-        }
-        catch ( PropertyReadOnlyException $e )
-        {
+            self::fail('Succeeded setting read only property');
+        } catch (PropertyReadOnlyException $e) {
         }
     }
 
     /**
-     * Test if property exists
+     * Test if property exists.
+     *
      * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::__isset
      */
     public function testIsPropertySet()
     {
         $trashItem = new TrashItem();
-        $value = isset( $trashItem->notDefined );
-        self::assertEquals( false, $value );
+        $value = isset($trashItem->notDefined);
+        self::assertEquals(false, $value);
 
-        $value = isset( $trashItem->id );
-        self::assertEquals( true, $value );
+        $value = isset($trashItem->id);
+        self::assertEquals(true, $value);
     }
 
     /**
-     * Test unsetting a property
+     * Test unsetting a property.
+     *
      * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::__unset
      */
     public function testUnsetProperty()
     {
-        $trashItem = new TrashItem( array( "id" => 2 ) );
-        try
-        {
-            unset( $trashItem->id );
-            self::fail( 'Unsetting read-only property succeeded' );
-        }
-        catch ( PropertyReadOnlyException $e )
-        {
+        $trashItem = new TrashItem(array('id' => 2));
+        try {
+            unset($trashItem->id);
+            self::fail('Unsetting read-only property succeeded');
+        } catch (PropertyReadOnlyException $e) {
         }
     }
 
     /**
-     * Test loading a trash item
+     * Test loading a trash item.
+     *
      * @covers \eZ\Publish\API\Repository\TrashService::loadTrashItem
      */
     public function testLoadTrashItem()
@@ -123,10 +122,10 @@ abstract class TrashBase extends BaseServiceTest
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 
-        $trashItem = $location = $trashService->trash( $locationService->loadLocation( 44 ) );
-        $loadedTrashItem = $trashService->loadTrashItem( $location->id );
+        $trashItem = $location = $trashService->trash($locationService->loadLocation(44));
+        $loadedTrashItem = $trashService->loadTrashItem($location->id);
 
-        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem', $trashItem );
+        self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem', $trashItem);
 
         self::assertSameClassPropertiesCorrect(
             array(
@@ -147,18 +146,20 @@ abstract class TrashBase extends BaseServiceTest
     }
 
     /**
-     * Test loading a trash item throwing NotFoundException
+     * Test loading a trash item throwing NotFoundException.
+     *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @covers \eZ\Publish\API\Repository\TrashService::loadTrashItem
      */
     public function testLoadTrashItemThrowsNotFoundException()
     {
         $trashService = $this->repository->getTrashService();
-        $trashService->loadTrashItem( 44 );
+        $trashService->loadTrashItem(44);
     }
 
     /**
-     * Test sending a location to trash
+     * Test sending a location to trash.
+     *
      * @covers \eZ\Publish\API\Repository\TrashService::trash
      */
     public function testTrash()
@@ -166,10 +167,10 @@ abstract class TrashBase extends BaseServiceTest
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 
-        $location = $locationService->loadLocation( 44 );
-        $trashItem = $trashService->trash( $location );
+        $location = $locationService->loadLocation(44);
+        $trashItem = $trashService->trash($location);
 
-        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem', $trashItem );
+        self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem', $trashItem);
 
         self::assertSameClassPropertiesCorrect(
             array(
@@ -182,7 +183,7 @@ abstract class TrashBase extends BaseServiceTest
                 'pathString',
                 'depth',
                 'sortField',
-                'sortOrder'
+                'sortOrder',
             ),
             $location,
             $trashItem
@@ -190,7 +191,8 @@ abstract class TrashBase extends BaseServiceTest
     }
 
     /**
-     * Test sending a location to trash
+     * Test sending a location to trash.
+     *
      * @covers \eZ\Publish\API\Repository\TrashService::trash
      */
     public function testTrashUpdatesMainLocation()
@@ -199,26 +201,27 @@ abstract class TrashBase extends BaseServiceTest
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 
-        $contentInfo = $contentService->loadContentInfo( 42 );
+        $contentInfo = $contentService->loadContentInfo(42);
 
         // Create additional location that will become new main location
         $location = $locationService->createLocation(
             $contentInfo,
-            new LocationCreateStruct( array( "parentLocationId" => 2 ) )
+            new LocationCreateStruct(array('parentLocationId' => 2))
         );
 
         $trashService->trash(
-            $locationService->loadLocation( $contentInfo->mainLocationId )
+            $locationService->loadLocation($contentInfo->mainLocationId)
         );
 
         self::assertEquals(
             $location->id,
-            $contentService->loadContentInfo( 42 )->mainLocationId
+            $contentService->loadContentInfo(42)->mainLocationId
         );
     }
 
     /**
-     * Test sending a location to trash
+     * Test sending a location to trash.
+     *
      * @covers \eZ\Publish\API\Repository\TrashService::trash
      */
     public function testTrashReturnsNull()
@@ -229,17 +232,18 @@ abstract class TrashBase extends BaseServiceTest
 
         // Create additional location to trash
         $location = $locationService->createLocation(
-            $contentService->loadContentInfo( 42 ),
-            new LocationCreateStruct( array( "parentLocationId" => 2 ) )
+            $contentService->loadContentInfo(42),
+            new LocationCreateStruct(array('parentLocationId' => 2))
         );
 
-        $trashItem = $trashService->trash( $location );
+        $trashItem = $trashService->trash($location);
 
-        self::assertNull( $trashItem );
+        self::assertNull($trashItem);
     }
 
     /**
-     * Test recovering a location from trash to original location
+     * Test recovering a location from trash to original location.
+     *
      * @covers \eZ\Publish\API\Repository\TrashService::recover
      */
     public function testRecover()
@@ -247,12 +251,12 @@ abstract class TrashBase extends BaseServiceTest
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 
-        $location = $locationService->loadLocation( 44 );
-        $trashItem = $trashService->trash( $location );
+        $location = $locationService->loadLocation(44);
+        $trashItem = $trashService->trash($location);
 
-        $recoveredLocation = $trashService->recover( $trashItem );
+        $recoveredLocation = $trashService->recover($trashItem);
 
-        self::assertInstanceOf( '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location', $recoveredLocation );
+        self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location', $recoveredLocation);
 
         self::assertSameClassPropertiesCorrect(
             array(
@@ -263,22 +267,23 @@ abstract class TrashBase extends BaseServiceTest
                 'parentLocationId',
                 'depth',
                 'sortField',
-                'sortOrder'
+                'sortOrder',
             ),
             $location,
             $recoveredLocation
         );
 
-        $parentLocation = $locationService->loadLocation( $location->parentLocationId );
+        $parentLocation = $locationService->loadLocation($location->parentLocationId);
         $newPathString = $parentLocation->pathString . $recoveredLocation->id . '/';
 
-        self::assertEquals( $newPathString, $recoveredLocation->pathString );
-        self::assertGreaterThan( 0, $recoveredLocation->id );
-        self::assertEquals( $recoveredLocation->id, $recoveredLocation->contentInfo->mainLocationId );
+        self::assertEquals($newPathString, $recoveredLocation->pathString);
+        self::assertGreaterThan(0, $recoveredLocation->id);
+        self::assertEquals($recoveredLocation->id, $recoveredLocation->contentInfo->mainLocationId);
     }
 
     /**
-     * Test recovering a non existing trash item
+     * Test recovering a non existing trash item.
+     *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @covers \eZ\Publish\API\Repository\TrashService::recover
      */
@@ -286,61 +291,63 @@ abstract class TrashBase extends BaseServiceTest
     {
         $trashService = $this->repository->getTrashService();
 
-        $trashItem = new TrashItem( array( "id" => APIBaseTest::DB_INT_MAX, "parentLocationId" => APIBaseTest::DB_INT_MAX ) );
-        $trashService->recover( $trashItem );
+        $trashItem = new TrashItem(array('id' => APIBaseTest::DB_INT_MAX, 'parentLocationId' => APIBaseTest::DB_INT_MAX));
+        $trashService->recover($trashItem);
     }
 
     /**
-     * Test recovering a location from trash to different location
+     * Test recovering a location from trash to different location.
+     *
      * @covers \eZ\Publish\API\Repository\TrashService::recover
      */
     public function testRecoverToDifferentLocation()
     {
         // @todo: remove creating test locations when field types are fully functional
         // Create test locations
-        $deleteLocationId = $this->createTestContentLocation( 5 )->contentInfo->mainLocationId;
-        $recoverLocationId = $this->createTestContentLocation( 5 )->contentInfo->mainLocationId;
+        $deleteLocationId = $this->createTestContentLocation(5)->contentInfo->mainLocationId;
+        $recoverLocationId = $this->createTestContentLocation(5)->contentInfo->mainLocationId;
 
         /* BEGIN: Use Case */
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 
-        $location = $locationService->loadLocation( $deleteLocationId );
-        $trashItem = $trashService->trash( $location );
+        $location = $locationService->loadLocation($deleteLocationId);
+        $trashItem = $trashService->trash($location);
 
-        $newParentLocation = $locationService->loadLocation( $recoverLocationId );
+        $newParentLocation = $locationService->loadLocation($recoverLocationId);
 
-        $recoveredLocation = $trashService->recover( $trashItem, $newParentLocation );
+        $recoveredLocation = $trashService->recover($trashItem, $newParentLocation);
         /* END: Use Case */
 
-        self::assertInstanceOf( "\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location", $recoveredLocation );
+        self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location', $recoveredLocation);
 
         self::assertSameClassPropertiesCorrect(
             array(
-                "priority",
-                "hidden",
-                "invisible",
-                "remoteId",
-                "depth",
-                "sortField",
-                "sortOrder"
+                'priority',
+                'hidden',
+                'invisible',
+                'remoteId',
+                'depth',
+                'sortField',
+                'sortOrder',
             ),
             $location,
             $recoveredLocation,
-            array( "depth" )
+            array('depth')
         );
 
-        $parentLocation = $locationService->loadLocation( $recoveredLocation->parentLocationId );
-        $newPathString = $parentLocation->pathString . $recoveredLocation->id . "/";
+        $parentLocation = $locationService->loadLocation($recoveredLocation->parentLocationId);
+        $newPathString = $parentLocation->pathString . $recoveredLocation->id . '/';
 
-        self::assertEquals( $parentLocation->depth + 1, $recoveredLocation->depth );
-        self::assertEquals( $newPathString, $recoveredLocation->pathString );
-        self::assertGreaterThan( 0, $recoveredLocation->id );
-        self::assertEquals( $newParentLocation->id, $recoveredLocation->parentLocationId );
+        self::assertEquals($parentLocation->depth + 1, $recoveredLocation->depth);
+        self::assertEquals($newPathString, $recoveredLocation->pathString);
+        self::assertGreaterThan(0, $recoveredLocation->id);
+        self::assertEquals($newParentLocation->id, $recoveredLocation->parentLocationId);
     }
 
     /**
-     * Test recovering a location from trash to non existing location
+     * Test recovering a location from trash to non existing location.
+     *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @covers \eZ\Publish\API\Repository\TrashService::recover
      */
@@ -349,20 +356,21 @@ abstract class TrashBase extends BaseServiceTest
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 
-        $location = $locationService->loadLocation( 44 );
-        $trashItem = $trashService->trash( $location );
+        $location = $locationService->loadLocation(44);
+        $trashItem = $trashService->trash($location);
 
         $newParentLocation = new Location(
             array(
-                "id" => APIBaseTest::DB_INT_MAX,
-                "parentLocationId" => APIBaseTest::DB_INT_MAX
+                'id' => APIBaseTest::DB_INT_MAX,
+                'parentLocationId' => APIBaseTest::DB_INT_MAX,
             )
         );
-        $trashService->recover( $trashItem, $newParentLocation );
+        $trashService->recover($trashItem, $newParentLocation);
     }
 
     /**
-     * Test deleting a trash item
+     * Test deleting a trash item.
+     *
      * @covers \eZ\Publish\API\Repository\TrashService::deleteTrashItem
      */
     public function testDeleteTrashItem()
@@ -370,24 +378,22 @@ abstract class TrashBase extends BaseServiceTest
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 
-        $location = $locationService->loadLocation( 44 );
-        $trashItem = $trashService->trash( $location );
+        $location = $locationService->loadLocation(44);
+        $trashItem = $trashService->trash($location);
 
-        $trashService->deleteTrashItem( $trashItem );
+        $trashService->deleteTrashItem($trashItem);
 
-        try
-        {
-            $trashService->loadTrashItem( $trashItem->id );
-            self::fail( "Succeeded loading deleted trash item" );
-        }
-        catch ( NotFoundException $e )
-        {
+        try {
+            $trashService->loadTrashItem($trashItem->id);
+            self::fail('Succeeded loading deleted trash item');
+        } catch (NotFoundException $e) {
             // Do nothing
         }
     }
 
     /**
-     * Test deleting a non existing trash item
+     * Test deleting a non existing trash item.
+     *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @covers \eZ\Publish\API\Repository\TrashService::deleteTrashItem
      */
@@ -395,38 +401,39 @@ abstract class TrashBase extends BaseServiceTest
     {
         $trashService = $this->repository->getTrashService();
 
-        $trashItem = new TrashItem( array( "id" => APIBaseTest::DB_INT_MAX ) );
-        $trashService->deleteTrashItem( $trashItem );
+        $trashItem = new TrashItem(array('id' => APIBaseTest::DB_INT_MAX));
+        $trashService->deleteTrashItem($trashItem);
     }
 
     /**
-     * Test searching for trash items
+     * Test searching for trash items.
+     *
      * @covers \eZ\Publish\API\Repository\TrashService::findTrashItems
      * @covers \eZ\Publish\API\Repository\TrashService::emptyTrash
      */
     public function testFindTrashItemsAndEmptyTrash()
     {
         // @todo: remove creating test location when field types are fully functional
-        $newLocationId = $this->createTestContentLocation( 5 )->contentInfo->mainLocationId;
+        $newLocationId = $this->createTestContentLocation(5)->contentInfo->mainLocationId;
 
         $locationService = $this->repository->getLocationService();
         $trashService = $this->repository->getTrashService();
 
-        $searchResult = $trashService->findTrashItems( new Query() );
+        $searchResult = $trashService->findTrashItems(new Query());
         $countBeforeTrashing = $searchResult->count;
 
-        $location = $locationService->loadLocation( $newLocationId );
-        $trashService->trash( $location );
+        $location = $locationService->loadLocation($newLocationId);
+        $trashService->trash($location);
 
-        $searchResult = $trashService->findTrashItems( new Query() );
+        $searchResult = $trashService->findTrashItems(new Query());
         $countAfterTrashing = $searchResult->count;
 
-        self::assertGreaterThan( $countBeforeTrashing, $countAfterTrashing );
+        self::assertGreaterThan($countBeforeTrashing, $countAfterTrashing);
 
         $trashService->emptyTrash();
-        $searchResult = $trashService->findTrashItems( new Query() );
+        $searchResult = $trashService->findTrashItems(new Query());
 
-        self::assertEquals( 0, $searchResult->count );
+        self::assertEquals(0, $searchResult->count);
     }
 
     /**
@@ -434,18 +441,18 @@ abstract class TrashBase extends BaseServiceTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    protected function createTestContentLocation( $parentLocationId )
+    protected function createTestContentLocation($parentLocationId)
     {
         $contentService = $this->repository->getContentService();
         $contentTypeService = $this->repository->getContentTypeService();
         // User Group content type
-        $contentType = $contentTypeService->loadContentType( 3 );
+        $contentType = $contentTypeService->loadContentType(3);
 
-        $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
-        $contentCreate->setField( "name", "dummy value" );
+        $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $contentCreate->setField('name', 'dummy value');
         $contentCreate->sectionId = 1;
         $contentCreate->ownerId = 14;
-        $contentCreate->remoteId = md5( uniqid( get_class( $this ), true ) );
+        $contentCreate->remoteId = md5(uniqid(get_class($this), true));
         $contentCreate->alwaysAvailable = true;
 
         $locationCreates = array(
@@ -453,12 +460,12 @@ abstract class TrashBase extends BaseServiceTest
                 array(
                     //priority = 0
                     //hidden = false
-                    "remoteId" => md5( uniqid( get_class( $this ), true ) ),
+                    'remoteId' => md5(uniqid(get_class($this), true)),
                     //sortField = Location::SORT_FIELD_NAME
                     //sortOrder = Location::SORT_ORDER_ASC
-                    "parentLocationId" => $parentLocationId
+                    'parentLocationId' => $parentLocationId,
                 )
-            )
+            ),
         );
 
         return $contentService->publishVersion(

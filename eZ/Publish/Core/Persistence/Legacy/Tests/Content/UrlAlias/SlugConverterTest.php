@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlAlias\SlugConverterTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlAlias\SlugConverterTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -33,7 +35,7 @@ class SlugConverterTest extends TestCase
         );
 
         $this->assertAttributeInternalType(
-            "array",
+            'array',
             'configuration',
             $slugConverter
         );
@@ -46,26 +48,26 @@ class SlugConverterTest extends TestCase
      */
     public function testConvert()
     {
-        $slugConverter = $this->getSlugConverterMock( array( "cleanupText" ) );
+        $slugConverter = $this->getSlugConverterMock(array('cleanupText'));
         $transformationProcessor = $this->getTransformationProcessorMock();
 
-        $text = "test text  č ";
-        $transformedText = "test text  c ";
-        $slug = "test_text_c";
+        $text = 'test text  č ';
+        $transformedText = 'test text  c ';
+        $slug = 'test_text_c';
 
-        $transformationProcessor->expects( $this->atLeastOnce() )
-            ->method( "transform" )
-            ->with( $text, array( "test_command1" ) )
-            ->will( $this->returnValue( $transformedText ) );
+        $transformationProcessor->expects($this->atLeastOnce())
+            ->method('transform')
+            ->with($text, array('test_command1'))
+            ->will($this->returnValue($transformedText));
 
-        $slugConverter->expects( $this->once() )
-            ->method( "cleanupText" )
-            ->with( $this->equalTo( $transformedText ), $this->equalTo( "test_cleanup1" ) )
-            ->will( $this->returnValue( $slug ) );
+        $slugConverter->expects($this->once())
+            ->method('cleanupText')
+            ->with($this->equalTo($transformedText), $this->equalTo('test_cleanup1'))
+            ->will($this->returnValue($slug));
 
         $this->assertEquals(
             $slug,
-            $slugConverter->convert( $text )
+            $slugConverter->convert($text)
         );
     }
 
@@ -76,26 +78,26 @@ class SlugConverterTest extends TestCase
      */
     public function testConvertWithDefaultTextFallback()
     {
-        $slugConverter = $this->getSlugConverterMock( array( "cleanupText" ) );
+        $slugConverter = $this->getSlugConverterMock(array('cleanupText'));
         $transformationProcessor = $this->getTransformationProcessorMock();
 
-        $defaultText = "test text  č ";
-        $transformedText = "test text  c ";
-        $slug = "test_text_c";
+        $defaultText = 'test text  č ';
+        $transformedText = 'test text  c ';
+        $slug = 'test_text_c';
 
-        $transformationProcessor->expects( $this->atLeastOnce() )
-            ->method( "transform" )
-            ->with( $defaultText, array( "test_command1" ) )
-            ->will( $this->returnValue( $transformedText ) );
+        $transformationProcessor->expects($this->atLeastOnce())
+            ->method('transform')
+            ->with($defaultText, array('test_command1'))
+            ->will($this->returnValue($transformedText));
 
-        $slugConverter->expects( $this->once() )
-            ->method( "cleanupText" )
-            ->with( $this->equalTo( $transformedText ), $this->equalTo( "test_cleanup1" ) )
-            ->will( $this->returnValue( $slug ) );
+        $slugConverter->expects($this->once())
+            ->method('cleanupText')
+            ->with($this->equalTo($transformedText), $this->equalTo('test_cleanup1'))
+            ->will($this->returnValue($slug));
 
         $this->assertEquals(
             $slug,
-            $slugConverter->convert( "", $defaultText )
+            $slugConverter->convert('', $defaultText)
         );
     }
 
@@ -106,36 +108,36 @@ class SlugConverterTest extends TestCase
      */
     public function testConvertWithGivenTransformation()
     {
-        $slugConverter = $this->getSlugConverterMock( array( "cleanupText" ) );
+        $slugConverter = $this->getSlugConverterMock(array('cleanupText'));
         $transformationProcessor = $this->getTransformationProcessorMock();
 
-        $text = "test text  č ";
-        $transformedText = "test text  c ";
-        $slug = "test_text_c";
+        $text = 'test text  č ';
+        $transformedText = 'test text  c ';
+        $slug = 'test_text_c';
 
-        $transformationProcessor->expects( $this->atLeastOnce() )
-            ->method( "transform" )
-            ->with( $text, array( "test_command2" ) )
-            ->will( $this->returnValue( $transformedText ) );
+        $transformationProcessor->expects($this->atLeastOnce())
+            ->method('transform')
+            ->with($text, array('test_command2'))
+            ->will($this->returnValue($transformedText));
 
-        $slugConverter->expects( $this->once() )
-            ->method( "cleanupText" )
-            ->with( $this->equalTo( $transformedText ), $this->equalTo( "test_cleanup2" ) )
-            ->will( $this->returnValue( $slug ) );
+        $slugConverter->expects($this->once())
+            ->method('cleanupText')
+            ->with($this->equalTo($transformedText), $this->equalTo('test_cleanup2'))
+            ->will($this->returnValue($slug));
 
         $this->assertEquals(
             $slug,
-            $slugConverter->convert( $text, "_1", "testTransformation2" )
+            $slugConverter->convert($text, '_1', 'testTransformation2')
         );
     }
 
     public function providerForTestGetUniqueCounterValue()
     {
         return array(
-            array( "reserved", true, 2 ),
-            array( "reserved", false, 1 ),
-            array( "not-reserved", true, 1 ),
-            array( "not-reserved", false, 1 ),
+            array('reserved', true, 2),
+            array('reserved', false, 1),
+            array('not-reserved', true, 1),
+            array('not-reserved', false, 1),
         );
     }
 
@@ -145,13 +147,13 @@ class SlugConverterTest extends TestCase
      * @dataProvider providerForTestGetUniqueCounterValue
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter::getUniqueCounterValue
      */
-    public function testGetUniqueCounterValue( $text, $isRootLevel, $returnValue )
+    public function testGetUniqueCounterValue($text, $isRootLevel, $returnValue)
     {
         $slugConverter = $this->getMockedSlugConverter();
 
         $this->assertEquals(
             $returnValue,
-            $slugConverter->getUniqueCounterValue( $text, $isRootLevel )
+            $slugConverter->getUniqueCounterValue($text, $isRootLevel)
         );
     }
 
@@ -159,23 +161,23 @@ class SlugConverterTest extends TestCase
      * @var array
      */
     protected $configuration = array(
-        "transformation" => "testTransformation1",
-        "transformationGroups" => array(
-            "testTransformation1" => array(
-                "commands" => array(
-                    "test_command1",
+        'transformation' => 'testTransformation1',
+        'transformationGroups' => array(
+            'testTransformation1' => array(
+                'commands' => array(
+                    'test_command1',
                 ),
-                "cleanupMethod" => "test_cleanup1",
+                'cleanupMethod' => 'test_cleanup1',
             ),
-            "testTransformation2" => array(
-                "commands" => array(
-                    "test_command2",
+            'testTransformation2' => array(
+                'commands' => array(
+                    'test_command2',
                 ),
-                "cleanupMethod" => "test_cleanup2",
+                'cleanupMethod' => 'test_cleanup2',
             ),
         ),
-        "reservedNames" => array(
-            "reserved",
+        'reservedNames' => array(
+            'reserved',
         ),
     );
 
@@ -199,8 +201,7 @@ class SlugConverterTest extends TestCase
      */
     protected function getMockedSlugConverter()
     {
-        if ( !isset( $this->slugConverter ) )
-        {
+        if (!isset($this->slugConverter)) {
             $this->slugConverter = new SlugConverter(
                 $this->getTransformationProcessorMock(),
                 $this->configuration
@@ -215,16 +216,15 @@ class SlugConverterTest extends TestCase
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getSlugConverterMock( array $methods = array() )
+    protected function getSlugConverterMock(array $methods = array())
     {
-        if ( !isset( $this->slugConverterMock ) )
-        {
+        if (!isset($this->slugConverterMock)) {
             $this->slugConverterMock = $this->getMock(
-                "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\SlugConverter",
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\SlugConverter',
                 $methods,
                 array(
                     $this->getTransformationProcessorMock(),
-                    $this->configuration
+                    $this->configuration,
                 )
             );
         }
@@ -237,16 +237,15 @@ class SlugConverterTest extends TestCase
      */
     protected function getTransformationProcessorMock()
     {
-        if ( !isset( $this->transformationProcessorMock ) )
-        {
+        if (!isset($this->transformationProcessorMock)) {
             $this->transformationProcessorMock = $this->getMockForAbstractClass(
-                "eZ\\Publish\\Core\\Persistence\\TransformationProcessor",
+                'eZ\\Publish\\Core\\Persistence\\TransformationProcessor',
                 array(),
                 '',
                 false,
                 true,
                 true,
-                array( "transform" )
+                array('transform')
             );
         }
 
@@ -260,6 +259,6 @@ class SlugConverterTest extends TestCase
      */
     public static function suite()
     {
-        return new \PHPUnit_Framework_TestSuite( __CLASS__ );
+        return new \PHPUnit_Framework_TestSuite(__CLASS__);
     }
 }

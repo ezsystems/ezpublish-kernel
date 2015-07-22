@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the UserWrapped class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -35,7 +37,7 @@ class UserWrapped implements UserInterface, EquatableInterface
      */
     private $apiUser;
 
-    public function __construct( CoreUserInterface $wrappedUser, APIUser $apiUser )
+    public function __construct(CoreUserInterface $wrappedUser, APIUser $apiUser)
     {
         $this->wrappedUser = $wrappedUser;
         $this->apiUser = $apiUser;
@@ -69,7 +71,7 @@ class UserWrapped implements UserInterface, EquatableInterface
     /**
      * @param \eZ\Publish\API\Repository\Values\User\User $apiUser
      */
-    public function setAPIUser( APIUser $apiUser )
+    public function setAPIUser(APIUser $apiUser)
     {
         $this->apiUser = $apiUser;
     }
@@ -85,7 +87,7 @@ class UserWrapped implements UserInterface, EquatableInterface
     /**
      * @param \Symfony\Component\Security\Core\User\UserInterface $wrappedUser
      */
-    public function setWrappedUser( CoreUserInterface $wrappedUser )
+    public function setWrappedUser(CoreUserInterface $wrappedUser)
     {
         $this->wrappedUser = $wrappedUser;
     }
@@ -123,8 +125,8 @@ class UserWrapped implements UserInterface, EquatableInterface
         $this->wrappedUser->eraseCredentials();
     }
 
-    public function isEqualTo( CoreUserInterface $user )
+    public function isEqualTo(CoreUserInterface $user)
     {
-        return $this->wrappedUser instanceof EquatableInterface ? $this->wrappedUser->isEqualTo( $user ) : true;
+        return $this->wrappedUser instanceof EquatableInterface ? $this->wrappedUser->isEqualTo($user) : true;
     }
 }

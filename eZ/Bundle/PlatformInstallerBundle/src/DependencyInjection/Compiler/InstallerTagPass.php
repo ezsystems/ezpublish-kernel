@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the ezpublish-kernel package.
  *
@@ -13,33 +14,29 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Compiles services tagged as ezplatform.installer to %ezplatform.installers%
+ * Compiles services tagged as ezplatform.installer to %ezplatform.installers%.
  */
 class InstallerTagPass implements CompilerPassInterface
 {
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
-        if ( !$container->hasDefinition( 'ezplatform.installer.install_command' ) )
-        {
+        if (!$container->hasDefinition('ezplatform.installer.install_command')) {
             return;
         }
 
-        $installCommandDef = $container->findDefinition( 'ezplatform.installer.install_command' );
+        $installCommandDef = $container->findDefinition('ezplatform.installer.install_command');
         $installers = [];
 
-        foreach ( $container->findTaggedServiceIds( 'ezplatform.installer' ) as $id => $tags )
-        {
-            foreach ( $tags as $tag )
-            {
-                if ( !isset( $tag['type'] ) )
-                {
-                    throw new \LogicException( "ezplatform.installer service tag needs a 'type' attribute to identify the installer. None given for $id." );
+        foreach ($container->findTaggedServiceIds('ezplatform.installer') as $id => $tags) {
+            foreach ($tags as $tag) {
+                if (!isset($tag['type'])) {
+                    throw new \LogicException("ezplatform.installer service tag needs a 'type' attribute to identify the installer. None given for $id.");
                 }
 
-                $installers[$tag['type']] = new Reference( $id );
+                $installers[$tag['type']] = new Reference($id);
             }
         }
 
-        $installCommandDef->replaceArgument( 1, $installers );
+        $installCommandDef->replaceArgument(1, $installers);
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\API\Repository\Values\User\Limitation\ParentUserGroupLimitation class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,7 +25,7 @@ use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 
 /**
- * ParentUserGroupLimitation is a Content limitation
+ * ParentUserGroupLimitation is a Content limitation.
  */
 class ParentUserGroupLimitationType extends AbstractPersistenceLimitationType implements SPILimitationTypeInterface
 {
@@ -36,32 +38,23 @@ class ParentUserGroupLimitationType extends AbstractPersistenceLimitationType im
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
      */
-    public function acceptValue( APILimitationValue $limitationValue )
+    public function acceptValue(APILimitationValue $limitationValue)
     {
-        if ( !$limitationValue instanceof APIParentUserGroupLimitation )
-        {
-            throw new InvalidArgumentType( "\$limitationValue", "APIParentUserGroupLimitation", $limitationValue );
-        }
-        else if ( !is_array( $limitationValue->limitationValues ) )
-        {
-            throw new InvalidArgumentType( "\$limitationValue->limitationValues", "array", $limitationValue->limitationValues );
+        if (!$limitationValue instanceof APIParentUserGroupLimitation) {
+            throw new InvalidArgumentType("\$limitationValue", 'APIParentUserGroupLimitation', $limitationValue);
+        } elseif (!is_array($limitationValue->limitationValues)) {
+            throw new InvalidArgumentType("\$limitationValue->limitationValues", 'array', $limitationValue->limitationValues);
         }
 
-        foreach ( $limitationValue->limitationValues as $key => $value )
-        {
+        foreach ($limitationValue->limitationValues as $key => $value) {
             // Accept a true value for b/c with 5.0
-            if ( $value === true )
-            {
+            if ($value === true) {
                 $limitationValue->limitationValues[$key] = 1;
-            }
-            // Cast integers passed as string to int
-            else if ( is_string( $value ) && ctype_digit( $value ) )
-            {
+            } elseif (is_string($value) && ctype_digit($value)) {
+                // Cast integers passed as string to int
                 $limitationValue->limitationValues[$key] = (int)$value;
-            }
-            else if ( !is_int( $value ) )
-            {
-                throw new InvalidArgumentType( "\$limitationValue->limitationValues[{$key}]", "int", $value );
+            } elseif (!is_int($value)) {
+                throw new InvalidArgumentType("\$limitationValue->limitationValues[{$key}]", 'int', $value);
             }
         }
     }
@@ -75,40 +68,39 @@ class ParentUserGroupLimitationType extends AbstractPersistenceLimitationType im
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( APILimitationValue $limitationValue )
+    public function validate(APILimitationValue $limitationValue)
     {
         $validationErrors = array();
-        foreach ( $limitationValue->limitationValues as $key => $value )
-        {
-            if ( $value !== 1 )
-            {
+        foreach ($limitationValue->limitationValues as $key => $value) {
+            if ($value !== 1) {
                 $validationErrors[] = new ValidationError(
                     "limitationValues[%key%] => '%value%' must be 1 (owner)",
                     null,
                     array(
-                        "value" => $value,
-                        "key" => $key
+                        'value' => $value,
+                        'key' => $key,
                     )
                 );
             }
         }
+
         return $validationErrors;
     }
 
     /**
-     * Create the Limitation Value
+     * Create the Limitation Value.
      *
      * @param mixed[] $limitationValues
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation
      */
-    public function buildValue( array $limitationValues )
+    public function buildValue(array $limitationValues)
     {
-        return new APIParentUserGroupLimitation( array( 'limitationValues' => $limitationValues ) );
+        return new APIParentUserGroupLimitation(array('limitationValues' => $limitationValues));
     }
 
     /**
-     * Evaluate permission against content & target(placement/parent/assignment)
+     * Evaluate permission against content & target(placement/parent/assignment).
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      *         Example: If LimitationValue is instance of ContentTypeLimitationValue, and Type is SectionLimitationType.
@@ -120,15 +112,15 @@ class ParentUserGroupLimitationType extends AbstractPersistenceLimitationType im
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
      * @param \eZ\Publish\API\Repository\Values\ValueObject[]|null $targets The context of the $object, like Location of Content, if null none where provided by caller
      *
-     * @return boolean
+     * @return bool
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = null )
+    public function evaluate(APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = null)
     {
-        if ( !$value instanceof APIParentUserGroupLimitation )
-            throw new InvalidArgumentException( '$value', 'Must be of type: APIParentUserGroupLimitation' );
+        if (!$value instanceof APIParentUserGroupLimitation) {
+            throw new InvalidArgumentException('$value', 'Must be of type: APIParentUserGroupLimitation');
+        }
 
-        if ( $value->limitationValues[0] != 1 )
-        {
+        if ($value->limitationValues[0] != 1) {
             throw new BadStateException(
                 'Parent User Group limitation',
                 'expected limitation value to be 1 but got:' . $value->limitationValues[0]
@@ -136,65 +128,51 @@ class ParentUserGroupLimitationType extends AbstractPersistenceLimitationType im
         }
 
         // Parent Limitations are usually used by content/create where target is specified, so we return false if not provided.
-        if ( empty( $targets ) )
-        {
+        if (empty($targets)) {
             return false;
         }
 
         $locationHandler = $this->persistence->locationHandler();
-        $currentUserLocations = $locationHandler->loadLocationsByContent( $currentUser->id );
-        if ( empty( $currentUserLocations ) )
-        {
+        $currentUserLocations = $locationHandler->loadLocationsByContent($currentUser->id);
+        if (empty($currentUserLocations)) {
             return false;
         }
 
-        foreach ( $targets as $target )
-        {
-            if ( $target instanceof LocationCreateStruct )
-            {
-                $target = $locationHandler->load( $target->parentLocationId );
+        foreach ($targets as $target) {
+            if ($target instanceof LocationCreateStruct) {
+                $target = $locationHandler->load($target->parentLocationId);
             }
 
-            if ( $target instanceof Location )
-            {
+            if ($target instanceof Location) {
                 // $target is assumed to be parent in this case
                 $parentOwnerId = $target->getContentInfo()->ownerId;
-            }
-            else if ( $target instanceof SPILocation )
-            {
+            } elseif ($target instanceof SPILocation) {
                 // $target is assumed to be parent in this case
-                $spiContentInfo = $this->persistence->contentHandler()->loadContentInfo( $target->contentId );
+                $spiContentInfo = $this->persistence->contentHandler()->loadContentInfo($target->contentId);
                 $parentOwnerId = $spiContentInfo->ownerId;
-            }
-            else
-            {
+            } else {
                 throw new InvalidArgumentException(
                     '$targets',
                     'Must contain objects of type: Location or LocationCreateStruct'
                 );
             }
 
-            if ( $parentOwnerId === $currentUser->id )
-            {
+            if ($parentOwnerId === $currentUser->id) {
                 continue;
             }
 
-            /**
+            /*
              * As long as SPI userHandler and API UserService does not speak the same language, this is the ugly truth;
              */
             $locationHandler = $this->persistence->locationHandler();
-            $parentOwnerLocations = $locationHandler->loadLocationsByContent( $parentOwnerId );
-            if ( empty( $parentOwnerLocations ) )
-            {
+            $parentOwnerLocations = $locationHandler->loadLocationsByContent($parentOwnerId);
+            if (empty($parentOwnerLocations)) {
                 return false;
             }
 
-            foreach ( $parentOwnerLocations as $parentOwnerLocation )
-            {
-                foreach ( $currentUserLocations as $currentUserLocation )
-                {
-                    if ( $parentOwnerLocation->parentId === $currentUserLocation->parentId )
-                    {
+            foreach ($parentOwnerLocations as $parentOwnerLocation) {
+                foreach ($currentUserLocations as $currentUserLocation) {
+                    if ($parentOwnerLocation->parentId === $currentUserLocation->parentId) {
                         continue 3;
                     }
                 }
@@ -207,26 +185,26 @@ class ParentUserGroupLimitationType extends AbstractPersistenceLimitationType im
     }
 
     /**
-     * Returns Criterion for use in find() query
+     * Returns Criterion for use in find() query.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
      */
-    public function getCriterion( APILimitationValue $value, APIUser $currentUser )
+    public function getCriterion(APILimitationValue $value, APIUser $currentUser)
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException(__METHOD__);
     }
 
     /**
-     * Returns info on valid $limitationValues
+     * Returns info on valid $limitationValues.
      *
      * @return mixed[]|int In case of array, a hash with key as valid limitations value and value as human readable name
      *                     of that option, in case of int on of VALUE_SCHEMA_ constants.
      */
     public function valueSchema()
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException(__METHOD__);
     }
 }

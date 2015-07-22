@@ -1,17 +1,20 @@
 <?php
+
 /**
  * File containing the eZ\Publish\SPI\Search\FieldType class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
+
 namespace eZ\Publish\SPI\Search;
 
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
- * Base class for document field definitions
+ * Base class for document field definitions.
  *
  * @property-read string $type The type name of the facet
  */
@@ -32,30 +35,30 @@ abstract class FieldType extends ValueObject
     protected $type;
 
     /**
-     * Whether highlighting should be performed for this field on result documents
+     * Whether highlighting should be performed for this field on result documents.
      *
-     * @var boolean
+     * @var bool
      */
     public $highlight = false;
 
     /**
-     * The importance of that field (boost factor)
+     * The importance of that field (boost factor).
      *
      * @var int
      */
     public $boost = 1;
 
     /**
-     * Whether the field supports multiple values
+     * Whether the field supports multiple values.
      *
-     * @var boolean
+     * @var bool
      */
     public $multiValue = false;
 
     /**
-     * Whether the field should be a part of the resulting document
+     * Whether the field should be a part of the resulting document.
      *
-     * @var boolean
+     * @var bool
      */
     public $inResult = true;
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the BaseTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -29,17 +31,17 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getPartiallyMockedViewProvider( array $matchingConfig = array() )
+    protected function getPartiallyMockedViewProvider(array $matchingConfig = array())
     {
         return $this
-            ->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\Provider\\Location\\Configured' )
+            ->getMockBuilder('eZ\\Publish\\Core\\MVC\\Symfony\\View\\Provider\\Location\\Configured')
             ->setConstructorArgs(
                 array(
                     $this->repositoryMock,
-                    $matchingConfig
+                    $matchingConfig,
                 )
             )
-            ->setMethods( array( 'getMatcher' ) )
+            ->setMethods(array('getMatcher'))
             ->getMock();
     }
 
@@ -51,12 +53,12 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
 
         return $this
-            ->getMockBuilder( $repositoryClass )
+            ->getMockBuilder($repositoryClass)
             ->disableOriginalConstructor()
             ->setMethods(
                 array_diff(
-                    get_class_methods( $repositoryClass ),
-                    array( 'sudo' )
+                    get_class_methods($repositoryClass),
+                    array('sudo')
                 )
             )
             ->getMock();
@@ -67,11 +69,11 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getLocationMock( array $properties = array() )
+    protected function getLocationMock(array $properties = array())
     {
         return $this
-            ->getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' )
-            ->setConstructorArgs( array( $properties ) )
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Location')
+            ->setConstructorArgs(array($properties))
             ->getMockForAbstractClass();
     }
 
@@ -80,11 +82,11 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getContentInfoMock( array $properties = array() )
+    protected function getContentInfoMock(array $properties = array())
     {
         return $this->
-            getMockBuilder( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' )
-            ->setConstructorArgs( array( $properties ) )
+            getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo')
+            ->setConstructorArgs(array($properties))
             ->getMockForAbstractClass();
     }
 }

@@ -1,10 +1,12 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributd with this source code.
  */
+
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\ComplexSettings;
 
 use PHPUnit_Framework_TestCase;
@@ -23,17 +25,17 @@ class ComplexSettingParserTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideSettings
      */
-    public function testContainsDynamicSettings( $setting, $expected )
+    public function testContainsDynamicSettings($setting, $expected)
     {
-        self::assertEquals( $expected[0], $this->parser->containsDynamicSettings( $setting ), "string" );
+        self::assertEquals($expected[0], $this->parser->containsDynamicSettings($setting), 'string');
     }
 
     /**
      * @dataProvider provideSettings
      */
-    public function testParseComplexSetting( $setting, $expected )
+    public function testParseComplexSetting($setting, $expected)
     {
-        self::assertEquals( $expected[1], $this->parser->parseComplexSetting( $setting ), "string" );
+        self::assertEquals($expected[1], $this->parser->parseComplexSetting($setting), 'string');
     }
 
     public function provideSettings()
@@ -42,40 +44,40 @@ class ComplexSettingParserTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 '%container_var%',
-                array( false, array() )
+                array(false, array()),
             ),
             array(
                 '$somestring',
-                array( false, array() )
+                array(false, array()),
             ),
             array(
                 '$setting$',
-                array( true, array( '$setting$' ) )
+                array(true, array('$setting$')),
             ),
             array(
 
                 '$setting;scope$',
-                array( true, array( '$setting;scope$' ) )
+                array(true, array('$setting;scope$')),
             ),
             array(
                 '$setting;namespace;scope$',
-                array( true, array( '$setting;namespace;scope$' ) )
+                array(true, array('$setting;namespace;scope$')),
             ),
             array(
                 'a_string_before$setting;namespace;scope$',
-                array( true, array( '$setting;namespace;scope$' ) )
+                array(true, array('$setting;namespace;scope$')),
             ),
             array(
                 '$setting;namespace;scope$a_string_after',
-                array( true, array( '$setting;namespace;scope$' ) )
+                array(true, array('$setting;namespace;scope$')),
             ),
             array(
                 'a_string_before$setting;namespace;scope$a_string_after',
-                array( true, array( '$setting;namespace;scope$' ) )
+                array(true, array('$setting;namespace;scope$')),
             ),
             array(
                 '$setting;one$somethingelse$setting;two$',
-                array( true, array( '$setting;one$', '$setting;two$' ) )
+                array(true, array('$setting;one$', '$setting;two$')),
             ),
         );
     }

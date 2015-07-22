@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the RelationListProcessor class
+ * File containing the RelationListProcessor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,18 +17,17 @@ use PHPUnit_Framework_TestCase;
 class RelationListProcessorTest extends PHPUnit_Framework_TestCase
 {
     protected $constants = array(
-        "SELECTION_BROWSE",
-        "SELECTION_DROPDOWN"
+        'SELECTION_BROWSE',
+        'SELECTION_DROPDOWN',
     );
 
     public function fieldSettingsHashes()
     {
         return array_map(
-            function ( $constantName )
-            {
+            function ($constantName) {
                 return array(
-                    array( "selectionMethod" => $constantName ),
-                    array( "selectionMethod" => constant( "eZ\\Publish\\Core\\FieldType\\RelationList\\Type::{$constantName}" ) )
+                    array('selectionMethod' => $constantName),
+                    array('selectionMethod' => constant("eZ\\Publish\\Core\\FieldType\\RelationList\\Type::{$constantName}")),
                 );
             },
             $this->constants
@@ -37,13 +38,13 @@ class RelationListProcessorTest extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\RelationListProcessor::preProcessFieldSettingsHash
      * @dataProvider fieldSettingsHashes
      */
-    public function testPreProcessFieldSettingsHash( $inputSettings, $outputSettings )
+    public function testPreProcessFieldSettingsHash($inputSettings, $outputSettings)
     {
         $processor = $this->getProcessor();
 
         $this->assertEquals(
             $outputSettings,
-            $processor->preProcessFieldSettingsHash( $inputSettings )
+            $processor->preProcessFieldSettingsHash($inputSettings)
         );
     }
 
@@ -51,13 +52,13 @@ class RelationListProcessorTest extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\Core\REST\Common\FieldTypeProcessor\RelationListProcessor::postProcessFieldSettingsHash
      * @dataProvider fieldSettingsHashes
      */
-    public function testPostProcessFieldSettingsHash( $outputSettings, $inputSettings )
+    public function testPostProcessFieldSettingsHash($outputSettings, $inputSettings)
     {
         $processor = $this->getProcessor();
 
         $this->assertEquals(
             $outputSettings,
-            $processor->postProcessFieldSettingsHash( $inputSettings )
+            $processor->postProcessFieldSettingsHash($inputSettings)
         );
     }
 
@@ -66,6 +67,6 @@ class RelationListProcessorTest extends PHPUnit_Framework_TestCase
      */
     protected function getProcessor()
     {
-        return new RelationListProcessor;
+        return new RelationListProcessor();
     }
 }

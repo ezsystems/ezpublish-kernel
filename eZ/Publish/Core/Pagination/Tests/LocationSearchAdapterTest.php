@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContentSearchHitAdapterTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,9 +23,9 @@ class LocationSearchAdapterTest extends LocationSearchHitAdapterTest
      *
      * @return LocationSearchAdapter
      */
-    protected function getAdapter( LocationQuery $query, SearchService $searchService )
+    protected function getAdapter(LocationQuery $query, SearchService $searchService)
     {
-        return new LocationSearchAdapter( $query, $searchService );
+        return new LocationSearchAdapter($query, $searchService);
     }
 
     /**
@@ -33,13 +35,12 @@ class LocationSearchAdapterTest extends LocationSearchHitAdapterTest
      *
      * @return mixed
      */
-    protected function getExpectedFinalResultFromHits( $hits )
+    protected function getExpectedFinalResultFromHits($hits)
     {
         $expectedResult = array();
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Search\SearchHit[] $hits */
-        foreach ( $hits as $hit )
-        {
+        foreach ($hits as $hit) {
             $expectedResult[] = $hit->valueObject;
         }
 

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Location Search handler class
+ * File containing the Location Search handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,22 +17,22 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
- * Visits the DateMetadata criterion
+ * Visits the DateMetadata criterion.
  */
 class PublishedBetween extends DateMetadata
 {
     /**
-     * Check if visitor is applicable to current criterion
+     * Check if visitor is applicable to current criterion.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return boolean
+     * @return bool
      */
-    public function canVisit( Criterion $criterion )
+    public function canVisit(Criterion $criterion)
     {
         return
             $criterion instanceof Criterion\DateMetadata &&
-            $criterion->target === "created" &&
+            $criterion->target === 'created' &&
             (
                 $criterion->operator === Operator::LT ||
                 $criterion->operator === Operator::LTE ||
@@ -41,26 +43,24 @@ class PublishedBetween extends DateMetadata
     }
 
     /**
-     * Map field value to a proper Solr representation
+     * Map field value to a proper Solr representation.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Search\Solr\Content\CriterionVisitor $subVisitor
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
-        $start = $this->getSolrTime( $criterion->value[0] );
-        $end   = isset( $criterion->value[1] ) ? $this->getSolrTime( $criterion->value[1] ) : null;
+        $start = $this->getSolrTime($criterion->value[0]);
+        $end = isset($criterion->value[1]) ? $this->getSolrTime($criterion->value[1]) : null;
 
-        if ( ( $criterion->operator === Operator::LT ) ||
-             ( $criterion->operator === Operator::LTE ) )
-        {
+        if (($criterion->operator === Operator::LT) ||
+             ($criterion->operator === Operator::LTE)) {
             $end = $start;
             $start = null;
         }
 
-        return "content_published_dt:" . $this->getRange( $criterion->operator, $start, $end );
+        return 'content_published_dt:' . $this->getRange($criterion->operator, $start, $end);
     }
 }
-

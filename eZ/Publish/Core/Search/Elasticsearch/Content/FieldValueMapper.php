@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the FieldValueMapper class
+ * File containing the FieldValueMapper class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,20 +19,20 @@ use eZ\Publish\SPI\Search\Field;
 abstract class FieldValueMapper
 {
     /**
-     * Check if field can be mapped
+     * Check if field can be mapped.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
-     * @return boolean
+     * @return bool
      */
-    abstract public function canMap( Field $field );
+    abstract public function canMap(Field $field);
 
     /**
-     * Map field value to a proper Elasticsearch representation
+     * Map field value to a proper Elasticsearch representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
      * @return mixed
      */
-    abstract public function map( Field $field );
+    abstract public function map(Field $field);
 }

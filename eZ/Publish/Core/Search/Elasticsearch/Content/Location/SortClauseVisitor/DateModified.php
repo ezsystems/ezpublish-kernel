@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the DateModified sort clause class
+ * File containing the DateModified sort clause class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,34 +15,34 @@ use eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
- * Visits the DateModified sort clause
+ * Visits the DateModified sort clause.
  */
 class DateModified extends SortClauseVisitor
 {
     /**
-     * Check if visitor is applicable to current sort clause
+     * Check if visitor is applicable to current sort clause.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
-     * @return boolean
+     * @return bool
      */
-    public function canVisit( SortClause $sortClause )
+    public function canVisit(SortClause $sortClause)
     {
         return $sortClause instanceof SortClause\DateModified;
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation
+     * Map field value to a proper Elasticsearch representation.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
      * @return mixed
      */
-    public function visit( SortClause $sortClause )
+    public function visit(SortClause $sortClause)
     {
         return array(
-            "content_modified_dt" => array(
-                "order" => $this->getDirection( $sortClause ),
+            'content_modified_dt' => array(
+                'order' => $this->getDirection($sortClause),
             ),
         );
     }

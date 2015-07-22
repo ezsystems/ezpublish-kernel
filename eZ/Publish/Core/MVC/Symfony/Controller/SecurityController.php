@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the SecurityController class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -31,7 +33,7 @@ class SecurityController
      */
     protected $authenticationUtils;
 
-    public function __construct( EngineInterface $templateEngine, ConfigResolverInterface $configResolver, AuthenticationUtils $authenticationUtils )
+    public function __construct(EngineInterface $templateEngine, ConfigResolverInterface $configResolver, AuthenticationUtils $authenticationUtils)
     {
         $this->templateEngine = $templateEngine;
         $this->configResolver = $configResolver;
@@ -42,11 +44,11 @@ class SecurityController
     {
         return new Response(
             $this->templateEngine->render(
-                $this->configResolver->getParameter( 'security.login_template' ),
+                $this->configResolver->getParameter('security.login_template'),
                 array(
                     'last_username' => $this->authenticationUtils->getLastUsername(),
                     'error' => $this->authenticationUtils->getLastAuthenticationError(),
-                    'layout' => $this->configResolver->getParameter( 'security.base_layout' ),
+                    'layout' => $this->configResolver->getParameter('security.base_layout'),
                 )
             )
         );

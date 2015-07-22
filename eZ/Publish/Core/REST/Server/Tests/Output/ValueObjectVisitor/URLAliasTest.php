@@ -1,33 +1,33 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\API\Repository\Values\Content;
-use eZ\Publish\Core\REST\Common;
 
 class URLAliasTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the URLAlias visitor
+     * Test the URLAlias visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $urlAlias = new Content\URLAlias(
             array(
@@ -35,17 +35,17 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
                 'type' => 1,
                 'destination' => '/destination/url',
                 'path' => '/some/path',
-                'languageCodes' => array( 'eng-GB', 'eng-US' ),
+                'languageCodes' => array('eng-GB', 'eng-US'),
                 'alwaysAvailable' => true,
                 'isHistory' => true,
                 'isCustom' => false,
-                'forward' => false
+                'forward' => false,
             )
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadURLAlias',
-            array( 'urlAliasId' => $urlAlias->id ),
+            array('urlAliasId' => $urlAlias->id),
             "/content/urlaliases/{$urlAlias->id}"
         );
 
@@ -55,29 +55,29 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
             $urlAlias
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains UrlAlias element
+     * Test if result contains UrlAlias element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsUrlAliasElement( $result )
+    public function testResultContainsUrlAliasElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'UrlAlias',
+                'tag' => 'UrlAlias',
                 'children' => array(
-                    'less_than'    => 8,
+                    'less_than' => 8,
                     'greater_than' => 6,
-                )
+                ),
             ),
             $result,
             'Invalid <UrlAlias> element.',
@@ -86,23 +86,23 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains UrlAlias element attributes
+     * Test if result contains UrlAlias element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsUrlAliasAttributes( $result )
+    public function testResultContainsUrlAliasAttributes($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'UrlAlias',
+                'tag' => 'UrlAlias',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.UrlAlias+xml',
-                    'href'       => '/content/urlaliases/some-id',
-                    'id'         => 'some-id',
-                    'type'       => 'RESOURCE'
-                )
+                    'href' => '/content/urlaliases/some-id',
+                    'id' => 'some-id',
+                    'type' => 'RESOURCE',
+                ),
             ),
             $result,
             'Invalid <UrlAlias> attributes.',
@@ -111,18 +111,18 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains url value element
+     * Test if result contains url value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsUrlValueElement( $result )
+    public function testResultContainsUrlValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'resource',
-                'content'  => '/destination/url',
+                'tag' => 'resource',
+                'content' => '/destination/url',
             ),
             $result,
             'Invalid or non-existing <UrlAlias> url value element.',
@@ -131,18 +131,18 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains path value element
+     * Test if result contains path value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsPathValueElement( $result )
+    public function testResultContainsPathValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'path',
-                'content'  => '/some/path',
+                'tag' => 'path',
+                'content' => '/some/path',
             ),
             $result,
             'Invalid or non-existing <UrlAlias> path value element.',
@@ -151,18 +151,18 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains languageCodes value element
+     * Test if result contains languageCodes value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsLanguageCodesValueElement( $result )
+    public function testResultContainsLanguageCodesValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'languageCodes',
-                'content'  => 'eng-GB,eng-US',
+                'tag' => 'languageCodes',
+                'content' => 'eng-GB,eng-US',
             ),
             $result,
             'Invalid or non-existing <UrlAlias> languageCodes value element.',
@@ -171,18 +171,18 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains alwaysAvailable value element
+     * Test if result contains alwaysAvailable value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsAlwaysAvailableValueElement( $result )
+    public function testResultContainsAlwaysAvailableValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'alwaysAvailable',
-                'content'  => 'true',
+                'tag' => 'alwaysAvailable',
+                'content' => 'true',
             ),
             $result,
             'Invalid or non-existing <UrlAlias> alwaysAvailable value element.',
@@ -191,18 +191,18 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains isHistory value element
+     * Test if result contains isHistory value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsIsHistoryValueElement( $result )
+    public function testResultContainsIsHistoryValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'isHistory',
-                'content'  => 'true',
+                'tag' => 'isHistory',
+                'content' => 'true',
             ),
             $result,
             'Invalid or non-existing <UrlAlias> isHistory value element.',
@@ -211,18 +211,18 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains forward value element
+     * Test if result contains forward value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsForwardValueElement( $result )
+    public function testResultContainsForwardValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'forward',
-                'content'  => 'false',
+                'tag' => 'forward',
+                'content' => 'false',
             ),
             $result,
             'Invalid or non-existing <UrlAlias> forward value element.',
@@ -231,18 +231,18 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains custom value element
+     * Test if result contains custom value element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsCustomValueElement( $result )
+    public function testResultContainsCustomValueElement($result)
     {
         $this->assertXMLTag(
             array(
-                'tag'      => 'custom',
-                'content'  => 'false',
+                'tag' => 'custom',
+                'content' => 'false',
             ),
             $result,
             'Invalid or non-existing <UrlAlias> custom value element.',
@@ -251,12 +251,12 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the URLAlias visitor
+     * Get the URLAlias visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\URLAlias
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\URLAlias;
+        return new ValueObjectVisitor\URLAlias();
     }
 }

@@ -1,21 +1,23 @@
 <?php
+
 /**
  * File containing the Legacy class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
+
 namespace eZ\Publish\Core\FieldType\Image\IO;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\IO\IOServiceInterface;
-use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 
 /**
- * Legacy Image IOService
+ * Legacy Image IOService.
  *
  * Acts as a dispatcher between the two IOService instances required by FieldType\Image in Legacy.
  * - One is the usual one, as used in ImageStorage, that uses 'images' as the prefix
@@ -31,27 +33,31 @@ use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 class Legacy implements IOServiceInterface
 {
     /**
-     * Published images IO Service
+     * Published images IO Service.
+     *
      * @var \eZ\Publish\Core\IO\IOServiceInterface
      */
     private $publishedIOService;
 
     /**
-     * Draft images IO Service
+     * Draft images IO Service.
+     *
      * @var \eZ\Publish\Core\IO\IOServiceInterface
      */
     private $draftIOService;
 
     /**
      * Prefix for published images.
-     * Example: var/ezdemo_site/storage/images
+     * Example: var/ezdemo_site/storage/images.
+     *
      * @var string
      */
     private $publishedPrefix;
 
     /**
      * Prefix for draft images.
-     * Example: var/ezdemo_site/storage/images-versioned
+     * Example: var/ezdemo_site/storage/images-versioned.
+     *
      * @var string
      */
     private $draftPrefix;
@@ -72,7 +78,7 @@ class Legacy implements IOServiceInterface
      * @throws \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
      *         If a required option is missing.
      */
-    public function __construct( IOServiceInterface $publishedIOService, IOServiceInterface $draftIOService, OptionsProvider $optionsProvider )
+    public function __construct(IOServiceInterface $publishedIOService, IOServiceInterface $draftIOService, OptionsProvider $optionsProvider)
     {
         $this->publishedIOService = $publishedIOService;
         $this->draftIOService = $draftIOService;
@@ -81,131 +87,120 @@ class Legacy implements IOServiceInterface
     }
 
     /**
-     * Sets the IOService prefix
+     * Sets the IOService prefix.
      */
-    public function setPrefix( $prefix )
+    public function setPrefix($prefix)
     {
-        $this->publishedIOService->setPrefix( $prefix );
-        $this->draftIOService->setPrefix( $prefix );
+        $this->publishedIOService->setPrefix($prefix);
+        $this->draftIOService->setPrefix($prefix);
     }
 
     /**
-     * Computes the paths to published & draft images path using the options from the provider
+     * Computes the paths to published & draft images path using the options from the provider.
      */
     private function setPrefixes()
     {
-        $pathArray = array( $this->optionsProvider->getVarDir() );
+        $pathArray = array($this->optionsProvider->getVarDir());
 
         // The storage dir itself might be null
-        if ( $storageDir = $this->optionsProvider->getStorageDir() )
-        {
+        if ($storageDir = $this->optionsProvider->getStorageDir()) {
             $pathArray[] = $storageDir;
         }
 
-        $this->draftPrefix = implode( '/', array_merge( $pathArray, array( $this->optionsProvider->getDraftImagesDir() ) ) );
-        $this->publishedPrefix = implode( '/', array_merge( $pathArray, array( $this->optionsProvider->getPublishedImagesDir() ) ) );
+        $this->draftPrefix = implode('/', array_merge($pathArray, array($this->optionsProvider->getDraftImagesDir())));
+        $this->publishedPrefix = implode('/', array_merge($pathArray, array($this->optionsProvider->getPublishedImagesDir())));
     }
 
-    public function getExternalPath( $internalId )
+    public function getExternalPath($internalId)
     {
-        return $this->publishedIOService->getExternalPath( $internalId );
+        return $this->publishedIOService->getExternalPath($internalId);
     }
 
-    public function newBinaryCreateStructFromLocalFile( $localFile )
+    public function newBinaryCreateStructFromLocalFile($localFile)
     {
-        return $this->publishedIOService->newBinaryCreateStructFromLocalFile( $localFile );
+        return $this->publishedIOService->newBinaryCreateStructFromLocalFile($localFile);
     }
 
-    public function exists( $binaryFileId )
+    public function exists($binaryFileId)
     {
-        return $this->publishedIOService->exists( $binaryFileId );
+        return $this->publishedIOService->exists($binaryFileId);
     }
 
-    public function getInternalPath( $externalId )
+    public function getInternalPath($externalId)
     {
-        return $this->publishedIOService->getInternalPath( $externalId );
+        return $this->publishedIOService->getInternalPath($externalId);
     }
 
-    public function loadBinaryFile( $binaryFileId )
+    public function loadBinaryFile($binaryFileId)
     {
         // If the id is an internal (absolute) path to a draft image, use the draft service to get external path & load
-        if ( $this->isDraftImagePath( $binaryFileId ) )
-        {
-            return $this->draftIOService->loadBinaryFile( $this->draftIOService->getExternalPath( $binaryFileId ) );
+        if ($this->isDraftImagePath($binaryFileId)) {
+            return $this->draftIOService->loadBinaryFile($this->draftIOService->getExternalPath($binaryFileId));
         }
 
         // If the id is an internal path (absolute) to a published image, replace with the internal path
-        if ( $this->isPublishedImagePath( $binaryFileId ) )
-        {
-            $binaryFileId = $this->publishedIOService->getExternalPath( $binaryFileId );
+        if ($this->isPublishedImagePath($binaryFileId)) {
+            $binaryFileId = $this->publishedIOService->getExternalPath($binaryFileId);
         }
 
-        return $this->publishedIOService->loadBinaryFile( $binaryFileId );
+        return $this->publishedIOService->loadBinaryFile($binaryFileId);
     }
 
     /**
-     * Since both services should use the same uri, we can use any of them to *GET* the URI
+     * Since both services should use the same uri, we can use any of them to *GET* the URI.
      */
-    public function loadBinaryFileByUri( $binaryFileUri )
+    public function loadBinaryFileByUri($binaryFileUri)
     {
-        try
-        {
-            return $this->publishedIOService->loadBinaryFileByUri( $binaryFileUri );
-        }
-        // InvalidArgumentException means that the prefix didn't match, NotFound can pass through
-        catch ( InvalidArgumentException $prefixException )
-        {
-            try
-            {
-                return $this->draftIOService->loadBinaryFileByUri( $binaryFileUri );
-            }
-            catch ( InvalidArgumentException $e )
-            {
+        try {
+            return $this->publishedIOService->loadBinaryFileByUri($binaryFileUri);
+        } catch (InvalidArgumentException $prefixException) {
+            // InvalidArgumentException means that the prefix didn't match, NotFound can pass through
+            try {
+                return $this->draftIOService->loadBinaryFileByUri($binaryFileUri);
+            } catch (InvalidArgumentException $e) {
                 throw $prefixException;
             }
         }
     }
 
-    public function getFileContents( BinaryFile $binaryFile )
+    public function getFileContents(BinaryFile $binaryFile)
     {
-        return $this->publishedIOService->getFileContents( $binaryFile );
+        return $this->publishedIOService->getFileContents($binaryFile);
     }
 
-    public function createBinaryFile( BinaryFileCreateStruct $binaryFileCreateStruct )
+    public function createBinaryFile(BinaryFileCreateStruct $binaryFileCreateStruct)
     {
-        return $this->publishedIOService->createBinaryFile( $binaryFileCreateStruct );
+        return $this->publishedIOService->createBinaryFile($binaryFileCreateStruct);
     }
 
-    public function getUri( $binaryFileId )
+    public function getUri($binaryFileId)
     {
-        return $this->publishedIOService->getUri( $binaryFileId );
+        return $this->publishedIOService->getUri($binaryFileId);
     }
 
-    public function getMimeType( $binaryFileId )
+    public function getMimeType($binaryFileId)
     {
         // If the id is an internal (absolute) path to a draft image, use the draft service to get external path & load
-        if ( $this->isDraftImagePath( $binaryFileId ) )
-        {
-            return $this->draftIOService->getMimeType( $this->draftIOService->getExternalPath( $binaryFileId ) );
+        if ($this->isDraftImagePath($binaryFileId)) {
+            return $this->draftIOService->getMimeType($this->draftIOService->getExternalPath($binaryFileId));
         }
 
         // If the id is an internal path (absolute) to a published image, replace with the internal path
-        if ( $this->isPublishedImagePath( $binaryFileId ) )
-        {
-            $binaryFileId = $this->publishedIOService->getExternalPath( $binaryFileId );
+        if ($this->isPublishedImagePath($binaryFileId)) {
+            $binaryFileId = $this->publishedIOService->getExternalPath($binaryFileId);
         }
 
-        return $this->publishedIOService->getMimeType( $binaryFileId );
+        return $this->publishedIOService->getMimeType($binaryFileId);
     }
 
-    public function getFileInputStream( BinaryFile $binaryFile )
+    public function getFileInputStream(BinaryFile $binaryFile)
     {
-        return $this->publishedIOService->getFileInputStream( $binaryFile );
+        return $this->publishedIOService->getFileInputStream($binaryFile);
     }
 
-    public function deleteBinaryFile( BinaryFile $binaryFile )
+    public function deleteBinaryFile(BinaryFile $binaryFile)
     {
-        $this->publishedIOService->deleteBinaryFile( $binaryFile );
+        $this->publishedIOService->deleteBinaryFile($binaryFile);
     }
 
     /**
@@ -213,33 +208,37 @@ class Legacy implements IOServiceInterface
      *
      * @param string $path
      */
-    public function deleteDirectory( $path )
+    public function deleteDirectory($path)
     {
-        $this->publishedIOService->deleteDirectory( $path );
+        $this->publishedIOService->deleteDirectory($path);
     }
 
-    public function newBinaryCreateStructFromUploadedFile( array $uploadedFile )
+    public function newBinaryCreateStructFromUploadedFile(array $uploadedFile)
     {
-        return $this->publishedIOService->newBinaryCreateStructFromUploadedFile( $uploadedFile );
-    }
-
-    /**
-     * Checks if $internalPath is a published image path
-     * @param string $internalPath
-     * @return bool true if $internalPath is the path to a published image
-     */
-    protected function isPublishedImagePath( $internalPath )
-    {
-        return strpos( $internalPath, $this->publishedPrefix ) === 0;
+        return $this->publishedIOService->newBinaryCreateStructFromUploadedFile($uploadedFile);
     }
 
     /**
-     * Checks if $internalPath is a published image path
+     * Checks if $internalPath is a published image path.
+     *
      * @param string $internalPath
+     *
      * @return bool true if $internalPath is the path to a published image
      */
-    protected function isDraftImagePath( $internalPath )
+    protected function isPublishedImagePath($internalPath)
     {
-        return strpos( $internalPath, $this->draftPrefix ) === 0;
+        return strpos($internalPath, $this->publishedPrefix) === 0;
+    }
+
+    /**
+     * Checks if $internalPath is a published image path.
+     *
+     * @param string $internalPath
+     *
+     * @return bool true if $internalPath is the path to a published image
+     */
+    protected function isDraftImagePath($internalPath)
+    {
+        return strpos($internalPath, $this->draftPrefix) === 0;
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\SPI\Limitation\Type class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,7 +16,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 
 /**
- * This interface represent the Limitation Type
+ * This interface represent the Limitation Type.
  *
  * A Limitation is a lot like a Symfony voter, telling the permission system if user has
  * access or not. It consists of a Limitation Value which is persisted, and this Limitation
@@ -24,7 +26,7 @@ use eZ\Publish\API\Repository\Values\User\User as APIUser;
 interface Type
 {
     /**
-     * Constants for return value of {@see evaluate()}
+     * Constants for return value of {@see evaluate()}.
      *
      * Currently ACCESS_ABSTAIN must mean that evaluate does not support the provided $object or $targets,
      * this is currently only supported by role limitations as policy limitations should not allow this.
@@ -35,10 +37,10 @@ interface Type
      */
     const ACCESS_GRANTED = true;
     const ACCESS_ABSTAIN = null;
-    const ACCESS_DENIED  = false;
+    const ACCESS_DENIED = false;
 
     /**
-     * Constants for valueSchema() return values
+     * Constants for valueSchema() return values.
      *
      * Used in cases where a certain value is accepted but the options are to many to return as a hash of options.
      * GUI should typically present option to browse content tree to select limitation value(s).
@@ -55,7 +57,7 @@ interface Type
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitationValue
      */
-    public function acceptValue( APILimitationValue $limitationValue );
+    public function acceptValue(APILimitationValue $limitationValue);
 
     /**
      * Makes sure LimitationValue->limitationValues is valid according to valueSchema().
@@ -66,10 +68,10 @@ interface Type
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate( APILimitationValue $limitationValue );
+    public function validate(APILimitationValue $limitationValue);
 
     /**
-     * Create the Limitation Value
+     * Create the Limitation Value.
      *
      * The is the method to create values as Limitation type needs value knowledge anyway in acceptValue,
      * the reverse relation is provided by means of identifier lookup (Value has identifier, and so does RoleService).
@@ -78,10 +80,10 @@ interface Type
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation
      */
-    public function buildValue( array $limitationValues );
+    public function buildValue(array $limitationValues);
 
     /**
-     * Evaluate ("Vote") against a main value object and targets for the context
+     * Evaluate ("Vote") against a main value object and targets for the context.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      *         Example: If LimitationValue is instance of ContentTypeLimitationValue, and Type is SectionLimitationType.
@@ -95,12 +97,12 @@ interface Type
      * @param \eZ\Publish\API\Repository\Values\ValueObject[]|null $targets An array of location, parent or "assignment"
      *                                                                 objects, if null: none where provided by caller
      *
-     * @return boolean|null Returns one of ACCESS_* constants
+     * @return bool|null Returns one of ACCESS_* constants
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, APIValueObject $object, array $targets = null );
+    public function evaluate(APILimitationValue $value, APIUser $currentUser, APIValueObject $object, array $targets = null);
 
     /**
-     * Returns Criterion for use in find() query
+     * Returns Criterion for use in find() query.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException If the limitation does not support
      *         being used as a Criterion.
@@ -110,10 +112,10 @@ interface Type
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
      */
-    public function getCriterion( APILimitationValue $value, APIUser $currentUser );
+    public function getCriterion(APILimitationValue $value, APIUser $currentUser);
 
     /**
-     * Returns info on valid $limitationValues
+     * Returns info on valid $limitationValues.
      *
      * @return mixed[]|int In case of array, a hash with key as valid limitations value and value as human readable name
      *                     of that option, in case of int on of VALUE_SCHEMA_* constants.

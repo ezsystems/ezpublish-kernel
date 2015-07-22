@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the LocationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,7 +26,7 @@ class LocationTest extends BaseTest
     protected function setUp()
     {
         parent::setUp();
-        $this->matcher = new LocationIdMatcher;
+        $this->matcher = new LocationIdMatcher();
     }
 
     /**
@@ -34,12 +36,12 @@ class LocationTest extends BaseTest
      *
      * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param boolean $expectedResult
+     * @param bool $expectedResult
      */
-    public function testMatchLocation( $matchingConfig, Location $location, $expectedResult )
+    public function testMatchLocation($matchingConfig, Location $location, $expectedResult)
     {
-        $this->matcher->setMatchingConfig( $matchingConfig );
-        $this->assertSame( $expectedResult, $this->matcher->matchLocation( $location ) );
+        $this->matcher->setMatchingConfig($matchingConfig);
+        $this->assertSame($expectedResult, $this->matcher->matchLocation($location));
     }
 
     public function matchLocationProvider()
@@ -47,24 +49,24 @@ class LocationTest extends BaseTest
         return array(
             array(
                 123,
-                $this->getLocationMock( array( 'id' => 123 ) ),
-                true
+                $this->getLocationMock(array('id' => 123)),
+                true,
             ),
             array(
                 123,
-                $this->getLocationMock( array( 'id' => 456 ) ),
-                false
+                $this->getLocationMock(array('id' => 456)),
+                false,
             ),
             array(
-                array( 123, 789 ),
-                $this->getLocationMock( array( 'id' => 456 ) ),
-                false
+                array(123, 789),
+                $this->getLocationMock(array('id' => 456)),
+                false,
             ),
             array(
-                array( 123, 789 ),
-                $this->getLocationMock( array( 'id' => 789 ) ),
-                true
-            )
+                array(123, 789),
+                $this->getLocationMock(array('id' => 789)),
+                true,
+            ),
         );
     }
 
@@ -75,12 +77,12 @@ class LocationTest extends BaseTest
      *
      * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param boolean $expectedResult
+     * @param bool $expectedResult
      */
-    public function testMatchContentInfo( $matchingConfig, ContentInfo $contentInfo, $expectedResult )
+    public function testMatchContentInfo($matchingConfig, ContentInfo $contentInfo, $expectedResult)
     {
-        $this->matcher->setMatchingConfig( $matchingConfig );
-        $this->assertSame( $expectedResult, $this->matcher->matchContentInfo( $contentInfo ) );
+        $this->matcher->setMatchingConfig($matchingConfig);
+        $this->assertSame($expectedResult, $this->matcher->matchContentInfo($contentInfo));
     }
 
     public function matchContentInfoProvider()
@@ -88,24 +90,24 @@ class LocationTest extends BaseTest
         return array(
             array(
                 123,
-                $this->getContentInfoMock( array( 'mainLocationId' => 123 ) ),
-                true
+                $this->getContentInfoMock(array('mainLocationId' => 123)),
+                true,
             ),
             array(
                 123,
-                $this->getContentInfoMock( array( 'mainLocationId' => 456 ) ),
-                false
+                $this->getContentInfoMock(array('mainLocationId' => 456)),
+                false,
             ),
             array(
-                array( 123, 789 ),
-                $this->getContentInfoMock( array( 'mainLocationId' => 456 ) ),
-                false
+                array(123, 789),
+                $this->getContentInfoMock(array('mainLocationId' => 456)),
+                false,
             ),
             array(
-                array( 123, 789 ),
-                $this->getContentInfoMock( array( 'mainLocationId' => 789 ) ),
-                true
-            )
+                array(123, 789),
+                $this->getContentInfoMock(array('mainLocationId' => 789)),
+                true,
+            ),
         );
     }
 }

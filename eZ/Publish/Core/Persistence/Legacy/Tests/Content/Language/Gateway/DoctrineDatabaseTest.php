@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\Gateway\DoctrineDatabaseTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\Gateway\DoctrineDatabaseTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -27,8 +29,6 @@ class DoctrineDatabaseTest extends TestCase
 
     /**
      * Inserts DB fixture.
-     *
-     * @return void
      */
     public function setUp()
     {
@@ -41,8 +41,6 @@ class DoctrineDatabaseTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::__construct
-     *
-     * @return void
      */
     public function testCtor()
     {
@@ -57,7 +55,6 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::insertLanguage
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::setCommonLanguageColumns
      */
@@ -65,7 +62,7 @@ class DoctrineDatabaseTest extends TestCase
     {
         $gateway = $this->getDatabaseGateway();
 
-        $gateway->insertLanguage( $this->getLanguageFixture() );
+        $gateway->insertLanguage($this->getLanguageFixture());
 
         $this->assertQueryResult(
             array(
@@ -74,17 +71,17 @@ class DoctrineDatabaseTest extends TestCase
                     'locale' => 'de-DE',
                     'name' => 'Deutsch (Deutschland)',
                     'disabled' => '0',
-                )
+                ),
             ),
             $this->getDatabaseHandler()->createSelectQuery()
-                ->select( 'id', 'locale', 'name', 'disabled' )
-                ->from( 'ezcontent_language' )
-                ->where( 'id=8' )
+                ->select('id', 'locale', 'name', 'disabled')
+                ->from('ezcontent_language')
+                ->where('id=8')
         );
     }
 
     /**
-     * Returns a Language fixture
+     * Returns a Language fixture.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
@@ -100,7 +97,6 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::updateLanguage
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::setCommonLanguageColumns
      */
@@ -111,7 +107,7 @@ class DoctrineDatabaseTest extends TestCase
         $language = $this->getLanguageFixture();
         $language->id = 2;
 
-        $gateway->updateLanguage( $language );
+        $gateway->updateLanguage($language);
 
         $this->assertQueryResult(
             array(
@@ -120,17 +116,16 @@ class DoctrineDatabaseTest extends TestCase
                     'locale' => 'de-DE',
                     'name' => 'Deutsch (Deutschland)',
                     'disabled' => '0',
-                )
+                ),
             ),
             $this->getDatabaseHandler()->createSelectQuery()
-                ->select( 'id', 'locale', 'name', 'disabled' )
-                ->from( 'ezcontent_language' )
-                ->where( 'id=2' )
+                ->select('id', 'locale', 'name', 'disabled')
+                ->from('ezcontent_language')
+                ->where('id=2')
         );
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::loadLanguageData
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::createFindQuery
      */
@@ -138,7 +133,7 @@ class DoctrineDatabaseTest extends TestCase
     {
         $gateway = $this->getDatabaseGateway();
 
-        $result = $gateway->loadLanguageData( 2 );
+        $result = $gateway->loadLanguageData(2);
 
         $this->assertEquals(
             array(
@@ -147,14 +142,13 @@ class DoctrineDatabaseTest extends TestCase
                     'locale' => 'eng-US',
                     'name' => 'English (American)',
                     'disabled' => '0',
-                )
+                ),
             ),
             $result
         );
     }
 
     /**
-     * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::loadAllLanguagesData
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::createFindQuery
      */
@@ -177,7 +171,7 @@ class DoctrineDatabaseTest extends TestCase
                     'locale' => 'eng-GB',
                     'name' => 'English (United Kingdom)',
                     'disabled' => '0',
-                )
+                ),
             ),
             $result
         );
@@ -185,52 +179,50 @@ class DoctrineDatabaseTest extends TestCase
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::deleteLanguage
-     *
-     * @return void
      */
     public function testDeleteLanguage()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $result = $gateway->deleteLanguage( 2 );
+        $result = $gateway->deleteLanguage(2);
 
         $this->assertQueryResult(
             array(
                 array(
-                    'count' => '1'
-                )
+                    'count' => '1',
+                ),
             ),
             $this->getDatabaseHandler()->createSelectQuery()
-                ->select( 'COUNT( * ) AS count' )
-                ->from( 'ezcontent_language' )
+                ->select('COUNT( * ) AS count')
+                ->from('ezcontent_language')
         );
 
         $this->assertQueryResult(
             array(
                 array(
-                    'count' => '0'
-                )
+                    'count' => '0',
+                ),
             ),
             $this->getDatabaseHandler()->createSelectQuery()
-                ->select( 'COUNT( * ) AS count' )
-                ->from( 'ezcontent_language' )
-                ->where( 'id=2' )
+                ->select('COUNT( * ) AS count')
+                ->from('ezcontent_language')
+                ->where('id=2')
         );
     }
 
     /**
-     * Returns a ready to test DoctrineDatabase gateway
+     * Returns a ready to test DoctrineDatabase gateway.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase
      */
     protected function getDatabaseGateway()
     {
-        if ( !isset( $this->databaseGateway ) )
-        {
+        if (!isset($this->databaseGateway)) {
             $this->databaseGateway = new DoctrineDatabase(
                 $this->getDatabaseHandler()
             );
         }
+
         return $this->databaseGateway;
     }
 }

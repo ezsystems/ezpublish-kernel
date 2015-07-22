@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\FieldType\RichText\Type class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,16 +28,16 @@ use RuntimeException;
 class Type extends FieldType
 {
     /**
-     * List of settings available for this FieldType
+     * List of settings available for this FieldType.
      *
      * The key is the setting name, and the value is the default value for this setting
      *
      * @var array
      */
     protected $settingsSchema = array(
-        "numRows" => array(
-            "type" => "int",
-            "default" => 10
+        'numRows' => array(
+            'type' => 'int',
+            'default' => 10,
         ),
     );
 
@@ -53,20 +55,20 @@ class Type extends FieldType
      * @param \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher $inputConverterDispatcher
      * @param \eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher $validatorDispatcher
      */
-    public function __construct( ConverterDispatcher $inputConverterDispatcher, ValidatorDispatcher $validatorDispatcher )
+    public function __construct(ConverterDispatcher $inputConverterDispatcher, ValidatorDispatcher $validatorDispatcher)
     {
         $this->inputConverterDispatcher = $inputConverterDispatcher;
         $this->validatorDispatcher = $validatorDispatcher;
     }
 
     /**
-     * Returns the field type identifier for this field type
+     * Returns the field type identifier for this field type.
      *
      * @return string
      */
     public function getFieldTypeIdentifier()
     {
-        return "ezrichtext";
+        return 'ezrichtext';
     }
 
     /**
@@ -79,27 +81,24 @@ class Type extends FieldType
      *
      * @return string
      */
-    public function getName( SPIValue $value )
+    public function getName(SPIValue $value)
     {
         $result = null;
-        if ( $section = $value->xml->documentElement->firstChild )
-        {
+        if ($section = $value->xml->documentElement->firstChild) {
             $textDom = $section->firstChild;
 
-            if ( $textDom && $textDom->hasChildNodes() )
-            {
+            if ($textDom && $textDom->hasChildNodes()) {
                 $result = $textDom->firstChild->textContent;
-            }
-            else if ( $textDom )
-            {
+            } elseif ($textDom) {
                 $result = $textDom->textContent;
             }
         }
 
-        if ( $result === null )
+        if ($result === null) {
             $result = $value->xml->documentElement->textContent;
+        }
 
-        return trim( $result );
+        return trim($result);
     }
 
     /**
@@ -110,20 +109,19 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value;
+        return new Value();
     }
 
     /**
-     * Returns if the given $value is considered empty by the field type
+     * Returns if the given $value is considered empty by the field type.
      *
      * @param \eZ\Publish\Core\FieldType\RichText\Value $value
      *
-     * @return boolean
+     * @return bool
      */
-    public function isEmptyValue( SPIValue $value )
+    public function isEmptyValue(SPIValue $value)
     {
-        if ( $value->xml === null )
-        {
+        if ($value->xml === null) {
             return true;
         }
 
@@ -137,41 +135,36 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\RichText\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
-        if ( is_string( $inputValue ) )
-        {
-            if ( empty( $inputValue ) )
-            {
+        if (is_string($inputValue)) {
+            if (empty($inputValue)) {
                 $inputValue = Value::EMPTY_VALUE;
             }
 
-            $inputValue = $this->loadXMLString( $inputValue );
+            $inputValue = $this->loadXMLString($inputValue);
         }
 
-        if ( $inputValue instanceof DOMDocument )
-        {
-            $errors = $this->validatorDispatcher->dispatch( $inputValue );
-            if ( !empty( $errors ) )
-            {
+        if ($inputValue instanceof DOMDocument) {
+            $errors = $this->validatorDispatcher->dispatch($inputValue);
+            if (!empty($errors)) {
                 throw new InvalidArgumentException(
                     "\$inputValue",
-                    "Validation of XML content failed: " . join( "\n", $errors )
+                    'Validation of XML content failed: ' . implode("\n", $errors)
                 );
             }
 
-            $inputValue = $this->inputConverterDispatcher->dispatch( $inputValue );
+            $inputValue = $this->inputConverterDispatcher->dispatch($inputValue);
 
-            $errors = $this->validatorDispatcher->dispatch( $inputValue );
-            if ( !empty( $errors ) )
-            {
+            $errors = $this->validatorDispatcher->dispatch($inputValue);
+            if (!empty($errors)) {
                 throw new InvalidArgumentException(
                     "\$inputValue",
-                    "Validation of XML content failed: " . join( "\n", $errors )
+                    'Validation of XML content failed: ' . implode("\n", $errors)
                 );
             }
 
-            $inputValue = new Value( $inputValue );
+            $inputValue = new Value($inputValue);
         }
 
         return $inputValue;
@@ -186,27 +179,25 @@ class Type extends FieldType
      *
      * @return \DOMDocument
      */
-    protected function loadXMLString( $xmlString )
+    protected function loadXMLString($xmlString)
     {
-        $document = new DOMDocument;
+        $document = new DOMDocument();
 
-        libxml_use_internal_errors( true );
+        libxml_use_internal_errors(true);
         libxml_clear_errors();
 
-        $success = $document->loadXML( $xmlString );
+        $success = $document->loadXML($xmlString);
 
-        if ( !$success )
-        {
+        if (!$success) {
             $messages = array();
 
-            foreach ( libxml_get_errors() as $error )
-            {
-                $messages[] = trim( $error->message );
+            foreach (libxml_get_errors() as $error) {
+                $messages[] = trim($error->message);
             }
 
             throw new InvalidArgumentException(
                 "\$inputValue",
-                "Could not create XML document: " . join( "\n", $messages )
+                'Could not create XML document: ' . implode("\n", $messages)
             );
         }
 
@@ -219,13 +210,10 @@ class Type extends FieldType
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
      *
      * @param \eZ\Publish\Core\FieldType\RichText\Value $value
-     *
-     * @return void
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
-        if ( !$value->xml instanceof DOMDocument )
-        {
+        if (!$value->xml instanceof DOMDocument) {
             throw new InvalidArgumentType(
                 '$value->xml',
                 'DOMDocument',
@@ -235,7 +223,7 @@ class Type extends FieldType
     }
 
     /**
-     * Returns sortKey information
+     * Returns sortKey information.
      *
      * @see \eZ\Publish\Core\FieldType
      *
@@ -243,7 +231,7 @@ class Type extends FieldType
      *
      * @return array|bool
      */
-    protected function getSortInfo( BaseValue $value )
+    protected function getSortInfo(BaseValue $value)
     {
         return false;
     }
@@ -251,32 +239,31 @@ class Type extends FieldType
     /**
      * Converts an $hash to the Value defined by the field type.
      * $hash accepts the following keys:
-     *  - xml (XML string which complies internal format)
+     *  - xml (XML string which complies internal format).
      *
      * @param mixed $hash
      *
      * @return \eZ\Publish\Core\FieldType\RichText\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        if ( !isset( $hash["xml"] ) )
-        {
-            throw new RuntimeException( "'xml' index is missing in hash." );
+        if (!isset($hash['xml'])) {
+            throw new RuntimeException("'xml' index is missing in hash.");
         }
 
-        return $this->acceptValue( $hash['xml'] );
+        return $this->acceptValue($hash['xml']);
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\RichText\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
-        return array( 'xml' => (string)$value );
+        return array('xml' => (string)$value);
     }
 
     /**
@@ -287,9 +274,9 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\RichText\Value
      */
-    public function fromPersistenceValue( FieldValue $fieldValue )
+    public function fromPersistenceValue(FieldValue $fieldValue)
     {
-        return new Value( $fieldValue->data );
+        return new Value($fieldValue->data);
     }
 
     /**
@@ -297,21 +284,21 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
-    public function toPersistenceValue( SPIValue $value )
+    public function toPersistenceValue(SPIValue $value)
     {
         return new FieldValue(
             array(
                 'data' => $value->xml->saveXML(),
                 'externalData' => null,
-                'sortKey' => $this->getSortInfo( $value )
+                'sortKey' => $this->getSortInfo($value),
             )
         );
     }
 
     /**
-     * Returns whether the field type is searchable
+     * Returns whether the field type is searchable.
      *
-     * @return boolean
+     * @return bool
      */
     public function isSearchable()
     {
@@ -319,44 +306,38 @@ class Type extends FieldType
     }
 
     /**
-     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
      * @param mixed $fieldSettings
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateFieldSettings( $fieldSettings )
+    public function validateFieldSettings($fieldSettings)
     {
         $validationErrors = array();
 
-        foreach ( $fieldSettings as $name => $value )
-        {
-            if ( isset( $this->settingsSchema[$name] ) )
-            {
-                switch ( $name )
-                {
-                    case "numRows":
-                        if ( !is_integer( $value ) )
-                        {
+        foreach ($fieldSettings as $name => $value) {
+            if (isset($this->settingsSchema[$name])) {
+                switch ($name) {
+                    case 'numRows':
+                        if (!is_integer($value)) {
                             $validationErrors[] = new ValidationError(
                                 "Setting '%setting%' value must be of integer type",
                                 null,
                                 array(
-                                    "setting" => $name
+                                    'setting' => $name,
                                 ),
                                 "[$name]"
                             );
                         }
                         break;
                 }
-            }
-            else
-            {
+            } else {
                 $validationErrors[] = new ValidationError(
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        "setting" => $name
+                        'setting' => $name,
                     ),
                     "[$name]"
                 );
@@ -391,16 +372,15 @@ class Type extends FieldType
      *  )
      * </code>
      */
-    public function getRelations( SPIValue $value )
+    public function getRelations(SPIValue $value)
     {
         $relations = array();
 
         /** @var \eZ\Publish\Core\FieldType\RichText\Value $value */
-        if ( $value->xml instanceof DOMDocument )
-        {
+        if ($value->xml instanceof DOMDocument) {
             $relations = array(
-                Relation::LINK => $this->getRelatedObjectIds( $value, Relation::LINK ),
-                Relation::EMBED => $this->getRelatedObjectIds( $value, Relation::EMBED )
+                Relation::LINK => $this->getRelatedObjectIds($value, Relation::LINK),
+                Relation::EMBED => $this->getRelatedObjectIds($value, Relation::EMBED),
             );
         }
 
@@ -410,47 +390,39 @@ class Type extends FieldType
     /**
      * @todo handle embeds when implemented
      */
-    protected function getRelatedObjectIds( Value $fieldValue, $relationType )
+    protected function getRelatedObjectIds(Value $fieldValue, $relationType)
     {
-        if ( $relationType === Relation::EMBED )
-        {
-            $tagName = "embed";
-        }
-        else
-        {
-            $tagName = "link";
+        if ($relationType === Relation::EMBED) {
+            $tagName = 'embed';
+        } else {
+            $tagName = 'link';
         }
 
         $contentIds = array();
         $locationIds = array();
-        $xpath = new \DOMXPath( $fieldValue->xml );
-        $xpath->registerNamespace( "docbook", "http://docbook.org/ns/docbook" );
+        $xpath = new \DOMXPath($fieldValue->xml);
+        $xpath->registerNamespace('docbook', 'http://docbook.org/ns/docbook');
         $xpathExpression = "//docbook:{$tagName}[starts-with( @xlink:href, 'ezcontent://' ) or starts-with( @xlink:href, 'ezlocation://' )]";
 
         /** @var \DOMElement $link */
-        foreach ( $xpath->query( $xpathExpression ) as $link )
-        {
-            preg_match( "~^(.+)://([^#]*)?(#.*|\\s*)?$~", $link->getAttribute( "xlink:href" ), $matches );
-            list( , $scheme, $id ) = $matches;
+        foreach ($xpath->query($xpathExpression) as $link) {
+            preg_match('~^(.+)://([^#]*)?(#.*|\\s*)?$~', $link->getAttribute('xlink:href'), $matches);
+            list(, $scheme, $id) = $matches;
 
-            if ( empty( $id ) )
-            {
+            if (empty($id)) {
                 continue;
             }
 
-            if ( $scheme === "ezcontent" )
-            {
+            if ($scheme === 'ezcontent') {
                 $contentIds[] = $id;
-            }
-            else if ( $scheme === "ezlocation" )
-            {
+            } elseif ($scheme === 'ezlocation') {
                 $locationIds[] = $id;
             }
         }
 
         return array(
-            "locationIds" => array_unique( $locationIds ),
-            "contentIds" => array_unique( $contentIds )
+            'locationIds' => array_unique($locationIds),
+            'contentIds' => array_unique($contentIds),
         );
     }
 }

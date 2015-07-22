@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the CreatedUserGroup class
+ * File containing the CreatedUserGroup class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,7 +19,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class CreatedUserGroup extends ValueObject
 {
     /**
-     * The created user group
+     * The created user group.
      *
      * @var \eZ\Publish\Core\REST\Server\Values\RestUserGroup
      */

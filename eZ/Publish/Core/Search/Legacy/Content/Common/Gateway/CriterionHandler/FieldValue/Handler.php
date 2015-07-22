@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the DoctrineDatabase base field value Handler class
+ * File containing the DoctrineDatabase base field value Handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,7 +24,7 @@ use RuntimeException;
 abstract class Handler
 {
     /**
-     * DB handler to fetch additional field information
+     * DB handler to fetch additional field information.
      *
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
@@ -35,28 +37,28 @@ abstract class Handler
      * @var array
      */
     protected $comparatorMap = array(
-        CriterionOperator::EQ => "eq",
-        CriterionOperator::GT => "gt",
-        CriterionOperator::GTE => "gte",
-        CriterionOperator::LT => "lt",
-        CriterionOperator::LTE => "lte",
-        CriterionOperator::LIKE => "like",
+        CriterionOperator::EQ => 'eq',
+        CriterionOperator::GT => 'gt',
+        CriterionOperator::GTE => 'gte',
+        CriterionOperator::LT => 'lt',
+        CriterionOperator::LTE => 'lte',
+        CriterionOperator::LIKE => 'like',
     );
 
     /**
-     * Transformation processor
+     * Transformation processor.
      *
      * @var \eZ\Publish\Core\Persistence\TransformationProcessor
      */
     protected $transformationProcessor;
 
     /**
-     * Creates a new criterion handler
+     * Creates a new criterion handler.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
      */
-    public function __construct( DatabaseHandler $dbHandler, TransformationProcessor $transformationProcessor )
+    public function __construct(DatabaseHandler $dbHandler, TransformationProcessor $transformationProcessor)
     {
         $this->dbHandler = $dbHandler;
         $this->transformationProcessor = $transformationProcessor;
@@ -73,24 +75,23 @@ abstract class Handler
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function handle( SelectQuery $query, Criterion $criterion, $column )
+    public function handle(SelectQuery $query, Criterion $criterion, $column)
     {
-        $column = $this->dbHandler->quoteColumn( $column );
+        $column = $this->dbHandler->quoteColumn($column);
 
-        switch ( $criterion->operator )
-        {
+        switch ($criterion->operator) {
             case Criterion\Operator::IN:
                 $filter = $query->expr->in(
                     $column,
-                    array_map( array( $this, 'lowercase' ), $criterion->value )
+                    array_map(array($this, 'lowercase'), $criterion->value)
                 );
                 break;
 
             case Criterion\Operator::BETWEEN:
                 $filter = $query->expr->between(
                     $column,
-                    $query->bindValue( $this->lowercase( $criterion->value[0] ) ),
-                    $query->bindValue( $this->lowercase( $criterion->value[1] ) )
+                    $query->bindValue($this->lowercase($criterion->value[0])),
+                    $query->bindValue($this->lowercase($criterion->value[1]))
                 );
                 break;
 
@@ -103,19 +104,19 @@ abstract class Handler
                 $operatorFunction = $this->comparatorMap[$criterion->operator];
                 $filter = $query->expr->$operatorFunction(
                     $column,
-                    $query->bindValue( $this->lowercase( $criterion->value ) )
+                    $query->bindValue($this->lowercase($criterion->value))
                 );
                 break;
 
             case Criterion\Operator::CONTAINS:
                 $filter = $query->expr->like(
                     $column,
-                    $query->bindValue( "%" . $this->lowercase( $criterion->value ) . "%" )
+                    $query->bindValue('%' . $this->lowercase($criterion->value) . '%')
                 );
                 break;
 
             default:
-                throw new RuntimeException( "Unknown operator '{$criterion->operator}' for Field criterion handler." );
+                throw new RuntimeException("Unknown operator '{$criterion->operator}' for Field criterion handler.");
         }
 
         return $filter;
@@ -128,8 +129,8 @@ abstract class Handler
      *
      * @return string
      */
-    protected function lowerCase( $string )
+    protected function lowerCase($string)
     {
-        return $this->transformationProcessor->transformByGroup( $string, "lowercase" );
+        return $this->transformationProcessor->transformByGroup($string, 'lowercase');
     }
 }

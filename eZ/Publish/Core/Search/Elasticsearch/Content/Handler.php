@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Content Search handler class
+ * File containing the Content Search handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,9 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Search\Content\Handler as SearchHandlerInterface;
-use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\SPI\Persistence\Content\Location;
-use eZ\Publish\SPI\Persistence\Content\Section;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
@@ -33,14 +33,14 @@ class Handler implements SearchHandlerInterface
     protected $mapper;
 
     /**
-     * Search result extractor
+     * Search result extractor.
      *
      * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Extractor
      */
     protected $extractor;
 
     /**
-     * Name of Content document type in the search backend
+     * Name of Content document type in the search backend.
      *
      * @var string
      */
@@ -51,8 +51,7 @@ class Handler implements SearchHandlerInterface
         MapperInterface $mapper,
         Extractor $extractor,
         $documentTypeName
-    )
-    {
+    ) {
         $this->gateway = $gateway;
         $this->mapper = $mapper;
         $this->extractor = $extractor;
@@ -72,18 +71,18 @@ class Handler implements SearchHandlerInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContent( Query $query, array $fieldFilters = array() )
+    public function findContent(Query $query, array $fieldFilters = array())
     {
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
 
-        $data = $this->gateway->find( $query, $this->documentTypeName, $fieldFilters );
+        $data = $this->gateway->find($query, $this->documentTypeName, $fieldFilters);
 
-        return $this->extractor->extract( $data );
+        return $this->extractor->extract($data);
     }
 
     /**
-     * Performs a query for a single content object
+     * Performs a query for a single content object.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
@@ -97,25 +96,22 @@ class Handler implements SearchHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function findSingle( Criterion $filter, array $fieldFilters = array() )
+    public function findSingle(Criterion $filter, array $fieldFilters = array())
     {
         $query = new Query();
         $query->filter = $filter;
         $query->offset = 0;
-        $query->limit  = 1;
-        $result = $this->findContent( $query, $fieldFilters );
+        $query->limit = 1;
+        $result = $this->findContent($query, $fieldFilters);
 
-        if ( !$result->totalCount )
-        {
+        if (!$result->totalCount) {
             throw new NotFoundException(
-                "Content",
+                'Content',
                 "findSingle() found no content for given \$filter"
             );
-        }
-        else if ( $result->totalCount > 1 )
-        {
+        } elseif ($result->totalCount > 1) {
             throw new InvalidArgumentException(
-                "totalCount",
+                'totalCount',
                 "findSingle() found more then one item for given \$filter"
             );
         }
@@ -124,76 +120,70 @@ class Handler implements SearchHandlerInterface
     }
 
     /**
-     * Suggests a list of values for the given prefix
+     * Suggests a list of values for the given prefix.
      *
      * @param string $prefix
      * @param string[] $fieldPaths
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
-    public function suggest( $prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null )
+    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null)
     {
         // TODO: Implement suggest() method.
     }
 
     /**
-     * Indexes a content object
+     * Indexes a content object.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      */
-    public function indexContent( Content $content )
+    public function indexContent(Content $content)
     {
-        $document = $this->mapper->mapContent( $content );
+        $document = $this->mapper->mapContent($content);
 
-        $this->gateway->index( $document );
+        $this->gateway->index($document);
     }
 
     /**
-     * Indexes several content objects
+     * Indexes several content objects.
      *
      * @todo: This function and setCommit() is needed for Persistence\Solr for test speed but not part
      *       of interface for the reason described in Solr\Content\Search\Gateway\Native::bulkIndexContent
      *       Short: Bulk handling should be properly designed before added to the interface.
      *
      * @param \eZ\Publish\SPI\Persistence\Content[] $contentObjects
-     *
-     * @return void
      */
-    public function bulkIndexContent( array $contentObjects )
+    public function bulkIndexContent(array $contentObjects)
     {
         $documents = array();
-        foreach ( $contentObjects as $content )
-        {
-            $documents[] = $this->mapper->mapContent( $content );
+        foreach ($contentObjects as $content) {
+            $documents[] = $this->mapper->mapContent($content);
         }
 
-        $this->gateway->bulkIndex( $documents );
+        $this->gateway->bulkIndex($documents);
     }
 
     /**
-     * Deletes a content object from the index
+     * Deletes a content object from the index.
      *
      * @param int $contentId
      * @param int|null $versionId
-     *
-     * @return void
      */
-    public function deleteContent( $contentId, $versionId = null )
+    public function deleteContent($contentId, $versionId = null)
     {
-        if ( $versionId === null )
-        {
+        if ($versionId === null) {
             $ast = array(
-                "query" => array(
-                    "filtered" => array(
-                        "filter" => array(
-                            "and" => array(
+                'query' => array(
+                    'filtered' => array(
+                        'filter' => array(
+                            'and' => array(
                                 array(
-                                    "ids" => array(
-                                        "type" => $this->documentTypeName,
-                                        "values" => array(
+                                    'ids' => array(
+                                        'type' => $this->documentTypeName,
+                                        'values' => array(
                                             $contentId,
                                         ),
-                                    )
+                                    ),
                                 ),
                             ),
                         ),
@@ -201,16 +191,14 @@ class Handler implements SearchHandlerInterface
                 ),
             );
 
-            $this->gateway->deleteByQuery( json_encode( $ast ), "content" );
-        }
-        else
-        {
-            $this->gateway->delete( $contentId, "content" );
+            $this->gateway->deleteByQuery(json_encode($ast), 'content');
+        } else {
+            $this->gateway->delete($contentId, 'content');
         }
     }
 
     /**
-     * Deletes a location from the index
+     * Deletes a location from the index.
      *
      * @todo When we support Location-less Content, we will have to reindex instead of removing
      * @todo Should we not already support the above?
@@ -219,26 +207,26 @@ class Handler implements SearchHandlerInterface
      * @param mixed $locationId
      * @param mixed $contentId @todo Make use of this, or remove if not needed.
      */
-    public function deleteLocation( $locationId, $contentId )
+    public function deleteLocation($locationId, $contentId)
     {
         // 1. Update (reindex) all Content in the subtree with additional Location(s) outside of it
         $ast = array(
-            "filter" => array(
-                "nested" => array(
-                    "path" => "locations_doc",
-                    "filter" => array(
-                        "and" => array(
+            'filter' => array(
+                'nested' => array(
+                    'path' => 'locations_doc',
+                    'filter' => array(
+                        'and' => array(
                             0 => array(
-                                "regexp" => array(
-                                    "locations_doc.path_string_id" => ".*/{$locationId}/.*",
+                                'regexp' => array(
+                                    'locations_doc.path_string_id' => ".*/{$locationId}/.*",
                                 ),
                             ),
                             1 => array(
-                                "regexp" => array(
-                                    "locations_doc.path_string_id" => array(
+                                'regexp' => array(
+                                    'locations_doc.path_string_id' => array(
                                         // Matches anything (@) and (&) not (~) <expression>
-                                        "value" => "@&~(.*/{$locationId}/.*)",
-                                        "flags" => "INTERSECTION|COMPLEMENT|ANYSTRING",
+                                        'value' => "@&~(.*/{$locationId}/.*)",
+                                        'flags' => 'INTERSECTION|COMPLEMENT|ANYSTRING',
                                     ),
                                 ),
                             ),
@@ -248,50 +236,47 @@ class Handler implements SearchHandlerInterface
             ),
         );
 
-        $response = $this->gateway->findRaw( json_encode( $ast ), $this->documentTypeName );
-        $result = json_decode( $response->body );
+        $response = $this->gateway->findRaw(json_encode($ast), $this->documentTypeName);
+        $result = json_decode($response->body);
 
         $documents = array();
-        foreach ( $result->hits->hits as $hit )
-        {
-            $documents[] = $this->mapper->mapContentById( $hit->_id );
+        foreach ($result->hits->hits as $hit) {
+            $documents[] = $this->mapper->mapContentById($hit->_id);
         }
 
-        $this->gateway->bulkIndex( $documents );
+        $this->gateway->bulkIndex($documents);
 
         // 2. Delete all Content in the subtree with no other Location(s) outside of it
-        $ast["filter"]["nested"]["filter"]["and"][1] = array(
-            "not" => $ast["filter"]["nested"]["filter"]["and"][1],
+        $ast['filter']['nested']['filter']['and'][1] = array(
+            'not' => $ast['filter']['nested']['filter']['and'][1],
         );
         $ast = array(
-            "query" => array(
-                "filtered" => $ast,
+            'query' => array(
+                'filtered' => $ast,
             ),
         );
 
-        $this->gateway->deleteByQuery( json_encode( $ast ), $this->documentTypeName );
+        $this->gateway->deleteByQuery(json_encode($ast), $this->documentTypeName);
     }
 
     /**
-     * Purges all contents from the index
+     * Purges all contents from the index.
      *
      * @todo: Make this public API?
-     *
-     * @return void
      */
     public function purgeIndex()
     {
-        $this->gateway->purgeIndex( $this->documentTypeName );
+        $this->gateway->purgeIndex($this->documentTypeName);
     }
 
     /**
-     * Set if index/delete actions should commit or if several actions is to be expected
+     * Set if index/delete actions should commit or if several actions is to be expected.
      *
      * This should be set to false before group of actions and true before the last one
      *
      * @param bool $commit
      */
-    public function setCommit( $commit )
+    public function setCommit($commit)
     {
         //$this->gateway->setCommit( $commit );
     }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * TrashService class
+ * TrashService class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,27 +21,26 @@ use eZ\Publish\Core\SignalSlot\Signal\TrashService\EmptyTrashSignal;
 use eZ\Publish\Core\SignalSlot\Signal\TrashService\DeleteTrashItemSignal;
 
 /**
- * TrashService class
- * @package eZ\Publish\Core\SignalSlot
+ * TrashService class.
  */
 class TrashService implements TrashServiceInterface
 {
     /**
-     * Aggregated service
+     * Aggregated service.
      *
      * @var \eZ\Publish\API\Repository\TrashService
      */
     protected $service;
 
     /**
-     * SignalDispatcher
+     * SignalDispatcher.
      *
      * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * Construct service object from aggregated service and signal
      * dispatcher
@@ -47,9 +48,9 @@ class TrashService implements TrashServiceInterface
      * @param \eZ\Publish\API\Repository\TrashService $service
      * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
      */
-    public function __construct( TrashServiceInterface $service, SignalDispatcher $signalDispatcher )
+    public function __construct(TrashServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service          = $service;
+        $this->service = $service;
         $this->signalDispatcher = $signalDispatcher;
     }
 
@@ -65,9 +66,9 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
-    public function loadTrashItem( $trashItemId )
+    public function loadTrashItem($trashItemId)
     {
-        return $this->service->loadTrashItem( $trashItemId );
+        return $this->service->loadTrashItem($trashItemId);
     }
 
     /**
@@ -81,9 +82,9 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
-    public function trash( Location $location )
+    public function trash(Location $location)
     {
-        $returnValue = $this->service->trash( $location );
+        $returnValue = $this->service->trash($location);
         $this->signalDispatcher->emit(
             new TrashSignal(
                 array(
@@ -92,6 +93,7 @@ class TrashService implements TrashServiceInterface
                 )
             )
         );
+
         return $returnValue;
     }
 
@@ -107,9 +109,9 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created or recovered location
      */
-    public function recover( TrashItem $trashItem, Location $newParentLocation = null )
+    public function recover(TrashItem $trashItem, Location $newParentLocation = null)
     {
-        $newLocation = $this->service->recover( $trashItem, $newParentLocation );
+        $newLocation = $this->service->recover($trashItem, $newParentLocation);
         $this->signalDispatcher->emit(
             new RecoverSignal(
                 array(
@@ -119,6 +121,7 @@ class TrashService implements TrashServiceInterface
                 )
             )
         );
+
         return $newLocation;
     }
 
@@ -133,7 +136,8 @@ class TrashService implements TrashServiceInterface
     public function emptyTrash()
     {
         $returnValue = $this->service->emptyTrash();
-        $this->signalDispatcher->emit( new EmptyTrashSignal( array() ) );
+        $this->signalDispatcher->emit(new EmptyTrashSignal(array()));
+
         return $returnValue;
     }
 
@@ -146,9 +150,9 @@ class TrashService implements TrashServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
      */
-    public function deleteTrashItem( TrashItem $trashItem )
+    public function deleteTrashItem(TrashItem $trashItem)
     {
-        $returnValue = $this->service->deleteTrashItem( $trashItem );
+        $returnValue = $this->service->deleteTrashItem($trashItem);
         $this->signalDispatcher->emit(
             new DeleteTrashItemSignal(
                 array(
@@ -156,6 +160,7 @@ class TrashService implements TrashServiceInterface
                 )
             )
         );
+
         return $returnValue;
     }
 
@@ -168,8 +173,8 @@ class TrashService implements TrashServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
      */
-    public function findTrashItems( Query $query )
+    public function findTrashItems(Query $query)
     {
-        return $this->service->findTrashItems( $query );
+        return $this->service->findTrashItems($query);
     }
 }

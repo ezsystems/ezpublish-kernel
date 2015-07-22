@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Content Search Gateway class
+ * File containing the Content Search Gateway class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -29,7 +31,7 @@ use eZ\Publish\SPI\Search\FieldType;
 class Native extends Gateway
 {
     /**
-     * HTTP client to communicate with Solr server
+     * HTTP client to communicate with Solr server.
      *
      * @var HttpClient
      */
@@ -41,49 +43,49 @@ class Native extends Gateway
     protected $endpointResolver;
 
     /**
-     * Endpoint registry service
+     * Endpoint registry service.
      *
      * @var \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointRegistry
      */
     protected $endpointRegistry;
 
     /**
-     * Core filter service
+     * Core filter service.
      *
      * @var \eZ\Publish\Core\Search\Solr\Content\Gateway\CoreFilter
      */
     protected $coreFilter;
 
     /**
-     * Query visitor
+     * Query visitor.
      *
      * @var CriterionVisitor
      */
     protected $criterionVisitor;
 
     /**
-     * Sort clause visitor
+     * Sort clause visitor.
      *
      * @var SortClauseVisitor
      */
     protected $sortClauseVisitor;
 
     /**
-     * Facet builder visitor
+     * Facet builder visitor.
      *
      * @var FacetBuilderVisitor
      */
     protected $facetBuilderVisitor;
 
     /**
-     * Field value mapper
+     * Field value mapper.
      *
      * @var FieldValueMapper
      */
     protected $fieldValueMapper;
 
     /**
-     * Field name generator
+     * Field name generator.
      *
      * @var FieldNameGenerator
      */
@@ -95,7 +97,7 @@ class Native extends Gateway
     protected $commit = true;
 
     /**
-     * Construct from HTTP client
+     * Construct from HTTP client.
      *
      * @param HttpClient $client
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver $endpointResolver
@@ -117,17 +119,16 @@ class Native extends Gateway
         FacetBuilderVisitor $facetBuilderVisitor,
         FieldValueMapper $fieldValueMapper,
         FieldNameGenerator $nameGenerator
-    )
-    {
-        $this->client              = $client;
+    ) {
+        $this->client = $client;
         $this->endpointResolver = $endpointResolver;
         $this->endpointRegistry = $endpointRegistry;
         $this->coreFilter = $coreFilter;
-        $this->criterionVisitor    = $criterionVisitor;
-        $this->sortClauseVisitor   = $sortClauseVisitor;
+        $this->criterionVisitor = $criterionVisitor;
+        $this->sortClauseVisitor = $sortClauseVisitor;
         $this->facetBuilderVisitor = $facetBuilderVisitor;
-        $this->fieldValueMapper    = $fieldValueMapper;
-        $this->nameGenerator       = $nameGenerator;
+        $this->fieldValueMapper = $fieldValueMapper;
+        $this->nameGenerator = $nameGenerator;
     }
 
     /**
@@ -141,33 +142,31 @@ class Native extends Gateway
      *
      * @return mixed
      */
-    public function find( Query $query, array $fieldFilters = array() )
+    public function find(Query $query, array $fieldFilters = array())
     {
         $query = clone $query;
 
-        $this->coreFilter->apply( $query, $fieldFilters );
+        $this->coreFilter->apply($query, $fieldFilters);
 
         $parameters = array(
-            "q" => $this->criterionVisitor->visit( $query->query ),
-            "fq" => $this->criterionVisitor->visit( $query->filter ),
-            "sort" => $this->getSortClauses( $query->sortClauses ),
-            "start" => $query->offset,
-            "rows" => $query->limit,
-            "fl" => "*,score,[shard]",
-            "wt" => "json",
+            'q' => $this->criterionVisitor->visit($query->query),
+            'fq' => $this->criterionVisitor->visit($query->filter),
+            'sort' => $this->getSortClauses($query->sortClauses),
+            'start' => $query->offset,
+            'rows' => $query->limit,
+            'fl' => '*,score,[shard]',
+            'wt' => 'json',
         );
 
-        $searchTargets = $this->getSearchTargets( $fieldFilters );
-        if ( !empty( $searchTargets ) )
-        {
-            $parameters["shards"] = $searchTargets;
+        $searchTargets = $this->getSearchTargets($fieldFilters);
+        if (!empty($searchTargets)) {
+            $parameters['shards'] = $searchTargets;
         }
 
-        $queryString = http_build_query( $parameters );
+        $queryString = http_build_query($parameters);
 
-        $facets = $this->getFacets( $query->facetBuilders );
-        if ( !empty( $facets ) )
-        {
+        $facets = $this->getFacets($query->facetBuilders);
+        if (!empty($facets)) {
             $queryString .= "&facet=true&facet.sort=count&{$facets}";
         }
 
@@ -180,12 +179,11 @@ class Native extends Gateway
         );
 
         // @todo: Error handling?
-        $result = json_decode( $response->body );
+        $result = json_decode($response->body);
 
-        if ( !isset( $result->response ) )
-        {
+        if (!isset($result->response)) {
             throw new \Exception(
-                '->response not set: ' . var_export( array( $result, $parameters ), true )
+                '->response not set: ' . var_export(array($result, $parameters), true)
             );
         }
 
@@ -193,62 +191,60 @@ class Native extends Gateway
     }
 
     /**
-     * Converts an array of sort clause objects to a proper Solr representation
+     * Converts an array of sort clause objects to a proper Solr representation.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
      *
      * @return string
      */
-    protected function getSortClauses( array $sortClauses )
+    protected function getSortClauses(array $sortClauses)
     {
         return implode(
-            ", ",
+            ', ',
             array_map(
-                array( $this->sortClauseVisitor, "visit" ),
+                array($this->sortClauseVisitor, 'visit'),
                 $sortClauses
             )
         );
     }
 
     /**
-     * Converts an array of facet builder objects to a proper Solr representation
+     * Converts an array of facet builder objects to a proper Solr representation.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder[] $facetBuilders
      *
      * @return string
      */
-    protected function getFacets( array $facetBuilders )
+    protected function getFacets(array $facetBuilders)
     {
         return implode(
             '&',
             array_map(
-                array( $this->facetBuilderVisitor, 'visit' ),
+                array($this->facetBuilderVisitor, 'visit'),
                 $facetBuilders
             )
         );
     }
 
     /**
-     * Returns search targets for given language settings
+     * Returns search targets for given language settings.
      *
      * @param array $languageSettings
      *
      * @return string
      */
-    protected function getSearchTargets( $languageSettings )
+    protected function getSearchTargets($languageSettings)
     {
         $shards = array();
-        $endpoints = $this->endpointResolver->getSearchTargets( $languageSettings );
+        $endpoints = $this->endpointResolver->getSearchTargets($languageSettings);
 
-        if ( !empty( $endpoints ) )
-        {
-            foreach ( $endpoints as $endpoint )
-            {
-                $shards[] = $this->endpointRegistry->getEndpoint( $endpoint )->getIdentifier();
+        if (!empty($endpoints)) {
+            foreach ($endpoints as $endpoint) {
+                $shards[] = $this->endpointRegistry->getEndpoint($endpoint)->getIdentifier();
             }
         }
 
-        return implode( ",", $shards );
+        return implode(',', $shards);
     }
 
     /**
@@ -261,59 +257,54 @@ class Native extends Gateway
      *
      * @todo $documents should be generated more on demand then this and sent to Solr in chunks before final commit
      */
-    public function bulkIndexDocuments( array $documents )
+    public function bulkIndexDocuments(array $documents)
     {
         $documentMap = array();
         $mainTranslationsEndpoint = $this->endpointResolver->getMainLanguagesEndpoint();
         $alwaysAvailableDocuments = array();
 
-        foreach ( $documents as $translationDocuments )
-        {
-            foreach ( $translationDocuments as $document )
-            {
+        foreach ($documents as $translationDocuments) {
+            foreach ($translationDocuments as $document) {
                 $documentMap[$document->languageCode][] = $document;
 
-                if ( $mainTranslationsEndpoint !== null && $document->isMainTranslation )
-                {
-                    $alwaysAvailableDocuments[] = $this->getAlwaysAvailableDocument( $document );
+                if ($mainTranslationsEndpoint !== null && $document->isMainTranslation) {
+                    $alwaysAvailableDocuments[] = $this->getAlwaysAvailableDocument($document);
                 }
             }
         }
 
-        foreach ( $documentMap as $languageCode => $translationDocuments )
-        {
+        foreach ($documentMap as $languageCode => $translationDocuments) {
             $this->doBulkIndexDocuments(
                 $this->endpointRegistry->getEndpoint(
-                    $this->endpointResolver->getIndexingTarget( $languageCode )
+                    $this->endpointResolver->getIndexingTarget($languageCode)
                 ),
                 $translationDocuments
             );
         }
 
-        if ( !empty( $alwaysAvailableDocuments ) )
-        {
+        if (!empty($alwaysAvailableDocuments)) {
             $this->doBulkIndexDocuments(
-                $this->endpointRegistry->getEndpoint( $mainTranslationsEndpoint ),
+                $this->endpointRegistry->getEndpoint($mainTranslationsEndpoint),
                 $alwaysAvailableDocuments
             );
         }
     }
 
     /**
-     * Returns version of the $document to be indexed in the always available core
+     * Returns version of the $document to be indexed in the always available core.
      *
      * @param \eZ\Publish\SPI\Search\Document $document
      *
      * @return \eZ\Publish\SPI\Search\Document
      */
-    protected function getAlwaysAvailableDocument( Document $document )
+    protected function getAlwaysAvailableDocument(Document $document)
     {
         // Clone to prevent mutation
         $document = clone $document;
 
-        $document->id .= "mt";
+        $document->id .= 'mt';
         $document->fields[] = new Field(
-            "meta_indexed_main_translation",
+            'meta_indexed_main_translation',
             true,
             new FieldType\BooleanField()
         );
@@ -325,14 +316,14 @@ class Native extends Gateway
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint $endpoint
      * @param \eZ\Publish\SPI\Search\Document[] $documents
      */
-    protected function doBulkIndexDocuments( Endpoint $endpoint, array $documents )
+    protected function doBulkIndexDocuments(Endpoint $endpoint, array $documents)
     {
-        $updates = $this->createUpdates( $documents );
+        $updates = $this->createUpdates($documents);
         $result = $this->client->request(
             'POST',
             $endpoint,
             '/update?' .
-            ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
+            ($this->commit ? 'softCommit=true&' : '') . 'wt=json',
             new Message(
                 array(
                     'Content-Type' => 'text/xml',
@@ -341,10 +332,9 @@ class Native extends Gateway
             )
         );
 
-        if ( $result->headers["status"] !== 200 )
-        {
+        if ($result->headers['status'] !== 200) {
             throw new RuntimeException(
-                "Wrong HTTP status received from Solr: " . $result->headers["status"] . var_export( array( $result, $updates ), true )
+                'Wrong HTTP status received from Solr: ' . $result->headers['status'] . var_export(array($result, $updates), true)
             );
         }
     }
@@ -354,17 +344,16 @@ class Native extends Gateway
      *
      * @param string $query
      */
-    public function deleteByQuery( $query )
+    public function deleteByQuery($query)
     {
         $endpoints = $this->endpointResolver->getEndpoints();
 
-        foreach ( $endpoints as $endpointName )
-        {
+        foreach ($endpoints as $endpointName) {
             $this->client->request(
                 'POST',
-                $this->endpointRegistry->getEndpoint( $endpointName ),
+                $this->endpointRegistry->getEndpoint($endpointName),
                 '/update?' .
-                ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
+                ($this->commit ? 'softCommit=true&' : '') . 'wt=json',
                 new Message(
                     array(
                         'Content-Type' => 'text/xml',
@@ -379,17 +368,14 @@ class Native extends Gateway
      * @todo implement purging for document type
      *
      * Purges all contents from the index
-     *
-     * @return void
      */
     public function purgeIndex()
     {
         $endpoints = $this->endpointResolver->getEndpoints();
 
-        foreach ( $endpoints as $endpointName )
-        {
+        foreach ($endpoints as $endpointName) {
             $this->purgeEndpoint(
-                $this->endpointRegistry->getEndpoint( $endpointName )
+                $this->endpointRegistry->getEndpoint($endpointName)
             );
         }
     }
@@ -399,13 +385,13 @@ class Native extends Gateway
      *
      * @param $endpoint
      */
-    protected function purgeEndpoint( $endpoint )
+    protected function purgeEndpoint($endpoint)
     {
         $this->client->request(
             'POST',
             $endpoint,
             '/update?' .
-            ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
+            ($this->commit ? 'softCommit=true&' : '') . 'wt=json',
             new Message(
                 array(
                     'Content-Type' => 'text/xml',
@@ -418,37 +404,36 @@ class Native extends Gateway
     /**
      * @param bool $commit
      */
-    public function setCommit( $commit )
+    public function setCommit($commit)
     {
         $this->commit = !!$commit;
     }
 
     /**
-     * Create document(s) update XML
+     * Create document(s) update XML.
      *
      * @param \eZ\Publish\SPI\Search\Document[] $documents
      *
      * @return string
      */
-    protected function createUpdates( array $documents )
+    protected function createUpdates(array $documents)
     {
         $xmlWriter = new XmlWriter();
         $xmlWriter->openMemory();
-        $xmlWriter->startElement( 'add' );
+        $xmlWriter->startElement('add');
 
-        foreach ( $documents as $document )
-        {
-            $this->writeDocument( $xmlWriter, $document );
+        foreach ($documents as $document) {
+            $this->writeDocument($xmlWriter, $document);
         }
 
         $xmlWriter->endElement();
 
-        return $xmlWriter->outputMemory( true );
+        return $xmlWriter->outputMemory(true);
     }
 
-    protected function writeDocument( XmlWriter $xmlWriter, Document $document )
+    protected function writeDocument(XmlWriter $xmlWriter, Document $document)
     {
-        $xmlWriter->startElement( 'doc' );
+        $xmlWriter->startElement('doc');
 
         $this->writeField(
             $xmlWriter,
@@ -459,24 +444,22 @@ class Native extends Gateway
             )
         );
 
-        foreach ( $document->fields as $field )
-        {
-            $this->writeField( $xmlWriter, $field );
+        foreach ($document->fields as $field) {
+            $this->writeField($xmlWriter, $field);
         }
 
         $xmlWriter->endElement();
     }
 
-    protected function writeField( XmlWriter $xmlWriter, Field $field )
+    protected function writeField(XmlWriter $xmlWriter, Field $field)
     {
-        foreach ( (array)$this->fieldValueMapper->map( $field ) as $value )
-        {
-            $xmlWriter->startElement( 'field' );
+        foreach ((array)$this->fieldValueMapper->map($field) as $value) {
+            $xmlWriter->startElement('field');
             $xmlWriter->writeAttribute(
                 'name',
-                $this->nameGenerator->getTypedName( $field->name, $field->type )
+                $this->nameGenerator->getTypedName($field->name, $field->type)
             );
-            $xmlWriter->text( $value );
+            $xmlWriter->text($value);
             $xmlWriter->endElement();
         }
     }

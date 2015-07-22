@@ -1,10 +1,12 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributd with this source code.
  */
+
 namespace eZ\Publish\Core\IO\Tests\UrlDecorator;
 
 use eZ\Publish\Core\IO\UrlDecorator\Prefix;
@@ -12,30 +14,29 @@ use PHPUnit_Framework_TestCase;
 
 class PrefixTest extends PHPUnit_Framework_TestCase
 {
-
     /**
      * @dataProvider provideData
      */
-    public function testDecorate( $url, $prefix, $decoratedUrl )
+    public function testDecorate($url, $prefix, $decoratedUrl)
     {
-        $decorator = $this->buildDecorator( $prefix );
+        $decorator = $this->buildDecorator($prefix);
 
         self::assertEquals(
             $decoratedUrl,
-            $decorator->decorate( $url )
+            $decorator->decorate($url)
         );
     }
 
     /**
      * @dataProvider provideData
      */
-    public function testUndecorate( $url, $prefix, $decoratedUrl )
+    public function testUndecorate($url, $prefix, $decoratedUrl)
     {
-        $decorator = $this->buildDecorator( $prefix );
+        $decorator = $this->buildDecorator($prefix);
 
         self::assertEquals(
             $url,
-            $decorator->undecorate( $decoratedUrl )
+            $decorator->undecorate($decoratedUrl)
         );
     }
 
@@ -44,9 +45,9 @@ class PrefixTest extends PHPUnit_Framework_TestCase
      *
      * @return \eZ\Publish\Core\IO\UrlDecorator
      */
-    protected function buildDecorator( $prefix )
+    protected function buildDecorator($prefix)
     {
-        return new Prefix( $prefix );
+        return new Prefix($prefix);
     }
 
     public function provideData()
@@ -55,18 +56,18 @@ class PrefixTest extends PHPUnit_Framework_TestCase
             array(
                 'images/file.png',
                 'var/storage',
-                'var/storage/images/file.png'
+                'var/storage/images/file.png',
             ),
             array(
                 'images/file.png',
                 'var/storage/',
-                'var/storage/images/file.png'
+                'var/storage/images/file.png',
             ),
             array(
                 'images/file.png',
                 'http://static.example.com',
-                'http://static.example.com/images/file.png'
-            )
+                'http://static.example.com/images/file.png',
+            ),
         );
     }
 }

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\API\Repository\Tests\FieldType\IntegerIntegrationTest class
+ * File contains: eZ\Publish\API\Repository\Tests\FieldType\IntegerIntegrationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,7 @@ use eZ\Publish\Core\FieldType\Integer\Value as IntegerValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * Integration test for use field type
+ * Integration test for use field type.
  *
  * @group integration
  * @group field-type
@@ -21,7 +23,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class IntegerIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
-     * Get name of tested field type
+     * Get name of tested field type.
      *
      * @return string
      */
@@ -31,7 +33,7 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get expected settings schema
+     * Get expected settings schema.
      *
      * @return array
      */
@@ -41,7 +43,7 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get a valid $fieldSettings value
+     * Get a valid $fieldSettings value.
      *
      * @return mixed
      */
@@ -51,7 +53,7 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get $fieldSettings value not accepted by the field type
+     * Get $fieldSettings value not accepted by the field type.
      *
      * @return mixed
      */
@@ -63,7 +65,7 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get expected validator schema
+     * Get expected validator schema.
      *
      * @return array
      */
@@ -72,19 +74,19 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
         return array(
             'IntegerValueValidator' => array(
                 'minIntegerValue' => array(
-                    'type'    => 'int',
+                    'type' => 'int',
                     'default' => null,
                 ),
                 'maxIntegerValue' => array(
-                    'type'    => 'int',
+                    'type' => 'int',
                     'default' => null,
                 ),
-            )
+            ),
         );
     }
 
     /**
-     * Get a valid $validatorConfiguration
+     * Get a valid $validatorConfiguration.
      *
      * @return mixed
      */
@@ -94,12 +96,12 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
             'IntegerValueValidator' => array(
                 'minIntegerValue' => 23,
                 'maxIntegerValue' => 42,
-            )
+            ),
         );
     }
 
     /**
-     * Get $validatorConfiguration not accepted by the field type
+     * Get $validatorConfiguration not accepted by the field type.
      *
      * @return mixed
      */
@@ -108,18 +110,18 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
         return array(
             'IntegerValueValidator' => array(
                 'minStringLength' => new \stdClass(),
-            )
+            ),
         );
     }
 
     /**
-     * Get initial field data for valid object creation
+     * Get initial field data for valid object creation.
      *
      * @return mixed
      */
     public function getValidCreationFieldData()
     {
-        return new IntegerValue( 23 );
+        return new IntegerValue(23);
     }
 
     /**
@@ -129,10 +131,8 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
      * was stored and loaded correctly.
      *
      * @param Field $field
-     *
-     * @return void
      */
-    public function assertFieldDataLoadedCorrect( Field $field )
+    public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Integer\\Value',
@@ -149,7 +149,7 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during creation
+     * Get field data which will result in errors during creation.
      *
      * This is a PHPUnit data provider.
      *
@@ -177,34 +177,34 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
             ),
             array(
-                new IntegerValue( 5 ),
+                new IntegerValue(5),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
             ),
             array(
-                new IntegerValue( 127 ),
+                new IntegerValue(127),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
             ),
         );
     }
 
     /**
-     * Get update field externals data
+     * Get update field externals data.
      *
      * @return array
      */
     public function getValidUpdateFieldData()
     {
-        return new IntegerValue( 42 );
+        return new IntegerValue(42);
     }
 
     /**
-     * Get externals updated field data values
+     * Get externals updated field data values.
      *
      * This is a PHPUnit data provider
      *
      * @return array
      */
-    public function assertUpdatedFieldDataLoadedCorrect( Field $field )
+    public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Integer\\Value',
@@ -221,7 +221,7 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get field data which will result in errors during update
+     * Get field data which will result in errors during update.
      *
      * This is a PHPUnit data provider.
      *
@@ -254,7 +254,7 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
      *
      * @param Field $field
      */
-    public function assertCopiedFieldDataLoadedCorrectly( Field $field )
+    public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\FieldType\\Integer\\Value',
@@ -271,7 +271,7 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * Get data to test to hash method
+     * Get data to test to hash method.
      *
      * This is a PHPUnit data provider
      *
@@ -294,14 +294,14 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
     {
         return array(
             array(
-                new IntegerValue( 23 ),
+                new IntegerValue(23),
                 23,
             ),
         );
     }
 
     /**
-     * Get expectations for the fromHash call on our field value
+     * Get expectations for the fromHash call on our field value.
      *
      * This is a PHPUnit data provider
      *
@@ -312,7 +312,7 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
         return array(
             array(
                 42,
-                new IntegerValue( 42 )
+                new IntegerValue(42),
             ),
         );
     }
@@ -320,7 +320,7 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
     public function providerForTestIsEmptyValue()
     {
         return array(
-            array( new IntegerValue() ),
+            array(new IntegerValue()),
         );
     }
 
@@ -328,10 +328,10 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
     {
         return array(
             array(
-                $this->getValidCreationFieldData()
+                $this->getValidCreationFieldData(),
             ),
-            array( new IntegerValue( 0 ) ),
-            array( new IntegerValue( 0.0 ) ),
+            array(new IntegerValue(0)),
+            array(new IntegerValue(0.0)),
         );
     }
 
@@ -345,4 +345,3 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
         return 26;
     }
 }
-

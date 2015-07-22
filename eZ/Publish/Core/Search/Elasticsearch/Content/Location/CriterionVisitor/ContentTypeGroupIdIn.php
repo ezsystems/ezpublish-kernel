@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentTypeGroupIdIn criterion visitor class
+ * File containing the ContentTypeGroupIdIn criterion visitor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,29 +17,29 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
- * Visits the ContentTypeGroupId criterion
+ * Visits the ContentTypeGroupId criterion.
  */
 class ContentTypeGroupIdIn extends CriterionVisitor
 {
     /**
-     * Check if visitor is applicable to current criterion
+     * Check if visitor is applicable to current criterion.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return boolean
+     * @return bool
      */
-    public function canVisit( Criterion $criterion )
+    public function canVisit(Criterion $criterion)
     {
         return
             $criterion instanceof Criterion\ContentTypeGroupId &&
             (
-                ( $criterion->operator ?: Operator::IN ) === Operator::IN ||
+                ($criterion->operator ?: Operator::IN) === Operator::IN ||
                 $criterion->operator === Operator::EQ
             );
     }
 
     /**
-     * Map field value to a proper Elasticsearch filter representation
+     * Map field value to a proper Elasticsearch filter representation.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
@@ -45,21 +47,18 @@ class ContentTypeGroupIdIn extends CriterionVisitor
      *
      * @return mixed
      */
-    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters )
+    public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters)
     {
-        if ( count( $criterion->value ) > 1 )
-        {
+        if (count($criterion->value) > 1) {
             $filter = array(
-                "terms" => array(
-                    "content_group_mid" => $criterion->value,
+                'terms' => array(
+                    'content_group_mid' => $criterion->value,
                 ),
             );
-        }
-        else
-        {
+        } else {
             $filter = array(
-                "term" => array(
-                    "content_group_mid" => $criterion->value[0],
+                'term' => array(
+                    'content_group_mid' => $criterion->value[0],
                 ),
             );
         }

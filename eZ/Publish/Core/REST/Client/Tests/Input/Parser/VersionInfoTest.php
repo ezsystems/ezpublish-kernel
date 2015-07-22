@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a VersionInfoTest class
+ * File containing a VersionInfoTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -21,7 +23,7 @@ class VersionInfoTest extends BaseTest
     protected $contentServiceMock;
 
     /**
-     * Tests the section parser
+     * Tests the section parser.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
@@ -55,9 +57,9 @@ class VersionInfoTest extends BaseTest
             ),
         );
 
-        $result = $relationParser->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $relationParser->parse($inputArray, $this->getParsingDispatcherMock());
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
@@ -65,7 +67,7 @@ class VersionInfoTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedId( $parsedVersionInfo )
+    public function testParsedId($parsedVersionInfo)
     {
         $this->assertEquals(
             474,
@@ -76,7 +78,7 @@ class VersionInfoTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedVersionNo( $parsedVersionInfo )
+    public function testParsedVersionNo($parsedVersionInfo)
     {
         $this->assertEquals(
             2,
@@ -87,7 +89,7 @@ class VersionInfoTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedStatus( $parsedVersionInfo )
+    public function testParsedStatus($parsedVersionInfo)
     {
         $this->assertEquals(
             Values\Content\VersionInfo::STATUS_PUBLISHED,
@@ -98,7 +100,7 @@ class VersionInfoTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedCreatorId( $parsedVersionInfo )
+    public function testParsedCreatorId($parsedVersionInfo)
     {
         $this->assertEquals(
             '/user/users/14',
@@ -109,10 +111,10 @@ class VersionInfoTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedCreationDate( $parsedVersionInfo )
+    public function testParsedCreationDate($parsedVersionInfo)
     {
         $this->assertEquals(
-            new \DateTime( '2003-12-23T12:52:17+01:00' ),
+            new \DateTime('2003-12-23T12:52:17+01:00'),
             $parsedVersionInfo->creationDate
         );
     }
@@ -120,10 +122,10 @@ class VersionInfoTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedModificationDate( $parsedVersionInfo )
+    public function testParsedModificationDate($parsedVersionInfo)
     {
         $this->assertEquals(
-            new \DateTime( '2003-12-23T12:53:25+01:00' ),
+            new \DateTime('2003-12-23T12:53:25+01:00'),
             $parsedVersionInfo->modificationDate
         );
     }
@@ -131,7 +133,7 @@ class VersionInfoTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedInitialLanguageCode( $parsedVersionInfo )
+    public function testParsedInitialLanguageCode($parsedVersionInfo)
     {
         $this->assertEquals(
             'eng-US',
@@ -142,10 +144,10 @@ class VersionInfoTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedLanguageCodes( $parsedVersionInfo )
+    public function testParsedLanguageCodes($parsedVersionInfo)
     {
         $this->assertEquals(
-            array( 'eng-US', 'ger-DE' ),
+            array('eng-US', 'ger-DE'),
             $parsedVersionInfo->languageCodes
         );
     }
@@ -153,7 +155,7 @@ class VersionInfoTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedNames( $parsedVersionInfo )
+    public function testParsedNames($parsedVersionInfo)
     {
         $this->assertEquals(
             array(
@@ -166,7 +168,7 @@ class VersionInfoTest extends BaseTest
     /**
      * @depends testParse
      */
-    public function testParsedContentInfoId( $parsedVersionInfo )
+    public function testParsedContentInfoId($parsedVersionInfo)
     {
         $this->assertEquals(
             '/content/objects/10',
@@ -175,7 +177,7 @@ class VersionInfoTest extends BaseTest
     }
 
     /**
-     * Gets the section parser
+     * Gets the section parser.
      *
      * @return \eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo
      */
@@ -192,8 +194,7 @@ class VersionInfoTest extends BaseTest
      */
     protected function getContentServiceMock()
     {
-        if ( !isset( $this->contentServiceMock ) )
-        {
+        if (!isset($this->contentServiceMock)) {
             $this->contentServiceMock = $this->getMock(
                 'eZ\\Publish\\Core\\REST\\Client\\ContentService',
                 array(),
@@ -202,6 +203,7 @@ class VersionInfoTest extends BaseTest
                 false
             );
         }
+
         return $this->contentServiceMock;
     }
 }

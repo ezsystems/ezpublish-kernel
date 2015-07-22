@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -26,54 +28,54 @@ use eZ\Publish\Core\Search\Common\FieldRegistry;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 
 /**
- * NativeDocumentMapper maps Solr backend documents per Content translation
+ * NativeDocumentMapper maps Solr backend documents per Content translation.
  */
 class NativeDocumentMapper implements DocumentMapper
 {
     /**
-     * Field registry
+     * Field registry.
      *
      * @var \eZ\Publish\Core\Search\Common\FieldRegistry
      */
     protected $fieldRegistry;
 
     /**
-     * Content handler
+     * Content handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Handler
      */
     protected $contentHandler;
 
     /**
-     * Location handler
+     * Location handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     protected $locationHandler;
 
     /**
-     * Content type handler
+     * Content type handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
      */
     protected $contentTypeHandler;
 
     /**
-     * Object state handler
+     * Object state handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
      */
     protected $objectStateHandler;
 
     /**
-     * Section handler
+     * Section handler.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Section\Handler
      */
     protected $sectionHandler;
 
     /**
-     * Field name generator
+     * Field name generator.
      *
      * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator
      */
@@ -98,8 +100,7 @@ class NativeDocumentMapper implements DocumentMapper
         ObjectStateHandler $objectStateHandler,
         SectionHandler $sectionHandler,
         FieldNameGenerator $fieldNameGenerator
-    )
-    {
+    ) {
         $this->fieldRegistry = $fieldRegistry;
         $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
@@ -116,29 +117,26 @@ class NativeDocumentMapper implements DocumentMapper
      *
      * @return \eZ\Publish\SPI\Search\Document[]
      */
-    public function mapContent( Content $content )
+    public function mapContent(Content $content)
     {
-        $locations = $this->locationHandler->loadLocationsByContent( $content->versionInfo->contentInfo->id );
-        $section = $this->sectionHandler->load( $content->versionInfo->contentInfo->sectionId );
+        $locations = $this->locationHandler->loadLocationsByContent($content->versionInfo->contentInfo->id);
+        $section = $this->sectionHandler->load($content->versionInfo->contentInfo->sectionId);
         $mainLocation = null;
         $isSomeLocationVisible = false;
         $locationData = array();
 
-        foreach ( $locations as $location )
-        {
-            $locationData["ids"][] = $location->id;
-            $locationData["parent_ids"][] = $location->parentId;
-            $locationData["remote_ids"][] = $location->remoteId;
-            $locationData["path_strings"][] = $location->pathString;
-            $locationData["depths"][] = $location->depth;
+        foreach ($locations as $location) {
+            $locationData['ids'][] = $location->id;
+            $locationData['parent_ids'][] = $location->parentId;
+            $locationData['remote_ids'][] = $location->remoteId;
+            $locationData['path_strings'][] = $location->pathString;
+            $locationData['depths'][] = $location->depth;
 
-            if ( $location->id == $content->versionInfo->contentInfo->mainLocationId )
-            {
+            if ($location->id == $content->versionInfo->contentInfo->mainLocationId) {
                 $mainLocation = $location;
             }
 
-            if ( !$location->hidden && !$location->invisible )
-            {
+            if (!$location->hidden && !$location->invisible) {
                 $isSomeLocationVisible = true;
             }
         }
@@ -230,7 +228,7 @@ class NativeDocumentMapper implements DocumentMapper
             ),
             new Field(
                 'language_code',
-                array_keys( $content->versionInfo->names ),
+                array_keys($content->versionInfo->names),
                 new FieldType\MultipleStringField()
             ),
             new Field(
@@ -250,37 +248,35 @@ class NativeDocumentMapper implements DocumentMapper
             ),
         );
 
-        if ( !empty( $locationData ) )
-        {
+        if (!empty($locationData)) {
             $fields[] = new Field(
                 'location_id',
-                $locationData["ids"],
+                $locationData['ids'],
                 new FieldType\MultipleIdentifierField()
             );
             $fields[] = new Field(
                 'location_parent_id',
-                $locationData["parent_ids"],
+                $locationData['parent_ids'],
                 new FieldType\MultipleIdentifierField()
             );
             $fields[] = new Field(
                 'location_remote_id',
-                $locationData["remote_ids"],
+                $locationData['remote_ids'],
                 new FieldType\MultipleIdentifierField()
             );
             $fields[] = new Field(
                 'location_path_string',
-                $locationData["path_strings"],
+                $locationData['path_strings'],
                 new FieldType\MultipleIdentifierField()
             );
             $fields[] = new Field(
                 'location_depth',
-                $locationData["depths"],
+                $locationData['depths'],
                 new FieldType\MultipleIntegerField()
             );
         }
 
-        if ( $mainLocation !== null )
-        {
+        if ($mainLocation !== null) {
             $fields[] = new Field(
                 'main_location',
                 $mainLocation->id,
@@ -318,7 +314,7 @@ class NativeDocumentMapper implements DocumentMapper
             );
         }
 
-        $contentType = $this->contentTypeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
+        $contentType = $this->contentTypeHandler->load($content->versionInfo->contentInfo->contentTypeId);
         $fields[] = new Field(
             'group',
             $contentType->groupIds,
@@ -327,15 +323,14 @@ class NativeDocumentMapper implements DocumentMapper
 
         $fields[] = new Field(
             'object_state',
-            $this->getObjectStateIds( $content->versionInfo->contentInfo->id ),
+            $this->getObjectStateIds($content->versionInfo->contentInfo->id),
             new FieldType\MultipleIdentifierField()
         );
 
-        $fieldSets = $this->mapContentFields( $content, $contentType, true );
+        $fieldSets = $this->mapContentFields($content, $contentType, true);
         $documents = array();
 
-        foreach ( $fieldSets as $languageCode => $translationFields )
-        {
+        foreach ($fieldSets as $languageCode => $translationFields) {
             $translationFields[] = new Field(
                 'meta_indexed_language_code',
                 $languageCode,
@@ -343,28 +338,28 @@ class NativeDocumentMapper implements DocumentMapper
             );
             $translationFields[] = new Field(
                 'meta_indexed_is_main_translation',
-                ( $languageCode === $content->versionInfo->contentInfo->mainLanguageCode ),
+                ($languageCode === $content->versionInfo->contentInfo->mainLanguageCode),
                 new FieldType\BooleanField()
             );
             $translationFields[] = new Field(
                 'meta_indexed_is_main_translation_and_always_available',
                 (
-                    ( $languageCode === $content->versionInfo->contentInfo->mainLanguageCode ) &&
+                    ($languageCode === $content->versionInfo->contentInfo->mainLanguageCode) &&
                     $content->versionInfo->contentInfo->alwaysAvailable
                 ),
                 new FieldType\BooleanField()
             );
 
-            $isMainTranslation = ( $content->versionInfo->contentInfo->mainLanguageCode === $languageCode );
-            $alwaysAvailable = ( $isMainTranslation && $content->versionInfo->contentInfo->alwaysAvailable );
+            $isMainTranslation = ($content->versionInfo->contentInfo->mainLanguageCode === $languageCode);
+            $alwaysAvailable = ($isMainTranslation && $content->versionInfo->contentInfo->alwaysAvailable);
 
             $documents[] = new Document(
                 array(
-                    "id" => $this->generateContentDocumentId( $content, $languageCode ),
-                    "languageCode" => $languageCode,
-                    "alwaysAvailable" => $alwaysAvailable,
-                    "isMainTranslation" => $isMainTranslation,
-                    "fields" => array_merge( $fields, $translationFields ),
+                    'id' => $this->generateContentDocumentId($content, $languageCode),
+                    'languageCode' => $languageCode,
+                    'alwaysAvailable' => $alwaysAvailable,
+                    'isMainTranslation' => $isMainTranslation,
+                    'fields' => array_merge($fields, $translationFields),
                 )
             );
         }
@@ -373,29 +368,29 @@ class NativeDocumentMapper implements DocumentMapper
     }
 
     /**
-     * Generates the Solr backend document id for Content object
+     * Generates the Solr backend document id for Content object.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param string $languageCode
      *
      * @return string
      */
-    protected function generateContentDocumentId( Content $content, $languageCode )
+    protected function generateContentDocumentId(Content $content, $languageCode)
     {
-        return strtolower( "content{$content->versionInfo->contentInfo->id}{$languageCode}" );
+        return strtolower("content{$content->versionInfo->contentInfo->id}{$languageCode}");
     }
 
     /**
-     * Generates the Solr backend document id for Content object
+     * Generates the Solr backend document id for Content object.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      * @param string $languageCode
      *
      * @return string
      */
-    protected function generateLocationDocumentId( Location $location, $languageCode )
+    protected function generateLocationDocumentId(Location $location, $languageCode)
     {
-        return strtolower( "location{$location->id}{$languageCode}" );
+        return strtolower("location{$location->id}{$languageCode}");
     }
 
     /**
@@ -403,7 +398,7 @@ class NativeDocumentMapper implements DocumentMapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
-     * @param boolean $indexFulltext
+     * @param bool $indexFulltext
      *
      * @return \eZ\Publish\SPI\Search\Field[][]
      */
@@ -411,26 +406,20 @@ class NativeDocumentMapper implements DocumentMapper
         Content $content,
         ContentType $contentType,
         $indexFulltext
-    )
-    {
+    ) {
         $fieldSets = array();
 
-        foreach ( $content->fields as $field )
-        {
-            foreach ( $contentType->fieldDefinitions as $fieldDefinition )
-            {
-                if ( $fieldDefinition->id !== $field->fieldDefinitionId )
-                {
+        foreach ($content->fields as $field) {
+            foreach ($contentType->fieldDefinitions as $fieldDefinition) {
+                if ($fieldDefinition->id !== $field->fieldDefinitionId) {
                     continue;
                 }
 
-                $fieldType = $this->fieldRegistry->getType( $field->type );
-                $indexFields = $fieldType->getIndexData( $field, $fieldDefinition );
+                $fieldType = $this->fieldRegistry->getType($field->type);
+                $indexFields = $fieldType->getIndexData($field, $fieldDefinition);
 
-                foreach ( $indexFields as $indexField )
-                {
-                    if ( $indexField->value === null )
-                    {
+                foreach ($indexFields as $indexField) {
+                    if ($indexField->value === null) {
                         continue;
                     }
 
@@ -444,10 +433,9 @@ class NativeDocumentMapper implements DocumentMapper
                         $indexField->type
                     );
 
-                    if ( $indexFulltext && $indexField->type instanceof FieldType\StringField )
-                    {
+                    if ($indexFulltext && $indexField->type instanceof FieldType\StringField) {
                         $fieldSets[$field->languageCode][] = new Field(
-                            $name . "_fulltext",
+                            $name . '_fulltext',
                             $indexField->value,
                             new FieldType\TextField()
                         );
@@ -459,11 +447,11 @@ class NativeDocumentMapper implements DocumentMapper
         return $fieldSets;
     }
 
-    public function mapLocation( Location $location )
+    public function mapLocation(Location $location)
     {
-        $contentInfo = $this->contentHandler->loadContentInfo( $location->contentId );
-        $content = $this->contentHandler->load( $location->contentId, $contentInfo->currentVersionNo );
-        $section = $this->sectionHandler->load( $content->versionInfo->contentInfo->sectionId );
+        $contentInfo = $this->contentHandler->loadContentInfo($location->contentId);
+        $content = $this->contentHandler->load($location->contentId, $contentInfo->currentVersionNo);
+        $section = $this->sectionHandler->load($content->versionInfo->contentInfo->sectionId);
 
         $fields = array(
             new Field(
@@ -523,7 +511,7 @@ class NativeDocumentMapper implements DocumentMapper
             ),
             new Field(
                 'is_main_location',
-                ( $location->id == $content->versionInfo->contentInfo->mainLocationId ),
+                ($location->id == $content->versionInfo->contentInfo->mainLocationId),
                 new FieldType\BooleanField()
             ),
         );
@@ -531,7 +519,7 @@ class NativeDocumentMapper implements DocumentMapper
         // UserGroups and Users are Content, but permissions cascade is achieved through
         // Locations hierarchy. We index all ancestor Location Content ids of all
         // Locations of an owner.
-        $ancestorLocationsContentIds = $this->getAncestorLocationsContentIds( $contentInfo->ownerId );
+        $ancestorLocationsContentIds = $this->getAncestorLocationsContentIds($contentInfo->ownerId);
         // Add owner user id as it can also be considered as user group.
         $ancestorLocationsContentIds[] = $contentInfo->ownerId;
         $fields[] = new Field(
@@ -607,7 +595,7 @@ class NativeDocumentMapper implements DocumentMapper
         );
         $fields[] = new Field(
             'language_code',
-            array_keys( $content->versionInfo->names ),
+            array_keys($content->versionInfo->names),
             new FieldType\MultipleStringField()
         );
         $fields[] = new Field(
@@ -624,18 +612,17 @@ class NativeDocumentMapper implements DocumentMapper
         );
         $fields[] = new Field(
             'content_object_state',
-            $this->getObjectStateIds( $content->versionInfo->contentInfo->id ),
+            $this->getObjectStateIds($content->versionInfo->contentInfo->id),
             new FieldType\MultipleIdentifierField()
         );
 
         $contentType = $this->contentTypeHandler->load(
             $content->versionInfo->contentInfo->contentTypeId
         );
-        $fieldSets = $this->mapContentFields( $content, $contentType, false );
+        $fieldSets = $this->mapContentFields($content, $contentType, false);
         $documents = array();
 
-        foreach ( $fieldSets as $languageCode => $translationFields )
-        {
+        foreach ($fieldSets as $languageCode => $translationFields) {
             $translationFields[] = new Field(
                 'meta_indexed_language_code',
                 $languageCode,
@@ -643,28 +630,28 @@ class NativeDocumentMapper implements DocumentMapper
             );
             $translationFields[] = new Field(
                 'meta_indexed_is_main_translation',
-                ( $languageCode === $content->versionInfo->contentInfo->mainLanguageCode ),
+                ($languageCode === $content->versionInfo->contentInfo->mainLanguageCode),
                 new FieldType\BooleanField()
             );
             $translationFields[] = new Field(
                 'meta_indexed_is_main_translation_and_always_available',
                 (
-                    ( $languageCode === $content->versionInfo->contentInfo->mainLanguageCode ) &&
+                    ($languageCode === $content->versionInfo->contentInfo->mainLanguageCode) &&
                     $content->versionInfo->contentInfo->alwaysAvailable
                 ),
                 new FieldType\BooleanField()
             );
 
-            $isMainTranslation = ( $content->versionInfo->contentInfo->mainLanguageCode === $languageCode );
-            $alwaysAvailable = ( $isMainTranslation && $content->versionInfo->contentInfo->alwaysAvailable );
+            $isMainTranslation = ($content->versionInfo->contentInfo->mainLanguageCode === $languageCode);
+            $alwaysAvailable = ($isMainTranslation && $content->versionInfo->contentInfo->alwaysAvailable);
 
             $documents[] = new Document(
                 array(
-                    "id" => $this->generateLocationDocumentId( $location, $languageCode ),
-                    "languageCode" => $languageCode,
-                    "alwaysAvailable" => $alwaysAvailable,
-                    "isMainTranslation" => $isMainTranslation,
-                    "fields" => array_merge( $fields, $translationFields ),
+                    'id' => $this->generateLocationDocumentId($location, $languageCode),
+                    'languageCode' => $languageCode,
+                    'alwaysAvailable' => $alwaysAvailable,
+                    'isMainTranslation' => $isMainTranslation,
+                    'fields' => array_merge($fields, $translationFields),
                 )
             );
         }
@@ -682,31 +669,29 @@ class NativeDocumentMapper implements DocumentMapper
      *
      * @return array
      */
-    protected function getAncestorLocationsContentIds( $contentId )
+    protected function getAncestorLocationsContentIds($contentId)
     {
-        $locations = $this->locationHandler->loadLocationsByContent( $contentId );
+        $locations = $this->locationHandler->loadLocationsByContent($contentId);
         $ancestorLocationContentIds = array();
         $ancestorLocationIds = array();
 
-        foreach ( $locations as $location )
-        {
-            $locationIds = explode( "/", trim( $location->pathString, "/" ) );
+        foreach ($locations as $location) {
+            $locationIds = explode('/', trim($location->pathString, '/'));
             // Remove Location of Content with $contentId
-            array_pop( $locationIds );
+            array_pop($locationIds);
             // Remove Root Location id (id==1 in legacy DB)
-            array_shift( $locationIds );
+            array_shift($locationIds);
 
-            $ancestorLocationIds = array_merge( $ancestorLocationIds, $locationIds );
+            $ancestorLocationIds = array_merge($ancestorLocationIds, $locationIds);
         }
 
-        foreach ( array_unique( $ancestorLocationIds ) as $locationId )
-        {
-            $location = $this->locationHandler->load( $locationId );
+        foreach (array_unique($ancestorLocationIds) as $locationId) {
+            $location = $this->locationHandler->load($locationId);
 
             $ancestorLocationContentIds[$location->contentId] = true;
         }
 
-        return array_keys( $ancestorLocationContentIds );
+        return array_keys($ancestorLocationContentIds);
     }
 
     /**
@@ -716,12 +701,11 @@ class NativeDocumentMapper implements DocumentMapper
      *
      * @return array
      */
-    protected function getObjectStateIds( $contentId )
+    protected function getObjectStateIds($contentId)
     {
         $objectStateIds = array();
 
-        foreach ( $this->objectStateHandler->loadAllGroups() as $objectStateGroup )
-        {
+        foreach ($this->objectStateHandler->loadAllGroups() as $objectStateGroup) {
             $objectStateIds[] = $this->objectStateHandler->getContentState(
                 $contentId,
                 $objectStateGroup->id

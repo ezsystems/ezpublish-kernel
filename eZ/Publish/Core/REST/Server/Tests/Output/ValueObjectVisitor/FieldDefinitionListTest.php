@@ -1,20 +1,19 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server;
-use eZ\Publish\Core\REST\Common;
-
 use eZ\Publish\Core\Repository\Values;
 
 /**
@@ -27,20 +26,20 @@ class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
      */
     public function testVisitFieldDefinitionList()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $fieldDefinitionList = $this->getBasicFieldDefinitionList();
 
-        $this->getVisitorMock()->expects( $this->exactly( 2 ) )
-            ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Server\\Values\\RestFieldDefinition' ) );
+        $this->getVisitorMock()->expects($this->exactly(2))
+            ->method('visitValueObject')
+            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\RestFieldDefinition'));
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentTypeFieldDefinitionList',
-            array( 'contentTypeId' => $fieldDefinitionList->contentType->id ),
+            array('contentTypeId' => $fieldDefinitionList->contentType->id),
             "/content/types/{$fieldDefinitionList->contentType->id}/fieldDefinitions"
         );
 
@@ -50,12 +49,12 @@ class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
             $fieldDefinitionList
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         $dom = new \DOMDocument();
-        $dom->loadXml( $result );
+        $dom->loadXml($result);
 
         return $dom;
     }
@@ -72,11 +71,11 @@ class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
             ),
             array(
                 new Values\ContentType\FieldDefinition(
-                    array( 'id' => 'fieldDefinitionId_1' )
+                    array('id' => 'fieldDefinitionId_1')
                 ),
                 new Values\ContentType\FieldDefinition(
-                    array( 'id' => 'fieldDefinitionId_2' )
-                )
+                    array('id' => 'fieldDefinitionId_2')
+                ),
             )
         );
     }
@@ -85,10 +84,10 @@ class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
     {
         return array(
             array(
-                '/FieldDefinitions[@href="/content/types/contentTypeId/fieldDefinitions"]'
+                '/FieldDefinitions[@href="/content/types/contentTypeId/fieldDefinitions"]',
             ),
             array(
-                '/FieldDefinitions[@media-type="application/vnd.ez.api.FieldDefinitionList+xml"]'
+                '/FieldDefinitions[@media-type="application/vnd.ez.api.FieldDefinitionList+xml"]',
             ),
         );
     }
@@ -100,18 +99,18 @@ class FieldDefinitionListTest extends ValueObjectVisitorBaseTest
      * @depends testVisitFieldDefinitionList
      * @dataProvider provideXpathAssertions
      */
-    public function testGeneratedXml( $xpath, \DOMDocument $dom )
+    public function testGeneratedXml($xpath, \DOMDocument $dom)
     {
-        $this->assertXPath( $dom, $xpath );
+        $this->assertXPath($dom, $xpath);
     }
 
     /**
-     * Get the Content visitor
+     * Get the Content visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\FieldDefinitionList
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\FieldDefinitionList;
+        return new ValueObjectVisitor\FieldDefinitionList();
     }
 }

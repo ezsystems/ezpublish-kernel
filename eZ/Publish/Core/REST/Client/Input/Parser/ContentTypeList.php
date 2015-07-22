@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentTypeList parser class
+ * File containing the ContentTypeList parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,12 +15,12 @@ use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
 /**
- * Parser for ContentTypeList
+ * Parser for ContentTypeList.
  */
 class ContentTypeList extends BaseParser
 {
     /**
-     * Parse input structure
+     * Parse input structure.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -27,16 +29,16 @@ class ContentTypeList extends BaseParser
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[]
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
         $contentTypes = array();
-        foreach ( $data['ContentType'] as $rawContentTypeData )
-        {
+        foreach ($data['ContentType'] as $rawContentTypeData) {
             $contentTypes[] = $parsingDispatcher->parse(
                 $rawContentTypeData,
                 $rawContentTypeData['_media-type']
             );
         }
+
         return $contentTypes;
     }
 }

@@ -1,11 +1,14 @@
 <?php
+
 /**
  * File containing the IOConfigurationPass class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
+
 namespace eZ\Bundle\EzPublishIOBundle\Tests\DependencyInjection\Compiler;
 
 use ArrayObject;
@@ -26,32 +29,32 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->container->setParameter( 'ez_io.metadata_handlers', array() );
-        $this->container->setParameter( 'ez_io.binarydata_handlers', array() );
+        $this->container->setParameter('ez_io.metadata_handlers', array());
+        $this->container->setParameter('ez_io.binarydata_handlers', array());
 
-        $this->container->setDefinition( 'ezpublish.core.io.binarydata_handler.factory', new Definition() );
-        $this->container->setDefinition( 'ezpublish.core.io.metadata_handler.factory', new Definition() );
+        $this->container->setDefinition('ezpublish.core.io.binarydata_handler.factory', new Definition());
+        $this->container->setDefinition('ezpublish.core.io.metadata_handler.factory', new Definition());
     }
 
-    protected function registerCompilerPass( ContainerBuilder $container )
+    protected function registerCompilerPass(ContainerBuilder $container)
     {
-        $this->metadataConfigurationFactoryMock = $this->getMock( '\eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory' );
-        $this->binarydataConfigurationFactoryMock = $this->getMock( '\eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory' );
+        $this->metadataConfigurationFactoryMock = $this->getMock('\eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory');
+        $this->binarydataConfigurationFactoryMock = $this->getMock('\eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory');
 
         $container->addCompilerPass(
             new IOConfigurationPass(
                 new ArrayObject(
-                    array( 'test_handler' => $this->metadataConfigurationFactoryMock )
+                    array('test_handler' => $this->metadataConfigurationFactoryMock)
                 ),
                 new ArrayObject(
-                    array( 'test_handler' => $this->binarydataConfigurationFactoryMock )
+                    array('test_handler' => $this->binarydataConfigurationFactoryMock)
                 )
             )
         );
     }
 
     /**
-     * Tests that the default handlers are available when nothing is configured
+     * Tests that the default handlers are available when nothing is configured.
      */
     public function testDefaultHandlers()
     {
@@ -60,13 +63,13 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.core.io.binarydata_handler.factory',
             'setHandlersMap',
-            array( array( 'default' => 'ezpublish.core.io.binarydata_handler.flysystem.default' ) )
+            array(array('default' => 'ezpublish.core.io.binarydata_handler.flysystem.default'))
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.core.io.metadata_handler.factory',
             'setHandlersMap',
-            array( array( 'default' => 'ezpublish.core.io.metadata_handler.flysystem.default' ) )
+            array(array('default' => 'ezpublish.core.io.metadata_handler.flysystem.default'))
         );
     }
 
@@ -74,13 +77,13 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     {
         $this->container->setParameter(
             'ez_io.binarydata_handlers',
-            array( 'my_handler' => array( 'name' => 'my_handler', 'type' => 'test_handler' ) )
+            array('my_handler' => array('name' => 'my_handler', 'type' => 'test_handler'))
         );
 
         $this->binarydataConfigurationFactoryMock
-            ->expects( $this->once() )
-            ->method( 'getParentServiceId' )
-            ->will( $this->returnValue( 'test.io.binarydata_handler.test_handler' ) );
+            ->expects($this->once())
+            ->method('getParentServiceId')
+            ->will($this->returnValue('test.io.binarydata_handler.test_handler'));
 
         $this->compile();
 
@@ -94,13 +97,13 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     {
         $this->container->setParameter(
             'ez_io.metadata_handlers',
-            array( 'my_handler' => array( 'name' => 'my_handler', 'type' => 'test_handler' ) )
+            array('my_handler' => array('name' => 'my_handler', 'type' => 'test_handler'))
         );
 
         $this->metadataConfigurationFactoryMock
-            ->expects( $this->once() )
-            ->method( 'getParentServiceId' )
-            ->will( $this->returnValue( 'test.io.metadata_handler.test_handler' ) );
+            ->expects($this->once())
+            ->method('getParentServiceId')
+            ->will($this->returnValue('test.io.metadata_handler.test_handler'));
 
         $this->compile();
 
@@ -118,7 +121,7 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     {
         $this->container->setParameter(
             'ez_io.metadata_handlers',
-            array( 'test' => array( 'type' => 'unknown' ) )
+            array('test' => array('type' => 'unknown'))
         );
 
         $this->compile();
@@ -132,7 +135,7 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     {
         $this->container->setParameter(
             'ez_io.binarydata_handlers',
-            array( 'test' => array( 'type' => 'unknown' ) )
+            array('test' => array('type' => 'unknown'))
         );
 
         $this->compile();

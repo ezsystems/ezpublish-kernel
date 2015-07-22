@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the FloatTest class
+ * File containing the FloatTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -33,7 +35,7 @@ class FloatTest extends FieldTypeTest
     protected function createFieldTypeUnderTest()
     {
         $fieldType = new FloatType();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+        $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
     }
@@ -46,16 +48,16 @@ class FloatTest extends FieldTypeTest
     protected function getValidatorConfigurationSchemaExpectation()
     {
         return array(
-            "FloatValueValidator" => array(
-                "minFloatValue" => array(
-                    "type" => "float",
-                    "default" => null
+            'FloatValueValidator' => array(
+                'minFloatValue' => array(
+                    'type' => 'float',
+                    'default' => null,
                 ),
-                "maxFloatValue" => array(
-                    "type" => "float",
-                    "default" => null
-                )
-            )
+                'maxFloatValue' => array(
+                    'type' => 'float',
+                    'default' => null,
+                ),
+            ),
         );
     }
 
@@ -76,7 +78,7 @@ class FloatTest extends FieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return new FloatValue;
+        return new FloatValue();
     }
 
     /**
@@ -114,7 +116,7 @@ class FloatTest extends FieldTypeTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                new FloatValue( 'foo' ),
+                new FloatValue('foo'),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
@@ -154,25 +156,25 @@ class FloatTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new FloatValue,
+                new FloatValue(),
             ),
             array(
                 42.23,
-                new FloatValue( 42.23 ),
+                new FloatValue(42.23),
             ),
             array(
                 23,
-                new FloatValue( 23. ),
+                new FloatValue(23.),
             ),
             array(
-                new FloatValue( 23.42 ),
-                new FloatValue( 23.42 ),
+                new FloatValue(23.42),
+                new FloatValue(23.42),
             ),
         );
     }
 
     /**
-     * Provide input for the toHash() method
+     * Provide input for the toHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to toHash(), 2. The expected return value from toHash().
@@ -210,18 +212,18 @@ class FloatTest extends FieldTypeTest
     {
         return array(
             array(
-                new FloatValue,
+                new FloatValue(),
                 null,
             ),
             array(
-                new FloatValue( 23.42 ),
+                new FloatValue(23.42),
                 23.42,
             ),
         );
     }
 
     /**
-     * Provide input to fromHash() method
+     * Provide input to fromHash() method.
      *
      * Returns an array of data provider sets with 2 arguments: 1. The valid
      * input to fromHash(), 2. The expected return value from fromHash().
@@ -260,11 +262,11 @@ class FloatTest extends FieldTypeTest
         return array(
             array(
                 null,
-                new FloatValue,
+                new FloatValue(),
             ),
             array(
                 23.42,
-                new FloatValue( 23.42 ),
+                new FloatValue(23.42),
             ),
         );
     }
@@ -301,43 +303,43 @@ class FloatTest extends FieldTypeTest
     {
         return array(
             array(
-                array()
+                array(),
             ),
             array(
                 array(
                     'FloatValueValidator' => array(
                         'minFloatValue' => null,
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 array(
                     'FloatValueValidator' => array(
                         'minFloatValue' => .23,
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 array(
                     'FloatValueValidator' => array(
                         'maxFloatValue' => null,
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 array(
                     'FloatValueValidator' => array(
                         'maxFloatValue' => .23,
-                    )
-                )
+                    ),
+                ),
             ),
             array(
                 array(
                     'FloatValueValidator' => array(
                         'minFloatValue' => .23,
                         'maxFloatValue' => .42,
-                    )
-                )
+                    ),
+                ),
             ),
         );
     }
@@ -395,7 +397,7 @@ class FloatTest extends FieldTypeTest
             array(
                 array(
                     'FloatValueValidator' => array(
-                        'nonExistentValue' => .23
+                        'nonExistentValue' => .23,
                     ),
                 ),
             ),
@@ -411,7 +413,7 @@ class FloatTest extends FieldTypeTest
                     'FloatValueValidator' => array(
                         'maxFloatValue' => 'bar',
                     ),
-                )
+                ),
             ),
         );
     }
@@ -424,8 +426,8 @@ class FloatTest extends FieldTypeTest
     public function provideDataForGetName()
     {
         return array(
-            array( $this->getEmptyValueExpectation(), "" ),
-            array( new FloatValue( 23.42 ), "23.42" )
+            array($this->getEmptyValueExpectation(), ''),
+            array(new FloatValue(23.42), '23.42'),
         );
     }
 
@@ -479,14 +481,14 @@ class FloatTest extends FieldTypeTest
         return array(
             array(
                 array(
-                    "validatorConfiguration" => array(
+                    'validatorConfiguration' => array(
                         'FloatValueValidator' => array(
                             'minFloatValue' => 5.1,
-                            'maxFloatValue' => 10.5
+                            'maxFloatValue' => 10.5,
                         ),
                     ),
                 ),
-                new FloatValue( 7.5 ),
+                new FloatValue(7.5),
             ),
         );
     }
@@ -560,20 +562,20 @@ class FloatTest extends FieldTypeTest
         return array(
             array(
                 array(
-                    "validatorConfiguration" => array(
+                    'validatorConfiguration' => array(
                         'FloatValueValidator' => array(
                             'minFloatValue' => 5.1,
-                            'maxFloatValue' => 10.5
+                            'maxFloatValue' => 10.5,
                         ),
                     ),
                 ),
-                new FloatValue( 3.2 ),
+                new FloatValue(3.2),
                 array(
                     new ValidationError(
-                        "The value can not be lower than %size%.",
+                        'The value can not be lower than %size%.',
                         null,
                         array(
-                            "size" => 5.1
+                            'size' => 5.1,
                         ),
                         'value'
                     ),
@@ -581,20 +583,20 @@ class FloatTest extends FieldTypeTest
             ),
             array(
                 array(
-                    "validatorConfiguration" => array(
+                    'validatorConfiguration' => array(
                         'FloatValueValidator' => array(
                             'minFloatValue' => 5.1,
-                            'maxFloatValue' => 10.5
+                            'maxFloatValue' => 10.5,
                         ),
                     ),
                 ),
-                new FloatValue( 13.2 ),
+                new FloatValue(13.2),
                 array(
                     new ValidationError(
-                        "The value can not be higher than %size%.",
+                        'The value can not be higher than %size%.',
                         null,
                         array(
-                            "size" => 10.5
+                            'size' => 10.5,
                         ),
                         'value'
                     ),
@@ -602,28 +604,28 @@ class FloatTest extends FieldTypeTest
             ),
             array(
                 array(
-                    "validatorConfiguration" => array(
+                    'validatorConfiguration' => array(
                         'FloatValueValidator' => array(
                             'minFloatValue' => 10.5,
-                            'maxFloatValue' => 5.1
+                            'maxFloatValue' => 5.1,
                         ),
                     ),
                 ),
-                new FloatValue( 7.5 ),
+                new FloatValue(7.5),
                 array(
                     new ValidationError(
-                        "The value can not be higher than %size%.",
+                        'The value can not be higher than %size%.',
                         null,
                         array(
-                            "size" => 5.1
+                            'size' => 5.1,
                         ),
                         'value'
                     ),
                     new ValidationError(
-                        "The value can not be lower than %size%.",
+                        'The value can not be lower than %size%.',
                         null,
                         array(
-                            "size" => 10.5
+                            'size' => 10.5,
                         ),
                         'value'
                     ),

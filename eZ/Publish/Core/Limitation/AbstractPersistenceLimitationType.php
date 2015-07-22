@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\Limitation\AbstractPersistenceLimitationType class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,7 +14,7 @@ namespace eZ\Publish\Core\Limitation;
 use eZ\Publish\SPI\Persistence\Handler as SPIPersistenceHandler;
 
 /**
- * LocationLimitation is a Content limitation
+ * LocationLimitation is a Content limitation.
  */
 class AbstractPersistenceLimitationType
 {
@@ -24,7 +26,7 @@ class AbstractPersistenceLimitationType
     /**
      * @param \eZ\Publish\SPI\Persistence\Handler $persistence
      */
-    public function __construct( SPIPersistenceHandler $persistence )
+    public function __construct(SPIPersistenceHandler $persistence)
     {
         $this->persistence = $persistence;
     }

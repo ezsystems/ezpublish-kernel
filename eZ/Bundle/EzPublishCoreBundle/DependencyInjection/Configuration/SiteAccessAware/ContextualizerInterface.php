@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContextualizerInterface interface.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,7 +25,7 @@ interface ContextualizerInterface
      * With this option, mapConfigArray() will merge the hashes from the second level.
      * For instance:
      * array( 'full' => array( 1, 2, 3 ) ) and array( 'full' => array( 4, 5 ) )
-     * will result in array( 'full' => array( 1, 2, 3, 4, 5 ) )
+     * will result in array( 'full' => array( 1, 2, 3, 4, 5 ) ).
      */
     const MERGE_FROM_SECOND_LEVEL = 2;
 
@@ -68,7 +70,7 @@ interface ContextualizerInterface
      * @param string $scope
      * @param mixed $value
      */
-    public function setContextualParameter( $parameterName, $scope, $value );
+    public function setContextualParameter($parameterName, $scope, $value);
 
     /**
      * Maps a semantic setting to internal format for all declared scopes.
@@ -81,7 +83,7 @@ interface ContextualizerInterface
      *
      * @return mixed
      */
-    public function mapSetting( $id, array $config );
+    public function mapSetting($id, array $config);
 
     /**
      * Maps semantic array settings to internal format, and merges them between scopes.
@@ -174,7 +176,7 @@ interface ContextualizerInterface
      * @param array $config Full semantic configuration array for current bundle.
      * @param int $options Bit mask of options (see constants of the interface)
      */
-    public function mapConfigArray( $id, array $config, $options = 0 );
+    public function mapConfigArray($id, array $config, $options = 0);
 
     /**
      * @return \Symfony\Component\DependencyInjection\ContainerInterface
@@ -184,16 +186,16 @@ interface ContextualizerInterface
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
-    public function setContainer( ContainerInterface $container );
+    public function setContainer(ContainerInterface $container);
 
     /**
      * Injects namespace for internal settings.
      * Registered internal settings always have the format <namespace>.<scope>.<parameter_name>
-     * e.g. ezsettings.default.session
+     * e.g. ezsettings.default.session.
      *
      * @param string $namespace
      */
-    public function setNamespace( $namespace );
+    public function setNamespace($namespace);
 
     /**
      * @return string
@@ -205,7 +207,7 @@ interface ContextualizerInterface
      *
      * @param string $scopeNodeName
      */
-    public function setSiteAccessNodeName( $scopeNodeName );
+    public function setSiteAccessNodeName($scopeNodeName);
 
     /**
      * @return string
@@ -217,7 +219,7 @@ interface ContextualizerInterface
      *
      * @param array $availableSiteAccesses
      */
-    public function setAvailableSiteAccesses( array $availableSiteAccesses );
+    public function setAvailableSiteAccesses(array $availableSiteAccesses);
 
     /**
      * @return array
@@ -230,7 +232,7 @@ interface ContextualizerInterface
      *
      * @param array $groupsBySiteAccess
      */
-    public function setGroupsBySiteAccess( array $groupsBySiteAccess );
+    public function setGroupsBySiteAccess(array $groupsBySiteAccess);
 
     /**
      * @return array

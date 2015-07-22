@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ValidationError interface
+ * File containing the ValidationError interface.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,8 +19,6 @@ use eZ\Publish\API\Repository\Translatable;
  * Enforces to return a translatable message, since it will be necessary to
  * present validation errors to the user. Thus we need plural form handling and
  * replacements of placeholders and so on.
- *
- * @package eZ\Publish\SPI\FieldType
  */
 interface ValidationError extends Translatable
 {
@@ -34,7 +34,7 @@ interface ValidationError extends Translatable
      *
      * @param string $target
      */
-    public function setTarget( $target );
+    public function setTarget($target);
 
     /**
      * Returns the target element on which the error occurred.
@@ -43,4 +43,3 @@ interface ValidationError extends Translatable
      */
     public function getTarget();
 }
-

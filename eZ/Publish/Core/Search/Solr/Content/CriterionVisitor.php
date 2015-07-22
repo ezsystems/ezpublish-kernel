@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Content Search handler class
+ * File containing the Content Search handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,31 +15,31 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
- * Visits the criterion tree into a Solr query
+ * Visits the criterion tree into a Solr query.
  */
 abstract class CriterionVisitor
 {
     /**
-     * CHeck if visitor is applicable to current criterion
+     * CHeck if visitor is applicable to current criterion.
      *
      * @param Criterion $criterion
      *
-     * @return boolean
+     * @return bool
      */
-    abstract public function canVisit( Criterion $criterion );
+    abstract public function canVisit(Criterion $criterion);
 
     /**
-     * Map field value to a proper Solr representation
+     * Map field value to a proper Solr representation.
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
      *
      * @return string
      */
-    abstract public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null );
+    abstract public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null);
 
     /**
-     * Get Solr range
+     * Get Solr range.
      *
      * Start and end are optional, depending on the respective operator. Pass
      * null in this case. The operator may be one of:
@@ -54,21 +56,20 @@ abstract class CriterionVisitor
      *
      * @return string
      */
-    protected function getRange( $operator, $start, $end )
+    protected function getRange($operator, $start, $end)
     {
         $startBrace = '[';
         $startValue = '*';
-        $endValue   = '*';
-        $endBrace   = ']';
+        $endValue = '*';
+        $endBrace = ']';
 
-        $start = $this->prepareValue( $start );
-        $end = $this->prepareValue( $end );
+        $start = $this->prepareValue($start);
+        $end = $this->prepareValue($end);
 
-        switch ( $operator )
-        {
+        switch ($operator) {
             case Operator::GT:
                 $startBrace = '{';
-                $endBrace   = '}';
+                $endBrace = '}';
                 // Intentionally omitted break
 
             case Operator::GTE:
@@ -77,7 +78,7 @@ abstract class CriterionVisitor
 
             case Operator::LT:
                 $startBrace = '{';
-                $endBrace   = '}';
+                $endBrace = '}';
                 // Intentionally omitted break
 
             case Operator::LTE:
@@ -86,11 +87,11 @@ abstract class CriterionVisitor
 
             case Operator::BETWEEN:
                 $startValue = $start;
-                $endValue   = $end;
+                $endValue = $end;
                 break;
 
             default:
-                throw new \RuntimeException( "Unknown operator: $operator" );
+                throw new \RuntimeException("Unknown operator: $operator");
         }
 
         return "$startBrace$startValue TO $endValue$endBrace";
@@ -105,19 +106,17 @@ abstract class CriterionVisitor
      *
      * @return string
      */
-    protected function prepareValue( $value )
+    protected function prepareValue($value)
     {
-        switch ( gettype( $value ) )
-        {
-            case "boolean":
-                return ( $value ? "true" : "false" );
+        switch (gettype($value)) {
+            case 'boolean':
+                return ($value ? 'true' : 'false');
 
-            case "string":
-                return '"' . preg_replace( '/("|\\\)/', '\\\$1', $value ) . '"';
+            case 'string':
+                return '"' . preg_replace('/("|\\\)/', '\\\$1', $value) . '"';
 
             default:
                 return (string)$value;
         }
     }
 }
-

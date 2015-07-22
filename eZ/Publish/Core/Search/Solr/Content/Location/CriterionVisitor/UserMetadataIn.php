@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the UserMetadataIn class
+ * File containing the UserMetadataIn class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,27 +17,27 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
- * Visits the UserMetadata criterion
+ * Visits the UserMetadata criterion.
  */
 class UserMetadataIn extends CriterionVisitor
 {
     /**
-     * CHeck if visitor is applicable to current criterion
+     * CHeck if visitor is applicable to current criterion.
      *
      * @param Criterion $criterion
      *
-     * @return boolean
+     * @return bool
      */
-    public function canVisit( Criterion $criterion )
+    public function canVisit(Criterion $criterion)
     {
         return
             $criterion instanceof Criterion\UserMetadata &&
-            ( ( $criterion->operator ?: Operator::IN ) === Operator::IN ||
-              $criterion->operator === Operator::EQ );
+            (($criterion->operator ?: Operator::IN) === Operator::IN ||
+              $criterion->operator === Operator::EQ);
     }
 
     /**
-     * Map field value to a proper Solr representation
+     * Map field value to a proper Solr representation.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
@@ -44,10 +46,9 @@ class UserMetadataIn extends CriterionVisitor
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
-        switch ( $criterion->target )
-        {
+        switch ($criterion->target) {
             case Criterion\UserMetadata::MODIFIER:
                 $solrField = 'content_creator_id';
                 break;
@@ -60,7 +61,7 @@ class UserMetadataIn extends CriterionVisitor
 
             default:
                 throw new NotImplementedException(
-                    "No visitor available for target: " . $criterion->target . ' with operator: ' . $criterion->operator
+                    'No visitor available for target: ' . $criterion->target . ' with operator: ' . $criterion->operator
                 );
         }
 
@@ -68,8 +69,7 @@ class UserMetadataIn extends CriterionVisitor
             implode(
                 ' OR ',
                 array_map(
-                    function ( $value ) use ( $solrField )
-                    {
+                    function ($value) use ($solrField) {
                         return "{$solrField}:\"{$value}\"";
                     },
                     $criterion->value
@@ -78,4 +78,3 @@ class UserMetadataIn extends CriterionVisitor
             ')';
     }
 }
-

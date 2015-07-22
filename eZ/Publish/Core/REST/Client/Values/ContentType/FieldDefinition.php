@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the FieldDefinition class
+ * File containing the FieldDefinition class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,8 +14,8 @@ namespace eZ\Publish\Core\REST\Client\Values\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
 
 /**
+ * This class represents a field definition.
  *
- * This class represents a field definition
  * @property-read $names calls getNames() or on access getName($language)
  * @property-read $descriptions calls getDescriptions() or on access getDescription($language)
  * @property-read $fieldSettings calls getFieldSettings()
@@ -33,44 +35,43 @@ class FieldDefinition extends APIFieldDefinition
 {
     /**
      * Contains the human readable name of this field in all provided languages
-     * of the content type
+     * of the content type.
      *
      * @var string[]
      */
     protected $names;
 
     /**
-     * Contains the human readable description of the field
+     * Contains the human readable description of the field.
      *
      * @var string[]
      */
     protected $descriptions;
 
     /**
-     * Contains the validators of this field definition supported by the field type#
+     * Contains the validators of this field definition supported by the field type#.
      *
      * @var \eZ\Publish\Core\FieldType\Validator[]
      */
     protected $validators;
 
     /**
-     * Contains settings for the field definition supported by the field type
+     * Contains settings for the field definition supported by the field type.
      *
      * @var array
      */
     protected $fieldSettings;
 
-    function __construct( array $data = array() )
+    public function __construct(array $data = array())
     {
-        foreach ( $data as $propertyName => $propertyValue )
-        {
+        foreach ($data as $propertyName => $propertyValue) {
             $this->$propertyName = $propertyValue;
         }
     }
 
     /**
      * This method returns the human readable name of this field in all provided languages
-     * of the content type
+     * of the content type.
      *
      * The structure of the return value is:
      * <code>
@@ -85,19 +86,19 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     * This method returns the name of the field in the given language
+     * This method returns the name of the field in the given language.
      *
      * @param string $languageCode
      *
      * @return string the name for the given language or null if none exists.
      */
-    public function getName( $languageCode )
+    public function getName($languageCode)
     {
         return $this->names[$languageCode];
     }
 
     /**
-     * This method returns the human readable description of the field
+     * This method returns the human readable description of the field.
      *
      * The structure of this field is:
      * <code>
@@ -112,19 +113,19 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     * This method returns the name of the field in the given language
+     * This method returns the name of the field in the given language.
      *
      * @param string $languageCode
      *
      * @return string the description for the given language or null if none exists.
      */
-    public function getDescription( $languageCode )
+    public function getDescription($languageCode)
     {
         return $this->descriptions[$languageCode];
     }
 
     /**
-     * This method returns the validators of this field definition supported by the field type
+     * This method returns the validators of this field definition supported by the field type.
      *
      * @return \eZ\Publish\Core\FieldType\Validator[]
      */
@@ -134,7 +135,7 @@ class FieldDefinition extends APIFieldDefinition
     }
 
     /**
-     * This method returns settings for the field definition supported by the field type
+     * This method returns settings for the field definition supported by the field type.
      *
      * @return array
      */

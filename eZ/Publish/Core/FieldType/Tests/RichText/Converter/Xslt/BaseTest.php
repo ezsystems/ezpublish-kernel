@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the eZ\Publish\Core\FieldType\Tests\RichText\Converter\BaseTest class
+ * File containing the eZ\Publish\Core\FieldType\Tests\RichText\Converter\BaseTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -41,47 +43,42 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         $map = array();
 
-        foreach ( glob( __DIR__ . "/_fixtures/{$fixtureSubdirectories["input"]}/*.xml" ) as $inputFile )
-        {
-            $basename = basename( $inputFile, ".xml" );
-            $outputFile = __DIR__ . "/_fixtures/{$fixtureSubdirectories["output"]}/{$basename}.xml";
-            $outputFileLossy = __DIR__ . "/_fixtures/{$fixtureSubdirectories["output"]}/{$basename}.lossy.xml";
+        foreach (glob(__DIR__ . "/_fixtures/{$fixtureSubdirectories['input']}/*.xml") as $inputFile) {
+            $basename = basename($inputFile, '.xml');
+            $outputFile = __DIR__ . "/_fixtures/{$fixtureSubdirectories['output']}/{$basename}.xml";
+            $outputFileLossy = __DIR__ . "/_fixtures/{$fixtureSubdirectories['output']}/{$basename}.lossy.xml";
 
-            if ( !file_exists( $outputFile ) && file_exists( $outputFileLossy ) )
-            {
+            if (!file_exists($outputFile) && file_exists($outputFileLossy)) {
                 $outputFile = $outputFileLossy;
             }
 
-            $map[] = array( $inputFile, $outputFile );
+            $map[] = array($inputFile, $outputFile);
         }
 
-        $lossySubdirectory = "_fixtures/{$fixtureSubdirectories["input"]}/lossy";
-        $inputDirNormalized = str_replace( "/", ".", $fixtureSubdirectories["input"] );
-        $outputDirNormalized = str_replace( "/", ".", $fixtureSubdirectories["output"] );
-        foreach ( glob( __DIR__ . "/{$lossySubdirectory}/*.{$fixtureSubdirectories["input"]}.xml" ) as $inputFile )
-        {
-            $basename = basename( basename( $inputFile, ".xml" ), ".{$inputDirNormalized}" );
+        $lossySubdirectory = "_fixtures/{$fixtureSubdirectories['input']}/lossy";
+        $inputDirNormalized = str_replace('/', '.', $fixtureSubdirectories['input']);
+        $outputDirNormalized = str_replace('/', '.', $fixtureSubdirectories['output']);
+        foreach (glob(__DIR__ . "/{$lossySubdirectory}/*.{$fixtureSubdirectories['input']}.xml") as $inputFile) {
+            $basename = basename(basename($inputFile, '.xml'), ".{$inputDirNormalized}");
             $outputFile = __DIR__ . "/{$lossySubdirectory}/{$basename}.{$outputDirNormalized}.xml";
 
-            if ( !file_exists( $outputFile ) )
-            {
+            if (!file_exists($outputFile)) {
                 continue;
             }
 
-            $map[] = array( $inputFile, $outputFile );
+            $map[] = array($inputFile, $outputFile);
         }
 
         return $map;
     }
 
-    protected function removeComments( DOMDocument $document )
+    protected function removeComments(DOMDocument $document)
     {
-        $xpath = new DOMXpath( $document );
-        $nodes = $xpath->query( "//comment()" );
+        $xpath = new DOMXpath($document);
+        $nodes = $xpath->query('//comment()');
 
-        for ( $i = 0; $i < $nodes->length; $i++ )
-        {
-            $nodes->item( $i )->parentNode->removeChild( $nodes->item( $i ) );
+        for ($i = 0; $i < $nodes->length; ++$i) {
+            $nodes->item($i)->parentNode->removeChild($nodes->item($i));
         }
     }
 
@@ -91,42 +88,39 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider providerForTestConvert
      */
-    public function testConvert( $inputFile, $outputFile )
+    public function testConvert($inputFile, $outputFile)
     {
-        $endsWith = ".lossy.xml";
-        if ( substr_compare( $inputFile, $endsWith, -strlen( $endsWith ), strlen( $endsWith ) ) === 0 )
-        {
-            $this->markTestSkipped( "Skipped lossy conversion." );
+        $endsWith = '.lossy.xml';
+        if (substr_compare($inputFile, $endsWith, -strlen($endsWith), strlen($endsWith)) === 0) {
+            $this->markTestSkipped('Skipped lossy conversion.');
         }
 
-        if ( !file_exists( $outputFile ) )
-        {
-            $this->markTestIncomplete( "Test is not complete: missing output fixture: " . $outputFile );
+        if (!file_exists($outputFile)) {
+            $this->markTestIncomplete('Test is not complete: missing output fixture: ' . $outputFile);
         }
 
-        $inputDocument = $this->createDocument( $inputFile );
-        $outputDocument = $this->createDocument( $outputFile );
+        $inputDocument = $this->createDocument($inputFile);
+        $outputDocument = $this->createDocument($outputFile);
 
-        $this->removeComments( $inputDocument );
-        $this->removeComments( $outputDocument );
+        $this->removeComments($inputDocument);
+        $this->removeComments($outputDocument);
 
         $converter = $this->getConverter();
-        $convertedDocument = $converter->convert( $inputDocument );
+        $convertedDocument = $converter->convert($inputDocument);
 
         // Needed by some disabled output escaping (eg. legacy ezxml paragraph <line/> elements)
         $convertedDocumentNormalized = new DOMDocument();
-        $convertedDocumentNormalized->loadXML( $convertedDocument->saveXML() );
+        $convertedDocumentNormalized->loadXML($convertedDocument->saveXML());
 
-        $this->assertEquals( $outputDocument, $convertedDocumentNormalized );
+        $this->assertEquals($outputDocument, $convertedDocumentNormalized);
 
         $validator = $this->getConversionValidator();
-        if ( isset( $validator ) )
-        {
-            $errors = $validator->validate( $convertedDocument );
+        if (isset($validator)) {
+            $errors = $validator->validate($convertedDocument);
             $this->assertTrue(
-                empty( $errors ),
-                "Conversion result did not validate against the configured schemas:" .
-                $this->formatValidationErrors( $outputFile, $errors )
+                empty($errors),
+                'Conversion result did not validate against the configured schemas:' .
+                $this->formatValidationErrors($outputFile, $errors)
             );
         }
     }
@@ -136,31 +130,30 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      *
      * @return \DOMDocument
      */
-    protected function createDocument( $xmlFile )
+    protected function createDocument($xmlFile)
     {
         $document = new DOMDocument();
 
         $document->preserveWhiteSpace = false;
         $document->formatOutput = false;
 
-        $document->loadXml( file_get_contents( $xmlFile ) );
+        $document->loadXml(file_get_contents($xmlFile));
 
         return $document;
     }
 
-    protected function formatValidationErrors( $outputFile, array $errors )
+    protected function formatValidationErrors($outputFile, array $errors)
     {
         $output = "\n";
-        foreach ( $errors as $error )
-        {
-            $output .= " - " . $error . "\n";
+        foreach ($errors as $error) {
+            $output .= ' - ' . $error . "\n";
         }
         $output .= "Configured schemas:\n";
-        foreach ( $this->getConversionValidationSchema() as $schemaPath )
-        {
-            $output .= " - " . $schemaPath . "\n";
+        foreach ($this->getConversionValidationSchema() as $schemaPath) {
+            $output .= ' - ' . $schemaPath . "\n";
         }
-        $output .= "Validated XML:\n" . file_get_contents( $outputFile );
+        $output .= "Validated XML:\n" . file_get_contents($outputFile);
+
         return $output;
     }
 
@@ -169,8 +162,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     protected function getConverter()
     {
-        if ( $this->converter === null )
-        {
+        if ($this->converter === null) {
             $this->converter = new Xslt(
                 $this->getConversionTransformationStylesheet(),
                 $this->getCustomConversionTransformationStylesheets()
@@ -186,9 +178,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     protected function getConversionValidator()
     {
         $validationSchema = $this->getConversionValidationSchema();
-        if ( $validationSchema !== null && $this->validator === null )
-        {
-            $this->validator = new Validator( $validationSchema );
+        if ($validationSchema !== null && $this->validator === null) {
+            $this->validator = new Validator($validationSchema);
         }
 
         return $this->validator;

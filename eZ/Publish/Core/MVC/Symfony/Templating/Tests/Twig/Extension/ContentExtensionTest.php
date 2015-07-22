@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the ContentExtensionIntegrationTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -19,13 +21,11 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
- * Integration tests for ContentExtension templates
+ * Integration tests for ContentExtension templates.
  *
  * Tests ContentExtension in context of site with "fre-FR, eng-US" configured as languages.
- *
- * @package eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension
  */
-class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
+class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
 {
     /**
      * @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit_Framework_MockObject_MockObject
@@ -36,7 +36,7 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
 
     public function getExtensions()
     {
-        $this->fieldHelperMock = $this->getMockBuilder( 'eZ\\Publish\\Core\\Helper\\FieldHelper' )
+        $this->fieldHelperMock = $this->getMockBuilder('eZ\\Publish\\Core\\Helper\\FieldHelper')
             ->disableOriginalConstructor()->getMock();
         $configResolver = $this->getConfigResolverMock();
 
@@ -45,22 +45,22 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
                 $this->getRepositoryMock(),
                 new TranslationHelper(
                     $configResolver,
-                    $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' ),
+                    $this->getMock('eZ\\Publish\\API\\Repository\\ContentService'),
                     array(),
-                    $this->getMock( 'Psr\Log\LoggerInterface' )
+                    $this->getMock('Psr\Log\LoggerInterface')
                 ),
                 $this->fieldHelperMock
-            )
+            ),
         );
     }
 
     public function getFixturesDir()
     {
-        return dirname( __FILE__ ) . '/_fixtures/content_functions/';
+        return dirname(__FILE__) . '/_fixtures/content_functions/';
     }
 
     /**
-     * Creates content with initial/main language being fre-FR
+     * Creates content with initial/main language being fre-FR.
      *
      * @param string $contentTypeIdentifier
      * @param array $fieldsData
@@ -68,26 +68,24 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
      *
      * @return Content
      */
-    protected function getContent( $contentTypeIdentifier, array $fieldsData, array $namesData = array() )
+    protected function getContent($contentTypeIdentifier, array $fieldsData, array $namesData = array())
     {
         $fields = array();
-        foreach ( $fieldsData as $fieldTypeIdentifier => $fieldsArray )
-        {
-            $fieldsArray = isset( $fieldsArray['id'] ) ? array( $fieldsArray ) : $fieldsArray;
-            foreach ( $fieldsArray as $fieldInfo )
-            {
+        foreach ($fieldsData as $fieldTypeIdentifier => $fieldsArray) {
+            $fieldsArray = isset($fieldsArray['id']) ? array($fieldsArray) : $fieldsArray;
+            foreach ($fieldsArray as $fieldInfo) {
                 // Save field definitions in property for mocking purposes
                 $this->fieldDefinitions[$contentTypeIdentifier][$fieldInfo['fieldDefIdentifier']] = new FieldDefinition(
                     array(
                         'identifier' => $fieldInfo['fieldDefIdentifier'],
                         'id' => $fieldInfo['id'],
                         'fieldTypeIdentifier' => $fieldTypeIdentifier,
-                        'names' => isset( $fieldInfo['fieldDefNames'] ) ? $fieldInfo['fieldDefNames'] : array(),
-                        'descriptions' => isset( $fieldInfo['fieldDefDescriptions'] ) ? $fieldInfo['fieldDefDescriptions'] : array()
+                        'names' => isset($fieldInfo['fieldDefNames']) ? $fieldInfo['fieldDefNames'] : array(),
+                        'descriptions' => isset($fieldInfo['fieldDefDescriptions']) ? $fieldInfo['fieldDefDescriptions'] : array(),
                     )
                 );
-                unset( $fieldInfo['fieldDefNames'], $fieldInfo['fieldDefDescriptions'] );
-                $fields[] = new Field( $fieldInfo );
+                unset($fieldInfo['fieldDefNames'], $fieldInfo['fieldDefDescriptions']);
+                $fields[] = new Field($fieldInfo);
             }
         }
         $content = new Content(
@@ -103,16 +101,15 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
                                 'id' => 42,
                                 'mainLanguageCode' => 'fre-FR',
                                 // Using as id as we don't really care to test the service here
-                                'contentTypeId' => $contentTypeIdentifier
+                                'contentTypeId' => $contentTypeIdentifier,
                             )
-                        )
+                        ),
                     )
-                )
+                ),
             )
         );
 
         return $content;
-
     }
 
     private function getConfigResolverMock()
@@ -121,8 +118,8 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
             'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface'
         );
         // Signature: ConfigResolverInterface->getParameter( $paramName, $namespace = null, $scope = null )
-        $mock->expects( $this->any() )
-            ->method( 'getParameter' )
+        $mock->expects($this->any())
+            ->method('getParameter')
             ->will(
                 $this->returnValueMap(
                     array(
@@ -130,22 +127,23 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
                             'languages',
                             null,
                             null,
-                            array( 'fre-FR', 'eng-US' )
+                            array('fre-FR', 'eng-US'),
                         ),
                     )
                 )
             );
+
         return $mock;
     }
 
-    protected function getField( $isEmpty )
+    protected function getField($isEmpty)
     {
-        $field = new Field( array( 'fieldDefIdentifier' => 'testfield', 'value' => null ) );
+        $field = new Field(array('fieldDefIdentifier' => 'testfield', 'value' => null));
 
         $this->fieldHelperMock
-            ->expects( $this->once() )
-            ->method( 'isFieldEmpty' )
-            ->will( $this->returnValue( $isEmpty ) );
+            ->expects($this->once())
+            ->method('isFieldEmpty')
+            ->will($this->returnValue($isEmpty));
 
         return $field;
     }
@@ -155,11 +153,11 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
      */
     protected function getRepositoryMock()
     {
-        $mock = $this->getMock( "eZ\\Publish\\API\\Repository\\Repository" );
+        $mock = $this->getMock('eZ\\Publish\\API\\Repository\\Repository');
 
-        $mock->expects( $this->any() )
-            ->method( "getContentTypeService" )
-            ->will( $this->returnValue( $this->getContentTypeServiceMock() ) );
+        $mock->expects($this->any())
+            ->method('getContentTypeService')
+            ->will($this->returnValue($this->getContentTypeServiceMock()));
 
         return $mock;
     }
@@ -169,19 +167,18 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
      */
     protected function getContentTypeServiceMock()
     {
-        $mock = $this->getMock( "eZ\\Publish\\API\\Repository\\ContentTypeService" );
+        $mock = $this->getMock('eZ\\Publish\\API\\Repository\\ContentTypeService');
 
-        $mock->expects( $this->any() )
-            ->method( "loadContentType" )
+        $mock->expects($this->any())
+            ->method('loadContentType')
             ->will(
                 $this->returnCallback(
-                    function ( $contentTypeId )
-                    {
+                    function ($contentTypeId) {
                         return new ContentType(
                             array(
                                 'identifier' => $contentTypeId,
                                 'mainLanguageCode' => 'fre-FR',
-                                'fieldDefinitions' => $this->fieldDefinitions[$contentTypeId]
+                                'fieldDefinitions' => $this->fieldDefinitions[$contentTypeId],
                             )
                         );
                     }

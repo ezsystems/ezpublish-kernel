@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Visibility Criterion parser class
+ * File containing the Visibility Criterion parser class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -15,12 +17,12 @@ use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility as VisibilityCriterion;
 
 /**
- * Parser for Visibility Criterion
+ * Parser for Visibility Criterion.
  */
 class Visibility extends BaseParser
 {
     /**
-     * Parses input structure to a Visibility Criterion object
+     * Parses input structure to a Visibility Criterion object.
      *
      * @param array $data
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
@@ -29,18 +31,16 @@ class Visibility extends BaseParser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility
      */
-    public function parse( array $data, ParsingDispatcher $parsingDispatcher )
+    public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        if ( !array_key_exists( "VisibilityCriterion", $data ) )
-        {
-            throw new Exceptions\Parser( "Invalid <VisibilityCriterion> format" );
+        if (!array_key_exists('VisibilityCriterion', $data)) {
+            throw new Exceptions\Parser('Invalid <VisibilityCriterion> format');
         }
 
-        if ( $data['VisibilityCriterion'] != VisibilityCriterion::VISIBLE && $data['VisibilityCriterion'] != VisibilityCriterion::HIDDEN )
-        {
-            throw new Exceptions\Parser( "Invalid <VisibilityCriterion> format" );
+        if ($data['VisibilityCriterion'] != VisibilityCriterion::VISIBLE && $data['VisibilityCriterion'] != VisibilityCriterion::HIDDEN) {
+            throw new Exceptions\Parser('Invalid <VisibilityCriterion> format');
         }
 
-        return new VisibilityCriterion( (int)$data['VisibilityCriterion'] );
+        return new VisibilityCriterion((int)$data['VisibilityCriterion']);
     }
 }

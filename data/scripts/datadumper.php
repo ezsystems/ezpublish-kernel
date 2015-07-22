@@ -16,41 +16,39 @@
 
 require "./vendor/autoload.php";
 
-if ( false === isset( $argv[1] ) || false === isset( $argv[2] ) )
-{
+if (false === isset($argv[1]) || false === isset($argv[2])) {
     echo 'Usage: ', PHP_EOL,
-         basename( __FILE__ ), ' "mysql://user:password@localhost/database_name" <dump-file>', PHP_EOL;
-    exit( 1 );
+         basename(__FILE__), ' "mysql://user:password@localhost/database_name" <dump-file>', PHP_EOL;
+    exit(1);
 }
 
-$db = ezcDbFactory::create( $argv[1] );
+$db = ezcDbFactory::create($argv[1]);
 
 // Get eZ tables
 $tables = array();
-$result = $db->query( 'SHOW TABLES' );
-while ( $row = $result->fetch( PDO::FETCH_COLUMN ) )
-{
+$result = $db->query('SHOW TABLES');
+while ($row = $result->fetch(PDO::FETCH_COLUMN)) {
     // Only add ez tables but not ezx_ (eznetwork) tables
-    if ( strpos( $row, 'ez' ) === 0 && strpos( $row, 'ezx_' ) !== 0 )
+    if (strpos($row, 'ez') === 0 && strpos($row, 'ezx_') !== 0) {
         $tables[] = $row;
+    }
 }
 
 // Get data
 $fixture = array();
-foreach ( $tables as $table )
-{
-    $result = $db->query( 'SELECT * FROM ' . $table );
+foreach ($tables as $table) {
+    $result = $db->query('SELECT * FROM ' . $table);
 
     $fixture[$table] = array();
-    while ( $row = $result->fetch( PDO::FETCH_ASSOC ) )
-    {
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $fixture[$table][] = $row;
     }
 }
 
 // Var export fixture, reduce indentation & write to dump-file
-$fixture = "<?php\n\nreturn " . str_replace(  array( "\n  ", "\n  ", "\n   ", " => \n" ), array( "\n", "\n ", "\n  ", " =>\n" ), var_export( $fixture, true ) ) . ";\n\n";
-if ( file_put_contents( $argv[2], $fixture ) === false )
+$fixture = "<?php\n\nreturn " . str_replace(array( "\n  ", "\n  ", "\n   ", " => \n" ), array( "\n", "\n ", "\n  ", " =>\n" ), var_export($fixture, true)) . ";\n\n";
+if (file_put_contents($argv[2], $fixture) === false) {
     echo "file_put_contents returned false, might be wrong dump file name or missing permissions";
-else
-    echo count( $table ) . " tables successfully written to file {$argv[2]}";
+} else {
+    echo count($table) . " tables successfully written to file {$argv[2]}";
+}

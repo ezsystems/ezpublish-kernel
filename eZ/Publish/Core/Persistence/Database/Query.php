@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing an interface for the database abstractions
+ * File containing an interface for the database abstractions.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -52,9 +54,10 @@ interface Query
      *
      * @param mixed $value
      * @param string $placeHolder the name to bind with. The string must start with a colon ':'.
+     *
      * @return string the placeholder name used.
      */
-    public function bindValue( $value, $placeHolder = null, $type = PDO::PARAM_STR );
+    public function bindValue($value, $placeHolder = null, $type = PDO::PARAM_STR);
 
     /**
      * Binds the parameter $param to the specified variable name $placeHolder..
@@ -80,9 +83,10 @@ interface Query
      *
      * @param &mixed $param
      * @param string $placeHolder the name to bind with. The string must start with a colon ':'.
+     *
      * @return string the placeholder name used.
      */
-    public function bindParam( &$param, $placeHolder = null, $type = PDO::PARAM_STR );
+    public function bindParam(&$param, $placeHolder = null, $type = PDO::PARAM_STR);
 
     /**
      * Return the SQL string for this query.

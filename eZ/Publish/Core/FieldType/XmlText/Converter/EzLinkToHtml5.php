@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the eZ\Publish\Core\FieldType\XmlText\Converter\EzLinkToHtml5 class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -42,7 +44,7 @@ class EzLinkToHtml5 implements Converter
      */
     protected $logger;
 
-    public function __construct( LocationService $locationService, ContentService $contentService, UrlAliasRouter $urlAliasRouter, LoggerInterface $logger = null )
+    public function __construct(LocationService $locationService, ContentService $contentService, UrlAliasRouter $urlAliasRouter, LoggerInterface $logger = null)
     {
         $this->locationService = $locationService;
         $this->contentService = $contentService;
@@ -57,95 +59,75 @@ class EzLinkToHtml5 implements Converter
      *
      * @return string|null
      */
-    public function convert( DOMDocument $xmlDoc )
+    public function convert(DOMDocument $xmlDoc)
     {
-        $xpath = new DOMXPath( $xmlDoc );
+        $xpath = new DOMXPath($xmlDoc);
 
-        $elements = $xpath->query( "//link|//embed|//embed-inline" );
+        $elements = $xpath->query('//link|//embed|//embed-inline');
 
         /** @var \DOMElement $element */
-        foreach ( $elements as $element )
-        {
+        foreach ($elements as $element) {
             $location = null;
 
-            if ( $this->elementHasAttribute( $element, 'object_id' ) )
-            {
-                try
-                {
+            if ($this->elementHasAttribute($element, 'object_id')) {
+                try {
                     $contentInfo = $this->contentService->loadContentInfo(
-                        $this->getElementAttribute( $element, 'object_id' )
+                        $this->getElementAttribute($element, 'object_id')
                     );
-                    $location = $this->locationService->loadLocation( $contentInfo->mainLocationId );
-                }
-                catch ( APINotFoundException $e )
-                {
-                    if ( $this->logger )
-                    {
+                    $location = $this->locationService->loadLocation($contentInfo->mainLocationId);
+                } catch (APINotFoundException $e) {
+                    if ($this->logger) {
                         $this->logger->warning(
-                            "While generating links for xmltext, could not locate " .
-                            "Content object with ID " . $this->getElementAttribute( $element, 'object_id' )
+                            'While generating links for xmltext, could not locate ' .
+                            'Content object with ID ' . $this->getElementAttribute($element, 'object_id')
                         );
                     }
-                }
-                catch ( APIUnauthorizedException $e )
-                {
-                    if ( $this->logger )
-                    {
+                } catch (APIUnauthorizedException $e) {
+                    if ($this->logger) {
                         $this->logger->notice(
-                            "While generating links for xmltext, unauthorized to load " .
-                            "Content object with ID " . $this->getElementAttribute( $element, 'object_id' )
+                            'While generating links for xmltext, unauthorized to load ' .
+                            'Content object with ID ' . $this->getElementAttribute($element, 'object_id')
                         );
                     }
                 }
             }
 
-            if ( $this->elementHasAttribute( $element, 'node_id' ) )
-            {
-                try
-                {
+            if ($this->elementHasAttribute($element, 'node_id')) {
+                try {
                     $location = $this->locationService->loadLocation(
-                        $this->getElementAttribute( $element, 'node_id' )
+                        $this->getElementAttribute($element, 'node_id')
                     );
-                }
-                catch ( APINotFoundException $e )
-                {
-                    if ( $this->logger )
-                    {
+                } catch (APINotFoundException $e) {
+                    if ($this->logger) {
                         $this->logger->warning(
-                            "While generating links for xmltext, could not locate " .
-                            "Location with ID " . $this->getElementAttribute( $element, 'node_id' )
+                            'While generating links for xmltext, could not locate ' .
+                            'Location with ID ' . $this->getElementAttribute($element, 'node_id')
                         );
                     }
-                }
-                catch ( APIUnauthorizedException $e )
-                {
-                    if ( $this->logger )
-                    {
+                } catch (APIUnauthorizedException $e) {
+                    if ($this->logger) {
                         $this->logger->notice(
-                            "While generating links for xmltext, unauthorized to load " .
-                            "Location with ID " . $this->getElementAttribute( $element, 'node_id' )
+                            'While generating links for xmltext, unauthorized to load ' .
+                            'Location with ID ' . $this->getElementAttribute($element, 'node_id')
                         );
                     }
                 }
             }
 
-            if ( $location !== null )
-            {
-                $element->setAttribute( 'url', $this->urlAliasRouter->generate( $location ) );
+            if ($location !== null) {
+                $element->setAttribute('url', $this->urlAliasRouter->generate($location));
             }
 
             // Copy temporary URL if it exists and is not set at this point
-            if ( !$element->hasAttribute( 'url' ) && $element->hasAttribute( EmbedLinking::TEMP_PREFIX . 'url' ) )
-            {
-                $element->setAttribute( 'url', $element->getAttribute( EmbedLinking::TEMP_PREFIX . 'url' ) );
+            if (!$element->hasAttribute('url') && $element->hasAttribute(EmbedLinking::TEMP_PREFIX . 'url')) {
+                $element->setAttribute('url', $element->getAttribute(EmbedLinking::TEMP_PREFIX . 'url'));
             }
 
-            if ( $this->elementHasAttribute( $element, 'anchor_name' ) )
-            {
+            if ($this->elementHasAttribute($element, 'anchor_name')) {
                 $element->setAttribute(
                     'url',
-                    $element->getAttribute( 'url' ) . "#" .
-                    $this->getElementAttribute( $element, 'anchor_name' )
+                    $element->getAttribute('url') . '#' .
+                    $this->getElementAttribute($element, 'anchor_name')
                 );
             }
         }
@@ -159,19 +141,17 @@ class EzLinkToHtml5 implements Converter
      * @param \DOMElement $element
      * @param string $attributeName
      *
-     * @return boolean
+     * @return bool
      */
-    protected function elementHasAttribute( DomElement $element, $attributeName )
+    protected function elementHasAttribute(DomElement $element, $attributeName)
     {
         // First try to return for link
-        if ( $element->localName === "link" && $element->hasAttribute( $attributeName ) )
-        {
+        if ($element->localName === 'link' && $element->hasAttribute($attributeName)) {
             return true;
         }
 
         // Second return for embed
-        if ( $element->hasAttribute( EmbedLinking::TEMP_PREFIX . $attributeName ) )
-        {
+        if ($element->hasAttribute(EmbedLinking::TEMP_PREFIX . $attributeName)) {
             return true;
         }
 
@@ -188,15 +168,14 @@ class EzLinkToHtml5 implements Converter
      *
      * @return string
      */
-    protected function getElementAttribute( DomElement $element, $attributeName )
+    protected function getElementAttribute(DomElement $element, $attributeName)
     {
         // First try to return for link
-        if ( $element->localName === "link" )
-        {
-            return $element->getAttribute( $attributeName );
+        if ($element->localName === 'link') {
+            return $element->getAttribute($attributeName);
         }
 
         // Second return for embed
-        return $element->getAttribute( EmbedLinking::TEMP_PREFIX . $attributeName );
+        return $element->getAttribute(EmbedLinking::TEMP_PREFIX . $attributeName);
     }
 }

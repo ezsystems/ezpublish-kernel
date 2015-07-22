@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the Siteaccess MatcherBuilder class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -24,7 +26,7 @@ class MatcherBuilder extends BaseMatcherBuilder
      */
     protected $container;
 
-    public function __construct( ContainerInterface $container )
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -40,22 +42,22 @@ class MatcherBuilder extends BaseMatcherBuilder
      * @return \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Matcher
      *
      * @throws \RuntimeException
-     *
      */
-    public function buildMatcher( $matchingClass, $matchingConfiguration, SimplifiedRequest $request )
+    public function buildMatcher($matchingClass, $matchingConfiguration, SimplifiedRequest $request)
     {
-        if ( $matchingClass[0] === '@' )
-        {
+        if ($matchingClass[0] === '@') {
             /** @var $matcher \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Matcher */
-            $matcher = $this->container->get( substr( $matchingClass, 1 ) );
-            if ( !$matcher instanceof Matcher )
-                throw new RuntimeException( 'A service based siteaccess matcher MUST implement ' . __NAMESPACE__ . '\\Matcher interface.' );
+            $matcher = $this->container->get(substr($matchingClass, 1));
+            if (!$matcher instanceof Matcher) {
+                throw new RuntimeException('A service based siteaccess matcher MUST implement ' . __NAMESPACE__ . '\\Matcher interface.');
+            }
 
-            $matcher->setMatchingConfiguration( $matchingConfiguration );
-            $matcher->setRequest( $request );
+            $matcher->setMatchingConfiguration($matchingConfiguration);
+            $matcher->setRequest($request);
+
             return $matcher;
         }
 
-        return parent::buildMatcher( $matchingClass, $matchingConfiguration, $request );
+        return parent::buildMatcher($matchingClass, $matchingConfiguration, $request);
     }
 }

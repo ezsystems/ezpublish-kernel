@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RelationListProcessor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -17,17 +19,15 @@ class RelationListProcessor extends FieldTypeProcessor
     /**
      * {@inheritDoc}
      */
-    public function preProcessFieldSettingsHash( $incomingSettingsHash )
+    public function preProcessFieldSettingsHash($incomingSettingsHash)
     {
-        if ( isset( $incomingSettingsHash["selectionMethod"] ) )
-        {
-            switch ( $incomingSettingsHash["selectionMethod"] )
-            {
+        if (isset($incomingSettingsHash['selectionMethod'])) {
+            switch ($incomingSettingsHash['selectionMethod']) {
                 case 'SELECTION_BROWSE':
-                    $incomingSettingsHash["selectionMethod"] = Type::SELECTION_BROWSE;
+                    $incomingSettingsHash['selectionMethod'] = Type::SELECTION_BROWSE;
                     break;
                 case 'SELECTION_DROPDOWN':
-                    $incomingSettingsHash["selectionMethod"] = Type::SELECTION_DROPDOWN;
+                    $incomingSettingsHash['selectionMethod'] = Type::SELECTION_DROPDOWN;
             }
         }
 
@@ -37,17 +37,15 @@ class RelationListProcessor extends FieldTypeProcessor
     /**
      * {@inheritDoc}
      */
-    public function postProcessFieldSettingsHash( $outgoingSettingsHash )
+    public function postProcessFieldSettingsHash($outgoingSettingsHash)
     {
-        if ( isset( $outgoingSettingsHash["selectionMethod"] ) )
-        {
-            switch ( $outgoingSettingsHash["selectionMethod"] )
-            {
+        if (isset($outgoingSettingsHash['selectionMethod'])) {
+            switch ($outgoingSettingsHash['selectionMethod']) {
                 case Type::SELECTION_BROWSE:
-                    $outgoingSettingsHash["selectionMethod"] = 'SELECTION_BROWSE';
+                    $outgoingSettingsHash['selectionMethod'] = 'SELECTION_BROWSE';
                     break;
                 case Type::SELECTION_DROPDOWN:
-                    $outgoingSettingsHash["selectionMethod"] = 'SELECTION_DROPDOWN';
+                    $outgoingSettingsHash['selectionMethod'] = 'SELECTION_DROPDOWN';
             }
         }
 

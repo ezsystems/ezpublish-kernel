@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ImageStorage Converter class
+ * File containing the ImageStorage Converter class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,7 +20,7 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 /**
- * Converter for Image field type external storage
+ * Converter for Image field type external storage.
  */
 class ImageStorage extends GatewayBasedStorage
 {
@@ -44,9 +46,8 @@ class ImageStorage extends GatewayBasedStorage
         MetadataHandler $imageSizeMetadataHandler,
         DeprecationWarner $deprecationWarner,
         AliasCleanerInterface $aliasCleaner = null
-    )
-    {
-        parent::__construct( $gateways );
+    ) {
+        parent::__construct($gateways);
         $this->IOService = $IOService;
         $this->pathGenerator = $pathGenerator;
         $this->imageSizeMetadataHandler = $imageSizeMetadataHandler;
@@ -54,7 +55,7 @@ class ImageStorage extends GatewayBasedStorage
         $this->aliasCleaner = $aliasCleaner;
     }
 
-    public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
+    public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
         $contentMetaData = array(
             'fieldId' => $field->id,
@@ -63,8 +64,7 @@ class ImageStorage extends GatewayBasedStorage
         );
 
         // new image
-        if ( isset( $field->value->externalData ) )
-        {
+        if (isset($field->value->externalData)) {
             $targetPath = sprintf(
                 '%s/%s',
                 $this->pathGenerator->getStoragePathForField(
@@ -75,39 +75,32 @@ class ImageStorage extends GatewayBasedStorage
                 $field->value->externalData['fileName']
             );
 
-            if ( isset( $field->value->externalData['id'] ) )
-            {
-                $binaryFile = $this->IOService->loadBinaryFile( $field->value->externalData['id'] );
-            }
-            else if ( $this->IOService->exists( $targetPath ) )
-            {
-                $binaryFile = $this->IOService->loadBinaryFile( $targetPath );
-            }
-            else if ( isset( $field->value->externalData['inputUri'] ) )
-            {
+            if (isset($field->value->externalData['id'])) {
+                $binaryFile = $this->IOService->loadBinaryFile($field->value->externalData['id']);
+            } elseif ($this->IOService->exists($targetPath)) {
+                $binaryFile = $this->IOService->loadBinaryFile($targetPath);
+            } elseif (isset($field->value->externalData['inputUri'])) {
                 $localFilePath = $field->value->externalData['inputUri'];
-                unset( $field->value->externalData['inputUri'] );
+                unset($field->value->externalData['inputUri']);
 
-                $binaryFileCreateStruct = $this->IOService->newBinaryCreateStructFromLocalFile( $localFilePath );
+                $binaryFileCreateStruct = $this->IOService->newBinaryCreateStructFromLocalFile($localFilePath);
                 $binaryFileCreateStruct->id = $targetPath;
-                $binaryFile = $this->IOService->createBinaryFile( $binaryFileCreateStruct );
+                $binaryFile = $this->IOService->createBinaryFile($binaryFileCreateStruct);
 
-                $imageSize = getimagesize( $localFilePath );
+                $imageSize = getimagesize($localFilePath);
                 $field->value->externalData['width'] = $imageSize[0];
                 $field->value->externalData['height'] = $imageSize[1];
-            }
-            else
-            {
+            } else {
                 throw new InvalidArgumentException(
-                    "inputUri",
-                    "No source image could be obtained from the given external data"
+                    'inputUri',
+                    'No source image could be obtained from the given external data'
                 );
             }
 
             $field->value->externalData['imageId'] = $versionInfo->contentInfo->id . '-' . $field->id;
             $field->value->externalData['uri'] = $binaryFile->uri;
             $field->value->externalData['id'] = $binaryFile->id;
-            $field->value->externalData['mime'] = $this->IOService->getMimeType( $binaryFile->id );
+            $field->value->externalData['mime'] = $this->IOService->getMimeType($binaryFile->id);
 
             $field->value->data = array_merge(
                 $field->value->externalData,
@@ -115,18 +108,15 @@ class ImageStorage extends GatewayBasedStorage
             );
 
             $field->value->externalData = null;
-        }
-        // existing image from another version
-        else
-        {
-            if ( $field->value->data === null )
-            {
+        } else { // existing image from another version
+            if ($field->value->data === null) {
                 // Store empty value only with content meta data
                 $field->value->data = $contentMetaData;
+
                 return false;
             }
 
-            $this->IOService->loadBinaryFile( $field->value->data['id'] );
+            $this->IOService->loadBinaryFile($field->value->data['id']);
 
             $field->value->data = array_merge(
                 $field->value->data,
@@ -135,51 +125,45 @@ class ImageStorage extends GatewayBasedStorage
             $field->value->externalData = null;
         }
 
-        $this->getGateway( $context )->storeImageReference( $field->value->data['uri'], $field->id );
+        $this->getGateway($context)->storeImageReference($field->value->data['uri'], $field->id);
 
         // Data has been updated and needs to be stored!
         return true;
     }
 
-    public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
+    public function getFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        if ( $field->value->data !== null )
-        {
+        if ($field->value->data !== null) {
             $field->value->data['imageId'] = $versionInfo->contentInfo->id . '-' . $field->id;
-            $binaryFile = $this->IOService->loadBinaryFile( $field->value->data['id'] );
+            $binaryFile = $this->IOService->loadBinaryFile($field->value->data['id']);
             $field->value->data['id'] = $binaryFile->id;
             $field->value->data['fileSize'] = $binaryFile->size;
             $field->value->data['uri'] = $binaryFile->uri;
         }
     }
 
-    public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
+    public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds, array $context)
     {
         /** @var \eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway $gateway */
-        $gateway = $this->getGateway( $context );
+        $gateway = $this->getGateway($context);
 
-        $fieldXmls = $gateway->getXmlForImages( $versionInfo->versionNo, $fieldIds );
+        $fieldXmls = $gateway->getXmlForImages($versionInfo->versionNo, $fieldIds);
 
-        foreach ( $fieldXmls as $fieldId => $xml )
-        {
-            $storedFiles = $gateway->extractFilesFromXml( $xml );
-            if ( $storedFiles === null )
-            {
+        foreach ($fieldXmls as $fieldId => $xml) {
+            $storedFiles = $gateway->extractFilesFromXml($xml);
+            if ($storedFiles === null) {
                 continue;
             }
 
-            if ( $this->aliasCleaner )
-            {
-                $this->aliasCleaner->removeAliases( $storedFiles['original'] );
+            if ($this->aliasCleaner) {
+                $this->aliasCleaner->removeAliases($storedFiles['original']);
             }
 
-            foreach ( $storedFiles as $storedFilePath )
-            {
-                $gateway->removeImageReferences( $storedFilePath, $versionInfo->versionNo, $fieldId );
-                if ( $gateway->countImageReferences( $storedFilePath ) === 0 )
-                {
-                    $binaryFile = $this->IOService->loadBinaryFileByUri( $storedFilePath );
-                    $this->IOService->deleteBinaryFile( $binaryFile );
+            foreach ($storedFiles as $storedFilePath) {
+                $gateway->removeImageReferences($storedFilePath, $versionInfo->versionNo, $fieldId);
+                if ($gateway->countImageReferences($storedFilePath) === 0) {
+                    $binaryFile = $this->IOService->loadBinaryFileByUri($storedFilePath);
+                    $this->IOService->deleteBinaryFile($binaryFile);
                 }
             }
         }
@@ -190,7 +174,7 @@ class ImageStorage extends GatewayBasedStorage
         return true;
     }
 
-    public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
+    public function getIndexData(VersionInfo $versionInfo, Field $field, array $context)
     {
         // @todo: Correct?
         return null;

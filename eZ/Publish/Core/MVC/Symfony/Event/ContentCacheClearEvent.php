@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,7 +27,7 @@ class ContentCacheClearEvent extends Event
      */
     private $locationsToClear = [];
 
-    public function __construct( ContentInfo $contentInfo )
+    public function __construct(ContentInfo $contentInfo)
     {
         $this->contentInfo = $contentInfo;
     }
@@ -55,7 +57,7 @@ class ContentCacheClearEvent extends Event
      *
      * @param Location $location
      */
-    public function addLocationToClear( Location $location )
+    public function addLocationToClear(Location $location)
     {
         $this->locationsToClear[] = $location;
     }
@@ -65,7 +67,7 @@ class ContentCacheClearEvent extends Event
      *
      * @param Location[] $locationsToClear
      */
-    public function setLocationsToClear( array $locationsToClear )
+    public function setLocationsToClear(array $locationsToClear)
     {
         $this->locationsToClear = $locationsToClear;
     }

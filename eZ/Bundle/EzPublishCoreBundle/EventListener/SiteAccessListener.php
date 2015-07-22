@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the SiteAccessListener class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -38,7 +40,7 @@ class SiteAccessListener extends ContainerAware implements EventSubscriberInterf
      */
     private $httpUtils;
 
-    public function __construct( RouterInterface $defaultRouter, UrlAliasGenerator $urlAliasGenerator, HttpUtils $httpUtils )
+    public function __construct(RouterInterface $defaultRouter, UrlAliasGenerator $urlAliasGenerator, HttpUtils $httpUtils)
     {
         $this->defaultRouter = $defaultRouter;
         $this->urlAliasGenerator = $urlAliasGenerator;
@@ -48,35 +50,31 @@ class SiteAccessListener extends ContainerAware implements EventSubscriberInterf
     public static function getSubscribedEvents()
     {
         return array(
-            MVCEvents::SITEACCESS => array( 'onSiteAccessMatch', 255 )
+            MVCEvents::SITEACCESS => array('onSiteAccessMatch', 255),
         );
     }
 
-    public function onSiteAccessMatch( PostSiteAccessMatchEvent $event )
+    public function onSiteAccessMatch(PostSiteAccessMatchEvent $event)
     {
         $request = $event->getRequest();
         $matchedSiteAccess = $event->getSiteAccess();
 
-        $siteAccess = $this->container->get( 'ezpublish.siteaccess' );
+        $siteAccess = $this->container->get('ezpublish.siteaccess');
         $siteAccess->name = $matchedSiteAccess->name;
         $siteAccess->matchingType = $matchedSiteAccess->matchingType;
         $siteAccess->matcher = $matchedSiteAccess->matcher;
 
         // We already have semanticPathinfo (sub-request)
-        if ( $request->attributes->has( 'semanticPathinfo' ) )
-        {
-            $vpString = $request->attributes->get( 'viewParametersString' );
-            if ( !empty( $vpString ) )
-            {
+        if ($request->attributes->has('semanticPathinfo')) {
+            $vpString = $request->attributes->get('viewParametersString');
+            if (!empty($vpString)) {
                 $request->attributes->set(
                     'viewParameters',
-                    $this->generateViewParametersArray( $vpString )
+                    $this->generateViewParametersArray($vpString)
                 );
-            }
-            else
-            {
-                $request->attributes->set( 'viewParametersString', '' );
-                $request->attributes->set( 'viewParameters', array() );
+            } else {
+                $request->attributes->set('viewParametersString', '');
+                $request->attributes->set('viewParameters', array());
             }
 
             return;
@@ -84,23 +82,20 @@ class SiteAccessListener extends ContainerAware implements EventSubscriberInterf
 
         // Analyse the pathinfo if needed since it might contain the siteaccess (i.e. like in URI mode)
         $pathinfo = $request->getPathInfo();
-        if ( $siteAccess->matcher instanceof URILexer )
-        {
-            $semanticPathinfo = $siteAccess->matcher->analyseURI( $pathinfo );
-        }
-        else
-        {
+        if ($siteAccess->matcher instanceof URILexer) {
+            $semanticPathinfo = $siteAccess->matcher->analyseURI($pathinfo);
+        } else {
             $semanticPathinfo = $pathinfo;
         }
 
         // Get view parameters and cleaned up pathinfo (without view parameters string)
-        list( $semanticPathinfo, $viewParameters, $viewParametersString ) = $this->getViewParameters( $semanticPathinfo );
+        list($semanticPathinfo, $viewParameters, $viewParametersString) = $this->getViewParameters($semanticPathinfo);
 
         // Storing the modified pathinfo in 'semanticPathinfo' request attribute, to keep a trace of it.
         // Routers implementing RequestMatcherInterface should thus use this attribute instead of the original pathinfo
-        $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
-        $request->attributes->set( 'viewParameters', $viewParameters );
-        $request->attributes->set( 'viewParametersString', $viewParametersString );
+        $request->attributes->set('semanticPathinfo', $semanticPathinfo);
+        $request->attributes->set('viewParameters', $viewParameters);
+        $request->attributes->set('viewParametersString', $viewParametersString);
     }
 
     /**
@@ -113,20 +108,20 @@ class SiteAccessListener extends ContainerAware implements EventSubscriberInterf
      *               Second element is the view parameters hash.
      *               Third element is the view parameters string (e.g. /(foo)/bar)
      */
-    private function getViewParameters( $pathinfo )
+    private function getViewParameters($pathinfo)
     {
         // No view parameters, get out of here.
-        if ( ( $vpStart = strpos( $pathinfo, '/(' ) ) === false )
-        {
-            return array( $pathinfo, array(), '' );
+        if (($vpStart = strpos($pathinfo, '/(')) === false) {
+            return array($pathinfo, array(), '');
         }
 
-        $vpString = substr( $pathinfo, $vpStart + 1 );
-        $viewParameters = $this->generateViewParametersArray( $vpString );
+        $vpString = substr($pathinfo, $vpStart + 1);
+        $viewParameters = $this->generateViewParametersArray($vpString);
 
         // Now remove the view parameters string from $semanticPathinfo
-        $pathinfo = substr( $pathinfo, 0, $vpStart );
-        return array( $pathinfo, $viewParameters, "/$vpString" );
+        $pathinfo = substr($pathinfo, 0, $vpStart);
+
+        return array($pathinfo, $viewParameters, "/$vpString");
     }
 
     /**
@@ -136,40 +131,32 @@ class SiteAccessListener extends ContainerAware implements EventSubscriberInterf
      *
      * @return array
      */
-    private function generateViewParametersArray( $vpString )
+    private function generateViewParametersArray($vpString)
     {
-        $vpString = trim( $vpString, '/' );
+        $vpString = trim($vpString, '/');
         $viewParameters = array();
 
-        $vpSegments = explode( '/', $vpString );
-        for ( $i = 0, $iMax = count( $vpSegments ); $i < $iMax; ++$i )
-        {
-            if ( !isset( $vpSegments[$i] ) )
-            {
+        $vpSegments = explode('/', $vpString);
+        for ($i = 0, $iMax = count($vpSegments); $i < $iMax; ++$i) {
+            if (!isset($vpSegments[$i])) {
                 continue;
             }
 
             // View parameter name.
             // We extract it + the value from the following segment (next element in $vpSegments array)
-            if ( $vpSegments[$i]{0} === '(' )
-            {
-                $paramName = str_replace( array( '(', ')' ), '', $vpSegments[$i] );
+            if ($vpSegments[$i]{0} === '(') {
+                $paramName = str_replace(array('(', ')'), '', $vpSegments[$i]);
                 // A value is present (e.g. /(foo)/bar)
-                if ( isset( $vpSegments[$i + 1] ) )
-                {
+                if (isset($vpSegments[$i + 1])) {
                     $viewParameters[$paramName] = $vpSegments[$i + 1];
-                    unset( $vpSegments[$i + 1] );
-                }
-                // No value (e.g. /(foo)) => set it to empty string
-                else
-                {
+                    unset($vpSegments[$i + 1]);
+                } else {
+                    // No value (e.g. /(foo)) => set it to empty string
                     $viewParameters[$paramName] = '';
                 }
-            }
-            // Orphan segment (no previous parameter name), e.g. /(foo)/bar/baz
-            // Add it to the previous parameter.
-            else if ( isset( $paramName ) )
-            {
+            } elseif (isset($paramName)) {
+                // Orphan segment (no previous parameter name), e.g. /(foo)/bar/baz
+                // Add it to the previous parameter.
                 $viewParameters[$paramName] .= '/' . $vpSegments[$i];
             }
         }

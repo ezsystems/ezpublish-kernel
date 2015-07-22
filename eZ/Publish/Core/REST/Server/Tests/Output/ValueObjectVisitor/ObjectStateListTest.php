@@ -1,41 +1,41 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\ObjectStateList;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
-use eZ\Publish\Core\REST\Common;
 
 class ObjectStateListTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the ObjectStateList visitor
+     * Test the ObjectStateList visitor.
      *
      * @return string
      */
     public function testVisit()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         // @todo coverage add actual object states + visitor mock for RestObjectState
-        $stateList = new ObjectStateList( array(), 42 );
+        $stateList = new ObjectStateList(array(), 42);
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadObjectStates',
-            array( 'objectStateGroupId' => $stateList->groupId ),
+            array('objectStateGroupId' => $stateList->groupId),
             "/content/objectstategroups/{$stateList->groupId}/objectstates"
         );
 
@@ -45,21 +45,21 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
             $stateList
         );
 
-        $result = $generator->endDocument( null );
+        $result = $generator->endDocument(null);
 
-        $this->assertNotNull( $result );
+        $this->assertNotNull($result);
 
         return $result;
     }
 
     /**
-     * Test if result contains ObjectStateList element
+     * Test if result contains ObjectStateList element.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsObjectStateListElement( $result )
+    public function testResultContainsObjectStateListElement($result)
     {
         $this->assertXMLTag(
             array(
@@ -72,21 +72,21 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if result contains ObjectStateList element attributes
+     * Test if result contains ObjectStateList element attributes.
      *
      * @param string $result
      *
      * @depends testVisit
      */
-    public function testResultContainsObjectStateListAttributes( $result )
+    public function testResultContainsObjectStateListAttributes($result)
     {
         $this->assertXMLTag(
             array(
                 'tag' => 'ObjectStateList',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.ObjectStateList+xml',
-                    'href'       => '/content/objectstategroups/42/objectstates',
-                )
+                    'href' => '/content/objectstategroups/42/objectstates',
+                ),
             ),
             $result,
             'Invalid <ObjectStateList> attributes.',
@@ -95,14 +95,14 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Test if ObjectStateList visitor visits the children
+     * Test if ObjectStateList visitor visits the children.
      */
     public function testObjectStateListVisitsChildren()
     {
-        $visitor   = $this->getVisitor();
+        $visitor = $this->getVisitor();
         $generator = $this->getGenerator();
 
-        $generator->startDocument( null );
+        $generator->startDocument(null);
 
         $objectStateList = new ObjectStateList(
             array(
@@ -112,9 +112,9 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
             42
         );
 
-        $this->getVisitorMock()->expects( $this->exactly( 2 ) )
-            ->method( 'visitValueObject' )
-            ->with( $this->isInstanceOf( 'eZ\\Publish\\Core\\REST\\Common\\Values\\RestObjectState' ) );
+        $this->getVisitorMock()->expects($this->exactly(2))
+            ->method('visitValueObject')
+            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Common\\Values\\RestObjectState'));
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -124,12 +124,12 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * Get the ObjectStateList visitor
+     * Get the ObjectStateList visitor.
      *
      * @return \eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ObjectStateList
      */
     protected function internalGetVisitor()
     {
-        return new ValueObjectVisitor\ObjectStateList;
+        return new ValueObjectVisitor\ObjectStateList();
     }
 }

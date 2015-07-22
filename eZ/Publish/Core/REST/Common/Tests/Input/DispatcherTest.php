@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the DispatcherTest class
+ * File containing the DispatcherTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,7 +15,7 @@ use eZ\Publish\Core\REST\Common;
 use PHPUnit_Framework_TestCase;
 
 /**
- * Dispatcher test class
+ * Dispatcher test class.
  */
 class DispatcherTest extends PHPUnit_Framework_TestCase
 {
@@ -24,10 +26,10 @@ class DispatcherTest extends PHPUnit_Framework_TestCase
     {
         $message = new Common\Message();
 
-        $parsingDispatcher = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher' );
-        $dispatcher = new Common\Input\Dispatcher( $parsingDispatcher );
+        $parsingDispatcher = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher');
+        $dispatcher = new Common\Input\Dispatcher($parsingDispatcher);
 
-        $dispatcher->parse( $message );
+        $dispatcher->parse($message);
     }
 
     /**
@@ -41,10 +43,10 @@ class DispatcherTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $parsingDispatcher = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher' );
-        $dispatcher = new Common\Input\Dispatcher( $parsingDispatcher );
+        $parsingDispatcher = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher');
+        $dispatcher = new Common\Input\Dispatcher($parsingDispatcher);
 
-        $dispatcher->parse( $message );
+        $dispatcher->parse($message);
     }
 
     /**
@@ -58,10 +60,10 @@ class DispatcherTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $parsingDispatcher = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher' );
-        $dispatcher = new Common\Input\Dispatcher( $parsingDispatcher );
+        $parsingDispatcher = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher');
+        $dispatcher = new Common\Input\Dispatcher($parsingDispatcher);
 
-        $dispatcher->parse( $message );
+        $dispatcher->parse($message);
     }
 
     public function testParse()
@@ -73,25 +75,25 @@ class DispatcherTest extends PHPUnit_Framework_TestCase
             'Hello world!'
         );
 
-        $parsingDispatcher = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher' );
+        $parsingDispatcher = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher');
         $parsingDispatcher
-            ->expects( $this->at( 0 ) )
-            ->method( 'parse' )
-            ->with( array( 42 ), 'text/html' )
-            ->will( $this->returnValue( 23 ) );
+            ->expects($this->at(0))
+            ->method('parse')
+            ->with(array(42), 'text/html')
+            ->will($this->returnValue(23));
 
-        $handler = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\Handler' );
+        $handler = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Input\\Handler');
         $handler
-            ->expects( $this->at( 0 ) )
-            ->method( 'convert' )
-            ->with( 'Hello world!' )
-            ->will( $this->returnValue( array( array( 42 ) ) ) );
+            ->expects($this->at(0))
+            ->method('convert')
+            ->with('Hello world!')
+            ->will($this->returnValue(array(array(42))));
 
-        $dispatcher = new Common\Input\Dispatcher( $parsingDispatcher, array( 'format' => $handler ) );
+        $dispatcher = new Common\Input\Dispatcher($parsingDispatcher, array('format' => $handler));
 
         $this->assertSame(
             23,
-            $dispatcher->parse( $message )
+            $dispatcher->parse($message)
         );
     }
 
@@ -109,34 +111,33 @@ class DispatcherTest extends PHPUnit_Framework_TestCase
             'Hello world!'
         );
 
-        $parsingDispatcher = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher' );
+        $parsingDispatcher = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher');
         $parsingDispatcher
-            ->expects( $this->at( 0 ) )
-            ->method( 'parse' )
-            ->with( array( 'someKey' => 'someValue', '__url' => '/foo/bar' ), 'text/html' )
-            ->will( $this->returnValue( 23 ) );
+            ->expects($this->at(0))
+            ->method('parse')
+            ->with(array('someKey' => 'someValue', '__url' => '/foo/bar'), 'text/html')
+            ->will($this->returnValue(23));
 
-        $handler = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Input\\Handler' );
+        $handler = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Input\\Handler');
         $handler
-            ->expects( $this->at( 0 ) )
-            ->method( 'convert' )
-            ->with( 'Hello world!' )
+            ->expects($this->at(0))
+            ->method('convert')
+            ->with('Hello world!')
             ->will(
                 $this->returnValue(
                     array(
                         array(
                             'someKey' => 'someValue',
-                        )
+                        ),
                     )
                 )
             );
 
-        $dispatcher = new Common\Input\Dispatcher( $parsingDispatcher, array( 'format' => $handler ) );
+        $dispatcher = new Common\Input\Dispatcher($parsingDispatcher, array('format' => $handler));
 
         $this->assertSame(
             23,
-            $dispatcher->parse( $message )
+            $dispatcher->parse($message)
         );
-
     }
 }

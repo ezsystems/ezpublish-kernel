@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the Expanding class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -22,11 +24,11 @@ use DOMNode;
 class Expanding implements Converter
 {
     /**
-     * Attribute denoting inherited tanglement
+     * Attribute denoting inherited tanglement.
      *
      * @const string
      */
-    const ATTRIBUTE_INHERIT_TANGLEMENT = "ez-inherit-tanglement";
+    const ATTRIBUTE_INHERIT_TANGLEMENT = 'ez-inherit-tanglement';
 
     /**
      * Holds map of the elements that expand the paragraph.
@@ -38,52 +40,47 @@ class Expanding implements Converter
      * @var array
      */
     protected $containmentMap = array(
-        "embed" => array(
-            "link" => true,
+        'embed' => array(
+            'link' => true,
         ),
-        "table" => array(),
-        "ul" => array(),
-        "ol" => array(),
-        "literal" => array(),
+        'table' => array(),
+        'ul' => array(),
+        'ol' => array(),
+        'literal' => array(),
     );
 
-    public function convert( DOMDocument $document )
+    public function convert(DOMDocument $document)
     {
         // First mark temporary paragraphs by checking the namespace as an attribute.
         // Reason: as namespace on an element is inherited for all children, it is unusable
         // in XSL transformation.
         /** @var \DOMElement $paragraph */
-        foreach ( $document->getElementsByTagName( 'paragraph' ) as $paragraph )
-        {
-            if ( $paragraph->hasAttribute( 'xmlns:tmp' ) )
-            {
-                $paragraph->setAttribute( 'ez-temporary', 1 );
+        foreach ($document->getElementsByTagName('paragraph') as $paragraph) {
+            if ($paragraph->hasAttribute('xmlns:tmp')) {
+                $paragraph->setAttribute('ez-temporary', 1);
             }
         }
 
-        $xpath = new DOMXPath( $document );
-        $containedExpression = "//" . implode( "|//", array_keys( $this->containmentMap ) );
+        $xpath = new DOMXPath($document);
+        $containedExpression = '//' . implode('|//', array_keys($this->containmentMap));
         // Select all paragraphs containing elements that need expansion,
         // except temporary paragraphs
         $xpathExpression = "//paragraph[not(@ez-temporary=1) and ($containedExpression)]";
 
-        $paragraphs = $xpath->query( $xpathExpression );
+        $paragraphs = $xpath->query($xpathExpression);
 
         $paragraphsDepthSorted = array();
 
-        foreach ( $paragraphs as $paragraph )
-        {
-            $paragraphsDepthSorted[$this->getNodeDepth( $paragraph )][] = $paragraph;
+        foreach ($paragraphs as $paragraph) {
+            $paragraphsDepthSorted[$this->getNodeDepth($paragraph)][] = $paragraph;
         }
 
         // Process deepest paragraphs first to avoid conflicts
-        krsort( $paragraphsDepthSorted, SORT_NUMERIC );
+        krsort($paragraphsDepthSorted, SORT_NUMERIC);
 
-        foreach ( $paragraphsDepthSorted as $paragraphs )
-        {
-            foreach ( $paragraphs as $paragraph )
-            {
-                $this->expandParagraph( $document, $paragraph );
+        foreach ($paragraphsDepthSorted as $paragraphs) {
+            foreach ($paragraphs as $paragraph) {
+                $this->expandParagraph($document, $paragraph);
             }
         }
     }
@@ -94,10 +91,10 @@ class Expanding implements Converter
      * @param \DOMDocument $document
      * @param \DOMElement $paragraph
      */
-    protected function expandParagraph( DOMDocument $document, DOMElement $paragraph )
+    protected function expandParagraph(DOMDocument $document, DOMElement $paragraph)
     {
         $paragraph->parentNode->replaceChild(
-            $this->expandElement( $document, $paragraph ),
+            $this->expandElement($document, $paragraph),
             $paragraph
         );
     }
@@ -115,53 +112,43 @@ class Expanding implements Converter
      *
      * @return \DOMDocumentFragment
      */
-    protected function expandElement( DOMDocument $document, DOMElement $element )
+    protected function expandElement(DOMDocument $document, DOMElement $element)
     {
         $fragment = $document->createDocumentFragment();
-        $expandingElement = $this->cloneAndEmpty( $element );
+        $expandingElement = $this->cloneAndEmpty($element);
 
         /** @var \DOMElement $node */
-        foreach ( $element->childNodes as $node )
-        {
+        foreach ($element->childNodes as $node) {
             // If node was untangled continue with next one
             // New expanding element will be started by the sub-routine in that case
-            if ( $this->isTangled( $node ) )
-            {
-                $this->untangleNode( $fragment, $element, $expandingElement, $node );
+            if ($this->isTangled($node)) {
+                $this->untangleNode($fragment, $element, $expandingElement, $node);
                 continue;
             }
 
             // Expand sub-node if it is element
-            if ( $node->nodeType === XML_ELEMENT_NODE )
-            {
-                $subFragment = $this->expandElement( $document, $node );
+            if ($node->nodeType === XML_ELEMENT_NODE) {
+                $subFragment = $this->expandElement($document, $node);
 
                 /** @var \DOMElement $subNode */
-                foreach ( $subFragment->childNodes as $subNode )
-                {
+                foreach ($subFragment->childNodes as $subNode) {
                     // If not untangled just append to existing expanding element, otherwise new
                     // expanding element will be started by the sub-routine
-                    if ( $this->isTangled( $subNode ) )
-                    {
-                        $this->untangleNode( $fragment, $element, $expandingElement, $subNode );
-                    }
-                    else
-                    {
-                        $expandingElement->appendChild( $subNode->cloneNode( true ) );
+                    if ($this->isTangled($subNode)) {
+                        $this->untangleNode($fragment, $element, $expandingElement, $subNode);
+                    } else {
+                        $expandingElement->appendChild($subNode->cloneNode(true));
                     }
                 }
-            }
-            // Else just append it to the expanding element
-            else
-            {
-                $expandingElement->appendChild( $node->cloneNode( true ) );
+            } else {
+                // Else just append it to the expanding element
+                $expandingElement->appendChild($node->cloneNode(true));
             }
         }
 
         // Append only if expanded element is not empty, or was empty to begin with
-        if ( $element->childNodes->length === 0 || $expandingElement->childNodes->length > 0 )
-        {
-            $fragment->appendChild( $expandingElement );
+        if ($element->childNodes->length === 0 || $expandingElement->childNodes->length > 0) {
+            $fragment->appendChild($expandingElement);
         }
 
         return $fragment;
@@ -179,39 +166,33 @@ class Expanding implements Converter
      * @param \DOMElement $expandingElement
      * @param \DOMNode $node
      *
-     * @return boolean
+     * @return bool
      */
     protected function untangleNode(
         DOMDocumentFragment $fragment,
         DOMElement $element,
         DOMElement &$expandingElement,
         DOMNode $node
-    )
-    {
+    ) {
         // Execute if node is entangled in the paragraph context
-        if ( $this->isTangled( $node ) )
-        {
+        if ($this->isTangled($node)) {
             // If expanding element is not empty, append it to the fragment and start a new one
-            if ( $expandingElement->childNodes->length > 0 )
-            {
-                $fragment->appendChild( $expandingElement );
-                $expandingElement = $this->cloneAndEmpty( $element );
+            if ($expandingElement->childNodes->length > 0) {
+                $fragment->appendChild($expandingElement);
+                $expandingElement = $this->cloneAndEmpty($element);
             }
 
             // If element is the entangler append the node directly to the fragment
-            if ( $this->isTangler( $element, $node ) )
-            {
-                $fragment->appendChild( $node->cloneNode( true ) );
-            }
-            // Else wrap it in the expanding element and append that to the fragment
-            else
-            {
-                $expandingElement->appendChild( $node->cloneNode( true ) );
-                $expandingElement->setAttribute( static::ATTRIBUTE_INHERIT_TANGLEMENT, 1 );
-                $fragment->appendChild( $expandingElement );
+            if ($this->isTangler($element, $node)) {
+                $fragment->appendChild($node->cloneNode(true));
+            } else {
+                // Else wrap it in the expanding element and append that to the fragment
+                $expandingElement->appendChild($node->cloneNode(true));
+                $expandingElement->setAttribute(static::ATTRIBUTE_INHERIT_TANGLEMENT, 1);
+                $fragment->appendChild($expandingElement);
 
                 // Start new expanding element
-                $expandingElement = $this->cloneAndEmpty( $element );
+                $expandingElement = $this->cloneAndEmpty($element);
             }
 
             return true;
@@ -225,13 +206,13 @@ class Expanding implements Converter
      *
      * @param \DOMNode $node
      *
-     * @return boolean
+     * @return bool
      */
-    protected function isTangled( DOMNode $node )
+    protected function isTangled(DOMNode $node)
     {
         return (
-            isset( $this->containmentMap[$node->localName] )
-            || ( $node instanceof DOMElement && $node->hasAttribute( static::ATTRIBUTE_INHERIT_TANGLEMENT ) )
+            isset($this->containmentMap[$node->localName])
+            || ($node instanceof DOMElement && $node->hasAttribute(static::ATTRIBUTE_INHERIT_TANGLEMENT))
         );
     }
 
@@ -241,13 +222,13 @@ class Expanding implements Converter
      * @param \DOMElement $element
      * @param \DOMNode $node
      *
-     * @return boolean
+     * @return bool
      */
-    protected function isTangler( DOMElement $element, DOMNode $node )
+    protected function isTangler(DOMElement $element, DOMNode $node)
     {
         return (
-            !isset( $this->containmentMap[$node->localName][$element->localName] )
-            || ( $node instanceof DOMElement && $node->hasAttribute( static::ATTRIBUTE_INHERIT_TANGLEMENT ) )
+            !isset($this->containmentMap[$node->localName][$element->localName])
+            || ($node instanceof DOMElement && $node->hasAttribute(static::ATTRIBUTE_INHERIT_TANGLEMENT))
         );
     }
 
@@ -258,22 +239,20 @@ class Expanding implements Converter
      *
      * @return \DOMElement
      */
-    protected function cloneAndEmpty( DOMElement $element )
+    protected function cloneAndEmpty(DOMElement $element)
     {
-        $clone = $element->cloneNode( true );
+        $clone = $element->cloneNode(true);
 
         $children = array();
 
         // Collect child nodes first, as we can't iterate and
         // remove from \DOMNodeList directly
-        foreach ( $clone->childNodes as $node )
-        {
+        foreach ($clone->childNodes as $node) {
             $children[] = $node;
         }
 
-        foreach ( $children as $node )
-        {
-            $clone->removeChild( $node );
+        foreach ($children as $node) {
+            $clone->removeChild($node);
         }
 
         return $clone;
@@ -286,13 +265,12 @@ class Expanding implements Converter
      *
      * @return int
      */
-    protected function getNodeDepth( DomNode $node )
+    protected function getNodeDepth(DomNode $node)
     {
         $depth = -2;
 
-        while ( $node )
-        {
-            $depth++;
+        while ($node) {
+            ++$depth;
             $node = $node->parentNode;
         }
 

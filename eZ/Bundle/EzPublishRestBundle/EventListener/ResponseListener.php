@@ -1,11 +1,14 @@
 <?php
+
 /**
  * File containing the ResponseListener class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
+
 namespace eZ\Bundle\EzPublishRestBundle\EventListener;
 
 use eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher;
@@ -29,7 +32,7 @@ class ResponseListener implements EventSubscriberInterface
     /**
      * @param $viewDispatcher AcceptHeaderVisitorDispatcher
      */
-    public function __construct( AcceptHeaderVisitorDispatcher $viewDispatcher )
+    public function __construct(AcceptHeaderVisitorDispatcher $viewDispatcher)
     {
         $this->viewDispatcher = $viewDispatcher;
     }
@@ -48,10 +51,11 @@ class ResponseListener implements EventSubscriberInterface
     /**
      * @param \Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent $event
      */
-    public function onKernelResultView( GetResponseForControllerResultEvent $event )
+    public function onKernelResultView(GetResponseForControllerResultEvent $event)
     {
-        if ( !$event->getRequest()->attributes->get( 'is_rest_request' ) )
+        if (!$event->getRequest()->attributes->get('is_rest_request')) {
             return;
+        }
 
         $event->setResponse(
             $this->viewDispatcher->dispatch(
@@ -66,13 +70,12 @@ class ResponseListener implements EventSubscriberInterface
      * @param \Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent $event
      *
      * @throws \Exception
-     *
-     * @return void
      */
-    public function onKernelExceptionView( GetResponseForExceptionEvent $event )
+    public function onKernelExceptionView(GetResponseForExceptionEvent $event)
     {
-        if ( !$event->getRequest()->attributes->get( 'is_rest_request' ) )
+        if (!$event->getRequest()->attributes->get('is_rest_request')) {
             return;
+        }
 
         $event->setResponse(
             $this->viewDispatcher->dispatch(

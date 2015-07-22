@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\ContentBase class
+ * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\ContentBase class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,7 +20,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Tests\BaseTest as APIBaseTest;
 
 /**
- * Test case for Content service
+ * Test case for Content service.
  */
 abstract class ContentBase extends BaseServiceTest
 {
@@ -28,50 +30,49 @@ abstract class ContentBase extends BaseServiceTest
     {
         // Legacy fixture content ID=4 values
         return array(
-            "id" => 4,
-            "name" => "Users",
-            "sectionId" => 2,
-            "currentVersionNo" => 1,
-            "published" => true,
-            "ownerId" => 14,
-            "modificationDate" => $this->getDateTime( 1033917596 ),
-            "publishedDate" => $this->getDateTime( 1033917596 ),
-            "alwaysAvailable" => true,
-            "remoteId" => "f5c88a2209584891056f987fd965b0ba",
-            "mainLanguageCode" => "eng-US",
-            "mainLocationId" => 5
+            'id' => 4,
+            'name' => 'Users',
+            'sectionId' => 2,
+            'currentVersionNo' => 1,
+            'published' => true,
+            'ownerId' => 14,
+            'modificationDate' => $this->getDateTime(1033917596),
+            'publishedDate' => $this->getDateTime(1033917596),
+            'alwaysAvailable' => true,
+            'remoteId' => 'f5c88a2209584891056f987fd965b0ba',
+            'mainLanguageCode' => 'eng-US',
+            'mainLocationId' => 5,
         );
     }
 
     /**
-     * @param boolean $draft
+     * @param bool $draft
      *
      * @return array
      */
-    protected function getVersionInfoExpectedValues( $draft = false )
+    protected function getVersionInfoExpectedValues($draft = false)
     {
         // Legacy fixture content 4 current version (1) values
         $values = array(
             //"id" => 4,
-            "versionNo" => 1,
-            "modificationDate" => $this->getDateTime( 0 ),
-            "creatorId" => 14,
-            "creationDate" => $this->getDateTime( 0 ),
-            "status" => VersionInfo::STATUS_PUBLISHED,
-            "initialLanguageCode" => "eng-US",
-            "languageCodes" => array( "eng-US" ),
+            'versionNo' => 1,
+            'modificationDate' => $this->getDateTime(0),
+            'creatorId' => 14,
+            'creationDate' => $this->getDateTime(0),
+            'status' => VersionInfo::STATUS_PUBLISHED,
+            'initialLanguageCode' => 'eng-US',
+            'languageCodes' => array('eng-US'),
             // Implementation properties
-            "names" => array( "eng-US" => "Users" )
+            'names' => array('eng-US' => 'Users'),
         );
 
-        if ( $draft )
-        {
+        if ($draft) {
             //$values["id"] = 675;
-            $values["creatorId"] = $this->repository->getCurrentUser()->id;
-            $values["versionNo"] = 2;
-            $values["status"] = VersionInfo::STATUS_DRAFT;
-            unset( $values["modificationDate"] );
-            unset( $values["creationDate"] );
+            $values['creatorId'] = $this->repository->getCurrentUser()->id;
+            $values['versionNo'] = 2;
+            $values['status'] = VersionInfo::STATUS_DRAFT;
+            unset($values['modificationDate']);
+            unset($values['creationDate']);
         }
 
         return $values;
@@ -82,28 +83,29 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @return mixed
      */
-    protected function getFieldValuesExpectedValues( array $languages = null )
+    protected function getFieldValuesExpectedValues(array $languages = null)
     {
         // Legacy fixture content ID=4 field values
         $fieldValues = array(
-            "eng-US" => array(
-                "name" => array( "eng-US" => "Users" ),
-                "description" => array( "eng-US" => "Main group" )
-            )
+            'eng-US' => array(
+                'name' => array('eng-US' => 'Users'),
+                'description' => array('eng-US' => 'Main group'),
+            ),
         );
 
         $returnArray = array();
-        foreach ( $fieldValues as $languageCode => $languageFieldValues )
-        {
-            if ( !empty( $languages ) && !in_array( $languageCode, $languages ) ) continue;
-            $returnArray = array_merge_recursive( $returnArray, $languageFieldValues );
+        foreach ($fieldValues as $languageCode => $languageFieldValues) {
+            if (!empty($languages) && !in_array($languageCode, $languages)) {
+                continue;
+            }
+            $returnArray = array_merge_recursive($returnArray, $languageFieldValues);
         }
+
         return $returnArray;
     }
 
     protected function getExpectedContentType()
     {
-
     }
 
     /**
@@ -118,7 +120,7 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $contentInfo = $contentService->loadContentInfo( 4 );
+        $contentInfo = $contentService->loadContentInfo(4);
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -136,10 +138,8 @@ abstract class ContentBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfo
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     *
-     * @return void
      */
-    public function testLoadContentInfoValues( $contentInfo )
+    public function testLoadContentInfoValues($contentInfo)
     {
         $this->assertPropertiesCorrect(
             $this->getContentInfoExpectedValues(),
@@ -152,8 +152,6 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfo
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     *
-     * @return void
      */
     public function testLoadContentInfoThrowsNotFoundException()
     {
@@ -161,7 +159,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         // Throws an exception because given contentId does not exist
-        $contentInfo = $contentService->loadContentInfo( APIBaseTest::DB_INT_MAX );
+        $contentInfo = $contentService->loadContentInfo(APIBaseTest::DB_INT_MAX);
         /* END: Use Case */
     }
 
@@ -170,15 +168,13 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfo
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     *
-     * @return void
      */
     public function testLoadContentInfoThrowsUnauthorizedException()
     {
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
-        $this->repository->getContentService()->loadContentInfo( 4 );
+        $this->repository->getContentService()->loadContentInfo(4);
     }
 
     /**
@@ -193,7 +189,7 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $contentInfo = $contentService->loadContentInfoByRemoteId( "f5c88a2209584891056f987fd965b0ba" );
+        $contentInfo = $contentService->loadContentInfoByRemoteId('f5c88a2209584891056f987fd965b0ba');
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -211,10 +207,8 @@ abstract class ContentBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfoByRemoteId
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     *
-     * @return void
      */
-    public function testLoadContentInfoByRemoteIdValues( $contentInfo )
+    public function testLoadContentInfoByRemoteIdValues($contentInfo)
     {
         $this->assertPropertiesCorrect(
             $this->getContentInfoExpectedValues(),
@@ -227,8 +221,6 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfoByRemoteId
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     *
-     * @return void
      */
     public function testLoadContentInfoByRemoteIdThrowsNotFoundException()
     {
@@ -236,7 +228,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         // Throws an exception because remoteId does not exist
-        $contentInfo = $contentService->loadContentInfoByRemoteId( "this-remote-id-does-not-exist" );
+        $contentInfo = $contentService->loadContentInfoByRemoteId('this-remote-id-does-not-exist');
         /* END: Use Case */
     }
 
@@ -245,15 +237,13 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::loadContentInfoByRemoteId
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     *
-     * @return void
      */
     public function testLoadContentInfoByRemoteIdThrowsUnauthorizedException()
     {
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
-        $this->repository->getContentService()->loadContentInfoByRemoteId( "f5c88a2209584891056f987fd965b0ba" );
+        $this->repository->getContentService()->loadContentInfoByRemoteId('f5c88a2209584891056f987fd965b0ba');
     }
 
     /**
@@ -268,7 +258,7 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $versionInfo = $contentService->loadVersionInfoById( 4 );
+        $versionInfo = $contentService->loadVersionInfoById(4);
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -286,10 +276,8 @@ abstract class ContentBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     *
-     * @return void
      */
-    public function testLoadVersionInfoByIdValues( $versionInfo )
+    public function testLoadVersionInfoByIdValues($versionInfo)
     {
         $this->assertPropertiesCorrect(
             $this->getVersionInfoExpectedValues(),
@@ -309,7 +297,7 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $versionInfo = $contentService->loadVersionInfoById( 4, 1 );
+        $versionInfo = $contentService->loadVersionInfoById(4, 1);
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -327,10 +315,8 @@ abstract class ContentBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     *
-     * @return void
      */
-    public function testLoadVersionInfoByIdWithSecondParameterValues( $versionInfo )
+    public function testLoadVersionInfoByIdWithSecondParameterValues($versionInfo)
     {
         $this->assertPropertiesCorrect(
             $this->getVersionInfoExpectedValues(),
@@ -343,8 +329,6 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     *
-     * @return void
      */
     public function testLoadVersionInfoByIdThrowsNotFoundException()
     {
@@ -352,7 +336,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         // Throws an exception because version with given number does not exists
-        $versionInfo = $contentService->loadVersionInfoById( 4, APIBaseTest::DB_INT_MAX );
+        $versionInfo = $contentService->loadVersionInfoById(4, APIBaseTest::DB_INT_MAX);
         /* END: Use Case */
     }
 
@@ -361,31 +345,29 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     *
-     * @return void
      */
     public function testLoadVersionInfoByIdThrowsUnauthorizedException()
     {
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
-        $this->repository->getContentService()->loadVersionInfoById( 4 );
+        $this->repository->getContentService()->loadVersionInfoById(4);
     }
 
     /**
-     * Data provider for testLoadContent()
+     * Data provider for testLoadContent().
      *
      * @return array
      */
     public function testLoadContentArgumentsProvider()
     {
         return array(
-            array( 4, null, null ),
-            array( 4, array( "eng-US" ), null ),
-            array( 4, array( "eng-US", "fre-FR" ), null ),
-            array( 4, null, 1 ),
-            array( 4, array( "eng-US", "fre-FR", "nor-NO", "eng-DE" ), 1 ),
-            array( 4, array( "eng-US" ), 1 ),
+            array(4, null, null),
+            array(4, array('eng-US'), null),
+            array(4, array('eng-US', 'fre-FR'), null),
+            array(4, null, 1),
+            array(4, array('eng-US', 'fre-FR', 'nor-NO', 'eng-DE'), 1),
+            array(4, array('eng-US'), 1),
         );
     }
 
@@ -401,12 +383,12 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function testLoadContent( $contentId, array $languages = null, $versionNo = null  )
+    public function testLoadContent($contentId, array $languages = null, $versionNo = null)
     {
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $content = $contentService->loadContent( $contentId, $languages, $versionNo );
+        $content = $contentService->loadContent($contentId, $languages, $versionNo);
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -414,21 +396,19 @@ abstract class ContentBase extends BaseServiceTest
             $content
         );
 
-        $this->assertContentValues( $content, $languages );
+        $this->assertContentValues($content, $languages);
     }
 
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param array $languages
-     * @param boolean $draft
-     *
-     * @return void
+     * @param bool $draft
      */
-    protected function assertContentValues( APIContent $content, array $languages = null, $draft = false )
+    protected function assertContentValues(APIContent $content, array $languages = null, $draft = false)
     {
-        $versionInfoValues = $this->getVersionInfoExpectedValues( $draft );
+        $versionInfoValues = $this->getVersionInfoExpectedValues($draft);
         $contentInfoValues = $this->getContentInfoExpectedValues();
-        $fieldValuesValues = $this->getFieldValuesExpectedValues( $languages );
+        $fieldValuesValues = $this->getFieldValuesExpectedValues($languages);
 
         $this->assertPropertiesCorrect(
             $versionInfoValues,
@@ -447,7 +427,7 @@ abstract class ContentBase extends BaseServiceTest
 
         // @todo assert relations
 
-        $this->assertEquals( $content->id, $content->contentInfo->id );
+        $this->assertEquals($content->id, $content->contentInfo->id);
     }
 
     /**
@@ -459,9 +439,9 @@ abstract class ContentBase extends BaseServiceTest
     public function testLoadContentThrowsUnauthorizedException()
     {
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
-        $this->repository->getContentService()->loadContent( 4 );
+        $this->repository->getContentService()->loadContent(4);
     }
 
     /**
@@ -472,8 +452,8 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentWithVersionThrowsUnauthorizedException()
     {
-        list( $draft, ) = $this->createTestContent();
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        list($draft) = $this->createTestContent();
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
         $this->repository->getContentService()->loadContent(
             $draft->id,
@@ -494,7 +474,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         // Throws an exception because content with id APIBaseTest::DB_INT_MAX does not exist
-        $content = $contentService->loadContent( APIBaseTest::DB_INT_MAX );
+        $content = $contentService->loadContent(APIBaseTest::DB_INT_MAX);
         /* END: Use Case */
     }
 
@@ -510,7 +490,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         // Throws an exception because version number APIBaseTest::DB_INT_MAX for content with id 4 does not exist
-        $content = $contentService->loadContent( 4, null, APIBaseTest::DB_INT_MAX );
+        $content = $contentService->loadContent(4, null, APIBaseTest::DB_INT_MAX);
         /* END: Use Case */
     }
 
@@ -526,7 +506,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         // Throws an exception because content does not exists in "fre-FR" language
-        $content = $contentService->loadContent( 4, array( "fre-FR" ), null, false );
+        $content = $contentService->loadContent(4, array('fre-FR'), null, false);
         /* END: Use Case */
     }
 
@@ -541,27 +521,27 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         // Content only exists in eng-US, so we should only have it in eng-US.
-        $content = $contentService->loadContent( 4, array( "eng-US", "eng-GB" ) );
+        $content = $contentService->loadContent(4, array('eng-US', 'eng-GB'));
         $this->assertInstanceOf(
-            "eZ\\Publish\\API\\Repository\\Values\\Content\\Content",
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
             $content
         );
-        $this->assertContentValues( $content, array( "eng-US" ) );
+        $this->assertContentValues($content, array('eng-US'));
         /* END: Use Case */
     }
 
     /**
-     * Data provider for testLoadContentByRemoteId()
+     * Data provider for testLoadContentByRemoteId().
      *
      * @return array
      */
     public function testLoadContentByRemoteIdArgumentsProvider()
     {
         return array(
-            array( "f5c88a2209584891056f987fd965b0ba", null, null ),
-            array( "f5c88a2209584891056f987fd965b0ba", array( "eng-US" ), null ),
-            array( "f5c88a2209584891056f987fd965b0ba", null, 1 ),
-            array( "f5c88a2209584891056f987fd965b0ba", array( "eng-US" ), 1 )
+            array('f5c88a2209584891056f987fd965b0ba', null, null),
+            array('f5c88a2209584891056f987fd965b0ba', array('eng-US'), null),
+            array('f5c88a2209584891056f987fd965b0ba', null, 1),
+            array('f5c88a2209584891056f987fd965b0ba', array('eng-US'), 1),
         );
     }
 
@@ -577,20 +557,20 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function testLoadContentByRemoteId( $remoteId, $languages, $versionNo )
+    public function testLoadContentByRemoteId($remoteId, $languages, $versionNo)
     {
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $content = $contentService->loadContentByRemoteId( $remoteId, $languages, $versionNo );
+        $content = $contentService->loadContentByRemoteId($remoteId, $languages, $versionNo);
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            "eZ\\Publish\\API\\Repository\\Values\\Content\\Content",
+            'eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
             $content
         );
 
-        $this->assertContentValues( $content, $languages );
+        $this->assertContentValues($content, $languages);
     }
 
     /**
@@ -605,7 +585,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
 
         // Throws an exception because given remoteId does not exist
-        $content = $contentService->loadContentByRemoteId( "non-existent-remote-id" );
+        $content = $contentService->loadContentByRemoteId('non-existent-remote-id');
         /* END: Use Case */
     }
 
@@ -618,9 +598,9 @@ abstract class ContentBase extends BaseServiceTest
     public function testLoadContentByRemoteIdThrowsUnauthorizedException()
     {
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
-        $this->repository->getContentService()->loadContentByRemoteId( "f5c88a2209584891056f987fd965b0ba" );
+        $this->repository->getContentService()->loadContentByRemoteId('f5c88a2209584891056f987fd965b0ba');
     }
 
     /**
@@ -633,9 +613,9 @@ abstract class ContentBase extends BaseServiceTest
     {
         $contentService = $this->repository->getContentService();
 
-        $content = $contentService->loadContent( 4 );
-        $draft = $contentService->createContentDraft( $content->contentInfo );
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $content = $contentService->loadContent(4);
+        $draft = $contentService->createContentDraft($content->contentInfo);
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
         $contentService->loadContentByRemoteId(
             $draft->contentInfo->remoteId,
@@ -657,11 +637,11 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
         $contentTypeService = $this->repository->getContentTypeService();
 
-        $folderContentType = $contentTypeService->loadContentType( 1 );
+        $folderContentType = $contentTypeService->loadContentType(1);
 
         $contentCreateStruct = $contentService->newContentCreateStruct(
             $folderContentType,
-            "eng-GB"
+            'eng-GB'
         );
         /* END: Use Case */
 
@@ -671,8 +651,8 @@ abstract class ContentBase extends BaseServiceTest
         );
 
         return array(
-            "contentType" => $folderContentType,
-            "contentCreateStruct" => $contentCreateStruct
+            'contentType' => $folderContentType,
+            'contentCreateStruct' => $contentCreateStruct,
         );
     }
 
@@ -683,23 +663,21 @@ abstract class ContentBase extends BaseServiceTest
      * @covers \eZ\Publish\Core\Repository\ContentService::newContentCreateStruct
      *
      * @param array $data
-     *
-     * @return void
      */
-    public function testNewContentCreateStructValues( array $data )
+    public function testNewContentCreateStructValues(array $data)
     {
-        $contentType = $data["contentType"];
-        $contentCreateStruct = $data["contentCreateStruct"];
+        $contentType = $data['contentType'];
+        $contentCreateStruct = $data['contentCreateStruct'];
 
         $expectedValues = array(
-            "fields" => array(),
-            "contentType" => $contentType,
-            "sectionId" => null,
-            "ownerId" => null,
-            "alwaysAvailable" => null,
-            "remoteId" => null,
-            "mainLanguageCode" => "eng-GB",
-            "modificationDate" => null
+            'fields' => array(),
+            'contentType' => $contentType,
+            'sectionId' => null,
+            'ownerId' => null,
+            'alwaysAvailable' => null,
+            'remoteId' => null,
+            'mainLanguageCode' => 'eng-GB',
+            'modificationDate' => null,
         );
 
         $this->assertPropertiesCorrect(
@@ -724,9 +702,9 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $testContentType, 'eng-GB' );
-        $contentCreate->setField( "test_required_empty", "value for field definition with empty default value" );
-        $contentCreate->setField( "test_translatable", "and thumbs opposable", "eng-US" );
+        $contentCreate = $contentService->newContentCreateStruct($testContentType, 'eng-GB');
+        $contentCreate->setField('test_required_empty', 'value for field definition with empty default value');
+        $contentCreate->setField('test_translatable', 'and thumbs opposable', 'eng-US');
         $contentCreate->sectionId = 1;
         $contentCreate->ownerId = $this->repository->getCurrentUser()->id;
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
@@ -737,35 +715,35 @@ abstract class ContentBase extends BaseServiceTest
                 array(
                     //priority = 0
                     //hidden = false
-                    "remoteId" => "db787a9143f57828dd4331573466a013",
+                    'remoteId' => 'db787a9143f57828dd4331573466a013',
                     //sortField = Location::SORT_FIELD_NAME
                     //sortOrder = Location::SORT_ORDER_ASC
-                    "parentLocationId" => 2
+                    'parentLocationId' => 2,
                 )
             ),
             new LocationCreateStruct(
                 array(
                     //priority = 0
                     //hidden = false
-                    "remoteId" => "a3dd7c1c9e04c89e446a70f647286e6b",
+                    'remoteId' => 'a3dd7c1c9e04c89e446a70f647286e6b',
                     //sortField = Location::SORT_FIELD_NAME
                     //sortOrder = Location::SORT_ORDER_ASC
-                    "parentLocationId" => 5
+                    'parentLocationId' => 5,
                 )
             ),
         );
 
-        $contentDraft = $contentService->createContent( $contentCreate, $locationCreates );
+        $contentDraft = $contentService->createContent($contentCreate, $locationCreates);
         /* END: Use Case */
 
-        $this->assertInstanceOf( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $contentDraft );
+        $this->assertInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $contentDraft);
 
         return array(
-            "expected" => $contentCreate,
-            "actual" => $contentDraft,
-            "loadedActual" => $contentService->loadContent( $contentDraft->id, null, 1 ),
-            "contentType" => $testContentType,
-            "time" => $time
+            'expected' => $contentCreate,
+            'actual' => $contentDraft,
+            'loadedActual' => $contentService->loadContent($contentDraft->id, null, 1),
+            'contentType' => $testContentType,
+            'time' => $time,
         );
     }
 
@@ -777,9 +755,9 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @param array $data
      */
-    public function testCreateContentStructValues( array $data )
+    public function testCreateContentStructValues(array $data)
     {
-        $this->assertCreateContentStructValues( $data );
+        $this->assertCreateContentStructValues($data);
     }
 
     /**
@@ -794,11 +772,11 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @param array $data
      */
-    public function testCreateContentStructValuesLoaded( array $data )
+    public function testCreateContentStructValuesLoaded(array $data)
     {
-        $data["actual"] = $data['loadedActual'];
+        $data['actual'] = $data['loadedActual'];
 
-        $this->assertCreateContentStructValues( $data );
+        $this->assertCreateContentStructValues($data);
     }
 
     /**
@@ -808,20 +786,20 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @param array $data
      */
-    protected function assertCreateContentStructValues( array $data )
+    protected function assertCreateContentStructValues(array $data)
     {
-        $this->assertCreateContentStructValuesContentInfo( $data );
-        $this->assertCreateContentStructValuesVersionInfo( $data );
-        $this->assertCreateContentStructValuesRelations( $data );
-        $this->assertCreateContentStructValuesFields( $data );
+        $this->assertCreateContentStructValuesContentInfo($data);
+        $this->assertCreateContentStructValuesVersionInfo($data);
+        $this->assertCreateContentStructValuesRelations($data);
+        $this->assertCreateContentStructValuesFields($data);
     }
 
     /**
-     * Asserts that ContentInfo is valid after Content creation
+     * Asserts that ContentInfo is valid after Content creation.
      *
      * @param array $data
      */
-    protected function assertCreateContentStructValuesContentInfo( array $data )
+    protected function assertCreateContentStructValuesContentInfo(array $data)
     {
         /** @var $contentDraft \eZ\Publish\API\Repository\Values\Content\Content */
         $contentDraft = $data['actual'];
@@ -830,24 +808,24 @@ abstract class ContentBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                "id" => $contentDraft->id,
-                "name" => $contentCreate->fields[0]->value,
-                "sectionId" => $contentCreate->sectionId,
-                "currentVersionNo" => 1,
-                "published" => false,
-                "ownerId" => $contentCreate->ownerId,
-                "modificationDate" => null,
-                "publishedDate" => null,
-                "alwaysAvailable" => $contentCreate->alwaysAvailable,
-                "remoteId" => $contentCreate->remoteId,
-                "mainLanguageCode" => $contentCreate->mainLanguageCode,
+                'id' => $contentDraft->id,
+                'name' => $contentCreate->fields[0]->value,
+                'sectionId' => $contentCreate->sectionId,
+                'currentVersionNo' => 1,
+                'published' => false,
+                'ownerId' => $contentCreate->ownerId,
+                'modificationDate' => null,
+                'publishedDate' => null,
+                'alwaysAvailable' => $contentCreate->alwaysAvailable,
+                'remoteId' => $contentCreate->remoteId,
+                'mainLanguageCode' => $contentCreate->mainLanguageCode,
                 // @todo: should be null, InMemory skips creating node assignments and creates locations right away
                 //"mainLocationId" => null,
                 //"contentType"
             ),
             $contentDraft->versionInfo->contentInfo
         );
-        $this->assertNotNull( $contentDraft->id );
+        $this->assertNotNull($contentDraft->id);
         $this->assertEquals(
             $contentCreate->contentType->id,
             $contentDraft->versionInfo->contentInfo->contentTypeId
@@ -855,11 +833,11 @@ abstract class ContentBase extends BaseServiceTest
     }
 
     /**
-     * Asserts that VersionInfo is valid after Content creation
+     * Asserts that VersionInfo is valid after Content creation.
      *
      * @param array $data
      */
-    protected function assertCreateContentStructValuesVersionInfo( array $data )
+    protected function assertCreateContentStructValuesVersionInfo(array $data)
     {
         /** @var $contentDraft \eZ\Publish\API\Repository\Values\Content\Content */
         $contentDraft = $data['actual'];
@@ -870,47 +848,46 @@ abstract class ContentBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 //"id"
-                "versionNo" => 1,
+                'versionNo' => 1,
                 //"creationDate"
                 //"modificationDate"
-                "creatorId" => $contentCreate->ownerId,
-                "status" => VersionInfo::STATUS_DRAFT,
-                "initialLanguageCode" => $contentCreate->mainLanguageCode,
+                'creatorId' => $contentCreate->ownerId,
+                'status' => VersionInfo::STATUS_DRAFT,
+                'initialLanguageCode' => $contentCreate->mainLanguageCode,
                 //"languageCodes"
-                "names" => array(
-                    "eng-GB" => "value for field definition with empty default value",
-                    "eng-US" => "value for field definition with empty default value"
-                )
+                'names' => array(
+                    'eng-GB' => 'value for field definition with empty default value',
+                    'eng-US' => 'value for field definition with empty default value',
+                ),
             ),
             $contentDraft->versionInfo
         );
 
-        $languageCodes = $this->getLanguageCodesFromFields( $contentCreate->fields, $contentCreate->mainLanguageCode );
+        $languageCodes = $this->getLanguageCodesFromFields($contentCreate->fields, $contentCreate->mainLanguageCode);
 
-        $this->assertCount( count( $languageCodes ), $contentDraft->versionInfo->languageCodes );
-        foreach ( $contentDraft->versionInfo->languageCodes as $languageCode )
-        {
-            $this->assertTrue( in_array( $languageCode, $languageCodes ) );
+        $this->assertCount(count($languageCodes), $contentDraft->versionInfo->languageCodes);
+        foreach ($contentDraft->versionInfo->languageCodes as $languageCode) {
+            $this->assertTrue(in_array($languageCode, $languageCodes));
         }
-        $this->assertNotNull( $contentDraft->versionInfo->id );
-        $this->assertGreaterThanOrEqual( $this->getDateTime( $time ), $contentDraft->versionInfo->creationDate );
-        $this->assertGreaterThanOrEqual( $this->getDateTime( $time ), $contentDraft->versionInfo->modificationDate );
+        $this->assertNotNull($contentDraft->versionInfo->id);
+        $this->assertGreaterThanOrEqual($this->getDateTime($time), $contentDraft->versionInfo->creationDate);
+        $this->assertGreaterThanOrEqual($this->getDateTime($time), $contentDraft->versionInfo->modificationDate);
     }
 
     /**
      * @param array $data
      */
-    protected function assertCreateContentStructValuesRelations( array $data )
+    protected function assertCreateContentStructValuesRelations(array $data)
     {
         // @todo: relations not implemented yet
     }
 
     /**
-     * Asserts that fields are valid after Content creation
+     * Asserts that fields are valid after Content creation.
      *
      * @param array $data
      */
-    protected function assertCreateContentStructValuesFields( array $data )
+    protected function assertCreateContentStructValuesFields(array $data)
     {
         /** @var $contentDraft \eZ\Publish\API\Repository\Values\Content\Content */
         $contentDraft = $data['actual'];
@@ -926,25 +903,24 @@ abstract class ContentBase extends BaseServiceTest
         );
 
         $this->assertCount(
-            count( $contentType->fieldDefinitions ) * count( $createdInLanguageCodes ),
+            count($contentType->fieldDefinitions) * count($createdInLanguageCodes),
             $createdFields,
-            "Number of created fields does not match number of content type field definitions multiplied by number of languages the content is created in"
+            'Number of created fields does not match number of content type field definitions multiplied by number of languages the content is created in'
         );
 
         // Check field values
         $structFields = array();
-        foreach ( $contentCreate->fields as $field )
+        foreach ($contentCreate->fields as $field) {
             $structFields[$field->fieldDefIdentifier][$field->languageCode] = $field;
-        foreach ( $contentType->fieldDefinitions as $fieldDefinition )
-        {
+        }
+        foreach ($contentType->fieldDefinitions as $fieldDefinition) {
             $this->assertArrayHasKey(
                 $fieldDefinition->identifier,
                 $contentDraft->fields,
                 "Field values are missing for field definition '{$fieldDefinition->identifier}'"
             );
 
-            foreach ( $createdInLanguageCodes as $languageCode )
-            {
+            foreach ($createdInLanguageCodes as $languageCode) {
                 $this->assertArrayHasKey(
                     $languageCode,
                     $contentDraft->fields[$fieldDefinition->identifier],
@@ -953,16 +929,13 @@ abstract class ContentBase extends BaseServiceTest
 
                 // If field is not set in create struct, it should have default value
                 $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $contentCreate->mainLanguageCode;
-                if ( isset( $structFields[$fieldDefinition->identifier][$valueLanguageCode] ) )
-                {
+                if (isset($structFields[$fieldDefinition->identifier][$valueLanguageCode])) {
                     $this->assertEquals(
                         $structFields[$fieldDefinition->identifier][$valueLanguageCode]->value,
                         $contentDraft->fields[$fieldDefinition->identifier][$languageCode],
                         "Field value for field definition '{$fieldDefinition->identifier}' in language '{$languageCode}' is not equal to given struct field value"
                     );
-                }
-                else
-                {
+                } else {
                     $this->assertEquals(
                         $fieldDefinition->defaultValue,
                         $contentDraft->fields[$fieldDefinition->identifier][$languageCode],
@@ -974,18 +947,21 @@ abstract class ContentBase extends BaseServiceTest
     }
 
     /**
-     * Gathers language codes from an array of fields
+     * Gathers language codes from an array of fields.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Field[] $fields
      * @param string $mainLanguageCode
      *
      * @return array an array of language code strings
      */
-    protected function getLanguageCodesFromFields( array $fields, $mainLanguageCode )
+    protected function getLanguageCodesFromFields(array $fields, $mainLanguageCode)
     {
-        $languageCodes = array( $mainLanguageCode );
-        foreach ( $fields as $field ) $languageCodes[] = $field->languageCode;
-        return array_unique( $languageCodes );
+        $languageCodes = array($mainLanguageCode);
+        foreach ($fields as $field) {
+            $languageCodes[] = $field->languageCode;
+        }
+
+        return array_unique($languageCodes);
     }
 
     /**
@@ -999,9 +975,9 @@ abstract class ContentBase extends BaseServiceTest
         $testContentType = $this->createTestContentType();
         $contentService = $this->repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $testContentType, 'eng-GB' );
-        $contentCreate->setField( "test_required_empty", "value for field definition with empty default value" );
-        $contentCreate->setField( "test_translatable", "and thumbs opposable", "eng-US" );
+        $contentCreate = $contentService->newContentCreateStruct($testContentType, 'eng-GB');
+        $contentCreate->setField('test_required_empty', 'value for field definition with empty default value');
+        $contentCreate->setField('test_translatable', 'and thumbs opposable', 'eng-US');
         $contentCreate->sectionId = 1;
         $contentCreate->ownerId = $this->repository->getCurrentUser()->id;
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
@@ -1010,16 +986,16 @@ abstract class ContentBase extends BaseServiceTest
         $locationCreates = array(
             new LocationCreateStruct(
                 array(
-                    "remoteId" => "db787a9143f57828dd4331573466a013",
-                    "parentLocationId" => 2
+                    'remoteId' => 'db787a9143f57828dd4331573466a013',
+                    'parentLocationId' => 2,
                 )
             ),
         );
 
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
-        $contentService->createContent( $contentCreate, $locationCreates );
+        $contentService->createContent($contentCreate, $locationCreates);
     }
 
     /**
@@ -1033,18 +1009,18 @@ abstract class ContentBase extends BaseServiceTest
         $testContentType = $this->createTestContentType();
         $contentService = $this->repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $testContentType, 'eng-GB' );
-        $contentCreate->setField( "test_required_empty", "value for field definition with empty default value" );
-        $contentCreate->setField( "test_translatable", "and thumbs opposable", "eng-US" );
+        $contentCreate = $contentService->newContentCreateStruct($testContentType, 'eng-GB');
+        $contentCreate->setField('test_required_empty', 'value for field definition with empty default value');
+        $contentCreate->setField('test_translatable', 'and thumbs opposable', 'eng-US');
         $contentCreate->sectionId = 1;
         $contentCreate->ownerId = $this->repository->getCurrentUser()->id;
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
-        $contentService->createContent( $contentCreate, array() );
+        $contentService->createContent($contentCreate, array());
     }
 
     /**
@@ -1060,15 +1036,15 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $testContentType, 'eng-GB' );
-        $contentCreate->setField( "test_required_empty", "value for field definition with empty default value" );
+        $contentCreate = $contentService->newContentCreateStruct($testContentType, 'eng-GB');
+        $contentCreate->setField('test_required_empty', 'value for field definition with empty default value');
         $contentCreate->sectionId = 1;
         $contentCreate->ownerId = 14;
         $contentCreate->remoteId = 'f5c88a2209584891056f987fd965b0ba';
         $contentCreate->alwaysAvailable = true;
 
         // Throws an exception because remoteId "f5c88a2209584891056f987fd965b0ba" already exists
-        $contentService->createContent( $contentCreate );
+        $contentService->createContent($contentCreate);
         /* END: Use Case */
     }
 
@@ -1087,16 +1063,16 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $testContentType, 'eng-GB' );
-        $contentCreate->setField( "test_required_empty", "value for field definition with empty default value" );
-        $contentCreate->setField( "humpty_dumpty", "no such field definition" );
+        $contentCreate = $contentService->newContentCreateStruct($testContentType, 'eng-GB');
+        $contentCreate->setField('test_required_empty', 'value for field definition with empty default value');
+        $contentCreate->setField('humpty_dumpty', 'no such field definition');
         $contentCreate->sectionId = 1;
         $contentCreate->ownerId = 14;
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
         // Throws an exception because field definition with identifier "humpty_dumpty" does not exist
-        $contentService->createContent( $contentCreate );
+        $contentService->createContent($contentCreate);
         /* END: Use Case */
     }
 
@@ -1115,9 +1091,9 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $testContentType, 'eng-GB' );
-        $contentCreate->setField( "test_required_empty", "value for field definition with empty default value" );
-        $contentCreate->setField( "test_untranslatable", "Bandersnatch", "eng-US" );
+        $contentCreate = $contentService->newContentCreateStruct($testContentType, 'eng-GB');
+        $contentCreate->setField('test_required_empty', 'value for field definition with empty default value');
+        $contentCreate->setField('test_untranslatable', 'Bandersnatch', 'eng-US');
         $contentCreate->sectionId = 1;
         $contentCreate->ownerId = 14;
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
@@ -1125,7 +1101,7 @@ abstract class ContentBase extends BaseServiceTest
 
         // Throws an exception because translation was given for a untranslatable field
         // Note that it is still permissible to set untranslatable field with main language
-        $contentService->createContent( $contentCreate );
+        $contentService->createContent($contentCreate);
         /* END: Use Case */
     }
 
@@ -1144,15 +1120,15 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $testContentType, 'eng-GB' );
-        $contentCreate->setField( "test_translatable", "Jabberwock" );
+        $contentCreate = $contentService->newContentCreateStruct($testContentType, 'eng-GB');
+        $contentCreate->setField('test_translatable', 'Jabberwock');
         $contentCreate->sectionId = 1;
         $contentCreate->ownerId = 14;
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
         // Throws an exception because required field is not set and its default value is empty
-        $contentService->createContent( $contentCreate );
+        $contentService->createContent($contentCreate);
         /* END: Use Case */
     }
 
@@ -1169,12 +1145,12 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $contentCreate = $contentService->newContentCreateStruct( $testContentType, 'eng-GB' );
+        $contentCreate = $contentService->newContentCreateStruct($testContentType, 'eng-GB');
         $contentCreate->setField(
-            "test_required_empty",
-            "a string that is too long and will not validate 12345678901234567890123456789012345678901234567890"
+            'test_required_empty',
+            'a string that is too long and will not validate 12345678901234567890123456789012345678901234567890'
         );
-        $contentCreate->setField( "test_translatable", "and thumbs opposable", "eng-US" );
+        $contentCreate->setField('test_translatable', 'and thumbs opposable', 'eng-US');
         $contentCreate->sectionId = 1;
         $contentCreate->ownerId = 14;
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
@@ -1182,7 +1158,7 @@ abstract class ContentBase extends BaseServiceTest
 
         // Throws an exception because "test_required_empty" field value is too long and fails
         // field definition's string length validator
-        $contentService->createContent( $contentCreate );
+        $contentService->createContent($contentCreate);
         /* END: Use Case */
     }
 
@@ -1204,8 +1180,9 @@ abstract class ContentBase extends BaseServiceTest
             $contentMetadataUpdateStruct
         );
 
-        foreach ( $contentMetadataUpdateStruct as $propertyName => $propertyValue )
-            $this->assertNull( $propertyValue, "Property '{$propertyName}' initial value should be null'" );
+        foreach ($contentMetadataUpdateStruct as $propertyName => $propertyValue) {
+            $this->assertNull($propertyValue, "Property '{$propertyName}' initial value should be null'");
+        }
     }
 
     /**
@@ -1220,48 +1197,48 @@ abstract class ContentBase extends BaseServiceTest
     {
         // Create one additional location for content to be set as main location
         $locationService = $this->repository->getLocationService();
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( 12 );
-        $locationCreateStruct = $locationService->newLocationCreateStruct( 44 );
-        $locationCreateStruct->remoteId = "test-location-remote-id-1234";
+        $contentInfo = $this->repository->getContentService()->loadContentInfo(12);
+        $locationCreateStruct = $locationService->newLocationCreateStruct(44);
+        $locationCreateStruct->remoteId = 'test-location-remote-id-1234';
         $newLocation = $locationService->createLocation(
             $contentInfo,
             $locationCreateStruct
         );
         $newSectionId = $this->repository->getContentService()->loadContentInfo(
-            $locationService->loadLocation( $newLocation->parentLocationId )->contentId
+            $locationService->loadLocation($newLocation->parentLocationId)->contentId
         )->sectionId;
         // Change content section to be different from new main location parent location content
         $sectionService = $this->repository->getSectionService();
         $sectionService->assignSection(
             $contentInfo,
-            $sectionService->loadSection( $newSectionId === 1 ? $newSectionId + 1 : $newSectionId - 1 )
+            $sectionService->loadSection($newSectionId === 1 ? $newSectionId + 1 : $newSectionId - 1)
         );
 
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $contentInfo = $contentService->loadContentInfo( 12 );
+        $contentInfo = $contentService->loadContentInfo(12);
 
         $newMainLocationId = $newLocation->id;
         $time = time();
         $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
         $contentMetadataUpdateStruct->ownerId = 10;
-        $contentMetadataUpdateStruct->publishedDate = $this->getDateTime( $time );
-        $contentMetadataUpdateStruct->modificationDate = $this->getDateTime( $time );
-        $contentMetadataUpdateStruct->mainLanguageCode = "eng-GB";
+        $contentMetadataUpdateStruct->publishedDate = $this->getDateTime($time);
+        $contentMetadataUpdateStruct->modificationDate = $this->getDateTime($time);
+        $contentMetadataUpdateStruct->mainLanguageCode = 'eng-GB';
         $contentMetadataUpdateStruct->alwaysAvailable = false;
-        $contentMetadataUpdateStruct->remoteId = "the-all-new-remoteid";
+        $contentMetadataUpdateStruct->remoteId = 'the-all-new-remoteid';
         $contentMetadataUpdateStruct->mainLocationId = $newMainLocationId;
 
-        $content = $contentService->updateContentMetadata( $contentInfo, $contentMetadataUpdateStruct );
+        $content = $contentService->updateContentMetadata($contentInfo, $contentMetadataUpdateStruct);
         /* END: Use Case */
 
-        $this->assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\Content", $content );
+        $this->assertInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
 
         return array(
-            "expected" => $contentMetadataUpdateStruct,
-            "actual" => $content,
-            "newSectionId" => $newSectionId
+            'expected' => $contentMetadataUpdateStruct,
+            'actual' => $content,
+            'newSectionId' => $newSectionId,
         );
     }
 
@@ -1273,7 +1250,7 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @param array $data
      */
-    public function testUpdateContentMetadataStructValues( array $data )
+    public function testUpdateContentMetadataStructValues(array $data)
     {
         /** @var $updateStruct \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct */
         $updateStruct = $data['expected'];
@@ -1282,16 +1259,16 @@ abstract class ContentBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                "ownerId" => $updateStruct->ownerId,
+                'ownerId' => $updateStruct->ownerId,
                 // not changeable through MetadataUpdateStruct
                 //"name"
-                "publishedDate" => $updateStruct->publishedDate,
-                "modificationDate" => $updateStruct->modificationDate,
-                "mainLanguageCode" => $updateStruct->mainLanguageCode,
-                "alwaysAvailable" => $updateStruct->alwaysAvailable,
-                "remoteId" => $updateStruct->remoteId,
-                "mainLocationId" => $updateStruct->mainLocationId,
-                "sectionId" => $data["newSectionId"]
+                'publishedDate' => $updateStruct->publishedDate,
+                'modificationDate' => $updateStruct->modificationDate,
+                'mainLanguageCode' => $updateStruct->mainLanguageCode,
+                'alwaysAvailable' => $updateStruct->alwaysAvailable,
+                'remoteId' => $updateStruct->remoteId,
+                'mainLocationId' => $updateStruct->mainLocationId,
+                'sectionId' => $data['newSectionId'],
             ),
             $content->contentInfo
         );
@@ -1305,14 +1282,14 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentMetadataThrowsUnauthorizedException()
     {
-        $contentInfo = $this->repository->getContentService()->loadContentInfo( 12 );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo(12);
         $contentMetadataUpdateStruct = $this->repository->getContentService()->newContentMetadataUpdateStruct();
-        $contentMetadataUpdateStruct->remoteId = "the-all-new-remoteid";
+        $contentMetadataUpdateStruct->remoteId = 'the-all-new-remoteid';
 
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
-        $this->repository->getContentService()->updateContentMetadata( $contentInfo, $contentMetadataUpdateStruct );
+        $this->repository->getContentService()->updateContentMetadata($contentInfo, $contentMetadataUpdateStruct);
     }
 
     /**
@@ -1326,12 +1303,12 @@ abstract class ContentBase extends BaseServiceTest
     {
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
-        $contentInfo = $contentService->loadContentInfo( 4 );
+        $contentInfo = $contentService->loadContentInfo(4);
         $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
-        $contentMetadataUpdateStruct->remoteId = "9b47a45624b023b1a76c73b74d704acf";
+        $contentMetadataUpdateStruct->remoteId = '9b47a45624b023b1a76c73b74d704acf';
 
         // Throws an exception because remoteId "9b47a45624b023b1a76c73b74d704acf" is already in use
-        $contentService->updateContentMetadata( $contentInfo, $contentMetadataUpdateStruct );
+        $contentService->updateContentMetadata($contentInfo, $contentMetadataUpdateStruct);
         /* END: Use Case */
     }
 
@@ -1346,11 +1323,11 @@ abstract class ContentBase extends BaseServiceTest
     {
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
-        $contentInfo = $contentService->loadContentInfo( 4 );
+        $contentInfo = $contentService->loadContentInfo(4);
         $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
 
         // Throws an exception because no properties are set in $contentMetadataUpdateStruct
-        $contentService->updateContentMetadata( $contentInfo, $contentMetadataUpdateStruct );
+        $contentService->updateContentMetadata($contentInfo, $contentMetadataUpdateStruct);
         /* END: Use Case */
     }
 
@@ -1374,8 +1351,8 @@ abstract class ContentBase extends BaseServiceTest
 
         $this->assertPropertiesCorrect(
             array(
-                "initialLanguageCode" => null,
-                "fields" => array()
+                'initialLanguageCode' => null,
+                'fields' => array(),
             ),
             $contentUpdateStruct
         );
@@ -1389,14 +1366,14 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentThrowsUnauthorizedException()
     {
-        list( $content, $contentType ) = $this->createTestContent();
+        list($content, $contentType) = $this->createTestContent();
 
         $contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
-        $contentUpdateStruct->initialLanguageCode = "eng-US";
-        $contentUpdateStruct->setField( "test_required_empty", "new value for test_required_empty" );
+        $contentUpdateStruct->initialLanguageCode = 'eng-US';
+        $contentUpdateStruct->setField('test_required_empty', 'new value for test_required_empty');
 
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
         $this->repository->getContentService()->updateContent(
             $content->versionInfo,
@@ -1415,11 +1392,11 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $versionInfo = $contentService->loadVersionInfoById( 4 );
+        $versionInfo = $contentService->loadVersionInfoById(4);
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
 
         // Throws an exception because version is not a draft
-        $updatedContent = $contentService->updateContent( $versionInfo, $contentUpdateStruct );
+        $updatedContent = $contentService->updateContent($versionInfo, $contentUpdateStruct);
         /* END: Use Case */
     }
 
@@ -1431,7 +1408,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentThrowsContentFieldValidationException()
     {
-        list( $content, $contentType ) = $this->createTestContent();
+        list($content, $contentType) = $this->createTestContent();
 
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
@@ -1442,15 +1419,15 @@ abstract class ContentBase extends BaseServiceTest
         );
 
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->initialLanguageCode = "eng-US";
+        $contentUpdateStruct->initialLanguageCode = 'eng-US';
         $contentUpdateStruct->setField(
-            "test_required_empty",
-            "a string that is too long and will not validate 12345678901234567890123456789012345678901234567890"
+            'test_required_empty',
+            'a string that is too long and will not validate 12345678901234567890123456789012345678901234567890'
         );
 
         // Throws an exception because "test_required_empty" field value is too long and fails
         // field definition's string length validator
-        $updatedContent = $contentService->updateContent( $versionInfo, $contentUpdateStruct );
+        $updatedContent = $contentService->updateContent($versionInfo, $contentUpdateStruct);
         /* END: Use Case */
     }
 
@@ -1462,7 +1439,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentThrowsContentValidationExceptionRequiredFieldEmpty()
     {
-        list( $content, $contentType ) = $this->createTestContent();
+        list($content, $contentType) = $this->createTestContent();
 
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
@@ -1473,11 +1450,11 @@ abstract class ContentBase extends BaseServiceTest
         );
 
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->initialLanguageCode = "eng-GB";
-        $contentUpdateStruct->setField( "test_required_empty", "" );
+        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
+        $contentUpdateStruct->setField('test_required_empty', '');
 
         // Throws an exception because required field is being updated with empty value
-        $updatedContent = $contentService->updateContent( $versionInfo, $contentUpdateStruct );
+        $updatedContent = $contentService->updateContent($versionInfo, $contentUpdateStruct);
         /* END: Use Case */
     }
 
@@ -1489,7 +1466,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentThrowsContentValidationExceptionFieldDefinitionNonexistent()
     {
-        list( $content, $contentType ) = $this->createTestContent();
+        list($content, $contentType) = $this->createTestContent();
 
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
@@ -1500,12 +1477,12 @@ abstract class ContentBase extends BaseServiceTest
         );
 
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->initialLanguageCode = "eng-GB";
-        $contentUpdateStruct->setField( "nonexistent_field_definition_identifier", "eng-GB" );
+        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
+        $contentUpdateStruct->setField('nonexistent_field_definition_identifier', 'eng-GB');
 
         // Throws an exception because field definition with identifier "nonexistent_field_definition_identifier"
         // does not exist in content draft content type
-        $updatedContent = $contentService->updateContent( $versionInfo, $contentUpdateStruct );
+        $updatedContent = $contentService->updateContent($versionInfo, $contentUpdateStruct);
         /* END: Use Case */
     }
 
@@ -1519,7 +1496,7 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testUpdateContentThrowsContentValidationExceptionUntranslatableField()
     {
-        list( $content, $contentType ) = $this->createTestContent();
+        list($content, $contentType) = $this->createTestContent();
 
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
@@ -1530,12 +1507,12 @@ abstract class ContentBase extends BaseServiceTest
         );
 
         $contentUpdateStruct = $contentService->newContentUpdateStruct();
-        $contentUpdateStruct->initialLanguageCode = "eng-GB";
-        $contentUpdateStruct->setField( "test_untranslatable", "Jabberwock", "eng-US" );
+        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
+        $contentUpdateStruct->setField('test_untranslatable', 'Jabberwock', 'eng-US');
 
         // Throws an exception because translation was given for a untranslatable field
         // Note that it is still permissible to set untranslatable field with main language
-        $updatedContent = $contentService->updateContent( $versionInfo, $contentUpdateStruct );
+        $updatedContent = $contentService->updateContent($versionInfo, $contentUpdateStruct);
         /* END: Use Case */
     }
 
@@ -1548,7 +1525,7 @@ abstract class ContentBase extends BaseServiceTest
     public function testPublishVersion()
     {
         $time = time();
-        list( $draftContent, $contentType ) = $this->createTestContent();
+        list($draftContent, $contentType) = $this->createTestContent();
 
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
@@ -1558,14 +1535,14 @@ abstract class ContentBase extends BaseServiceTest
             $draftContent->getVersionInfo()->versionNo
         );
 
-        $publishedContent = $contentService->publishVersion( $versionInfo );
+        $publishedContent = $contentService->publishVersion($versionInfo);
         /* END: Use Case */
 
-        $this->assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\Content", $publishedContent );
-        $this->assertTrue( $publishedContent->contentInfo->published );
-        $this->assertEquals( VersionInfo::STATUS_PUBLISHED, $publishedContent->versionInfo->status );
-        $this->assertGreaterThanOrEqual( $time, $publishedContent->contentInfo->publishedDate->getTimestamp() );
-        $this->assertGreaterThanOrEqual( $time, $publishedContent->contentInfo->modificationDate->getTimestamp() );
+        $this->assertInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $publishedContent);
+        $this->assertTrue($publishedContent->contentInfo->published);
+        $this->assertEquals(VersionInfo::STATUS_PUBLISHED, $publishedContent->versionInfo->status);
+        $this->assertGreaterThanOrEqual($time, $publishedContent->contentInfo->publishedDate->getTimestamp());
+        $this->assertGreaterThanOrEqual($time, $publishedContent->contentInfo->modificationDate->getTimestamp());
     }
 
     /**
@@ -1579,10 +1556,10 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $versionInfo = $contentService->loadVersionInfoById( 4 );
+        $versionInfo = $contentService->loadVersionInfoById(4);
 
         // Throws an exception because version is already published
-        $publishedContent = $contentService->publishVersion( $versionInfo );
+        $publishedContent = $contentService->publishVersion($versionInfo);
         /* END: Use Case */
     }
 
@@ -1594,12 +1571,12 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testPublishVersionThrowsUnauthorizedException()
     {
-        list( $draftContent, $contentType ) = $this->createTestContent();
+        list($draftContent, $contentType) = $this->createTestContent();
 
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
-        $this->repository->getContentService()->publishVersion( $draftContent->versionInfo );
+        $this->repository->getContentService()->publishVersion($draftContent->versionInfo);
     }
 
     /**
@@ -1616,9 +1593,9 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $contentInfo = $contentService->loadContentInfo( 4 );
+        $contentInfo = $contentService->loadContentInfo(4);
 
-        $draftContent = $contentService->createContentDraft( $contentInfo );
+        $draftContent = $contentService->createContentDraft($contentInfo);
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -1627,27 +1604,27 @@ abstract class ContentBase extends BaseServiceTest
         );
 
         return array(
-            "draftContent" => $draftContent,
-            "time" => $time
+            'draftContent' => $draftContent,
+            'time' => $time,
         );
     }
 
     /**
      * @param array $data
      */
-    protected function assertDraftContentValues( array $data )
+    protected function assertDraftContentValues(array $data)
     {
         /** @var $draftContent \eZ\Publish\API\Repository\Values\Content\Content */
-        $draftContent = $data["draftContent"];
-        $time = $data["time"];
+        $draftContent = $data['draftContent'];
+        $time = $data['time'];
 
-        $this->assertContentValues( $data["draftContent"], null, true );
+        $this->assertContentValues($data['draftContent'], null, true);
         $this->assertGreaterThanOrEqual(
-            $this->getDateTime( $time ),
+            $this->getDateTime($time),
             $draftContent->getVersionInfo()->creationDate
         );
         $this->assertGreaterThanOrEqual(
-            $this->getDateTime( $time ),
+            $this->getDateTime($time),
             $draftContent->getVersionInfo()->modificationDate
         );
     }
@@ -1660,9 +1637,9 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @param array $data
      */
-    public function testCreateContentDraftValues( array $data )
+    public function testCreateContentDraftValues(array $data)
     {
-        $this->assertDraftContentValues( $data );
+        $this->assertDraftContentValues($data);
     }
 
     /**
@@ -1678,7 +1655,7 @@ abstract class ContentBase extends BaseServiceTest
 
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
-        $content = $contentService->loadContent( 4 );
+        $content = $contentService->loadContent(4);
 
         $draftContent = $contentService->createContentDraft(
             $content->contentInfo,
@@ -1692,8 +1669,8 @@ abstract class ContentBase extends BaseServiceTest
         );
 
         return array(
-            "draftContent" => $draftContent,
-            "time" => $time
+            'draftContent' => $draftContent,
+            'time' => $time,
         );
     }
 
@@ -1705,9 +1682,9 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @param array $data
      */
-    public function testCreateContentDraftWithSecondArgumentValues( array $data )
+    public function testCreateContentDraftWithSecondArgumentValues(array $data)
     {
-        $this->assertDraftContentValues( $data );
+        $this->assertDraftContentValues($data);
     }
 
     /**
@@ -1723,7 +1700,7 @@ abstract class ContentBase extends BaseServiceTest
 
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
-        $content = $contentService->loadContent( 4 );
+        $content = $contentService->loadContent(4);
 
         $draftContent = $contentService->createContentDraft(
             $content->contentInfo,
@@ -1738,8 +1715,8 @@ abstract class ContentBase extends BaseServiceTest
         );
 
         return array(
-            "draftContent" => $draftContent,
-            "time" => $time
+            'draftContent' => $draftContent,
+            'time' => $time,
         );
     }
 
@@ -1751,9 +1728,9 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @param array $data
      */
-    public function testCreateContentDraftWithThirdArgumentValues( array $data )
+    public function testCreateContentDraftWithThirdArgumentValues(array $data)
     {
-        $this->assertDraftContentValues( $data );
+        $this->assertDraftContentValues($data);
     }
 
     /**
@@ -1765,8 +1742,8 @@ abstract class ContentBase extends BaseServiceTest
     public function testCreateContentDraftThrowsBadStateException()
     {
         $contentService = $this->repository->getContentService();
-        $contentInfo = $contentService->loadContentInfo( 4 );
-        $draftContent = $contentService->createContentDraft( $contentInfo );
+        $contentInfo = $contentService->loadContentInfo(4);
+        $draftContent = $contentService->createContentDraft($contentInfo);
 
         // Throws an exception because version status is not
         // VersionInfo::STATUS_PUBLISHED nor VersionInfo::STATUS_ARCHIVED
@@ -1786,12 +1763,12 @@ abstract class ContentBase extends BaseServiceTest
     {
         $contentService = $this->repository->getContentService();
 
-        $contentInfo = $contentService->loadContentInfo( 4 );
+        $contentInfo = $contentService->loadContentInfo(4);
 
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
-        $contentService->createContentDraft( $contentInfo );
+        $contentService->createContentDraft($contentInfo);
     }
 
     /**
@@ -1805,8 +1782,9 @@ abstract class ContentBase extends BaseServiceTest
 
         // delete existing drafts before we begin
         $draftedVersions = $contentService->loadContentDrafts();
-        foreach ( $draftedVersions as $draftedVersion )
-            $contentService->deleteVersion( $draftedVersion );
+        foreach ($draftedVersions as $draftedVersion) {
+            $contentService->deleteVersion($draftedVersion);
+        }
 
         /* BEGIN: Use Case */
         // Remote ids of the "Users" user group of a eZ Publish demo installation.
@@ -1814,12 +1792,12 @@ abstract class ContentBase extends BaseServiceTest
         $membersUserGroupRemoteId = '5f7f0bdb3381d6a461d8c29ff53d908f';
 
         // "Users" user group content object
-        $usersUserGroupContentInfo = $contentService->loadContentInfoByRemoteId( $usersUserGroupRemoteId );
-        $membersUserGroupContentInfo = $contentService->loadContentInfoByRemoteId( $membersUserGroupRemoteId );
+        $usersUserGroupContentInfo = $contentService->loadContentInfoByRemoteId($usersUserGroupRemoteId);
+        $membersUserGroupContentInfo = $contentService->loadContentInfoByRemoteId($membersUserGroupRemoteId);
 
         // Create some drafts
-        $contentService->createContentDraft( $usersUserGroupContentInfo );
-        $contentService->createContentDraft( $membersUserGroupContentInfo );
+        $contentService->createContentDraft($usersUserGroupContentInfo);
+        $contentService->createContentDraft($membersUserGroupContentInfo);
 
         // Now $contentDrafts should contain two drafted versions
         $draftedVersions = $contentService->loadContentDrafts();
@@ -1828,7 +1806,7 @@ abstract class ContentBase extends BaseServiceTest
         $actual = array(
             $draftedVersions[0]->status,
             $draftedVersions[1]->status,
-            count( $draftedVersions ),
+            count($draftedVersions),
             $draftedVersions[0]->getContentInfo()->remoteId,
             $draftedVersions[1]->getContentInfo()->remoteId,
         );
@@ -1839,7 +1817,7 @@ abstract class ContentBase extends BaseServiceTest
                 VersionInfo::STATUS_DRAFT,
                 2,
                 $usersUserGroupRemoteId,
-                $membersUserGroupRemoteId
+                $membersUserGroupRemoteId,
             ),
             $actual
         );
@@ -1852,7 +1830,6 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadContentDraftsWithFirstArgument()
     {
-
     }
 
     /**
@@ -1864,7 +1841,7 @@ abstract class ContentBase extends BaseServiceTest
     public function testLoadContentDraftsThrowsUnauthorizedException()
     {
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
         // Now $contentDrafts should contain two drafted versions
         $this->repository->getContentService()->loadContentDrafts();
@@ -1883,8 +1860,8 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $contentInfo = $contentService->loadContentInfo( 4 );
-        $versions = $contentService->loadVersions( $contentInfo );
+        $contentInfo = $contentService->loadContentInfo(4);
+        $versions = $contentService->loadVersions($contentInfo);
         /* END: Use Case */
 
         return $versions;
@@ -1898,7 +1875,7 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @param array $versions
      */
-    public function testLoadVersionsValues( array $versions )
+    public function testLoadVersionsValues(array $versions)
     {
         $versionInfoValues = $this->getVersionInfoExpectedValues();
 
@@ -1924,15 +1901,15 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $contentInfo = $contentService->loadContentInfo( 4 );
+        $contentInfo = $contentService->loadContentInfo(4);
         // Create one additional version
-        $draftContent = $contentService->createContentDraft( $contentInfo );
-        $versions = $contentService->loadVersions( $contentInfo );
+        $draftContent = $contentService->createContentDraft($contentInfo);
+        $versions = $contentService->loadVersions($contentInfo);
         /* END: Use Case */
 
         return array(
-            "versions" => $versions,
-            "time" => $time
+            'versions' => $versions,
+            'time' => $time,
         );
     }
 
@@ -1944,10 +1921,10 @@ abstract class ContentBase extends BaseServiceTest
      *
      * @param array $data
      */
-    public function testLoadVersionsMultipleValues( array $data )
+    public function testLoadVersionsMultipleValues(array $data)
     {
-        $versions = $data["versions"];
-        $time = $data["time"];
+        $versions = $data['versions'];
+        $time = $data['time'];
 
         $versionInfoValues = $this->getVersionInfoExpectedValues();
         $this->assertPropertiesCorrect(
@@ -1955,17 +1932,17 @@ abstract class ContentBase extends BaseServiceTest
             $versions[0]
         );
 
-        $versionInfoValues = $this->getVersionInfoExpectedValues( true );
+        $versionInfoValues = $this->getVersionInfoExpectedValues(true);
         $this->assertPropertiesCorrect(
             $versionInfoValues,
             $versions[1]
         );
         $this->assertGreaterThanOrEqual(
-            $this->getDateTime( $time ),
+            $this->getDateTime($time),
             $versions[1]->creationDate
         );
         $this->assertGreaterThanOrEqual(
-            $this->getDateTime( $time ),
+            $this->getDateTime($time),
             $versions[1]->modificationDate
         );
     }
@@ -1980,12 +1957,12 @@ abstract class ContentBase extends BaseServiceTest
     {
         $contentService = $this->repository->getContentService();
 
-        $contentInfo = $contentService->loadContentInfo( 4 );
+        $contentInfo = $contentService->loadContentInfo(4);
 
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
-        $contentService->loadVersions( $contentInfo );
+        $contentService->loadVersions($contentInfo);
     }
 
     /**
@@ -1998,25 +1975,22 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $contentInfo = $contentService->loadContentInfo( 4 );
+        $contentInfo = $contentService->loadContentInfo(4);
 
         // Create a version to delete
-        $draftContent = $contentService->createContentDraft( $contentInfo );
+        $draftContent = $contentService->createContentDraft($contentInfo);
 
-        $contentService->deleteVersion( $draftContent->versionInfo );
+        $contentService->deleteVersion($draftContent->versionInfo);
         /* END: Use Case */
 
-        try
-        {
+        try {
             $contentService->loadVersionInfo(
                 $draftContent->contentInfo,
                 $draftContent->versionInfo->versionNo
             );
 
-            $this->fail( "Version was not successfully deleted!" );
-        }
-        catch ( NotFoundException $e )
-        {
+            $this->fail('Version was not successfully deleted!');
+        } catch (NotFoundException $e) {
             // Do nothing
         }
     }
@@ -2032,10 +2006,10 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        $versionInfo = $contentService->loadVersionInfoById( 4 );
+        $versionInfo = $contentService->loadVersionInfoById(4);
 
         // Throws an exception because version is published
-        $contentService->deleteVersion( $versionInfo );
+        $contentService->deleteVersion($versionInfo);
         /* END: Use Case */
     }
 
@@ -2049,15 +2023,15 @@ abstract class ContentBase extends BaseServiceTest
     {
         $contentService = $this->repository->getContentService();
 
-        $contentInfo = $contentService->loadContentInfo( 4 );
+        $contentInfo = $contentService->loadContentInfo(4);
 
         // Create a version to delete
-        $draftContent = $contentService->createContentDraft( $contentInfo );
+        $draftContent = $contentService->createContentDraft($contentInfo);
 
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
-        $contentService->deleteVersion( $draftContent->versionInfo );
+        $contentService->deleteVersion($draftContent->versionInfo);
     }
 
     /**
@@ -2076,9 +2050,9 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
 
-        $contentInfo = $contentService->loadContentInfo( 11 );
-        $versionInfo = $contentService->loadVersionInfoById( 11, 1 );
-        $destinationLocationCreateStruct = $locationService->newLocationCreateStruct( 5 );
+        $contentInfo = $contentService->loadContentInfo(11);
+        $versionInfo = $contentService->loadVersionInfoById(11, 1);
+        $destinationLocationCreateStruct = $locationService->newLocationCreateStruct(5);
 
         $copiedContent = $contentService->copyContent(
             $contentInfo,
@@ -2088,15 +2062,15 @@ abstract class ContentBase extends BaseServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\Values\\Content\\Content",
+            'eZ\\Publish\\Core\\Repository\\Values\\Content\\Content',
             $copiedContent
         );
 
-        $this->assertEquals( 1, $copiedContent->contentInfo->currentVersionNo );
-        $this->assertGreaterThanOrEqual( $time, $copiedContent->contentInfo->modificationDate->getTimestamp() );
-        $this->assertGreaterThanOrEqual( $time, $copiedContent->contentInfo->publishedDate->getTimestamp() );
+        $this->assertEquals(1, $copiedContent->contentInfo->currentVersionNo);
+        $this->assertGreaterThanOrEqual($time, $copiedContent->contentInfo->modificationDate->getTimestamp());
+        $this->assertGreaterThanOrEqual($time, $copiedContent->contentInfo->publishedDate->getTimestamp());
         $this->assertCopyContentValues(
-            $contentService->loadContent( 11, null, 1 ),
+            $contentService->loadContent(11, null, 1),
             $copiedContent
         );
     }
@@ -2115,8 +2089,8 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
 
-        $contentInfo = $contentService->loadContentInfo( 11 );
-        $destinationLocationCreateStruct = $locationService->newLocationCreateStruct( 5 );
+        $contentInfo = $contentService->loadContentInfo(11);
+        $destinationLocationCreateStruct = $locationService->newLocationCreateStruct(5);
 
         $copiedContent = $contentService->copyContent(
             $contentInfo,
@@ -2125,31 +2099,29 @@ abstract class ContentBase extends BaseServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\Values\\Content\\Content",
+            'eZ\\Publish\\Core\\Repository\\Values\\Content\\Content',
             $copiedContent
         );
 
-        $this->assertGreaterThanOrEqual( $time, $copiedContent->contentInfo->modificationDate->getTimestamp() );
-        $this->assertGreaterThanOrEqual( $time, $copiedContent->contentInfo->publishedDate->getTimestamp() );
+        $this->assertGreaterThanOrEqual($time, $copiedContent->contentInfo->modificationDate->getTimestamp());
+        $this->assertGreaterThanOrEqual($time, $copiedContent->contentInfo->publishedDate->getTimestamp());
 
-        $originalVersionInfos = $contentService->loadVersions( $contentInfo );
-        $copiedVersionInfos = $contentService->loadVersions( $copiedContent->contentInfo );
+        $originalVersionInfos = $contentService->loadVersions($contentInfo);
+        $copiedVersionInfos = $contentService->loadVersions($copiedContent->contentInfo);
         $sorter =
-            function ( VersionInfo $a, VersionInfo $b )
-            {
-                return strcmp( $a->versionNo, $b->versionNo );
+            function (VersionInfo $a, VersionInfo $b) {
+                return strcmp($a->versionNo, $b->versionNo);
             };
-        usort( $originalVersionInfos, $sorter );
-        usort( $copiedVersionInfos, $sorter );
+        usort($originalVersionInfos, $sorter);
+        usort($copiedVersionInfos, $sorter);
         $this->assertCount(
-            count( $originalVersionInfos ),
+            count($originalVersionInfos),
             $copiedVersionInfos,
-            "Count of versions copied does not match the count of original versions"
+            'Count of versions copied does not match the count of original versions'
         );
-        $this->assertEquals( $contentInfo->currentVersionNo, $copiedContent->contentInfo->currentVersionNo );
-        foreach ( $originalVersionInfos as $index => $versionInfo )
-        {
-            $this->assertEquals( $versionInfo->versionNo, $copiedVersionInfos[$index]->versionNo );
+        $this->assertEquals($contentInfo->currentVersionNo, $copiedContent->contentInfo->currentVersionNo);
+        foreach ($originalVersionInfos as $index => $versionInfo) {
+            $this->assertEquals($versionInfo->versionNo, $copiedVersionInfos[$index]->versionNo);
             $this->assertCopyContentValues(
                 $contentService->loadContent(
                     $contentInfo->id,
@@ -2166,68 +2138,67 @@ abstract class ContentBase extends BaseServiceTest
     }
 
     /**
-     * Asserts that $copiedContent is valid copy of $originalContent
+     * Asserts that $copiedContent is valid copy of $originalContent.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $originalContent
      * @param \eZ\Publish\API\Repository\Values\Content\Content $copiedContent
      */
-    protected function assertCopyContentValues( APIContent $originalContent, APIContent $copiedContent )
+    protected function assertCopyContentValues(APIContent $originalContent, APIContent $copiedContent)
     {
         $this->assertNotEquals(
             $originalContent->id,
             $copiedContent->id,
-            "Id of content copy is equal to id od original content"
+            'Id of content copy is equal to id od original content'
         );
 
         $this->assertSameClassPropertiesCorrect(
             array(
                 //"name",
-                "contentTypeId",
-                "sectionId",
+                'contentTypeId',
+                'sectionId',
                 //"currentVersionNo",
-                "published",
-                "ownerId",
-                "alwaysAvailable",
-                "mainLanguageCode",
+                'published',
+                'ownerId',
+                'alwaysAvailable',
+                'mainLanguageCode',
                 //"mainLocationId"
             ),
             $originalContent->contentInfo,
             $copiedContent->contentInfo
         );
-        $this->assertNotEquals( $originalContent->contentInfo->id, $copiedContent->contentInfo->id );
-        $this->assertNotEquals( $originalContent->contentInfo->remoteId, $copiedContent->contentInfo->remoteId );
+        $this->assertNotEquals($originalContent->contentInfo->id, $copiedContent->contentInfo->id);
+        $this->assertNotEquals($originalContent->contentInfo->remoteId, $copiedContent->contentInfo->remoteId);
 
         $this->assertSameClassPropertiesCorrect(
             array(
-                "versionNo",
+                'versionNo',
                 //"contentId",
-                "names",
+                'names',
                 //"creationDate",
                 //"modificationDate",
-                "creatorId",
+                'creatorId',
                 //"status",
-                "initialLanguageCode",
-                "languageCodes"
+                'initialLanguageCode',
+                'languageCodes',
             ),
             $originalContent->versionInfo,
             $copiedContent->versionInfo
         );
-        $this->assertNotEquals( $originalContent->versionInfo->id, $copiedContent->versionInfo->id );
+        $this->assertNotEquals($originalContent->versionInfo->id, $copiedContent->versionInfo->id);
 
         $originalFields = $originalContent->getFields();
         $copiedFields = $copiedContent->getFields();
         $this->assertCount(
-            count( $originalFields ),
+            count($originalFields),
             $copiedFields,
-            "Count of fields copied does not match the count of original fields"
+            'Count of fields copied does not match the count of original fields'
         );
-        foreach ( $originalFields as $fieldIndex => $originalField )
-        {
+        foreach ($originalFields as $fieldIndex => $originalField) {
             $this->assertSameClassPropertiesCorrect(
                 array(
-                    "fieldDefIdentifier",
-                    "value",
-                    "languageCode"
+                    'fieldDefIdentifier',
+                    'value',
+                    'languageCode',
                 ),
                 $originalField,
                 $copiedFields[$fieldIndex]
@@ -2250,13 +2221,13 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
 
-        $contentInfo = $contentService->loadContentInfo( 11 );
-        $destinationLocationCreateStruct = $locationService->newLocationCreateStruct( 5 );
+        $contentInfo = $contentService->loadContentInfo(11);
+        $destinationLocationCreateStruct = $locationService->newLocationCreateStruct(5);
 
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
-        $contentService->copyContent( $contentInfo, $destinationLocationCreateStruct );
+        $contentService->copyContent($contentInfo, $destinationLocationCreateStruct);
     }
 
     /**
@@ -2277,8 +2248,9 @@ abstract class ContentBase extends BaseServiceTest
             $translationInfo
         );
 
-        foreach ( $translationInfo as $propertyName => $propertyValue )
-            $this->assertNull( $propertyValue, "Property '{$propertyName}' initial value should be null'" );
+        foreach ($translationInfo as $propertyName => $propertyValue) {
+            $this->assertNull($propertyValue, "Property '{$propertyName}' initial value should be null'");
+        }
     }
 
     /**
@@ -2299,8 +2271,9 @@ abstract class ContentBase extends BaseServiceTest
             $translationValues
         );
 
-        foreach ( $translationValues as $propertyName => $propertyValue )
-            $this->assertNull( $propertyValue, "Property '{$propertyName}' initial value should be null'" );
+        foreach ($translationValues as $propertyName => $propertyValue) {
+            $this->assertNull($propertyValue, "Property '{$propertyName}' initial value should be null'");
+        }
     }
 
     /**
@@ -2311,31 +2284,31 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadRelations()
     {
-        list( $contentDraft, $contentType ) = $this->createTestContent();
+        list($contentDraft, $contentType) = $this->createTestContent();
         $contentService = $this->repository->getContentService();
 
-        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId('a6e35cbcb7cd6ae4b691f3eee30cd262');
 
         $contentService->addRelation(
             $contentDraft->getVersionInfo(),
             $mediaContentInfo
         );
 
-        $relations = $contentService->loadRelations( $contentDraft->versionInfo );
+        $relations = $contentService->loadRelations($contentDraft->versionInfo);
 
-        $this->assertRelations( $relations, $contentDraft->contentInfo, $mediaContentInfo );
+        $this->assertRelations($relations, $contentDraft->contentInfo, $mediaContentInfo);
     }
 
-    protected function assertRelations( $relations, $sourceContentInfo, $destinationContentInfo )
+    protected function assertRelations($relations, $sourceContentInfo, $destinationContentInfo)
     {
-        self::assertInternalType( "array", $relations );
-        self::assertCount( 1, $relations );
-        self::assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\Relation", $relations[0] );
-        self::assertNotNull( $relations[0]->id );
-        self::assertEquals( Relation::COMMON, $relations[0]->type );
-        self::assertNull( $relations[0]->sourceFieldDefinitionIdentifier );
-        self::assertEquals( $sourceContentInfo, $relations[0]->sourceContentInfo );
-        self::assertEquals( $destinationContentInfo, $relations[0]->destinationContentInfo );
+        self::assertInternalType('array', $relations);
+        self::assertCount(1, $relations);
+        self::assertInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Relation', $relations[0]);
+        self::assertNotNull($relations[0]->id);
+        self::assertEquals(Relation::COMMON, $relations[0]->type);
+        self::assertNull($relations[0]->sourceFieldDefinitionIdentifier);
+        self::assertEquals($sourceContentInfo, $relations[0]->sourceContentInfo);
+        self::assertEquals($destinationContentInfo, $relations[0]->destinationContentInfo);
     }
 
     /**
@@ -2346,10 +2319,10 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadRelationsThrowsUnauthorizedException()
     {
-        list( $contentDraft, $contentType ) = $this->createTestContent();
+        list($contentDraft, $contentType) = $this->createTestContent();
         $contentService = $this->repository->getContentService();
 
-        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId('a6e35cbcb7cd6ae4b691f3eee30cd262');
 
         $contentService->addRelation(
             $contentDraft->getVersionInfo(),
@@ -2357,9 +2330,9 @@ abstract class ContentBase extends BaseServiceTest
         );
 
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
-        $contentService->loadRelations( $contentDraft->versionInfo );
+        $contentService->loadRelations($contentDraft->versionInfo);
     }
 
     /**
@@ -2370,10 +2343,10 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testLoadReverseRelationsThrowsUnauthorizedException()
     {
-        list( $contentDraft, $contentType ) = $this->createTestContent();
+        list($contentDraft, $contentType) = $this->createTestContent();
         $contentService = $this->repository->getContentService();
 
-        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId('a6e35cbcb7cd6ae4b691f3eee30cd262');
 
         $contentService->addRelation(
             $contentDraft->getVersionInfo(),
@@ -2381,9 +2354,9 @@ abstract class ContentBase extends BaseServiceTest
         );
 
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
-        $contentService->loadReverseRelations( $mediaContentInfo );
+        $contentService->loadReverseRelations($mediaContentInfo);
     }
 
     /**
@@ -2394,13 +2367,13 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testAddRelationThrowsUnauthorizedException()
     {
-        list( $contentDraft, $contentType ) = $this->createTestContent();
+        list($contentDraft, $contentType) = $this->createTestContent();
         $contentService = $this->repository->getContentService();
 
-        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId('a6e35cbcb7cd6ae4b691f3eee30cd262');
 
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
         $contentService->addRelation(
             $contentDraft->getVersionInfo(),
@@ -2417,10 +2390,10 @@ abstract class ContentBase extends BaseServiceTest
     public function testAddRelationThrowsBadStateException()
     {
         $contentService = $this->repository->getContentService();
-        list( $contentDraft, $contentType ) = $this->createTestContent();
-        $publishedContent = $contentService->publishVersion( $contentDraft->versionInfo );
+        list($contentDraft, $contentType) = $this->createTestContent();
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
 
-        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId('a6e35cbcb7cd6ae4b691f3eee30cd262');
 
         $contentService->addRelation(
             $publishedContent->getVersionInfo(),
@@ -2435,10 +2408,10 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testDeleteRelation()
     {
-        list( $contentDraft, $contentType ) = $this->createTestContent();
+        list($contentDraft, $contentType) = $this->createTestContent();
         $contentService = $this->repository->getContentService();
 
-        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId('a6e35cbcb7cd6ae4b691f3eee30cd262');
 
         $contentService->addRelation(
             $contentDraft->getVersionInfo(),
@@ -2450,9 +2423,9 @@ abstract class ContentBase extends BaseServiceTest
             $mediaContentInfo
         );
 
-        $relations = $contentService->loadRelations( $contentDraft->versionInfo );
+        $relations = $contentService->loadRelations($contentDraft->versionInfo);
 
-        self::assertCount( 0, $relations );
+        self::assertCount(0, $relations);
     }
 
     /**
@@ -2463,10 +2436,10 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testDeleteRelationThrowsUnauthorizedException()
     {
-        list( $contentDraft, $contentType ) = $this->createTestContent();
+        list($contentDraft, $contentType) = $this->createTestContent();
         $contentService = $this->repository->getContentService();
 
-        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId('a6e35cbcb7cd6ae4b691f3eee30cd262');
 
         $contentService->addRelation(
             $contentDraft->getVersionInfo(),
@@ -2474,7 +2447,7 @@ abstract class ContentBase extends BaseServiceTest
         );
 
         // Set anonymous as current user
-        $this->repository->setCurrentUser( $this->getStubbedUser( 10 ) );
+        $this->repository->setCurrentUser($this->getStubbedUser(10));
 
         $contentService->deleteRelation(
             $contentDraft->getVersionInfo(),
@@ -2491,16 +2464,16 @@ abstract class ContentBase extends BaseServiceTest
     public function testDeleteRelationThrowsBadStateException()
     {
         $contentService = $this->repository->getContentService();
-        list( $contentDraft, $contentType ) = $this->createTestContent();
+        list($contentDraft, $contentType) = $this->createTestContent();
 
-        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId('a6e35cbcb7cd6ae4b691f3eee30cd262');
 
         $contentService->addRelation(
             $contentDraft->getVersionInfo(),
             $mediaContentInfo
         );
 
-        $publishedContent = $contentService->publishVersion( $contentDraft->versionInfo );
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
 
         $contentService->deleteRelation(
             $publishedContent->getVersionInfo(),
@@ -2516,10 +2489,10 @@ abstract class ContentBase extends BaseServiceTest
      */
     public function testDeleteRelationThrowsInvalidArgumentException()
     {
-        list( $contentDraft, $contentType ) = $this->createTestContent();
+        list($contentDraft, $contentType) = $this->createTestContent();
         $contentService = $this->repository->getContentService();
 
-        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
+        $mediaContentInfo = $contentService->loadContentInfoByRemoteId('a6e35cbcb7cd6ae4b691f3eee30cd262');
 
         $contentService->deleteRelation(
             $contentDraft->getVersionInfo(),
@@ -2528,7 +2501,7 @@ abstract class ContentBase extends BaseServiceTest
     }
 
     /**
-     * Creates and returns content draft used in testing
+     * Creates and returns content draft used in testing.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
@@ -2537,12 +2510,12 @@ abstract class ContentBase extends BaseServiceTest
         $contentService = $this->repository->getContentService();
         $testContentType = $this->createTestContentType();
 
-        $contentCreate = $contentService->newContentCreateStruct( $testContentType, 'eng-GB' );
-        $contentCreate->setField( "test_required_empty", "val-11" );
-        $contentCreate->setField( "test_required_not_empty", "val-12" );
-        $contentCreate->setField( "test_translatable", "val-13" );
-        $contentCreate->setField( "test_untranslatable", "val-14" );
-        $contentCreate->setField( "test_translatable", "val-23", "eng-US" );
+        $contentCreate = $contentService->newContentCreateStruct($testContentType, 'eng-GB');
+        $contentCreate->setField('test_required_empty', 'val-11');
+        $contentCreate->setField('test_required_not_empty', 'val-12');
+        $contentCreate->setField('test_translatable', 'val-13');
+        $contentCreate->setField('test_untranslatable', 'val-14');
+        $contentCreate->setField('test_translatable', 'val-23', 'eng-US');
         $contentCreate->sectionId = 1;
         $contentCreate->ownerId = 14;
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
@@ -2553,29 +2526,29 @@ abstract class ContentBase extends BaseServiceTest
                 array(
                     //priority = 0
                     //hidden = false
-                    "remoteId" => "db787a9143f57828dd4331573466a013",
+                    'remoteId' => 'db787a9143f57828dd4331573466a013',
                     //sortField = Location::SORT_FIELD_NAME
                     //sortOrder = Location::SORT_ORDER_ASC
-                    "parentLocationId" => 2
+                    'parentLocationId' => 2,
                 )
             ),
             new LocationCreateStruct(
                 array(
                     //priority = 0
                     //hidden = false
-                    "remoteId" => "a3dd7c1c9e04c89e446a70f647286e6b",
+                    'remoteId' => 'a3dd7c1c9e04c89e446a70f647286e6b',
                     //sortField = Location::SORT_FIELD_NAME
                     //sortOrder = Location::SORT_ORDER_ASC
-                    "parentLocationId" => 5
+                    'parentLocationId' => 5,
                 )
             ),
         );
 
-        return array( $contentService->createContent( $contentCreate, $locationCreates ), $testContentType );
+        return array($contentService->createContent($contentCreate, $locationCreates), $testContentType);
     }
 
     /**
-     * Returns ContentType used in testing
+     * Returns ContentType used in testing.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
@@ -2583,88 +2556,88 @@ abstract class ContentBase extends BaseServiceTest
     {
         $contentTypeService = $this->repository->getContentTypeService();
         $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
-            "test-type"
+            'test-type'
         );
-        $typeCreateStruct->names = array( "eng-GB" => "Test type name" );
-        $typeCreateStruct->descriptions = array( "eng-GB" => "Test type description" );
-        $typeCreateStruct->remoteId = "test-type-remoteid";
+        $typeCreateStruct->names = array('eng-GB' => 'Test type name');
+        $typeCreateStruct->descriptions = array('eng-GB' => 'Test type description');
+        $typeCreateStruct->remoteId = 'test-type-remoteid';
         $typeCreateStruct->creatorId = $this->repository->getCurrentUser()->id;
-        $typeCreateStruct->creationDate = $this->getDateTime( 0 );
-        $typeCreateStruct->mainLanguageCode = "eng-GB";
-        $typeCreateStruct->nameSchema = "<test_required_empty>";
-        $typeCreateStruct->urlAliasSchema = "<test_required_empty>";
+        $typeCreateStruct->creationDate = $this->getDateTime(0);
+        $typeCreateStruct->mainLanguageCode = 'eng-GB';
+        $typeCreateStruct->nameSchema = '<test_required_empty>';
+        $typeCreateStruct->urlAliasSchema = '<test_required_empty>';
 
-        $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct( "test_required_empty", "ezstring" );
-        $fieldCreate->names = array( "eng-GB" => "Test required empty" );
-        $fieldCreate->descriptions = array( "eng-GB" => "Required field with empty default value" );
-        $fieldCreate->fieldGroup = "test-field-group";
+        $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('test_required_empty', 'ezstring');
+        $fieldCreate->names = array('eng-GB' => 'Test required empty');
+        $fieldCreate->descriptions = array('eng-GB' => 'Required field with empty default value');
+        $fieldCreate->fieldGroup = 'test-field-group';
         $fieldCreate->position = 1;
         $fieldCreate->isTranslatable = false;
         $fieldCreate->isRequired = true;
         $fieldCreate->isInfoCollector = false;
         $fieldCreate->isSearchable = true;
-        $fieldCreate->defaultValue = "";
+        $fieldCreate->defaultValue = '';
         //$validator = new StringLengthValidator();
         //$validator->maxStringLength = 64;
         //$fieldCreate->validatorConfiguration = array( $validator );
         $fieldCreate->validatorConfiguration = array(
-            "StringLengthValidator" => array(
-                "maxStringLength" => 64
-            )
+            'StringLengthValidator' => array(
+                'maxStringLength' => 64,
+            ),
         );
         //$fieldCreate->fieldSettings
-        $typeCreateStruct->addFieldDefinition( $fieldCreate );
+        $typeCreateStruct->addFieldDefinition($fieldCreate);
 
-        $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct( "test_required_not_empty", "ezstring" );
-        $fieldCreate->names = array( "eng-GB" => "Test required not empty" );
-        $fieldCreate->descriptions = array( "eng-GB" => "Required field with default value not empty" );
-        $fieldCreate->fieldGroup = "test-field-group";
+        $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('test_required_not_empty', 'ezstring');
+        $fieldCreate->names = array('eng-GB' => 'Test required not empty');
+        $fieldCreate->descriptions = array('eng-GB' => 'Required field with default value not empty');
+        $fieldCreate->fieldGroup = 'test-field-group';
         $fieldCreate->position = 2;
         $fieldCreate->isTranslatable = false;
         $fieldCreate->isRequired = true;
         $fieldCreate->isInfoCollector = false;
         $fieldCreate->isSearchable = true;
-        $fieldCreate->defaultValue = "dummy default data";
+        $fieldCreate->defaultValue = 'dummy default data';
         //$fieldCreate->validators
         //$fieldCreate->fieldSettings
-        $typeCreateStruct->addFieldDefinition( $fieldCreate );
+        $typeCreateStruct->addFieldDefinition($fieldCreate);
 
-        $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct( "test_translatable", "ezstring" );
-        $fieldCreate->names = array( "eng-GB" => "Test translatable" );
-        $fieldCreate->descriptions = array( "eng-GB" => "Translatable field" );
-        $fieldCreate->fieldGroup = "test-field-group";
+        $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('test_translatable', 'ezstring');
+        $fieldCreate->names = array('eng-GB' => 'Test translatable');
+        $fieldCreate->descriptions = array('eng-GB' => 'Translatable field');
+        $fieldCreate->fieldGroup = 'test-field-group';
         $fieldCreate->position = 3;
         $fieldCreate->isTranslatable = true;
         $fieldCreate->isRequired = false;
         $fieldCreate->isInfoCollector = false;
         $fieldCreate->isSearchable = true;
-        $fieldCreate->defaultValue = "";
+        $fieldCreate->defaultValue = '';
         //$fieldCreate->validators
         //$fieldCreate->fieldSettings
-        $typeCreateStruct->addFieldDefinition( $fieldCreate );
+        $typeCreateStruct->addFieldDefinition($fieldCreate);
 
-        $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct( "test_untranslatable", "ezstring" );
-        $fieldCreate->names = array( "eng-GB" => "Test not translatable" );
-        $fieldCreate->descriptions = array( "eng-GB" => "Untranslatable field" );
-        $fieldCreate->fieldGroup = "test-field-group";
+        $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('test_untranslatable', 'ezstring');
+        $fieldCreate->names = array('eng-GB' => 'Test not translatable');
+        $fieldCreate->descriptions = array('eng-GB' => 'Untranslatable field');
+        $fieldCreate->fieldGroup = 'test-field-group';
         $fieldCreate->position = 4;
         $fieldCreate->isTranslatable = false;
         $fieldCreate->isRequired = false;
         $fieldCreate->isInfoCollector = false;
         $fieldCreate->isSearchable = true;
-        $fieldCreate->defaultValue = "";
+        $fieldCreate->defaultValue = '';
         //$fieldCreate->validators
         //$fieldCreate->fieldSettings
-        $typeCreateStruct->addFieldDefinition( $fieldCreate );
+        $typeCreateStruct->addFieldDefinition($fieldCreate);
 
         $contentTypeDraft = $contentTypeService->createContentType(
             $typeCreateStruct,
-            array( $contentTypeService->loadContentTypeGroup( 1 ) )
+            array($contentTypeService->loadContentTypeGroup(1))
         );
         $contentTypeId = $contentTypeDraft->id;
 
-        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
 
-        return $contentTypeService->loadContentType( $contentTypeId );
+        return $contentTypeService->loadContentType($contentTypeId);
     }
 }

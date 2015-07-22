@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the HookableConfigurationMapper interface.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -27,7 +29,7 @@ interface HookableConfigurationMapperInterface extends ConfigurationMapperInterf
      *
      * @return mixed
      */
-    public function preMap( array $config, ContextualizerInterface $contextualizer );
+    public function preMap(array $config, ContextualizerInterface $contextualizer);
 
     /**
      * This method is called by the ConfigurationProcessor after looping over available scopes.
@@ -41,5 +43,5 @@ interface HookableConfigurationMapperInterface extends ConfigurationMapperInterf
      *
      * @return mixed
      */
-    public function postMap( array $config, ContextualizerInterface $contextualizer );
+    public function postMap(array $config, ContextualizerInterface $contextualizer);
 }

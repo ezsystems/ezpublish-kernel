@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the RoleLimitationConverterPass class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -23,22 +25,19 @@ class RoleLimitationConverterPass implements CompilerPassInterface
      *
      * @throws \LogicException
      */
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
-        if ( !$container->hasDefinition( 'ezpublish.persistence.legacy.role.limitation.converter' ) )
-        {
+        if (!$container->hasDefinition('ezpublish.persistence.legacy.role.limitation.converter')) {
             return;
         }
 
-        $roleLimitationConverter = $container->getDefinition( 'ezpublish.persistence.legacy.role.limitation.converter' );
+        $roleLimitationConverter = $container->getDefinition('ezpublish.persistence.legacy.role.limitation.converter');
 
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.persistence.legacy.role.limitation.handler' ) as $id => $attributes )
-        {
-            foreach ( $attributes as $attribute )
-            {
+        foreach ($container->findTaggedServiceIds('ezpublish.persistence.legacy.role.limitation.handler') as $id => $attributes) {
+            foreach ($attributes as $attribute) {
                 $roleLimitationConverter->addMethodCall(
                     'addHandler',
-                    array( new Reference( $id ) )
+                    array(new Reference($id))
                 );
             }
         }

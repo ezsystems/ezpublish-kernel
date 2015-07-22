@@ -1,16 +1,17 @@
 <?php
+
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\NameSchemaBase class
+ * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\NameSchemaBase class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
 
 use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
-use eZ\Publish\Core\Repository\Helper\NameSchemaService;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
@@ -19,20 +20,21 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 
 /**
- * Test case for NameSchema service
+ * Test case for NameSchema service.
  */
 abstract class NameSchemaBase extends BaseServiceTest
 {
     /**
-     * Test eZ\Publish\Core\Repository\Helper\NameSchemaService method
+     * Test eZ\Publish\Core\Repository\Helper\NameSchemaService method.
+     *
      * @covers \eZ\Publish\Core\Repository\Helper\NameSchemaService::resolve
      * @dataProvider providerForTestResolve
      */
-    public function testResolve( $nameSchema, $expectedName )
+    public function testResolve($nameSchema, $expectedName)
     {
         $service = $this->repository->getNameSchemaService();
 
-        list( $content, $contentType ) = $this->buildTestObjects();
+        list($content, $contentType) = $this->buildTestObjects();
 
         $name = $service->resolve(
             $nameSchema,
@@ -41,11 +43,12 @@ abstract class NameSchemaBase extends BaseServiceTest
             $content->versionInfo->languageCodes
         );
 
-        self::assertEquals( $expectedName, $name );
+        self::assertEquals($expectedName, $name);
     }
 
     /**
-     * Test eZ\Publish\Core\Repository\Helper\NameSchemaService method
+     * Test eZ\Publish\Core\Repository\Helper\NameSchemaService method.
+     *
      * @covers \eZ\Publish\Core\Repository\Helper\NameSchemaService::resolve
      */
     public function testResolveWithSettings()
@@ -55,15 +58,15 @@ abstract class NameSchemaBase extends BaseServiceTest
         $this->setConfiguration(
             $service,
             array(
-                "limit" => 38,
-                "sequence" => "..."
+                'limit' => 38,
+                'sequence' => '...',
             )
         );
 
-        list( $content, $contentType ) = $this->buildTestObjects();
+        list($content, $contentType) = $this->buildTestObjects();
 
         $name = $service->resolve(
-            "Hello, <text1> and <text2> and then goodbye and hello again",
+            'Hello, <text1> and <text2> and then goodbye and hello again',
             $contentType,
             $content->fields,
             $content->versionInfo->languageCodes
@@ -71,8 +74,8 @@ abstract class NameSchemaBase extends BaseServiceTest
 
         self::assertEquals(
             array(
-                "eng-GB" => "Hello, one and two and then goodbye...",
-                "cro-HR" => "Hello, jedan and dva and then goodb..."
+                'eng-GB' => 'Hello, one and two and then goodbye...',
+                'cro-HR' => 'Hello, jedan and dva and then goodb...',
             ),
             $name
         );
@@ -84,95 +87,95 @@ abstract class NameSchemaBase extends BaseServiceTest
     {
         return array(
             array(
-                "<text1>",
+                '<text1>',
                 array(
-                    "eng-GB" => "one",
-                    "cro-HR" => "jedan",
-                )
+                    'eng-GB' => 'one',
+                    'cro-HR' => 'jedan',
+                ),
             ),
             array(
-                "<text1> <text2>",
+                '<text1> <text2>',
                 array(
-                    "eng-GB" => "one two",
-                    "cro-HR" => "jedan dva",
-                )
+                    'eng-GB' => 'one two',
+                    'cro-HR' => 'jedan dva',
+                ),
             ),
             array(
-                "Hello <text1>",
+                'Hello <text1>',
                 array(
-                    "eng-GB" => "Hello one",
-                    "cro-HR" => "Hello jedan",
-                )
+                    'eng-GB' => 'Hello one',
+                    'cro-HR' => 'Hello jedan',
+                ),
             ),
             array(
-                "Hello, <text1> and <text2> and then goodbye",
+                'Hello, <text1> and <text2> and then goodbye',
                 array(
-                    "eng-GB" => "Hello, one and two and then goodbye",
-                    "cro-HR" => "Hello, jedan and dva and then goodbye",
-                )
+                    'eng-GB' => 'Hello, one and two and then goodbye',
+                    'cro-HR' => 'Hello, jedan and dva and then goodbye',
+                ),
             ),
             array(
-                "<text1|text2>",
+                '<text1|text2>',
                 array(
-                    "eng-GB" => "one",
-                    "cro-HR" => "jedan",
-                )
+                    'eng-GB' => 'one',
+                    'cro-HR' => 'jedan',
+                ),
             ),
             array(
-                "<text2|text1>",
+                '<text2|text1>',
                 array(
-                    "eng-GB" => "two",
-                    "cro-HR" => "dva",
-                )
+                    'eng-GB' => 'two',
+                    'cro-HR' => 'dva',
+                ),
             ),
             array(
-                "<text3|text1>",
+                '<text3|text1>',
                 array(
-                    "eng-GB" => "one",
-                    "cro-HR" => "jedan",
-                )
+                    'eng-GB' => 'one',
+                    'cro-HR' => 'jedan',
+                ),
             ),
             array(
-                "<(<text1> <text2>)>",
+                '<(<text1> <text2>)>',
                 array(
-                    "eng-GB" => "one two",
-                    "cro-HR" => "jedan dva",
-                )
+                    'eng-GB' => 'one two',
+                    'cro-HR' => 'jedan dva',
+                ),
             ),
             array(
-                "<(<text3|text2>)>",
+                '<(<text3|text2>)>',
                 array(
-                    "eng-GB" => "two",
-                    "cro-HR" => "dva",
-                )
+                    'eng-GB' => 'two',
+                    'cro-HR' => 'dva',
+                ),
             ),
             array(
-                "<text3|(<text3|text2>)>",
+                '<text3|(<text3|text2>)>',
                 array(
-                    "eng-GB" => "two",
-                    "cro-HR" => "dva",
-                )
+                    'eng-GB' => 'two',
+                    'cro-HR' => 'dva',
+                ),
             ),
             array(
-                "<text3|(Hello <text2> and <text1>!)>",
+                '<text3|(Hello <text2> and <text1>!)>',
                 array(
-                    "eng-GB" => "Hello two and one!",
-                    "cro-HR" => "Hello dva and jedan!",
-                )
+                    'eng-GB' => 'Hello two and one!',
+                    'cro-HR' => 'Hello dva and jedan!',
+                ),
             ),
             array(
-                "<text3|(Hello <text3> and <text1>)|text2>!",
+                '<text3|(Hello <text3> and <text1>)|text2>!',
                 array(
-                    "eng-GB" => "Hello  and one!",
-                    "cro-HR" => "Hello  and jedan!",
-                )
+                    'eng-GB' => 'Hello  and one!',
+                    'cro-HR' => 'Hello  and jedan!',
+                ),
             ),
             array(
-                "<text3|(Hello <text3|text2> and <text1>)|text2>!",
+                '<text3|(Hello <text3|text2> and <text1>)|text2>!',
                 array(
-                    "eng-GB" => "Hello two and one!",
-                    "cro-HR" => "Hello dva and jedan!",
-                )
+                    'eng-GB' => 'Hello two and one!',
+                    'cro-HR' => 'Hello dva and jedan!',
+                ),
             ),
         );
     }
@@ -185,44 +188,44 @@ abstract class NameSchemaBase extends BaseServiceTest
         return array(
             new Field(
                 array(
-                    "languageCode" => "eng-GB",
-                    "fieldDefIdentifier" => "text1",
-                    "value" => new TextLineValue( "one" )
+                    'languageCode' => 'eng-GB',
+                    'fieldDefIdentifier' => 'text1',
+                    'value' => new TextLineValue('one'),
                 )
             ),
             new Field(
                 array(
-                    "languageCode" => "eng-GB",
-                    "fieldDefIdentifier" => "text2",
-                    "value" => new TextLineValue( "two" )
+                    'languageCode' => 'eng-GB',
+                    'fieldDefIdentifier' => 'text2',
+                    'value' => new TextLineValue('two'),
                 )
             ),
             new Field(
                 array(
-                    "languageCode" => "eng-GB",
-                    "fieldDefIdentifier" => "text3",
-                    "value" => new TextLineValue( "" )
+                    'languageCode' => 'eng-GB',
+                    'fieldDefIdentifier' => 'text3',
+                    'value' => new TextLineValue(''),
                 )
             ),
             new Field(
                 array(
-                    "languageCode" => "cro-HR",
-                    "fieldDefIdentifier" => "text1",
-                    "value" => new TextLineValue( "jedan" )
+                    'languageCode' => 'cro-HR',
+                    'fieldDefIdentifier' => 'text1',
+                    'value' => new TextLineValue('jedan'),
                 )
             ),
             new Field(
                 array(
-                    "languageCode" => "cro-HR",
-                    "fieldDefIdentifier" => "text2",
-                    "value" => new TextLineValue( "dva" )
+                    'languageCode' => 'cro-HR',
+                    'fieldDefIdentifier' => 'text2',
+                    'value' => new TextLineValue('dva'),
                 )
             ),
             new Field(
                 array(
-                    "languageCode" => "cro-HR",
-                    "fieldDefIdentifier" => "text3",
-                    "value" => new TextLineValue( "" )
+                    'languageCode' => 'cro-HR',
+                    'fieldDefIdentifier' => 'text3',
+                    'value' => new TextLineValue(''),
                 )
             ),
         );
@@ -236,23 +239,23 @@ abstract class NameSchemaBase extends BaseServiceTest
         return array(
             new FieldDefinition(
                 array(
-                    "id" => "1",
-                    "identifier" => "text1",
-                    "fieldTypeIdentifier" => "ezstring"
+                    'id' => '1',
+                    'identifier' => 'text1',
+                    'fieldTypeIdentifier' => 'ezstring',
                 )
             ),
             new FieldDefinition(
                 array(
-                    "id" => "2",
-                    "identifier" => "text2",
-                    "fieldTypeIdentifier" => "ezstring"
+                    'id' => '2',
+                    'identifier' => 'text2',
+                    'fieldTypeIdentifier' => 'ezstring',
                 )
             ),
             new FieldDefinition(
                 array(
-                    "id" => "3",
-                    "identifier" => "text3",
-                    "fieldTypeIdentifier" => "ezstring"
+                    'id' => '3',
+                    'identifier' => 'text3',
+                    'fieldTypeIdentifier' => 'ezstring',
                 )
             ),
         );
@@ -263,38 +266,38 @@ abstract class NameSchemaBase extends BaseServiceTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    protected function buildTestObjects( $nameSchema = "<name_schema>", $urlAliasSchema = "<urlalias_schema>" )
+    protected function buildTestObjects($nameSchema = '<name_schema>', $urlAliasSchema = '<urlalias_schema>')
     {
         $contentType = new ContentType(
             array(
-                "nameSchema" => $nameSchema,
-                "urlAliasSchema" => $urlAliasSchema,
-                "fieldDefinitions" => $this->getFieldDefinitions()
+                'nameSchema' => $nameSchema,
+                'urlAliasSchema' => $urlAliasSchema,
+                'fieldDefinitions' => $this->getFieldDefinitions(),
             )
         );
         $content = new Content(
             array(
-                "internalFields" => $this->getFields(),
-                "versionInfo" => new VersionInfo(
+                'internalFields' => $this->getFields(),
+                'versionInfo' => new VersionInfo(
                     array(
-                        "languageCodes" => array( "eng-GB", "cro-HR" )
+                        'languageCodes' => array('eng-GB', 'cro-HR'),
                     )
-                )
+                ),
             )
         );
 
-        return array( $content, $contentType );
+        return array($content, $contentType);
     }
 
     /**
      * @param object $service
      * @param array $configuration
      */
-    protected function setConfiguration( $service, array $configuration )
+    protected function setConfiguration($service, array $configuration)
     {
-        $refObject = new \ReflectionObject( $service );
-        $refProperty = $refObject->getProperty( 'settings' );
-        $refProperty->setAccessible( true );
+        $refObject = new \ReflectionObject($service);
+        $refProperty = $refObject->getProperty('settings');
+        $refProperty->setAccessible(true);
         $refProperty->setValue(
             $service,
             $configuration

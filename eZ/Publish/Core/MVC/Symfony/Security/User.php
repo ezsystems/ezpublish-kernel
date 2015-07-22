@@ -1,9 +1,11 @@
 <?php
+
 /**
  * File containing the User class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -25,7 +27,7 @@ class User implements UserInterface, EquatableInterface
      */
     private $roles;
 
-    public function __construct( APIUser $user = null, array $roles = array() )
+    public function __construct(APIUser $user = null, array $roles = array())
     {
         $this->user = $user;
         $this->roles = $roles;
@@ -92,8 +94,6 @@ class User implements UserInterface, EquatableInterface
      *
      * This is important if, at any given point, sensitive information like
      * the plain-text password is stored on this object.
-     *
-     * @return void
      */
     public function eraseCredentials()
     {
@@ -110,15 +110,14 @@ class User implements UserInterface, EquatableInterface
     /**
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      */
-    public function setAPIUser( APIUser $user )
+    public function setAPIUser(APIUser $user)
     {
         $this->user = $user;
     }
 
-    public function isEqualTo( BaseUserInterface $user )
+    public function isEqualTo(BaseUserInterface $user)
     {
-        if ( $user instanceof User && $this->user instanceof APIUser )
-        {
+        if ($user instanceof self && $this->user instanceof APIUser) {
             return $user->getAPIUser()->id === $this->user->id;
         }
 

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Checkbox Value class
+ * File containing the Checkbox Value class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -12,23 +14,23 @@ namespace eZ\Publish\Core\FieldType\Checkbox;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
- * Value for Checkbox field type
+ * Value for Checkbox field type.
  */
 class Value extends BaseValue
 {
     /**
-     * Boolean value
+     * Boolean value.
      *
-     * @var boolean
+     * @var bool
      */
     public $bool;
 
     /**
-     * Construct a new Value object and initialize it $boolValue
+     * Construct a new Value object and initialize it $boolValue.
      *
-     * @param boolean $boolValue
+     * @param bool $boolValue
      */
-    public function __construct( $boolValue = false )
+    public function __construct($boolValue = false)
     {
         $this->bool = $boolValue;
     }

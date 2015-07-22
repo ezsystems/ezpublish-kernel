@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the ContentId sort clause visitor class
+ * File containing the ContentId sort clause visitor class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,34 +15,34 @@ use eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
- * Visits the ContentId sort clause
+ * Visits the ContentId sort clause.
  */
 class ContentId extends SortClauseVisitor
 {
     /**
-     * Check if visitor is applicable to current SortClause
+     * Check if visitor is applicable to current SortClause.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
-     * @return boolean
+     * @return bool
      */
-    public function canVisit( SortClause $sortClause )
+    public function canVisit(SortClause $sortClause)
     {
         return $sortClause instanceof SortClause\ContentId;
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation
+     * Map field value to a proper Elasticsearch representation.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
      * @return mixed
      */
-    public function visit( SortClause $sortClause )
+    public function visit(SortClause $sortClause)
     {
         return array(
-            "content_id_id" => array(
-                "order" => $this->getDirection( $sortClause ),
+            'content_id_id' => array(
+                'order' => $this->getDirection($sortClause),
             ),
         );
     }

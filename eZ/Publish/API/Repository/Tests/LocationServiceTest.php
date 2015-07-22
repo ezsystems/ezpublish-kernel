@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the LocationServiceTest class
+ * File containing the LocationServiceTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -28,13 +30,14 @@ class LocationServiceTest extends BaseTest
      * Test for the newLocationCreateStruct() method.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
+     *
      * @see \eZ\Publish\API\Repository\LocationService::newLocationCreateStruct()
      */
     public function testNewLocationCreateStruct()
     {
         $repository = $this->getRepository();
 
-        $parentLocationId = $this->generateId( 'location', 1 );
+        $parentLocationId = $this->generateId('location', 1);
         /* BEGIN: Use Case */
         // $parentLocationId is the ID of an existing location
         $locationService = $repository->getLocationService();
@@ -57,11 +60,10 @@ class LocationServiceTest extends BaseTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $locationCreate
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::newLocationCreateStruct()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
      */
-    public function testNewLocationCreateStructValues( LocationCreateStruct $locationCreate )
+    public function testNewLocationCreateStructValues(LocationCreateStruct $locationCreate)
     {
         $this->assertPropertiesCorrect(
             array(
@@ -71,7 +73,7 @@ class LocationServiceTest extends BaseTest
                 //'remoteId' => null,
                 'sortField' => Location::SORT_FIELD_NAME,
                 'sortOrder' => Location::SORT_ORDER_ASC,
-                'parentLocationId' => $this->generateId( 'location', 1 ),
+                'parentLocationId' => $this->generateId('location', 1),
             ),
             $locationCreate
         );
@@ -80,7 +82,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the createLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
      */
@@ -88,8 +89,8 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId( 'object', 41 );
-        $parentLocationId = $this->generateId( 'location', 5 );
+        $contentId = $this->generateId('object', 41);
+        $parentLocationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
         // $contentId is the ID of an existing content object
         // $parentLocationId is the ID of an existing location
@@ -97,9 +98,9 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // ContentInfo for "How to use eZ Publish"
-        $contentInfo = $contentService->loadContentInfo( $contentId );
+        $contentInfo = $contentService->loadContentInfo($contentId);
 
-        $locationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
+        $locationCreate = $locationService->newLocationCreateStruct($parentLocationId);
         $locationCreate->priority = 23;
         $locationCreate->hidden = true;
         $locationCreate->remoteId = 'sindelfingen';
@@ -121,18 +122,17 @@ class LocationServiceTest extends BaseTest
             'locationCreate' => $locationCreate,
             'createdLocation' => $location,
             'contentInfo' => $contentInfo,
-            'parentLocation' => $locationService->loadLocation( $this->generateId( 'location', 5 ) ),
+            'parentLocation' => $locationService->loadLocation($this->generateId('location', 5)),
         );
     }
 
     /**
      * Test for the createLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      */
-    public function testCreateLocationStructValues( array $data )
+    public function testCreateLocationStructValues(array $data)
     {
         $locationCreate = $data['locationCreate'];
         $createdLocation = $data['createdLocation'];
@@ -146,7 +146,7 @@ class LocationServiceTest extends BaseTest
                 'remoteId' => $locationCreate->remoteId,
                 'contentInfo' => $contentInfo,
                 'parentLocationId' => $locationCreate->parentLocationId,
-                'pathString' => '/1/5/' . $this->parseId( 'location', $createdLocation->id ) . '/',
+                'pathString' => '/1/5/' . $this->parseId('location', $createdLocation->id) . '/',
                 'depth' => 2,
                 'sortField' => $locationCreate->sortField,
                 'sortOrder' => $locationCreate->sortOrder,
@@ -154,13 +154,12 @@ class LocationServiceTest extends BaseTest
             $createdLocation
         );
 
-        $this->assertNotNull( $createdLocation->id );
+        $this->assertNotNull($createdLocation->id);
     }
 
     /**
      * Test for the createLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
@@ -169,8 +168,8 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId( 'object', 11 );
-        $parentLocationId = $this->generateId( 'location', 5 );
+        $contentId = $this->generateId('object', 11);
+        $parentLocationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
         // $contentId is the ID of an existing content object
         // $parentLocationId is the ID of an existing location which already
@@ -179,9 +178,9 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // ContentInfo for "How to use eZ Publish"
-        $contentInfo = $contentService->loadContentInfo( $contentId );
+        $contentInfo = $contentService->loadContentInfo($contentId);
 
-        $locationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
+        $locationCreate = $locationService->newLocationCreateStruct($parentLocationId);
 
         // Throws exception, since content is already located at "/1/2/107/110/"
         $locationService->createLocation(
@@ -194,7 +193,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the createLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
@@ -203,8 +201,8 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId( 'object', 4 );
-        $parentLocationId = $this->generateId( 'location', 12 );
+        $contentId = $this->generateId('object', 4);
+        $parentLocationId = $this->generateId('location', 12);
         /* BEGIN: Use Case */
         // $contentId is the ID of an existing content object
         // $parentLocationId is the ID of an existing location which is below a
@@ -213,9 +211,9 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // ContentInfo for "How to use eZ Publish"
-        $contentInfo = $contentService->loadContentInfo( $contentId );
+        $contentInfo = $contentService->loadContentInfo($contentId);
 
-        $locationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
+        $locationCreate = $locationService->newLocationCreateStruct($parentLocationId);
 
         // Throws exception, since content is already located at "/1/2/"
         $locationService->createLocation(
@@ -228,7 +226,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the createLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
@@ -237,17 +234,17 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId( 'object', 41 );
-        $parentLocationId = $this->generateId( 'location', 5 );
+        $contentId = $this->generateId('object', 41);
+        $parentLocationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
         // $contentId is the ID of an existing content object
         $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
 
         // ContentInfo for "How to use eZ Publish"
-        $contentInfo = $contentService->loadContentInfo( $contentId );
+        $contentInfo = $contentService->loadContentInfo($contentId);
 
-        $locationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
+        $locationCreate = $locationService->newLocationCreateStruct($parentLocationId);
         // This remote ID already exists
         $locationCreate->remoteId = 'f3e90596361e31d496d4026eb624c983';
 
@@ -262,7 +259,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the createLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      */
@@ -270,8 +266,8 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId( 'object', 41 );
-        $parentLocationId = $this->generateId( 'location', 5 );
+        $contentId = $this->generateId('object', 41);
+        $parentLocationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
         // $contentId is the ID of an existing content object
         // $parentLocationId is the ID of an existing location
@@ -280,21 +276,18 @@ class LocationServiceTest extends BaseTest
 
         $repository->beginTransaction();
 
-        try
-        {
+        try {
             // ContentInfo for "How to use eZ Publish"
-            $contentInfo = $contentService->loadContentInfo( $contentId );
+            $contentInfo = $contentService->loadContentInfo($contentId);
 
-            $locationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
+            $locationCreate = $locationService->newLocationCreateStruct($parentLocationId);
             $locationCreate->remoteId = 'sindelfingen';
 
             $createdLocationId = $locationService->createLocation(
                 $contentInfo,
                 $locationCreate
             )->id;
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             // Cleanup hanging transaction on error
             $repository->rollback();
             throw $e;
@@ -302,24 +295,22 @@ class LocationServiceTest extends BaseTest
 
         $repository->rollback();
 
-        try
-        {
+        try {
             // Throws exception since creation of location was rolled back
-            $location = $locationService->loadLocation( $createdLocationId );
-        }
-        catch ( NotFoundException $e )
-        {
+            $location = $locationService->loadLocation($createdLocationId);
+        } catch (NotFoundException $e) {
             return;
         }
         /* END: Use Case */
 
-        $this->fail( 'Objects still exists after rollback.' );
+        $this->fail('Objects still exists after rollback.');
     }
 
     /**
      * Test for the loadLocation() method.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
+     *
      * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      */
@@ -327,18 +318,19 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $locationId = $this->generateId( 'location', 5 );
+        $locationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
         // $locationId is the ID of an existing location
         $locationService = $repository->getLocationService();
 
-        $location = $locationService->loadLocation( $locationId );
+        $location = $locationService->loadLocation($locationId);
         /* END: Use Case */
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
             $location
         );
+
         return $location;
     }
 
@@ -347,20 +339,19 @@ class LocationServiceTest extends BaseTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
-    public function testLoadLocationStructValues( Location $location )
+    public function testLoadLocationStructValues(Location $location)
     {
         $this->assertPropertiesCorrect(
             array(
-                'id' => $this->generateId( 'location', 5 ),
+                'id' => $this->generateId('location', 5),
                 'priority' => 0,
                 'hidden' => false,
                 'invisible' => false,
                 'remoteId' => '3f6d92f8044aed134f32153517850f5a',
-                'parentLocationId' => $this->generateId( 'location', 1 ),
+                'parentLocationId' => $this->generateId('location', 1),
                 'pathString' => '/1/5/',
                 'depth' => 1,
                 'sortField' => 1,
@@ -373,15 +364,12 @@ class LocationServiceTest extends BaseTest
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo',
             $location->contentInfo
         );
-        $this->assertEquals(
-            $this->generateId( 'object', 4 ), $location->contentInfo->id
-        );
+        $this->assertEquals($this->generateId('object', 4), $location->contentInfo->id);
     }
 
     /**
      * Test for the loadLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
@@ -390,20 +378,19 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $nonExistentLocationId = $this->generateId( 'location', 2342 );
+        $nonExistentLocationId = $this->generateId('location', 2342);
         /* BEGIN: Use Case */
         $locationService = $repository->getLocationService();
 
         // Throws exception, if Location with $nonExistentLocationId does not
         // exist
-        $location = $locationService->loadLocation( $nonExistentLocationId );
+        $location = $locationService->loadLocation($nonExistentLocationId);
         /* END: Use Case */
     }
 
     /**
      * Test for the loadLocationByRemoteId() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
@@ -420,7 +407,7 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertEquals(
-            $locationService->loadLocation( $this->generateId( 'location', 5 ) ),
+            $locationService->loadLocation($this->generateId('location', 5)),
             $location
         );
     }
@@ -428,7 +415,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the loadLocationByRemoteId() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
@@ -450,7 +436,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the loadLocations() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      */
@@ -458,38 +443,35 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $contentId = $this->generateId( 'object', 4 );
+        $contentId = $this->generateId('object', 4);
         /* BEGIN: Use Case */
         // $contentId contains the ID of an existing content object
         $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
 
-        $contentInfo = $contentService->loadContentInfo( $contentId );
+        $contentInfo = $contentService->loadContentInfo($contentId);
 
-        $locations = $locationService->loadLocations( $contentInfo );
+        $locations = $locationService->loadLocations($contentInfo);
         /* END: Use Case */
 
-        $this->assertInternalType(
-            'array', $locations
-        );
+        $this->assertInternalType('array', $locations);
+
         return $locations;
     }
 
     /**
      * Test for the loadLocations() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocations
      */
-    public function testLoadLocationsContent( array $locations )
+    public function testLoadLocationsContent(array $locations)
     {
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
-        $this->assertEquals( 1, count( $locations ) );
-        foreach ( $locations as $loadedLocation )
-        {
+        $this->assertEquals(1, count($locations));
+        foreach ($locations as $loadedLocation) {
             $this->assertInstanceOf(
                 '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
                 $loadedLocation
@@ -498,17 +480,15 @@ class LocationServiceTest extends BaseTest
 
         usort(
             $locations,
-            function ( $a, $b )
-            {
-                strcmp( $a->id, $b->id );
+            function ($a, $b) {
+                strcmp($a->id, $b->id);
             }
         );
 
         $this->assertEquals(
-            array( $this->generateId( 'location', 5 ) ),
+            array($this->generateId('location', 5)),
             array_map(
-                function ( Location $location )
-                {
+                function (Location $location) {
                     return $location->id;
                 },
                 $locations
@@ -520,6 +500,7 @@ class LocationServiceTest extends BaseTest
      * Test for the loadLocations() method.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     *
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations($contentInfo, $rootLocation)
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocations
      */
@@ -527,9 +508,9 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $originalLocationId = $this->generateId( 'location', 54 );
-        $originalParentLocationId = $this->generateId( 'location', 48 );
-        $newParentLocationId = $this->generateId( 'location', 43 );
+        $originalLocationId = $this->generateId('location', 54);
+        $originalParentLocationId = $this->generateId('location', 48);
+        $newParentLocationId = $this->generateId('location', 43);
         /* BEGIN: Use Case */
         // $originalLocationId is the ID of an existing location
         // $originalParentLocationId is the ID of the parent location of
@@ -539,16 +520,16 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Location at "/1/48/54"
-        $originalLocation = $locationService->loadLocation( $originalLocationId );
+        $originalLocation = $locationService->loadLocation($originalLocationId);
 
         // Create location under "/1/43/"
-        $locationCreate = $locationService->newLocationCreateStruct( $newParentLocationId );
+        $locationCreate = $locationService->newLocationCreateStruct($newParentLocationId);
         $locationService->createLocation(
             $originalLocation->contentInfo,
             $locationCreate
         );
 
-        $findRootLocation = $locationService->loadLocation( $originalParentLocationId );
+        $findRootLocation = $locationService->loadLocation($originalParentLocationId);
 
         // Returns an array with only $originalLocation
         $locations = $locationService->loadLocations(
@@ -557,9 +538,8 @@ class LocationServiceTest extends BaseTest
         );
         /* END: Use Case */
 
-        $this->assertInternalType(
-            'array', $locations
-        );
+        $this->assertInternalType('array', $locations);
+
         return $locations;
     }
 
@@ -568,24 +548,22 @@ class LocationServiceTest extends BaseTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location[] $locations
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationsLimitedSubtree
      */
-    public function testLoadLocationsLimitedSubtreeContent( array $locations )
+    public function testLoadLocationsLimitedSubtreeContent(array $locations)
     {
-        $this->assertEquals( 1, count( $locations ) );
+        $this->assertEquals(1, count($locations));
 
         $this->assertEquals(
-            $this->generateId( 'location', 54 ),
-            reset( $locations )->id
+            $this->generateId('location', 54),
+            reset($locations)->id
         );
     }
 
     /**
      * Test for the loadLocations() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocations
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
@@ -600,12 +578,10 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Create new content, which is not published
-        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
-        $contentCreate = $contentService->newContentCreateStruct(
-            $folderType, 'eng-US'
-        );
-        $contentCreate->setField( 'name', 'New Folder' );
-        $content = $contentService->createContent( $contentCreate );
+        $folderType = $contentTypeService->loadContentTypeByIdentifier('folder');
+        $contentCreate = $contentService->newContentCreateStruct($folderType, 'eng-US');
+        $contentCreate->setField('name', 'New Folder');
+        $content = $contentService->createContent($contentCreate);
 
         // Throws Exception, since $content has no published version, yet
         $locationService->loadLocations(
@@ -617,7 +593,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the loadLocations() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations($contentInfo, $rootLocation)
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocations
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
@@ -626,7 +601,7 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $someLocationId = $this->generateId( 'location', 2 );
+        $someLocationId = $this->generateId('location', 2);
         /* BEGIN: Use Case */
         // $someLocationId is the ID of an existing location
         $contentTypeService = $repository->getContentTypeService();
@@ -634,14 +609,12 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Create new content, which is not published
-        $folderType = $contentTypeService->loadContentTypeByIdentifier( 'folder' );
-        $contentCreate = $contentService->newContentCreateStruct(
-            $folderType, 'eng-US'
-        );
-        $contentCreate->setField( 'name', 'New Folder' );
-        $content = $contentService->createContent( $contentCreate );
+        $folderType = $contentTypeService->loadContentTypeByIdentifier('folder');
+        $contentCreate = $contentService->newContentCreateStruct($folderType, 'eng-US');
+        $contentCreate->setField('name', 'New Folder');
+        $content = $contentService->createContent($contentCreate);
 
-        $findRootLocation = $locationService->loadLocation( $someLocationId );
+        $findRootLocation = $locationService->loadLocation($someLocationId);
 
         // Throws Exception, since $content has no published version, yet
         $locationService->loadLocations(
@@ -654,7 +627,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the loadLocationChildren() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
@@ -662,25 +634,20 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $locationId = $this->generateId( 'location', 5 );
+        $locationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
         // $locationId is the ID of an existing location
         $locationService = $repository->getLocationService();
 
-        $location = $locationService->loadLocation( $locationId );
+        $location = $locationService->loadLocation($locationId);
 
-        $childLocations = $locationService->loadLocationChildren( $location );
+        $childLocations = $locationService->loadLocationChildren($location);
         /* END: Use Case */
 
-        $this->assertInstanceOf(
-            "\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationList", $childLocations
-        );
-        $this->assertInternalType(
-            'array', $childLocations->locations
-        );
-        $this->assertInternalType(
-            'int', $childLocations->totalCount
-        );
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationList', $childLocations);
+        $this->assertInternalType('array', $childLocations->locations);
+        $this->assertInternalType('int', $childLocations->totalCount);
+
         return $childLocations;
     }
 
@@ -698,7 +665,7 @@ class LocationServiceTest extends BaseTest
         $this->assertSame(
             5,
             $locationService->getLocationChildCount(
-                $locationService->loadLocation( $this->generateId( 'location', 5 ) )
+                $locationService->loadLocation($this->generateId('location', 5))
             )
         );
     }
@@ -706,17 +673,15 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the loadLocationChildren() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildren
      */
-    public function testLoadLocationChildrenData( LocationList $locations )
+    public function testLoadLocationChildrenData(LocationList $locations)
     {
-        $this->assertEquals( 5, count( $locations->locations ) );
-        $this->assertEquals( 5, $locations->totalCount );
+        $this->assertEquals(5, count($locations->locations));
+        $this->assertEquals(5, $locations->totalCount);
 
-        foreach ( $locations->locations as $location )
-        {
+        foreach ($locations->locations as $location) {
             $this->assertInstanceOf(
                 '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
                 $location
@@ -725,15 +690,14 @@ class LocationServiceTest extends BaseTest
 
         $this->assertEquals(
             array(
-                $this->generateId( 'location', 12 ),
-                $this->generateId( 'location', 13 ),
-                $this->generateId( 'location', 14 ),
-                $this->generateId( 'location', 44 ),
-                $this->generateId( 'location', 61 ),
+                $this->generateId('location', 12),
+                $this->generateId('location', 13),
+                $this->generateId('location', 14),
+                $this->generateId('location', 44),
+                $this->generateId('location', 61),
             ),
             array_map(
-                function ( Location $location )
-                {
+                function (Location $location) {
                     return $location->id;
                 },
                 $locations->locations
@@ -745,6 +709,7 @@ class LocationServiceTest extends BaseTest
      * Test for the loadLocationChildren() method.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     *
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset)
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildren
      */
@@ -752,27 +717,20 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $locationId = $this->generateId( 'location', 5 );
+        $locationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
         // $locationId is the ID of an existing location
         $locationService = $repository->getLocationService();
 
-        $location = $locationService->loadLocation( $locationId );
+        $location = $locationService->loadLocation($locationId);
 
-        $childLocations = $locationService->loadLocationChildren(
-            $location, 2
-        );
+        $childLocations = $locationService->loadLocationChildren($location, 2);
         /* END: Use Case */
 
-        $this->assertInstanceOf(
-            "\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationList", $childLocations
-        );
-        $this->assertInternalType(
-            'array', $childLocations->locations
-        );
-        $this->assertInternalType(
-            'int', $childLocations->totalCount
-        );
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationList', $childLocations);
+        $this->assertInternalType('array', $childLocations->locations);
+        $this->assertInternalType('int', $childLocations->totalCount);
+
         return $childLocations;
     }
 
@@ -781,17 +739,15 @@ class LocationServiceTest extends BaseTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LocationList $locations
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset)
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildrenWithOffset
      */
-    public function testLoadLocationChildrenDataWithOffset( LocationList $locations )
+    public function testLoadLocationChildrenDataWithOffset(LocationList $locations)
     {
-        $this->assertEquals( 3, count( $locations->locations ) );
-        $this->assertEquals( 5, $locations->totalCount );
+        $this->assertEquals(3, count($locations->locations));
+        $this->assertEquals(5, $locations->totalCount);
 
-        foreach ( $locations->locations as $location )
-        {
+        foreach ($locations->locations as $location) {
             $this->assertInstanceOf(
                 '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
                 $location
@@ -800,13 +756,12 @@ class LocationServiceTest extends BaseTest
 
         $this->assertEquals(
             array(
-                $this->generateId( 'location', 14 ),
-                $this->generateId( 'location', 44 ),
-                $this->generateId( 'location', 61 ),
+                $this->generateId('location', 14),
+                $this->generateId('location', 44),
+                $this->generateId('location', 61),
             ),
             array_map(
-                function ( Location $location )
-                {
+                function (Location $location) {
                     return $location->id;
                 },
                 $locations->locations
@@ -818,6 +773,7 @@ class LocationServiceTest extends BaseTest
      * Test for the loadLocationChildren() method.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     *
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset, $limit)
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildren
      */
@@ -825,27 +781,20 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $locationId = $this->generateId( 'location', 5 );
+        $locationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
         // $locationId is the ID of an existing location
         $locationService = $repository->getLocationService();
 
-        $location = $locationService->loadLocation( $locationId );
+        $location = $locationService->loadLocation($locationId);
 
-        $childLocations = $locationService->loadLocationChildren(
-            $location, 2, 2
-        );
+        $childLocations = $locationService->loadLocationChildren($location, 2, 2);
         /* END: Use Case */
 
-        $this->assertInstanceOf(
-            "\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationList", $childLocations
-        );
-        $this->assertInternalType(
-            'array', $childLocations->locations
-        );
-        $this->assertInternalType(
-            'int', $childLocations->totalCount
-        );
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationList', $childLocations);
+        $this->assertInternalType('array', $childLocations->locations);
+        $this->assertInternalType('int', $childLocations->totalCount);
+
         return $childLocations;
     }
 
@@ -854,17 +803,15 @@ class LocationServiceTest extends BaseTest
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location[] $locations
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren($location, $offset, $limit)
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationChildrenWithOffsetAndLimit
      */
-    public function testLoadLocationChildrenDataWithOffsetAndLimit( LocationList $locations )
+    public function testLoadLocationChildrenDataWithOffsetAndLimit(LocationList $locations)
     {
-        $this->assertEquals( 2, count( $locations->locations ) );
-        $this->assertEquals( 5, $locations->totalCount );
+        $this->assertEquals(2, count($locations->locations));
+        $this->assertEquals(5, $locations->totalCount);
 
-        foreach ( $locations->locations as $location )
-        {
+        foreach ($locations->locations as $location) {
             $this->assertInstanceOf(
                 '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
                 $location
@@ -873,12 +820,11 @@ class LocationServiceTest extends BaseTest
 
         $this->assertEquals(
             array(
-                $this->generateId( 'location', 14 ),
-                $this->generateId( 'location', 44 ),
+                $this->generateId('location', 14),
+                $this->generateId('location', 44),
             ),
             array_map(
-                function ( Location $location )
-                {
+                function (Location $location) {
                     return $location->id;
                 },
                 $locations->locations
@@ -889,7 +835,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the newLocationUpdateStruct() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::newLocationUpdateStruct()
      */
     public function testNewLocationUpdateStruct()
@@ -911,7 +856,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the updateLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
@@ -919,12 +863,12 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $originalLocationId = $this->generateId( 'location', 5 );
+        $originalLocationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
         // $originalLocationId is the ID of an existing location
         $locationService = $repository->getLocationService();
 
-        $originalLocation = $locationService->loadLocation( $originalLocationId );
+        $originalLocation = $locationService->loadLocation($originalLocationId);
 
         $updateStruct = $locationService->newLocationUpdateStruct();
         $updateStruct->priority = 3;
@@ -932,9 +876,7 @@ class LocationServiceTest extends BaseTest
         $updateStruct->sortField = Location::SORT_FIELD_PRIORITY;
         $updateStruct->sortOrder = Location::SORT_ORDER_DESC;
 
-        $updatedLocation = $locationService->updateLocation(
-            $originalLocation, $updateStruct
-        );
+        $updatedLocation = $locationService->updateLocation($originalLocation, $updateStruct);
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -952,11 +894,10 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the updateLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testUpdateLocation
      */
-    public function testUpdateLocationStructValues( array $data )
+    public function testUpdateLocationStructValues(array $data)
     {
         $originalLocation = $data['originalLocation'];
         $updateStruct = $data['updateStruct'];
@@ -983,7 +924,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the updateLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
@@ -992,29 +932,26 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $locationId = $this->generateId( 'location', 5 );
+        $locationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
         // $locationId is the ID of an existing location
         $locationService = $repository->getLocationService();
 
-        $originalLocation = $locationService->loadLocation( $locationId );
+        $originalLocation = $locationService->loadLocation($locationId);
 
         $updateStruct = $locationService->newLocationUpdateStruct();
         // Remote ID of an existing location
         $updateStruct->remoteId = 'f3e90596361e31d496d4026eb624c983';
 
         // Throws exception, since remote ID is already taken
-        $locationService->updateLocation(
-            $originalLocation, $updateStruct
-        );
+        $locationService->updateLocation($originalLocation, $updateStruct);
         /* END: Use Case */
     }
 
     /**
      * Test for the updateLocation() method.
-     * Ref EZP-23302: Update Location fails if no change is performed with the update
+     * Ref EZP-23302: Update Location fails if no change is performed with the update.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
@@ -1022,34 +959,29 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $locationId = $this->generateId( 'location', 5 );
+        $locationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
         $locationService = $repository->getLocationService();
-        $repository->setCurrentUser( $repository->getUserService()->loadUser( 14 ) );
+        $repository->setCurrentUser($repository->getUserService()->loadUser(14));
 
-        $originalLocation = $locationService->loadLocation( $locationId );
+        $originalLocation = $locationService->loadLocation($locationId);
 
         $updateStruct = $locationService->newLocationUpdateStruct();
         $updateStruct->priority = 42;
 
-        $updatedLocation = $locationService->updateLocation(
-            $originalLocation, $updateStruct
-        );
+        $updatedLocation = $locationService->updateLocation($originalLocation, $updateStruct);
 
         // Repeated update with the same, unchanged struct
-        $secondUpdatedLocation = $locationService->updateLocation(
-            $updatedLocation, $updateStruct
-        );
+        $secondUpdatedLocation = $locationService->updateLocation($updatedLocation, $updateStruct);
         /* END: Use Case */
 
-        $this->assertEquals( $updatedLocation->priority, 42 );
-        $this->assertEquals( $secondUpdatedLocation->priority, 42 );
+        $this->assertEquals($updatedLocation->priority, 42);
+        $this->assertEquals($secondUpdatedLocation->priority, 42);
     }
 
     /**
      * Test for the swapLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::swapLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
@@ -1058,11 +990,11 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
-        $mediaLocationId = $this->generateId( 'location', 43 );
-        $demoDesignLocationId = $this->generateId( 'location', 56 );
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
 
-        $mediaContentInfo = $locationService->loadLocation( $mediaLocationId )->getContentInfo();
-        $demoDesignContentInfo = $locationService->loadLocation( $demoDesignLocationId )->getContentInfo();
+        $mediaContentInfo = $locationService->loadLocation($mediaLocationId)->getContentInfo();
+        $demoDesignContentInfo = $locationService->loadLocation($demoDesignLocationId)->getContentInfo();
 
         /* BEGIN: Use Case */
         // $mediaLocationId is the ID of the "Media" page location in
@@ -1074,27 +1006,26 @@ class LocationServiceTest extends BaseTest
         // Load the location service
         $locationService = $repository->getLocationService();
 
-        $mediaLocation = $locationService->loadLocation( $mediaLocationId );
-        $demoDesignLocation = $locationService->loadLocation( $demoDesignLocationId );
+        $mediaLocation = $locationService->loadLocation($mediaLocationId);
+        $demoDesignLocation = $locationService->loadLocation($demoDesignLocationId);
 
         // Swaps the content referred to by the locations
-        $locationService->swapLocation( $mediaLocation, $demoDesignLocation );
+        $locationService->swapLocation($mediaLocation, $demoDesignLocation);
         /* END: Use Case */
 
         $this->assertEquals(
             $mediaContentInfo->id,
-            $locationService->loadLocation( $demoDesignLocationId )->getContentInfo()->id
+            $locationService->loadLocation($demoDesignLocationId)->getContentInfo()->id
         );
         $this->assertEquals(
             $demoDesignContentInfo->id,
-            $locationService->loadLocation( $mediaLocationId )->getContentInfo()->id
+            $locationService->loadLocation($mediaLocationId)->getContentInfo()->id
         );
     }
 
     /**
      * Test for the hideLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::hideLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
@@ -1102,14 +1033,14 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $locationId = $this->generateId( 'location', 5 );
+        $locationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
         // $locationId is the ID of an existing location
         $locationService = $repository->getLocationService();
 
-        $visibleLocation = $locationService->loadLocation( $locationId );
+        $visibleLocation = $locationService->loadLocation($locationId);
 
-        $hiddenLocation = $locationService->hideLocation( $visibleLocation );
+        $hiddenLocation = $locationService->hideLocation($visibleLocation);
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -1124,43 +1055,37 @@ class LocationServiceTest extends BaseTest
                 $hiddenLocation->id
             )
         );
-        foreach ( $locationService->loadLocationChildren( $hiddenLocation )->locations as $child )
-        {
+        foreach ($locationService->loadLocationChildren($hiddenLocation)->locations as $child) {
             $this->assertSubtreeProperties(
-                array( 'invisible' => true ),
+                array('invisible' => true),
                 $child
             );
         }
     }
 
     /**
-     * Assert that $expectedValues are set in the subtree starting at $location
+     * Assert that $expectedValues are set in the subtree starting at $location.
      *
      * @param array $expectedValues
      * @param Location $location
-     *
-     * @return void
      */
-    protected function assertSubtreeProperties( array $expectedValues, Location $location, $stopId = null )
+    protected function assertSubtreeProperties(array $expectedValues, Location $location, $stopId = null)
     {
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
-        if ( $location->id === $stopId )
-        {
+        if ($location->id === $stopId) {
             return;
         }
 
-        foreach ( $expectedValues as $propertyName => $propertyValue )
-        {
+        foreach ($expectedValues as $propertyName => $propertyValue) {
             $this->assertEquals(
                 $propertyValue,
                 $location->$propertyName
             );
 
-            foreach ( $locationService->loadLocationChildren( $location )->locations as $child )
-            {
-                $this->assertSubtreeProperties( $expectedValues, $child );
+            foreach ($locationService->loadLocationChildren($location)->locations as $child) {
+                $this->assertSubtreeProperties($expectedValues, $child);
             }
         }
     }
@@ -1168,7 +1093,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the unhideLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::unhideLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testHideLocation
      */
@@ -1176,15 +1100,15 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $locationId = $this->generateId( 'location', 5 );
+        $locationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
         // $locationId is the ID of an existing location
         $locationService = $repository->getLocationService();
 
-        $visibleLocation = $locationService->loadLocation( $locationId );
-        $hiddenLocation = $locationService->hideLocation( $visibleLocation );
+        $visibleLocation = $locationService->loadLocation($locationId);
+        $hiddenLocation = $locationService->hideLocation($visibleLocation);
 
-        $unHiddenLocation = $locationService->unhideLocation( $hiddenLocation );
+        $unHiddenLocation = $locationService->unhideLocation($hiddenLocation);
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -1199,10 +1123,9 @@ class LocationServiceTest extends BaseTest
                 $unHiddenLocation->id
             )
         );
-        foreach ( $locationService->loadLocationChildren( $unHiddenLocation )->locations as $child )
-        {
+        foreach ($locationService->loadLocationChildren($unHiddenLocation)->locations as $child) {
             $this->assertSubtreeProperties(
-                array( 'invisible' => false ),
+                array('invisible' => false),
                 $child
             );
         }
@@ -1211,7 +1134,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the unhideLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::unhideLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testUnhideLocation
      */
@@ -1219,20 +1141,20 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $higherLocationId = $this->generateId( 'location', 5 );
-        $lowerLocationId = $this->generateId( 'location', 13 );
+        $higherLocationId = $this->generateId('location', 5);
+        $lowerLocationId = $this->generateId('location', 13);
         /* BEGIN: Use Case */
         // $higherLocationId is the ID of a location
         // $lowerLocationId is the ID of a location below $higherLocationId
         $locationService = $repository->getLocationService();
 
-        $higherLocation = $locationService->loadLocation( $higherLocationId );
-        $hiddenHigherLocation = $locationService->hideLocation( $higherLocation );
+        $higherLocation = $locationService->loadLocation($higherLocationId);
+        $hiddenHigherLocation = $locationService->hideLocation($higherLocation);
 
-        $lowerLocation = $locationService->loadLocation( $lowerLocationId );
-        $hiddenLowerLocation = $locationService->hideLocation( $lowerLocation );
+        $lowerLocation = $locationService->loadLocation($lowerLocationId);
+        $hiddenLowerLocation = $locationService->hideLocation($lowerLocation);
 
-        $unHiddenHigherLocation = $locationService->unhideLocation( $hiddenHigherLocation );
+        $unHiddenHigherLocation = $locationService->unhideLocation($hiddenHigherLocation);
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -1247,16 +1169,15 @@ class LocationServiceTest extends BaseTest
                 $unHiddenHigherLocation->id
             )
         );
-        foreach ( $locationService->loadLocationChildren( $unHiddenHigherLocation )->locations as $child )
-        {
+        foreach ($locationService->loadLocationChildren($unHiddenHigherLocation)->locations as $child) {
             $this->assertSubtreeProperties(
-                array( 'invisible' => false ),
+                array('invisible' => false),
                 $child,
-                $this->generateId( 'location', 13 )
+                $this->generateId('location', 13)
             );
         }
 
-        $stillHiddenLocation = $locationService->loadLocation( $this->generateId( 'location', 13 ) );
+        $stillHiddenLocation = $locationService->loadLocation($this->generateId('location', 13));
         $this->assertTrue(
             $stillHiddenLocation->hidden,
             sprintf(
@@ -1264,10 +1185,9 @@ class LocationServiceTest extends BaseTest
                 $stillHiddenLocation->id
             )
         );
-        foreach ( $locationService->loadLocationChildren( $stillHiddenLocation )->locations as $child )
-        {
+        foreach ($locationService->loadLocationChildren($stillHiddenLocation)->locations as $child) {
             $this->assertSubtreeProperties(
-                array( 'invisible' => true ),
+                array('invisible' => true),
                 $child
             );
         }
@@ -1276,7 +1196,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the deleteLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
@@ -1284,52 +1203,41 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $mediaLocationId = $this->generateId( 'location', 43 );
+        $mediaLocationId = $this->generateId('location', 43);
         /* BEGIN: Use Case */
         // $mediaLocationId is the ID of the location of the
         // "Media" location in an eZ Publish demo installation
         $locationService = $repository->getLocationService();
 
-        $location = $locationService->loadLocation( $mediaLocationId );
+        $location = $locationService->loadLocation($mediaLocationId);
 
-        $locationService->deleteLocation( $location );
+        $locationService->deleteLocation($location);
         /* END: Use Case */
 
-        try
-        {
-            $locationService->loadLocation( $mediaLocationId );
-            $this->fail( "Location $mediaLocationId not deleted." );
-        }
-        catch ( NotFoundException $e )
-        {
+        try {
+            $locationService->loadLocation($mediaLocationId);
+            $this->fail("Location $mediaLocationId not deleted.");
+        } catch (NotFoundException $e) {
         }
 
         // The following IDs are IDs of child locations of $mediaLocationId location
         // ( Media/Images, Media/Files, Media/Multimedia respectively )
-        foreach ( array( 51, 52, 53 ) as $childLocationId )
-        {
-            try
-            {
-                $locationService->loadLocation( $this->generateId( 'location', $childLocationId ) );
-                $this->fail( "Location $childLocationId not deleted." );
-            }
-            catch ( NotFoundException $e )
-            {
+        foreach (array(51, 52, 53) as $childLocationId) {
+            try {
+                $locationService->loadLocation($this->generateId('location', $childLocationId));
+                $this->fail("Location $childLocationId not deleted.");
+            } catch (NotFoundException $e) {
             }
         }
 
         // The following IDs are IDs of content below $mediaLocationId location
         // ( Media/Images, Media/Files, Media/Multimedia respectively )
         $contentService = $this->getRepository()->getContentService();
-        foreach ( array( 49, 50, 51 ) as $childContentId )
-        {
-            try
-            {
-                $contentService->loadContentInfo( $this->generateId( 'object', $childContentId ) );
-                $this->fail( "Content $childContentId not deleted." );
-            }
-            catch ( NotFoundException $e )
-            {
+        foreach (array(49, 50, 51) as $childContentId) {
+            try {
+                $contentService->loadContentInfo($this->generateId('object', $childContentId));
+                $this->fail("Content $childContentId not deleted.");
+            } catch (NotFoundException $e) {
             }
         }
     }
@@ -1337,7 +1245,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the deleteLocation() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testDeleteLocation
      */
@@ -1345,7 +1252,7 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $mediaLocationId = $this->generateId( 'location', 43 );
+        $mediaLocationId = $this->generateId('location', 43);
         /* BEGIN: Use Case */
         // $mediaLocationId is the ID of the location of the
         // "Media" location in an eZ Publish demo installation
@@ -1353,7 +1260,7 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Load the current the user group location
-        $location = $locationService->loadLocation( $mediaLocationId );
+        $location = $locationService->loadLocation($mediaLocationId);
 
         // Load the parent location
         $parentLocation = $locationService->loadLocation(
@@ -1361,10 +1268,10 @@ class LocationServiceTest extends BaseTest
         );
 
         // Get child count
-        $childCountBefore = $locationService->getLocationChildCount( $parentLocation );
+        $childCountBefore = $locationService->getLocationChildCount($parentLocation);
 
         // Delete the user group location
-        $locationService->deleteLocation( $location );
+        $locationService->deleteLocation($location);
 
         // Reload parent location
         $parentLocation = $locationService->loadLocation(
@@ -1372,18 +1279,17 @@ class LocationServiceTest extends BaseTest
         );
 
         // This will be $childCountBefore - 1
-        $childCountAfter = $locationService->getLocationChildCount( $parentLocation );
+        $childCountAfter = $locationService->getLocationChildCount($parentLocation);
         /* END: Use Case */
 
-        $this->assertEquals( $childCountBefore - 1, $childCountAfter );
+        $this->assertEquals($childCountBefore - 1, $childCountAfter);
     }
 
     /**
-     * Test for the deleteLocation() method
+     * Test for the deleteLocation() method.
      *
      * Related issue: EZP-21904
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
      * @expectedException eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
@@ -1399,35 +1305,34 @@ class LocationServiceTest extends BaseTest
 
         // prepare Content object
         $createStruct = $contentService->newContentCreateStruct(
-            $contentTypeService->loadContentTypeByIdentifier( 'folder' ),
+            $contentTypeService->loadContentTypeByIdentifier('folder'),
             'eng-GB'
         );
-        $createStruct->setField( 'name', 'Test folder' );
+        $createStruct->setField('name', 'Test folder');
 
         // creata Content object
         $content = $contentService->publishVersion(
             $contentService->createContent(
                 $createStruct,
-                array( $locationService->newLocationCreateStruct( 2 ) )
+                array($locationService->newLocationCreateStruct(2))
             )->versionInfo
         );
 
         // delete location
         $locationService->deleteLocation(
             $locationService->loadLocation(
-                $urlAliasService->lookup( "/Test-folder" )->destination
+                $urlAliasService->lookup('/Test-folder')->destination
             )
         );
 
         // this should throw a not found exception
-        $contentService->loadContent( $content->versionInfo->contentInfo->id );
+        $contentService->loadContent($content->versionInfo->contentInfo->id);
         /* END: Use case*/
     }
 
     /**
      * Test for the copySubtree() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
@@ -1435,8 +1340,8 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $mediaLocationId = $this->generateId( 'location', 43 );
-        $demoDesignLocationId = $this->generateId( 'location', 56 );
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
         /* BEGIN: Use Case */
         // $mediaLocationId is the ID of the "Media" page location in
         // an eZ Publish demo installation
@@ -1448,10 +1353,10 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Load location to copy
-        $locationToCopy = $locationService->loadLocation( $mediaLocationId );
+        $locationToCopy = $locationService->loadLocation($mediaLocationId);
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation( $demoDesignLocationId );
+        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
 
         // Copy location "Media" to "Demo Design"
         $copiedLocation = $locationService->copySubtree(
@@ -1469,33 +1374,29 @@ class LocationServiceTest extends BaseTest
             array(
                 'depth' => $newParentLocation->depth + 1,
                 'parentLocationId' => $newParentLocation->id,
-                'pathString' => "{$newParentLocation->pathString}" . $this->parseId( 'location', $copiedLocation->id ) . "/"
+                'pathString' => "{$newParentLocation->pathString}" . $this->parseId('location', $copiedLocation->id) . '/',
             ),
             $copiedLocation
         );
 
-        $this->assertDefaultContentStates( $copiedLocation->contentInfo );
+        $this->assertDefaultContentStates($copiedLocation->contentInfo);
     }
 
     /**
      * Asserts that given Content has default ContentStates.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     *
-     * @return void
      */
-    private function assertDefaultContentStates( ContentInfo $contentInfo )
+    private function assertDefaultContentStates(ContentInfo $contentInfo)
     {
         $repository = $this->getRepository();
         $objectStateService = $repository->getObjectStateService();
 
         $objectStateGroups = $objectStateService->loadObjectStateGroups();
 
-        foreach ( $objectStateGroups as $objectStateGroup )
-        {
-            $contentState = $objectStateService->getContentState( $contentInfo, $objectStateGroup );
-            foreach ( $objectStateService->loadObjectStates( $objectStateGroup ) as $objectState )
-            {
+        foreach ($objectStateGroups as $objectStateGroup) {
+            $contentState = $objectStateService->getContentState($contentInfo, $objectStateGroup);
+            foreach ($objectStateService->loadObjectStates($objectStateGroup) as $objectState) {
                 // Only check the first object state which is the default one.
                 $this->assertEquals(
                     $objectState,
@@ -1509,7 +1410,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the copySubtree() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCopySubtree
      */
@@ -1518,13 +1418,13 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
-        $locationToCopy = $locationService->loadLocation( $this->generateId( 'location', 43 ) );
+        $locationToCopy = $locationService->loadLocation($this->generateId('location', 43));
 
         // Load Subtree properties before copy
-        $expected = $this->loadSubtreeProperties( $locationToCopy );
+        $expected = $this->loadSubtreeProperties($locationToCopy);
 
-        $mediaLocationId = $this->generateId( 'location', 43 );
-        $demoDesignLocationId = $this->generateId( 'location', 56 );
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
         /* BEGIN: Use Case */
         // $mediaLocationId is the ID of the "Media" page location in
         // an eZ Publish demo installation
@@ -1536,10 +1436,10 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Load location to copy
-        $locationToCopy = $locationService->loadLocation( $mediaLocationId );
+        $locationToCopy = $locationService->loadLocation($mediaLocationId);
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation( $demoDesignLocationId );
+        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
 
         // Copy location "Media" to "Demo Design"
         $copiedLocation = $locationService->copySubtree(
@@ -1549,25 +1449,23 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $beforeIds = array();
-        foreach ( $expected as $properties )
-        {
+        foreach ($expected as $properties) {
             $beforeIds[] = $properties['id'];
         }
 
         // Load Subtree properties after copy
-        $actual = $this->loadSubtreeProperties( $copiedLocation );
+        $actual = $this->loadSubtreeProperties($copiedLocation);
 
-        $this->assertEquals( count( $expected ), count( $actual ) );
+        $this->assertEquals(count($expected), count($actual));
 
-        foreach ( $actual as $properties )
-        {
-            $this->assertNotContains( $properties['id'], $beforeIds );
+        foreach ($actual as $properties) {
+            $this->assertNotContains($properties['id'], $beforeIds);
             $this->assertStringStartsWith(
-                "{$newParentLocation->pathString}" . $this->parseId( 'location', $copiedLocation->id ) . "/",
+                "{$newParentLocation->pathString}" . $this->parseId('location', $copiedLocation->id) . '/',
                 $properties['pathString']
             );
             $this->assertStringEndsWith(
-                "/" . $this->parseId( 'location', $properties['id'] ) . "/",
+                '/' . $this->parseId('location', $properties['id']) . '/',
                 $properties['pathString']
             );
         }
@@ -1576,7 +1474,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the copySubtree() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCopySubtree
      */
@@ -1585,10 +1482,10 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
-        $childCountBefore = $locationService->getLocationChildCount( $locationService->loadLocation( 56 ) );
+        $childCountBefore = $locationService->getLocationChildCount($locationService->loadLocation(56));
 
-        $mediaLocationId = $this->generateId( 'location', 43 );
-        $demoDesignLocationId = $this->generateId( 'location', 56 );
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
         /* BEGIN: Use Case */
         // $mediaLocationId is the ID of the "Media" page location in
         // an eZ Publish demo installation
@@ -1600,10 +1497,10 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Load location to copy
-        $locationToCopy = $locationService->loadLocation( $mediaLocationId );
+        $locationToCopy = $locationService->loadLocation($mediaLocationId);
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation( $demoDesignLocationId );
+        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
 
         // Copy location "Media" to "Demo Design"
         $copiedLocation = $locationService->copySubtree(
@@ -1612,15 +1509,14 @@ class LocationServiceTest extends BaseTest
         );
         /* END: Use Case */
 
-        $childCountAfter = $locationService->getLocationChildCount( $locationService->loadLocation( $demoDesignLocationId ) );
+        $childCountAfter = $locationService->getLocationChildCount($locationService->loadLocation($demoDesignLocationId));
 
-        $this->assertEquals( $childCountBefore + 1, $childCountAfter );
+        $this->assertEquals($childCountBefore + 1, $childCountAfter);
     }
 
     /**
      * Test for the copySubtree() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCopySubtree
@@ -1629,7 +1525,7 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $communityLocationId = $this->generateId( 'location', 5 );
+        $communityLocationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
         // $communityLocationId is the ID of the "Community" page location in
         // an eZ Publish demo installation
@@ -1638,11 +1534,11 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Load location to copy
-        $locationToCopy = $locationService->loadLocation( $communityLocationId );
+        $locationToCopy = $locationService->loadLocation($communityLocationId);
 
         // Use a child as new parent
-        $childLocations = $locationService->loadLocationChildren( $locationToCopy )->locations;
-        $newParentLocation = end( $childLocations );
+        $childLocations = $locationService->loadLocationChildren($locationToCopy)->locations;
+        $newParentLocation = end($childLocations);
 
         // This call will fail with an "InvalidArgumentException", because the
         // new parent is a child location of the subtree to copy.
@@ -1656,7 +1552,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the moveSubtree() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
@@ -1664,8 +1559,8 @@ class LocationServiceTest extends BaseTest
     {
         $repository = $this->getRepository();
 
-        $mediaLocationId = $this->generateId( 'location', 43 );
-        $demoDesignLocationId = $this->generateId( 'location', 56 );
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
         /* BEGIN: Use Case */
         // $mediaLocationId is the ID of the "Media" page location in
         // an eZ Publish demo installation
@@ -1677,10 +1572,10 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Load location to move
-        $locationToMove = $locationService->loadLocation( $mediaLocationId );
+        $locationToMove = $locationService->loadLocation($mediaLocationId);
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation( $demoDesignLocationId );
+        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
 
         // Move location from "Home" to "Demo Design"
         $locationService->moveSubtree(
@@ -1689,14 +1584,14 @@ class LocationServiceTest extends BaseTest
         );
 
         // Load moved location
-        $movedLocation = $locationService->loadLocation( $mediaLocationId );
+        $movedLocation = $locationService->loadLocation($mediaLocationId);
         /* END: Use Case */
 
         $this->assertPropertiesCorrect(
             array(
                 'depth' => $newParentLocation->depth + 1,
                 'parentLocationId' => $newParentLocation->id,
-                'pathString' => "{$newParentLocation->pathString}" . $this->parseId( 'location', $movedLocation->id ) . "/"
+                'pathString' => "{$newParentLocation->pathString}" . $this->parseId('location', $movedLocation->id) . '/',
             ),
             $movedLocation
         );
@@ -1705,7 +1600,6 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the moveSubtree() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testMoveSubtree
      */
@@ -1714,23 +1608,22 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
-        $locationToMove = $locationService->loadLocation( $this->generateId( 'location', 43 ) );
-        $newParentLocation = $locationService->loadLocation( $this->generateId( 'location', 56 ) );
+        $locationToMove = $locationService->loadLocation($this->generateId('location', 43));
+        $newParentLocation = $locationService->loadLocation($this->generateId('location', 56));
 
         // Load Subtree properties before move
-        $expected = $this->loadSubtreeProperties( $locationToMove );
-        foreach ( $expected as $id => $properties )
-        {
+        $expected = $this->loadSubtreeProperties($locationToMove);
+        foreach ($expected as $id => $properties) {
             $expected[$id]['depth'] = $properties['depth'] + 2;
             $expected[$id]['pathString'] = str_replace(
                 $locationToMove->pathString,
-                "{$newParentLocation->pathString}" . $this->parseId( 'location', $locationToMove->id ) . "/",
+                "{$newParentLocation->pathString}" . $this->parseId('location', $locationToMove->id) . '/',
                 $properties['pathString']
             );
         }
 
-        $mediaLocationId = $this->generateId( 'location', 43 );
-        $demoDesignLocationId = $this->generateId( 'location', 56 );
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
         /* BEGIN: Use Case */
         // $mediaLocationId is the ID of the "Media" page location in
         // an eZ Publish demo installation
@@ -1742,10 +1635,10 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Load location to move
-        $locationToMove = $locationService->loadLocation( $mediaLocationId );
+        $locationToMove = $locationService->loadLocation($mediaLocationId);
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation( $demoDesignLocationId );
+        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
 
         // Move location from "Home" to "Demo Design"
         $locationService->moveSubtree(
@@ -1754,19 +1647,18 @@ class LocationServiceTest extends BaseTest
         );
 
         // Load moved location
-        $movedLocation = $locationService->loadLocation( $mediaLocationId );
+        $movedLocation = $locationService->loadLocation($mediaLocationId);
         /* END: Use Case */
 
         // Load Subtree properties after move
-        $actual = $this->loadSubtreeProperties( $movedLocation );
+        $actual = $this->loadSubtreeProperties($movedLocation);
 
-        $this->assertEquals( $expected, $actual );
+        $this->assertEquals($expected, $actual);
     }
 
     /**
      * Test for the moveSubtree() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testMoveSubtree
      */
@@ -1775,14 +1667,14 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
-        $newParentLocation = $locationService->loadLocation( $this->generateId( 'location', 56 ) );
+        $newParentLocation = $locationService->loadLocation($this->generateId('location', 56));
 
         // Load expected properties before move
-        $expected = $this->loadLocationProperties( $newParentLocation );
-        $childCountBefore = $locationService->getLocationChildCount( $newParentLocation );
+        $expected = $this->loadLocationProperties($newParentLocation);
+        $childCountBefore = $locationService->getLocationChildCount($newParentLocation);
 
-        $mediaLocationId = $this->generateId( 'location', 43 );
-        $demoDesignLocationId = $this->generateId( 'location', 56 );
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
         /* BEGIN: Use Case */
         // $mediaLocationId is the ID of the "Media" page location in
         // an eZ Publish demo installation
@@ -1794,10 +1686,10 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Load location to move
-        $locationToMove = $locationService->loadLocation( $mediaLocationId );
+        $locationToMove = $locationService->loadLocation($mediaLocationId);
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation( $demoDesignLocationId );
+        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
 
         // Move location from "Home" to "Demo Design"
         $locationService->moveSubtree(
@@ -1806,24 +1698,23 @@ class LocationServiceTest extends BaseTest
         );
 
         // Load moved location
-        $movedLocation = $locationService->loadLocation( $mediaLocationId );
+        $movedLocation = $locationService->loadLocation($mediaLocationId);
 
         // Reload new parent location
-        $newParentLocation = $locationService->loadLocation( $demoDesignLocationId );
+        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
         /* END: Use Case */
 
         // Load Subtree properties after move
-        $actual = $this->loadLocationProperties( $newParentLocation );
-        $childCountAfter = $locationService->getLocationChildCount( $newParentLocation );
+        $actual = $this->loadLocationProperties($newParentLocation);
+        $childCountAfter = $locationService->getLocationChildCount($newParentLocation);
 
-        $this->assertEquals( $expected, $actual );
-        $this->assertEquals( $childCountBefore + 1, $childCountAfter );
+        $this->assertEquals($expected, $actual);
+        $this->assertEquals($childCountBefore + 1, $childCountAfter);
     }
 
     /**
      * Test for the moveSubtree() method.
      *
-     * @return void
      * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testMoveSubtree
      */
@@ -1832,14 +1723,14 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
-        $oldParentLocation = $locationService->loadLocation( $this->generateId( 'location', 1 ) );
+        $oldParentLocation = $locationService->loadLocation($this->generateId('location', 1));
 
         // Load expected properties before move
-        $expected = $this->loadLocationProperties( $oldParentLocation );
-        $childCountBefore = $locationService->getLocationChildCount( $oldParentLocation );
+        $expected = $this->loadLocationProperties($oldParentLocation);
+        $childCountBefore = $locationService->getLocationChildCount($oldParentLocation);
 
-        $mediaLocationId = $this->generateId( 'location', 43 );
-        $demoDesignLocationId = $this->generateId( 'location', 56 );
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
         /* BEGIN: Use Case */
         // $mediaLocationId is the ID of the "Media" page location in
         // an eZ Publish demo installation
@@ -1851,13 +1742,13 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Load location to move
-        $locationToMove = $locationService->loadLocation( $mediaLocationId );
+        $locationToMove = $locationService->loadLocation($mediaLocationId);
 
         // Get the location id of the old parent
         $oldParentLocationId = $locationToMove->parentLocationId;
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation( $demoDesignLocationId );
+        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
 
         // Move location from "Home" to "Demo Design"
         $locationService->moveSubtree(
@@ -1866,29 +1757,28 @@ class LocationServiceTest extends BaseTest
         );
 
         // Reload old parent location
-        $oldParentLocation = $locationService->loadLocation( $oldParentLocationId );
+        $oldParentLocation = $locationService->loadLocation($oldParentLocationId);
         /* END: Use Case */
 
         // Load Subtree properties after move
-        $actual = $this->loadLocationProperties( $oldParentLocation );
-        $childCountAfter = $locationService->getLocationChildCount( $oldParentLocation );
+        $actual = $this->loadLocationProperties($oldParentLocation);
+        $childCountAfter = $locationService->getLocationChildCount($oldParentLocation);
 
-        $this->assertEquals( $expected, $actual );
-        $this->assertEquals( $childCountBefore - 1, $childCountAfter );
+        $this->assertEquals($expected, $actual);
+        $this->assertEquals($childCountBefore - 1, $childCountAfter);
     }
 
     /**
      * Test for the moveSubtree() method.
      *
-     * @return void
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testMoveSubtree
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testMoveSubtreeThrowsInvalidArgumentException()
     {
         $repository = $this->getRepository();
-        $mediaLocationId = $this->generateId( 'location', 43 );
-        $multimediaLocationId = $this->generateId( 'location', 53 );
+        $mediaLocationId = $this->generateId('location', 43);
+        $multimediaLocationId = $this->generateId('location', 53);
 
         /* BEGIN: Use Case */
         // $mediaLocationId is the ID of the "Media" page location in
@@ -1901,10 +1791,10 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
 
         // Load location to move
-        $locationToMove = $locationService->loadLocation( $mediaLocationId );
+        $locationToMove = $locationService->loadLocation($mediaLocationId);
 
         // Load new parent location
-        $newParentLocation = $locationService->loadLocation( $multimediaLocationId );
+        $newParentLocation = $locationService->loadLocation($multimediaLocationId);
 
         // Throws an exception because new parent location is placed below location to move
         $locationService->moveSubtree(
@@ -1915,22 +1805,21 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
-     * Loads properties from all locations in the $location's subtree
+     * Loads properties from all locations in the $location's subtree.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param array $properties
      *
      * @return array
      */
-    private function loadSubtreeProperties( Location $location, array $properties = array() )
+    private function loadSubtreeProperties(Location $location, array $properties = array())
     {
         $locationService = $this->getRepository()->getLocationService();
 
-        foreach ( $locationService->loadLocationChildren( $location )->locations as $childLocation )
-        {
-            $properties[] = $this->loadLocationProperties( $childLocation );
+        foreach ($locationService->loadLocationChildren($location)->locations as $childLocation) {
+            $properties[] = $this->loadLocationProperties($childLocation);
 
-            $properties = $this->loadSubtreeProperties( $childLocation, $properties );
+            $properties = $this->loadSubtreeProperties($childLocation, $properties);
         }
 
         return $properties;
@@ -1944,7 +1833,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return array
      */
-    private function loadLocationProperties( Location $location, array $overwrite = array() )
+    private function loadLocationProperties(Location $location, array $overwrite = array())
     {
         return array_merge(
             array(
@@ -1957,7 +1846,7 @@ class LocationServiceTest extends BaseTest
                 'invisible' => $location->invisible,
                 'priority' => $location->priority,
                 'sortField' => $location->sortField,
-                'sortOrder' => $location->sortOrder
+                'sortOrder' => $location->sortOrder,
             ),
             $overwrite
         );

@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Content Search handler class
+ * File containing the Content Search handler class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,39 +15,38 @@ use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
- * Visits the LogicalAnd criterion
+ * Visits the LogicalAnd criterion.
  */
 class LogicalAnd extends CriterionVisitor
 {
     /**
-     * CHeck if visitor is applicable to current criterion
+     * CHeck if visitor is applicable to current criterion.
      *
      * @param Criterion $criterion
      *
-     * @return boolean
+     * @return bool
      */
-    public function canVisit( Criterion $criterion )
+    public function canVisit(Criterion $criterion)
     {
         return $criterion instanceof Criterion\LogicalAnd;
     }
 
     /**
-     * Map field value to a proper Solr representation
+     * Map field value to a proper Solr representation.
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit(Criterion $criterion, CriterionVisitor $subVisitor = null)
     {
         return '(' .
             implode(
                 ' AND ',
                 array_map(
-                    function ( $value ) use ( $subVisitor )
-                    {
-                        return $subVisitor->visit( $value );
+                    function ($value) use ($subVisitor) {
+                        return $subVisitor->visit($value);
                     },
                     $criterion->criteria
                 )
@@ -53,4 +54,3 @@ class LogicalAnd extends CriterionVisitor
             ')';
     }
 }
-

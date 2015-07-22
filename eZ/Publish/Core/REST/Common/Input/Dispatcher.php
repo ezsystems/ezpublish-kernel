@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the Input Dispatcher class
+ * File containing the Input Dispatcher class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -13,12 +15,12 @@ use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Exceptions;
 
 /**
- * Input dispatcher
+ * Input dispatcher.
  */
 class Dispatcher
 {
     /**
-     * Array of handlers
+     * Array of handlers.
      *
      * Structure:
      *
@@ -39,79 +41,71 @@ class Dispatcher
     protected $parsingDispatcher;
 
     /**
-     * Construct from optional parsers array
+     * Construct from optional parsers array.
      *
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      * @param array $handlers
      */
-    public function __construct( ParsingDispatcher $parsingDispatcher, array $handlers = array() )
+    public function __construct(ParsingDispatcher $parsingDispatcher, array $handlers = array())
     {
         $this->parsingDispatcher = $parsingDispatcher;
-        foreach ( $handlers as $type => $handler )
-        {
-            $this->addHandler( $type, $handler );
+        foreach ($handlers as $type => $handler) {
+            $this->addHandler($type, $handler);
         }
     }
 
     /**
-     * Adds another handler for the given Content Type
+     * Adds another handler for the given Content Type.
      *
      * @param string $type
      * @param \eZ\Publish\Core\REST\Common\Input\Handler $handler
      */
-    public function addHandler( $type, Handler $handler )
+    public function addHandler($type, Handler $handler)
     {
         $this->handlers[$type] = $handler;
     }
 
     /**
-     * Parse provided request
+     * Parse provided request.
      *
      * @param \eZ\Publish\Core\REST\Common\Message $message
      *
      * @return mixed
      */
-    public function parse( Message $message )
+    public function parse(Message $message)
     {
-        if ( !isset( $message->headers['Content-Type'] ) )
-        {
-            throw new Exceptions\Parser( 'Missing Content-Type header in message.' );
+        if (!isset($message->headers['Content-Type'])) {
+            throw new Exceptions\Parser('Missing Content-Type header in message.');
         }
 
-        $mediaTypeParts = explode( ';', $message->headers['Content-Type'] );
-        $contentTypeParts = explode( '+', $mediaTypeParts[0] );
-        if ( count( $contentTypeParts ) !== 2 )
-        {
+        $mediaTypeParts = explode(';', $message->headers['Content-Type']);
+        $contentTypeParts = explode('+', $mediaTypeParts[0]);
+        if (count($contentTypeParts) !== 2) {
             // TODO expose default format
-            $contentTypeParts[1] = "xml";
+            $contentTypeParts[1] = 'xml';
         }
 
-        $media  = $contentTypeParts[0];
+        $media = $contentTypeParts[0];
         $format = $contentTypeParts[1];
 
-        if ( !isset( $this->handlers[$format] ) )
-        {
-            throw new Exceptions\Parser( "Unknown format specification: '{$format}'." );
+        if (!isset($this->handlers[$format])) {
+            throw new Exceptions\Parser("Unknown format specification: '{$format}'.");
         }
 
-        $rawArray = $this->handlers[$format]->convert( $message->body );
+        $rawArray = $this->handlers[$format]->convert($message->body);
 
         // Only 1 XML root node
-        $rootNodeArray = reset( $rawArray );
+        $rootNodeArray = reset($rawArray);
 
         // @todo: This needs to be refactored in order to make the called URL
         // available to parsers in the server in a sane way
-        if ( isset( $message->headers['Url'] ) )
-        {
+        if (isset($message->headers['Url'])) {
             $rootNodeArray['__url'] = $message->headers['Url'];
         }
-        if ( isset( $message->headers['__publish'] ) )
-        {
+        if (isset($message->headers['__publish'])) {
             $rootNodeArray['__publish'] = $message->headers['__publish'];
         }
 
-        return $this->parsingDispatcher->parse(
-            $rootNodeArray, $media
-        );
+        return $this->parsingDispatcher->parse($rootNodeArray, $media);
     }
 }

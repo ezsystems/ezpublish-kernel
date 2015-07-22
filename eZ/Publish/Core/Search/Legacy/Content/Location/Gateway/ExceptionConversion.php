@@ -1,15 +1,16 @@
 <?php
+
 /**
- * File containing the Location Gateway class
+ * File containing the Location Gateway class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\Search\Legacy\Content\Location\Gateway;
 
-use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway;
 use Doctrine\DBAL\DBALException;
@@ -22,18 +23,18 @@ use RuntimeException;
 class ExceptionConversion extends Gateway
 {
     /**
-     * The wrapped gateway
+     * The wrapped gateway.
      *
      * @var Gateway
      */
     protected $innerGateway;
 
     /**
-     * Creates a new exception conversion gateway around $innerGateway
+     * Creates a new exception conversion gateway around $innerGateway.
      *
      * @param Gateway $innerGateway
      */
-    public function __construct( Gateway $innerGateway )
+    public function __construct(Gateway $innerGateway)
     {
         $this->innerGateway = $innerGateway;
     }
@@ -51,19 +52,14 @@ class ExceptionConversion extends Gateway
      *
      * @return mixed[][]
      */
-    public function find( Criterion $criterion, $offset = 0, $limit = null, array $sortClauses = null, $doCount = true )
+    public function find(Criterion $criterion, $offset = 0, $limit = null, array $sortClauses = null, $doCount = true)
     {
-        try
-        {
-            return $this->innerGateway->find( $criterion, $offset, $limit, $sortClauses, $doCount );
-        }
-        catch ( DBALException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
+        try {
+            return $this->innerGateway->find($criterion, $offset, $limit, $sortClauses, $doCount);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
         }
     }
 }

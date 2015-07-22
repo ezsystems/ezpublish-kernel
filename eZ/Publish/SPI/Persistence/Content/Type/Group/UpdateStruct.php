@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the UpdateStruct class
+ * File containing the UpdateStruct class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -16,47 +18,48 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class UpdateStruct extends ValueObject
 {
     /**
-     * Primary key
+     * Primary key.
      *
      * @var mixed
      */
     public $id;
 
     /**
-     * Name
+     * Name.
      *
      * @since 5.0
+     *
      * @var string[]
      */
     public $name = array();
 
     /**
-     * Description
+     * Description.
      *
      * @since 5.0
+     *
      * @var string[]
      */
     public $description = array();
 
     /**
-     * Readable string identifier of a group
+     * Readable string identifier of a group.
      *
      * @var string
      */
     public $identifier;
 
     /**
-     * Modified date (timestamp)
+     * Modified date (timestamp).
      *
      * @var int
      */
     public $modified;
 
     /**
-     * Modifier user id
+     * Modifier user id.
      *
      * @var mixed
-     *
      */
     public $modifierId;
 }

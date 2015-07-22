@@ -1,10 +1,12 @@
 <?php
+
 /**
- * This file is part of the eZ Publish Kernel package
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace eZ\Publish\Core\IO\IOMetadataHandler;
 
 use DateTime;
@@ -20,7 +22,7 @@ class Flysystem implements IOMetadataHandler
     /** @var FilesystemInterface */
     private $filesystem;
 
-    public function __construct( FilesystemInterface $filesystem )
+    public function __construct(FilesystemInterface $filesystem)
     {
         $this->filesystem = $filesystem;
     }
@@ -30,9 +32,9 @@ class Flysystem implements IOMetadataHandler
      *
      * @throws BinaryFileNotFoundException
      */
-    public function create( SPIBinaryFileCreateStruct $spiBinaryFileCreateStruct )
+    public function create(SPIBinaryFileCreateStruct $spiBinaryFileCreateStruct)
     {
-        return $this->load( $spiBinaryFileCreateStruct->id );
+        return $this->load($spiBinaryFileCreateStruct->id);
     }
 
     /**
@@ -40,43 +42,40 @@ class Flysystem implements IOMetadataHandler
      *
      * @param $spiBinaryFileId
      */
-    public function delete( $spiBinaryFileId )
+    public function delete($spiBinaryFileId)
     {
     }
 
-    public function load( $spiBinaryFileId )
+    public function load($spiBinaryFileId)
     {
-        try
-        {
-            $info = $this->filesystem->getMetadata( $spiBinaryFileId );
-        }
-        catch ( FileNotFoundException $e )
-        {
-            throw new BinaryFileNotFoundException( $spiBinaryFileId );
+        try {
+            $info = $this->filesystem->getMetadata($spiBinaryFileId);
+        } catch (FileNotFoundException $e) {
+            throw new BinaryFileNotFoundException($spiBinaryFileId);
         }
 
         $spiBinaryFile = new SPIBinaryFile();
         $spiBinaryFile->id = $spiBinaryFileId;
-        $spiBinaryFile->mtime = new DateTime( '@' . $info['timestamp'] );
+        $spiBinaryFile->mtime = new DateTime('@' . $info['timestamp']);
         $spiBinaryFile->size = $info['size'];
 
         return $spiBinaryFile;
     }
 
-    public function exists( $spiBinaryFileId )
+    public function exists($spiBinaryFileId)
     {
-        return $this->filesystem->has( $spiBinaryFileId );
+        return $this->filesystem->has($spiBinaryFileId);
     }
 
-    public function getMimeType( $spiBinaryFileId )
+    public function getMimeType($spiBinaryFileId)
     {
-        return $this->filesystem->getMimetype( $spiBinaryFileId );
+        return $this->filesystem->getMimetype($spiBinaryFileId);
     }
 
     /**
-     * Does nothing, as the binarydata handler takes care of it
+     * Does nothing, as the binarydata handler takes care of it.
      */
-    public function deleteDirectory( $spiPath )
+    public function deleteDirectory($spiPath)
     {
     }
 }

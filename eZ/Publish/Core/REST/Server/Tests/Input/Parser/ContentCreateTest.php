@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing a test class
+ * File containing a test class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -18,40 +20,40 @@ use eZ\Publish\Core\REST\Server\Input\Parser\ContentCreate;
 class ContentCreateTest extends BaseTest
 {
     /**
-     * Tests the ContentCreate parser
+     * Tests the ContentCreate parser.
      */
     public function testParse()
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/13'
+                '_href' => '/content/types/13',
             ),
             'mainLanguageCode' => 'eng-US',
             'LocationCreate' => array(),
             'Section' => array(
-                '_href' => '/content/sections/4'
+                '_href' => '/content/sections/4',
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
             'User' => array(
-                '_href' => '/user/users/14'
+                '_href' => '/user/users/14',
             ),
             'fields' => array(
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'subject',
-                        'fieldValue' => array()
+                        'fieldValue' => array(),
                     ),
                     array(
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array()
-                    )
-                )
-            )
+                        'fieldValue' => array(),
+                    ),
+                ),
+            ),
         );
 
         $contentCreate = $this->getParser();
-        $result = $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $result = $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\Core\\REST\\Server\\Values\\RestContentCreateStruct',
@@ -113,8 +115,7 @@ class ContentCreateTest extends BaseTest
             'ownerId not created correctly'
         );
 
-        foreach ( $result->contentCreateStruct->fields as $field )
-        {
+        foreach ($result->contentCreateStruct->fields as $field) {
             $this->assertEquals(
                 'foo',
                 $field->value,
@@ -124,7 +125,7 @@ class ContentCreateTest extends BaseTest
     }
 
     /**
-     * Test ContentCreate parser throwing exception on missing LocationCreate
+     * Test ContentCreate parser throwing exception on missing LocationCreate.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'LocationCreate' element for ContentCreate.
@@ -133,37 +134,37 @@ class ContentCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/13'
+                '_href' => '/content/types/13',
             ),
             'mainLanguageCode' => 'eng-US',
             'Section' => array(
-                '_href' => '/content/sections/4'
+                '_href' => '/content/sections/4',
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
             'User' => array(
-                '_href' => '/user/users/14'
+                '_href' => '/user/users/14',
             ),
             'fields' => array(
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'subject',
-                        'fieldValue' => array()
+                        'fieldValue' => array(),
                     ),
                     array(
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array()
-                    )
-                )
-            )
+                        'fieldValue' => array(),
+                    ),
+                ),
+            ),
         );
 
         $contentCreate = $this->getParser();
-        $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentCreate parser throwing exception on missing ContentType
+     * Test ContentCreate parser throwing exception on missing ContentType.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'ContentType' element for ContentCreate.
@@ -174,33 +175,33 @@ class ContentCreateTest extends BaseTest
             'mainLanguageCode' => 'eng-US',
             'LocationCreate' => array(),
             'Section' => array(
-                '_href' => '/content/sections/4'
+                '_href' => '/content/sections/4',
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
             'User' => array(
-                '_href' => '/user/users/14'
+                '_href' => '/user/users/14',
             ),
             'fields' => array(
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'subject',
-                        'fieldValue' => array()
+                        'fieldValue' => array(),
                     ),
                     array(
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array()
-                    )
-                )
-            )
+                        'fieldValue' => array(),
+                    ),
+                ),
+            ),
         );
 
         $contentCreate = $this->getParser();
-        $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentCreate parser throwing exception on invalid ContentType
+     * Test ContentCreate parser throwing exception on invalid ContentType.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for ContentType element in ContentCreate.
@@ -212,33 +213,33 @@ class ContentCreateTest extends BaseTest
             'mainLanguageCode' => 'eng-US',
             'LocationCreate' => array(),
             'Section' => array(
-                '_href' => '/content/sections/4'
+                '_href' => '/content/sections/4',
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
             'User' => array(
-                '_href' => '/user/users/14'
+                '_href' => '/user/users/14',
             ),
             'fields' => array(
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'subject',
-                        'fieldValue' => array()
+                        'fieldValue' => array(),
                     ),
                     array(
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array()
-                    )
-                )
-            )
+                        'fieldValue' => array(),
+                    ),
+                ),
+            ),
         );
 
         $contentCreate = $this->getParser();
-        $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentCreate parser throwing exception on missing mainLanguageCode
+     * Test ContentCreate parser throwing exception on missing mainLanguageCode.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'mainLanguageCode' element for ContentCreate.
@@ -247,37 +248,37 @@ class ContentCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/13'
+                '_href' => '/content/types/13',
             ),
             'LocationCreate' => array(),
             'Section' => array(
-                '_href' => '/content/sections/4'
+                '_href' => '/content/sections/4',
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
             'User' => array(
-                '_href' => '/user/users/14'
+                '_href' => '/user/users/14',
             ),
             'fields' => array(
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'subject',
-                        'fieldValue' => array()
+                        'fieldValue' => array(),
                     ),
                     array(
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array()
-                    )
-                )
-            )
+                        'fieldValue' => array(),
+                    ),
+                ),
+            ),
         );
 
         $contentCreate = $this->getParser();
-        $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentCreate parser throwing exception on invalid Section
+     * Test ContentCreate parser throwing exception on invalid Section.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for Section element in ContentCreate.
@@ -286,7 +287,7 @@ class ContentCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/13'
+                '_href' => '/content/types/13',
             ),
             'mainLanguageCode' => 'eng-US',
             'LocationCreate' => array(),
@@ -294,28 +295,28 @@ class ContentCreateTest extends BaseTest
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
             'User' => array(
-                '_href' => '/user/users/14'
+                '_href' => '/user/users/14',
             ),
             'fields' => array(
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'subject',
-                        'fieldValue' => array()
+                        'fieldValue' => array(),
                     ),
                     array(
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array()
-                    )
-                )
-            )
+                        'fieldValue' => array(),
+                    ),
+                ),
+            ),
         );
 
         $contentCreate = $this->getParser();
-        $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentCreate parser throwing exception on invalid User
+     * Test ContentCreate parser throwing exception on invalid User.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for User element in ContentCreate.
@@ -324,12 +325,12 @@ class ContentCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/13'
+                '_href' => '/content/types/13',
             ),
             'mainLanguageCode' => 'eng-US',
             'LocationCreate' => array(),
             'Section' => array(
-                '_href' => '/content/sections/4'
+                '_href' => '/content/sections/4',
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
@@ -338,22 +339,22 @@ class ContentCreateTest extends BaseTest
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'subject',
-                        'fieldValue' => array()
+                        'fieldValue' => array(),
                     ),
                     array(
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array()
-                    )
-                )
-            )
+                        'fieldValue' => array(),
+                    ),
+                ),
+            ),
         );
 
         $contentCreate = $this->getParser();
-        $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentCreate parser throwing exception on invalid fields data
+     * Test ContentCreate parser throwing exception on invalid fields data.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'fields' element for ContentCreate.
@@ -362,26 +363,26 @@ class ContentCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/13'
+                '_href' => '/content/types/13',
             ),
             'mainLanguageCode' => 'eng-US',
             'LocationCreate' => array(),
             'Section' => array(
-                '_href' => '/content/sections/4'
+                '_href' => '/content/sections/4',
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
             'User' => array(
-                '_href' => '/user/users/14'
-            )
+                '_href' => '/user/users/14',
+            ),
         );
 
         $contentCreate = $this->getParser();
-        $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentCreate parser throwing exception on missing field definition identifier
+     * Test ContentCreate parser throwing exception on missing field definition identifier.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldDefinitionIdentifier' element in field data for ContentCreate.
@@ -390,37 +391,37 @@ class ContentCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/13'
+                '_href' => '/content/types/13',
             ),
             'mainLanguageCode' => 'eng-US',
             'LocationCreate' => array(),
             'Section' => array(
-                '_href' => '/content/sections/4'
+                '_href' => '/content/sections/4',
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
             'User' => array(
-                '_href' => '/user/users/14'
+                '_href' => '/user/users/14',
             ),
             'fields' => array(
                 'field' => array(
                     array(
-                        'fieldValue' => array()
+                        'fieldValue' => array(),
                     ),
                     array(
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array()
-                    )
-                )
-            )
+                        'fieldValue' => array(),
+                    ),
+                ),
+            ),
         );
 
         $contentCreate = $this->getParser();
-        $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentCreate parser throwing exception on invalid field definition identifier
+     * Test ContentCreate parser throwing exception on invalid field definition identifier.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage 'unknown' is invalid field definition identifier for 'some_class' content type in ContentCreate.
@@ -429,38 +430,38 @@ class ContentCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/13'
+                '_href' => '/content/types/13',
             ),
             'mainLanguageCode' => 'eng-US',
             'LocationCreate' => array(),
             'Section' => array(
-                '_href' => '/content/sections/4'
+                '_href' => '/content/sections/4',
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
             'User' => array(
-                '_href' => '/user/users/14'
+                '_href' => '/user/users/14',
             ),
             'fields' => array(
                 'field' => array(
                     array(
                         'fieldDefinitionIdentifier' => 'unknown',
-                        'fieldValue' => array()
+                        'fieldValue' => array(),
                     ),
                     array(
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array()
-                    )
-                )
-            )
+                        'fieldValue' => array(),
+                    ),
+                ),
+            ),
         );
 
         $contentCreate = $this->getParser();
-        $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Test ContentCreate parser throwing exception on missing field value
+     * Test ContentCreate parser throwing exception on missing field value.
      *
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldValue' element for 'subject' identifier in ContentCreate.
@@ -469,37 +470,37 @@ class ContentCreateTest extends BaseTest
     {
         $inputArray = array(
             'ContentType' => array(
-                '_href' => '/content/types/13'
+                '_href' => '/content/types/13',
             ),
             'mainLanguageCode' => 'eng-US',
             'LocationCreate' => array(),
             'Section' => array(
-                '_href' => '/content/sections/4'
+                '_href' => '/content/sections/4',
             ),
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
             'User' => array(
-                '_href' => '/user/users/14'
+                '_href' => '/user/users/14',
             ),
             'fields' => array(
                 'field' => array(
                     array(
-                        'fieldDefinitionIdentifier' => 'subject'
+                        'fieldDefinitionIdentifier' => 'subject',
                     ),
                     array(
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array()
-                    )
-                )
-            )
+                        'fieldValue' => array(),
+                    ),
+                ),
+            ),
         );
 
         $contentCreate = $this->getParser();
-        $contentCreate->parse( $inputArray, $this->getParsingDispatcherMock() );
+        $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
     }
 
     /**
-     * Returns the ContentCreate parser
+     * Returns the ContentCreate parser.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\ContentCreate
      */
@@ -515,7 +516,7 @@ class ContentCreateTest extends BaseTest
     }
 
     /**
-     * Get the field type parser mock object
+     * Get the field type parser mock object.
      *
      * @return \eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
      */
@@ -533,22 +534,22 @@ class ContentCreateTest extends BaseTest
                     array(),
                     '',
                     false
-                )
+                ),
             ),
             '',
             false
         );
 
-        $fieldTypeParserMock->expects( $this->any() )
-            ->method( 'parseValue' )
-            ->with( 'ezstring', array() )
-            ->will( $this->returnValue( 'foo' ) );
+        $fieldTypeParserMock->expects($this->any())
+            ->method('parseValue')
+            ->with('ezstring', array())
+            ->will($this->returnValue('foo'));
 
         return $fieldTypeParserMock;
     }
 
     /**
-     * Returns the LocationCreate parser mock object
+     * Returns the LocationCreate parser mock object.
      *
      * @return \eZ\Publish\Core\REST\Server\Input\Parser\LocationCreate
      */
@@ -562,16 +563,16 @@ class ContentCreateTest extends BaseTest
             false
         );
 
-        $locationCreateParserMock->expects( $this->any() )
-            ->method( 'parse' )
-            ->with( array(), $this->getParsingDispatcherMock() )
-            ->will( $this->returnValue( new LocationCreateStruct() ) );
+        $locationCreateParserMock->expects($this->any())
+            ->method('parse')
+            ->with(array(), $this->getParsingDispatcherMock())
+            ->will($this->returnValue(new LocationCreateStruct()));
 
         return $locationCreateParserMock;
     }
 
     /**
-     * Get the content service mock object
+     * Get the content service mock object.
      *
      * @return \eZ\Publish\API\Repository\ContentService
      */
@@ -586,18 +587,18 @@ class ContentCreateTest extends BaseTest
         );
 
         $contentType = $this->getContentType();
-        $contentServiceMock->expects( $this->any() )
-            ->method( 'newContentCreateStruct' )
+        $contentServiceMock->expects($this->any())
+            ->method('newContentCreateStruct')
             ->with(
-                $this->equalTo( $contentType ),
-                $this->equalTo( 'eng-US' )
+                $this->equalTo($contentType),
+                $this->equalTo('eng-US')
             )
             ->will(
                 $this->returnValue(
                     new ContentCreateStruct(
                         array(
                             'contentType' => $contentType,
-                            'mainLanguageCode' => 'eng-US'
+                            'mainLanguageCode' => 'eng-US',
                         )
                     )
                 )
@@ -607,7 +608,7 @@ class ContentCreateTest extends BaseTest
     }
 
     /**
-     * Get the content type service mock object
+     * Get the content type service mock object.
      *
      * @return \eZ\Publish\API\Repository\ContentTypeService
      */
@@ -621,10 +622,10 @@ class ContentCreateTest extends BaseTest
             false
         );
 
-        $contentTypeServiceMock->expects( $this->any() )
-            ->method( 'loadContentType' )
-            ->with( $this->equalTo( 13 ) )
-            ->will( $this->returnValue( $this->getContentType() ) );
+        $contentTypeServiceMock->expects($this->any())
+            ->method('loadContentType')
+            ->with($this->equalTo(13))
+            ->will($this->returnValue($this->getContentType()));
 
         return $contentTypeServiceMock;
     }
@@ -632,14 +633,14 @@ class ContentCreateTest extends BaseTest
     public function getParseHrefExpectationsMap()
     {
         return array(
-            array( '/content/types/13', 'contentTypeId', 13 ),
-            array( '/content/sections/4', 'sectionId', 4 ),
-            array( '/user/users/14', 'userId', 14 ),
+            array('/content/types/13', 'contentTypeId', 13),
+            array('/content/sections/4', 'sectionId', 4),
+            array('/user/users/14', 'userId', 14),
         );
     }
 
     /**
-     * Get the content type used in ContentCreate parser
+     * Get the content type used in ContentCreate parser.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
@@ -654,17 +655,17 @@ class ContentCreateTest extends BaseTest
                         array(
                             'id' => 42,
                             'identifier' => 'subject',
-                            'fieldTypeIdentifier' => 'ezstring'
+                            'fieldTypeIdentifier' => 'ezstring',
                         )
                     ),
                     new FieldDefinition(
                         array(
                             'id' => 43,
                             'identifier' => 'author',
-                            'fieldTypeIdentifier' => 'ezstring'
+                            'fieldTypeIdentifier' => 'ezstring',
                         )
-                    )
-                )
+                    ),
+                ),
             )
         );
     }

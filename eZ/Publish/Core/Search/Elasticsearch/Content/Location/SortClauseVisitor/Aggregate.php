@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing the SortClauseVisitor\Aggregate class
+ * File containing the SortClauseVisitor\Aggregate class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -14,56 +16,53 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
- * Aggregate sort clause visitor
+ * Aggregate sort clause visitor.
  */
 class Aggregate extends SortClauseVisitor
 {
     /**
-     * Array of available visitors
+     * Array of available visitors.
      *
      * @var \eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor[]
      */
     protected $visitors = array();
 
     /**
-     * Construct from optional visitor array
+     * Construct from optional visitor array.
      *
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor[] $visitors
      */
-    public function __construct( array $visitors = array() )
+    public function __construct(array $visitors = array())
     {
-        foreach ( $visitors as $visitor )
-        {
-            $this->addVisitor( $visitor );
+        foreach ($visitors as $visitor) {
+            $this->addVisitor($visitor);
         }
     }
 
     /**
-     * Adds visitor
+     * Adds visitor.
      *
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor $visitor
-     *
-     * @return void
      */
-    public function addVisitor( SortClauseVisitor $visitor )
+    public function addVisitor(SortClauseVisitor $visitor)
     {
         $this->visitors[] = $visitor;
     }
 
     /**
-     * Check if visitor is applicable to current SortClause
+     * Check if visitor is applicable to current SortClause.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
-     * @return boolean
+     * @return bool
      */
-    public function canVisit( SortClause $sortClause )
+    public function canVisit(SortClause $sortClause)
     {
         return true;
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation
+     * Map field value to a proper Elasticsearch representation.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
@@ -71,18 +70,16 @@ class Aggregate extends SortClauseVisitor
      *
      * @return mixed
      */
-    public function visit( SortClause $sortClause )
+    public function visit(SortClause $sortClause)
     {
-        foreach ( $this->visitors as $visitor )
-        {
-            if ( $visitor->canVisit( $sortClause ) )
-            {
-                return $visitor->visit( $sortClause, $this );
+        foreach ($this->visitors as $visitor) {
+            if ($visitor->canVisit($sortClause)) {
+                return $visitor->visit($sortClause, $this);
             }
         }
 
         throw new NotImplementedException(
-            "No visitor available for: " . get_class( $sortClause )
+            'No visitor available for: ' . get_class($sortClause)
         );
     }
 }

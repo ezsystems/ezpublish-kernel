@@ -1,9 +1,11 @@
 <?php
+
 /**
- * File containing an interface for the database abstractions
+ * File containing an interface for the database abstractions.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
 
@@ -20,9 +22,10 @@ interface DeleteQuery extends Query
      * deleteFrom() returns a pointer to $this.
      *
      * @param string $table
+     *
      * @return \eZ\Publish\Core\Persistence\Database\DeleteQuery
      */
-    public function deleteFrom( $table );
+    public function deleteFrom($table);
 
     /**
      * Adds a where clause with logical expressions to the query.
@@ -40,8 +43,10 @@ interface DeleteQuery extends Query
      * </code>
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
+     *
      * @param string|array(string) $... Either a string with a logical expression name
      * or an array with logical expressions.
+     *
      * @return \eZ\Publish\Core\Persistence\Database\DeleteQuery
      */
     public function where();
