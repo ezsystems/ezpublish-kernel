@@ -160,3 +160,5 @@ services:
         tags:
             - { name: request.param_converter, priority: %ezpublish.param_converter.location.priority%, converter: ez_location_converter }
 
+    ezpublish.query_type.registry:
+        class: BD\Bundle\TestBundle\NamedQueries\QueryTypeRegistry
