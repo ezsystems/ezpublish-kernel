@@ -16,6 +16,7 @@ return Symfony\CS\Config\Config::create()
     ])
     ->finder(
         Symfony\CS\Finder\DefaultFinder::create()
+            ->name('*.php')
             ->in(__DIR__)
             ->exclude([
                 'bin/.travis',
@@ -44,6 +45,7 @@ return Symfony\CS\Config\Config::create()
                 'eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures',
                 'eZ/Publish/Core/REST/Common/Tests/Input/Handler/_fixtures',
                 'eZ/Publish/Core/REST/Common/Tests/Output/Generator/_fixtures',
+                'eZ/Publish/Core/REST/Client',
                 'eZ/Publish/Core/Repository/Tests/Service/Integration/Legacy/_fixtures',
                 'eZ/Publish/Core/Search/Legacy/Tests/_fixtures',
                 'eZ/Publish/SPI/Tests/FieldType/_fixtures',
