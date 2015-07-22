@@ -24,7 +24,7 @@ ezpublish:
     siteaccess:
         # Available siteaccesses
         list:
-            - default
+            - site
         # Siteaccess groups. Use them to group common settings.
         groups:
             site_group: [site]
