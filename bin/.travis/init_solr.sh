@@ -3,7 +3,6 @@
 SOLR_PORT=${SOLR_PORT:-8983}
 SOLR_VERSION=${SOLR_VERSION:-4.10.4}
 DEBUG=${DEBUG:-false}
-SOLR_CONFS="eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
 
 download() {
     FILE="$2.tgz"
