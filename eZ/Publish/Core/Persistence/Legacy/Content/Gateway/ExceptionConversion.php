@@ -691,4 +691,22 @@ class ExceptionConversion extends Gateway
             throw new RuntimeException('Database error', 0, $e);
         }
     }
+
+    /**
+     * Load name data for set of content id's and corresponding version number.
+     *
+     * @param array[] $rows array of hashes with 'id' and 'version' to load names for
+     *
+     * @return array
+     */
+    public function loadVersionedNameData($rows)
+    {
+        try {
+            return $this->innerGateway->loadVersionedNameData($rows);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
 }

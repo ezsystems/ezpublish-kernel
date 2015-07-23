@@ -123,8 +123,25 @@ class TreeHandler
      */
     public function listVersions($contentId)
     {
+        $rows = $this->contentGateway->listVersions($contentId);
+        if (empty($rows)) {
+            return [];
+        }
+
+        $idVersionPairs = array_map(
+            function ($row) use ($contentId) {
+                return [
+                    'id' => $contentId,
+                    'version' => $row['ezcontentobject_version_version'],
+                ];
+            },
+            $rows
+        );
+        $nameRows = $this->contentGateway->loadVersionedNameData($idVersionPairs);
+
         return $this->contentMapper->extractVersionInfoListFromRows(
-            $this->contentGateway->listVersions($contentId)
+            $rows,
+            $nameRows
         );
     }
 

@@ -368,4 +368,13 @@ abstract class Gateway
      * @return int[]
      */
     abstract public function getContentIdsByContentTypeId($contentTypeId);
+
+    /**
+     * Load name data for set of content id's and corresponding version number.
+     *
+     * @param array[] $rows array of hashes with 'id' and 'version' to load names for
+     *
+     * @return array
+     */
+    abstract public function loadVersionedNameData($rows);
 }

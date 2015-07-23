@@ -24,9 +24,7 @@ return array(
     'ezcontentobject_published' => '1033920746',
     'ezcontentobject_status' => '1',
     'ezcontentobject_name' => 'Members',
-    'ezcontentobject_language_mask' => '3',
-    'ezcontentobject_name_name' => 'Guest accounts',
-    'ezcontentobject_name_content_translation' => 'eng-US',
+    'ezcontentobject_language_mask' => '3'
   ),
   1 =>
   array(
@@ -51,8 +49,6 @@ return array(
     'ezcontentobject_published' => '1033920746',
     'ezcontentobject_status' => '1',
     'ezcontentobject_name' => 'Members',
-    'ezcontentobject_language_mask' => '3',
-    'ezcontentobject_name_name' => 'Members',
-    'ezcontentobject_name_content_translation' => 'eng-US',
+    'ezcontentobject_language_mask' => '3'
   ),
 );

@@ -1753,4 +1753,35 @@ class DoctrineDatabase extends Gateway
 
         return $statement->fetchAll(PDO::FETCH_COLUMN);
     }
+
+    /**
+     * Load name data for set of content id's and corresponding version number.
+     *
+     * @param array[] $rows array of hashes with 'id' and 'version' to load names for
+     *
+     * @return array
+     */
+    public function loadVersionedNameData($rows)
+    {
+        $query = $this->queryBuilder->createNamesQuery();
+        $conditions = array();
+        foreach ($rows as $row) {
+            $conditions[] = $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('contentobject_id'),
+                    $query->bindValue($row['id'], null, \PDO::PARAM_INT)
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('content_version'),
+                    $query->bindValue($row['version'], null, \PDO::PARAM_INT)
+                )
+            );
+        }
+
+        $query->where($query->expr->lOr($conditions));
+        $stmt = $query->prepare();
+        $stmt->execute();
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }

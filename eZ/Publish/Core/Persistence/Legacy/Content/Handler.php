@@ -319,7 +319,10 @@ class Handler implements BaseContentHandler
             throw new NotFound('content', "contentId: $id, versionNo: $version");
         }
 
-        $contentObjects = $this->mapper->extractContentFromRows($rows);
+        $contentObjects = $this->mapper->extractContentFromRows(
+            $rows,
+            $this->contentGateway->loadVersionedNameData([['id' => $id, 'version' => $version]])
+        );
         $content = $contentObjects[0];
 
         $this->fieldHandler->loadExternalFieldData($content);
@@ -370,7 +373,10 @@ class Handler implements BaseContentHandler
             throw new NotFound('content', $contentId);
         }
 
-        $versionInfo = $this->mapper->extractVersionInfoListFromRows($rows);
+        $versionInfo = $this->mapper->extractVersionInfoListFromRows(
+            $rows,
+            $this->contentGateway->loadVersionedNameData([['id' => $contentId, 'version' => $versionNo]])
+        );
 
         return reset($versionInfo);
     }
@@ -384,9 +390,23 @@ class Handler implements BaseContentHandler
      */
     public function loadDraftsForUser($userId)
     {
-        return $this->mapper->extractVersionInfoListFromRows(
-            $this->contentGateway->listVersionsForUser($userId, VersionInfo::STATUS_DRAFT)
+        $rows = $this->contentGateway->listVersionsForUser($userId, VersionInfo::STATUS_DRAFT);
+        if (empty($rows)) {
+            return [];
+        }
+
+        $idVersionPairs = array_map(
+            function ($row) {
+                return [
+                    'id' => $row['ezcontentobject_version_contentobject_id'],
+                    'version' => $row['ezcontentobject_version_version'],
+                ];
+            },
+            $rows
         );
+        $nameRows = $this->contentGateway->loadVersionedNameData($idVersionPairs);
+
+        return $this->mapper->extractVersionInfoListFromRows($rows, $nameRows);
     }
 
     /**
