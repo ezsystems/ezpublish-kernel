@@ -11,12 +11,13 @@
 
 namespace eZ\Publish\Core\FieldType\DateAndTime;
 
-use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
-use DateTime;
+use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use DateInterval;
+use DateTime;
 
 class Type extends FieldType
 {
@@ -27,25 +28,25 @@ class Type extends FieldType
           DEFAULT_CURRENT_DATE = 1,
           DEFAULT_CURRENT_DATE_ADJUSTED = 2;
 
-    protected $settingsSchema = array(
-        'useSeconds' => array(
+    protected $settingsSchema = [
+        'useSeconds' => [
             'type' => 'bool',
             'default' => false,
-        ),
+        ],
         // One of the DEFAULT_* class constants
-        'defaultType' => array(
+        'defaultType' => [
             'type' => 'choice',
             'default' => self::DEFAULT_EMPTY,
-        ),
+        ],
         /*
-         * @var \DateInterval
+         * @var DateInterval
          * Used only if defaultValueType is set to DEFAULT_CURRENT_DATE_ADJUSTED
          */
-        'dateInterval' => array(
+        'dateInterval' => [
             'type' => 'dateInterval',
             'default' => null,
-        ),
-    );
+        ],
+    ];
 
     /**
      * Returns the field type identifier for this field type.
@@ -90,7 +91,7 @@ class Type extends FieldType
     /**
      * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
-     * @param string|int|\DateTime|\eZ\Publish\Core\FieldType\DateAndTime\Value $inputValue
+     * @param string|int|DateTime|\eZ\Publish\Core\FieldType\DateAndTime\Value $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\DateAndTime\Value The potentially converted and structurally plausible value.
      */
@@ -104,7 +105,7 @@ class Type extends FieldType
             $inputValue = Value::fromTimestamp($inputValue);
         }
 
-        if ($inputValue instanceof \DateTime) {
+        if ($inputValue instanceof DateTime) {
             $inputValue = new Value($inputValue);
         }
 
@@ -179,16 +180,16 @@ class Type extends FieldType
         }
 
         if ($value->value instanceof DateTime) {
-            return array(
+            return [
                 'timestamp' => $value->value->getTimestamp(),
-                'rfc850' => $value->value->format(\DateTime::RFC850),
-            );
+                'rfc850' => $value->value->format(DateTime::RFC850),
+            ];
         }
 
-        return array(
+        return [
             'timestamp' => 0,
             'rfc850' => null,
-        );
+        ];
     }
 
     /**
@@ -210,7 +211,7 @@ class Type extends FieldType
      */
     public function validateFieldSettings($fieldSettings)
     {
-        $validationErrors = array();
+        $validationErrors = [];
 
         foreach ($fieldSettings as $name => $value) {
             if (isset($this->settingsSchema[$name])) {
@@ -218,53 +219,49 @@ class Type extends FieldType
                     case 'useSeconds':
                         if (!is_bool($value)) {
                             $validationErrors[] = new ValidationError(
-                                "Setting '%setting%' value must be of boolean type",
+                                "Setting 'Use seconds' value must be of boolean type",
                                 null,
-                                array(
-                                    'setting' => $name,
-                                ),
+                                [],
                                 "[$name]"
                             );
                         }
                         break;
                     case 'defaultType':
-                        $definedTypes = array(
+                        $definedTypes = [
                             self::DEFAULT_EMPTY,
                             self::DEFAULT_CURRENT_DATE,
                             self::DEFAULT_CURRENT_DATE_ADJUSTED,
-                        );
+                        ];
                         if (!in_array($value, $definedTypes, true)) {
                             $validationErrors[] = new ValidationError(
-                                "Setting '%setting%' is of unknown type",
+                                "Setting 'Default value' is of unknown type",
                                 null,
-                                array(
-                                    'setting' => $name,
-                                ),
+                                [],
                                 "[$name]"
                             );
                         }
                         break;
                     case 'dateInterval':
                         if (isset($value)) {
-                            if (isset($fieldSettings['defaultType']) &&
-                                $fieldSettings['defaultType'] !== self::DEFAULT_CURRENT_DATE_ADJUSTED) {
+                            if ($value instanceof DateInterval) {
+                                // String conversion of $value, because DateInterval objects cannot be compared directly
+                                if (
+                                    isset($fieldSettings['defaultType'])
+                                    && $fieldSettings['defaultType'] !== self::DEFAULT_CURRENT_DATE_ADJUSTED
+                                    && $value->format('%y%m%d%h%i%s') !== '000000'
+                                ) {
+                                    $validationErrors[] = new ValidationError(
+                                        "Setting 'Current date and time adjusted by' can be used only when setting 'Default value' is set to 'Adjusted current datetime'",
+                                        null,
+                                        [],
+                                        "[$name]"
+                                    );
+                                }
+                            } else {
                                 $validationErrors[] = new ValidationError(
-                                    "Setting '%setting%' can be used only when setting '%defaultType%' is set to '%DEFAULT_CURRENT_DATE_ADJUSTED%'",
+                                    "Setting 'Current date and time adjusted by' value must be an instance of 'DateInterval' class",
                                     null,
-                                    array(
-                                        'setting' => $name,
-                                        'defaultType' => 'defaultType',
-                                        'DEFAULT_CURRENT_DATE_ADJUSTED' => 'DEFAULT_CURRENT_DATE_ADJUSTED',
-                                    ),
-                                    "[$name]"
-                                );
-                            } elseif (!($value instanceof \DateInterval)) {
-                                $validationErrors[] = new ValidationError(
-                                    "Setting '%setting%' value must be an instance of 'DateInterval' class",
-                                    null,
-                                    array(
-                                        'setting' => $name,
-                                    ),
+                                    [],
                                     "[$name]"
                                 );
                             }
@@ -275,9 +272,7 @@ class Type extends FieldType
                 $validationErrors[] = new ValidationError(
                     "Setting '%setting%' is unknown",
                     null,
-                    array(
-                        'setting' => $name,
-                    ),
+                    ['setting' => $name],
                     "[$name]"
                 );
             }
@@ -329,7 +324,7 @@ class Type extends FieldType
         $fieldSettings = parent::fieldSettingsFromHash($fieldSettingsHash);
 
         if (isset($fieldSettings['dateInterval'])) {
-            $fieldSettings['dateInterval'] = new \DateInterval($fieldSettings['dateInterval']);
+            $fieldSettings['dateInterval'] = new DateInterval($fieldSettings['dateInterval']);
         }
 
         return $fieldSettings;
