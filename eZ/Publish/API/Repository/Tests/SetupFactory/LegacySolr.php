@@ -16,6 +16,8 @@ use eZ\Publish\Core\Base\Container\Compiler;
 use PDO;
 use RuntimeException;
 use eZ\Publish\API\Repository\Tests\SearchServiceTranslationLanguageFallbackTest;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\Config\FileLocator;
 
 /**
  * A Test Factory is used to setup the infrastructure for a tests, based on a
@@ -51,6 +53,12 @@ class LegacySolr extends Legacy
             /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
             $containerBuilder = include $config['container_builder_path'];
 
+            $settingsPath = $installDir . '/vendor/ezsystems/ezplatform-solr-search-engine/src/eZ/Publish/Core/settings/';
+            $solrLoader = new YamlFileLoader($containerBuilder, new FileLocator($settingsPath));
+            $solrLoader->load('search_engines/solr.yml');
+
+            // Note: loading test configuration AFTER Solr engine configuration,
+            // in order to avoid override
             /* @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
             $loader->load($this->getTestConfigurationFile());
 
