@@ -53,7 +53,7 @@ class LegacySolr extends Legacy
             /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
             $containerBuilder = include $config['container_builder_path'];
 
-            $settingsPath = $installDir . '/vendor/ezsystems/ezplatform-solr-search-engine/src/eZ/Publish/Core/settings/';
+            $settingsPath = $installDir . '/vendor/ezsystems/ezplatform-solr-search-engine/lib/eZ/Publish/Core/settings/';
             $solrLoader = new YamlFileLoader($containerBuilder, new FileLocator($settingsPath));
             $solrLoader->load('search_engines/solr.yml');
 
