@@ -288,7 +288,6 @@ class ContentService implements ContentServiceInterface
      */
     public function deleteContent(ContentInfo $contentInfo)
     {
-        $returnValue = $this->service->deleteContent($contentInfo);
         $this->signalDispatcher->emit(
             new DeleteContentSignal(
                 array(
@@ -297,7 +296,7 @@ class ContentService implements ContentServiceInterface
             )
         );
 
-        return $returnValue;
+        return $this->service->deleteContent($contentInfo);
     }
 
     /**
