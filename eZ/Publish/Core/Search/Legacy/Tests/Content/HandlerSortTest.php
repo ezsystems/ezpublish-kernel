@@ -13,10 +13,8 @@ namespace eZ\Publish\Core\Search\Legacy\Tests\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\Core\Search\Legacy\Content;
-use eZ\Publish\SPI\Persistence\Content as ContentObject;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
@@ -151,7 +149,7 @@ class HandlerSortTest extends LanguageAwareTestCase
     {
         $mapperMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
-            array('extractContentFromRows'),
+            array('extractContentInfoFromRows'),
             array(
                 $this->getFieldRegistry(),
                 $this->getLanguageHandler(),
@@ -163,18 +161,16 @@ class HandlerSortTest extends LanguageAwareTestCase
             ->will(
                 $this->returnCallback(
                     function ($rows) {
-                        $contentObjs = array();
+                        $contentInfoObjs = array();
                         foreach ($rows as $row) {
-                            $contentId = (int)$row['ezcontentobject_id'];
-                            if (!isset($contentObjs[$contentId])) {
-                                $contentObjs[$contentId] = new ContentObject();
-                                $contentObjs[$contentId]->versionInfo = new VersionInfo();
-                                $contentObjs[$contentId]->versionInfo->contentInfo = new ContentInfo();
-                                $contentObjs[$contentId]->versionInfo->contentInfo->id = $contentId;
+                            $contentId = (int)$row['id'];
+                            if (!isset($contentInfoObjs[$contentId])) {
+                                $contentInfoObjs[$contentId] = new ContentInfo();
+                                $contentInfoObjs[$contentId]->id = $contentId;
                             }
                         }
 
-                        return array_values($contentObjs);
+                        return array_values($contentInfoObjs);
                     }
                 )
             );
