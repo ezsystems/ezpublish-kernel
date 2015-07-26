@@ -791,35 +791,6 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Loads data for the latest published version of the content identified by
-     * $contentId.
-     *
-     * @param mixed $contentId
-     *
-     * @return array
-     */
-    public function loadLatestPublishedData($contentId)
-    {
-        $query = $this->queryBuilder->createFindQuery();
-        $query->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
-                    $query->bindValue($contentId, null, \PDO::PARAM_INT)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('version', 'ezcontentobject_version'),
-                    $this->dbHandler->quoteColumn('current_version', 'ezcontentobject')
-                )
-            )
-        );
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-    /**
      * @see loadContentInfo(), loadContentInfoByRemoteId()
      *
      * @param string $column

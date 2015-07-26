@@ -1258,23 +1258,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::loadLatestPublishedData
-     */
-    public function testLoadLatestPublishedData()
-    {
-        $this->insertDatabaseFixture(
-            __DIR__ . '/../_fixtures/contentobjects.php'
-        );
-
-        $gateway = $this->getDatabaseGateway();
-
-        $this->assertEquals(
-            $gateway->loadLatestPublishedData(10),
-            $gateway->load(10, 2)
-        );
-    }
-
-    /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::loadRelations
      */
     public function testLoadRelations()
