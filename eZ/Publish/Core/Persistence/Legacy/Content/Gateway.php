@@ -318,16 +318,6 @@ abstract class Gateway
     abstract public function deleteContent($contentId);
 
     /**
-     * Loads data for the latest published version of the content identified by
-     * $contentId.
-     *
-     * @param mixed $contentId
-     *
-     * @return array
-     */
-    abstract public function loadLatestPublishedData($contentId);
-
-    /**
      * Loads data of related to/from $contentId.
      *
      * @param int $contentId

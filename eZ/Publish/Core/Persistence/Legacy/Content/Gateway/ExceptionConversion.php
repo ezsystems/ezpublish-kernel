@@ -596,25 +596,6 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Loads data for the latest published version of the content identified by
-     * $contentId.
-     *
-     * @param mixed $contentId
-     *
-     * @return array
-     */
-    public function loadLatestPublishedData($contentId)
-    {
-        try {
-            return $this->innerGateway->loadLatestPublishedData($contentId);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        }
-    }
-
-    /**
      * Loads data of related to/from $contentId.
      *
      * @param int $contentId
