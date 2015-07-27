@@ -376,41 +376,51 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentInfoFromRow
-     * @dataProvider extractContentInfoFromRowProvider
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentInfoFromRows
+     * @dataProvider extractContentInfoFromRowsProvider
      *
      * @param array $fixtures
      * @param string $prefix
      */
-    public function testExtractContentInfoFromRow(array $fixtures, $prefix)
+    public function testExtractContentInfoFromRows(array $fixtures, $prefix)
     {
         $contentInfoReference = $this->getContentExtractReference()->versionInfo->contentInfo;
         $mapper = new Mapper(
             $this->getValueConverterRegistryMock(),
             $this->getLanguageHandler()
         );
-        self::assertEquals($contentInfoReference, $mapper->extractContentInfoFromRow($fixtures, $prefix));
+        self::assertEquals(
+            [$contentInfoReference],
+            $mapper->extractContentInfoFromRows(
+                $fixtures,
+                $prefix
+            )
+        );
     }
 
     /**
-     * Returns test data for {@link testExtractContentInfoFromRow()}.
+     * Returns test data for {@link testExtractContentInfoFromRows()}.
      *
      * @return array
      */
-    public function extractContentInfoFromRowProvider()
+    public function extractContentInfoFromRowsProvider()
     {
-        $fixtures = $this->getContentExtractFixture();
-        $fixturesNoPrefix = array();
-        foreach ($fixtures[0] as $key => $value) {
-            $keyNoPrefix = $key === 'ezcontentobject_tree_main_node_id'
-                ? $key
-                : str_replace('ezcontentobject_', '', $key);
-            $fixturesNoPrefix[$keyNoPrefix] = $value;
+        $fixtures = $this->getContentInfoExtractFixture();
+        $fixturesNoPrefixList = array();
+        foreach ($fixtures as $fixture) {
+            $fixturesNoPrefix = [];
+            foreach ($fixture as $key => $value) {
+                $keyNoPrefix = strpos($key, 'ezcontentobject_tree') === 0 || strpos($key, 'ezcontentobject_name') === 0
+                    ? $key
+                    : str_replace( 'ezcontentobject_', '', $key );
+                $fixturesNoPrefix[$keyNoPrefix] = $value;
+            }
+            $fixturesNoPrefixList[] = $fixturesNoPrefix;
         }
 
         return array(
-            array($fixtures[0], 'ezcontentobject_'),
-            array($fixturesNoPrefix, ''),
+            array($fixtures, 'ezcontentobject_'),
+            array($fixturesNoPrefixList, ''),
         );
     }
 
@@ -466,6 +476,18 @@ class MapperTest extends LanguageAwareTestCase
     protected function getContentExtractFixture()
     {
         return require __DIR__ . '/_fixtures/extract_content_from_rows.php';
+    }
+
+    /**
+     * Returns a fixture of database rows for content info extraction.
+     *
+     * Fixture is stored in _fixtures/extract_content_info_from_rows.php
+     *
+     * @return array
+     */
+    protected function getContentInfoExtractFixture()
+    {
+        return require __DIR__ . '/_fixtures/extract_content_info_from_rows.php';
     }
 
     /**

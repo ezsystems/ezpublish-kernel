@@ -13,7 +13,7 @@ $content->fields = array();
 
 $versionInfo = new VersionInfo();
 $versionInfo->id = 676;
-$versionInfo->names = array( 'eng-US' => 'Something', 'eng-GB' => 'Something' );
+$versionInfo->names = array( 'eng-US' => 'Something', 'eng-GB' => 'SomethingGB' );
 $versionInfo->versionNo = 2;
 $versionInfo->modificationDate = 1313061404;
 $versionInfo->creatorId = 14;
@@ -34,7 +34,7 @@ $versionInfo->contentInfo->publicationDate = 1313047907;
 $versionInfo->contentInfo->currentVersionNo = 2;
 $versionInfo->contentInfo->isPublished = true;
 $versionInfo->contentInfo->mainLanguageCode = 'eng-US';
-$versionInfo->contentInfo->name = 'Something';
+$versionInfo->contentInfo->names = array( 'eng-US' => 'Something', 'eng-GB' => 'SomethingGB' );
 $versionInfo->contentInfo->mainLocationId = 228;
 
 $content->versionInfo = $versionInfo;

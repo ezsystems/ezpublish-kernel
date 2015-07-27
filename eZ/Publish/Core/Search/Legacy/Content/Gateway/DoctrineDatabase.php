@@ -119,10 +119,6 @@ class DoctrineDatabase extends Gateway
             $query->expr->eq(
                 'ezcontentobject.status',
                 ContentInfo::STATUS_PUBLISHED
-            ),
-            $query->expr->eq(
-                'ezcontentobject_version.status',
-                VersionInfo::STATUS_PUBLISHED
             )
         );
 
@@ -147,9 +143,17 @@ class DoctrineDatabase extends Gateway
             ->select("COUNT( DISTINCT $columnName )")
             ->from($this->handler->quoteTable('ezcontentobject'))
             ->innerJoin(
-                'ezcontentobject_version',
-                'ezcontentobject.id',
-                'ezcontentobject_version.contentobject_id'
+                $this->handler->quoteTable('ezcontentobject_version'),
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->handler->quoteColumn('contentobject_id', 'ezcontentobject_version'),
+                        $this->handler->quoteColumn('id', 'ezcontentobject')
+                    ),
+                    $query->expr->eq(
+                        $this->handler->quoteColumn('version', 'ezcontentobject_version'),
+                        $this->handler->quoteColumn('current_version', 'ezcontentobject')
+                    )
+                )
             );
 
         $query->where(
@@ -176,8 +180,12 @@ class DoctrineDatabase extends Gateway
     protected function getContentInfoList(Criterion $filter, $sort, $offset, $limit, $fieldFilters)
     {
         $query = $this->handler->createSelectQuery();
-        $query->selectDistinct(
+        $query->select(
             'ezcontentobject.*',
+            // Content object names
+            $this->handler->aliasedColumn($query, 'name', 'ezcontentobject_name'),
+            $this->handler->aliasedColumn($query, 'content_translation', 'ezcontentobject_name'),
+            // Main node id (if there is one)
             $this->handler->aliasedColumn($query, 'main_node_id', 'main_tree')
         );
 
@@ -188,9 +196,29 @@ class DoctrineDatabase extends Gateway
         $query->from(
             $this->handler->quoteTable('ezcontentobject')
         )->innerJoin(
-            'ezcontentobject_version',
-            'ezcontentobject.id',
-            'ezcontentobject_version.contentobject_id'
+            $this->handler->quoteTable('ezcontentobject_name'),
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->handler->quoteColumn('contentobject_id', 'ezcontentobject_name'),
+                    $this->handler->quoteColumn('id', 'ezcontentobject')
+                ),
+                $query->expr->eq(
+                    $this->handler->quoteColumn('content_version', 'ezcontentobject_name'),
+                    $this->handler->quoteColumn('current_version', 'ezcontentobject')
+                )
+            )
+        )->innerJoin(
+            $this->handler->quoteTable('ezcontentobject_version'),
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->handler->quoteColumn('contentobject_id', 'ezcontentobject_version'),
+                    $this->handler->quoteColumn('id', 'ezcontentobject')
+                ),
+                $query->expr->eq(
+                    $this->handler->quoteColumn('version', 'ezcontentobject_version'),
+                    $this->handler->quoteColumn('current_version', 'ezcontentobject')
+                )
+            )
         )->leftJoin(
             $this->handler->alias(
                 $this->handler->quoteTable('ezcontentobject_tree'),

@@ -351,9 +351,9 @@ class Handler implements BaseContentHandler
      */
     public function loadContentInfoByRemoteId($remoteId)
     {
-        return $this->mapper->extractContentInfoFromRow(
+        return $this->mapper->extractContentInfoFromRows(
             $this->contentGateway->loadContentInfoByRemoteId($remoteId)
-        );
+        )[0];
     }
 
     /**

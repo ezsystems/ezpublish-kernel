@@ -32,11 +32,12 @@ class ContentInfo extends ValueObject
     public $id;
 
     /**
-     * Computed name (via name schema) in the main language.
+     * Returns the names computed from the name schema in the available languages for current version.
+     * Eg. array( 'eng-GB' => "New Article" ).
      *
-     * @var string
+     * @return string[]
      */
-    public $name;
+    public $names;
 
     /**
      * Content type Id.
