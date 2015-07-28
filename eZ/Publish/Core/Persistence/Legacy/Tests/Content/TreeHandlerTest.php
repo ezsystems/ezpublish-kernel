@@ -50,12 +50,18 @@ class TreeHandlerTest extends TestCase
             ->expects($this->once())
             ->method('listVersions')
             ->with($this->equalTo(23))
+            ->will($this->returnValue([['ezcontentobject_version_version' => 2]]));
+
+        $this->getContentGatewayMock()
+            ->expects($this->once())
+            ->method('loadVersionedNameData')
+            ->with($this->equalTo([['id' => 23, 'version' => 2]]))
             ->will($this->returnValue(array()));
 
         $this->getContentMapperMock()
             ->expects($this->once())
             ->method('extractVersionInfoListFromRows')
-            ->with($this->equalTo(array()))
+            ->with($this->equalTo([['ezcontentobject_version_version' => 2]]), [])
             ->will($this->returnValue(array(new VersionInfo())));
 
         $versions = $this->getTreeHandler()->listVersions(23);

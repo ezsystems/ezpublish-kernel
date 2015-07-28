@@ -175,14 +175,21 @@ class Mapper
      *      "$tableName_$columnName"
      *
      * @param array $rows
+     * @param array $nameRows
      *
      * @return \eZ\Publish\SPI\Persistence\Content[]
      */
-    public function extractContentFromRows(array $rows)
+    public function extractContentFromRows(array $rows, array $nameRows)
     {
+        $versionedNameData = array();
+        foreach ($nameRows as $row) {
+            $contentId = (int)$row['ezcontentobject_name_contentobject_id'];
+            $versionNo = (int)$row['ezcontentobject_name_content_version'];
+            $versionedNameData[$contentId][$versionNo][$row['ezcontentobject_name_content_translation']] = $row['ezcontentobject_name_name'];
+        }
+
         $contentInfos = array();
         $versionInfos = array();
-
         $fields = array();
 
         foreach ($rows as $row) {
@@ -198,9 +205,6 @@ class Mapper
             if (!isset($versionInfos[$contentId][$versionId])) {
                 $versionInfos[$contentId][$versionId] = $this->extractVersionInfoFromRow($row);
             }
-            if (!isset($versionInfos[$contentId][$versionId]->names[$row['ezcontentobject_name_content_translation']])) {
-                $versionInfos[$contentId][$versionId]->names[$row['ezcontentobject_name_content_translation']] = $row['ezcontentobject_name_name'];
-            }
 
             $fieldId = (int)$row['ezcontentobject_attribute_id'];
             if (!isset($fields[$contentId][$versionId][$fieldId])) {
@@ -213,6 +217,7 @@ class Mapper
             foreach ($versionInfos[$contentId] as $versionId => $versionInfo) {
                 $content = new Content();
                 $content->versionInfo = $versionInfo;
+                $content->versionInfo->names = $versionedNameData[$contentId][$versionInfo->versionNo];
                 $content->versionInfo->contentInfo = $contentInfo;
                 $content->fields = array_values($fields[$contentId][$versionId]);
                 $results[] = $content;
@@ -277,10 +282,11 @@ class Mapper
      * {@link self::extractContentFromRows} where missing data will be filled in.
      *
      * @param array $row
+     * @param array $names
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo
      */
-    private function extractVersionInfoFromRow(array $row)
+    private function extractVersionInfoFromRow(array $row, array $names = array())
     {
         $versionInfo = new VersionInfo();
         $versionInfo->id = (int)$row['ezcontentobject_version_id'];
@@ -292,7 +298,7 @@ class Mapper
         $versionInfo->initialLanguageCode = $this->languageHandler->load($row['ezcontentobject_version_initial_language_id'])->languageCode;
         $versionInfo->languageIds = $this->extractLanguageIdsFromMask($row['ezcontentobject_version_language_mask']);
         $versionInfo->status = (int)$row['ezcontentobject_version_status'];
-        $versionInfo->names = array();
+        $versionInfo->names = $names;
 
         return $versionInfo;
     }
@@ -301,14 +307,21 @@ class Mapper
      * Extracts a VersionInfo object from $row.
      *
      * @param array $rows
+     * @param array $nameRows
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
-    public function extractVersionInfoListFromRows(array $rows)
+    public function extractVersionInfoListFromRows(array $rows, array $nameRows)
     {
+        $nameData = array();
+        foreach ($nameRows as $row) {
+            $versionId = $row['ezcontentobject_name_contentobject_id'] . '_' . $row['ezcontentobject_name_content_version'];
+            $nameData[$versionId][$row['ezcontentobject_name_content_translation']] = $row['ezcontentobject_name_name'];
+        }
+
         $versionInfoList = array();
         foreach ($rows as $row) {
-            $versionId = (int)$row['ezcontentobject_version_id'];
+            $versionId = $row['ezcontentobject_id'] . '_' . $row['ezcontentobject_version_version'];
             if (!isset($versionInfoList[$versionId])) {
                 $versionInfo = new VersionInfo();
                 $versionInfo->id = (int)$row['ezcontentobject_version_id'];
@@ -320,12 +333,8 @@ class Mapper
                 $versionInfo->initialLanguageCode = $this->languageHandler->load($row['ezcontentobject_version_initial_language_id'])->languageCode;
                 $versionInfo->languageIds = $this->extractLanguageIdsFromMask((int)$row['ezcontentobject_version_language_mask']);
                 $versionInfo->status = (int)$row['ezcontentobject_version_status'];
-                $versionInfo->names = array();
+                $versionInfo->names = $nameData[$versionId];
                 $versionInfoList[$versionId] = $versionInfo;
-            }
-
-            if (!isset($versionInfoList[$versionId]->names[$row['ezcontentobject_name_content_translation']])) {
-                $versionInfoList[$versionId]->names[$row['ezcontentobject_name_content_translation']] = $row['ezcontentobject_name_name'];
             }
         }
 

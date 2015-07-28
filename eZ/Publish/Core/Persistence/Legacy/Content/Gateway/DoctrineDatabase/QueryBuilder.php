@@ -33,10 +33,12 @@ class QueryBuilder
     }
 
     /**
-     * Creates a select query for content objects.
+     * Creates a select query for full content objects, used by Content `load`.
      *
      * Creates a select query with all necessary joins to fetch a complete
-     * content object. Does not apply any WHERE conditions.
+     * content object. Does not apply any WHERE conditions unless
+     * translations are provided, and does not contain name data as it will
+     * lead to very large result set {@see createNamesQuery}.
      *
      * @param string[] $translations
      *
@@ -85,9 +87,6 @@ class QueryBuilder
             $this->dbHandler->aliasedColumn($query, 'data_text', 'ezcontentobject_attribute'),
             $this->dbHandler->aliasedColumn($query, 'sort_key_int', 'ezcontentobject_attribute'),
             $this->dbHandler->aliasedColumn($query, 'sort_key_string', 'ezcontentobject_attribute'),
-            // Content object names
-            $this->dbHandler->aliasedColumn($query, 'name', 'ezcontentobject_name'),
-            $this->dbHandler->aliasedColumn($query, 'content_translation', 'ezcontentobject_name'),
             // Content object locations
             $this->dbHandler->aliasedColumn($query, 'main_node_id', 'ezcontentobject_tree')
         )->from(
@@ -108,22 +107,6 @@ class QueryBuilder
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn('version', 'ezcontentobject_attribute'),
                     $this->dbHandler->quoteColumn('version', 'ezcontentobject_version')
-                )
-            )
-        )->innerJoin(
-            $this->dbHandler->quoteTable('ezcontentobject_name'),
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_name'),
-                    $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_version')
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('content_version', 'ezcontentobject_name'),
-                    $this->dbHandler->quoteColumn('version', 'ezcontentobject_version')
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('content_translation', 'ezcontentobject_name'),
-                    $this->dbHandler->quoteColumn('language_code', 'ezcontentobject_attribute')
                 )
             )
         )->leftJoin(
@@ -153,6 +136,26 @@ class QueryBuilder
     }
 
     /**
+     * Create select query to query content name data.
+     *
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
+     */
+    public function createNamesQuery()
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query
+            ->select(
+                $this->dbHandler->aliasedColumn($query, 'contentobject_id', 'ezcontentobject_name'),
+                $this->dbHandler->aliasedColumn($query, 'content_version', 'ezcontentobject_name'),
+                $this->dbHandler->aliasedColumn($query, 'name', 'ezcontentobject_name'),
+                $this->dbHandler->aliasedColumn($query, 'content_translation', 'ezcontentobject_name')
+            )
+            ->from($this->dbHandler->quoteTable('ezcontentobject_name'));
+
+        return $query;
+    }
+
+    /**
      * Creates a select query for content relations.
      *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
@@ -176,10 +179,11 @@ class QueryBuilder
     }
 
     /**
-     * Creates a select query for content version objects.
+     * Creates a select query for content version objects, used for version loading w/o fields.
      *
      * Creates a select query with all necessary joins to fetch a complete
-     * content object. Does not apply any WHERE conditions.
+     * content object. Does not apply any WHERE conditions, and does not contain
+     * name data as it will lead to large result set {@see createNamesQuery}.
      *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
@@ -213,13 +217,10 @@ class QueryBuilder
             $this->dbHandler->aliasedColumn($query, 'published', 'ezcontentobject'),
             $this->dbHandler->aliasedColumn($query, 'status', 'ezcontentobject'),
             $this->dbHandler->aliasedColumn($query, 'name', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'language_mask', 'ezcontentobject'),
-            // Content object names
-            $this->dbHandler->aliasedColumn($query, 'name', 'ezcontentobject_name'),
-            $this->dbHandler->aliasedColumn($query, 'content_translation', 'ezcontentobject_name')
+            $this->dbHandler->aliasedColumn($query, 'language_mask', 'ezcontentobject')
         )->from(
             $this->dbHandler->quoteTable('ezcontentobject_version')
-        )->leftJoin(
+        )->innerJoin(
             $this->dbHandler->quoteTable('ezcontentobject'),
             $query->expr->eq(
                 $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
@@ -235,23 +236,6 @@ class QueryBuilder
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn('main_node_id', 'ezcontentobject_tree'),
                     $this->dbHandler->quoteColumn('node_id', 'ezcontentobject_tree')
-                )
-            )
-        )
-        // @todo: Joining with ezcontentobject_name is probably a VERY bad way to gather that information
-        // since it creates an additional cartesian product with translations.
-        ->leftJoin(
-            $this->dbHandler->quoteTable('ezcontentobject_name'),
-            $query->expr->lAnd(
-                // ezcontentobject_name.content_translation is also part of the PK but can't be
-                // easily joined with something at this level
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_name'),
-                    $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_version')
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('content_version', 'ezcontentobject_name'),
-                    $this->dbHandler->quoteColumn('version', 'ezcontentobject_version')
                 )
             )
         );

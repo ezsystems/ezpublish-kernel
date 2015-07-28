@@ -35,8 +35,6 @@ return array(
     'ezcontentobject_attribute_data_text' => '',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
-    'ezcontentobject_name_name' => 'Something',
-    'ezcontentobject_name_content_translation' => 'eng-GB',
     'ezcontentobject_tree_main_node_id' => '228',
   ),
   1 =>
@@ -73,8 +71,6 @@ return array(
     'ezcontentobject_attribute_data_text' => 'New test article (2)',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => 'new test article (2)',
-    'ezcontentobject_name_name' => 'Something',
-    'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_tree_main_node_id' => '228',
   ),
   2 =>
@@ -111,8 +107,6 @@ return array(
     'ezcontentobject_attribute_data_text' => 'Something',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => 'something',
-    'ezcontentobject_name_name' => 'Something',
-    'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_tree_main_node_id' => '228',
   ),
   3 =>
@@ -151,8 +145,6 @@ return array(
 ',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
-    'ezcontentobject_name_name' => 'Something',
-    'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_tree_main_node_id' => '228',
   ),
   4 =>
@@ -191,8 +183,6 @@ return array(
 ',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
-    'ezcontentobject_name_name' => 'Something',
-    'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_tree_main_node_id' => '228',
   ),
   5 =>
@@ -231,8 +221,6 @@ return array(
 ',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
-    'ezcontentobject_name_name' => 'Something',
-    'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_tree_main_node_id' => '228',
   ),
   6 =>
@@ -269,8 +257,6 @@ return array(
     'ezcontentobject_attribute_data_text' => '',
     'ezcontentobject_attribute_sort_key_int' => '1',
     'ezcontentobject_attribute_sort_key_string' => '',
-    'ezcontentobject_name_name' => 'Something',
-    'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_tree_main_node_id' => '228',
   ),
   7 =>
@@ -309,8 +295,6 @@ return array(
 ',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
-    'ezcontentobject_name_name' => 'Something',
-    'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_tree_main_node_id' => '228',
   ),
   8 =>
@@ -349,8 +333,6 @@ return array(
 ',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
-    'ezcontentobject_name_name' => 'Something',
-    'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_tree_main_node_id' => '228',
   ),
   9 =>
@@ -387,8 +369,6 @@ return array(
     'ezcontentobject_attribute_data_text' => '',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
-    'ezcontentobject_name_name' => 'Something',
-    'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_tree_main_node_id' => '228',
   ),
   10 =>
@@ -425,8 +405,6 @@ return array(
     'ezcontentobject_attribute_data_text' => '',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
-    'ezcontentobject_name_name' => 'Something',
-    'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_tree_main_node_id' => '228',
   ),
   11 =>
@@ -463,8 +441,6 @@ return array(
     'ezcontentobject_attribute_data_text' => '',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
-    'ezcontentobject_name_name' => 'Something',
-    'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_tree_main_node_id' => '228',
   ),
   12 =>
@@ -501,8 +477,6 @@ return array(
     'ezcontentobject_attribute_data_text' => '',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
-    'ezcontentobject_name_name' => 'Something',
-    'ezcontentobject_name_content_translation' => 'eng-US',
     'ezcontentobject_tree_main_node_id' => '228',
   ),
 );
