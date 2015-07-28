@@ -24,8 +24,8 @@ matrix:
 #      env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CORES_SETUP="dedicated" SOLR_CORES="core0 core1 core2 core3 core4 core5 core6 core7" SOLR_CONFS="vendor/ezsystems/ezplatform-solr-search-engine/lib/eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
 #    - php: 5.4
 #      env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CORES_SETUP="shared" SOLR_CORES="core0 core1 core2 core3 core4" SOLR_CONFS="vendor/ezsystems/ezplatform-solr-search-engine/lib/eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
-#    - php: 5.4
-#      env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CORES_SETUP="single" SOLR_CONFS="vendor/ezsystems/ezplatform-solr-search-engine/lib/eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
+    - php: 5.4
+      env: SOLR_VERSION="4.10.4" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CORES_SETUP="single" SOLR_CONFS="vendor/ezsystems/ezplatform-solr-search-engine/lib/eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
 # 5.5
     - php: 5.5
       env: TEST_CONFIG="phpunit.xml"

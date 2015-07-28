@@ -24,4 +24,7 @@ composer install -v --no-progress --no-interaction
 
 # Setup Solr / Elastic search if asked for
 if [ "$TEST_CONFIG" = "phpunit-integration-legacy-elasticsearch.xml" ] ; then ./bin/.travis/init_elasticsearch.sh ; fi
-if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then ./vendor/ezsystems/ezplatform-solr-search-engine/bin/.travis/init_solr.sh ; fi
+if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then
+    composer require -v --no-progress --no-interaction ezsystems/ezplatform-solr-search-engine:dev-master
+    ./vendor/ezsystems/ezplatform-solr-search-engine/bin/.travis/init_solr.sh
+fi
