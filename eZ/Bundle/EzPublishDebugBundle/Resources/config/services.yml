@@ -21,11 +21,3 @@ services:
                 id: "ezpublish.debug.persistence"
                 panelTemplate: "EzPublishDebugBundle:Profiler/persistence:panel.html.twig"
                 toolbarTemplate: "EzPublishDebugBundle:Profiler/persistence:toolbar.html.twig"
-
-    ezpublish_debug.templates_collector:
-        class: %ezpublish_debug.templates_collector.class%
-        tags:
-            -
-                name: ezpublish_data_collector
-                panelTemplate: "EzPublishDebugBundle:Profiler/templates:panel.html.twig"
-                toolbarTemplate: "EzPublishDebugBundle:Profiler/templates:toolbar.html.twig"
