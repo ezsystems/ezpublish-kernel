@@ -125,15 +125,15 @@ class TreeHandler
     {
         $rows = $this->contentGateway->listVersions($contentId);
         if (empty($rows)) {
-            return [];
+            return array();
         }
 
         $idVersionPairs = array_map(
             function ($row) use ($contentId) {
-                return [
+                return array(
                     'id' => $contentId,
                     'version' => $row['ezcontentobject_version_version'],
-                ];
+                );
             },
             $rows
         );

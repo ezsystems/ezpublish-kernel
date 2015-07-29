@@ -101,8 +101,8 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
         $this->getContentGatewayMock()
             ->expects($this->once())
             ->method('loadVersionedNameData')
-            ->with($this->equalTo([['id' => $contentId, 'version' => 1]]))
-            ->will($this->returnValue([]));
+            ->with($this->equalTo(array(array('id' => $contentId, 'version' => 1))))
+            ->will($this->returnValue(array()));
 
         $this->getContentGatewayMock()
             ->expects($this->at(2))
@@ -113,7 +113,7 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
         $this->getContentMapperMock()
             ->expects($this->once())
             ->method('extractContentFromRows')
-            ->with([], [])
+            ->with(array(), array())
             ->will($this->returnValue(array($content)));
 
         $action
@@ -141,8 +141,8 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
         $this->getContentGatewayMock()
             ->expects($this->once())
             ->method('loadVersionedNameData')
-            ->with($this->equalTo([['id' => $contentId, 'version' => 1]]))
-            ->will($this->returnValue([]));
+            ->with($this->equalTo(array(array('id' => $contentId, 'version' => 1))))
+            ->will($this->returnValue(array()));
 
         $this->getContentGatewayMock()
             ->expects($this->at(2))
@@ -153,7 +153,7 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
         $this->getContentMapperMock()
             ->expects($this->once())
             ->method('extractContentFromRows')
-            ->with([], [])
+            ->with(array(), array())
             ->will($this->returnValue(array($content)));
 
         $action
@@ -188,8 +188,8 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
         $this->getContentGatewayMock()
             ->expects($this->once())
             ->method('loadVersionedNameData')
-            ->with($this->equalTo([['id' => $contentId, 'version' => 1], ['id' => $contentId, 'version' => 2]]))
-            ->will($this->returnValue([]));
+            ->with($this->equalTo(array(array('id' => $contentId, 'version' => 1), array('id' => $contentId, 'version' => 2))))
+            ->will($this->returnValue(array()));
 
         $this->getContentGatewayMock()
             ->expects($this->at(2))
@@ -200,7 +200,7 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
         $this->getContentMapperMock()
             ->expects($this->at(0))
             ->method('extractContentFromRows')
-            ->with([], [])
+            ->with(array(), array())
             ->will($this->returnValue(array($content1)));
 
         $this->getContentGatewayMock()
@@ -212,7 +212,7 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
         $this->getContentMapperMock()
             ->expects($this->at(1))
             ->method('extractContentFromRows')
-            ->with([], [])
+            ->with(array(), array())
             ->will($this->returnValue(array($content2)));
 
         $action
@@ -247,8 +247,8 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
         $this->getContentGatewayMock()
             ->expects($this->once())
             ->method('loadVersionedNameData')
-            ->with($this->equalTo([['id' => $contentId, 'version' => 1], ['id' => $contentId, 'version' => 2]]))
-            ->will($this->returnValue([]));
+            ->with($this->equalTo(array(array('id' => $contentId, 'version' => 1), array('id' => $contentId, 'version' => 2))))
+            ->will($this->returnValue(array()));
 
         $this->getContentGatewayMock()
             ->expects($this->at(2))
@@ -259,7 +259,7 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
         $this->getContentMapperMock()
             ->expects($this->at(0))
             ->method('extractContentFromRows')
-            ->with([], [])
+            ->with(array(), array())
             ->will($this->returnValue(array($content1)));
 
         $this->getContentGatewayMock()
@@ -271,7 +271,7 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
         $this->getContentMapperMock()
             ->expects($this->at(1))
             ->method('extractContentFromRows')
-            ->with([], [])
+            ->with(array(), array())
             ->will($this->returnValue(array($content2)));
 
         $action

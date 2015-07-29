@@ -74,7 +74,7 @@ class RemoveField extends Action
         $nameRows = $this->contentGateway->loadVersionedNameData(
             array_map(
                 function ($versionNo) use ($contentId) {
-                    return ['id' => $contentId, 'version' => $versionNo];
+                    return array('id' => $contentId, 'version' => $versionNo);
                 },
                 $versionNumbers
             )

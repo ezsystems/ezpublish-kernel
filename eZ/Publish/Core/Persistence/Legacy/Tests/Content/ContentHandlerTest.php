@@ -262,14 +262,14 @@ class ContentHandlerTest extends TestCase
         $gatewayMock->expects($this->once())
             ->method('loadVersionedNameData')
             ->with(
-                $this->equalTo([['id' => 23, 'version' => 1]])
+                $this->equalTo(array(array('id' => 23, 'version' => 1)))
             )->will(
                 $this->returnValue(array(22))
             );
 
         $mapperMock->expects($this->once())
             ->method('extractContentFromRows')
-            ->with($this->equalTo([42]), $this->equalTo([22]))
+            ->with($this->equalTo(array(42)), $this->equalTo(array(22)))
             ->will($this->returnValue(array($this->getContentFixtureForDraft())));
 
         $fieldHandlerMock->expects($this->once())
@@ -338,14 +338,14 @@ class ContentHandlerTest extends TestCase
         $gatewayMock->expects($this->once())
             ->method('loadVersionedNameData')
             ->with(
-                $this->equalTo([['id' => 23, 'version' => 2]])
+                $this->equalTo(array(array('id' => 23, 'version' => 2)))
             )->will(
                 $this->returnValue(array(22))
             );
 
         $mapperMock->expects($this->once())
             ->method('extractContentFromRows')
-            ->with($this->equalTo([42]), $this->equalTo([22]))
+            ->with($this->equalTo(array(42)), $this->equalTo(array(22)))
             ->will($this->returnValue(array($this->getContentFixtureForDraft())));
 
         $fieldHandlerMock->expects($this->once())
@@ -490,14 +490,14 @@ class ContentHandlerTest extends TestCase
         $gatewayMock->expects($this->once())
             ->method('loadVersionedNameData')
             ->with(
-                $this->equalTo([['id' => 23, 'version' => 2]])
+                $this->equalTo(array(array('id' => 23, 'version' => 2)))
             )->will(
-                $this->returnValue([22])
+                $this->returnValue(array(22))
             );
 
         $mapperMock->expects($this->once())
             ->method('extractContentFromRows')
-            ->with($this->equalTo([42]), $this->equalTo([22]))
+            ->with($this->equalTo(array(42)), $this->equalTo(array(22)))
             ->will($this->returnValue(array($this->getContentFixtureForDraft())));
 
         $fieldHandlerMock->expects($this->once())
@@ -956,7 +956,7 @@ class ContentHandlerTest extends TestCase
     public function testLoadDraftsForUser()
     {
         $handler = $this->getContentHandler();
-        $rows = [['ezcontentobject_version_contentobject_id' => 42, 'ezcontentobject_version_version' => 2]];
+        $rows = array(array('ezcontentobject_version_contentobject_id' => 42, 'ezcontentobject_version_version' => 2));
 
         $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMapperMock();
@@ -968,12 +968,12 @@ class ContentHandlerTest extends TestCase
 
         $gatewayMock->expects($this->once())
             ->method('loadVersionedNameData')
-            ->with($this->equalTo([['id' => 42, 'version' => 2]]))
-            ->will($this->returnValue([]));
+            ->with($this->equalTo(array(array('id' => 42, 'version' => 2))))
+            ->will($this->returnValue(array()));
 
         $mapperMock->expects($this->once())
             ->method('extractVersionInfoListFromRows')
-            ->with($this->equalTo($rows), $this->equalTo([]))
+            ->with($this->equalTo($rows), $this->equalTo(array()))
             ->will($this->returnValue(array(new VersionInfo())));
 
         $res = $handler->loadDraftsForUser(23);
@@ -1081,16 +1081,16 @@ class ContentHandlerTest extends TestCase
         $gatewayMock->expects($this->once())
             ->method('loadVersionInfo')
             ->with($this->equalTo(225), $this->equalTo(2))
-            ->will($this->returnValue([42]));
+            ->will($this->returnValue(array(42)));
 
         $gatewayMock->expects($this->once())
             ->method('loadVersionedNameData')
-            ->with($this->equalTo([['id' => 225, 'version' => 2]]))
-            ->will($this->returnValue([22]));
+            ->with($this->equalTo(array(array('id' => 225, 'version' => 2))))
+            ->will($this->returnValue(array(22)));
 
         $mapperMock->expects($this->once())
             ->method('extractVersionInfoListFromRows')
-            ->with($this->equalTo([42]), $this->equalTo([22]))
+            ->with($this->equalTo(array(42)), $this->equalTo(array(22)))
             ->will($this->returnValue(array(new VersionInfo())));
 
         $locationHandlerMock->expects($this->once())
