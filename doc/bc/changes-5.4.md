@@ -189,6 +189,10 @@ Changes affecting version compatibility with former or future versions.
   when deleting last version of the Content. Since Content without a version does not make sense, in
   this case `eZ\Publish\Core\Repository\ContentService::deleteContent()` should be used instead.
 
+* 5.4.5: $fieldFilters argument on Search service has been renamed to $languageFilter
+  Reason is to better communicate what the argument is used for. No changes
+  to it's structure is done so this is a purly cosmetic change.
+
 ## Deprecations
 
 * `imagemagick` siteaccess settings are now deprecated. It is mandatory to remove them.

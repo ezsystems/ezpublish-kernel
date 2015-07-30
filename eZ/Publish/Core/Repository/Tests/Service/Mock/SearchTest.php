@@ -284,14 +284,14 @@ class SearchTest extends BaseServiceMockTest
 
         $serviceQuery = new Query();
         $handlerQuery = new Query(array('filter' => new Criterion\MatchAll(), 'limit' => 10));
-        $fieldFilters = array();
+        $languageFilter = array();
         $spiContentInfo = new SPIContentInfo();
         $contentMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
 
         /* @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
         $searchHandlerMock->expects($this->once())
             ->method('findContent')
-            ->with($this->equalTo($handlerQuery), $this->equalTo($fieldFilters))
+            ->with($this->equalTo($handlerQuery), $this->equalTo($languageFilter))
             ->will(
                 $this->returnValue(
                     new SearchResult(
@@ -308,7 +308,7 @@ class SearchTest extends BaseServiceMockTest
             ->method('internalLoadContent')
             ->will($this->returnValue($contentMock));
 
-        $result = $service->findContent($serviceQuery, $fieldFilters, false);
+        $result = $service->findContent($serviceQuery, $languageFilter, false);
 
         $this->assertEquals(
             new SearchResult(
@@ -363,14 +363,14 @@ class SearchTest extends BaseServiceMockTest
             ->disableOriginalConstructor()
             ->getMock();
         $query = new Query(array('filter' => $criterionMock, 'limit' => 10));
-        $fieldFilters = array();
+        $languageFilter = array();
         $spiContentInfo = new SPIContentInfo();
         $contentMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
 
         /* @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
         $searchHandlerMock->expects($this->once())
             ->method('findContent')
-            ->with($this->equalTo($query), $this->equalTo($fieldFilters))
+            ->with($this->equalTo($query), $this->equalTo($languageFilter))
             ->will(
                 $this->returnValue(
                     new SearchResult(
@@ -395,7 +395,7 @@ class SearchTest extends BaseServiceMockTest
             ->with($criterionMock)
             ->will($this->returnValue(true));
 
-        $result = $service->findContent($query, $fieldFilters, true);
+        $result = $service->findContent($query, $languageFilter, true);
 
         $this->assertEquals(
             new SearchResult(
@@ -596,7 +596,7 @@ class SearchTest extends BaseServiceMockTest
                 )
             );
 
-        $fieldFilters = array();
+        $languageFilter = array();
         $spiContentInfo = new SPIContentInfo();
         $contentMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
         $domainMapperMock->expects($this->never())
@@ -631,7 +631,7 @@ class SearchTest extends BaseServiceMockTest
                 )
             );
 
-        $result = $service->findContent(new Query(), $fieldFilters, false);
+        $result = $service->findContent(new Query(), $languageFilter, false);
 
         $this->assertEquals(
             new SearchResult(
@@ -765,14 +765,14 @@ class SearchTest extends BaseServiceMockTest
             ->with($criterionMock)
             ->will($this->returnValue(true));
 
-        $fieldFilters = array();
+        $languageFilter = array();
         $spiContentInfo = new SPIContentInfo();
         $contentMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\Content\\Content');
 
         /* @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
         $searchHandlerMock->expects($this->once())
             ->method('findSingle')
-            ->with($this->equalTo($criterionMock), $this->equalTo($fieldFilters))
+            ->with($this->equalTo($criterionMock), $this->equalTo($languageFilter))
             ->will($this->returnValue($spiContentInfo));
 
         $domainMapperMock->expects($this->never())
@@ -783,7 +783,7 @@ class SearchTest extends BaseServiceMockTest
             ->method('internalLoadContent')
             ->will($this->returnValue($contentMock));
 
-        $result = $service->findSingle($criterionMock, $fieldFilters, true);
+        $result = $service->findSingle($criterionMock, $languageFilter, true);
 
         $this->assertEquals($contentMock, $result);
     }

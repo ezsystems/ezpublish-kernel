@@ -75,11 +75,11 @@ class CriterionVisitorDispatcher
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param string $context
-     * @param array $fieldFilters
+     * @param array $languageFilter
      *
      * @return string
      */
-    public function dispatch(Criterion $criterion, $context, array $fieldFilters = array())
+    public function dispatch(Criterion $criterion, $context, array $languageFilter = array())
     {
         if (!isset($this->contextMethodMap[$context])) {
             throw new RuntimeException(
@@ -89,7 +89,7 @@ class CriterionVisitorDispatcher
 
         foreach ($this->visitors as $visitor) {
             if ($visitor->canVisit($criterion)) {
-                return $visitor->{ $this->contextMethodMap[$context] }($criterion, $this, $fieldFilters);
+                return $visitor->{ $this->contextMethodMap[$context] }($criterion, $this, $languageFilter);
             }
         }
 

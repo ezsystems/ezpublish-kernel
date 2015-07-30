@@ -93,19 +93,17 @@ class SearchService implements SearchServiceInterface
     /**
      * Finds content objects for the given query.
      *
-     * @todo define structs for the field filters
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if query is not valid
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array $fieldFilters - a map of filters for the returned fields.
+     * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
      *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
      *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations.
      * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContent(Query $query, array $fieldFilters = array(), $filterOnUserPermissions = true)
+    public function findContent(Query $query, array $languageFilter = array(), $filterOnUserPermissions = true)
     {
         if (!is_int($query->offset)) {
             throw new InvalidArgumentType(
@@ -135,16 +133,16 @@ class SearchService implements SearchServiceInterface
             return new SearchResult(array('time' => 0, 'totalCount' => 0));
         }
 
-        $result = $this->searchHandler->findContent($query, $fieldFilters);
+        $result = $this->searchHandler->findContent($query, $languageFilter);
 
         $contentService = $this->repository->getContentService();
         foreach ($result->searchHits as $hit) {
             $hit->valueObject = $contentService->internalLoadContent(
                 $hit->valueObject->id,
-                (!empty($fieldFilters['languages']) ? $fieldFilters['languages'] : null),
+                (!empty($languageFilter['languages']) ? $languageFilter['languages'] : null),
                 null,
                 false,
-                (isset($fieldFilters['useAlwaysAvailable']) ? $fieldFilters['useAlwaysAvailable'] : true)
+                (isset($languageFilter['useAlwaysAvailable']) ? $languageFilter['useAlwaysAvailable'] : true)
             );
         }
 
@@ -237,17 +235,15 @@ class SearchService implements SearchServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if criterion is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than one result matching the criterions
      *
-     * @todo define structs for the field filters
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
-     * @param array $fieldFilters - a map of filters for the returned fields.
+     * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
      *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
      *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations.
      * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle(Criterion $filter, array $fieldFilters = array(), $filterOnUserPermissions = true)
+    public function findSingle(Criterion $filter, array $languageFilter = array(), $filterOnUserPermissions = true)
     {
         $this->validateContentCriteria(array($filter), '$filter');
 
@@ -255,14 +251,14 @@ class SearchService implements SearchServiceInterface
             throw new NotFoundException('Content', '*');
         }
 
-        $contentInfo = $this->searchHandler->findSingle($filter, $fieldFilters);
+        $contentInfo = $this->searchHandler->findSingle($filter, $languageFilter);
 
         return $this->repository->getContentService()->internalLoadContent(
             $contentInfo->id,
-            (!empty($fieldFilters['languages']) ? $fieldFilters['languages'] : null),
+            (!empty($languageFilter['languages']) ? $languageFilter['languages'] : null),
             null,
             false,
-            (isset($fieldFilters['useAlwaysAvailable']) ? $fieldFilters['useAlwaysAvailable'] : true)
+            (isset($languageFilter['useAlwaysAvailable']) ? $languageFilter['useAlwaysAvailable'] : true)
         );
     }
 
@@ -284,14 +280,14 @@ class SearchService implements SearchServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if query is not valid
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
-     * @param array $fieldFilters - a map of filters for the returned fields.
+     * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
      *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
      *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations
      * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findLocations(LocationQuery $query, array $fieldFilters = array(), $filterOnUserPermissions = true)
+    public function findLocations(LocationQuery $query, array $languageFilter = array(), $filterOnUserPermissions = true)
     {
         if (!is_int($query->offset)) {
             throw new InvalidArgumentType(
@@ -318,7 +314,7 @@ class SearchService implements SearchServiceInterface
             return new SearchResult(array('time' => 0, 'totalCount' => 0));
         }
 
-        $result = $this->locationSearchHandler->findLocations($query, $fieldFilters);
+        $result = $this->locationSearchHandler->findLocations($query, $languageFilter);
 
         foreach ($result->searchHits as $hit) {
             $hit->valueObject = $this->domainMapper->buildLocationDomainObject(

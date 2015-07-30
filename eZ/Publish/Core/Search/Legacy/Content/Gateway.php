@@ -27,7 +27,7 @@ abstract class Gateway
      * @param int $offset
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
-     * @param array $fieldFilters
+     * @param array $languageFilter
      * @param bool $doCount
      *
      * @return mixed[][]
@@ -37,7 +37,7 @@ abstract class Gateway
         $offset,
         $limit,
         array $sort = null,
-        array $fieldFilters = array(),
+        array $languageFilter = array(),
         $doCount = true
     );
 }

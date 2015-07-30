@@ -33,14 +33,14 @@ abstract class CriterionVisitor
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
-     * @param array $fieldFilters
+     * @param array $languageFilter
      *
      * @return mixed Hash representation of Elasticsearch filter abstract syntax tree
      */
     abstract public function visitFilter(
         Criterion $criterion,
         CriterionVisitorDispatcher $dispatcher,
-        array $fieldFilters
+        array $languageFilter
     );
 
     /**
@@ -50,13 +50,13 @@ abstract class CriterionVisitor
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
-     * @param array $fieldFilters
+     * @param array $languageFilter
      *
      * @return mixed Hash representation of Elasticsearch query abstract syntax tree
      */
-    public function visitQuery(Criterion $criterion, CriterionVisitorDispatcher $dispatcher, array $fieldFilters)
+    public function visitQuery(Criterion $criterion, CriterionVisitorDispatcher $dispatcher, array $languageFilter)
     {
-        return $this->visitFilter($criterion, $dispatcher, $fieldFilters);
+        return $this->visitFilter($criterion, $dispatcher, $languageFilter);
     }
 
     /**

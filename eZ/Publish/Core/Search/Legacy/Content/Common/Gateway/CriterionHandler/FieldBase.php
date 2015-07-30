@@ -47,24 +47,24 @@ abstract class FieldBase extends CriterionHandler
     }
 
     /**
-     * Returns the bitmask for the list languages in given $fieldFilters.
+     * Returns the bitmask for the list languages in given $languageFilter.
      *
-     * The method will return null if no languages are contained in $fieldFilters.
+     * The method will return null if no languages are contained in $languageFilter.
      * Note: 'useAlwaysAvailable' filter is ignored here.
      *
-     * @param array $fieldFilters
+     * @param array $languageFilter
      *
      * @return null|int
      */
-    protected function getFieldFiltersLanguageMask(array $fieldFilters)
+    protected function getFieldFiltersLanguageMask(array $languageFilter)
     {
-        if (empty($fieldFilters['languages'])) {
+        if (empty($languageFilter['languages'])) {
             return null;
         }
 
         $mask = 0;
 
-        foreach ($fieldFilters['languages'] as $languageCode) {
+        foreach ($languageFilter['languages'] as $languageCode) {
             $mask |= $this->languageHandler->loadByLanguageCode($languageCode)->id;
         }
 
@@ -77,19 +77,19 @@ abstract class FieldBase extends CriterionHandler
      * Conditions are combined with existing ones using logical AND operator.
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param array $fieldFilters
+     * @param array $languageFilter
      */
-    protected function addFieldFiltersConditions(SelectQuery $query, array $fieldFilters)
+    protected function addFieldFiltersConditions(SelectQuery $query, array $languageFilter)
     {
-        $languageMask = $this->getFieldFiltersLanguageMask($fieldFilters);
+        $languageMask = $this->getFieldFiltersLanguageMask($languageFilter);
 
-        // Only apply if languages are defined in $fieldFilters;
+        // Only apply if languages are defined in $languageFilter;
         // 'useAlwaysAvailable' does not make sense on its own
         if ($languageMask === null) {
             return;
         }
 
-        // Condition for the language part of $fieldFilters
+        // Condition for the language part of $languageFilter
         $languageMaskExpression = $query->expr->gt(
             $query->expr->bitAnd(
                 $this->dbHandler->quoteColumn('language_id', 'ezcontentobject_attribute'),
@@ -101,8 +101,8 @@ abstract class FieldBase extends CriterionHandler
         // If 'useAlwaysAvailable' is set to true, additionally factor in condition for the
         // Content's main language that is marked as always available
         if (
-            !isset($fieldFilters['useAlwaysAvailable'])
-            || $fieldFilters['useAlwaysAvailable'] === true
+            !isset($languageFilter['useAlwaysAvailable'])
+            || $languageFilter['useAlwaysAvailable'] === true
         ) {
             $query->where(
                 $query->expr->lOr(

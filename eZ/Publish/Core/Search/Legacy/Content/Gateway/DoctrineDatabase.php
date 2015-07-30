@@ -71,7 +71,7 @@ class DoctrineDatabase extends Gateway
      * @param int $offset
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
-     * @param array $fieldFilters
+     * @param array $languageFilter
      * @param bool $doCount
      *
      * @return mixed[][]
@@ -81,10 +81,10 @@ class DoctrineDatabase extends Gateway
         $offset,
         $limit,
         array $sort = null,
-        array $fieldFilters = array(),
+        array $languageFilter = array(),
         $doCount = true
     ) {
-        $count = $doCount ? $this->getResultCount($criterion, $fieldFilters) : null;
+        $count = $doCount ? $this->getResultCount($criterion, $languageFilter) : null;
 
         if (!$doCount && $limit === 0) {
             throw new \RuntimeException('Invalid query, can not disable count and request 0 items at the same time');
@@ -94,7 +94,7 @@ class DoctrineDatabase extends Gateway
             return array('count' => $count, 'rows' => array());
         }
 
-        $contentInfoList = $this->getContentInfoList($criterion, $sort, $offset, $limit, $fieldFilters);
+        $contentInfoList = $this->getContentInfoList($criterion, $sort, $offset, $limit, $languageFilter);
 
         return array(
             'count' => $count,
@@ -107,14 +107,14 @@ class DoctrineDatabase extends Gateway
      *
      * @param Criterion $filter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param array $fieldFilters
+     * @param array $languageFilter
      *
      * @return string
      */
-    protected function getQueryCondition(Criterion $filter, SelectQuery $query, $fieldFilters)
+    protected function getQueryCondition(Criterion $filter, SelectQuery $query, $languageFilter)
     {
         $condition = $query->expr->lAnd(
-            $this->criteriaConverter->convertCriteria($query, $filter, $fieldFilters),
+            $this->criteriaConverter->convertCriteria($query, $filter, $languageFilter),
             $query->expr->eq(
                 'ezcontentobject.status',
                 ContentInfo::STATUS_PUBLISHED
@@ -133,11 +133,11 @@ class DoctrineDatabase extends Gateway
      *
      * @param Criterion $filter
      * @param array $sort
-     * @param array $fieldFilters
+     * @param array $languageFilter
      *
      * @return int
      */
-    protected function getResultCount(Criterion $filter, $fieldFilters)
+    protected function getResultCount(Criterion $filter, $languageFilter)
     {
         $query = $this->handler->createSelectQuery();
 
@@ -152,7 +152,7 @@ class DoctrineDatabase extends Gateway
             );
 
         $query->where(
-            $this->getQueryCondition($filter, $query, $fieldFilters)
+            $this->getQueryCondition($filter, $query, $languageFilter)
         );
 
         $statement = $query->prepare();
@@ -168,11 +168,11 @@ class DoctrineDatabase extends Gateway
      * @param array $sort
      * @param mixed $offset
      * @param mixed $limit
-     * @param array $fieldFilters
+     * @param array $languageFilter
      *
      * @return int[]
      */
-    protected function getContentInfoList(Criterion $filter, $sort, $offset, $limit, $fieldFilters)
+    protected function getContentInfoList(Criterion $filter, $sort, $offset, $limit, $languageFilter)
     {
         $query = $this->handler->createSelectQuery();
         $query->selectDistinct(
@@ -212,7 +212,7 @@ class DoctrineDatabase extends Gateway
         }
 
         $query->where(
-            $this->getQueryCondition($filter, $query, $fieldFilters)
+            $this->getQueryCondition($filter, $query, $languageFilter)
         );
 
         if ($sort !== null) {

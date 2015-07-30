@@ -100,7 +100,7 @@ class MapLocationDistance extends FieldBase
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array $fieldFilters
+     * @param array $languageFilter
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
@@ -108,7 +108,7 @@ class MapLocationDistance extends FieldBase
         CriteriaConverter $converter,
         SelectQuery $query,
         Criterion $criterion,
-        array $fieldFilters
+        array $languageFilter
     ) {
         $fieldDefinitionIds = $this->getFieldDefinitionIds($criterion->target);
         $subSelect = $query->subSelect();
@@ -235,7 +235,7 @@ class MapLocationDistance extends FieldBase
                 )
             );
 
-        $this->addFieldFiltersConditions($subSelect, $fieldFilters);
+        $this->addFieldFiltersConditions($subSelect, $languageFilter);
 
         return $query->expr->in(
             $this->dbHandler->quoteColumn('id', 'ezcontentobject'),

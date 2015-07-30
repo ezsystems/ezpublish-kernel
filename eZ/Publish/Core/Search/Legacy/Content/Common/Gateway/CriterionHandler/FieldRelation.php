@@ -74,7 +74,7 @@ class FieldRelation extends FieldBase
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array $fieldFilters
+     * @param array $languageFilter
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
      *
@@ -84,7 +84,7 @@ class FieldRelation extends FieldBase
         CriteriaConverter $converter,
         SelectQuery $query,
         Criterion $criterion,
-        array $fieldFilters
+        array $languageFilter
     ) {
         $column = $this->dbHandler->quoteColumn('to_contentobject_id', 'ezcontentobject_link');
         $fieldDefinitionIds = $this->getFieldDefinitionsIds($criterion->target);
