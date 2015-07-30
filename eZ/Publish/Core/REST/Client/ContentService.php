@@ -556,16 +556,14 @@ class ContentService implements APIContentService, Sessionable
     /**
      * Finds content objects for the given query.
      *
-     * @todo define structs for the field filters
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array $fieldFilters - a map of filters for the returned fields.
+     * @param array $languageFilter Configuration for specifying prioritized languages query will be performed on.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
      */
-    public function findContent(Query $query, array $fieldFilters, $filterOnUserPermissions = true)
+    public function findContent(Query $query, array $languageFilter, $filterOnUserPermissions = true)
     {
         throw new \Exception('@todo: Implement.');
     }
@@ -576,16 +574,14 @@ class ContentService implements APIContentService, Sessionable
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the query would return more than one result
      *
-     * @todo define structs for the field filters
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array $fieldFilters - a map of filters for the returned fields.
+     * @param array $languageFilter Configuration for specifying prioritized languages query will be performed on.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle(Query $query, array $fieldFilters, $filterOnUserPermissions = true)
+    public function findSingle(Query $query, array $languageFilter, $filterOnUserPermissions = true)
     {
         throw new \Exception('@todo: Implement.');
     }

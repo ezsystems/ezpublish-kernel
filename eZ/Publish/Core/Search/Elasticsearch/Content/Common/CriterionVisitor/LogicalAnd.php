@@ -36,17 +36,17 @@ class LogicalAnd extends CriterionVisitor
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
-     * @param array $fieldFilters
+     * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters)
+    public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
         return array(
             'and' => array_map(
-                function ($value) use ($dispatcher, $fieldFilters) {
-                    return $dispatcher->dispatch($value, Dispatcher::CONTEXT_FILTER, $fieldFilters);
+                function ($value) use ($dispatcher, $languageFilter) {
+                    return $dispatcher->dispatch($value, Dispatcher::CONTEXT_FILTER, $languageFilter);
                 },
                 $criterion->criteria
             ),
@@ -58,19 +58,19 @@ class LogicalAnd extends CriterionVisitor
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
-     * @param array $fieldFilters
+     * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters)
+    public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
         return array(
             'bool' => array(
                 'must' => array(
                     array_map(
-                        function ($value) use ($dispatcher, $fieldFilters) {
-                            return $dispatcher->dispatch($value, Dispatcher::CONTEXT_QUERY, $fieldFilters);
+                        function ($value) use ($dispatcher, $languageFilter) {
+                            return $dispatcher->dispatch($value, Dispatcher::CONTEXT_QUERY, $languageFilter);
                         },
                         $criterion->criteria
                     ),

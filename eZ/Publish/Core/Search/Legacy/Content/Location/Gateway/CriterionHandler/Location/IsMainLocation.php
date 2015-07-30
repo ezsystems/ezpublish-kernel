@@ -41,7 +41,7 @@ class IsMainLocation extends CriterionHandler
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion$criterion
-     * @param array $fieldFilters
+     * @param array $languageFilter
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
@@ -49,7 +49,7 @@ class IsMainLocation extends CriterionHandler
         CriteriaConverter $converter,
         SelectQuery $query,
         Criterion $criterion,
-        array $fieldFilters
+        array $languageFilter
     ) {
         $idColumn = $this->dbHandler->quoteColumn('node_id', 'ezcontentobject_tree');
         $mainIdColumn = $this->dbHandler->quoteColumn('main_node_id', 'ezcontentobject_tree');

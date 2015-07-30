@@ -201,14 +201,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchService = $repository->getSearchService();
 
         // The content will be found, but field filtering in the service will cause the exception.
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchService->findContent($query, $fieldFilters);
+        $searchService->findContent($query, $languageFilter);
     }
 
     /**
@@ -241,7 +241,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
                 'eng-US',
@@ -249,7 +249,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -283,14 +283,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -323,14 +323,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-US',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content2->id, $searchResult->searchHits[0]->valueObject->id);
@@ -363,14 +363,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(0, $searchResult->totalCount);
     }
@@ -405,13 +405,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -448,13 +448,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-US',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -491,13 +491,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -531,13 +531,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -570,13 +570,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(0, $searchResult->totalCount);
     }
@@ -699,7 +699,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
                 'eng-US',
@@ -707,7 +707,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -739,14 +739,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content2->id, $searchResult->searchHits[0]->valueObject->id);
@@ -777,14 +777,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-US',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -815,14 +815,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(0, $searchResult->totalCount);
     }
@@ -855,13 +855,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -896,13 +896,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-US',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -937,13 +937,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -975,13 +975,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -1012,13 +1012,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(0, $searchResult->totalCount);
     }
@@ -1051,7 +1051,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
                 'eng-US',
@@ -1059,7 +1059,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -1091,14 +1091,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content2->id, $searchResult->searchHits[0]->valueObject->id);
@@ -1129,14 +1129,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-US',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -1167,14 +1167,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(0, $searchResult->totalCount);
     }
@@ -1207,13 +1207,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -1248,13 +1248,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-US',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -1289,13 +1289,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -1327,13 +1327,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -1364,13 +1364,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(0, $searchResult->totalCount);
     }
@@ -1591,7 +1591,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
                 'eng-US',
@@ -1599,7 +1599,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -1639,14 +1639,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content2->id, $searchResult->searchHits[0]->valueObject->id);
@@ -1685,14 +1685,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-US',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -1731,14 +1731,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(0, $searchResult->totalCount);
     }
@@ -1775,13 +1775,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -1820,13 +1820,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-US',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -1865,13 +1865,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -1906,13 +1906,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -1947,13 +1947,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(0, $searchResult->totalCount);
     }
@@ -1990,7 +1990,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
                 'eng-US',
@@ -1998,7 +1998,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -2034,14 +2034,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content2->id, $searchResult->searchHits[0]->valueObject->id);
@@ -2076,14 +2076,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-US',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -2118,14 +2118,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(0, $searchResult->totalCount);
     }
@@ -2162,13 +2162,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -2207,13 +2207,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-US',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -2252,13 +2252,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -2294,13 +2294,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -2335,13 +2335,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(0, $searchResult->totalCount);
     }
@@ -2581,7 +2581,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
                 'eng-US',
@@ -2589,7 +2589,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -2641,14 +2641,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -2699,14 +2699,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-US',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content2->id, $searchResult->searchHits[0]->valueObject->id);
@@ -2757,14 +2757,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(0, $searchResult->totalCount);
     }
@@ -2826,13 +2826,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -2896,13 +2896,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-US',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -2966,13 +2966,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -3026,13 +3026,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -3085,13 +3085,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(0, $searchResult->totalCount);
     }
@@ -3220,7 +3220,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
                 'eng-US',
@@ -3228,7 +3228,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -3266,14 +3266,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content2->id, $searchResult->searchHits[0]->valueObject->id);
@@ -3310,14 +3310,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-US',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -3354,14 +3354,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(0, $searchResult->totalCount);
     }
@@ -3400,13 +3400,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -3447,13 +3447,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-US',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -3494,13 +3494,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -3538,13 +3538,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -3581,13 +3581,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(0, $searchResult->totalCount);
     }
@@ -3622,7 +3622,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
                 'eng-US',
@@ -3630,7 +3630,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -3664,14 +3664,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content2->id, $searchResult->searchHits[0]->valueObject->id);
@@ -3704,14 +3704,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-US',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -3744,14 +3744,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
             'useAlwaysAvailable' => false,
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(0, $searchResult->totalCount);
     }
@@ -3786,13 +3786,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-GB',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -3829,13 +3829,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'eng-US',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -3872,13 +3872,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(2, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -3912,13 +3912,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(1, $searchResult->totalCount);
         $this->assertEquals($content1->id, $searchResult->searchHits[0]->valueObject->id);
@@ -3951,13 +3951,13 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $fieldFilters = array(
+        $languageFilter = array(
             'languages' => array(
                 'ger-DE',
             ),
         );
 
-        $searchResult = $searchService->findContent($query, $fieldFilters);
+        $searchResult = $searchService->findContent($query, $languageFilter);
 
         $this->assertEquals(0, $searchResult->totalCount);
     }

@@ -47,11 +47,11 @@ class PriorityRange extends CriterionVisitor
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
-     * @param array $fieldFilters
+     * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters)
+    public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         $start = $criterion->value[0];
         $end = isset($criterion->value[1]) ? $criterion->value[1] : null;

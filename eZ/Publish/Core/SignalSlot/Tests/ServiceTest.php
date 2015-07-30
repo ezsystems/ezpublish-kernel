@@ -31,10 +31,10 @@ abstract class ServiceTest extends PHPUnit_Framework_TestCase
      * @param mixed $innerService mock of the inner service used by the signal
      * slot one used to test whether the original method is called is correctly
      * called.
-     * @param eZ\Publish\Core\SignalSlot\SignalDispatcher $dispatcher mock of
+     * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $dispatcher mock of
      * the dispatcher used to test whether the emit method is correctly called
      *
-     * @return an instance of the SignalSlot service
+     * @return object An instance of the SignalSlot service
      */
     abstract protected function getSignalSlotService($innerService, SignalDispatcher $dispatcher);
 

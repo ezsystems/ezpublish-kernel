@@ -117,7 +117,7 @@ class SearchServiceAuthorizationTest extends BaseTest
     /**
      * Test for the findContent() method, verifying disabling permissions.
      *
-     * @see \eZ\Publish\API\Repository\ContentService::findContent($query, $fieldFilters, $filterOnUserPermissions)
+     * @see \eZ\Publish\API\Repository\ContentService::findContent($query, $languageFilter, $filterOnUserPermissions)
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceAuthorizationTest::testFindContent
      */
     public function testFindContentWithUserPermissionFilter()
@@ -154,7 +154,7 @@ class SearchServiceAuthorizationTest extends BaseTest
     /**
      * Test for the findSingle() method disabling permission filtering.
      *
-     * @see \eZ\Publish\API\Repository\ContentService::findSingle($query, $fieldFilters, $filterOnUserPermissions)
+     * @see \eZ\Publish\API\Repository\ContentService::findSingle($query, $languageFilter, $filterOnUserPermissions)
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceAuthorizationTest::testFindContent
      */
     public function testFindSingleWithUserPermissionFilter()
@@ -184,7 +184,7 @@ class SearchServiceAuthorizationTest extends BaseTest
     /**
      * Test for the findSingle() method.
      *
-     * @see \eZ\Publish\API\Repository\ContentService::findSingle($query, $fieldFilters, $filterOnUserPermissions)
+     * @see \eZ\Publish\API\Repository\ContentService::findSingle($query, $languageFilter, $filterOnUserPermissions)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceAuthorizationTest::testFindContent
      */

@@ -75,11 +75,11 @@ class CustomFieldRange extends CustomField
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
-     * @param array $fieldFilters
+     * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters)
+    public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         $filter = array(
             'nested' => array(
@@ -90,7 +90,7 @@ class CustomFieldRange extends CustomField
             ),
         );
 
-        $fieldFilter = $this->getFieldFilter($fieldFilters);
+        $fieldFilter = $this->getFieldFilter($languageFilter);
 
         if ($fieldFilter !== null) {
             $filter['nested']['filter'] = array(

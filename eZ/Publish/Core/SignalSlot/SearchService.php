@@ -52,20 +52,39 @@ class SearchService implements SearchServiceInterface
     /**
      * Finds content objects for the given query.
      *
-     * @todo define structs for the field filters
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if query is not valid
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array $fieldFilters - a map of filters for the returned fields.
+     * @param array $languageFilter Configuration for specifying prioritized languages query will be performed on.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContent(Query $query, array $fieldFilters = array(), $filterOnUserPermissions = true)
+    public function findContent(Query $query, array $languageFilter = array(), $filterOnUserPermissions = true)
     {
-        return $this->service->findContent($query, $fieldFilters, $filterOnUserPermissions);
+        return $this->service->findContent($query, $languageFilter, $filterOnUserPermissions);
+    }
+
+    /**
+     * Finds contentInfo objects for the given query.
+     *
+     * @see SearchServiceInterface::findContentInfo()
+     *
+     * @since 5.4.5
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if query is not valid
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     * @param array $languageFilter - a map of filters for the returned fields.
+     *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
+     *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations.
+     * @param bool $filterOnUserPermissions if true (default) only the objects which is the user allowed to read are returned.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     */
+    public function findContentInfo(Query $query, array $languageFilter = array(), $filterOnUserPermissions = true)
+    {
+        return $this->service->findContentInfo($query, $languageFilter, $filterOnUserPermissions);
     }
 
     /**
@@ -75,18 +94,16 @@ class SearchService implements SearchServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if criterion is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
-     * @todo define structs for the field filters
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
-     * @param array $fieldFilters - a map of filters for the returned fields.
+     * @param array $languageFilter Configuration for specifying prioritized languages query will be performed on.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle(Criterion $filter, array $fieldFilters = array(), $filterOnUserPermissions = true)
+    public function findSingle(Criterion $filter, array $languageFilter = array(), $filterOnUserPermissions = true)
     {
-        return $this->service->findSingle($filter, $fieldFilters, $filterOnUserPermissions);
+        return $this->service->findSingle($filter, $languageFilter, $filterOnUserPermissions);
     }
 
     /**
@@ -108,15 +125,15 @@ class SearchService implements SearchServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if query is not valid
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
-     * @param array $fieldFilters - a map of filters for the returned fields.
+     * @param array $languageFilter Configuration for specifying prioritized languages query will be performed on.
      *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
      *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations
      * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findLocations(LocationQuery $query, array $fieldFilters = array(), $filterOnUserPermissions = true)
+    public function findLocations(LocationQuery $query, array $languageFilter = array(), $filterOnUserPermissions = true)
     {
-        return $this->service->findLocations($query, $fieldFilters, $filterOnUserPermissions);
+        return $this->service->findLocations($query, $languageFilter, $filterOnUserPermissions);
     }
 }

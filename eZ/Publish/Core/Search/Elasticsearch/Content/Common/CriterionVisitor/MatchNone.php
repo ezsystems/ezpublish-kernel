@@ -36,11 +36,11 @@ class MatchNone extends CriterionVisitor
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
-     * @param array $fieldFilters
+     * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters)
+    public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         return array(
             'terms' => array(
@@ -54,11 +54,11 @@ class MatchNone extends CriterionVisitor
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
-     * @param array $fieldFilters
+     * @param array $languageFilter
      *
      * @return mixed
      */
-    public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters)
+    public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         return array(
             'terms' => array(
