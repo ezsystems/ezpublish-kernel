@@ -557,7 +557,7 @@ class ContentService implements APIContentService, Sessionable
      * Finds content objects for the given query.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
+     * @param array $languageFilter Configuration for specifying prioritized languages query will be performed on.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
@@ -575,7 +575,7 @@ class ContentService implements APIContentService, Sessionable
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the query would return more than one result
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
+     * @param array $languageFilter Configuration for specifying prioritized languages query will be performed on.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *

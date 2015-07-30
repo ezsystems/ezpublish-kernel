@@ -77,7 +77,7 @@ class Handler implements SearchHandlerInterface
      * Finds Locations for the given $query.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
-     * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
+     * @param array $languageFilter Configuration for specifying prioritized languages query will be performed on.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
