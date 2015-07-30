@@ -4,7 +4,6 @@
  * @copyright: Copyright (C) 2014 Heliopsis. All rights reserved.
  * @license: proprietary
  */
-
 namespace eZ\Publish\API\Repository\Tests\Regression;
 
 use eZ\Publish\API\Repository\Tests\BaseTest;

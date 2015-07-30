@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState;
 
 use eZ\Publish\SPI\Persistence\Content\ObjectState;

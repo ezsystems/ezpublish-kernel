@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\SignalSlot\Signal\TrashService;
 
 use eZ\Publish\Core\SignalSlot\Signal;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Exception;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishDebugBundle\Tests\Collector;
 
 use eZ\Bundle\EzPublishDebugBundle\Collector\EzPublishCoreCollector;

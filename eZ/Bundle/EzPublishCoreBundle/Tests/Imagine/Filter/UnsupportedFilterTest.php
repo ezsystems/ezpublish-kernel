@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\UnsupportedFilter;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\Tests\XmlText\Converter;
 
 use eZ\Publish\Core\FieldType\XmlText\Converter\EmbedLinking;

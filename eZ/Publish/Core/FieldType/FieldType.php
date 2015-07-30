@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType;
 
 use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
@@ -184,7 +183,7 @@ abstract class FieldType implements FieldTypeInterface
     public function applyDefaultValidatorConfiguration(&$validatorConfiguration)
     {
         if ($validatorConfiguration !== null && !is_array($validatorConfiguration)) {
-            throw new InvalidArgumentType("\$validatorConfiguration", 'array|null', $validatorConfiguration);
+            throw new InvalidArgumentType('$validatorConfiguration', 'array|null', $validatorConfiguration);
         }
 
         foreach ($this->getValidatorConfigurationSchema() as $validatorName => $configurationSchema) {
@@ -243,7 +242,7 @@ abstract class FieldType implements FieldTypeInterface
     public function applyDefaultSettings(&$fieldSettings)
     {
         if ($fieldSettings !== null && !is_array($fieldSettings)) {
-            throw new InvalidArgumentType("\$fieldSettings", 'array|null', $fieldSettings);
+            throw new InvalidArgumentType('$fieldSettings', 'array|null', $fieldSettings);
         }
 
         foreach ($this->getSettingsSchema() as $settingName => $settingConfiguration) {
@@ -450,7 +449,7 @@ abstract class FieldType implements FieldTypeInterface
         $valueFQN = substr_replace($fieldTypeFQN, 'Value', strrpos($fieldTypeFQN, '\\') + 1);
 
         if (!$value instanceof $valueFQN) {
-            throw new InvalidArgumentType("\$value", $valueFQN, $value);
+            throw new InvalidArgumentType('$value', $valueFQN, $value);
         }
     }
 

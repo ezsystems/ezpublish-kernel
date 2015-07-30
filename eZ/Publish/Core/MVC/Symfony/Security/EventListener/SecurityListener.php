@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Security\EventListener;
 
 use eZ\Publish\API\Repository\Repository;

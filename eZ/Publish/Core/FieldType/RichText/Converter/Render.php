@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\RichText\Converter;
 
 use eZ\Publish\Core\FieldType\RichText\RendererInterface;

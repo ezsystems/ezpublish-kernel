@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\RichText\Converter;
 
 use eZ\Publish\Core\FieldType\RichText\XmlBase;
@@ -139,7 +138,7 @@ class Xslt extends XmlBase implements Converter
 
         if (!empty($errors)) {
             throw new InvalidArgumentException(
-                "\$xmlDoc",
+                '$xmlDoc',
                 'Transformation of XML content failed: ' . implode("\n", $errors)
             );
         }

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
 use eZ\Publish\SPI\Persistence\Content\Type;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor\Field;
 
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher as Dispatcher;
@@ -57,7 +56,7 @@ class FieldIn extends Field
 
         if (empty($fieldNames)) {
             throw new InvalidArgumentException(
-                "\$criterion->target",
+                '$criterion->target',
                 "No searchable fields found for the given criterion target '{$criterion->target}'."
             );
         }

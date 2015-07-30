@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishRestBundle\Tests\RequestParser;
 
 use PHPUnit_Framework_TestCase;

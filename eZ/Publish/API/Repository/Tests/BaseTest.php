@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\API\Repository\Tests;
 
 use PHPUnit_Framework_TestCase;

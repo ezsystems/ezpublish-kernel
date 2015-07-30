@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\Block\Id;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\Block\Id\Zone as ZoneIdMatcher;

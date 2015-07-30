@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\Integer;
 
 use eZ\Publish\SPI\Persistence\Content\Field;

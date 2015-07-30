@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\FieldTypeTools as FieldTypeToolsInterface;
@@ -20,9 +19,7 @@ use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
  * This class provides service methods available to FieldTypes.
  *
  * This interface cannot be retrieved through the Public API and is not meant to be
- * used by its users. It is only available to {@link
- * eZ\Publish\SPI\FieldType\EventListener} implementers through the {@link
- * eZ\Publish\SPI\FieldType\EventListener::handleEvent()} method.
+ * used by its users. It is only available to {@link * eZ\Publish\SPI\FieldType\EventListener} implementers through the {@link * eZ\Publish\SPI\FieldType\EventListener::handleEvent()} method.
  *
  * @todo Change this to be able to handle relations for FieldTypes in an effective manner (incl op_code handling in SPI)
  */

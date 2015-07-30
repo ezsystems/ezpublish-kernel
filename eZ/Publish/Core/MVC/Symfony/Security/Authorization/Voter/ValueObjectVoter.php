@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter;
 
 use eZ\Publish\API\Repository\Repository;

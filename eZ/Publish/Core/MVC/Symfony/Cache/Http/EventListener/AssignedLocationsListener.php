@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener;
 
 use eZ\Publish\API\Repository\LocationService;

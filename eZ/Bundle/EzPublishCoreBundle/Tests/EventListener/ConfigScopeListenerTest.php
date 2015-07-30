@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\ConfigScopeListener;

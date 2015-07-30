@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
@@ -17,7 +16,7 @@ use eZ\Publish\Core\FieldType\XmlText\Type;
 class XmlTextProcessor extends FieldTypeProcessor
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function preProcessFieldSettingsHash($incomingSettingsHash)
     {
@@ -35,7 +34,7 @@ class XmlTextProcessor extends FieldTypeProcessor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function postProcessFieldSettingsHash($outgoingSettingsHash)
     {

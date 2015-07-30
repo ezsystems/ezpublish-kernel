@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishRestBundle\RequestParser;
 
 use eZ\Publish\Core\REST\Common\RequestParser;
@@ -93,7 +92,7 @@ class Router implements RequestParser
     private function matchesRestRequest(array $match)
     {
         if (!isset($match['_route'])) {
-            throw new InvalidArgumentException("Invalid \$match parameter, no _route key");
+            throw new InvalidArgumentException('Invalid $match parameter, no _route key');
         }
 
         return (strpos($match['_route'], 'ezpublish_rest_') === 0);

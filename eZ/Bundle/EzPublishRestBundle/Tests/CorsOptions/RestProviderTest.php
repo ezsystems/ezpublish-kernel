@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishRestBundle\Tests\CorsOptions;
 
 use eZ\Bundle\EzPublishRestBundle\CorsOptions\RestProvider;

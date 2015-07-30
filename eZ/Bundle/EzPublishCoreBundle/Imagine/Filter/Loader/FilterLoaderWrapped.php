@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader;
 
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;

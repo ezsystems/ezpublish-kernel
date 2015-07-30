@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Security\User;
 
 use eZ\Publish\API\Repository\Values\User\User as APIUser;

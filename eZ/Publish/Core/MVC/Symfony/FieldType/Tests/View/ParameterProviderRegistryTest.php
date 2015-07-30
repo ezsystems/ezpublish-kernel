@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\FieldType\Tests\View;
 
 use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry;

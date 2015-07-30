@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\RelationList;
 
 use eZ\Publish\Core\FieldType\FieldType;
@@ -189,7 +188,7 @@ class Type extends FieldType
     {
         if (!is_array($value->destinationContentIds)) {
             throw new InvalidArgumentType(
-                "\$value->destinationContentIds",
+                '$value->destinationContentIds',
                 'array',
                 $value->destinationContentIds
             );

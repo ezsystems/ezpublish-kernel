@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishMigrationBundle\Command\LegacyStorage;
 
 use eZ\Publish\Core\Persistence\Database\SelectQuery;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;

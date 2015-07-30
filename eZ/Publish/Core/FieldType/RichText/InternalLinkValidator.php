@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\RichText;
 
 use eZ\Publish\API\Repository\ContentService;

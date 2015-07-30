@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\SPI\Persistence\Handler as SPIPersistenceHandler;

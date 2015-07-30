@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\Date;
 
 use eZ\Publish\SPI\Persistence\Content\Field;

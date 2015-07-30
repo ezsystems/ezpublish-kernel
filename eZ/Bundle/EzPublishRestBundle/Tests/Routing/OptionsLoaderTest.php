@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Routing;
 
 use eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader;

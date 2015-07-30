@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Block\Id;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\Block\MultipleValued;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Repository\Helper;
 
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
@@ -128,7 +127,7 @@ class DomainMapper
     {
         $fieldIdentifierMap = array();
         if (!$contentType instanceof SPIType && !$contentType instanceof ContentType) {
-            throw new InvalidArgumentType("\$contentType", 'SPI ContentType | API ContentType');
+            throw new InvalidArgumentType('$contentType', 'SPI ContentType | API ContentType');
         }
 
         foreach ($contentType->fieldDefinitions as $fieldDefinitions) {
@@ -356,7 +355,7 @@ class DomainMapper
             try {
                 $this->locationHandler->loadByRemoteId($remoteId);
                 throw new InvalidArgumentException(
-                    "\$locationCreateStructs",
+                    '$locationCreateStructs',
                     "Another Location with remoteId '{$remoteId}' exists"
                 );
             } catch (NotFoundException $e) {

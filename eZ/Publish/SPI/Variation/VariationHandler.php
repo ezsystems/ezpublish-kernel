@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\SPI\Variation;
 
 use eZ\Publish\API\Repository\Values\Content\Field;

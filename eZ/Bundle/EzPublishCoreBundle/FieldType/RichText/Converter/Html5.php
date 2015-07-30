@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter;
 
 use eZ\Publish\Core\FieldType\RichText\Converter\Xslt as XsltConverter;

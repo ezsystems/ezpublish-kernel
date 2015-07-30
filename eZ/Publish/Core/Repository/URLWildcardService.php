@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
@@ -89,7 +88,7 @@ class URLWildcardService implements URLWildcardServiceInterface
         foreach ($spiUrlWildcards as $wildcard) {
             if ($wildcard->sourceUrl === $sourceUrl) {
                 throw new InvalidArgumentException(
-                    "\$sourceUrl",
+                    '$sourceUrl',
                     'Pattern already exists'
                 );
             }

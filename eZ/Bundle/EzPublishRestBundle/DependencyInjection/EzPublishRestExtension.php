@@ -18,7 +18,7 @@ use Symfony\Component\Yaml\Yaml;
 class EzPublishRestExtension extends Extension implements PrependExtensionInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(array $configs, ContainerBuilder $container)
     {

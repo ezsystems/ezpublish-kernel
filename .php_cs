@@ -13,10 +13,10 @@ return Symfony\CS\Config\Config::create()
         '-phpdoc_to_comment',
         '-spaces_cast',
         '-blankline_after_open_tag',
+        '-single_blank_line_before_namespace',
     ])
     ->finder(
         Symfony\CS\Finder\DefaultFinder::create()
-            ->name('*.php')
             ->in(__DIR__)
             ->exclude([
                 'bin/.travis',
@@ -25,7 +25,6 @@ return Symfony\CS\Config\Config::create()
                 'var',
                 'vendor',
                 'eZ/Bundle/EzPublishCoreBundle/Tests/DependencyInjection/Fixtures',
-                'eZ/Bundle/EzPublishSolrSearchEngineBundle/Tests/DependencyInjection/Fixtures',
                 'eZ/Publish/API/Repository/Tests/FieldType/_fixtures',
                 'eZ/Publish/API/Repository/Tests/_fixtures',
                 'eZ/Publish/Core/FieldType/Tests/RichText/Converter/Xslt/_fixtures',
@@ -50,5 +49,6 @@ return Symfony\CS\Config\Config::create()
                 'eZ/Publish/Core/Search/Legacy/Tests/_fixtures',
                 'eZ/Publish/SPI/Tests/FieldType/_fixtures',
             ])
+            ->files()->name('*.php')
     )
 ;

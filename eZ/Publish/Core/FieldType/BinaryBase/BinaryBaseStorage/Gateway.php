@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage;
 
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;

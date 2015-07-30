@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\SPI\FieldType;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
@@ -52,8 +51,7 @@ interface FieldType
      * It will be used to generate content name and url alias if current field
      * is designated to be used in the content name/urlAlias pattern.
      *
-     * The used $value can be assumed to be already accepted by {@link
-     * acceptValue()}.
+     * The used $value can be assumed to be already accepted by {@link * acceptValue()}.
      *
      * @param \eZ\Publish\SPI\FieldType\Value $value
      *
@@ -161,8 +159,7 @@ interface FieldType
      * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
      *
      * This methods determines if the given $fieldSettings are structurally
-     * correct and comply to the settings schema returned by {@link
-     * getSettingsSchema()}.
+     * correct and comply to the settings schema returned by {@link * getSettingsSchema()}.
      *
      * @param mixed $fieldSettings
      *

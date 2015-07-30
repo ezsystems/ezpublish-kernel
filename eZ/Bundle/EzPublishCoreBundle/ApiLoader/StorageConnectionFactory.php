@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use Symfony\Component\DependencyInjection\ContainerAware;

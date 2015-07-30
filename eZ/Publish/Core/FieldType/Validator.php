@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType;
 
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException as PropertyNotFound;

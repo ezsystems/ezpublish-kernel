@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;

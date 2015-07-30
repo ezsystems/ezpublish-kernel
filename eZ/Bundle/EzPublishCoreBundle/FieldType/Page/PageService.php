@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\FieldType\Page;
 
 use eZ\Publish\Core\FieldType\Page\PageService as BasePageService;

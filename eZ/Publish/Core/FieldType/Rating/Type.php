@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\Rating;
 
 use eZ\Publish\Core\FieldType\FieldType;

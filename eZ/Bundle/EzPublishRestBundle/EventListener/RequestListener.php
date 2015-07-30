@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishRestBundle\EventListener;
 
 use Symfony\Component\HttpKernel\KernelEvents;

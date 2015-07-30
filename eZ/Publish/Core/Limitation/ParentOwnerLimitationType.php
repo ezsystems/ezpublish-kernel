@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -41,9 +40,9 @@ class ParentOwnerLimitationType extends AbstractPersistenceLimitationType implem
     public function acceptValue(APILimitationValue $limitationValue)
     {
         if (!$limitationValue instanceof APIParentOwnerLimitation) {
-            throw new InvalidArgumentType("\$limitationValue", 'APIParentOwnerLimitation', $limitationValue);
+            throw new InvalidArgumentType('$limitationValue', 'APIParentOwnerLimitation', $limitationValue);
         } elseif (!is_array($limitationValue->limitationValues)) {
-            throw new InvalidArgumentType("\$limitationValue->limitationValues", 'array', $limitationValue->limitationValues);
+            throw new InvalidArgumentType('$limitationValue->limitationValues', 'array', $limitationValue->limitationValues);
         }
 
         foreach ($limitationValue->limitationValues as $key => $value) {

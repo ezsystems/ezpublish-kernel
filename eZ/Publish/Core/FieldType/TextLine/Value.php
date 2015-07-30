@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\TextLine;
 
 use eZ\Publish\Core\FieldType\Value as BaseValue;

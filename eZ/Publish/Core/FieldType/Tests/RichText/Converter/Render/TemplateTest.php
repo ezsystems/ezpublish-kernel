@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\Tests\RichText\Converter\Render;
 
 use PHPUnit_Framework_TestCase;

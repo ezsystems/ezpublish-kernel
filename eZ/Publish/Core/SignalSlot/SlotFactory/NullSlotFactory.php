@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\SignalSlot\SlotFactory;
 
 use eZ\Publish\Core\SignalSlot\SlotFactory;

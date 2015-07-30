@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Base\Container\ApiLoader;
 
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;

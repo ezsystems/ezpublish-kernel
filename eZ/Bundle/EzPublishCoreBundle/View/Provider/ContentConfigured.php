@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\View\Provider;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;

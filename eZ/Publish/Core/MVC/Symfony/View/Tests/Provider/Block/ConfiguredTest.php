@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\Provider\Block;
 
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Block\Configured as BlockViewProvider;

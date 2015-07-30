@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\HttpClient;
 
 use eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\HttpClient;

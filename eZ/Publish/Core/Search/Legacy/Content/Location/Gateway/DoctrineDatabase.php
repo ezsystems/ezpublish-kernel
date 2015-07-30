@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Legacy\Content\Location\Gateway;
 
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;

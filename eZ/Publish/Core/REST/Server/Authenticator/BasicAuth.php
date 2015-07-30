@@ -11,7 +11,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Server\Authenticator;
 
 use eZ\Publish\Core\REST\Server\Authenticator;

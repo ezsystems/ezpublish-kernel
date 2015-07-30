@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Server\Controller;
 
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;

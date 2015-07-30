@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor\Field;
 
 use eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor\FieldBase;
@@ -53,7 +52,7 @@ class Field extends FieldBase
 
         if ($fieldName === null) {
             throw new InvalidArgumentException(
-                "\$sortClause->targetData",
+                '$sortClause->targetData',
                 'No searchable fields found for the given sort clause target ' .
                 "'{$target->fieldIdentifier}' on '{$target->typeIdentifier}'."
             );

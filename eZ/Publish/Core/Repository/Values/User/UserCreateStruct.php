@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct;

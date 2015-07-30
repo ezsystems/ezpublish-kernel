@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Common\Exceptions;
 
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException as APIInvalidArgumentException;

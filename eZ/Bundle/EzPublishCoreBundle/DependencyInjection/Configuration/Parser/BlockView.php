@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;

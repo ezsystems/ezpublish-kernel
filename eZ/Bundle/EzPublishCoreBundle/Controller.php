@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;

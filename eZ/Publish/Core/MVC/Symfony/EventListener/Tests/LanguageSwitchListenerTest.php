@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\EventListener\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Event\RouteReferenceGenerationEvent;

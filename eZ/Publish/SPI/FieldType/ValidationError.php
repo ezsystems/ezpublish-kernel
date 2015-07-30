@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\SPI\FieldType;
 
 use eZ\Publish\API\Repository\Translatable;

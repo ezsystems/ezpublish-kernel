@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\Country;
 
 use eZ\Publish\SPI\Persistence\Content\Field;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\API\Repository\Tests\Regression;
 
 use eZ\Publish\API\Repository\Tests\BaseTest;

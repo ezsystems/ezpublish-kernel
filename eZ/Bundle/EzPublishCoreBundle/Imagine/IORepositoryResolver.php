@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
@@ -101,7 +100,7 @@ class IORepositoryResolver implements ResolverInterface
      * Stores image alias in the IO Repository.
      * A temporary file is created to dump the filtered image and is used as basis for creation in the IO Repository.
      *
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function store(BinaryInterface $binary, $path, $filter)
     {

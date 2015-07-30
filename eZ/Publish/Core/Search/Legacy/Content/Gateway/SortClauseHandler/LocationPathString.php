@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Legacy\Content\Gateway\SortClauseHandler;
 
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler;

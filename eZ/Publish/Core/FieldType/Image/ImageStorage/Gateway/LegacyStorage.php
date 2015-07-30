@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
 use eZ\Publish\Core\IO\UrlRedecorator;

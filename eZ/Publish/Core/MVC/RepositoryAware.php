@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC;
 
 use eZ\Publish\API\Repository\Repository;

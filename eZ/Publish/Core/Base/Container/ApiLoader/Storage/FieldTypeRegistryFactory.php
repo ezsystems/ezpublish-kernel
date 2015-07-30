@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Base\Container\ApiLoader\Storage;
 
 use eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory;

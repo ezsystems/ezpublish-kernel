@@ -3,7 +3,6 @@
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

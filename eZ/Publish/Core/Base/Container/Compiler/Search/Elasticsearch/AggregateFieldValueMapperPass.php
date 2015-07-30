@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence\Legacy\Exception;
 
 use eZ\Publish\Core\Base\Exceptions\BadStateException;

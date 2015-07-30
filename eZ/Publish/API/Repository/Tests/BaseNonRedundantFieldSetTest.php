@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;

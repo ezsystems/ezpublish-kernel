@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
 use eZ\Publish\Core\FieldType\Media\Type;
@@ -34,7 +33,7 @@ class SearchableMedia extends Type
         $valueFQN = substr_replace($fieldTypeFQN, 'Value', strrpos($fieldTypeFQN, '\\') + 1);
 
         if (!$value instanceof $valueFQN) {
-            throw new InvalidArgumentType("\$value", $valueFQN, $value);
+            throw new InvalidArgumentType('$value', $valueFQN, $value);
         }
     }
 }

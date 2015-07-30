@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Matcher;
 
 use eZ\Bundle\EzPublishCoreBundle\Matcher\ContentMatcherFactory;

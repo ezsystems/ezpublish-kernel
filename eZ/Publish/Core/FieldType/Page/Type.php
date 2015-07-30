@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\Page;
 
 use eZ\Publish\Core\FieldType\FieldType;
@@ -263,7 +262,7 @@ class Type extends FieldType
     {
         if (!$value->page instanceof Page) {
             throw new InvalidArgumentType(
-                "\$value->page",
+                '$value->page',
                 'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Page',
                 $value->page
             );

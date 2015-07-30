@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishElasticsearchSearchEngineBundle;
 
 use eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\DependencyInjection\EzPublishElasticsearchSearchEngineExtension;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
 use eZ\Publish\Core\Persistence\TransformationProcessor;

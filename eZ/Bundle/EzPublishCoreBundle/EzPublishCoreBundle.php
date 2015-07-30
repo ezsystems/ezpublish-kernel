@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AsseticPass;

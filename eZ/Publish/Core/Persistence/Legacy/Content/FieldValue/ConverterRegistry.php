@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound;

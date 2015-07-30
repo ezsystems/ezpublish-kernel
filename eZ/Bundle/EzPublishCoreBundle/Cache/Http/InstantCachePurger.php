@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Cache\Http;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\InstantCachePurger as BasePurger;

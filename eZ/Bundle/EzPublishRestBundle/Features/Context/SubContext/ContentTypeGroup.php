@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
 use EzSystems\BehatBundle\Helper\Gherkin as GherkinHelper;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\Tests\Image\IO;
 
 use eZ\Publish\Core\FieldType\Image\IO\Legacy as LegacyIOService;

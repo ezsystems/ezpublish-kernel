@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Security\UserWrapped;

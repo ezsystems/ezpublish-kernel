@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
@@ -252,7 +251,7 @@ class LocationService implements LocationServiceInterface
     public function loadLocations(ContentInfo $contentInfo, APILocation $rootLocation = null)
     {
         if (!$contentInfo->published) {
-            throw new BadStateException("\$contentInfo", 'ContentInfo has no published versions');
+            throw new BadStateException('$contentInfo', 'ContentInfo has no published versions');
         }
 
         $spiLocations = $this->persistenceHandler->locationHandler()->loadLocationsByContent(
@@ -398,13 +397,13 @@ class LocationService implements LocationServiceInterface
             foreach ($existingContentLocations as $existingContentLocation) {
                 if (stripos($parentLocation->pathString, $existingContentLocation->pathString) !== false) {
                     throw new InvalidArgumentException(
-                        "\$locationCreateStruct",
+                        '$locationCreateStruct',
                         'Specified parent is a sub location of one of the existing content locations.'
                     );
                 }
                 if ($parentLocation->id == $existingContentLocation->parentLocationId) {
                     throw new InvalidArgumentException(
-                        "\$locationCreateStruct",
+                        '$locationCreateStruct',
                         'Content is already below the specified parent.'
                     );
                 }
@@ -645,8 +644,8 @@ class LocationService implements LocationServiceInterface
 
         if (strpos($newParentLocation->pathString, $location->pathString) === 0) {
             throw new InvalidArgumentException(
-                "\$newParentLocation",
-                "new parent location is in a subtree of the given \$location"
+                '$newParentLocation',
+                'new parent location is in a subtree of the given $location'
             );
         }
 

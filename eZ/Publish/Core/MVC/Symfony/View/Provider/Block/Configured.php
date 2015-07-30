@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\View\Provider\Block;
 
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Configured as BaseConfigured;

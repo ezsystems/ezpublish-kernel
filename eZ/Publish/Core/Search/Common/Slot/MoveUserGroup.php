@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;

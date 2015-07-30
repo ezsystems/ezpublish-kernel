@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigParser;

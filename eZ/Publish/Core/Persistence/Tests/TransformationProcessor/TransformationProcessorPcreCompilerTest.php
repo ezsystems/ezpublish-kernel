@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence\Tests\TransformationProcessor;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\Extractor;
 
 use eZ\Publish\Core\Search\Elasticsearch\Content\Extractor;

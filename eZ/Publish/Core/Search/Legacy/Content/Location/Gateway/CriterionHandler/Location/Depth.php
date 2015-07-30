@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\CriterionHandler\Location;
 
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;

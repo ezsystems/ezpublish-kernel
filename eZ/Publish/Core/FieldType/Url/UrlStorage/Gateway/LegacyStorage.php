@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway;
 
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;

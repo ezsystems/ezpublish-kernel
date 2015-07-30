@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Assetic;
 
 use eZ\Bundle\EzPublishCoreBundle\Assetic\AssetFactory;

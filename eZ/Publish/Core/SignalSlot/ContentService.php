@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;

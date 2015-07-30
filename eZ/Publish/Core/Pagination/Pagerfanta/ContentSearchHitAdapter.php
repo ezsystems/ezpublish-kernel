@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Pagination\Pagerfanta;
 
 use eZ\Publish\API\Repository\Values\Content\Query;

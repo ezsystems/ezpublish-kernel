@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Base\Exceptions;
 
 use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException as APIContentFieldValidationException;

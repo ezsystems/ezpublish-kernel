@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Routing;
 
 use eZ\Publish\API\Repository\LocationService;

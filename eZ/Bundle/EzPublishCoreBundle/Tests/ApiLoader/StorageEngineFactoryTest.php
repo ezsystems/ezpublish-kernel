@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\Tests\XmlText\Gateway;
 
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;

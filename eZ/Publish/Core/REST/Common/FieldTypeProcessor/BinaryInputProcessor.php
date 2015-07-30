@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
@@ -29,7 +28,7 @@ abstract class BinaryInputProcessor extends FieldTypeProcessor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function preProcessValueHash($incomingValueHash)
     {

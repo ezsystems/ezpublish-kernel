@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
 use eZ\Publish\Core\FieldType\XmlText\Converter\Html5 as Html5Converter;

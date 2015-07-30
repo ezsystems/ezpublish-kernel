@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\SPI\Persistence;
 
 use eZ\Publish\API\Repository\Values\ValueObject as APIValueObject;

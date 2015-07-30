@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 
 use eZ\Publish\Core\IO\IOServiceInterface;

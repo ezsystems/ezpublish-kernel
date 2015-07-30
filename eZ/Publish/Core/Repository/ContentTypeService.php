@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
@@ -128,7 +127,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             $this->loadContentTypeGroupByIdentifier($contentTypeGroupCreateStruct->identifier);
 
             throw new InvalidArgumentException(
-                "\$contentTypeGroupCreateStruct",
+                '$contentTypeGroupCreateStruct',
                 "A group with the identifier '{$contentTypeGroupCreateStruct->identifier}' already exists"
             );
         } catch (APINotFoundException $e) {
@@ -317,7 +316,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         } catch (APIBadStateException $e) {
             $this->repository->rollback();
             throw new InvalidArgumentException(
-                "\$contentTypeGroup",
+                '$contentTypeGroup',
                 'Content type group has content type instances',
                 $e
             );
@@ -377,12 +376,12 @@ class ContentTypeService implements ContentTypeServiceInterface
         // Required properties
 
         if ($contentTypeCreateStruct->identifier === null) {
-            throw new InvalidArgumentException("\$contentTypeCreateStruct", "Property 'identifier' is required");
+            throw new InvalidArgumentException('$contentTypeCreateStruct', "Property 'identifier' is required");
         }
 
         if (!is_string($contentTypeCreateStruct->identifier)) {
             throw new InvalidArgumentType(
-                "\$contentTypeCreateStruct->identifier",
+                '$contentTypeCreateStruct->identifier',
                 'string',
                 $contentTypeCreateStruct->identifier
             );
@@ -390,18 +389,18 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ($contentTypeCreateStruct->identifier === '') {
             throw new InvalidArgumentValue(
-                "\$contentTypeCreateStruct->identifier",
+                '$contentTypeCreateStruct->identifier',
                 $contentTypeCreateStruct->identifier
             );
         }
 
         if ($contentTypeCreateStruct->mainLanguageCode === null) {
-            throw new InvalidArgumentException("\$contentTypeCreateStruct", "Property 'mainLanguageCode' is required");
+            throw new InvalidArgumentException('$contentTypeCreateStruct', "Property 'mainLanguageCode' is required");
         }
 
         if (!is_string($contentTypeCreateStruct->mainLanguageCode)) {
             throw new InvalidArgumentType(
-                "\$contentTypeCreateStruct->mainLanguageCode",
+                '$contentTypeCreateStruct->mainLanguageCode',
                 'string',
                 $contentTypeCreateStruct->mainLanguageCode
             );
@@ -409,7 +408,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ($contentTypeCreateStruct->mainLanguageCode === '') {
             throw new InvalidArgumentValue(
-                "\$contentTypeCreateStruct->mainLanguageCode",
+                '$contentTypeCreateStruct->mainLanguageCode',
                 $contentTypeCreateStruct->mainLanguageCode
             );
         }
@@ -417,7 +416,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         if ($contentTypeCreateStruct->names !== null) {
             $this->domainMapper->validateTranslatedList(
                 $contentTypeCreateStruct->names,
-                "\$contentTypeCreateStruct->names"
+                '$contentTypeCreateStruct->names'
             );
         }
 
@@ -425,7 +424,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             $contentTypeCreateStruct->names[$contentTypeCreateStruct->mainLanguageCode] === ''
         ) {
             throw new InvalidArgumentException(
-                "\$contentTypeCreateStruct->names",
+                '$contentTypeCreateStruct->names',
                 'At least one name in the main language is required'
             );
         }
@@ -435,20 +434,20 @@ class ContentTypeService implements ContentTypeServiceInterface
         if ($contentTypeCreateStruct->descriptions !== null) {
             $this->domainMapper->validateTranslatedList(
                 $contentTypeCreateStruct->descriptions,
-                "\$contentTypeCreateStruct->descriptions"
+                '$contentTypeCreateStruct->descriptions'
             );
         }
 
         if ($contentTypeCreateStruct->defaultSortField !== null && !$this->domainMapper->isValidLocationSortField($contentTypeCreateStruct->defaultSortField)) {
             throw new InvalidArgumentValue(
-                "\$contentTypeCreateStruct->defaultSortField",
+                '$contentTypeCreateStruct->defaultSortField',
                 $contentTypeCreateStruct->defaultSortField
             );
         }
 
         if ($contentTypeCreateStruct->defaultSortOrder !== null && !$this->domainMapper->isValidLocationSortOrder($contentTypeCreateStruct->defaultSortOrder)) {
             throw new InvalidArgumentValue(
-                "\$contentTypeCreateStruct->defaultSortOrder",
+                '$contentTypeCreateStruct->defaultSortOrder',
                 $contentTypeCreateStruct->defaultSortOrder
             );
         }
@@ -459,7 +458,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ($contentTypeCreateStruct->creationDate !== null && !$contentTypeCreateStruct->creationDate instanceof DateTime) {
             throw new InvalidArgumentType(
-                "\$contentTypeCreateStruct->creationDate",
+                '$contentTypeCreateStruct->creationDate',
                 'DateTime',
                 $contentTypeCreateStruct->creationDate
             );
@@ -467,7 +466,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ($contentTypeCreateStruct->defaultAlwaysAvailable !== null && !is_bool($contentTypeCreateStruct->defaultAlwaysAvailable)) {
             throw new InvalidArgumentType(
-                "\$contentTypeCreateStruct->defaultAlwaysAvailable",
+                '$contentTypeCreateStruct->defaultAlwaysAvailable',
                 'boolean',
                 $contentTypeCreateStruct->defaultAlwaysAvailable
             );
@@ -475,7 +474,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ($contentTypeCreateStruct->isContainer !== null && !is_bool($contentTypeCreateStruct->isContainer)) {
             throw new InvalidArgumentType(
-                "\$contentTypeCreateStruct->isContainer",
+                '$contentTypeCreateStruct->isContainer',
                 'boolean',
                 $contentTypeCreateStruct->isContainer
             );
@@ -483,7 +482,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ($contentTypeCreateStruct->remoteId !== null && !is_string($contentTypeCreateStruct->remoteId)) {
             throw new InvalidArgumentType(
-                "\$contentTypeCreateStruct->remoteId",
+                '$contentTypeCreateStruct->remoteId',
                 'string',
                 $contentTypeCreateStruct->remoteId
             );
@@ -491,7 +490,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ($contentTypeCreateStruct->nameSchema !== null && !is_string($contentTypeCreateStruct->nameSchema)) {
             throw new InvalidArgumentType(
-                "\$contentTypeCreateStruct->nameSchema",
+                '$contentTypeCreateStruct->nameSchema',
                 'string',
                 $contentTypeCreateStruct->nameSchema
             );
@@ -499,7 +498,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ($contentTypeCreateStruct->urlAliasSchema !== null && !is_string($contentTypeCreateStruct->urlAliasSchema)) {
             throw new InvalidArgumentType(
-                "\$contentTypeCreateStruct->urlAliasSchema",
+                '$contentTypeCreateStruct->urlAliasSchema',
                 'string',
                 $contentTypeCreateStruct->urlAliasSchema
             );
@@ -533,7 +532,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         if (empty($contentTypeGroups)) {
             throw new InvalidArgumentException(
-                "\$contentTypeGroups",
+                '$contentTypeGroups',
                 'Argument must contain at least one ContentTypeGroup'
             );
         }
@@ -561,7 +560,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     protected function validateInputFieldDefinitionCreateStruct(
         FieldDefinitionCreateStruct $fieldDefinitionCreateStruct,
-        $argumentName = "\$fieldDefinitionCreateStruct"
+        $argumentName = '$fieldDefinitionCreateStruct'
     ) {
         // Required properties
 
@@ -713,7 +712,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
 
             throw new InvalidArgumentException(
-                "\$contentTypeCreateStruct",
+                '$contentTypeCreateStruct',
                 "Another ContentType with identifier '{$contentTypeCreateStruct->identifier}' exists"
             );
         } catch (APINotFoundException $e) {
@@ -727,7 +726,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 );
 
                 throw new InvalidArgumentException(
-                    "\$contentTypeCreateStruct",
+                    '$contentTypeCreateStruct',
                     "Another ContentType with remoteId '{$contentTypeCreateStruct->remoteId}' exists"
                 );
             } catch (APINotFoundException $e) {
@@ -743,7 +742,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $fieldDefinitionIdentifierSet[$fieldDefinitionCreateStruct->identifier] = true;
             } else {
                 throw new InvalidArgumentException(
-                    "\$contentTypeCreateStruct",
+                    '$contentTypeCreateStruct',
                     "Argument contains duplicate field definition identifier '{$fieldDefinitionCreateStruct->identifier}'"
                 );
             }
@@ -753,7 +752,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $fieldDefinitionPositionSet[$fieldDefinitionCreateStruct->position] = true;
             } else {
                 throw new InvalidArgumentException(
-                    "\$contentTypeCreateStruct",
+                    '$contentTypeCreateStruct',
                     "Argument contains duplicate field definition position '{$fieldDefinitionCreateStruct->position}'"
                 );
             }
@@ -1273,7 +1272,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
 
             throw new BadStateException(
-                "\$contentType",
+                '$contentType',
                 'Draft of the ContentType already exists'
             );
         } catch (APINotFoundException $e) {
@@ -1317,7 +1316,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             $loadedContentTypeDraft = $this->loadContentTypeDraft($contentTypeDraft->id);
         } catch (APINotFoundException $e) {
             throw new InvalidArgumentException(
-                "\$contentTypeDraft",
+                '$contentTypeDraft',
                 'There is no ContentType draft assigned to the authenticated user',
                 $e
             );
@@ -1329,7 +1328,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $this->loadContentTypeByIdentifier($contentTypeUpdateStruct->identifier);
 
                 throw new InvalidArgumentException(
-                    "\$contentTypeUpdateStruct",
+                    '$contentTypeUpdateStruct',
                     "Another ContentType with identifier '{$contentTypeUpdateStruct->identifier}' exists"
                 );
             } catch (APINotFoundException $e) {
@@ -1343,7 +1342,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $this->loadContentTypeByRemoteId($contentTypeUpdateStruct->remoteId);
 
                 throw new InvalidArgumentException(
-                    "\$contentTypeUpdateStruct",
+                    '$contentTypeUpdateStruct',
                     "Another ContentType with remoteId '{$contentTypeUpdateStruct->remoteId}' exists"
                 );
             } catch (APINotFoundException $e) {
@@ -1518,7 +1517,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if (in_array($contentTypeGroup->id, $spiContentType->groupIds)) {
             throw new InvalidArgumentException(
-                "\$contentTypeGroup",
+                '$contentTypeGroup',
                 'The given ContentType is already assigned to the ContentTypeGroup'
             );
         }
@@ -1560,7 +1559,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if (!in_array($contentTypeGroup->id, $spiContentType->groupIds)) {
             throw new InvalidArgumentException(
-                "\$contentTypeGroup",
+                '$contentTypeGroup',
                 'The given ContentType is not assigned the ContentTypeGroup'
             );
         }
@@ -1576,7 +1575,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         } catch (APIBadStateException $e) {
             $this->repository->rollback();
             throw new BadStateException(
-                "\$contentType",
+                '$contentType',
                 'The given ContentTypeGroup is the last group assigned to the ContentType',
                 $e
             );
@@ -1614,7 +1613,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if ($loadedContentTypeDraft->getFieldDefinition($fieldDefinitionCreateStruct->identifier) !== null) {
             throw new InvalidArgumentException(
-                "\$fieldDefinitionCreateStruct",
+                '$fieldDefinitionCreateStruct',
                 "Another FieldDefinition with identifier '{$fieldDefinitionCreateStruct->identifier}' exists in the ContentType"
             );
         }
@@ -1636,7 +1635,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             foreach ($loadedContentTypeDraft->getFieldDefinitions() as $fieldDefinition) {
                 if ($fieldDefinition->fieldTypeIdentifier === $fieldDefinitionCreateStruct->fieldTypeIdentifier) {
                     throw new BadStateException(
-                        "\$contentTypeDraft",
+                        '$contentTypeDraft',
                         "ContentType already contains field definition of non-repeatable field type '{$fieldDefinition->fieldTypeIdentifier}'"
                     );
                 }
@@ -1646,7 +1645,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         if ($fieldType->onlyEmptyInstance() && $this->contentTypeHandler->getContentCount($loadedContentTypeDraft->id)
         ) {
             throw new BadStateException(
-                "\$contentTypeDraft",
+                '$contentTypeDraft',
                 "Field definition of '{$fieldDefinitionCreateStruct->fieldTypeIdentifier}' field type cannot be added because ContentType has Content instances"
             );
         }
@@ -1690,7 +1689,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if (empty($loadedFieldDefinition) || $loadedFieldDefinition->id != $fieldDefinition->id) {
             throw new InvalidArgumentException(
-                "\$fieldDefinition",
+                '$fieldDefinition',
                 'The given FieldDefinition does not belong to the ContentType'
             );
         }
@@ -1733,14 +1732,14 @@ class ContentTypeService implements ContentTypeServiceInterface
                 $foundFieldId = true;
             } elseif ($existingFieldDefinition->identifier == $fieldDefinitionUpdateStruct->identifier) {
                 throw new InvalidArgumentException(
-                    "\$fieldDefinitionUpdateStruct",
+                    '$fieldDefinitionUpdateStruct',
                     "Another FieldDefinition with identifier '{$fieldDefinitionUpdateStruct->identifier}' exists in the ContentType"
                 );
             }
         }
         if (!$foundFieldId) {
             throw new InvalidArgumentException(
-                "\$fieldDefinition",
+                '$fieldDefinition',
                 'The given FieldDefinition does not belong to the ContentType'
             );
         }
@@ -1785,7 +1784,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             $loadedContentTypeDraft = $this->loadContentTypeDraft($contentTypeDraft->id);
         } catch (APINotFoundException $e) {
             throw new BadStateException(
-                "\$contentTypeDraft",
+                '$contentTypeDraft',
                 'The content type does not have a draft.',
                 $e
             );
@@ -1793,7 +1792,7 @@ class ContentTypeService implements ContentTypeServiceInterface
 
         if (count($loadedContentTypeDraft->getFieldDefinitions()) === 0) {
             throw new InvalidArgumentException(
-                "\$contentTypeDraft",
+                '$contentTypeDraft',
                 'The content type draft should have at least one field definition.'
             );
         }

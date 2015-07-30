@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Elasticsearch;
 
 use eZ\Publish\SPI\Search\Handler as HandlerInterface;

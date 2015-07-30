@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
 use eZ\Publish\Core\FieldType\Media\Type as MediaType;

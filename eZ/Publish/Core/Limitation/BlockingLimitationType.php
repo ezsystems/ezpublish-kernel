@@ -6,7 +6,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
@@ -61,9 +60,9 @@ class BlockingLimitationType implements SPILimitationTypeInterface
     public function acceptValue(APILimitationValue $limitationValue)
     {
         if (!$limitationValue instanceof APIBlockingLimitation) {
-            throw new InvalidArgumentType("\$limitationValue", 'BlockingLimitation', $limitationValue);
+            throw new InvalidArgumentType('$limitationValue', 'BlockingLimitation', $limitationValue);
         } elseif (!is_array($limitationValue->limitationValues)) {
-            throw new InvalidArgumentType("\$limitationValue->limitationValues", 'array', $limitationValue->limitationValues);
+            throw new InvalidArgumentType('$limitationValue->limitationValues', 'array', $limitationValue->limitationValues);
         }
     }
 

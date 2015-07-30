@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase;
 
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;

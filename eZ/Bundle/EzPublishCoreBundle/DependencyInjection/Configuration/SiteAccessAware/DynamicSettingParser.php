@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware;
 
 use OutOfBoundsException;
@@ -30,7 +29,7 @@ class DynamicSettingParser implements DynamicSettingParserInterface
     {
         $params = explode(static::INNER_DELIMITER, $this->removeBoundaryDelimiter($setting));
         if (count($params) > 3) {
-            throw new OutOfBoundsException("Dynamic settings cannot have more than 3 segments: \$paramName;namespace;scope\$");
+            throw new OutOfBoundsException('Dynamic settings cannot have more than 3 segments: $paramName;namespace;scope$');
         }
 
         return array(

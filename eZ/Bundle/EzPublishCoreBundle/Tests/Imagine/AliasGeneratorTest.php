@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\AliasGenerator;

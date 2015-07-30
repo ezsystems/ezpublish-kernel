@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -107,12 +106,12 @@ class Handler implements SearchHandlerInterface
         if (!$result->totalCount) {
             throw new NotFoundException(
                 'Content',
-                "findSingle() found no content for given \$filter"
+                'findSingle() found no content for given $filter'
             );
         } elseif ($result->totalCount > 1) {
             throw new InvalidArgumentException(
                 'totalCount',
-                "findSingle() found more then one item for given \$filter"
+                'findSingle() found more then one item for given $filter'
             );
         }
 

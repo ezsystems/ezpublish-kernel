@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\SiteAccess;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher as BaseMatcher;

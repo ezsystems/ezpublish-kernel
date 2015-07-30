@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\User\Role;
 
 use eZ\Publish\API\Repository\Values\User\Limitation;

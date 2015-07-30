@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler;
 
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
@@ -141,7 +140,7 @@ class MapLocationDistance extends SortClauseHandler
 
         if (!isset($fieldMap[$fieldTarget->typeIdentifier][$fieldTarget->fieldIdentifier]['field_definition_id'])) {
             throw new InvalidArgumentException(
-                "\$sortClause->targetData",
+                '$sortClause->targetData',
                 'No searchable fields found for the given sort clause target ' .
                 "'{$fieldTarget->fieldIdentifier}' on '{$fieldTarget->typeIdentifier}'."
             );

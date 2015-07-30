@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader;
 
 use Symfony\Component\Routing\RouteCollection;

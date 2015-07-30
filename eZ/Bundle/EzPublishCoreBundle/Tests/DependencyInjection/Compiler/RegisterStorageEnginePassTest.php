@@ -6,7 +6,6 @@
  * Date: 19/11/13
  * Time: 08:59.
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterStorageEnginePass;

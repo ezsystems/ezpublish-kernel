@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
 
 use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;

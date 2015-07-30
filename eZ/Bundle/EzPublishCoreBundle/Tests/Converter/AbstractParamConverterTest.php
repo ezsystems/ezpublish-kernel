@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Converter;
 
 abstract class AbstractParamConverterTest extends \PHPUnit_Framework_TestCase

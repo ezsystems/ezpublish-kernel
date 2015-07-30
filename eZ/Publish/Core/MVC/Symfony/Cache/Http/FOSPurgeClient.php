@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;

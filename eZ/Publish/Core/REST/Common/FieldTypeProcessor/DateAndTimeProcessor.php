@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
@@ -17,7 +16,7 @@ use eZ\Publish\Core\FieldType\DateAndTime\Type;
 class DateAndTimeProcessor extends FieldTypeProcessor
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function preProcessFieldSettingsHash($incomingSettingsHash)
     {
@@ -38,7 +37,7 @@ class DateAndTimeProcessor extends FieldTypeProcessor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function postProcessFieldSettingsHash($outgoingSettingsHash)
     {

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\SignalSlot\Signal\URLAliasService;
 
 use eZ\Publish\Core\SignalSlot\Signal;
