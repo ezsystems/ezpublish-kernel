@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine\Filter;
 
 use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;

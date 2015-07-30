@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishXhtml5EditTestBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;

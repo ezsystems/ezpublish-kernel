@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
@@ -28,7 +27,7 @@ class RichTextProcessor extends FieldTypeProcessor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function postProcessValueHash($outgoingValueHash)
     {

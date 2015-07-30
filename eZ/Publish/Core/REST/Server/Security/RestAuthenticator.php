@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Server\Security;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;

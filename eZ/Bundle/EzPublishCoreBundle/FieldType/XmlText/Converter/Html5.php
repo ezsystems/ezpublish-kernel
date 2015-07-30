@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\FieldType\XmlText\Converter;
 
 use eZ\Publish\Core\FieldType\XmlText\Converter\Html5 as BaseHtml5Converter;

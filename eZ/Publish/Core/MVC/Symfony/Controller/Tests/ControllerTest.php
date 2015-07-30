@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Tests;
 
 use Symfony\Component\HttpFoundation\Response;

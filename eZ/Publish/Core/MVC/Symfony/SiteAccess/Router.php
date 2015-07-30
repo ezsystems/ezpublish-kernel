@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;

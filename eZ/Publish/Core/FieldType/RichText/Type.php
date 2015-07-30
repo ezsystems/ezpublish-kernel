@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\RichText;
 
 use eZ\Publish\Core\FieldType\FieldType;
@@ -149,7 +148,7 @@ class Type extends FieldType
             $errors = $this->validatorDispatcher->dispatch($inputValue);
             if (!empty($errors)) {
                 throw new InvalidArgumentException(
-                    "\$inputValue",
+                    '$inputValue',
                     'Validation of XML content failed: ' . implode("\n", $errors)
                 );
             }
@@ -159,7 +158,7 @@ class Type extends FieldType
             $errors = $this->validatorDispatcher->dispatch($inputValue);
             if (!empty($errors)) {
                 throw new InvalidArgumentException(
-                    "\$inputValue",
+                    '$inputValue',
                     'Validation of XML content failed: ' . implode("\n", $errors)
                 );
             }
@@ -196,7 +195,7 @@ class Type extends FieldType
             }
 
             throw new InvalidArgumentException(
-                "\$inputValue",
+                '$inputValue',
                 'Could not create XML document: ' . implode("\n", $messages)
             );
         }

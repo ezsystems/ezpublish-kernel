@@ -3,7 +3,6 @@
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\FieldType\BinaryBase;
 
 use eZ\Publish\SPI\FieldType\BinaryBase\PathGenerator;

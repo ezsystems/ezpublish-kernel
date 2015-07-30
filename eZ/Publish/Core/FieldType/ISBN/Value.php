@@ -8,7 +8,6 @@
  *
  * @version
  */
-
 namespace eZ\Publish\Core\FieldType\ISBN;
 
 use eZ\Publish\Core\FieldType\Value as BaseValue;

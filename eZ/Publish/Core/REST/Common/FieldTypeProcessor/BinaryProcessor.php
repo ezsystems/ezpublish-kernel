@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
 class BinaryProcessor extends BinaryInputProcessor
@@ -33,7 +32,7 @@ class BinaryProcessor extends BinaryInputProcessor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function postProcessValueHash($outgoingValueHash)
     {

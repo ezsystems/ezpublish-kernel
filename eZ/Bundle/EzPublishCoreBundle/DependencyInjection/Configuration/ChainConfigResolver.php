@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;

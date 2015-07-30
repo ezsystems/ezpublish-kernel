@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot;
 
 use eZ\Publish\Core\MVC\Symfony\Event\SignalEvent;

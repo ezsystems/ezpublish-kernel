@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
@@ -433,7 +432,7 @@ class Repository implements RepositoryInterface
             $targets = array($targets);
         } elseif ($targets !== null && !is_array($targets)) {
             throw new InvalidArgumentType(
-                "\$targets",
+                '$targets',
                 'null|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject[]',
                 $targets
             );

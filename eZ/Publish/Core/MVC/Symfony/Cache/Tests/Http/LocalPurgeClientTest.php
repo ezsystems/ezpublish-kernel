@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace Symfony\Component\HttpFoundation;
 
 /**

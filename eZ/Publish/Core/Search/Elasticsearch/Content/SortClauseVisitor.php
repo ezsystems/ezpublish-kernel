@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;

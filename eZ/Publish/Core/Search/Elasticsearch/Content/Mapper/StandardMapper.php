@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\Mapper;
 
 use eZ\Publish\SPI\Search\Field;

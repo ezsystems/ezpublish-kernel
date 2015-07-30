@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\Url\UrlStorage;
 
 use eZ\Publish\Core\FieldType\StorageGateway;

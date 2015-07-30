@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\API\Repository\Tests\IdManager;
 
 use eZ\Publish\API\Repository\Tests\IdManager;

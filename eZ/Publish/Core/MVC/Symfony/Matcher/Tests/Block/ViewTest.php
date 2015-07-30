@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\Block;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\Block\View as BlockViewMatcher;

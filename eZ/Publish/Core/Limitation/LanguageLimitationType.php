@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
@@ -43,9 +42,9 @@ class LanguageLimitationType extends AbstractPersistenceLimitationType implement
     public function acceptValue(APILimitationValue $limitationValue)
     {
         if (!$limitationValue instanceof APILanguageLimitation) {
-            throw new InvalidArgumentType("\$limitationValue", 'APILanguageLimitation', $limitationValue);
+            throw new InvalidArgumentType('$limitationValue', 'APILanguageLimitation', $limitationValue);
         } elseif (!is_array($limitationValue->limitationValues)) {
-            throw new InvalidArgumentType("\$limitationValue->limitationValues", 'array', $limitationValue->limitationValues);
+            throw new InvalidArgumentType('$limitationValue->limitationValues', 'array', $limitationValue->limitationValues);
         }
 
         foreach ($limitationValue->limitationValues as $key => $value) {
@@ -162,7 +161,7 @@ class LanguageLimitationType extends AbstractPersistenceLimitationType implement
     {
         if (empty($value->limitationValues)) {
             // no limitation values
-            throw new \RuntimeException("\$value->limitationValues is empty, it should not have been stored in the first place");
+            throw new \RuntimeException('$value->limitationValues is empty, it should not have been stored in the first place');
         }
 
         if (!isset($value->limitationValues[1])) {

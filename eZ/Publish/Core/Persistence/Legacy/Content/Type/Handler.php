@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
 use eZ\Publish\SPI\Persistence\Content\Type;
@@ -352,7 +351,7 @@ class Handler implements BaseContentTypeHandler
 
         if (Type::STATUS_DEFINED === $status && $this->contentTypeGateway->countInstancesOfType($contentTypeId)) {
             throw new BadStateException(
-                "\$contentTypeId",
+                '$contentTypeId',
                 "ContentType with given id still has content instances and therefore can't be deleted"
             );
         }

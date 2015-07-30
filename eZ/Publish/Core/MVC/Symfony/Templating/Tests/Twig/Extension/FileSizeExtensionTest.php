@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension;
 
 use Twig_Test_IntegrationTestCase;

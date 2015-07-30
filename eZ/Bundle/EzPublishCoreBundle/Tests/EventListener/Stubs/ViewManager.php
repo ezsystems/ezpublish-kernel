@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs;
 
 use eZ\Publish\API\Repository\Values\Content\Content;

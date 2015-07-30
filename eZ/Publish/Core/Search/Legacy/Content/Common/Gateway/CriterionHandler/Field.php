@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
@@ -122,7 +121,7 @@ class Field extends FieldBase
 
         if (empty($fieldMapArray)) {
             throw new InvalidArgumentException(
-                "\$criterion->target",
+                '$criterion->target',
                 "No searchable fields found for the given criterion target '{$fieldIdentifier}'."
             );
         }

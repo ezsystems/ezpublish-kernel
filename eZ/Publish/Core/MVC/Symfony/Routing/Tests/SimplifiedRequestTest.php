@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;

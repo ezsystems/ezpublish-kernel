@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence;
 
 use eZ\Publish\SPI\Persistence\FieldType as FieldTypeInterface;

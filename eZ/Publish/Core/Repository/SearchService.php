@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
@@ -110,7 +109,7 @@ class SearchService implements SearchServiceInterface
     {
         if (!is_int($query->offset)) {
             throw new InvalidArgumentType(
-                "\$query->offset",
+                '$query->offset',
                 'integer',
                 $query->offset
             );
@@ -118,7 +117,7 @@ class SearchService implements SearchServiceInterface
 
         if (!is_int($query->limit)) {
             throw new InvalidArgumentType(
-                "\$query->limit",
+                '$query->limit',
                 'integer',
                 $query->limit
             );
@@ -127,8 +126,8 @@ class SearchService implements SearchServiceInterface
         $query = clone $query;
         $query->filter = $query->filter ?: new Criterion\MatchAll();
 
-        $this->validateContentCriteria(array($query->query), "\$query");
-        $this->validateContentCriteria(array($query->filter), "\$query");
+        $this->validateContentCriteria(array($query->query), '$query');
+        $this->validateContentCriteria(array($query->filter), '$query');
         $this->validateContentSortClauses($query);
         $this->validateSortClauses($query);
 
@@ -186,7 +185,7 @@ class SearchService implements SearchServiceInterface
     {
         foreach ($query->sortClauses as $sortClause) {
             if ($sortClause instanceof LocationSortClause) {
-                throw new InvalidArgumentException("\$query", 'Location sort clauses cannot be used in Content search');
+                throw new InvalidArgumentException('$query', 'Location sort clauses cannot be used in Content search');
             }
         }
     }
@@ -250,7 +249,7 @@ class SearchService implements SearchServiceInterface
      */
     public function findSingle(Criterion $filter, array $fieldFilters = array(), $filterOnUserPermissions = true)
     {
-        $this->validateContentCriteria(array($filter), "\$filter");
+        $this->validateContentCriteria(array($filter), '$filter');
 
         if ($filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion($filter)) {
             throw new NotFoundException('Content', '*');
@@ -296,7 +295,7 @@ class SearchService implements SearchServiceInterface
     {
         if (!is_int($query->offset)) {
             throw new InvalidArgumentType(
-                "\$query->offset",
+                '$query->offset',
                 'integer',
                 $query->offset
             );
@@ -304,7 +303,7 @@ class SearchService implements SearchServiceInterface
 
         if (!is_int($query->limit)) {
             throw new InvalidArgumentType(
-                "\$query->limit",
+                '$query->limit',
                 'integer',
                 $query->limit
             );

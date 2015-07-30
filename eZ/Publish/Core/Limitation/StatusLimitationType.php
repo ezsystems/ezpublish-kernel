@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -40,9 +39,9 @@ class StatusLimitationType implements SPILimitationTypeInterface
     public function acceptValue(APILimitationValue $limitationValue)
     {
         if (!$limitationValue instanceof APIStatusLimitation) {
-            throw new InvalidArgumentType("\$limitationValue", 'APIStatusLimitation', $limitationValue);
+            throw new InvalidArgumentType('$limitationValue', 'APIStatusLimitation', $limitationValue);
         } elseif (!is_array($limitationValue->limitationValues)) {
-            throw new InvalidArgumentType("\$limitationValue->limitationValues", 'array', $limitationValue->limitationValues);
+            throw new InvalidArgumentType('$limitationValue->limitationValues', 'array', $limitationValue->limitationValues);
         }
 
         foreach ($limitationValue->limitationValues as $key => $id) {

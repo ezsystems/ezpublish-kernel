@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -43,9 +42,9 @@ class OwnerLimitationType extends AbstractPersistenceLimitationType implements S
     public function acceptValue(APILimitationValue $limitationValue)
     {
         if (!$limitationValue instanceof APIOwnerLimitation) {
-            throw new InvalidArgumentType("\$limitationValue", 'APIOwnerLimitation', $limitationValue);
+            throw new InvalidArgumentType('$limitationValue', 'APIOwnerLimitation', $limitationValue);
         } elseif (!is_array($limitationValue->limitationValues)) {
-            throw new InvalidArgumentType("\$limitationValue->limitationValues", 'array', $limitationValue->limitationValues);
+            throw new InvalidArgumentType('$limitationValue->limitationValues', 'array', $limitationValue->limitationValues);
         }
 
         foreach ($limitationValue->limitationValues as $key => $value) {
@@ -159,7 +158,7 @@ class OwnerLimitationType extends AbstractPersistenceLimitationType implements S
     {
         if (empty($value->limitationValues)) {
             // no limitation values
-            throw new \RuntimeException("\$value->limitationValues is empty, it should not have been stored in the first place");
+            throw new \RuntimeException('$value->limitationValues is empty, it should not have been stored in the first place');
         }
 
         if ($value->limitationValues[0] != 1 && $value->limitationValues[0] != 2) {

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\Provider\Location;
 
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Location\Configured as LocationViewProvider;

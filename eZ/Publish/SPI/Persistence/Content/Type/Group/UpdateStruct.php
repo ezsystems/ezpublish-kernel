@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\SPI\Persistence\Content\Type\Group;
 
 use eZ\Publish\SPI\Persistence\ValueObject;

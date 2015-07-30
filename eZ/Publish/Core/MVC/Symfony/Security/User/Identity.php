@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Security\User;
 
 use eZ\Publish\SPI\User\Identity as IdentityInterface;

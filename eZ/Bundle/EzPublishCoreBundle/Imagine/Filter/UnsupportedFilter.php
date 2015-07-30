@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine\Filter;
 
 use Imagine\Exception\NotSupportedException;

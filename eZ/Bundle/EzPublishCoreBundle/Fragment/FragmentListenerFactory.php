@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Fragment;
 
 use eZ\Publish\Core\MVC\Symfony\RequestStackAware;

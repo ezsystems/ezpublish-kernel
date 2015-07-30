@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Cache\Http;
 
 use eZ\Bundle\EzPublishCoreBundle\Cache\Http\InstantCachePurger;

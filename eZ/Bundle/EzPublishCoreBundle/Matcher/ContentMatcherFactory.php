@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Matcher;
 
 use eZ\Publish\API\Repository\Repository;

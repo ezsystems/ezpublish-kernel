@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
@@ -45,9 +44,9 @@ class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType 
     public function acceptValue(APILimitationValue $limitationValue)
     {
         if (!$limitationValue instanceof APIParentContentTypeLimitation) {
-            throw new InvalidArgumentType("\$limitationValue", 'APIParentContentTypeLimitation', $limitationValue);
+            throw new InvalidArgumentType('$limitationValue', 'APIParentContentTypeLimitation', $limitationValue);
         } elseif (!is_array($limitationValue->limitationValues)) {
-            throw new InvalidArgumentType("\$limitationValue->limitationValues", 'array', $limitationValue->limitationValues);
+            throw new InvalidArgumentType('$limitationValue->limitationValues', 'array', $limitationValue->limitationValues);
         }
 
         foreach ($limitationValue->limitationValues as $key => $id) {
@@ -128,7 +127,7 @@ class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType 
             $object = $object->getContentInfo();
         } elseif (!$object instanceof ContentInfo) {
             throw new InvalidArgumentException(
-                "\$object",
+                '$object',
                 'Must be of type: ContentCreateStruct, Content, VersionInfo or ContentInfo'
             );
         }

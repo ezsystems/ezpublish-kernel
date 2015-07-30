@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Server;
 
 use Qafoo\RMF\Request\HTTP as RMFRequest;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
 use Symfony\Component\Routing\RouterInterface;
@@ -51,7 +50,7 @@ class ImageProcessor extends BinaryInputProcessor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function postProcessValueHash($outgoingValueHash)
     {

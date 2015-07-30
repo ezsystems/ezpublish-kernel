@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\SiteAccess;
 
 use eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder;

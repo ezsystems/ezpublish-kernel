@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Converter;
 
 use eZ\Bundle\EzPublishCoreBundle\Converter\ContentParamConverter;

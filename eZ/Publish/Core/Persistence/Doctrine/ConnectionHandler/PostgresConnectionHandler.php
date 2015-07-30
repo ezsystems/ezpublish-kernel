@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 
 use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;

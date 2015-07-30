@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\Tests\RichText\Validator;
 
 use eZ\Publish\Core\FieldType\RichText\Validator;

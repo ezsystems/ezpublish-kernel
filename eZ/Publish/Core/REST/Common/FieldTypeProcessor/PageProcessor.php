@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
@@ -17,7 +16,7 @@ use eZ\Publish\Core\FieldType\Page\Parts\Base;
 class PageProcessor extends FieldTypeProcessor
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function preProcessValueHash($incomingValueHash)
     {
@@ -53,7 +52,7 @@ class PageProcessor extends FieldTypeProcessor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function postProcessValueHash($outgoingValueHash)
     {

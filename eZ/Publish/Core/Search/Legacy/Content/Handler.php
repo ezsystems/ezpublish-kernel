@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Legacy\Content;
 
 use eZ\Publish\SPI\Persistence\Content;
@@ -148,9 +147,9 @@ class Handler implements SearchHandlerInterface
         $result = $this->findContent($searchQuery, $fieldFilters);
 
         if (empty($result->searchHits)) {
-            throw new NotFoundException('Content', "findSingle() found no content for given \$criterion");
+            throw new NotFoundException('Content', 'findSingle() found no content for given $criterion');
         } elseif (isset($result->searchHits[1])) {
-            throw new InvalidArgumentException('totalCount', "findSingle() found more then one item for given \$criterion");
+            throw new InvalidArgumentException('totalCount', 'findSingle() found more then one item for given $criterion');
         }
 
         $first = reset($result->searchHits);

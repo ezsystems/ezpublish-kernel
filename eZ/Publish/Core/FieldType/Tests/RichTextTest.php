@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\RichText\Type as RichTextType;
@@ -139,7 +138,7 @@ class RichTextTest extends PHPUnit_Framework_TestCase
   <h1>This is a heading.</h1>
 </section>',
                 new InvalidArgumentException(
-                    "\$inputValue",
+                    '$inputValue',
                     'Validation of XML content failed: Error in 3:0: Element section has extra content: h1'
                 ),
             ),
@@ -149,14 +148,14 @@ class RichTextTest extends PHPUnit_Framework_TestCase
   <title>This is a heading.</title>
 </section>',
                 new InvalidArgumentException(
-                    "\$inputValue",
+                    '$inputValue',
                     "Validation of XML content failed: /*[local-name()='section' and namespace-uri()='http://docbook.org/ns/docbook']: The root element must have a version attribute."
                 ),
             ),
             array(
                 'This is not XML at all!',
                 new InvalidArgumentException(
-                    "\$inputValue",
+                    '$inputValue',
                     "Could not create XML document: Start tag expected, '<' not found"
                 ),
             ),

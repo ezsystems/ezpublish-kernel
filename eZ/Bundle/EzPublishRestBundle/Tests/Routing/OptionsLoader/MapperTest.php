@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Routing\OptionsLoader;
 
 use eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\Mapper;

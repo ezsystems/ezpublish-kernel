@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
 use Buzz\Message\Request as HttpRequest;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor;
 
 use eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor;

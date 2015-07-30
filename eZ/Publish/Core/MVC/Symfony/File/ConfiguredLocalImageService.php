@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\File;
 
 use eZ\Publish\Core\FieldType\FileService\LegacyFileService as BaseFileService;

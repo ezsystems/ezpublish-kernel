@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\DateAndTime;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;

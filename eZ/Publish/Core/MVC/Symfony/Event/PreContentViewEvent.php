@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Event;
 
 use Symfony\Component\EventDispatcher\Event;

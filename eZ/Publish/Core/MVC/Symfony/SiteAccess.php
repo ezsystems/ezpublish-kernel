@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony;
 
 use eZ\Publish\API\Repository\Values\ValueObject;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash;
 
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;

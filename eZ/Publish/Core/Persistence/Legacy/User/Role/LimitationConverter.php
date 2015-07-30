@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence\Legacy\User\Role;
 
 use eZ\Publish\SPI\Persistence\User\Policy;

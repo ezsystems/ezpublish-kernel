@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Publish\API\Repository\Repository;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\Core\Base\Exceptions\LimitationValidationException;
@@ -201,7 +200,7 @@ class RoleService implements RoleServiceInterface
 
                 if ($existingRole->id != $loadedRole->id) {
                     throw new InvalidArgumentException(
-                        "\$roleUpdateStruct",
+                        '$roleUpdateStruct',
                         'Role with provided identifier already exists'
                     );
                 }
@@ -310,7 +309,7 @@ class RoleService implements RoleServiceInterface
         }
 
         if ($policy->roleId != $role->id) {
-            throw new InvalidArgumentException("\$policy", 'Policy does not belong to the given role');
+            throw new InvalidArgumentException('$policy', 'Policy does not belong to the given role');
         }
 
         $this->internalDeletePolicy($policy);
@@ -606,7 +605,7 @@ class RoleService implements RoleServiceInterface
 
         if (!$isAssigned) {
             throw new InvalidArgumentException(
-                "\$userGroup",
+                '$userGroup',
                 'Role is not assigned to the given UserGroup'
             );
         }
@@ -695,7 +694,7 @@ class RoleService implements RoleServiceInterface
 
         if (!$isAssigned) {
             throw new InvalidArgumentException(
-                "\$user",
+                '$user',
                 'Role is not assigned to the given User'
             );
         }
@@ -1019,7 +1018,7 @@ class RoleService implements RoleServiceInterface
             // Throw if Role is already assigned without limitations
             if ($spiAssignment->limitationIdentifier === null) {
                 throw new InvalidArgumentException(
-                    "\$role",
+                    '$role',
                     "Role '{$spiRole->id}' already assigned without limitations"
                 );
             }
@@ -1038,7 +1037,7 @@ class RoleService implements RoleServiceInterface
             $newValues = array_diff($limitation[$spiAssignment->limitationIdentifier], $spiAssignment->values);
             if (empty($newValues)) {
                 throw new InvalidArgumentException(
-                    "\$role",
+                    '$role',
                     "Role '{$spiRole->id}' already assigned with same '{$spiAssignment->limitationIdentifier}' value"
                 );
             }

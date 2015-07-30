@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Security;
 
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;

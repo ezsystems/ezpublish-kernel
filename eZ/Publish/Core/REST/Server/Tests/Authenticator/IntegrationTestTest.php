@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Server\Tests\Authenticator;
 
 use eZ\Publish\Core\REST\Server\Tests\BaseTest;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;

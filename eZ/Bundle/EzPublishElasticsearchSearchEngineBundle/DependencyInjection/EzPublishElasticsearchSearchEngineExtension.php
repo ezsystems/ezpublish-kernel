@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\DefinitionDecorator;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Common\Output\Generator\Xml;
 
 class FieldTypeHashGenerator

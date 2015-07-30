@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishRestBundle\Routing;
 
 use Symfony\Component\Config\Loader\Loader;

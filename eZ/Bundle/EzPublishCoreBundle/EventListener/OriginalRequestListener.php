@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

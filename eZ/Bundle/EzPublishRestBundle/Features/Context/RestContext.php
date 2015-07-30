@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context;
 
 use EzSystems\BehatBundle\Context\Api\Context;

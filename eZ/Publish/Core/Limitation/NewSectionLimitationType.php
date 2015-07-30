@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
@@ -43,9 +42,9 @@ class NewSectionLimitationType extends AbstractPersistenceLimitationType impleme
     public function acceptValue(APILimitationValue $limitationValue)
     {
         if (!$limitationValue instanceof APINewSectionLimitation) {
-            throw new InvalidArgumentType("\$limitationValue", 'APINewSectionLimitation', $limitationValue);
+            throw new InvalidArgumentType('$limitationValue', 'APINewSectionLimitation', $limitationValue);
         } elseif (!is_array($limitationValue->limitationValues)) {
-            throw new InvalidArgumentType("\$limitationValue->limitationValues", 'array', $limitationValue->limitationValues);
+            throw new InvalidArgumentType('$limitationValue->limitationValues', 'array', $limitationValue->limitationValues);
         }
 
         foreach ($limitationValue->limitationValues as $key => $id) {

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishIOBundle\Tests\DependencyInjection\Compiler;
 
 use ArrayObject;

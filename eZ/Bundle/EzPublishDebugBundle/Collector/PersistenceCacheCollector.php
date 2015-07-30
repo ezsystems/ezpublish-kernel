@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishDebugBundle\Collector;
 
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;

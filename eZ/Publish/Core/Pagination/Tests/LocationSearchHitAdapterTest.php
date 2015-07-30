@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Pagination\Tests;
 
 use eZ\Publish\API\Repository\SearchService;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
 use eZ\Publish\Core\FieldType\Media\Type;
@@ -16,7 +15,7 @@ use eZ\Publish\Core\FieldType\Media\Type;
 class MediaProcessor extends BinaryInputProcessor
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function preProcessFieldSettingsHash($incomingSettingsHash)
     {
@@ -49,7 +48,7 @@ class MediaProcessor extends BinaryInputProcessor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function postProcessFieldSettingsHash($outgoingSettingsHash)
     {

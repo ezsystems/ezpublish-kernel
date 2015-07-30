@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\FieldType\Page;
 
 use eZ\Publish\Core\FieldType\Tests\Page\PageServiceTest as BaseTest;

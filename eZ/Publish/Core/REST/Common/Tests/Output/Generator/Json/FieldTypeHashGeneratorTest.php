@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Common\Tests\Output\Generator\Json;
 
 use eZ\Publish\Core\REST\Common;

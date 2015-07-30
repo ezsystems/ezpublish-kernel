@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Tests\Controller;
 
 use eZ\Publish\Core\MVC\Symfony\Controller\Manager;

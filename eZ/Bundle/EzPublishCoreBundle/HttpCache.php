@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore;

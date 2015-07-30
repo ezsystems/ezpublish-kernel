@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 
 use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
@@ -81,7 +80,7 @@ class AliasGenerator implements VariationHandler
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @throws \InvalidArgumentException If field value is not an instance of \eZ\Publish\Core\FieldType\Image\Value.
      * @throws \eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException If source image cannot be found.

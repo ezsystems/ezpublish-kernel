@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -39,9 +38,9 @@ class ParentDepthLimitationType extends AbstractPersistenceLimitationType implem
     public function acceptValue(APILimitationValue $limitationValue)
     {
         if (!$limitationValue instanceof APIParentDepthLimitation) {
-            throw new InvalidArgumentType("\$limitationValue", 'APIParentDepthLimitation', $limitationValue);
+            throw new InvalidArgumentType('$limitationValue', 'APIParentDepthLimitation', $limitationValue);
         } elseif (!is_array($limitationValue->limitationValues)) {
-            throw new InvalidArgumentType("\$limitationValue->limitationValues", 'array', $limitationValue->limitationValues);
+            throw new InvalidArgumentType('$limitationValue->limitationValues', 'array', $limitationValue->limitationValues);
         }
 
         foreach ($limitationValue->limitationValues as $key => $value) {

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishDebugBundle\Collector;
 
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;

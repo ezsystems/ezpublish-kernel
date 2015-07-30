@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Common\Values;
 
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;

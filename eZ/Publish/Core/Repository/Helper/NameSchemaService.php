@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Repository\Helper;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
@@ -247,7 +246,7 @@ class NameSchemaService
                         $fieldDefinition->fieldTypeIdentifier
                     );
                 } else {
-                    throw new InvalidArgumentType("\$contentType", 'API or SPI variant of ContentType');
+                    throw new InvalidArgumentType('$contentType', 'API or SPI variant of ContentType');
                 }
 
                 $fieldTitles[$fieldDefinitionIdentifier] = $fieldType->getName(

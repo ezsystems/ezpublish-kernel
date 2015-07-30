@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger;

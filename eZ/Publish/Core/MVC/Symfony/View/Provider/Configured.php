@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\View\Provider;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\MatcherFactoryInterface;

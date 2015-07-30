@@ -9,7 +9,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\Image\PathGenerator;
 
 use eZ\Publish\Core\FieldType\Image\PathGenerator;

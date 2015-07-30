@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\SPI\FieldType\Events;
 
 use eZ\Publish\SPI\FieldType\Event;

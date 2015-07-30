@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\CacheTests\Http;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore;

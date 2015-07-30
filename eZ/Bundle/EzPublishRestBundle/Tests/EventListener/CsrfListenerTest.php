@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishRestBundle\Tests\EventListener;
 
 use PHPUnit_Framework_MockObject_MockObject;

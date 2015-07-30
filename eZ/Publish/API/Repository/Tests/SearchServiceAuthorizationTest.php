@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -49,7 +48,7 @@ class SearchServiceAuthorizationTest extends BaseTest
         /* END: Use Case */
 
         self::assertEquals(1, $searchResult->totalCount, 'Search query should return totalCount of 1');
-        self::assertNotEmpty($searchResult->searchHits, "\$searchResult->searchHits should not be empty");
+        self::assertNotEmpty($searchResult->searchHits, '$searchResult->searchHits should not be empty');
         self::assertEquals('Home', $searchResult->searchHits[0]->valueObject->contentInfo->name);
     }
 

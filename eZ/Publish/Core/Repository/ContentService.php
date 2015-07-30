@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
@@ -474,11 +473,11 @@ class ContentService implements ContentServiceInterface
     public function createContent(APIContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array())
     {
         if ($contentCreateStruct->mainLanguageCode === null) {
-            throw new InvalidArgumentException("\$contentCreateStruct", "'mainLanguageCode' property must be set");
+            throw new InvalidArgumentException('$contentCreateStruct', "'mainLanguageCode' property must be set");
         }
 
         if ($contentCreateStruct->contentType === null) {
-            throw new InvalidArgumentException("\$contentCreateStruct", "'contentType' property must be set");
+            throw new InvalidArgumentException('$contentCreateStruct', "'contentType' property must be set");
         }
 
         $contentCreateStruct = clone $contentCreateStruct;
@@ -524,7 +523,7 @@ class ContentService implements ContentServiceInterface
                 $this->loadContentByRemoteId($contentCreateStruct->remoteId);
 
                 throw new InvalidArgumentException(
-                    "\$contentCreateStruct",
+                    '$contentCreateStruct',
                     "Another content with remoteId '{$contentCreateStruct->remoteId}' exists"
                 );
             } catch (APINotFoundException $e) {
@@ -804,7 +803,7 @@ class ContentService implements ContentServiceInterface
         foreach ($locationCreateStructs as $locationCreateStruct) {
             if (isset($parentLocationIdSet[$locationCreateStruct->parentLocationId])) {
                 throw new InvalidArgumentException(
-                    "\$locationCreateStructs",
+                    '$locationCreateStructs',
                     "Multiple LocationCreateStructs with the same parent Location '{$locationCreateStruct->parentLocationId}' are given"
                 );
             }
@@ -853,7 +852,7 @@ class ContentService implements ContentServiceInterface
         }
         if ($propertyCount === 0) {
             throw new InvalidArgumentException(
-                "\$contentMetadataUpdateStruct",
+                '$contentMetadataUpdateStruct',
                 'At least one property must be set'
             );
         }
@@ -870,7 +869,7 @@ class ContentService implements ContentServiceInterface
 
                 if ($existingContentInfo->id !== $loadedContentInfo->id) {
                     throw new InvalidArgumentException(
-                        "\$contentMetadataUpdateStruct",
+                        '$contentMetadataUpdateStruct',
                         "Another content with remoteId '{$contentMetadataUpdateStruct->remoteId}' exists"
                     );
                 }
@@ -1010,7 +1009,7 @@ class ContentService implements ContentServiceInterface
             // Check that given $contentInfo and $versionInfo belong to the same content
             if ($versionInfo->getContentInfo()->id != $contentInfo->id) {
                 throw new InvalidArgumentException(
-                    "\$versionInfo",
+                    '$versionInfo',
                     'VersionInfo does not belong to the same content as given ContentInfo'
                 );
             }
@@ -1025,7 +1024,7 @@ class ContentService implements ContentServiceInterface
                 default:
                     // @todo: throw an exception here, to be defined
                     throw new BadStateException(
-                        "\$versionInfo",
+                        '$versionInfo',
                         'Draft can not be created from a draft version'
                     );
             }
@@ -1036,7 +1035,7 @@ class ContentService implements ContentServiceInterface
         } else {
             // @todo: throw an exception here, to be defined
             throw new BadStateException(
-                "\$contentInfo",
+                '$contentInfo',
                 'Content is not published, draft can be created only from published or archived version'
             );
         }
@@ -1154,7 +1153,7 @@ class ContentService implements ContentServiceInterface
         );
         if ($content->versionInfo->status !== APIVersionInfo::STATUS_DRAFT) {
             throw new BadStateException(
-                "\$versionInfo",
+                '$versionInfo',
                 'Version is not a draft and can not be updated'
             );
         }
@@ -1442,7 +1441,7 @@ class ContentService implements ContentServiceInterface
     protected function internalPublishVersion(APIVersionInfo $versionInfo, $publicationDate = null)
     {
         if ($versionInfo->status !== APIVersionInfo::STATUS_DRAFT) {
-            throw new BadStateException("\$versionInfo", 'Only versions in draft status can be published.');
+            throw new BadStateException('$versionInfo', 'Only versions in draft status can be published.');
         }
 
         $metadataUpdateStruct = new SPIMetadataUpdateStruct();
@@ -1474,7 +1473,7 @@ class ContentService implements ContentServiceInterface
     {
         if ($versionInfo->status === APIVersionInfo::STATUS_PUBLISHED) {
             throw new BadStateException(
-                "\$versionInfo",
+                '$versionInfo',
                 'Version is published and can not be removed'
             );
         }
@@ -1493,7 +1492,7 @@ class ContentService implements ContentServiceInterface
 
         if (count($versionList) === 1) {
             throw new BadStateException(
-                "\$versionInfo",
+                '$versionInfo',
                 'Version is the last version of the Content and can not be removed'
             );
         }
@@ -1718,7 +1717,7 @@ class ContentService implements ContentServiceInterface
 
         if ($sourceVersion->status !== APIVersionInfo::STATUS_DRAFT) {
             throw new BadStateException(
-                "\$sourceVersion",
+                '$sourceVersion',
                 'Relations of type common can only be added to versions of status draft'
             );
         }
@@ -1770,7 +1769,7 @@ class ContentService implements ContentServiceInterface
 
         if ($sourceVersion->status !== APIVersionInfo::STATUS_DRAFT) {
             throw new BadStateException(
-                "\$sourceVersion",
+                '$sourceVersion',
                 'Relations of type common can only be removed from versions of status draft'
             );
         }
@@ -1787,7 +1786,7 @@ class ContentService implements ContentServiceInterface
 
         if (empty($spiRelations)) {
             throw new InvalidArgumentException(
-                "\$sourceVersion",
+                '$sourceVersion',
                 'There are no relations of type COMMON for the given destination'
             );
         }

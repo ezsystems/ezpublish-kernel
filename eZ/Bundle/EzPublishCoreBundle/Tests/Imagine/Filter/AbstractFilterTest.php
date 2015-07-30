@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter;
 
 use PHPUnit_Framework_TestCase;

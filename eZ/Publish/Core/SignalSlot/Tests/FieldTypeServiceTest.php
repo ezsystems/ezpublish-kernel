@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
 use eZ\Publish\Core\FieldType\TextLine\Type;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Common;
 
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;

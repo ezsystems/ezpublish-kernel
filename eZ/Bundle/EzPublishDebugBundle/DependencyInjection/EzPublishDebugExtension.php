@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishDebugBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;

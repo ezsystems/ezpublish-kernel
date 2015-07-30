@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\Tests\MetadataHandler;
 
 use eZ\Publish\Core\IO\MetadataHandler\ImageSize as ImageSizeMetadataHandler;

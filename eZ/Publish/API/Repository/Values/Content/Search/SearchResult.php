@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\API\Repository\Values\Content\Search;
 
 use eZ\Publish\API\Repository\Values\ValueObject;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishDebugBundle\Tests\DependencyInjection\Compiler;
 
 use eZ\Bundle\EzPublishDebugBundle\DependencyInjection\Compiler\DataCollectorPass;

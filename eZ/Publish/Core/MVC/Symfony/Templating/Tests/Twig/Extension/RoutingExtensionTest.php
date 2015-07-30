@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension;
 
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGenerator;

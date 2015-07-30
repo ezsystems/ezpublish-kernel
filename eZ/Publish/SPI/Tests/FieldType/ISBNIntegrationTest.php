@@ -8,7 +8,6 @@
  *
  * @version
  */
-
 namespace eZ\Publish\SPI\Tests\FieldType;
 
 use eZ\Publish\Core\Persistence\Legacy;

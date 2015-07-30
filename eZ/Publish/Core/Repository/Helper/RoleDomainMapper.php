@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Repository\Helper;
 
 use eZ\Publish\Core\Repository\Values\User\Policy;

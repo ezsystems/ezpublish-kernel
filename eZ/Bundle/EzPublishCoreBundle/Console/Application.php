@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Console;
 
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;

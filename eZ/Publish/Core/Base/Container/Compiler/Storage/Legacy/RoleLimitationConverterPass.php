@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

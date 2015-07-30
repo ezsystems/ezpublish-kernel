@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
 use eZ\Publish\API\Repository\ContentService;

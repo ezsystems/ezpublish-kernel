@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\Location\SortClauseVisitor;
 
 use eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor;

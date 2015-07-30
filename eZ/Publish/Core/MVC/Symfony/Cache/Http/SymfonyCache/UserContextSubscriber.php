@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SymfonyCache;
 
 use FOS\HttpCache\SymfonyCache\UserContextSubscriber as BaseUserContextSubscriber;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Server\Exceptions;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationException;

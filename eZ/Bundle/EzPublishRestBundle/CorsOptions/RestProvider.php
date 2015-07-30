@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Bundle\EzPublishRestBundle\CorsOptions;
 
 use Nelmio\CorsBundle\Options\ProviderInterface;

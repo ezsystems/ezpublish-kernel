@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;

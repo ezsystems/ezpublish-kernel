@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
 use PHPUnit_Framework_TestCase;

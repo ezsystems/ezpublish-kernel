@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Base\Tests\Container\Compiler;
 
 use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;

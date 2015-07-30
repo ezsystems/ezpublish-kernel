@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\Repository\Helper;
 
 use eZ\Publish\SPI\Persistence\Handler;

@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\FieldType\Page\PageStorage\Gateway;
 
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;

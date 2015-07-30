@@ -8,7 +8,6 @@
  *
  * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\EventListener;
 
 use eZ\Publish\Core\Helper\TranslationHelper;
