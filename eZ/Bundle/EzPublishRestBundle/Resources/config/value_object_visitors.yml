@@ -167,7 +167,6 @@ services:
 
     ezpublish_rest.output.value_object_visitor.UnauthorizedException:
         parent: ezpublish_rest.output.value_object_visitor.base
-        parent: ezpublish_rest.output.value_object_visitor.base
         class: %ezpublish_rest.output.value_object_visitor.UnauthorizedException.class%
         arguments: [ true  ]
         tags:

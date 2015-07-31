@@ -45,6 +45,8 @@ class RestLocationRootNodeTest extends RestLocationTest
                     'contentInfo' => new ContentInfo(
                         array(
                             'id' => 42,
+                            'contentTypeId' => 4,
+                            'name' => 'A Node, long lost',
                         )
                     ),
                 )
@@ -73,6 +75,16 @@ class RestLocationRootNodeTest extends RestLocationTest
             array('locationPath' => '1'),
             '/content/objects/1/urlaliases'
         );
+
+        $this->addRouteExpectation(
+            'ezpublish_rest_loadContent',
+            array('contentId' => $location->location->contentId),
+            "/content/objects/{$location->location->contentId}"
+        );
+
+        $this->getVisitorMock()->expects($this->once())
+            ->method('visitValueObject')
+            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\RestContent'));
 
         $visitor->visit(
             $this->getVisitorMock(),
