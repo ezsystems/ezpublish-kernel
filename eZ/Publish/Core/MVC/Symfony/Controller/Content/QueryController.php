@@ -31,7 +31,7 @@ class QueryController extends Controller
     }
 
     /**
-     * Runs a findContent search
+     * Runs a findContent search.
      *
      * @param $queryTypeName
      * @param $viewType
@@ -52,7 +52,7 @@ class QueryController extends Controller
     }
 
     /**
-     * Runs a findLocation search
+     * Runs a findLocation search.
      *
      * @param string $queryTypeName
      * @param string $viewType
@@ -60,7 +60,7 @@ class QueryController extends Controller
      */
     public function location($queryTypeName, $viewType, array $parameters = [])
     {
-        $queryType = $this->queryTypeRegistry->getQueryType( $queryTypeName );
+        $queryType = $this->queryTypeRegistry->getQueryType($queryTypeName);
         $query = $queryType->getQuery($parameters);
 
         $queryResult = new QueryTypeResult(
@@ -68,7 +68,7 @@ class QueryController extends Controller
                 'searchResult' => $this->searchService->findLocations($query),
                 'queryTypeName' => $queryTypeName,
                 'query' => $query,
-                'parameters' => $parameters
+                'parameters' => $parameters,
             ]
         );
 
@@ -83,7 +83,7 @@ class QueryController extends Controller
     }
 
     /**
-     * Runs a findContentInfo search
+     * Runs a findContentInfo search.
      *
      * @param $queryTypeName
      * @param $viewType

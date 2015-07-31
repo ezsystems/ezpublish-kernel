@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 interface QueryType
 {
     /**
-     * Builds and returns the Query object
+     * Builds and returns the Query object.
      *
      * @param array $parameters A hash of parameters that will be used to build the Query
      *
@@ -23,13 +23,13 @@ interface QueryType
     public function getQuery(array $parameters = []);
 
     /**
-     * Returns an array listing the parameters supported by the QueryType
+     * Returns an array listing the parameters supported by the QueryType.
      * @return array
      */
     public function getSupportedParameters();
 
     /**
-     * Returns the QueryType name
+     * Returns the QueryType name.
      * @return string
      */
     public static function getName();

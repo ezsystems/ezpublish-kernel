@@ -3,7 +3,6 @@
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\QueryType;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -64,14 +63,14 @@ abstract class OptionsResolverBasedQueryType
     }
 
     /**
-     * Builds the resolver, and configures it using configureOptions()
+     * Builds the resolver, and configures it using configureOptions().
      *
      * @return OptionsResolver
      */
     private function getResolver()
     {
         if ($this->resolver === null) {
-            $this->resolver = new OptionsResolver;
+            $this->resolver = new OptionsResolver();
             $this->configureOptions($this->resolver);
         }
 

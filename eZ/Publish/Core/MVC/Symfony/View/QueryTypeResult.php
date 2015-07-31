@@ -2,7 +2,6 @@
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\MVC\Symfony\View;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -10,7 +9,7 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * Aggregate of a Query and its SearchResults
+ * Aggregate of a Query and its SearchResults.
  */
 class QueryTypeResult extends ValueObject
 {

@@ -3,7 +3,6 @@
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\QueryType;
 
 /**
@@ -15,18 +14,18 @@ class QueryTypeRegistry
     private $registry;
 
     /**
-     * Registers $queryType as $name
+     * Registers $queryType as $name.
      *
      * @param string $name
      * @param \eZ\Publish\Core\QueryType\QueryType $queryType
      */
-    public function addQueryType($name, QueryType $queryType )
+    public function addQueryType($name, QueryType $queryType)
     {
         $this->registry[$name] = $queryType;
     }
 
     /**
-     * Registers form the array $queryTypes
+     * Registers form the array $queryTypes.
      *
      * @param \eZ\Publish\Core\QueryType\QueryType[] $queryTypes An array of QueryTypes, with their name as the index
      */
@@ -36,7 +35,7 @@ class QueryTypeRegistry
     }
 
     /**
-     * Get the QueryType $name
+     * Get the QueryType $name.
      *
      * @param string $name
      *

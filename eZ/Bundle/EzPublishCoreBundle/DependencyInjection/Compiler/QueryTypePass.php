@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Processes services tagged as ezpublish.query_type
+ * Processes services tagged as ezpublish.query_type.
  */
 class QueryTypePass implements CompilerPassInterface
 {
@@ -25,7 +25,7 @@ class QueryTypePass implements CompilerPassInterface
             $queryTypeDefinition = $container->getDefinition($taggedServiceId);
             $queryTypeClass = $queryTypeDefinition->getClass();
 
-            for ($i = 0, $count = count($tags); $i < $count; $i++) {
+            for ($i = 0, $count = count($tags); $i < $count; ++$i) {
                 // TODO: Check for duplicates
                 $queryTypes[$queryTypeClass::getName()] = new Reference($taggedServiceId);
             }
