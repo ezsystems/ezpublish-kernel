@@ -69,6 +69,17 @@ services:
             - @security.authorization_checker
         parent: ezpublish.controller.base
 
+    ezpublish.controller.content.query:
+        class: %ezpublish.controller.content.query.class%
+        arguments:
+            - @ezpublish.query_type.registry
+            - @ezpublish.api.service.search
+            - @ezpublish.view_renderer.dispatcher
+        parent: ezpublish.controller.base
+
+    ez_query:
+        alias: ezpublish.controller.content.query
+
     ezpublish.controller.content.preview.core:
         class: %ezpublish.controller.content.preview.class%
         arguments:

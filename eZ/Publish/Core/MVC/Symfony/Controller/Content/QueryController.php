@@ -79,6 +79,8 @@ class QueryController extends Controller
                 $parameters
             )
         );
+
+        return $response;
     }
 
     /**
