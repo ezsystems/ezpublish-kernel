@@ -38,38 +38,41 @@ class Manager implements ViewManagerInterface
     protected $logger;
 
     /**
-     * @var array Array indexed by priority.
-     *            Each priority key is an array of Content View Provider objects having this priority.
-     *            The highest priority number is the highest priority
+     * @var \eZ\Publish\Core\MVC\Symfony\View\ViewProvider[]
+     *      Array indexed by priority.
+     *      Each priority key is an array of Content View Provider objects having this priority.
+     *      The highest priority number is the highest priority
      */
     protected $contentViewProviders = array();
 
     /**
-     * @var array Array indexed by priority.
-     *            Each priority key is an array of Location View Provider objects having this priority.
-     *            The highest priority number is the highest priority
+     * @var \eZ\Publish\Core\MVC\Symfony\View\ViewProvider[]
+     *      Array indexed by priority.
+     *      Each priority key is an array of Location View Provider objects having this priority.
+     *      The highest priority number is the highest priority
      */
     protected $locationViewProviders = array();
 
     /**
-     * @var array Array indexed by priority.
-     *            Each priority key is an array of Block View Provider objects having this priority.
-     *            The highest priority number is the highest priority
+     * @var \eZ\Publish\Core\MVC\Symfony\View\ViewProvider[]
+     *      Array indexed by priority.
+     *      Each priority key is an array of Block View Provider objects having this priority.
+     *      The highest priority number is the highest priority
      */
     protected $blockViewProviders = array();
 
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\Provider\Content[]
+     * @var \eZ\Publish\Core\MVC\Symfony\View\ViewProvider[]
      */
     protected $sortedContentViewProviders;
 
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\Provider\Location[]
+     * @var \eZ\Publish\Core\MVC\Symfony\View\ViewProvider[]
      */
     protected $sortedLocationViewProviders;
 
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\Provider\Block[]
+     * @var \eZ\Publish\Core\MVC\Symfony\View\ViewProvider[]
      */
     protected $sortedBlockViewProviders;
 
@@ -116,7 +119,7 @@ class Manager implements ViewManagerInterface
      * Helper for {@see addContentViewProvider()} and {@see addLocationViewProvider()}.
      *
      * @param array $property
-     * @param \eZ\Publish\Core\MVC\Symfony\View\Provider\Content $viewProvider
+     * @param \eZ\Publish\Core\MVC\Symfony\View\ViewProvider $viewProvider
      * @param int $priority
      */
     private function addViewProvider(&$property, $viewProvider, $priority)
@@ -133,10 +136,10 @@ class Manager implements ViewManagerInterface
      * Registers $viewProvider as a valid content view provider.
      * When this view provider will be called in the chain depends on $priority. The highest $priority is, the earliest the router will be called.
      *
-     * @param \eZ\Publish\Core\MVC\Symfony\View\Provider\Content $viewProvider
+     * @param \eZ\Publish\Core\MVC\Symfony\View\ViewProvider $viewProvider
      * @param int $priority
      */
-    public function addContentViewProvider(ContentViewProvider $viewProvider, $priority = 0)
+    public function addContentViewProvider(ViewProvider $viewProvider, $priority = 0)
     {
         $this->addViewProvider($this->contentViewProviders, $viewProvider, $priority);
     }
@@ -145,28 +148,28 @@ class Manager implements ViewManagerInterface
      * Registers $viewProvider as a valid location view provider.
      * When this view provider will be called in the chain depends on $priority. The highest $priority is, the earliest the router will be called.
      *
-     * @param \eZ\Publish\Core\MVC\Symfony\View\Provider\Location $viewProvider
+     * @param \eZ\Publish\Core\MVC\Symfony\View\ViewProvider $viewProvider
      * @param int $priority
      */
-    public function addLocationViewProvider(LocationViewProvider $viewProvider, $priority = 0)
+    public function addLocationViewProvider(ViewProvider $viewProvider, $priority = 0)
     {
         $this->addViewProvider($this->locationViewProviders, $viewProvider, $priority);
     }
 
-    /**
+    /*
      * Registers $viewProvider as a valid location view provider.
      * When this view provider will be called in the chain depends on $priority. The highest $priority is, the earliest the router will be called.
      *
-     * @param \eZ\Publish\Core\MVC\Symfony\View\Provider\Block $viewProvider
+     * @param \eZ\Publish\Core\MVC\Symfony\View\ViewProvider $viewProvider
      * @param int $priority
      */
-    public function addBlockViewProvider(BlockViewProvider $viewProvider, $priority = 0)
+    public function addBlockViewProvider(ViewProvider $viewProvider, $priority = 0)
     {
         $this->addViewProvider($this->blockViewProviders, $viewProvider, $priority);
     }
 
     /**
-     * @return \eZ\Publish\Core\MVC\Symfony\View\Provider\Content[]
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ViewProvider[]
      */
     public function getAllContentViewProviders()
     {
@@ -178,7 +181,7 @@ class Manager implements ViewManagerInterface
     }
 
     /**
-     * @return \eZ\Publish\Core\MVC\Symfony\View\Provider\Location[]
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ViewProvider[]
      */
     public function getAllLocationViewProviders()
     {
@@ -190,7 +193,7 @@ class Manager implements ViewManagerInterface
     }
 
     /**
-     * @return \eZ\Publish\Core\MVC\Symfony\View\Provider\Block[]
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ViewProvider[]
      */
     public function getAllBlockViewProviders()
     {
@@ -207,7 +210,7 @@ class Manager implements ViewManagerInterface
      *
      * @param array $property view providers to sort
      *
-     * @return \eZ\Publish\Core\MVC\Symfony\View\Provider\Content[]|\eZ\Publish\Core\MVC\Symfony\View\Provider\Location[]|\eZ\Publish\Core\MVC\Symfony\View\Provider\Block[]
+     * @return \eZ\Publish\Core\MVC\Symfony\View\ViewProvider[]
      */
     protected function sortViewProviders($property)
     {

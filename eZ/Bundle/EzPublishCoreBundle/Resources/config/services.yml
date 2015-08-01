@@ -11,6 +11,7 @@ parameters:
     ezpublish.controller.content.preview.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController
     ezpublish.controller.content.download.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\DownloadController
     ezpublish.controller.content.download_redirection.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\DownloadRedirectionController
+    ezpublish.controller.content.query.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\QueryController
     ezpublish.controller.page.view.class: eZ\Bundle\EzPublishCoreBundle\Controller\PageController
 
     # Param converters
@@ -68,6 +69,17 @@ services:
             - @ezpublish.view_manager
             - @security.authorization_checker
         parent: ezpublish.controller.base
+
+    ezpublish.controller.content.query:
+        class: %ezpublish.controller.content.query.class%
+        arguments:
+            - @ezpublish.query_type.registry
+            - @ezpublish.api.service.search
+            - @ezpublish.view_renderer.dispatcher
+        parent: ezpublish.controller.base
+
+    ez_query:
+        alias: ezpublish.controller.content.query
 
     ezpublish.controller.content.preview.core:
         class: %ezpublish.controller.content.preview.class%
@@ -161,4 +173,4 @@ services:
             - { name: request.param_converter, priority: %ezpublish.param_converter.location.priority%, converter: ez_location_converter }
 
     ezpublish.query_type.registry:
-        class: BD\Bundle\TestBundle\NamedQueries\QueryTypeRegistry
+        class: eZ\Publish\Core\QueryType\QueryTypeRegistry

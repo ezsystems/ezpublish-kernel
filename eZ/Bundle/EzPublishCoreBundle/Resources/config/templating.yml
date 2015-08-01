@@ -6,10 +6,10 @@ parameters:
     ezpublish.view_manager.class: eZ\Bundle\EzPublishCoreBundle\View\Manager
     ezpublish.content_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\ContentMatcherFactory
     ezpublish.location_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\LocationMatcherFactory
+    ezpublish.location_query_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\LocationQueryMatcherFactory
+    ezpublish.content_query_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\ContentQueryMatcherFactory
     ezpublish.block_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\BlockMatcherFactory
-    ezpublish.content_view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\Provider\ContentConfigured
-    ezpublish.location_view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\Provider\LocationConfigured
-    ezpublish.block_view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\Provider\BlockConfigured
+    ezpublish.view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\Provider\Configured
     ezpublish.content_view.viewbase_layout: "EzPublishCoreBundle::viewbase_layout.html.twig"
     ezpublish.content_view.content_block_name: "content"
 
@@ -53,7 +53,7 @@ services:
           - @?logger
 
     ezpublish.content_view_provider.configured:
-        class: %ezpublish.content_view_provider.configured.class%
+        class: %ezpublish.view_provider.configured.class%
         arguments: [@ezpublish.content_view.matcher_factory]
         tags:
             - {name: ezpublish.content_view_provider, priority: 10}
@@ -65,7 +65,7 @@ services:
             - [setContainer, [@service_container]]
 
     ezpublish.location_view_provider.configured:
-        class: %ezpublish.location_view_provider.configured.class%
+        class: %ezpublish.view_provider.configured.class%
         arguments: [@ezpublish.location_view.matcher_factory]
         tags:
             - {name: ezpublish.location_view_provider, priority: 10}
@@ -77,13 +77,37 @@ services:
             - [setContainer, [@service_container]]
 
     ezpublish.block_view_provider.configured:
-        class: %ezpublish.block_view_provider.configured.class%
+        class: %ezpublish.view_provider.configured.class%
         arguments: [@ezpublish.block_view.matcher_factory]
         tags:
             - {name: ezpublish.block_view_provider, priority: 10}
 
     ezpublish.block_view.matcher_factory:
         class: %ezpublish.block_view.matcher_factory.class%
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        calls:
+            - [setContainer, [@service_container]]
+
+    ezpublish.location_query_view_provider.configured:
+        class: %ezpublish.view_provider.configured.class%
+        arguments: [@ezpublish.location_query_view.matcher_factory]
+        tags:
+            - {name: ezpublish.location_view_provider, priority: 10}
+
+    ezpublish.location_query_view.matcher_factory:
+        class: %ezpublish.location_query_view.matcher_factory.class%
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        calls:
+            - [setContainer, [@service_container]]
+
+    ezpublish.content_query_view_provider.configured:
+        class: %ezpublish.view_provider.configured.class%
+        arguments: [@ezpublish.content_query_view.matcher_factory]
+        tags:
+            - {name: ezpublish.content_query_view_provider, priority: 10}
+
+    ezpublish.content_query_view.matcher_factory:
+        class: %ezpublish.content_query_view.matcher_factory.class%
         arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
         calls:
             - [setContainer, [@service_container]]
@@ -158,3 +182,45 @@ services:
         tags:
             - { name: twig.extension }
 
+    ezpublish.view.output_renderer.templating:
+        class: eZ\Publish\Core\MVC\Symfony\View\OutputRenderer\TemplateEngine
+        arguments: [@templating, @event_dispatcher, %ezpublish.content_view.viewbase_layout%]
+
+    ezpublish.view.output_renderer:
+        alias: ezpublish.view.output_renderer.templating
+
+    ezpublish.view_renderer.dispatcher:
+        class: eZ\Publish\Core\MVC\Symfony\View\Renderer\Dispatcher
+        arguments:
+            -
+                - @ezpublish.view_renderer.query_type.content
+                - @ezpublish.view_renderer.query_type.location
+
+    ezpublish.view_renderer.view_provider_based:
+        class: eZ\Publish\Core\MVC\Symfony\View\Renderer\ViewProviderBased
+        arguments:
+            - []
+            - @ezpublish.view.output_renderer
+
+    ezpublish.view_renderer.query_type.content:
+        class: eZ\Publish\Core\MVC\Symfony\View\Renderer\QueryTypeResultRenderer
+        parent: ezpublish.view_renderer.view_provider_based
+        calls:
+            - [setRenderedQueryType, ['eZ\Publish\API\Repository\Values\Content\Query']]
+            - [setTemplateVariableName, ['content_list']]
+            - [addViewProvider, [@ezpublish.content_query_view_provider.configured]]
+
+    ezpublish.view_renderer.query_type.location:
+        class: eZ\Publish\Core\MVC\Symfony\View\Renderer\QueryTypeResultRenderer
+        parent: ezpublish.view_renderer.view_provider_based
+        calls:
+            - [setRenderedQueryType, ['eZ\Publish\API\Repository\Values\Content\LocationQuery']]
+            - [setTemplateVariableName, ['location_list']]
+            - [addViewProvider, [@ezpublish.location_query_view_provider.configured]]
+
+    ezpublish.view_renderer.query_type.content_info:
+        class: eZ\Publish\Core\MVC\Symfony\View\Renderer\QueryTypeResultRenderer
+        parent: ezpublish.view_renderer.view_provider_based
+        calls:
+            - [setRenderedQueryType, ['eZ\Publish\API\Repository\Values\Content\ContentInfoQuery']]
+            - [setTemplateVariableName, ['content_info_list']]
