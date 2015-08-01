@@ -108,6 +108,7 @@ class EzPublishCoreBundle extends Bundle
                     new ConfigParser\ContentView(),
                     new ConfigParser\BlockView(),
                     new ConfigParser\LocationQueryView(),
+                    new ConfigParser\ContentQueryView(),
                     new ConfigParser\Common(),
                     new ConfigParser\Content(),
                     new ConfigParser\FieldType\RichText(),

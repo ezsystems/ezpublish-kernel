@@ -7,6 +7,7 @@ parameters:
     ezpublish.content_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\ContentMatcherFactory
     ezpublish.location_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\LocationMatcherFactory
     ezpublish.location_query_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\LocationQueryMatcherFactory
+    ezpublish.content_query_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\ContentQueryMatcherFactory
     ezpublish.block_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\BlockMatcherFactory
     ezpublish.view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\Provider\Configured
     ezpublish.content_view.viewbase_layout: "EzPublishCoreBundle::viewbase_layout.html.twig"
@@ -95,6 +96,18 @@ services:
 
     ezpublish.location_query_view.matcher_factory:
         class: %ezpublish.location_query_view.matcher_factory.class%
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        calls:
+            - [setContainer, [@service_container]]
+
+    ezpublish.content_query_view_provider.configured:
+        class: %ezpublish.view_provider.configured.class%
+        arguments: [@ezpublish.content_query_view.matcher_factory]
+        tags:
+            - {name: ezpublish.content_query_view_provider, priority: 10}
+
+    ezpublish.content_query_view.matcher_factory:
+        class: %ezpublish.content_query_view.matcher_factory.class%
         arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
         calls:
             - [setContainer, [@service_container]]
@@ -203,8 +216,7 @@ services:
         calls:
             - [setRenderedQueryType, ['eZ\Publish\API\Repository\Values\Content\LocationQuery']]
             - [setTemplateVariableName, ['location_list']]
-        arguments:
-            - [@ezpublish.location_query_view_provider.configured]
+            - [addViewProvider, [@ezpublish.location_query_view_provider.configured]]
 
     ezpublish.view_renderer.query_type.content_info:
         class: eZ\Publish\Core\MVC\Symfony\View\Renderer\QueryTypeResultRenderer

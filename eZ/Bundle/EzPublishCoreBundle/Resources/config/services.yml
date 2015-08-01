@@ -11,6 +11,7 @@ parameters:
     ezpublish.controller.content.preview.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController
     ezpublish.controller.content.download.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\DownloadController
     ezpublish.controller.content.download_redirection.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\DownloadRedirectionController
+    ezpublish.controller.content.query.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\QueryController
     ezpublish.controller.page.view.class: eZ\Bundle\EzPublishCoreBundle\Controller\PageController
 
     # Param converters

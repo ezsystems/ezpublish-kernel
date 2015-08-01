@@ -5,6 +5,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
 use eZ\Publish\API\Repository\SearchService;
+use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
 use eZ\Publish\Core\MVC\Symfony\View\QueryTypeResult;
 use eZ\Publish\Core\MVC\Symfony\View\ViewRenderer;
@@ -35,18 +36,16 @@ class QueryController extends Controller
      * @param $queryTypeName
      * @param $viewType
      * @param array $parameters
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function content($queryTypeName, $viewType, array $parameters = [])
     {
-        $query = $this
-            ->queryTypeRegistry->getQueryType($queryTypeName)
-            ->getQuery($parameters);
-
-        $searchResults = $this->searchService->findContent($query);
-
-        $response = new Response();
-        $response->setContent(
-            $this->renderer->render($searchResults, $viewType, $parameters)
+        return $this->buildResponse(
+            $queryTypeName,
+            $viewType,
+            $parameters,
+            function(Query $query) { return $this->searchService->findContent($query); }
         );
     }
 
@@ -56,15 +55,54 @@ class QueryController extends Controller
      * @param string $queryTypeName
      * @param string $viewType
      * @param array $parameters
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function location($queryTypeName, $viewType, array $parameters = [])
+    {
+        return $this->buildResponse(
+            $queryTypeName,
+            $viewType,
+            $parameters,
+            function(Query $query) { return $this->searchService->findLocations($query); }
+        );
+    }
+
+    /**
+     * Runs a findContentInfo search.
+     *
+     * @param string $queryTypeName
+     * @param string $viewType
+     * @param array $parameters
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function contentInfo($queryTypeName, $viewType, array $parameters = [])
+    {
+        return $this->buildResponse(
+            $queryTypeName,
+            $viewType,
+            $parameters,
+            function(Query $query) { return $this->searchService->findContentInfo($query); }
+        );
+    }
+
+    /**
+     * @param string $queryTypeName
+     * @param string $viewType
+     * @param array $parameters
+     * @param callable $searchCallback Will be called to run the actual search, with the Query as the 1st parameter
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    private function buildResponse($queryTypeName, $viewType, array $parameters = [], Callable $searchCallback)
     {
         $queryType = $this->queryTypeRegistry->getQueryType($queryTypeName);
         $query = $queryType->getQuery($parameters);
 
         $queryResult = new QueryTypeResult(
             [
-                'searchResult' => $this->searchService->findLocations($query),
+                'searchResult' => $searchCallback($query),
                 'queryTypeName' => $queryTypeName,
                 'query' => $query,
                 'parameters' => $parameters,
@@ -72,40 +110,7 @@ class QueryController extends Controller
         );
 
         $response = new Response();
-        $response->setContent(
-            $this->renderer->render(
-                $queryResult,
-                $viewType,
-                $parameters
-            )
-        );
-
+        $response->setContent($this->renderer->render($queryResult, $viewType, $parameters));
         return $response;
-    }
-
-    /**
-     * Runs a findContentInfo search.
-     *
-     * @param $queryTypeName
-     * @param $viewType
-     * @param array $parameters
-     */
-    public function contentInfo($queryTypeName, $viewType, array $parameters = [])
-    {
-        $query = $this
-            ->queryTypeRegistry->getQueryType($queryTypeName)
-            ->getQuery($parameters);
-
-        $searchResult = $this->searchService->findContent($query);
-
-        $response = new Response();
-        $response->setContent(
-            $this->renderingDispatcher->dispatchRendering(
-                'content_query',
-                $searchResult,
-                $viewType,
-                $parameters
-            )
-        );
     }
 }

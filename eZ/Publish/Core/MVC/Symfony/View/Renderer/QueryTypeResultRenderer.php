@@ -55,7 +55,7 @@ class QueryTypeResultRenderer extends ViewProviderBased implements ViewRenderer
      */
     public function canRender(ValueObject $value)
     {
-        return ($value instanceof QueryTypeResult) && ($value->query instanceof $this->renderedQueryType);
+        return $value instanceof QueryTypeResult && get_class($value->query) == $this->renderedQueryType;
     }
 
     /**
@@ -65,9 +65,14 @@ class QueryTypeResultRenderer extends ViewProviderBased implements ViewRenderer
      */
     protected function filterRenderingParameters(ValueObject $queryTypeResult, array &$params)
     {
+        $list = [];
+        foreach ($queryTypeResult->searchResult->searchHits as $searchHit) {
+            $list[] = $searchHit->valueObject;
+        }
+
         $params += [
-            $this->templateVariableName => $queryTypeResult->searchResult->searchHits,
-            'list_count' => $queryTypeResult->searchResult->totalCount,
+            $this->templateVariableName => $list,
+            'total_count' => $queryTypeResult->searchResult->totalCount,
             'parameters' => $queryTypeResult->parameters
         ];
     }

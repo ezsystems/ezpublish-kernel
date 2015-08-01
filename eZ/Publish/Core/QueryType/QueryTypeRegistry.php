@@ -30,9 +30,7 @@ class QueryTypeRegistry
      */
     public function addQueryTypes(array $queryTypes)
     {
-        foreach ($queryTypes as $queryType) {
-            $this->registry[$queryType::getName()] = $queryType;
-        }
+        $this->registry += $queryTypes;
     }
 
     /**
