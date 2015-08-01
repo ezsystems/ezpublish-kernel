@@ -2,8 +2,10 @@
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace eZ\Publish\Core\MVC\Symfony\View\Renderer;
 
+use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\MVC\Symfony\View\ViewRenderer;
 use InvalidArgumentException;
 
@@ -31,14 +33,17 @@ class Dispatcher implements ViewRenderer
             }
         }
 
-        throw new InvalidArgumentException('No ViewRenderer found for ' . get_class($value));
+        throw new InvalidArgumentException("No ViewRenderer found for " . get_class($value));
     }
 
     /**
      * Tests if the ViewRenderer can render $value.
+     *
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $value
+     *
      * @return bool true if the ViewRenderer can render $value
      */
-    public function canRender($value)
+    public function canRender(ValueObject $value)
     {
         foreach ($this->renderers as $type => $renderer) {
             if ($renderer->canRender($value)) {

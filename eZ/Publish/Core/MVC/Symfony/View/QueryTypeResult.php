@@ -2,6 +2,7 @@
 /**
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace eZ\Publish\Core\MVC\Symfony\View;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -9,19 +10,36 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * Aggregate of a Query and its SearchResults.
+ * Aggregate of a Query and its SearchResults
+ *
+ * @property-read Query $query
+ * @property-read SearchResult $searchResult
+ * @property-read string $queryTypeName
+ * @property-read array $parameters
  */
 class QueryTypeResult extends ValueObject
 {
-    /** @var Query The Query that was executed*/
+    /**
+     * The Query that was executed
+     * @var Query
+     */
     protected $query;
 
-    /** @var SearchResult The QueryType search results*/
+    /**
+     * The QueryType search results
+     * @var SearchResult
+     */
     protected $searchResult;
 
-    /** @var string The name of the QueryType that was ran */
+    /**
+     * The name of the QueryType that was ran
+     * @var string
+     */
     protected $queryTypeName;
 
-    /** @var array The parameters used to run the QueryType */
+    /**
+     * The parameters used to run the QueryType
+     * @var array
+     */
     protected $parameters;
 }

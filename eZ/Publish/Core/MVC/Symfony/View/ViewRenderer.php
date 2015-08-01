@@ -4,6 +4,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\View;
 
+use eZ\Publish\API\Repository\Values\ValueObject;
 use InvalidArgumentException;
 
 /**
@@ -30,7 +31,9 @@ interface ViewRenderer
     /**
      * Tests if the ViewRenderer can render $value.
      *
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $value
+     *
      * @return bool true if the ViewRenderer can render $value
      */
-    public function canRender($value);
+    public function canRender(ValueObject $value);
 }
