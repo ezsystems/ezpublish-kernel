@@ -7,7 +7,6 @@ namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
 use eZ\Publish\Core\MVC\Symfony\View\QueryTypeResult;
-use eZ\Publish\Core\MVC\Symfony\View\RenderingDispatcher;
 use eZ\Publish\Core\MVC\Symfony\View\ViewRenderer;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use Symfony\Component\HttpFoundation\Response;
