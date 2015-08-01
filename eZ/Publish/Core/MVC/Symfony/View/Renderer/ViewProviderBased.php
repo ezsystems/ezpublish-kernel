@@ -28,6 +28,11 @@ abstract class ViewProviderBased implements ViewRenderer
         $this->outputRenderer = $outputRenderer;
     }
 
+    public function addViewProvider($viewProvider)
+    {
+        $this->viewProviders[] = $viewProvider;
+    }
+
     /**
      * Renders
      *

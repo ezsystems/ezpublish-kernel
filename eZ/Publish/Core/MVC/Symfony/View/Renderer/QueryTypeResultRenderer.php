@@ -7,14 +7,13 @@ namespace eZ\Publish\Core\MVC\Symfony\View\Renderer;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\MVC\Symfony\View\QueryTypeResult;
 use eZ\Publish\Core\MVC\Symfony\View\ViewRenderer;
 
 /**
  * Renders a QueryTypeResult
  */
-abstract class QueryTypeResultRenderer extends ViewProviderBased implements ViewRenderer
+class QueryTypeResultRenderer extends ViewProviderBased implements ViewRenderer
 {
     /**
      * The type of Query rendered by this class. Ex:

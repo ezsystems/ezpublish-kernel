@@ -171,10 +171,17 @@ services:
 
     ezpublish.view.output_renderer.templating:
         class: eZ\Publish\Core\MVC\Symfony\View\OutputRenderer\TemplateEngine
-        arguments: [@templating, @event_dispatcher]
+        arguments: [@templating, @event_dispatcher, %ezpublish.content_view.viewbase_layout%]
 
     ezpublish.view.output_renderer:
         alias: ezpublish.view.output_renderer.templating
+
+    ezpublish.view_renderer.dispatcher:
+        class: eZ\Publish\Core\MVC\Symfony\View\Renderer\Dispatcher
+        arguments:
+            -
+                - @ezpublish.view_renderer.query_type.content
+                - @ezpublish.view_renderer.query_type.location
 
     ezpublish.view_renderer.view_provider_based:
         class: eZ\Publish\Core\MVC\Symfony\View\Renderer\ViewProviderBased
@@ -188,6 +195,7 @@ services:
         calls:
             - [setRenderedQueryType, ['eZ\Publish\API\Repository\Values\Content\Query']]
             - [setTemplateVariableName, ['content_list']]
+            - [addViewProvider, [@ezpublish.content_query_view_provider.configured]]
 
     ezpublish.view_renderer.query_type.location:
         class: eZ\Publish\Core\MVC\Symfony\View\Renderer\QueryTypeResultRenderer
@@ -195,8 +203,10 @@ services:
         calls:
             - [setRenderedQueryType, ['eZ\Publish\API\Repository\Values\Content\LocationQuery']]
             - [setTemplateVariableName, ['location_list']]
+        arguments:
+            - [@ezpublish.location_query_view_provider.configured]
 
-    ezpublish.view_renderer.query_type.location:
+    ezpublish.view_renderer.query_type.content_info:
         class: eZ\Publish\Core\MVC\Symfony\View\Renderer\QueryTypeResultRenderer
         parent: ezpublish.view_renderer.view_provider_based
         calls:
