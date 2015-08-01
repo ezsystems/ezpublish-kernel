@@ -11,17 +11,16 @@ namespace eZ\Publish\Core\QueryType;
 class QueryTypeRegistry
 {
     /** @var QueryType[] */
-    private $registry;
+    private $registry = [];
 
     /**
      * Registers $queryType as $name.
      *
-     * @param string $name
      * @param \eZ\Publish\Core\QueryType\QueryType $queryType
      */
-    public function addQueryType($name, QueryType $queryType)
+    public function addQueryType(QueryType $queryType)
     {
-        $this->registry[$name] = $queryType;
+        $this->registry[$queryType::getName()] = $queryType;
     }
 
     /**
@@ -31,7 +30,9 @@ class QueryTypeRegistry
      */
     public function addQueryTypes(array $queryTypes)
     {
-        $this->registry += $queryTypes;
+        foreach ($queryTypes as $queryType) {
+            $this->registry[$queryType::getName()] = $queryType;
+        }
     }
 
     /**
