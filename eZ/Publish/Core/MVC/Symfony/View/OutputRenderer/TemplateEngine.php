@@ -31,11 +31,11 @@ class TemplateEngine implements OutputRenderer
 
     /**
      * @param \eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface $view
-     * @param array $params
+     * @param array $defaultParams
      *
      * @return string
      */
-    public function render(ContentViewInterface $view, array $params)
+    public function render(ContentViewInterface $view, array $defaultParams)
     {
         $defaultParams['viewbaseLayout'] = $this->viewBaseLayout;
         $view->addParameters($defaultParams);
