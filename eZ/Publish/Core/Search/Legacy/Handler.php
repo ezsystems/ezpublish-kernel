@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\Search\Legacy;
 
 use eZ\Publish\SPI\Search\Handler as HandlerInterface;
 use eZ\Publish\SPI\Search\Content\Handler as ContentSearchHandler;
-use eZ\Publish\SPI\Search\Content\Location\Handler as LocationSearchHandler;
 
 /**
  * The main handler for the Legacy Search Engine.
@@ -24,26 +23,13 @@ class Handler implements HandlerInterface
      */
     protected $contentSearchHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Search\Content\Location\Handler
-     */
-    protected $locationSearchHandler;
-
-    public function __construct(
-        ContentSearchHandler $contentSearchHandler,
-        LocationSearchHandler $locationSearchHandler
-    ) {
+    public function __construct(ContentSearchHandler $contentSearchHandler)
+    {
         $this->contentSearchHandler = $contentSearchHandler;
-        $this->locationSearchHandler = $locationSearchHandler;
     }
 
     public function contentSearchHandler()
     {
         return $this->contentSearchHandler;
-    }
-
-    public function locationSearchHandler()
-    {
-        return $this->locationSearchHandler;
     }
 }
