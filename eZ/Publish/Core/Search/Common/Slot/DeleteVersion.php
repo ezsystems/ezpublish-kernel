@@ -29,6 +29,9 @@ class DeleteVersion extends Slot
             return;
         }
 
-        $this->searchHandler->contentSearchHandler()->deleteContent($signal->contentId, $signal->versionNo);
+        $this->searchHandler->contentSearchHandler()->deleteContent(
+            $signal->contentId,
+            $signal->versionNo
+        );
     }
 }

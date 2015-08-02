@@ -29,7 +29,9 @@ class MoveUserGroup extends MoveSubtree
             return;
         }
 
-        $userGroupContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($signal->userGroupId);
+        $userGroupContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo(
+            $signal->userGroupId
+        );
 
         // Moving UserGroup moves its main Location, so we only need to
         // (re)index main Location's subtree
