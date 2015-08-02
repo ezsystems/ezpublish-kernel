@@ -24,9 +24,9 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as ContentTypeHandle
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as ContentTypeMapper;
 
 /**
- * Test case for ContentSearchHandler.
+ * Content Search test case for ContentSearchHandler.
  */
-class HandlerSortTest extends LanguageAwareTestCase
+class HandlerContentSortTest extends LanguageAwareTestCase
 {
     protected static $setUp = false;
 
@@ -101,7 +101,9 @@ class HandlerSortTest extends LanguageAwareTestCase
                     )
                 )
             ),
-            $this->getContentMapperMock()
+            $this->getMock('eZ\\Publish\\Core\\Search\\Legacy\\Content\\Location\\Gateway'),
+            $this->getContentMapperMock(),
+            $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper')
         );
     }
 

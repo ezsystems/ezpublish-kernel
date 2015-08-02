@@ -25,9 +25,9 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
 
 /**
- * Test case for ContentSearchHandler.
+ * Content Search test case for ContentSearchHandler.
  */
-class HandlerTest extends LanguageAwareTestCase
+class HandlerContentTest extends LanguageAwareTestCase
 {
     protected static $setUp = false;
 
@@ -223,7 +223,9 @@ class HandlerTest extends LanguageAwareTestCase
                     )
                 )
             ),
-            $this->getContentMapperMock()
+            $this->getMock('eZ\\Publish\\Core\\Search\\Legacy\\Content\\Location\\Gateway'),
+            $this->getContentMapperMock(),
+            $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper')
         );
     }
 
@@ -418,52 +420,6 @@ class HandlerTest extends LanguageAwareTestCase
         $this->assertEquals(
             0,
             count($result->searchHits)
-        );
-    }
-
-    public function testFindWithExistingLanguageFields()
-    {
-        $this->markTestSkipped('Translation filters are currently not supported by new search API.');
-
-        $locator = $this->getContentSearchHandler();
-
-        $result = $locator->findContent(
-            new Query(
-                array(
-                    'filter' => new Criterion\ContentId(11),
-                    'offset' => 0,
-                    'limit' => null,
-                    'translations' => array('eng-US'),
-                )
-            )
-        );
-
-        $this->assertEquals(
-            1,
-            $result->totalCount
-        );
-    }
-
-    public function testFindWithMissingLanguageFields()
-    {
-        $this->markTestSkipped('Translation filters are currently not supported by new search API.');
-
-        $locator = $this->getContentSearchHandler();
-
-        $result = $locator->findContent(
-            new Query(
-                array(
-                    'filter' => new Criterion\ContentId(4),
-                    'offset' => 0,
-                    'limit' => null,
-                    'translations' => array('eng-GB'),
-                )
-            )
-        );
-
-        $this->assertEquals(
-            0,
-            $result->totalCount
         );
     }
 
