@@ -20,9 +20,4 @@ interface Handler
      * @return \eZ\Publish\SPI\Search\Content\Handler
      */
     public function contentSearchHandler();
-
-    /**
-     * @return \eZ\Publish\SPI\Search\Content\Location\Handler
-     */
-    public function locationSearchHandler();
 }

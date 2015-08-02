@@ -12,8 +12,10 @@
 namespace eZ\Publish\SPI\Search\Content;
 
 use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -54,10 +56,21 @@ interface Handler
     public function findSingle(Criterion $filter, array $fieldFilters = array());
 
     /**
+     * Finds locations for the given $query.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
+     * @param array $fieldFilters - a map of filters for the returned fields.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult With Location as SearchHit->valueObject
+     */
+    public function findLocations(LocationQuery $query, array $fieldFilters = array());
+
+    /**
      * Suggests a list of values for the given prefix.
      *
      * @param string $prefix
-     * @param string[] $fieldpath
+     * @param string[] $fieldPaths
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
@@ -77,6 +90,13 @@ interface Handler
      * @param int|null $versionId
      */
     public function deleteContent($contentId, $versionId = null);
+
+    /**
+     * Indexes a Location in the index storage.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
+     */
+    public function indexLocation(Location $location);
 
     /**
      * Deletes a location from the index.
