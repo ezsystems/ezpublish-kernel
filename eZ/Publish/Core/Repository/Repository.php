@@ -801,7 +801,6 @@ class Repository implements RepositoryInterface
         $this->searchService = new SearchService(
             $this,
             $this->searchHandler->contentSearchHandler(),
-            $this->searchHandler->locationSearchHandler(),
             $this->getDomainMapper(),
             $this->getPermissionsCriterionHandler(),
             $this->serviceSettings['search']
