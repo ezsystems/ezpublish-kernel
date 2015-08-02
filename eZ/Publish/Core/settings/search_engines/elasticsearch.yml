@@ -11,15 +11,14 @@ imports:
 parameters:
     ezpublish.search.elasticsearch.connection.server: http://localhost:9200/
     ezpublish.search.elasticsearch.connection.index_name: 'ezpublish'
-    ezpublish.search.elasticsearch.connection.document_type_name.content: 'content'
-    ezpublish.search.elasticsearch.connection.document_type_name.location: 'location'
+    ezpublish.search.elasticsearch.connection.document_type_identifier.content: 'content'
+    ezpublish.search.elasticsearch.connection.document_type_identifier.location: 'location'
     ezpublish.spi.search.elasticsearch.class: eZ\Publish\Core\Search\Elasticsearch\Handler
     ezpublish.search.elasticsearch.serializer.class: eZ\Publish\Core\Search\Elasticsearch\Content\Serializer
     ezpublish.search.elasticsearch.mapper.standard.class: eZ\Publish\Core\Search\Elasticsearch\Content\Mapper\StandardMapper
     ezpublish.search.elasticsearch.gateway.native.class: eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\Native
     ezpublish.search.elasticsearch.location.gateway.native.class: eZ\Publish\Core\Search\Elasticsearch\Content\Location\Gateway\Native
     ezpublish.spi.search.elasticsearch.content_handler.class: eZ\Publish\Core\Search\Elasticsearch\Content\Handler
-    ezpublish.spi.search.elasticsearch.location_handler.class: eZ\Publish\Core\Search\Elasticsearch\Content\Location\Handler
     ezpublish.search.elasticsearch.extractor.loading.class: eZ\Publish\Core\Search\Elasticsearch\Content\Extractor\Loading
 
 services:
@@ -83,25 +82,17 @@ services:
         class: %ezpublish.spi.search.elasticsearch.content_handler.class%
         arguments:
             - @ezpublish.search.elasticsearch.content.gateway
-            - @ezpublish.search.elasticsearch.mapper
-            - @ezpublish.search.elasticsearch.extractor
-            - %ezpublish.search.elasticsearch.connection.document_type_name.content%
-        lazy: true
-
-    ezpublish.spi.search.elasticsearch.location_handler:
-        class: %ezpublish.spi.search.elasticsearch.location_handler.class%
-        arguments:
             - @ezpublish.search.elasticsearch.location.gateway
             - @ezpublish.search.elasticsearch.mapper
             - @ezpublish.search.elasticsearch.extractor
-            - %ezpublish.search.elasticsearch.connection.document_type_name.location%
+            - %ezpublish.search.elasticsearch.connection.document_type_identifier.content%
+            - %ezpublish.search.elasticsearch.connection.document_type_identifier.location%
         lazy: true
 
     ezpublish.spi.search.elasticsearch:
         class: %ezpublish.spi.search.elasticsearch.class%
         arguments:
             - @ezpublish.spi.search.elasticsearch.content_handler
-            - @ezpublish.spi.search.elasticsearch.location_handler
         tags:
             - {name: ezpublish.searchEngine, alias: elasticsearch}
         lazy: true
