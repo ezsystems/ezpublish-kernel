@@ -30,7 +30,9 @@ class CreateUserGroup extends Slot
             return;
         }
 
-        $userGroupContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($signal->userGroupId);
+        $userGroupContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo(
+            $signal->userGroupId
+        );
 
         $this->searchHandler->contentSearchHandler()->indexContent(
             $this->persistenceHandler->contentHandler()->load(
@@ -39,9 +41,11 @@ class CreateUserGroup extends Slot
             )
         );
 
-        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($userGroupContentInfo->id);
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent(
+            $userGroupContentInfo->id
+        );
         foreach ($locations as $location) {
-            $this->searchHandler->locationSearchHandler()->indexLocation($location);
+            $this->searchHandler->contentSearchHandler()->indexLocation($location);
         }
     }
 }

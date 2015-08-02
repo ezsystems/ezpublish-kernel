@@ -32,8 +32,5 @@ class DeleteContent extends Slot
 
         // Delete Content
         $this->searchHandler->contentSearchHandler()->deleteContent($signal->contentId);
-
-        // Delete all Content locations
-        $this->searchHandler->locationSearchHandler()->deleteContent($signal->contentId);
     }
 }

@@ -38,13 +38,12 @@ class MoveSubtree extends Slot
         $contentHandler = $this->persistenceHandler->contentHandler();
         $contentSearchHandler = $this->searchHandler->contentSearchHandler();
         $locationHandler = $this->persistenceHandler->locationHandler();
-        $locationSearchHandler = $this->searchHandler->locationSearchHandler();
 
         $processedContentIdSet = array();
         $subtreeIds = $locationHandler->loadSubtreeIds($locationId);
 
         foreach ($subtreeIds as $locationId => $contentId) {
-            $locationSearchHandler->indexLocation(
+            $contentSearchHandler->indexLocation(
                 $locationHandler->load($locationId)
             );
 

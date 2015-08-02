@@ -31,10 +31,13 @@ class UnhideLocation extends Slot
         }
 
         $this->searchHandler->contentSearchHandler()->indexContent(
-            $this->persistenceHandler->contentHandler()->load($signal->contentId, $signal->currentVersionNo)
+            $this->persistenceHandler->contentHandler()->load(
+                $signal->contentId,
+                $signal->currentVersionNo
+            )
         );
 
-        $this->searchHandler->locationSearchHandler()->indexLocation(
+        $this->searchHandler->contentSearchHandler()->indexLocation(
             $this->persistenceHandler->locationHandler()->load($signal->locationId)
         );
     }

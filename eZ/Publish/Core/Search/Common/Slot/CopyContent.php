@@ -31,12 +31,17 @@ class CopyContent extends Slot
         }
 
         $this->searchHandler->contentSearchHandler()->indexContent(
-            $this->persistenceHandler->contentHandler()->load($signal->dstContentId, $signal->dstVersionNo)
+            $this->persistenceHandler->contentHandler()->load(
+                $signal->dstContentId,
+                $signal->dstVersionNo
+            )
         );
 
-        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($signal->dstContentId);
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent(
+            $signal->dstContentId
+        );
         foreach ($locations as $location) {
-            $this->searchHandler->locationSearchHandler()->indexLocation($location);
+            $this->searchHandler->contentSearchHandler()->indexLocation($location);
         }
     }
 }

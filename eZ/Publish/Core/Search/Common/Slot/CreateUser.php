@@ -30,7 +30,9 @@ class CreateUser extends Slot
             return;
         }
 
-        $userContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($signal->userId);
+        $userContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo(
+            $signal->userId
+        );
 
         $this->searchHandler->contentSearchHandler()->indexContent(
             $this->persistenceHandler->contentHandler()->load(
@@ -39,9 +41,11 @@ class CreateUser extends Slot
             )
         );
 
-        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($userContentInfo->id);
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent(
+            $userContentInfo->id
+        );
         foreach ($locations as $location) {
-            $this->searchHandler->locationSearchHandler()->indexLocation($location);
+            $this->searchHandler->contentSearchHandler()->indexLocation($location);
         }
     }
 }

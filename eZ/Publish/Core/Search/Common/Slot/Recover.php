@@ -38,7 +38,7 @@ class Recover extends Slot
                 $contentHandler->load($contentInfo->id, $contentInfo->currentVersionNo)
             );
 
-            $this->searchHandler->locationSearchHandler()->indexLocation(
+            $this->searchHandler->contentSearchHandler()->indexLocation(
                 $this->persistenceHandler->locationHandler()->load($signal->newLocationId)
             );
         }
