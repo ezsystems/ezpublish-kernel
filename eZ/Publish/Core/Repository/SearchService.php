@@ -25,7 +25,6 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\SPI\Search\Content\Handler;
-use eZ\Publish\SPI\Search\Content\Location\Handler as LocationSearchHandler;
 
 /**
  * Search service.
@@ -41,11 +40,6 @@ class SearchService implements SearchServiceInterface
      * @var \eZ\Publish\SPI\Search\Content\Handler
      */
     protected $searchHandler;
-
-    /**
-     * @var \eZ\Publish\SPI\Search\Content\Location\Handler
-     */
-    protected $locationSearchHandler;
 
     /**
      * @var array
@@ -67,7 +61,6 @@ class SearchService implements SearchServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Search\Content\Handler $searchHandler
-     * @param \eZ\Publish\SPI\Search\Content\Location\Handler $locationSearchHandler
      * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
      * @param \eZ\Publish\Core\Repository\PermissionsCriterionHandler $permissionsCriterionHandler
      * @param array $settings
@@ -75,14 +68,12 @@ class SearchService implements SearchServiceInterface
     public function __construct(
         RepositoryInterface $repository,
         Handler $searchHandler,
-        LocationSearchHandler $locationSearchHandler,
         Helper\DomainMapper $domainMapper,
         PermissionsCriterionHandler $permissionsCriterionHandler,
         array $settings = array()
     ) {
         $this->repository = $repository;
         $this->searchHandler = $searchHandler;
-        $this->locationSearchHandler = $locationSearchHandler;
         $this->domainMapper = $domainMapper;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
@@ -319,7 +310,7 @@ class SearchService implements SearchServiceInterface
             return new SearchResult(array('time' => 0, 'totalCount' => 0));
         }
 
-        $result = $this->locationSearchHandler->findLocations($query, $fieldFilters);
+        $result = $this->searchHandler->findLocations($query, $fieldFilters);
 
         foreach ($result->searchHits as $hit) {
             $hit->valueObject = $this->domainMapper->buildLocationDomainObject(
