@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Type;
-use eZ\Publish\SPI\Search\Content\Handler as SearchHandlerInterface;
+use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;

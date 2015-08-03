@@ -24,7 +24,7 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
-use eZ\Publish\SPI\Search\Content\Handler;
+use eZ\Publish\SPI\Search\Handler;
 
 /**
  * Search service.
@@ -37,7 +37,7 @@ class SearchService implements SearchServiceInterface
     protected $repository;
 
     /**
-     * @var \eZ\Publish\SPI\Search\Content\Handler
+     * @var \eZ\Publish\SPI\Search\Handler
      */
     protected $searchHandler;
 
@@ -60,7 +60,7 @@ class SearchService implements SearchServiceInterface
      * Setups service with reference to repository object that created it & corresponding handler.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\SPI\Search\Content\Handler $searchHandler
+     * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
      * @param \eZ\Publish\Core\Repository\PermissionsCriterionHandler $permissionsCriterionHandler
      * @param array $settings

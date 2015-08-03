@@ -34,14 +34,14 @@ class CreateLocation extends Slot
             $signal->contentId
         );
 
-        $this->searchHandler->contentSearchHandler()->indexContent(
+        $this->searchHandler->indexContent(
             $this->persistenceHandler->contentHandler()->load(
                 $signal->contentId,
                 $contentInfo->currentVersionNo
             )
         );
 
-        $this->searchHandler->contentSearchHandler()->indexLocation(
+        $this->searchHandler->indexLocation(
             $this->persistenceHandler->locationHandler()->load($signal->locationId)
         );
     }

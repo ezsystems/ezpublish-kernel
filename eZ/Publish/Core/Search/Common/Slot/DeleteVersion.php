@@ -30,7 +30,7 @@ class DeleteVersion extends Slot
             return;
         }
 
-        $this->searchHandler->contentSearchHandler()->deleteContent(
+        $this->searchHandler->deleteContent(
             $signal->contentId,
             $signal->versionNo
         );

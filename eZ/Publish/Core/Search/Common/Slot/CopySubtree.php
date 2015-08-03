@@ -34,13 +34,13 @@ class CopySubtree extends Slot
 
         foreach ($this->persistenceHandler->locationHandler()->loadSubtreeIds($signal->targetNewSubtreeId) as $contentId) {
             $contentInfo = $contentHandler->loadContentInfo($contentId);
-            $this->searchHandler->contentSearchHandler()->indexContent(
+            $this->searchHandler->indexContent(
                 $contentHandler->load($contentInfo->id, $contentInfo->currentVersionNo)
             );
 
             $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentInfo->id);
             foreach ($locations as $location) {
-                $this->searchHandler->contentSearchHandler()->indexLocation($location);
+                $this->searchHandler->indexLocation($location);
             }
         }
     }
