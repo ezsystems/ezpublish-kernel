@@ -60,11 +60,9 @@ EOT
         $stmt = $query->prepare();
         $stmt->execute();
 
-        /** @var \eZ\Publish\Core\Search\Solr\Content\Handler $contentSearchHandler */
-        $contentSearchHandler = $searchHandler->contentSearchHandler();
-        $contentSearchHandler->setCommit(false);
-        $contentSearchHandler->purgeIndex();
-        $contentSearchHandler->setCommit(true);
+        /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Handler $searchHandler */
+        $searchHandler->setCommit(true);
+        $searchHandler->purgeIndex();
 
         $output->writeln('Indexing Content...');
 
@@ -87,7 +85,7 @@ EOT
             }
 
             if (!empty($contentObjects)) {
-                $contentSearchHandler->bulkIndexContent($contentObjects);
+                $searchHandler->bulkIndexContent($contentObjects);
             }
 
             $progress->advance($k);
@@ -124,12 +122,6 @@ EOT
         $stmt = $query->prepare();
         $stmt->execute();
 
-        /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Location\Handler $locationSearchHandler */
-        $locationSearchHandler = $searchHandler->locationSearchHandler();
-        $locationSearchHandler->setCommit(false);
-        $locationSearchHandler->purgeIndex();
-        $locationSearchHandler->setCommit(true);
-
         $output->writeln('Indexing Locations...');
 
         /** @var \Symfony\Component\Console\Helper\ProgressHelper $progress */
@@ -148,7 +140,7 @@ EOT
             }
 
             if (!empty($locations)) {
-                $locationSearchHandler->bulkIndexLocations($locations);
+                $searchHandler->bulkIndexLocations($locations);
             }
 
             $progress->advance($k);
