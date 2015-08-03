@@ -29,7 +29,7 @@ class Trash extends Slot
             return;
         }
 
-        $this->searchHandler->contentSearchHandler()->deleteLocation(
+        $this->searchHandler->deleteLocation(
             $signal->locationId,
             $signal->contentId
         );

@@ -33,7 +33,7 @@ class CreateUserGroup extends Slot
             $signal->userGroupId
         );
 
-        $this->searchHandler->contentSearchHandler()->indexContent(
+        $this->searchHandler->indexContent(
             $this->persistenceHandler->contentHandler()->load(
                 $userGroupContentInfo->id,
                 $userGroupContentInfo->currentVersionNo
@@ -44,7 +44,7 @@ class CreateUserGroup extends Slot
             $userGroupContentInfo->id
         );
         foreach ($locations as $location) {
-            $this->searchHandler->contentSearchHandler()->indexLocation($location);
+            $this->searchHandler->indexLocation($location);
         }
     }
 }

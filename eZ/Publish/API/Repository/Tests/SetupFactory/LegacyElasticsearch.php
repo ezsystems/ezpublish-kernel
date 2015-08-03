@@ -117,10 +117,9 @@ class LegacyElasticsearch extends Legacy
             );
         }
 
-        /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Handler $contentSearchHandler */
-        $contentSearchHandler = $searchHandler->contentSearchHandler();
-        $contentSearchHandler->purgeIndex();
-        $contentSearchHandler->bulkIndexContent($contentObjects);
-        $contentSearchHandler->bulkIndexLocations($locations);
+        /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Handler $searchHandler */
+        $searchHandler->purgeIndex();
+        $searchHandler->bulkIndexContent($contentObjects);
+        $searchHandler->bulkIndexLocations($locations);
     }
 }
