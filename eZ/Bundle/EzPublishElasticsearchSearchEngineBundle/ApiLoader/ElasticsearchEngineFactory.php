@@ -21,20 +21,17 @@ class ElasticsearchEngineFactory extends ContainerAware
     private $repositoryConfigurationProvider;
 
     /**
-     * @var
+     * @var string
      */
     private $defaultConnection;
 
-    /**
-     * @var string
-     */
-    private $searchEngineClass;
-
-    public function __construct(RepositoryConfigurationProvider $repositoryConfigurationProvider, $defaultConnection, $searchEngineClass)
-    {
+    public function __construct(
+        RepositoryConfigurationProvider $repositoryConfigurationProvider,
+        $defaultConnection,
+        $searchEngineClass
+    ) {
         $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
         $this->defaultConnection = $defaultConnection;
-        $this->searchEngineClass = $searchEngineClass;
     }
 
     public function buildEngine()
@@ -46,12 +43,10 @@ class ElasticsearchEngineFactory extends ContainerAware
             $connection = $repositoryConfig['search']['connection'];
         }
 
-        $contentHandlerId = $this->container->getParameter("ez_search_engine_elasticsearch.connection.$connection.content_handler_id");
-        $locationHandlerId = $this->container->getParameter("ez_search_engine_elasticsearch.connection.$connection.location_handler_id");
-
-        return new $this->searchEngineClass(
-            $this->container->get($contentHandlerId),
-            $this->container->get($locationHandlerId)
+        $engineId = $this->container->getParameter(
+            "ez_search_engine_elasticsearch.connection.$connection.engine_id"
         );
+
+        return $this->container->get($engineId);
     }
 }
