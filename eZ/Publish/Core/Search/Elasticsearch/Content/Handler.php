@@ -12,10 +12,11 @@
 namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Type;
-use eZ\Publish\SPI\Search\Content\Handler as SearchHandlerInterface;
+use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -26,6 +27,11 @@ class Handler implements SearchHandlerInterface
      * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway
      */
     protected $gateway;
+
+    /**
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway
+     */
+    protected $locationGateway;
 
     /**
      * @var \eZ\Publish\Core\Search\Elasticsearch\Content\MapperInterface
@@ -40,22 +46,33 @@ class Handler implements SearchHandlerInterface
     protected $extractor;
 
     /**
-     * Name of Content document type in the search backend.
+     * Identifier of Content document type in the search backend.
      *
      * @var string
      */
-    protected $documentTypeName;
+    protected $contentDocumentTypeIdentifier;
+
+    /**
+     * Identifier of Location document type in the search backend.
+     *
+     * @var string
+     */
+    protected $locationDocumentTypeIdentifier;
 
     public function __construct(
         Gateway $gateway,
+        Gateway $locationGateway,
         MapperInterface $mapper,
         Extractor $extractor,
-        $documentTypeName
+        $contentDocumentTypeIdentifier,
+        $locationDocumentTypeIdentifier
     ) {
         $this->gateway = $gateway;
+        $this->locationGateway = $locationGateway;
         $this->mapper = $mapper;
         $this->extractor = $extractor;
-        $this->documentTypeName = $documentTypeName;
+        $this->contentDocumentTypeIdentifier = $contentDocumentTypeIdentifier;
+        $this->locationDocumentTypeIdentifier = $locationDocumentTypeIdentifier;
     }
 
     /**
@@ -76,7 +93,7 @@ class Handler implements SearchHandlerInterface
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
 
-        $data = $this->gateway->find($query, $this->documentTypeName, $fieldFilters);
+        $data = $this->gateway->find($query, $this->contentDocumentTypeIdentifier, $fieldFilters);
 
         return $this->extractor->extract($data);
     }
@@ -117,6 +134,25 @@ class Handler implements SearchHandlerInterface
         }
 
         return $result->searchHits[0]->valueObject;
+    }
+
+    /**
+     * Finds Locations for the given $query.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
+     * @param array $fieldFilters - a map of filters for the returned fields.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     */
+    public function findLocations(LocationQuery $query, array $fieldFilters = array())
+    {
+        $query->filter = $query->filter ?: new Criterion\MatchAll();
+        $query->query = $query->query ?: new Criterion\MatchAll();
+
+        $data = $this->locationGateway->find($query, $this->locationDocumentTypeIdentifier);
+
+        return $this->extractor->extract($data);
     }
 
     /**
@@ -164,6 +200,37 @@ class Handler implements SearchHandlerInterface
     }
 
     /**
+     * Indexes a Location in the index storage.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
+     */
+    public function indexLocation(Location $location)
+    {
+        $document = $this->mapper->mapLocation($location);
+
+        $this->gateway->index($document);
+    }
+
+    /**
+     * Indexes several Locations.
+     *
+     * @todo: This function and setCommit() is needed for Persistence\Solr for test speed but not part
+     *       of interface for the reason described in Solr\Content\Search\Gateway\Native::bulkIndexContent
+     *       Short: Bulk handling should be properly designed before added to the interface.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Location[] $locations
+     */
+    public function bulkIndexLocations(array $locations)
+    {
+        $documents = array();
+        foreach ($locations as $location) {
+            $documents[] = $this->mapper->mapLocation($location);
+        }
+
+        $this->gateway->bulkIndex($documents);
+    }
+
+    /**
      * Deletes a content object from the index.
      *
      * @param int $contentId
@@ -171,6 +238,7 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteContent($contentId, $versionId = null)
     {
+        // 1. Delete the Content
         if ($versionId === null) {
             $ast = array(
                 'query' => array(
@@ -179,7 +247,7 @@ class Handler implements SearchHandlerInterface
                             'and' => array(
                                 array(
                                     'ids' => array(
-                                        'type' => $this->documentTypeName,
+                                        'type' => $this->contentDocumentTypeIdentifier,
                                         'values' => array(
                                             $contentId,
                                         ),
@@ -195,6 +263,21 @@ class Handler implements SearchHandlerInterface
         } else {
             $this->gateway->delete($contentId, 'content');
         }
+
+        // 2. Delete all Content's Locations
+        $ast = array(
+            'query' => array(
+                'filtered' => array(
+                    'filter' => array(
+                        'term' => array(
+                            'content_id' => $contentId,
+                        ),
+                    ),
+                ),
+            ),
+        );
+
+        $this->gateway->deleteByQuery(json_encode($ast), $this->locationDocumentTypeIdentifier);
     }
 
     /**
@@ -209,7 +292,10 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteLocation($locationId, $contentId)
     {
-        // 1. Update (reindex) all Content in the subtree with additional Location(s) outside of it
+        // 1. Delete the Location
+        $this->gateway->delete($locationId, $this->locationDocumentTypeIdentifier);
+
+        // 2. Update (reindex) all Content in the subtree with additional Location(s) outside of it
         $ast = array(
             'filter' => array(
                 'nested' => array(
@@ -236,7 +322,7 @@ class Handler implements SearchHandlerInterface
             ),
         );
 
-        $response = $this->gateway->findRaw(json_encode($ast), $this->documentTypeName);
+        $response = $this->gateway->findRaw(json_encode($ast), $this->contentDocumentTypeIdentifier);
         $result = json_decode($response->body);
 
         $documents = array();
@@ -246,7 +332,7 @@ class Handler implements SearchHandlerInterface
 
         $this->gateway->bulkIndex($documents);
 
-        // 2. Delete all Content in the subtree with no other Location(s) outside of it
+        // 3. Delete all Content in the subtree with no other Location(s) outside of it
         $ast['filter']['nested']['filter']['and'][1] = array(
             'not' => $ast['filter']['nested']['filter']['and'][1],
         );
@@ -256,7 +342,7 @@ class Handler implements SearchHandlerInterface
             ),
         );
 
-        $this->gateway->deleteByQuery(json_encode($ast), $this->documentTypeName);
+        $this->gateway->deleteByQuery(json_encode($ast), $this->contentDocumentTypeIdentifier);
     }
 
     /**
@@ -266,7 +352,8 @@ class Handler implements SearchHandlerInterface
      */
     public function purgeIndex()
     {
-        $this->gateway->purgeIndex($this->documentTypeName);
+        $this->gateway->purgeIndex($this->contentDocumentTypeIdentifier);
+        $this->gateway->purgeIndex($this->locationDocumentTypeIdentifier);
     }
 
     /**

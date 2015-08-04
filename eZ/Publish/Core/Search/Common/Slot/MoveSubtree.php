@@ -36,15 +36,13 @@ class MoveSubtree extends Slot
     protected function indexSubtree($locationId)
     {
         $contentHandler = $this->persistenceHandler->contentHandler();
-        $contentSearchHandler = $this->searchHandler->contentSearchHandler();
         $locationHandler = $this->persistenceHandler->locationHandler();
-        $locationSearchHandler = $this->searchHandler->locationSearchHandler();
 
         $processedContentIdSet = array();
         $subtreeIds = $locationHandler->loadSubtreeIds($locationId);
 
         foreach ($subtreeIds as $locationId => $contentId) {
-            $locationSearchHandler->indexLocation(
+            $this->searchHandler->indexLocation(
                 $locationHandler->load($locationId)
             );
 
@@ -52,7 +50,7 @@ class MoveSubtree extends Slot
                 continue;
             }
 
-            $contentSearchHandler->indexContent(
+            $this->searchHandler->indexContent(
                 $contentHandler->load(
                     $contentId,
                     $contentHandler->loadContentInfo($contentId)->currentVersionNo

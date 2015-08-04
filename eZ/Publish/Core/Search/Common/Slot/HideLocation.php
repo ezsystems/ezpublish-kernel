@@ -30,11 +30,14 @@ class HideLocation extends Slot
             return;
         }
 
-        $this->searchHandler->contentSearchHandler()->indexContent(
-            $this->persistenceHandler->contentHandler()->load($signal->contentId, $signal->currentVersionNo)
+        $this->searchHandler->indexContent(
+            $this->persistenceHandler->contentHandler()->load(
+                $signal->contentId,
+                $signal->currentVersionNo
+            )
         );
 
-        $this->searchHandler->locationSearchHandler()->indexLocation(
+        $this->searchHandler->indexLocation(
             $this->persistenceHandler->locationHandler()->load($signal->locationId)
         );
     }
