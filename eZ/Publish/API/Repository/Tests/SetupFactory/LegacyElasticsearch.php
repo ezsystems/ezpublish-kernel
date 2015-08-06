@@ -117,18 +117,9 @@ class LegacyElasticsearch extends Legacy
             );
         }
 
-        /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Handler $contentSearchHandler */
-        $contentSearchHandler = $searchHandler->contentSearchHandler();
-        $contentSearchHandler->setCommit(false);
-        $contentSearchHandler->purgeIndex();
-        $contentSearchHandler->setCommit(true);
-        $contentSearchHandler->bulkIndexContent($contentObjects);
-
-        /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Location\Handler $locationSearchHandler */
-        $locationSearchHandler = $searchHandler->locationSearchHandler();
-        $locationSearchHandler->setCommit(false);
-        $locationSearchHandler->purgeIndex();
-        $locationSearchHandler->setCommit(true);
-        $locationSearchHandler->bulkIndexLocations($locations);
+        /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Handler $searchHandler */
+        $searchHandler->purgeIndex();
+        $searchHandler->bulkIndexContent($contentObjects);
+        $searchHandler->bulkIndexLocations($locations);
     }
 }

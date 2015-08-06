@@ -33,11 +33,11 @@ class Recover extends Slot
 
         foreach ($this->persistenceHandler->locationHandler()->loadSubtreeIds($signal->newLocationId) as $contentId) {
             $contentInfo = $contentHandler->loadContentInfo($contentId);
-            $this->searchHandler->contentSearchHandler()->indexContent(
+            $this->searchHandler->indexContent(
                 $contentHandler->load($contentInfo->id, $contentInfo->currentVersionNo)
             );
 
-            $this->searchHandler->locationSearchHandler()->indexLocation(
+            $this->searchHandler->indexLocation(
                 $this->persistenceHandler->locationHandler()->load($signal->newLocationId)
             );
         }

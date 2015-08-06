@@ -11,13 +11,17 @@
 namespace eZ\Publish\Core\Search\Legacy\Content;
 
 use eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Search\Content\Handler as SearchHandlerInterface;
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
+use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
@@ -52,6 +56,13 @@ class Handler implements SearchHandlerInterface
     protected $gateway;
 
     /**
+     * Location locator gateway.
+     *
+     * @var \eZ\Publish\Core\Search\Legacy\Content\Location\Gateway
+     */
+    protected $locationGateway;
+
+    /**
      * Content mapper.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
@@ -59,15 +70,30 @@ class Handler implements SearchHandlerInterface
     protected $contentMapper;
 
     /**
+     * Location locationMapper.
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
+     */
+    protected $locationMapper;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Gateway $gateway
+     * @param \eZ\Publish\Core\Search\Legacy\Content\Location\Gateway $locationGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
      */
-    public function __construct(Gateway $gateway, ContentMapper $contentMapper)
-    {
+    public function __construct(
+        Gateway $gateway,
+        LocationGateway $locationGateway,
+        ContentMapper $contentMapper,
+        LocationMapper $locationMapper
+    ) {
         $this->gateway = $gateway;
+        $this->locationGateway = $locationGateway;
         $this->contentMapper = $contentMapper;
+        $this->locationMapper = $locationMapper;
     }
 
     /**
@@ -154,6 +180,40 @@ class Handler implements SearchHandlerInterface
     }
 
     /**
+     * @see \eZ\Publish\SPI\Search\Content\Handler::findLocations
+     */
+    public function findLocations(LocationQuery $query, array $fieldFilters = array())
+    {
+        $start = microtime(true);
+        $query->filter = $query->filter ?: new Criterion\MatchAll();
+        $query->query = $query->query ?: new Criterion\MatchAll();
+
+        if (count($query->facetBuilders)) {
+            throw new NotImplementedException('Facets are not supported by the legacy search engine.');
+        }
+
+        // The legacy search does not know about scores, so we just
+        // combine the query with the filter
+        $data = $this->locationGateway->find(
+            new Criterion\LogicalAnd(array($query->query, $query->filter)),
+            $query->offset,
+            $query->limit,
+            $query->sortClauses,
+            $query->performCount
+        );
+
+        $result = new SearchResult();
+        $result->time = microtime(true) - $start;
+        $result->totalCount = $data['count'];
+
+        foreach ($this->locationMapper->createLocationsFromRows($data['rows']) as $location) {
+            $result->searchHits[] = new SearchHit(array('valueObject' => $location));
+        }
+
+        return $result;
+    }
+
+    /**
      * Suggests a list of values for the given prefix.
      *
      * @param string $prefix
@@ -173,7 +233,15 @@ class Handler implements SearchHandlerInterface
      */
     public function indexContent(Content $content)
     {
-        throw new \Exception('Not implemented yet.');
+        // Not implemented in Legacy Storage Engine
+    }
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
+     */
+    public function indexLocation(Location $location)
+    {
+        // Not implemented in Legacy Storage Engine
     }
 
     /**
@@ -184,7 +252,7 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteContent($contentId, $versionId = null)
     {
-        throw new \Exception('Not implemented yet.');
+        // Not implemented in Legacy Storage Engine
     }
 
     /**

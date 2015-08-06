@@ -29,7 +29,9 @@ class DeleteLocation extends Slot
             return;
         }
 
-        $this->searchHandler->contentSearchHandler()->deleteLocation($signal->locationId, $signal->contentId);
-        $this->searchHandler->locationSearchHandler()->deleteLocation($signal->locationId);
+        $this->searchHandler->deleteLocation(
+            $signal->locationId,
+            $signal->contentId
+        );
     }
 }

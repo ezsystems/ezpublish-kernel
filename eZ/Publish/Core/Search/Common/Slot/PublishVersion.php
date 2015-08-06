@@ -29,13 +29,13 @@ class PublishVersion extends Slot
             return;
         }
 
-        $this->searchHandler->contentSearchHandler()->indexContent(
+        $this->searchHandler->indexContent(
             $this->persistenceHandler->contentHandler()->load($signal->contentId, $signal->versionNo)
         );
 
         $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($signal->contentId);
         foreach ($locations as $location) {
-            $this->searchHandler->locationSearchHandler()->indexLocation($location);
+            $this->searchHandler->indexLocation($location);
         }
     }
 }

@@ -11,7 +11,7 @@
 namespace eZ\Publish\Core\Search\Legacy\Tests\Content\Location;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
-use eZ\Publish\Core\Search\Legacy\Content\Location;
+use eZ\Publish\Core\Search\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -29,9 +29,9 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 
 /**
- * Test case for LocationSearchHandler.
+ * Location Search test case for ContentSearchHandler.
  */
-class HandlerSortTest extends LanguageAwareTestCase
+class HandlerLocationSortTest extends LanguageAwareTestCase
 {
     protected static $setUp = false;
 
@@ -46,7 +46,7 @@ class HandlerSortTest extends LanguageAwareTestCase
     {
         if (!self::$setUp) {
             parent::setUp();
-            $this->insertDatabaseFixture(__DIR__ . '/../../_fixtures/full_dump.php');
+            $this->insertDatabaseFixture(__DIR__ . '/../_fixtures/full_dump.php');
             self::$setUp = $this->handler;
         } else {
             $this->handler = self::$setUp;
@@ -79,12 +79,13 @@ class HandlerSortTest extends LanguageAwareTestCase
      *
      * This method returns a fully functional search handler to perform tests on.
      *
-     * @return \eZ\Publish\Core\Search\Legacy\Content\Location\Handler
+     * @return \eZ\Publish\Core\Search\Legacy\Content\Handler
      */
-    protected function getLocationSearchHandler()
+    protected function getContentSearchHandler()
     {
-        return new Location\Handler(
-            new Location\Gateway\DoctrineDatabase(
+        return new Content\Handler(
+            $this->getMock('eZ\\Publish\\Core\\Search\\Legacy\\Content\\Gateway'),
+            new Content\Location\Gateway\DoctrineDatabase(
                 $this->getDatabaseHandler(),
                 new CriteriaConverter(
                     array(
@@ -121,6 +122,7 @@ class HandlerSortTest extends LanguageAwareTestCase
                     )
                 )
             ),
+            $this->getMockBuilder('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper')->disableOriginalConstructor()->getMock(),
             $this->getLocationMapperMock()
         );
     }
@@ -206,7 +208,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testNoSorting()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $locations = $handler->findLocations(
             new LocationQuery(
@@ -229,7 +231,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testSortLocationPath()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $locations = $handler->findLocations(
             new LocationQuery(
@@ -250,7 +252,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testSortLocationDepth()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $locations = $handler->findLocations(
             new LocationQuery(
@@ -271,7 +273,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testSortLocationDepthAndPath()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $locations = $handler->findLocations(
             new LocationQuery(
@@ -295,7 +297,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testSortLocationPriority()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $locations = $handler->findLocations(
             new LocationQuery(
@@ -318,7 +320,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testSortDateModified()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $locations = $handler->findLocations(
             new LocationQuery(
@@ -341,7 +343,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testSortDatePublished()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $locations = $handler->findLocations(
             new LocationQuery(
@@ -364,7 +366,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testSortSectionIdentifier()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $locations = $handler->findLocations(
             new LocationQuery(
@@ -407,7 +409,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testSortContentName()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $locations = $handler->findLocations(
             new LocationQuery(
@@ -430,7 +432,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testSortContentId()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $locations = $handler->findLocations(
             new LocationQuery(
@@ -453,7 +455,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testSortLocationId()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $locations = $handler->findLocations(
             new LocationQuery(
@@ -476,7 +478,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testSortLocationVisibilityAscending()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $locations = $handler->findLocations(
             new LocationQuery(
@@ -499,7 +501,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testSortLocationVisibilityDescending()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $locations = $handler->findLocations(
             new LocationQuery(
@@ -522,7 +524,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testSortSectionName()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $result = $handler->findLocations(
             new LocationQuery(
@@ -576,7 +578,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testSortFieldText()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $result = $handler->findLocations(
             new LocationQuery(
@@ -646,7 +648,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testSortFieldNumeric()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $result = $handler->findLocations(
             new LocationQuery(
@@ -679,7 +681,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testSortIsMainLocationAscending()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $locations = $handler->findLocations(
             new LocationQuery(
@@ -702,7 +704,7 @@ class HandlerSortTest extends LanguageAwareTestCase
 
     public function testSortIsMainLocationDescending()
     {
-        $handler = $this->getLocationSearchHandler();
+        $handler = $this->getContentSearchHandler();
 
         $locations = $handler->findLocations(
             new LocationQuery(
