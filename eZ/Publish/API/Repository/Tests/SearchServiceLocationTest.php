@@ -841,7 +841,9 @@ class SearchServiceLocationTest extends BaseTest
         );
         $this->assertQueryFixture(
             $query,
-            $this->getFixtureDir() . '/QueryCustomField.php'
+            $this->getFixtureDir() . '/QueryCustomField.php',
+            null,
+            true
         );
     }
 
@@ -880,7 +882,9 @@ class SearchServiceLocationTest extends BaseTest
 
         $this->assertQueryFixture(
             $query,
-            $this->getFixtureDir() . '/QueryModifiedField.php'
+            $this->getFixtureDir() . '/QueryModifiedField.php',
+            null,
+            true
         );
     }
 
@@ -1608,7 +1612,7 @@ class SearchServiceLocationTest extends BaseTest
      * @param string $fixture
      * @param null|callable $closure
      */
-    protected function assertQueryFixture(LocationQuery $query, $fixture, $closure = null)
+    protected function assertQueryFixture(LocationQuery $query, $fixture, $closure = null, $ignoreScore = true)
     {
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1634,8 +1638,24 @@ class SearchServiceLocationTest extends BaseTest
             }
         }
 
+        $fixture = include $fixture;
+
         if ($closure !== null) {
             $closure($result);
+        }
+
+        if ($ignoreScore) {
+            foreach (array($fixture, $result) as $result) {
+                $property = new \ReflectionProperty(get_class($result), 'maxScore');
+                $property->setAccessible(true);
+                $property->setValue($result, 0.0);
+
+                foreach ($result->searchHits as $hit) {
+                    $property = new \ReflectionProperty(get_class($hit), 'score');
+                    $property->setAccessible(true);
+                    $property->setValue($hit, 0.0);
+                }
+            }
         }
 
         foreach ($result->searchHits as $hit) {
@@ -1649,7 +1669,7 @@ class SearchServiceLocationTest extends BaseTest
         }
 
         $this->assertEquals(
-            include $fixture,
+            $fixture,
             $result,
             'Search results do not match.',
             .2 // Be quite generous regarding delay -- most important for scores
