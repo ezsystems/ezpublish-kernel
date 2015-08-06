@@ -23,4 +23,16 @@ class ContentTypeLimitation extends Limitation
     {
         return Limitation::CONTENTTYPE;
     }
+
+    /**
+     * A hash of human readable limitations, using IDs or identifiers as keys.
+     *
+     * @readonly
+     *
+     * @return mixed[]
+     */
+    public function limitationValuesAsText()
+    {
+        return $this->limitationValues; // TODO: load content type names
+    }
 }

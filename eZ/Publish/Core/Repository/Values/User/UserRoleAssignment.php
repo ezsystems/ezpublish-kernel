@@ -67,4 +67,14 @@ class UserRoleAssignment extends APIUserRoleAssignment
     {
         return $this->user;
     }
+
+    /**
+     * Returns the type of role assignment: user or usergroup.
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return 'user';
+    }
 }
