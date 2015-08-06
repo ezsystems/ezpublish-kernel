@@ -89,8 +89,7 @@ class Handler implements SearchHandlerInterface
         LocationGateway $locationGateway,
         ContentMapper $contentMapper,
         LocationMapper $locationMapper
-    )
-    {
+    ) {
         $this->gateway = $gateway;
         $this->locationGateway = $locationGateway;
         $this->contentMapper = $contentMapper;
