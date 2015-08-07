@@ -24,9 +24,17 @@ abstract class Gateway
      * @param int $offset
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     * @param array $languageFilter
      * @param bool $doCount
      *
      * @return mixed[][]
      */
-    abstract public function find(Criterion $criterion, $offset, $limit, array $sortClauses = null, $doCount = true);
+    abstract public function find(
+        Criterion $criterion,
+        $offset,
+        $limit,
+        array $sortClauses = null,
+        array $languageFilter = array(),
+        $doCount = true
+    );
 }

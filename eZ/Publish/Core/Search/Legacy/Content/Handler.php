@@ -203,6 +203,7 @@ class Handler implements SearchHandlerInterface
             $query->offset,
             $query->limit,
             $query->sortClauses,
+            $languageFilter,
             $query->performCount
         );
 
