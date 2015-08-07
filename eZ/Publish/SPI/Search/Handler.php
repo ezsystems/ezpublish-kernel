@@ -25,17 +25,17 @@ interface Handler
     /**
      * Finds content objects for the given query.
      *
-     * @todo define structs for the field filters
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Query criterion is not applicable to its target
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array $fieldFilters - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
+     *        Also used to define which field languages are loaded for the returned content.
+     *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
+     *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult With ContentInfo as SearchHit->valueObject
      */
-    public function findContent(Query $query, array $fieldFilters = array());
+    public function findContent(Query $query, array $languageFilter = array());
 
     /**
      * Performs a query for a single content object.
@@ -44,26 +44,28 @@ interface Handler
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
-     * @todo define structs for the field filters
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
-     * @param array $fieldFilters - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
+     *        Also used to define which field languages are loaded for the returned content.
+     *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
+     *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
-    public function findSingle(Criterion $filter, array $fieldFilters = array());
+    public function findSingle(Criterion $filter, array $languageFilter = array());
 
     /**
      * Finds locations for the given $query.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
-     * @param array $fieldFilters - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
+     *        Also used to define which field languages are loaded for the returned content.
+     *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
+     *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult With Location as SearchHit->valueObject
      */
-    public function findLocations(LocationQuery $query, array $fieldFilters = array());
+    public function findLocations(LocationQuery $query, array $languageFilter = array());
 
     /**
      * Suggests a list of values for the given prefix.

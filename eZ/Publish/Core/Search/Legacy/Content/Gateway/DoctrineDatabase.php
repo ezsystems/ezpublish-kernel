@@ -132,7 +132,6 @@ class DoctrineDatabase extends Gateway
      * Get result count.
      *
      * @param Criterion $filter
-     * @param array $sort
      * @param array $languageFilter
      *
      * @return int

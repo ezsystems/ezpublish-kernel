@@ -102,8 +102,10 @@ class Handler implements SearchHandlerInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Query criterion is not applicable to its target
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     * @param array $languageFilter Configuration for specifying prioritized languages query will be performed on.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
+     *        Also used to define which field languages are loaded for the returned content.
+     *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
+     *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
@@ -152,8 +154,10 @@ class Handler implements SearchHandlerInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
-     * @param array $languageFilter Configuration for specifying prioritized languages query will be performed on.
-     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
+     * @param array $languageFilter - a map of language related filters specifying languages query will be performed on.
+     *        Also used to define which field languages are loaded for the returned content.
+     *        Currently supports: <code>array("languages" => array(<language1>,..), "useAlwaysAvailable" => bool)</code>
+     *                            useAlwaysAvailable defaults to true to avoid exceptions on missing translations
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
@@ -180,9 +184,9 @@ class Handler implements SearchHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Search\Content\Handler::findLocations
+     * @see \eZ\Publish\SPI\Search\Handler::findLocations
      */
-    public function findLocations(LocationQuery $query, array $fieldFilters = array())
+    public function findLocations(LocationQuery $query, array $languageFilter = array())
     {
         $start = microtime(true);
         $query->filter = $query->filter ?: new Criterion\MatchAll();
@@ -199,6 +203,7 @@ class Handler implements SearchHandlerInterface
             $query->offset,
             $query->limit,
             $query->sortClauses,
+            $languageFilter,
             $query->performCount
         );
 
@@ -217,7 +222,7 @@ class Handler implements SearchHandlerInterface
      * Suggests a list of values for the given prefix.
      *
      * @param string $prefix
-     * @param string[] $fieldpath
+     * @param string[] $fieldPaths
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */

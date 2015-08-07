@@ -45,16 +45,23 @@ class ExceptionConversion extends Gateway
      * @param int $offset
      * @param int|null $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     * @param array $languageFilter
      * @param bool $doCount
      *
      * @throws \RuntimeException
      *
      * @return mixed[][]
      */
-    public function find(Criterion $criterion, $offset = 0, $limit = null, array $sortClauses = null, $doCount = true)
-    {
+    public function find(
+        Criterion $criterion,
+        $offset = 0,
+        $limit = null,
+        array $sortClauses = null,
+        array $languageFilter = array(),
+        $doCount = true
+    ) {
         try {
-            return $this->innerGateway->find($criterion, $offset, $limit, $sortClauses, $doCount);
+            return $this->innerGateway->find($criterion, $offset, $limit, $sortClauses, $languageFilter, $doCount);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

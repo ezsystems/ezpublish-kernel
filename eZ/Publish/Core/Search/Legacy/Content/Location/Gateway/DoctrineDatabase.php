@@ -70,13 +70,20 @@ class DoctrineDatabase extends Gateway
      * @param int $offset
      * @param int $limit
      * @param null|\eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     * @param array $languageFilter
      * @param bool $doCount
      *
      * @return mixed[][]
      */
-    public function find(Criterion $criterion, $offset, $limit, array $sortClauses = null, $doCount = true)
-    {
-        $count = $doCount ? $this->getTotalCount($criterion, $sortClauses) : null;
+    public function find(
+        Criterion $criterion,
+        $offset,
+        $limit,
+        array $sortClauses = null,
+        array $languageFilter = array(),
+        $doCount = true
+    ) {
+        $count = $doCount ? $this->getTotalCount($criterion, $languageFilter) : null;
 
         if (!$doCount && $limit === 0) {
             throw new \RuntimeException('Invalid query, can not disable count and request 0 items at the same time');
@@ -111,7 +118,7 @@ class DoctrineDatabase extends Gateway
         }
 
         $selectQuery->where(
-            $this->criteriaConverter->convertCriteria($selectQuery, $criterion),
+            $this->criteriaConverter->convertCriteria($selectQuery, $criterion, $languageFilter),
             $selectQuery->expr->eq(
                 'ezcontentobject.status',
                 //ContentInfo::STATUS_PUBLISHED
@@ -147,11 +154,11 @@ class DoctrineDatabase extends Gateway
      * Returns total results count for $criterion and $sortClauses.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param null|\eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     * @param array $languageFilter
      *
      * @return array
      */
-    protected function getTotalCount(Criterion $criterion, $sortClauses)
+    protected function getTotalCount(Criterion $criterion, $languageFilter)
     {
         $query = $this->handler->createSelectQuery();
         $query
@@ -168,12 +175,8 @@ class DoctrineDatabase extends Gateway
                 'ezcontentobject_version.contentobject_id'
             );
 
-        if ($sortClauses !== null) {
-            $this->sortClauseConverter->applyJoin($query, $sortClauses);
-        }
-
         $query->where(
-            $this->criteriaConverter->convertCriteria($query, $criterion),
+            $this->criteriaConverter->convertCriteria($query, $criterion, $languageFilter),
             $query->expr->eq(
                 'ezcontentobject.status',
                 //ContentInfo::STATUS_PUBLISHED

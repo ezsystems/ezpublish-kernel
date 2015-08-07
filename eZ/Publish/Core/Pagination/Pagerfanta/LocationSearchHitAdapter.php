@@ -31,14 +31,20 @@ class LocationSearchHitAdapter implements AdapterInterface
     private $searchService;
 
     /**
+     * @var array
+     */
+    private $languageFilter;
+
+    /**
      * @var int
      */
     private $nbResults;
 
-    public function __construct(LocationQuery $query, SearchService $searchService)
+    public function __construct(LocationQuery $query, SearchService $searchService, array $languageFilter = array())
     {
         $this->query = $query;
         $this->searchService = $searchService;
+        $this->languageFilter = $languageFilter;
     }
 
     /**
@@ -73,7 +79,7 @@ class LocationSearchHitAdapter implements AdapterInterface
         $query->limit = $length;
         $query->performCount = false;
 
-        $searchResult = $this->searchService->findLocations($query);
+        $searchResult = $this->searchService->findLocations($query, $this->languageFilter);
 
         // Set count for further use if returned by search engine despite !performCount (Solr, ES)
         if (!isset($this->nbResults) && isset($searchResult->totalCount)) {
