@@ -83,7 +83,7 @@ class DoctrineDatabase extends Gateway
         array $languageFilter = array(),
         $doCount = true
     ) {
-        $count = $doCount ? $this->getTotalCount($criterion, $sortClauses, $languageFilter) : null;
+        $count = $doCount ? $this->getTotalCount($criterion, $languageFilter) : null;
 
         if (!$doCount && $limit === 0) {
             throw new \RuntimeException('Invalid query, can not disable count and request 0 items at the same time');
@@ -154,12 +154,11 @@ class DoctrineDatabase extends Gateway
      * Returns total results count for $criterion and $sortClauses.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param null|\eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
      * @param array $languageFilter
      *
      * @return array
      */
-    protected function getTotalCount(Criterion $criterion, $sortClauses, $languageFilter)
+    protected function getTotalCount(Criterion $criterion, $languageFilter)
     {
         $query = $this->handler->createSelectQuery();
         $query
@@ -175,10 +174,6 @@ class DoctrineDatabase extends Gateway
                 'ezcontentobject.id',
                 'ezcontentobject_version.contentobject_id'
             );
-
-        if ($sortClauses !== null) {
-            $this->sortClauseConverter->applyJoin($query, $sortClauses);
-        }
 
         $query->where(
             $this->criteriaConverter->convertCriteria($query, $criterion, $languageFilter),
