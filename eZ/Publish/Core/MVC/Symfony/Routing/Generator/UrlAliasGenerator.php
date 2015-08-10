@@ -84,16 +84,23 @@ class UrlAliasGenerator extends Generator
     public function doGenerate($location, array $parameters)
     {
         $urlAliasService = $this->repository->getURLAliasService();
+
+        $siteaccess = null;
         if (isset($parameters['siteaccess'])) {
+            $siteaccess = $parameters['siteaccess'];
+            unset($parameters['siteaccess']);
+        }
+
+        if ($siteaccess) {
             // We generate for a different SiteAccess, so potentially in a different language.
-            $languages = $this->configResolver->getParameter('languages', null, $parameters['siteaccess']);
+            $languages = $this->configResolver->getParameter('languages', null, $siteaccess);
             $urlAliases = $urlAliasService->listLocationAliases($location, false, null, null, $languages);
             // Use the target SiteAccess root location
-            $rootLocationId = $this->configResolver->getParameter('content.tree_root.location_id', null, $parameters['siteaccess']);
-            unset($parameters['siteaccess']);
+            $rootLocationId = $this->configResolver->getParameter('content.tree_root.location_id', null, $siteaccess);
         } else {
-            $rootLocationId = $this->rootLocationId;
+            $languages = null;
             $urlAliases = $urlAliasService->listLocationAliases($location, false);
+            $rootLocationId = $this->rootLocationId;
         }
 
         $queryString = '';
@@ -105,7 +112,7 @@ class UrlAliasGenerator extends Generator
             $path = $urlAliases[0]->path;
             // Remove rootLocation's prefix if needed.
             if ($rootLocationId !== null) {
-                $pathPrefix = $this->getPathPrefixByRootLocationId($rootLocationId);
+                $pathPrefix = $this->getPathPrefixByRootLocationId($rootLocationId, $languages, $siteaccess);
                 // "/" cannot be considered as a path prefix since it's root, so we ignore it.
                 if ($pathPrefix !== '/' && mb_stripos($path, $pathPrefix) === 0) {
                     $path = mb_substr($path, mb_strlen($pathPrefix));
@@ -150,25 +157,34 @@ class UrlAliasGenerator extends Generator
      * Returns path corresponding to $rootLocationId.
      *
      * @param int $rootLocationId
+     * @param array $languages
+     * @param string $siteaccess
      *
      * @return string
      */
-    public function getPathPrefixByRootLocationId($rootLocationId)
+    public function getPathPrefixByRootLocationId($rootLocationId, $languages = null, $siteaccess = null)
     {
         if (!$rootLocationId) {
             return '';
         }
 
-        if (isset($this->pathPrefixMap[$rootLocationId])) {
-            return $this->pathPrefixMap[$rootLocationId];
+        if (!isset($this->pathPrefixMap[$siteaccess])) {
+            $this->pathPrefixMap[$siteaccess] = array();
         }
 
-        $this->pathPrefixMap[$rootLocationId] = $this->repository
-            ->getURLAliasService()
-            ->reverseLookup($this->loadLocation($rootLocationId))
-            ->path;
+        if (!isset($this->pathPrefixMap[$siteaccess][$rootLocationId])) {
+            $this->pathPrefixMap[$siteaccess][$rootLocationId] = $this->repository
+                ->getURLAliasService()
+                ->reverseLookup(
+                    $this->loadLocation($rootLocationId),
+                    null,
+                    false,
+                    $languages
+                )
+                ->path;
+        }
 
-        return $this->pathPrefixMap[$rootLocationId];
+        return $this->pathPrefixMap[$siteaccess][$rootLocationId];
     }
 
     /**
