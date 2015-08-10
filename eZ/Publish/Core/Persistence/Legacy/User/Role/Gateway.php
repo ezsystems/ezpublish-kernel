@@ -93,7 +93,7 @@ abstract class Gateway
     /**
      * Update role.
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * Will not throw anything if location id is invalid.
      *
      * @param RoleUpdateStruct $role
      */
