@@ -15,7 +15,6 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\User\Policy;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Role;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * User Role gateway implementation using the Doctrine database.
@@ -456,7 +455,7 @@ class DoctrineDatabase extends Gateway
     /**
      * Update role.
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * Will not throw anything if location id is invalid.
      *
      * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
      */
@@ -477,9 +476,11 @@ class DoctrineDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        if ($statement->rowCount() < 1) {
+        // Commented due to EZP-24698: Role update leads to NotFoundException
+        // Should be fixed with PDO::MYSQL_ATTR_FOUND_ROWS instead
+        /*if ($statement->rowCount() < 1) {
             throw new NotFoundException('role', $role->id);
-        }
+        }*/
     }
 
     /**
