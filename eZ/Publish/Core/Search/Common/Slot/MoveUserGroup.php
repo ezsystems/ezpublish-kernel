@@ -16,7 +16,7 @@ use eZ\Publish\Core\Search\Common\Slot;
 /**
  * A Search Engine slot handling MoveUserGroupSignal.
  */
-class MoveUserGroup extends MoveSubtree
+class MoveUserGroup extends AbstractSubtree
 {
     /**
      * Receive the given $signal and react on it.
