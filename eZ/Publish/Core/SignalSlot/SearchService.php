@@ -57,7 +57,7 @@ class SearchService implements SearchServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param array $languageFilter Configuration for specifying prioritized languages query will be performed on.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
-     * @param bool $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
+     * @param bool $filterOnUserPermissions if true only the objects which the user is allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
