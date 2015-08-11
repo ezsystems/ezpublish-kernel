@@ -16,7 +16,7 @@ use eZ\Publish\Core\Search\Common\Slot;
 /**
  * A Search Engine slot handling UnhideLocationSignal.
  */
-class UnhideLocation extends Slot
+class UnhideLocation extends AbstractSubtree
 {
     /**
      * Receive the given $signal and react on it.
@@ -29,15 +29,6 @@ class UnhideLocation extends Slot
             return;
         }
 
-        $this->searchHandler->indexContent(
-            $this->persistenceHandler->contentHandler()->load(
-                $signal->contentId,
-                $signal->currentVersionNo
-            )
-        );
-
-        $this->searchHandler->indexLocation(
-            $this->persistenceHandler->locationHandler()->load($signal->locationId)
-        );
+        $this->indexSubtree($signal->locationId);
     }
 }

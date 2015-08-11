@@ -16,7 +16,7 @@ use eZ\Publish\Core\Search\Common\Slot;
 /**
  * A Search Engine slot handling HideLocationSignal.
  */
-class HideLocation extends Slot
+class HideLocation extends AbstractSubtree
 {
     /**
      * Receive the given $signal and react on it.
@@ -29,15 +29,6 @@ class HideLocation extends Slot
             return;
         }
 
-        $this->searchHandler->indexContent(
-            $this->persistenceHandler->contentHandler()->load(
-                $signal->contentId,
-                $signal->currentVersionNo
-            )
-        );
-
-        $this->searchHandler->indexLocation(
-            $this->persistenceHandler->locationHandler()->load($signal->locationId)
-        );
+        $this->indexSubtree($signal->locationId);
     }
 }
