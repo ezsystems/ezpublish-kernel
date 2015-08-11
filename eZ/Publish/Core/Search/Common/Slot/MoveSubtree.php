@@ -16,7 +16,7 @@ use eZ\Publish\Core\Search\Common\Slot;
 /**
  * A Search Engine slot handling MoveSubtreeSignal.
  */
-class MoveSubtree extends Slot
+class MoveSubtree extends AbstractSubtree
 {
     /**
      * Receive the given $signal and react on it.
@@ -30,35 +30,5 @@ class MoveSubtree extends Slot
         }
 
         $this->indexSubtree($signal->locationId);
-    }
-
-    protected function indexSubtree($locationId)
-    {
-        $contentHandler = $this->persistenceHandler->contentHandler();
-        $locationHandler = $this->persistenceHandler->locationHandler();
-
-        $processedContentIdSet = array();
-        $subtreeIds = $locationHandler->loadSubtreeIds($locationId);
-
-        foreach ($subtreeIds as $locationId => $contentId) {
-            $this->searchHandler->indexLocation(
-                $locationHandler->load($locationId)
-            );
-
-            if (isset($processedContentIdSet[$contentId])) {
-                continue;
-            }
-
-            $this->searchHandler->indexContent(
-                $contentHandler->load(
-                    $contentId,
-                    $contentHandler->loadContentInfo($contentId)->currentVersionNo
-                )
-            );
-
-            // Content could be found in multiple Locations of the subtree,
-            // but we need to (re)index it only once
-            $processedContentIdSet[$contentId] = true;
-        }
     }
 }
