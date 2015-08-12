@@ -43,7 +43,7 @@ class SearchHit extends ValueObject
      *
      * @var string
      */
-    public $contentTranslation;
+    public $matchedTranslation;
 
     /**
      * A representation of the search hit including highlighted terms.

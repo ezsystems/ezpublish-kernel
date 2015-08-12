@@ -1454,7 +1454,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
             );
             $this->assertEquals(
                 $translationLanguageCode,
-                $searchResult->searchHits[$index]->contentTranslation
+                $searchResult->searchHits[$index]->matchedTranslation
             );
         }
     }
@@ -1510,7 +1510,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
             );
             $this->assertEquals(
                 $translationLanguageCode,
-                $searchResult->searchHits[$index]->contentTranslation
+                $searchResult->searchHits[$index]->matchedTranslation
             );
         }
     }
@@ -1562,7 +1562,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
             );
             $this->assertEquals(
                 $translationLanguageCode,
-                $searchResult->searchHits[$index]->contentTranslation
+                $searchResult->searchHits[$index]->matchedTranslation
             );
         }
 
@@ -1582,7 +1582,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
             );
             $this->assertEquals(
                 $translationLanguageCode,
-                $searchResult->searchHits[$realIndex]->contentTranslation
+                $searchResult->searchHits[$realIndex]->matchedTranslation
             );
         }
     }
