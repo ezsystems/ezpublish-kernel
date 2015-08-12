@@ -83,6 +83,8 @@ class EZP21069Test extends BaseTest
             )->versionInfo,
             $contentDraftStruct
         );
+
+        $this->refreshSearch($repository);
     }
 
     public function testSearchOnPreviousAttributeContentGivesNoResult()

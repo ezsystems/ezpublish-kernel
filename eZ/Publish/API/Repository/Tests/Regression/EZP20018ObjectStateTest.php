@@ -26,23 +26,27 @@ class EZP20018ObjectStateTest extends BaseTest
      */
     public function testSearchForNonUsedObjectState()
     {
+        $repository = $this->getRepository();
+
         $query = new Query();
         $query->filter = new ObjectStateId(2);
-        $results1 = $this->getRepository()->getSearchService()->findContent($query);
+        $results1 = $repository->getSearchService()->findContent($query);
 
         $this->assertEquals(0, $results1->totalCount);
         $this->assertCount(0, $results1->searchHits);
 
         // Assign and make sure it updates
-        $stateService = $this->getRepository()->getObjectStateService();
+        $stateService = $repository->getObjectStateService();
 
         $stateService->setContentState(
-            $this->getRepository()->getContentService()->loadContentInfo(52),
+            $repository->getContentService()->loadContentInfo(52),
             $stateService->loadObjectStateGroup(2),
             $stateService->loadObjectState(2)
         );
 
-        $results2 = $this->getRepository()->getSearchService()->findContent($query);
+        $this->refreshSearch($repository);
+
+        $results2 = $repository->getSearchService()->findContent($query);
 
         $this->assertEquals(1, $results2->totalCount);
         $this->assertCount($results2->totalCount, $results2->searchHits);
@@ -53,24 +57,28 @@ class EZP20018ObjectStateTest extends BaseTest
      */
     public function testSearchForUsedObjectState()
     {
+        $repository = $this->getRepository();
+
         $query = new Query();
         $query->filter = new ObjectStateId(1);
         $query->limit = 50;
-        $results1 = $this->getRepository()->getSearchService()->findContent($query);
+        $results1 = $repository->getSearchService()->findContent($query);
 
         $this->assertEquals(18, $results1->totalCount);
         $this->assertEquals($results1->totalCount, count($results1->searchHits));
 
         // Assign and make sure it updates
-        $stateService = $this->getRepository()->getObjectStateService();
+        $stateService = $repository->getObjectStateService();
 
         $stateService->setContentState(
-            $this->getRepository()->getContentService()->loadContentInfo(52),
+            $repository->getContentService()->loadContentInfo(52),
             $stateService->loadObjectStateGroup(2),
             $stateService->loadObjectState(2)
         );
 
-        $results2 = $this->getRepository()->getSearchService()->findContent($query);
+        $this->refreshSearch($repository);
+
+        $results2 = $repository->getSearchService()->findContent($query);
 
         $this->assertEquals(17, $results2->totalCount);
         $this->assertCount($results2->totalCount, $results2->searchHits);

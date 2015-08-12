@@ -10,7 +10,9 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr;
 use PHPUnit_Framework_TestCase;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
@@ -394,5 +396,41 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         }
 
         return $dateTime;
+    }
+
+    /**
+     * Calls given Repository's aggregated SearchHandler::refresh().
+     *
+     * Currently implemented only in Solr search engine.
+     *
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     */
+    protected function refreshSearch(Repository $repository)
+    {
+        $setupFactory = $this->getSetupFactory();
+
+        if (!$setupFactory instanceof LegacySolr) {
+            return;
+        }
+
+        while (true) {
+            $repositoryReflection = new \ReflectionObject($repository);
+            // If the repository is decorated, we need to recurse in the "repository" property
+            if (!$repositoryReflection->hasProperty('repository')) {
+                break;
+            }
+
+            $repositoryProperty = $repositoryReflection->getProperty('repository');
+            $repositoryProperty->setAccessible(true);
+            $repository = $repositoryProperty->getValue($repository);
+        }
+
+        $searchHandlerProperty = new \ReflectionProperty($repository, 'searchHandler');
+        $searchHandlerProperty->setAccessible(true);
+
+        /** @var \eZ\Publish\Core\Search\Solr\Handler $searchHandler */
+        $searchHandler = $searchHandlerProperty->getValue($repository);
+
+        $searchHandler->commit();
     }
 }

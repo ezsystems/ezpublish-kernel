@@ -60,6 +60,8 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
         $locationService->createLocation($feedbackFormContentInfo, $locationCreateStruct1);
         $locationCreateStruct2 = $locationService->newLocationCreateStruct($locationsFolder2[0]->id);
         $locationService->createLocation($feedbackFormContentInfo, $locationCreateStruct2);
+
+        $this->refreshSearch($repository);
     }
 
     /**

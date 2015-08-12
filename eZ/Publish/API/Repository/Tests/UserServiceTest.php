@@ -247,6 +247,8 @@ class UserServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $this->createUserGroupVersion1();
 
+        $this->refreshSearch($repository);
+
         // This should be one greater than before
         $subGroupCount = $userService->loadUserGroup($mainGroupId)->subGroupCount;
         /* END: Use Case */
@@ -455,6 +457,8 @@ class UserServiceTest extends BaseTest
         // Reload the user group to get an updated $parentId
         $userGroup = $userService->loadUserGroup($userGroup->id);
 
+        $this->refreshSearch($repository);
+
         // The returned array will no contain $userGroup
         $subUserGroups = $userService->loadSubUserGroups(
             $membersUserGroup
@@ -495,6 +499,8 @@ class UserServiceTest extends BaseTest
 
         // Move user group from "Users" to "Members"
         $userService->moveUserGroup($userGroup, $membersUserGroup);
+
+        $this->refreshSearch($repository);
 
         // Reload the user group to get an updated $subGroupCount
         $membersUserGroupUpdated = $userService->loadUserGroup($membersGroupId);
@@ -1610,6 +1616,8 @@ class UserServiceTest extends BaseTest
 
         /* BEGIN: Use Case */
         $this->createUserVersion1();
+
+        $this->refreshSearch($repository);
 
         // This array will contain the email of the newly created "Editor" user
         $email = array();

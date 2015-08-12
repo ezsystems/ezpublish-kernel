@@ -26,19 +26,23 @@ class EZP20018VisibilityTest extends BaseTest
      */
     public function testSearchForHiddenContent()
     {
+        $repository = $this->getRepository();
+
         $query = new Query();
         $query->filter = new Visibility(Visibility::HIDDEN);
-        $results1 = $this->getRepository()->getSearchService()->findContent($query);
+        $results1 = $repository->getSearchService()->findContent($query);
 
         $this->assertEquals(0, $results1->totalCount);
         $this->assertCount(0, $results1->searchHits);
 
          // Hide "Images" Folder
-        $locationService = $this->getRepository()->getLocationService();
+        $locationService = $repository->getLocationService();
         $locationService->hideLocation($locationService->loadLocation(54));
 
+        $this->refreshSearch($repository);
+
         // Assert updated values
-        $results2 = $this->getRepository()->getSearchService()->findContent($query);
+        $results2 = $repository->getSearchService()->findContent($query);
 
         $this->assertEquals(1, $results2->totalCount);
         $this->assertCount(1, $results2->searchHits);
@@ -49,20 +53,24 @@ class EZP20018VisibilityTest extends BaseTest
      */
     public function testSearchForVisibleContent()
     {
+        $repository = $this->getRepository();
+
         $query = new Query();
         $query->filter = new Visibility(Visibility::VISIBLE);
         $query->limit = 50;
-        $results1 = $this->getRepository()->getSearchService()->findContent($query);
+        $results1 = $repository->getSearchService()->findContent($query);
 
         $this->assertEquals(18, $results1->totalCount);
         $this->assertEquals($results1->totalCount, count($results1->searchHits));
 
          // Hide "Images" Folder
-        $locationService = $this->getRepository()->getLocationService();
+        $locationService = $repository->getLocationService();
         $locationService->hideLocation($locationService->loadLocation(54));
 
+        $this->refreshSearch($repository);
+
         // Assert updated values
-        $results2 = $this->getRepository()->getSearchService()->findContent($query);
+        $results2 = $repository->getSearchService()->findContent($query);
 
         $this->assertEquals($results1->totalCount - 1, $results2->totalCount);
         $this->assertEquals($results2->totalCount, count($results2->searchHits));
