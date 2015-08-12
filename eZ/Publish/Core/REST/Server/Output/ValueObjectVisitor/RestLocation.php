@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
 
 /**
  * RestLocation value object visitor.
@@ -32,41 +33,43 @@ class RestLocation extends ValueObjectVisitor
         $visitor->setHeader('Content-Type', $generator->getMediaType('Location'));
         $visitor->setHeader('Accept-Patch', $generator->getMediaType('LocationUpdate'));
 
+        $location = $data->location;
+
         $generator->startAttribute(
             'href',
             $this->router->generate(
                 'ezpublish_rest_loadLocation',
-                array('locationPath' => trim($data->location->pathString, '/'))
+                array('locationPath' => trim($location->pathString, '/'))
             )
         );
         $generator->endAttribute('href');
 
-        $generator->startValueElement('id', $data->location->id);
+        $generator->startValueElement('id', $location->id);
         $generator->endValueElement('id');
 
-        $generator->startValueElement('priority', $data->location->priority);
+        $generator->startValueElement('priority', $location->priority);
         $generator->endValueElement('priority');
 
         $generator->startValueElement(
             'hidden',
-            $this->serializeBool($generator, $data->location->hidden)
+            $this->serializeBool($generator, $location->hidden)
         );
         $generator->endValueElement('hidden');
 
         $generator->startValueElement(
             'invisible',
-            $this->serializeBool($generator, $data->location->invisible)
+            $this->serializeBool($generator, $location->invisible)
         );
         $generator->endValueElement('invisible');
 
         $generator->startObjectElement('ParentLocation', 'Location');
-        if (trim($data->location->pathString, '/') !== '1') {
+        if (trim($location->pathString, '/') !== '1') {
             $generator->startAttribute(
                 'href',
                 $this->router->generate(
                     'ezpublish_rest_loadLocation',
                     array(
-                        'locationPath' => implode('/', array_slice($data->location->path, 0, count($data->location->path) - 1)),
+                        'locationPath' => implode('/', array_slice($location->path, 0, count($location->path) - 1)),
                     )
                 )
             );
@@ -74,16 +77,16 @@ class RestLocation extends ValueObjectVisitor
         }
         $generator->endObjectElement('ParentLocation');
 
-        $generator->startValueElement('pathString', $data->location->pathString);
+        $generator->startValueElement('pathString', $location->pathString);
         $generator->endValueElement('pathString');
 
-        $generator->startValueElement('depth', $data->location->depth);
+        $generator->startValueElement('depth', $location->depth);
         $generator->endValueElement('depth');
 
         $generator->startValueElement('childCount', $data->childCount);
         $generator->endValueElement('childCount');
 
-        $generator->startValueElement('remoteId', $data->location->remoteId);
+        $generator->startValueElement('remoteId', $location->remoteId);
         $generator->endValueElement('remoteId');
 
         $generator->startObjectElement('Children', 'LocationList');
@@ -92,7 +95,7 @@ class RestLocation extends ValueObjectVisitor
             $this->router->generate(
                 'ezpublish_rest_loadLocationChildren',
                 array(
-                    'locationPath' => trim($data->location->pathString, '/'),
+                    'locationPath' => trim($location->pathString, '/'),
                 )
             )
         );
@@ -102,15 +105,15 @@ class RestLocation extends ValueObjectVisitor
         $generator->startObjectElement('Content');
         $generator->startAttribute(
             'href',
-            $this->router->generate('ezpublish_rest_loadContent', array('contentId' => $data->location->contentId))
+            $this->router->generate('ezpublish_rest_loadContent', array('contentId' => $location->contentId))
         );
         $generator->endAttribute('href');
         $generator->endObjectElement('Content');
 
-        $generator->startValueElement('sortField', $this->serializeSortField($data->location->sortField));
+        $generator->startValueElement('sortField', $this->serializeSortField($location->sortField));
         $generator->endValueElement('sortField');
 
-        $generator->startValueElement('sortOrder', $this->serializeSortOrder($data->location->sortOrder));
+        $generator->startValueElement('sortOrder', $this->serializeSortOrder($location->sortOrder));
         $generator->endValueElement('sortOrder');
 
         $generator->startObjectElement('UrlAliases', 'UrlAliasRefList');
@@ -118,13 +121,23 @@ class RestLocation extends ValueObjectVisitor
             'href',
             $this->router->generate(
                 'ezpublish_rest_listLocationURLAliases',
-                array(
-                    'locationPath' => trim($data->location->pathString, '/'),
-                )
+                array('locationPath' => trim($location->pathString, '/'))
             )
         );
         $generator->endAttribute('href');
         $generator->endObjectElement('UrlAliases');
+
+        $generator->startObjectElement('ContentInfo', 'ContentInfo');
+        $generator->startAttribute(
+            'href',
+            $this->router->generate(
+                'ezpublish_rest_loadContent',
+                array('contentId' => $location->contentId)
+            )
+        );
+        $generator->endAttribute('href');
+        $visitor->visitValueObject(new RestContentValue($location->contentInfo));
+        $generator->endObjectElement('ContentInfo');
 
         $generator->endObjectElement('Location');
     }
