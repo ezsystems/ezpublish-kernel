@@ -26,7 +26,11 @@ class PageService extends BasePageService
     {
         $contentInfoObjects = array();
         foreach ($this->getValidBlockItems($block) as $item) {
-            $contentInfoObjects[] = $this->contentService->loadContentInfo($item->contentId);
+            try {
+                $contentInfoObjects[] = $this->contentService->loadContentInfo($item->contentId);
+            } catch (UnauthorizedException $e) {
+                // If unauthorized, disregard block as "valid" and continue loading other blocks.
+            }
         }
 
         return $contentInfoObjects;
