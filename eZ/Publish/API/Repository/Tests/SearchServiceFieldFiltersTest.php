@@ -10,7 +10,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr;
+use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
@@ -30,8 +30,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
     {
         $setupFactory = $this->getSetupFactory();
 
-        if ($setupFactory instanceof LegacySolr) {
-            $this->markTestIncomplete('Not implemented for Solr Search Engine');
+        if (!$setupFactory instanceof LegacyElasticsearch) {
+            $this->markTestIncomplete('ATM implemented only for Elasticsearch storage');
         }
 
         parent::setUp();
