@@ -25,6 +25,20 @@ abstract class RoleCreateStruct extends ValueObject
     public $identifier;
 
     /**
+     * True before the role has been published.
+     *
+     * @var bool
+     */
+    public $is_new = true;
+
+    /**
+     * Version number: non-zero for draft roles.
+     *
+     * @var bool
+     */
+    public $version = 0;
+
+    /**
      * Returns policies associated with the role.
      *
      * @return \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[]

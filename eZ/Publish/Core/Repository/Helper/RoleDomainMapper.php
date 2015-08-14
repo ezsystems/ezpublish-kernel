@@ -168,6 +168,8 @@ class RoleDomainMapper
         return new SPIRole(
             array(
                 'identifier' => $roleCreateStruct->identifier,
+                'is_new' => $roleCreateStruct->is_new,
+                'version' => $roleCreateStruct->version,
                 'policies' => $policiesToCreate,
             )
         );

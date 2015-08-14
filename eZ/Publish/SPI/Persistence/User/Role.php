@@ -56,4 +56,18 @@ class Role extends ValueObject
      * @var \eZ\Publish\SPI\Persistence\User\Policy[]
      */
     public $policies = array();
+
+    /**
+     * True before the role has been published.
+     *
+     * @var bool
+     */
+    public $is_new = true;
+
+    /**
+     * Version number: non-zero for draft roles.
+     *
+     * @var bool
+     */
+    public $version = 0;
 }
