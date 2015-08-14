@@ -1054,6 +1054,9 @@ class LocationServiceTest extends BaseTest
                 $hiddenLocation->id
             )
         );
+
+        $this->refreshSearch($repository);
+
         foreach ($locationService->loadLocationChildren($hiddenLocation)->locations as $child) {
             $this->assertSubtreeProperties(
                 array('invisible' => true),
@@ -1122,6 +1125,9 @@ class LocationServiceTest extends BaseTest
                 $unHiddenLocation->id
             )
         );
+
+        $this->refreshSearch($repository);
+
         foreach ($locationService->loadLocationChildren($unHiddenLocation)->locations as $child) {
             $this->assertSubtreeProperties(
                 array('invisible' => false),
@@ -1168,6 +1174,9 @@ class LocationServiceTest extends BaseTest
                 $unHiddenHigherLocation->id
             )
         );
+
+        $this->refreshSearch($repository);
+
         foreach ($locationService->loadLocationChildren($unHiddenHigherLocation)->locations as $child) {
             $this->assertSubtreeProperties(
                 array('invisible' => false),
@@ -1271,6 +1280,8 @@ class LocationServiceTest extends BaseTest
 
         // Delete the user group location
         $locationService->deleteLocation($location);
+
+        $this->refreshSearch($repository);
 
         // Reload parent location
         $parentLocation = $locationService->loadLocation(
@@ -1452,6 +1463,8 @@ class LocationServiceTest extends BaseTest
             $beforeIds[] = $properties['id'];
         }
 
+        $this->refreshSearch($repository);
+
         // Load Subtree properties after copy
         $actual = $this->loadSubtreeProperties($copiedLocation);
 
@@ -1507,6 +1520,8 @@ class LocationServiceTest extends BaseTest
             $newParentLocation
         );
         /* END: Use Case */
+
+        $this->refreshSearch($repository);
 
         $childCountAfter = $locationService->getLocationChildCount($locationService->loadLocation($demoDesignLocationId));
 
@@ -1649,6 +1664,8 @@ class LocationServiceTest extends BaseTest
         $movedLocation = $locationService->loadLocation($mediaLocationId);
         /* END: Use Case */
 
+        $this->refreshSearch($repository);
+
         // Load Subtree properties after move
         $actual = $this->loadSubtreeProperties($movedLocation);
 
@@ -1702,6 +1719,8 @@ class LocationServiceTest extends BaseTest
         // Reload new parent location
         $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
         /* END: Use Case */
+
+        $this->refreshSearch($repository);
 
         // Load Subtree properties after move
         $actual = $this->loadLocationProperties($newParentLocation);
@@ -1758,6 +1777,8 @@ class LocationServiceTest extends BaseTest
         // Reload old parent location
         $oldParentLocation = $locationService->loadLocation($oldParentLocationId);
         /* END: Use Case */
+
+        $this->refreshSearch($repository);
 
         // Load Subtree properties after move
         $actual = $this->loadLocationProperties($oldParentLocation);

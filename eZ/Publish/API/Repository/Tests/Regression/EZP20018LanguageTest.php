@@ -56,6 +56,8 @@ class EZP20018LanguageTest extends BaseTest
         $contentService->publishVersion(
             $draft->getVersionInfo()
         );
+
+        $this->refreshSearch($repository);
     }
 
     /**

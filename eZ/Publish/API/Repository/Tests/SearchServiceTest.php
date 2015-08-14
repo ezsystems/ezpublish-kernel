@@ -1093,6 +1093,8 @@ class SearchServiceTest extends BaseTest
         $draft = $contentService->createContent($createStruct);
         $content = $contentService->publishVersion($draft->getVersionInfo());
 
+        $this->refreshSearch($repository);
+
         return $content;
     }
 
@@ -1688,6 +1690,8 @@ class SearchServiceTest extends BaseTest
 
         $draft = $contentService->createContent($createStruct);
         $content = $contentService->publishVersion($draft->getVersionInfo());
+
+        $this->refreshSearch($repository);
 
         return $content;
     }
@@ -2735,6 +2739,8 @@ class SearchServiceTest extends BaseTest
         $draft = $contentService->createContent($createStruct);
         $tree = $contentService->publishVersion($draft->getVersionInfo());
 
+        $this->refreshSearch($repository);
+
         $query = new Query(
             array(
                 'filter' => new Criterion\LogicalAnd(
@@ -2812,6 +2818,8 @@ class SearchServiceTest extends BaseTest
 
         $draft = $contentService->createContent($createStruct);
         $tree = $contentService->publishVersion($draft->getVersionInfo());
+
+        $this->refreshSearch($repository);
 
         $query = new Query(
             array(
@@ -2907,6 +2915,8 @@ class SearchServiceTest extends BaseTest
         $draft = $contentService->createContent($createStruct);
         $mushrooms = $contentService->publishVersion($draft->getVersionInfo());
 
+        $this->refreshSearch($repository);
+
         $query = new Query(
             array(
                 'filter' => new Criterion\LogicalAnd(
@@ -2976,6 +2986,8 @@ class SearchServiceTest extends BaseTest
 
         $draft = $contentService->createContent($createStruct);
         $polarBear = $contentService->publishVersion($draft->getVersionInfo());
+
+        $this->refreshSearch($repository);
 
         $query = new Query(
             array(
@@ -3070,6 +3082,8 @@ class SearchServiceTest extends BaseTest
 
         $draft = $contentService->createContent($createStruct);
         $mushrooms = $contentService->publishVersion($draft->getVersionInfo());
+
+        $this->refreshSearch($repository);
 
         $wellInVodice = array(
             'latitude' => 43.756825,
@@ -3186,6 +3200,8 @@ class SearchServiceTest extends BaseTest
         $draft = $contentService->createContent($createStruct);
         $mushrooms = $contentService->publishVersion($draft->getVersionInfo());
 
+        $this->refreshSearch($repository);
+
         $well = array(
             'latitude' => 43.756825,
             'longitude' => 15.775074,
@@ -3290,6 +3306,8 @@ class SearchServiceTest extends BaseTest
         $draft = $contentService->createContent($createStruct);
         $tree = $contentService->publishVersion($draft->getVersionInfo());
 
+        $this->refreshSearch($repository);
+
         $distanceCriterion = new Criterion\MapLocationDistance(
             'maplocation',
             Criterion\Operator::LTE,
@@ -3392,6 +3410,8 @@ class SearchServiceTest extends BaseTest
         $draft = $contentService->createContent($createStruct);
         $mushrooms = $contentService->publishVersion($draft->getVersionInfo());
 
+        $this->refreshSearch($repository);
+
         $well = array(
             'latitude' => 43.756825,
             'longitude' => 15.775074,
@@ -3466,6 +3486,8 @@ class SearchServiceTest extends BaseTest
             $locationService->newLocationCreateStruct($designLocationId)
         );
 
+        $this->refreshSearch($repository);
+
         $query = new LocationQuery(
             array(
                 'filter' => new Criterion\LogicalAnd(
@@ -3507,6 +3529,8 @@ class SearchServiceTest extends BaseTest
             $contentService->loadContentInfo($partnersContentId),
             $locationService->newLocationCreateStruct($designLocationId)
         );
+
+        $this->refreshSearch($repository);
 
         $query = new LocationQuery(
             array(
@@ -3551,6 +3575,8 @@ class SearchServiceTest extends BaseTest
             $locationService->newLocationCreateStruct($designLocationId)
         );
 
+        $this->refreshSearch($repository);
+
         $query = new LocationQuery(
             array(
                 'filter' => new Criterion\ParentLocationId($designLocationId),
@@ -3591,6 +3617,8 @@ class SearchServiceTest extends BaseTest
             $contentService->loadContentInfo($partnersContentId),
             $locationService->newLocationCreateStruct($designLocationId)
         );
+
+        $this->refreshSearch($repository);
 
         $query = new LocationQuery(
             array(
@@ -3638,6 +3666,8 @@ class SearchServiceTest extends BaseTest
         $location1 = $locationService->createLocation($content->contentInfo, $locationCreateStruct);
         $locationCreateStruct = $repository->getLocationService()->newLocationCreateStruct(5);
         $location2 = $locationService->createLocation($content->contentInfo, $locationCreateStruct);
+
+        $this->refreshSearch($repository);
 
         $query = new LocationQuery(
             array(
@@ -4033,6 +4063,8 @@ class SearchServiceTest extends BaseTest
         $draft = $contentService->createContent($createStruct, array($locationCreateStruct));
         $content = $contentService->publishVersion($draft->getVersionInfo());
         $contentTypeService->createContentTypeDraft($contentType);
+
+        $this->refreshSearch($repository);
 
         return $content;
     }

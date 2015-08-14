@@ -249,7 +249,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
         $contentType = $this->testCreateContentType();
 
-        return array(
+        $context = array(
             $repository,
             $this->createTestSearchContent(
                 $this->getValidSearchValueOne(),
@@ -262,6 +262,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 $contentType
             )->id,
         );
+
+        $this->refreshSearch($repository);
+
+        return $context;
     }
 
     /**

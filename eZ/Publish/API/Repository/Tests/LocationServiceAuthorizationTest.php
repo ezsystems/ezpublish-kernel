@@ -360,6 +360,8 @@ class LocationServiceAuthorizationTest extends BaseTest
         // Set current user to newly created user again, and try to delete $firstLocation
         $repository->setCurrentUser($user);
 
+        $this->refreshSearch($repository);
+
         // This call will fail with an "UnauthorizedException" because user does not have
         // permission to delete $secondLocation which is in the subtree of the $firstLocation
         $locationService->deleteLocation($firstLocation);

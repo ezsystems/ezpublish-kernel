@@ -141,7 +141,7 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
 
         $contentType = $this->testCreateContentType();
 
-        return array(
+        $context = array(
             $repository,
             $this->createTestSearchContent(
                 $this->getValidMultivaluedSearchValuesOne(),
@@ -154,6 +154,10 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
                 $contentType
             )->id,
         );
+
+        $this->refreshSearch($repository);
+
+        return $context;
     }
 
     /**

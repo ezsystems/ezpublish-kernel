@@ -153,7 +153,7 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
 
         $contentType = $this->createTestContentType();
 
-        return array(
+        $context = array(
             $repository,
             array(
                 1 => $this->createContent(
@@ -194,6 +194,10 @@ class SearchServiceTranslationLanguageFallbackTest extends BaseTest
                 ),
             ),
         );
+
+        $this->refreshSearch($repository);
+
+        return $context;
     }
 
     public function testCreateTestContent()

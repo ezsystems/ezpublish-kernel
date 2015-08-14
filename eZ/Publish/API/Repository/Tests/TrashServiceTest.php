@@ -156,6 +156,8 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $this->createTrashItem();
 
+        $this->refreshSearch($repository);
+
         $this->assertEquals(
             $childCount - 1,
             $locationService->getLocationChildCount($location)
@@ -374,12 +376,16 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         $trashItem = $this->createTrashItem();
 
+        $this->refreshSearch($repository);
+
         /* BEGIN: Use Case */
         $childCount = $locationService->getLocationChildCount($location);
 
         // Recover location with new location
         $trashService->recover($trashItem);
         /* END: Use Case */
+
+        $this->refreshSearch($repository);
 
         $this->assertEquals(
             $childCount + 1,
@@ -424,6 +430,8 @@ class TrashServiceTest extends BaseTrashServiceTest
         // Recover location with new location
         $trashService->recover($trashItem, $newParentLocation);
         /* END: Use Case */
+
+        $this->refreshSearch($repository);
 
         $this->assertEquals(
             $childCount + 1,
