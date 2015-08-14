@@ -268,6 +268,13 @@ No further changes are known in this release at the time of writing.
 See online on your corresponding eZ Publish version for
 updated list of known issues (missing features, breaks and errata).
 
+* 5.4.5: $languageCode parameter on Field & MapLocation SortClause deprecated
+
+As part of work to simplify language handling, we are moving language logic
+to $languageFilter *(see Changes section above)* to enable better language
+fallback behaviour both for Solr and Sql search. For this $languageCode
+parameter on Field & MapLocation SortClauses have been deprecated.
+
 
 ## Removed features
 
