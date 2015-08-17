@@ -23,7 +23,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 abstract class Role extends ValueObject
 {
     /**
-     * ID of the user rule.
+     * ID of the user role.
      *
      * @var mixed
      */
@@ -36,6 +36,34 @@ abstract class Role extends ValueObject
      * @var string
      */
     protected $identifier;
+
+    /**
+     * Creation date of the content type.
+     *
+     * @var \DateTime
+     */
+    protected $creationDate;
+
+    /**
+     * Modification date of the content type.
+     *
+     * @var \DateTime
+     */
+    protected $modificationDate;
+
+    /**
+     * Creator user id of the content type.
+     *
+     * @var mixed
+     */
+    protected $creatorId;
+
+    /**
+     * Modifier user id of the content type.
+     *
+     * @var mixed
+     */
+    protected $modifierId;
 
     /**
      * Returns the list of policies of this role.
