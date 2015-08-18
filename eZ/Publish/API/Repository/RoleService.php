@@ -64,7 +64,7 @@ interface RoleService
      * @since 6.0
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given id was not found
      *
      * @param mixed $id
      *
@@ -78,7 +78,7 @@ interface RoleService
      * @since 6.0
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the identifier of the role already exists
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
      * @param \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct $roleUpdateStruct
@@ -105,7 +105,7 @@ interface RoleService
     public function addPolicyByRoleDraft(RoleDraft $roleDraft, PolicyCreateStruct $policyCreateStruct);
 
     /**
-     * Removes a policy from a role draft
+     * Removes a policy from a role draft.
      *
      * @since 6.0
      *
@@ -180,7 +180,7 @@ interface RoleService
     /**
      * Updates the name of the role.
      *
-     * @deprecated since 6.0, use {@see createRoleDraft}
+     * @deprecated since 6.0, use {@see updateRoleDraft}
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
@@ -210,7 +210,7 @@ interface RoleService
     public function addPolicy(Role $role, PolicyCreateStruct $policyCreateStruct);
 
     /**
-     * removes a policy from the role.
+     * Removes a policy from the role.
      *
      * @deprecated since 5.3, use {@link removePolicyByRoleDraft()} instead.
      *

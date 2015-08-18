@@ -485,7 +485,7 @@ class UserHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new Role(
-                        array('id' => 33, 'name' => 'Editors', 'identifier' => 'intranet')
+                        ['id' => 33, 'name' => 'Editors', 'identifier' => 'intranet', 'status' => Role::STATUS_DEFINED]
                     )
                 )
             );
@@ -508,6 +508,50 @@ class UserHandlerTest extends HandlerTest
 
         $handler = $this->persistenceCacheHandler->userHandler();
         $handler->createRole(new Role());
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::createRole
+     */
+    public function testCreateRoleDraft()
+    {
+        $this->loggerMock->expects($this->once())->method('logCall');
+
+        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\User\\Handler');
+        $this->persistenceHandlerMock
+            ->expects($this->once())
+            ->method('userHandler')
+            ->will($this->returnValue($innerHandlerMock));
+
+        $innerHandlerMock
+            ->expects($this->once())
+            ->method('createRole')
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\Role'))
+            ->will(
+                $this->returnValue(
+                    new Role(
+                        ['id' => 33, 'name' => 'Editors', 'identifier' => 'intranet', 'status' => Role::STATUS_DRAFT]
+                    )
+                )
+            );
+
+        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $this->cacheMock
+            ->expects($this->never())
+            ->method('getItem');
+
+        $cacheItemMock
+            ->expects($this->never())
+            ->method('set');
+
+        $cacheItemMock
+            ->expects($this->never())
+            ->method('get');
+
+        $handler = $this->persistenceCacheHandler->userHandler();
+        $roleDraft = new Role();
+        $roleDraft->status = Role::STATUS_DRAFT;
+        $handler->createRole($roleDraft);
     }
 
     /**
@@ -543,6 +587,39 @@ class UserHandlerTest extends HandlerTest
 
         $handler = $this->persistenceCacheHandler->userHandler();
         $handler->updateRole($roleUpdateStruct);
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::updateRoleDraft
+     */
+    public function testUpdateRoleDraft()
+    {
+        $this->loggerMock->expects($this->once())->method('logCall');
+
+        $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\User\\Handler');
+        $this->persistenceHandlerMock
+            ->expects($this->once())
+            ->method('userHandler')
+            ->will($this->returnValue($innerHandler));
+
+        $innerHandler
+            ->expects($this->once())
+            ->method('updateRoleDraft')
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\RoleUpdateStruct'));
+
+        $roleUpdateStruct = new RoleUpdateStruct();
+        $roleUpdateStruct->id = 42;
+
+        $this->cacheMock
+            ->expects($this->never())
+            ->method('clear');
+
+        $this->cacheMock
+            ->expects($this->never())
+            ->method('getItem');
+
+        $handler = $this->persistenceCacheHandler->userHandler();
+        $handler->updateRoleDraft($roleUpdateStruct);
     }
 
     /**
@@ -583,6 +660,72 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::deleteRoleDraft
+     */
+    public function testDeleteRoleDraft()
+    {
+        $this->loggerMock->expects($this->once())->method('logCall');
+
+        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\User\\Handler');
+        $this->persistenceHandlerMock
+            ->expects($this->once())
+            ->method('userHandler')
+            ->will($this->returnValue($innerHandlerMock));
+
+        $innerHandlerMock
+            ->expects($this->once())
+            ->method('deleteRoleDraft')
+            ->with(33)
+            ->will(
+                $this->returnValue(true)
+            );
+
+        $this->cacheMock
+            ->expects($this->never())
+            ->method('clear');
+
+        $handler = $this->persistenceCacheHandler->userHandler();
+        $handler->deleteRoleDraft(33);
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::publishRoleDraft
+     */
+    public function testPublishRoleDraft()
+    {
+        $this->loggerMock->expects($this->once())->method('logCall');
+
+        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\User\\Handler');
+        $this->persistenceHandlerMock
+            ->expects($this->once())
+            ->method('userHandler')
+            ->will($this->returnValue($innerHandlerMock));
+
+        $innerHandlerMock
+            ->expects($this->once())
+            ->method('publishRoleDraft')
+            ->with(33)
+            ->will(
+                $this->returnValue(true)
+            );
+
+        $this->cacheMock
+            ->expects($this->at(0))
+            ->method('clear')
+            ->with('user', 'role', 33)
+            ->will($this->returnValue(true));
+
+        $this->cacheMock
+            ->expects($this->at(1))
+            ->method('clear')
+            ->with('user', 'role', 'assignments')
+            ->will($this->returnValue(true));
+
+        $handler = $this->persistenceCacheHandler->userHandler();
+        $handler->publishRoleDraft(33);
+    }
+
+    /**
      * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::addPolicy
      */
     public function testAddPolicy()
@@ -611,6 +754,35 @@ class UserHandlerTest extends HandlerTest
 
         $handler = $this->persistenceCacheHandler->userHandler();
         $handler->addPolicy(33, new Policy());
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::addPolicyByRoleDraft
+     */
+    public function testAddPolicyByRoleDraft()
+    {
+        $this->loggerMock->expects($this->once())->method('logCall');
+
+        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\User\\Handler');
+        $this->persistenceHandlerMock
+            ->expects($this->once())
+            ->method('userHandler')
+            ->will($this->returnValue($innerHandlerMock));
+
+        $innerHandlerMock
+            ->expects($this->once())
+            ->method('addPolicyByRoleDraft')
+            ->with(33, $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\Policy'))
+            ->will(
+                $this->returnValue(new Policy())
+            );
+
+        $this->cacheMock
+            ->expects($this->never())
+            ->method('clear');
+
+        $handler = $this->persistenceCacheHandler->userHandler();
+        $handler->addPolicyByRoleDraft(33, new Policy());
     }
 
     /**

@@ -93,6 +93,17 @@ interface Handler
     public function createRole(Role $role);
 
     /**
+     * Loads a specified role draft by $roleId.
+     *
+     * @param mixed $roleId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
+     */
+    public function loadRoleDraft($roleId);
+
+    /**
      * Loads a specified role by $roleId.
      *
      * @param mixed $roleId
@@ -102,6 +113,17 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
     public function loadRole($roleId);
+
+    /**
+     * Loads a specified role draft by $identifier.
+     *
+     * @param string $identifier
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
+     */
+    public function loadRoleDraftByIdentifier($identifier);
 
     /**
      * Loads a specified role by $identifier.
@@ -146,6 +168,13 @@ interface Handler
     public function loadRoleAssignmentsByGroupId($groupId, $inherit = false);
 
     /**
+     * Update role draft.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
+     */
+    public function updateRoleDraft(RoleUpdateStruct $role);
+
+    /**
      * Update role.
      *
      * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
@@ -153,11 +182,39 @@ interface Handler
     public function updateRole(RoleUpdateStruct $role);
 
     /**
+     * Delete the specified role draft.
+     *
+     * @param mixed $roleId
+     */
+    public function deleteRoleDraft($roleId);
+
+    /**
      * Delete the specified role.
      *
      * @param mixed $roleId
      */
     public function deleteRole($roleId);
+
+    /**
+     * Publish the specified role draft.
+     *
+     * @param mixed $roleId
+     */
+    public function publishRoleDraft($roleId);
+
+    /**
+     * Adds a policy to a role draft.
+     *
+     * @param mixed $roleId
+     * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Policy
+     *
+     * @todo Throw on invalid Role Id?
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $policy->limitation is empty (null, empty string/array..)
+     */
+    public function addPolicyByRoleDraft($roleId, Policy $policy);
 
     /**
      * Adds a policy to a role.

@@ -23,4 +23,11 @@ class RoleUpdateStruct extends ValueObject
      * @var string
      */
     public $identifier;
+
+    /**
+     * The status of the role.
+     *
+     * @var int One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
+     */
+    public $status;
 }

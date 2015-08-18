@@ -23,6 +23,16 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 abstract class Role extends ValueObject
 {
     /**
+     * @var int Status constant for defined (aka "published") role
+     */
+    const STATUS_DEFINED = 0;
+
+    /**
+     * @var int Status constant for draft (aka "temporary") role
+     */
+    const STATUS_DRAFT = 1;
+
+    /**
      * ID of the user role.
      *
      * @var mixed
@@ -38,28 +48,35 @@ abstract class Role extends ValueObject
     protected $identifier;
 
     /**
-     * Creation date of the content type.
+     * The status of the role.
+     *
+     * @var int One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
+     */
+    protected $status;
+
+    /**
+     * Creation date of the role.
      *
      * @var \DateTime
      */
     protected $creationDate;
 
     /**
-     * Modification date of the content type.
+     * Modification date of the role.
      *
      * @var \DateTime
      */
     protected $modificationDate;
 
     /**
-     * Creator user id of the content type.
+     * Creator user id of the role.
      *
      * @var mixed
      */
     protected $creatorId;
 
     /**
-     * Modifier user id of the content type.
+     * Modifier user id of the role.
      *
      * @var mixed
      */

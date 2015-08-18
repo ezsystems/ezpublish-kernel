@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\Repository\Helper;
 use eZ\Publish\Core\Repository\Values\User\Policy;
 use eZ\Publish\Core\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\Role as APIRole;
+use eZ\Publish\Core\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
 use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
 use eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
@@ -59,7 +60,25 @@ class RoleDomainMapper
             array(
                 'id' => $role->id,
                 'identifier' => $role->identifier,
+                'status' => $role->status,
                 'policies' => $rolePolicies,
+            )
+        );
+    }
+
+    /**
+     * Builds a ContentTypeDraft domain object from value object returned by persistence
+     * Decorates ContentType.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\Role $spiRole
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
+     */
+    public function buildDomainRoleDraftObject(SPIRole $spiRole)
+    {
+        return new RoleDraft(
+            array(
+                'innerRole' => $this->buildDomainRoleObject($spiRole),
             )
         );
     }
@@ -167,7 +186,9 @@ class RoleDomainMapper
 
         return new SPIRole(
             array(
+                'id' => $roleCreateStruct->id,
                 'identifier' => $roleCreateStruct->identifier,
+                'status' => $roleCreateStruct->status,
                 'policies' => $policiesToCreate,
             )
         );

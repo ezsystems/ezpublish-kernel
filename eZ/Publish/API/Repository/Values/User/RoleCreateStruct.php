@@ -18,11 +18,25 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 abstract class RoleCreateStruct extends ValueObject
 {
     /**
+     * ID of a role.
+     *
+     * @var int
+     */
+    public $id;
+
+    /**
      * Readable string identifier of a role.
      *
      * @var string
      */
     public $identifier;
+
+    /**
+     * The status of the role.
+     *
+     * @var int One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
+     */
+    public $status = Role::STATUS_DRAFT;
 
     /**
      * Returns policies associated with the role.

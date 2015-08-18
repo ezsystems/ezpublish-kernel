@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\User;
 
+use eZ\Publish\API\Repository\Values\User\Role as APIRole;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\User;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter;
@@ -237,12 +238,13 @@ class UserHandlerTest extends TestCase
 
         $role = new Persistence\User\Role();
         $role->identifier = 'Test';
+        $role->status = APIRole::STATUS_DEFINED;
 
         $handler->createRole($role);
 
         $this->assertQueryResult(
-            array(array(1, 'Test')),
-            $this->handler->createSelectQuery()->select('id', 'name')->from('ezrole'),
+            array(array(1, 'Test', APIRole::STATUS_DEFINED)),
+            $this->handler->createSelectQuery()->select('id', 'name', 'version')->from('ezrole'),
             'Expected a new role.'
         );
     }
@@ -253,6 +255,7 @@ class UserHandlerTest extends TestCase
 
         $role = new Persistence\User\Role();
         $role->identifier = 'Test';
+        $role->status = APIRole::STATUS_DEFINED;
 
         $role = $handler->createRole($role);
 
@@ -265,6 +268,7 @@ class UserHandlerTest extends TestCase
 
         $role = new Persistence\User\Role();
         $role->identifier = 'Test';
+        $role->status = APIRole::STATUS_DEFINED;
 
         $role = $handler->createRole($role);
 
@@ -280,6 +284,7 @@ class UserHandlerTest extends TestCase
 
         $role = new Persistence\User\Role();
         $role->identifier = 'Test';
+        $role->status = APIRole::STATUS_DEFINED;
 
         $role = $handler->createRole($role);
 
@@ -312,6 +317,7 @@ class UserHandlerTest extends TestCase
 
         $role = new Persistence\User\Role();
         $role->identifier = 'Test';
+        $role->status = APIRole::STATUS_DEFINED;
 
         $role = $handler->createRole($role);
 
@@ -347,6 +353,7 @@ class UserHandlerTest extends TestCase
 
         $role = new Persistence\User\Role();
         $role->identifier = 'Test';
+        $role->status = APIRole::STATUS_DEFINED;
 
         $role = $handler->createRole($role);
 
@@ -391,6 +398,7 @@ class UserHandlerTest extends TestCase
 
         $role = new Persistence\User\Role();
         $role->identifier = 'Test';
+        $role->status = APIRole::STATUS_DEFINED;
 
         $role = $handler->createRole($role);
 
@@ -406,6 +414,7 @@ class UserHandlerTest extends TestCase
 
         $role = new Persistence\User\Role();
         $role->identifier = 'Test';
+        $role->status = APIRole::STATUS_DEFINED;
 
         $role = $handler->createRole($role);
 
@@ -455,6 +464,8 @@ class UserHandlerTest extends TestCase
 
         $role = new Persistence\User\Role();
         $role->identifier = 'Test';
+        $role->status = APIRole::STATUS_DEFINED;
+
         $handler->createRole($role);
 
         $policy = new Persistence\User\Policy();
@@ -476,6 +487,8 @@ class UserHandlerTest extends TestCase
 
         $role = new Persistence\User\Role();
         $role->identifier = 'Test';
+        $role->status = APIRole::STATUS_DEFINED;
+
         $handler->createRole($role);
 
         $policy = new Persistence\User\Policy();
@@ -493,6 +506,8 @@ class UserHandlerTest extends TestCase
 
         $role = new Persistence\User\Role();
         $role->identifier = 'Test';
+        $role->status = APIRole::STATUS_DEFINED;
+
         $handler->createRole($role);
 
         $policy = new Persistence\User\Policy();
@@ -521,6 +536,8 @@ class UserHandlerTest extends TestCase
 
         $role = new Persistence\User\Role();
         $role->identifier = 'Test';
+        $role->status = APIRole::STATUS_DEFINED;
+
         $handler->createRole($role);
 
         $policy = new Persistence\User\Policy();
@@ -565,6 +582,7 @@ class UserHandlerTest extends TestCase
 
         $role = new Persistence\User\Role();
         $role->identifier = 'Test';
+        $role->status = APIRole::STATUS_DEFINED;
         $role->policies = array($policy1, $policy2);
 
         return $handler->createRole($role);

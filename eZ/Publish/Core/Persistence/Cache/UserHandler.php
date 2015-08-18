@@ -103,9 +103,22 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
         $this->logger->logCall(__METHOD__, array('struct' => $struct));
         $role = $this->persistenceHandler->userHandler()->createRole($struct);
 
-        $this->cache->getItem('user', 'role', $role->id)->set($role);
+        // Don't cache draft roles
+        if ($role->status == Role::STATUS_DEFINED) {
+            $this->cache->getItem('user', 'role', $role->id)->set($role);
+        }
 
         return $role;
+    }
+
+    /**
+     * @see eZ\Publish\SPI\Persistence\User\Handler::loadRoleDraft
+     */
+    public function loadRoleDraft($roleId)
+    {
+        $this->logger->logCall(__METHOD__, array('role' => $roleId));
+
+        return $this->persistenceHandler->userHandler()->loadRoleDraft($roleId);
     }
 
     /**
@@ -122,6 +135,16 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
         }
 
         return $role;
+    }
+
+    /**
+     * @see eZ\Publish\SPI\Persistence\User\Handler::loadRoleDraftByIdentifier
+     */
+    public function loadRoleDraftByIdentifier($identifier)
+    {
+        $this->logger->logCall(__METHOD__, array('role' => $identifier));
+
+        return $this->persistenceHandler->userHandler()->loadRoleDraftByIdentifier($identifier);
     }
 
     /**
@@ -178,6 +201,16 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
+     * @see eZ\Publish\SPI\Persistence\User\Handler::updateRoleDraft
+     */
+    public function updateRoleDraft(RoleUpdateStruct $struct)
+    {
+        $this->logger->logCall(__METHOD__, array('struct' => $struct));
+
+        $this->persistenceHandler->userHandler()->updateRoleDraft($struct);
+    }
+
+    /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::updateRole
      */
     public function updateRole(RoleUpdateStruct $struct)
@@ -186,6 +219,16 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
         $this->persistenceHandler->userHandler()->updateRole($struct);
 
         $this->cache->clear('user', 'role', $struct->id);
+    }
+
+    /**
+     * @see eZ\Publish\SPI\Persistence\User\Handler::deleteRoleDraft
+     */
+    public function deleteRoleDraft($roleId)
+    {
+        $this->logger->logCall(__METHOD__, array('role' => $roleId));
+
+        return $this->persistenceHandler->userHandler()->deleteRoleDraft($roleId);
     }
 
     /**
@@ -200,6 +243,30 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
         $this->cache->clear('user', 'role', 'assignments');
 
         return $return;
+    }
+
+    /**
+     * @see eZ\Publish\SPI\Persistence\User\Handler::publishRoleDraft
+     */
+    public function publishRoleDraft($roleId)
+    {
+        $this->logger->logCall(__METHOD__, array('role' => $roleId));
+        $return = $this->persistenceHandler->userHandler()->publishRoleDraft($roleId);
+
+        $this->cache->clear('user', 'role', $roleId);
+        $this->cache->clear('user', 'role', 'assignments');
+
+        return $return;
+    }
+
+    /**
+     * @see eZ\Publish\SPI\Persistence\User\Handler::addPolicyByRoleDraft
+     */
+    public function addPolicyByRoleDraft($roleId, Policy $policy)
+    {
+        $this->logger->logCall(__METHOD__, array('role' => $roleId, 'struct' => $policy));
+
+        return $this->persistenceHandler->userHandler()->addPolicyByRoleDraft($roleId, $policy);
     }
 
     /**

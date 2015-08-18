@@ -17,6 +17,16 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class Role extends ValueObject
 {
     /**
+     * @var int Status constant for defined (aka "published") role
+     */
+    const STATUS_DEFINED = 0;
+
+    /**
+     * @var int Status constant for draft (aka "temporary") role
+     */
+    const STATUS_DRAFT = 1;
+
+    /**
      * ID of the user rule.
      *
      * @var mixed
@@ -31,6 +41,15 @@ class Role extends ValueObject
      * @var string
      */
     public $identifier;
+
+    /**
+     * Status of the role (legacy: "version").
+     *
+     * @since 6.0
+     *
+     * @var int One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
+     */
+    public $status;
 
     /**
      * Name of the role.

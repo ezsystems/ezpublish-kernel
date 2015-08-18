@@ -32,35 +32,40 @@ abstract class Gateway
      * Loads a specified role by $roleId.
      *
      * @param mixed $roleId
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      *
      * @return array
      */
-    abstract public function loadRole($roleId);
+    abstract public function loadRole($roleId, $status = Role::STATUS_DEFINED);
 
     /**
      * Loads a specified role by $identifier.
      *
      * @param string $identifier
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      *
      * @return array
      */
-    abstract public function loadRoleByIdentifier($identifier);
+    abstract public function loadRoleByIdentifier($identifier, $status = Role::STATUS_DEFINED);
 
     /**
      * Loads all roles.
      *
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
+     *
      * @return array
      */
-    abstract public function loadRoles();
+    abstract public function loadRoles($status = Role::STATUS_DEFINED);
 
     /**
      * Loads all roles associated with the given content objects.
      *
      * @param array $contentIds
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      *
      * @return array
      */
-    abstract public function loadRolesForContentObjects($contentIds);
+    abstract public function loadRolesForContentObjects($contentIds, $status = Role::STATUS_DEFINED);
 
     /**
      * Loads role assignments for specified content ID.
@@ -91,28 +96,39 @@ abstract class Gateway
     abstract public function loadPoliciesByUserId($userId);
 
     /**
-     * Update role.
+     * Update role (draft).
      *
      * Will not throw anything if location id is invalid.
      *
      * @param RoleUpdateStruct $role
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    abstract public function updateRole(RoleUpdateStruct $role);
+    abstract public function updateRole(RoleUpdateStruct $role, $status = Role::STATUS_DEFINED);
 
     /**
-     * Delete the specified role including all of its assignments.
+     * Delete the specified role (draft).
+     * If it's not a draft, the role assignments will also be deleted.
+     *
+     * @param mixed $roleId
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
+     */
+    abstract public function deleteRole($roleId, $status = Role::STATUS_DEFINED);
+
+    /**
+     * Publish the specified role draft.
      *
      * @param mixed $roleId
      */
-    abstract public function deleteRole($roleId);
+    abstract public function publishRoleDraft($roleId);
 
     /**
      * Adds a policy to a role.
      *
      * @param mixed $roleId
      * @param Policy $policy
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    abstract public function addPolicy($roleId, Policy $policy);
+    abstract public function addPolicy($roleId, Policy $policy, $status = Role::STATUS_DEFINED);
 
     /**
      * Adds limitations to an existing policy.
@@ -126,8 +142,9 @@ abstract class Gateway
      * Removes a policy from a role.
      *
      * @param mixed $policyId
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    abstract public function removePolicy($policyId);
+    abstract public function removePolicy($policyId, $status = Role::STATUS_DEFINED);
 
     /**
      * Removes a policy from a role.
