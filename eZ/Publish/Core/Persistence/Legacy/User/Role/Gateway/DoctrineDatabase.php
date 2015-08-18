@@ -55,7 +55,7 @@ class DoctrineDatabase extends Gateway
                 $this->handler->getAutoIncrementValue('ezrole', 'id')
             )->set(
                 $this->handler->quoteColumn('is_new'),
-                $query->bindValue($role->is_new)
+                0
             )->set(
                 $this->handler->quoteColumn('name'),
                 $query->bindValue($role->identifier)
@@ -64,7 +64,7 @@ class DoctrineDatabase extends Gateway
                 0
             )->set(
                 $this->handler->quoteColumn('version'),
-                $query->bindValue($role->version)
+                0
             );
         $query->prepare()->execute();
 
