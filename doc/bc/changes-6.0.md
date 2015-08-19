@@ -119,23 +119,23 @@ Changes affecting version compatibility with former or future versions.
 
 * `eZ\Publish\API\Repository\Values\Content\Query` and `eZ\Publish\API\Repository\Values\Content\LocationQuery`
   property `$limit` is now defined as `integer` (instead of `integer|null`), which means its value must always be
-  set. By default, it's value will be `10`. No way is provided to return all search hits, pagination should be used
+  set. By default, it's value will be `25`. No way is provided to return all search hits, pagination should be used
   if full result set is desired.
 
 * `eZ\Publish\API\Repository\LocationService::loadLocationChildren()` signature has changed, default value of
-  parameter `$limit` is now `10`. No way is provided to return all children, pagination should be used if full
+  parameter `$limit` is now `25`. No way is provided to return all children, pagination should be used if full
   result set is desired.
 
 * `eZ\Publish\API\Repository\UserService::loadUsersOfUserGroup()` signature has changed, default value of
-  parameter `$limit` is now `10`. No way is provided to return all users, pagination should be used if full
+  parameter `$limit` is now `25`. No way is provided to return all users, pagination should be used if full
   result set is desired.
 
 * `eZ\Publish\API\Repository\UserService::loadSubUserGroups()` signature has changed, parameters `$offset = 0`
-  and `$limit = 10` are added. No way is provided to return all user groups, pagination should be used if full
+  and `$limit = 25` are added. No way is provided to return all user groups, pagination should be used if full
   result set is desired.
 
 * `eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser()` signature has changed, parameters `$offset = 0`
-  and `$limit = 10` are added. No way is provided to return all user groups, pagination should be used if full
+  and `$limit = 25` are added. No way is provided to return all user groups, pagination should be used if full
   result set is desired.
 
 * SiteAccess service (`ezpublish.siteaccess`) is not synchronized any more.

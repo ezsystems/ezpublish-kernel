@@ -351,7 +351,7 @@ class Location extends RestController
         $children = $this->locationService->loadLocationChildren(
             $this->locationService->loadLocation($locationId),
             $offset >= 0 ? $offset : 0,
-            $limit >= 0 ? $limit : 10
+            $limit >= 0 ? $limit : 25
         )->locations;
         foreach ($children as $location) {
             $restLocations[] = new Values\RestLocation(

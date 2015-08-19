@@ -128,7 +128,7 @@ class UserService implements APIUserService, Sessionable
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
-    public function loadSubUserGroups(UserGroup $userGroup, $offset = 0, $limit = 10)
+    public function loadSubUserGroups(UserGroup $userGroup, $offset = 0, $limit = 25)
     {
         throw new \Exception('@todo: Implement.');
     }
@@ -343,7 +343,7 @@ class UserService implements APIUserService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
-    public function loadUserGroupsOfUser(User $user, $offset = 0, $limit = 10)
+    public function loadUserGroupsOfUser(User $user, $offset = 0, $limit = 25)
     {
         throw new \Exception('@todo: Implement.');
     }
@@ -359,7 +359,7 @@ class UserService implements APIUserService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersOfUserGroup(UserGroup $userGroup, $offset = 0, $limit = 10)
+    public function loadUsersOfUserGroup(UserGroup $userGroup, $offset = 0, $limit = 25)
     {
         throw new \Exception('@todo: Implement.');
     }

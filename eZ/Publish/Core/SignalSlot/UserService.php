@@ -118,7 +118,7 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
-    public function loadSubUserGroups(UserGroup $userGroup, $offset = 0, $limit = 10)
+    public function loadSubUserGroups(UserGroup $userGroup, $offset = 0, $limit = 25)
     {
         return $this->service->loadSubUserGroups($userGroup, $offset, $limit);
     }
@@ -410,7 +410,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
-    public function loadUserGroupsOfUser(User $user, $offset = 0, $limit = 10)
+    public function loadUserGroupsOfUser(User $user, $offset = 0, $limit = 25)
     {
         return $this->service->loadUserGroupsOfUser($user, $offset, $limit);
     }
@@ -426,7 +426,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersOfUserGroup(UserGroup $userGroup, $offset = 0, $limit = 10)
+    public function loadUsersOfUserGroup(UserGroup $userGroup, $offset = 0, $limit = 25)
     {
         return $this->service->loadUsersOfUserGroup($userGroup, $offset, $limit);
     }

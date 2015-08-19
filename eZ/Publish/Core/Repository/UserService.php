@@ -164,7 +164,7 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
-    public function loadSubUserGroups(APIUserGroup $userGroup, $offset = 0, $limit = 10)
+    public function loadSubUserGroups(APIUserGroup $userGroup, $offset = 0, $limit = 25)
     {
         $locationService = $this->repository->getLocationService();
 
@@ -215,7 +215,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    protected function searchSubGroups($locationId, $sortField = null, $sortOrder = Location::SORT_ORDER_ASC, $offset = 0, $limit = 10)
+    protected function searchSubGroups($locationId, $sortField = null, $sortOrder = Location::SORT_ORDER_ASC, $offset = 0, $limit = 25)
     {
         $searchQuery = new LocationQuery();
 
@@ -875,7 +875,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
-    public function loadUserGroupsOfUser(APIUser $user, $offset = 0, $limit = 10)
+    public function loadUserGroupsOfUser(APIUser $user, $offset = 0, $limit = 25)
     {
         $locationService = $this->repository->getLocationService();
 
@@ -932,7 +932,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersOfUserGroup(APIUserGroup $userGroup, $offset = 0, $limit = 10)
+    public function loadUsersOfUserGroup(APIUserGroup $userGroup, $offset = 0, $limit = 25)
     {
         $loadedUserGroup = $this->loadUserGroup($userGroup->id);
 

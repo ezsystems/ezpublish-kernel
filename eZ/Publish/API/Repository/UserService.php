@@ -66,7 +66,7 @@ interface UserService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
-    public function loadSubUserGroups(UserGroup $userGroup, $offset = 0, $limit = 10);
+    public function loadSubUserGroups(UserGroup $userGroup, $offset = 0, $limit = 25);
 
     /**
      * Removes a user group.
@@ -250,7 +250,7 @@ interface UserService
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
-    public function loadUserGroupsOfUser(User $user, $offset = 0, $limit = 10);
+    public function loadUserGroupsOfUser(User $user, $offset = 0, $limit = 25);
 
     /**
      * Loads the users of a user group.
@@ -263,7 +263,7 @@ interface UserService
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersOfUserGroup(UserGroup $userGroup, $offset = 0, $limit = 10);
+    public function loadUsersOfUserGroup(UserGroup $userGroup, $offset = 0, $limit = 25);
 
     /**
      * Instantiate a user create class.
