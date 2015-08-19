@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
@@ -27,7 +28,6 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\SPI\Persistence\User as SPIUser;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
-use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId;
@@ -194,7 +194,11 @@ class UserService implements UserServiceInterface
 
         $subUserGroups = array();
         foreach ($searchResult->searchHits as $searchHit) {
-            $subUserGroups[] = $this->buildDomainUserGroupObject($searchHit->valueObject);
+            $subUserGroups[] = $this->buildDomainUserGroupObject(
+                $this->repository->getContentService()->internalLoadContent(
+                    $searchHit->valueObject->contentInfo->id
+                )
+            );
         }
 
         return $subUserGroups;
@@ -213,7 +217,7 @@ class UserService implements UserServiceInterface
      */
     protected function searchSubGroups($locationId, $sortField = null, $sortOrder = Location::SORT_ORDER_ASC, $offset = 0, $limit = 10)
     {
-        $searchQuery = new Query();
+        $searchQuery = new LocationQuery();
 
         $searchQuery->offset = $offset;
         $searchQuery->limit = $limit;
@@ -230,7 +234,7 @@ class UserService implements UserServiceInterface
             $searchQuery->sortClauses[] = $this->getSortClauseBySortField($sortField, $sortOrder);
         }
 
-        return $this->repository->getSearchService()->findContent($searchQuery, array(), false);
+        return $this->repository->getSearchService()->findLocations($searchQuery, array(), false);
     }
 
     /**
@@ -890,7 +894,7 @@ class UserService implements UserServiceInterface
             }
         }
 
-        $searchQuery = new Query();
+        $searchQuery = new LocationQuery();
 
         $searchQuery->offset = $offset;
         $searchQuery->limit = $limit;
@@ -903,11 +907,15 @@ class UserService implements UserServiceInterface
             )
         );
 
-        $searchResult = $this->repository->getSearchService()->findContent($searchQuery, array());
+        $searchResult = $this->repository->getSearchService()->findLocations($searchQuery);
 
         $userGroups = array();
         foreach ($searchResult->searchHits as $resultItem) {
-            $userGroups[] = $this->buildDomainUserGroupObject($resultItem->valueObject);
+            $userGroups[] = $this->buildDomainUserGroupObject(
+                $this->repository->getContentService()->internalLoadContent(
+                    $resultItem->valueObject->contentInfo->id
+                )
+            );
         }
 
         return $userGroups;
@@ -936,7 +944,7 @@ class UserService implements UserServiceInterface
             $loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId
         );
 
-        $searchQuery = new Query();
+        $searchQuery = new LocationQuery();
 
         $searchQuery->filter = new CriterionLogicalAnd(
             array(
@@ -953,13 +961,16 @@ class UserService implements UserServiceInterface
             $this->getSortClauseBySortField($mainGroupLocation->sortField, $mainGroupLocation->sortOrder),
         );
 
-        $searchResult = $this->repository->getSearchService()->findContent($searchQuery, array());
+        $searchResult = $this->repository->getSearchService()->findLocations($searchQuery);
 
         $users = array();
         foreach ($searchResult->searchHits as $resultItem) {
-            $spiUser = $this->userHandler->load($resultItem->valueObject->id);
-
-            $users[] = $this->buildDomainUserObject($spiUser, $resultItem->valueObject);
+            $users[] = $this->buildDomainUserObject(
+                $this->userHandler->load($resultItem->valueObject->contentInfo->id),
+                $this->repository->getContentService()->internalLoadContent(
+                    $resultItem->valueObject->contentInfo->id
+                )
+            );
         }
 
         return $users;
@@ -1139,10 +1150,10 @@ class UserService implements UserServiceInterface
      */
     protected function getSortClauseBySortField($sortField, $sortOrder = Location::SORT_ORDER_ASC)
     {
-        $sortOrder = $sortOrder == Location::SORT_ORDER_DESC ? Query::SORT_DESC : Query::SORT_ASC;
+        $sortOrder = $sortOrder == Location::SORT_ORDER_DESC ? LocationQuery::SORT_DESC : LocationQuery::SORT_ASC;
         switch ($sortField) {
             case Location::SORT_FIELD_PATH:
-                return new SortClause\LocationPathString($sortOrder);
+                return new SortClause\Location\Path($sortOrder);
 
             case Location::SORT_FIELD_PUBLISHED:
                 return new SortClause\DatePublished($sortOrder);
@@ -1154,7 +1165,7 @@ class UserService implements UserServiceInterface
                 return new SortClause\SectionIdentifier($sortOrder);
 
             case Location::SORT_FIELD_DEPTH:
-                return new SortClause\LocationDepth($sortOrder);
+                return new SortClause\Location\Depth($sortOrder);
 
             //@todo: enable
             // case APILocation::SORT_FIELD_CLASS_IDENTIFIER:
@@ -1163,7 +1174,7 @@ class UserService implements UserServiceInterface
             // case APILocation::SORT_FIELD_CLASS_NAME:
 
             case Location::SORT_FIELD_PRIORITY:
-                return new SortClause\LocationPriority($sortOrder);
+                return new SortClause\Location\Priority($sortOrder);
 
             case Location::SORT_FIELD_NAME:
                 return new SortClause\ContentName($sortOrder);
@@ -1178,7 +1189,7 @@ class UserService implements UserServiceInterface
             // case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
 
             default:
-                return new SortClause\LocationPathString($sortOrder);
+                return new SortClause\Location\Path($sortOrder);
         }
     }
 }
