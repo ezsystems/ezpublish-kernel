@@ -146,9 +146,6 @@ class HandlerContentTest extends LanguageAwareTestCase
                         new Content\Gateway\CriterionHandler\LocationId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Gateway\CriterionHandler\LocationPriority(
-                            $this->getDatabaseHandler()
-                        ),
                         new Content\Gateway\CriterionHandler\ParentLocationId(
                             $this->getDatabaseHandler()
                         ),
@@ -208,9 +205,6 @@ class HandlerContentTest extends LanguageAwareTestCase
                         new Content\Common\Gateway\CriterionHandler\FieldRelation(
                             $this->getDatabaseHandler(),
                             $this->getContentTypeHandler()
-                        ),
-                        new Content\Gateway\CriterionHandler\Depth(
-                            $this->getDatabaseHandler()
                         ),
                     )
                 ),
@@ -635,110 +629,6 @@ class HandlerContentTest extends LanguageAwareTestCase
         );
     }
 
-    public function testContentDepthFilterEq()
-    {
-        $this->assertSearchResults(
-            array(4, 41, 45, 56, 65),
-            $this->getContentSearchHandler()->findContent(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\Depth(Criterion\Operator::EQ, 1),
-                        'limit' => 10,
-                    )
-                )
-            )
-        );
-    }
-
-    public function testContentDepthFilterIn()
-    {
-        $this->assertSearchResults(
-            array(4, 11, 12, 13, 41, 42, 45, 49, 50, 51, 52, 54, 56, 57, 65, 67, 75, 84, 94, 105, 151, 154, 165, 188, 225),
-            $this->getContentSearchHandler()->findContent(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\Depth(Criterion\Operator::IN, array(1, 2)),
-                        'limit' => 50,
-                    )
-                )
-            )
-        );
-    }
-
-    public function testContentDepthFilterBetween()
-    {
-        $this->assertSearchResults(
-            array(4, 41, 45, 56, 65),
-            $this->getContentSearchHandler()->findContent(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\Depth(Criterion\Operator::BETWEEN, array(0, 1)),
-                    )
-                )
-            )
-        );
-    }
-
-    public function testContentDepthFilterGreaterThan()
-    {
-        $this->assertSearchResults(
-            array(97, 100, 133, 134, 135, 137, 138, 140, 141, 142, 143, 146, 149, 172, 173, 175, 192, 194, 195, 196, 197, 198, 199, 200, 201, 203, 204, 205, 206, 207, 208, 209, 210, 212, 213),
-            $this->getContentSearchHandler()->findContent(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\Depth(Criterion\Operator::GT, 4),
-                        'limit' => 50,
-                    )
-                )
-            )
-        );
-    }
-
-    public function testContentDepthFilterGreaterThanOrEqual()
-    {
-        $this->assertSearchResults(
-            array(97, 100, 133, 134, 135, 137, 138, 140, 141, 142, 143, 146, 149, 172, 173, 175, 192, 194, 195, 196, 197, 198, 199, 200, 201, 203, 204, 205, 206, 207, 208, 209, 210, 212, 213),
-            $this->getContentSearchHandler()->findContent(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\Depth(Criterion\Operator::GTE, 5),
-                        'limit' => 50,
-                    )
-                )
-            )
-        );
-    }
-
-    public function testContentDepthFilterLessThan()
-    {
-        $this->assertSearchResults(
-            array(4, 41, 45, 56, 65),
-            $this->getContentSearchHandler()->findContent(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\Depth(Criterion\Operator::LT, 2),
-                        'limit' => 10,
-                    )
-                )
-            )
-        );
-    }
-
-    public function testContentDepthFilterLessThanOrEqual()
-    {
-        $this->assertSearchResults(
-            array(4, 11, 12, 13, 41, 42, 45, 49, 50, 51, 52, 54, 56, 57, 65, 67, 75, 84, 94, 105, 151, 154, 165, 188, 225),
-            $this->getContentSearchHandler()->findContent(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\Depth(Criterion\Operator::LTE, 2),
-                        'limit' => 50,
-                    )
-                )
-            )
-        );
-    }
-
     public function testContentTypeIdFilter()
     {
         $this->assertSearchResults(
@@ -888,24 +778,6 @@ class HandlerContentTest extends LanguageAwareTestCase
                 new Query(
                     array(
                         'filter' => new Criterion\LocationId(array(1, 2, 5)),
-                        'limit' => 10,
-                    )
-                )
-            )
-        );
-    }
-
-    public function testLocationPriorityFilter()
-    {
-        $this->assertSearchResults(
-            array(154, 165, 188),
-            $this->getContentSearchHandler()->findContent(
-                new Query(
-                    array(
-                        'filter' => new Criterion\LocationPriority(
-                            Criterion\Operator::BETWEEN,
-                            array(1, 10)
-                        ),
                         'limit' => 10,
                     )
                 )

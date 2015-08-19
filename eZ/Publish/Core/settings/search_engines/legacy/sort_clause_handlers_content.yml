@@ -1,7 +1,4 @@
 parameters:
-    ezpublish.search.legacy.gateway.sort_clause_handler.content.location_depth.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\SortClauseHandler\LocationDepth
-    ezpublish.search.legacy.gateway.sort_clause_handler.content.location_path_string.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\SortClauseHandler\LocationPathString
-    ezpublish.search.legacy.gateway.sort_clause_handler.content.location_priority.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\SortClauseHandler\LocationPriority
 
 services:
     # Note: services tagged with:
@@ -9,21 +6,3 @@ services:
     # are registered to this one using compilation pass
     ezpublish.search.legacy.gateway.sort_clause_converter.content:
         class: %ezpublish.search.legacy.gateway.sort_clause_converter.class%
-
-    ezpublish.search.legacy.gateway.sort_clause_handler.content.location_depth:
-        parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: %ezpublish.search.legacy.gateway.sort_clause_handler.content.location_depth.class%
-        tags:
-            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
-
-    ezpublish.search.legacy.gateway.sort_clause_handler.content.location_path_string:
-        parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: %ezpublish.search.legacy.gateway.sort_clause_handler.content.location_path_string.class%
-        tags:
-            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
-
-    ezpublish.search.legacy.gateway.sort_clause_handler.content.location_priority:
-        parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: %ezpublish.search.legacy.gateway.sort_clause_handler.content.location_priority.class%
-        tags:
-            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}

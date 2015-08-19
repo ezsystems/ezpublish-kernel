@@ -1230,15 +1230,15 @@ class DoctrineDatabase extends Gateway
         foreach ($sort as $condition) {
             $sortDirection = $condition->direction === Query::SORT_ASC ? SelectQuery::ASC : SelectQuery::DESC;
             switch (true) {
-                case $condition instanceof SortClause\LocationDepth:
+                case $condition instanceof SortClause\Location\Depth:
                     $query->orderBy('depth', $sortDirection);
                     break;
 
-                case $condition instanceof SortClause\LocationPathString:
+                case $condition instanceof SortClause\Location\Path:
                     $query->orderBy('path_string', $sortDirection);
                     break;
 
-                case $condition instanceof SortClause\LocationPriority:
+                case $condition instanceof SortClause\Location\Priority:
                     $query->orderBy('priority', $sortDirection);
                     break;
 
