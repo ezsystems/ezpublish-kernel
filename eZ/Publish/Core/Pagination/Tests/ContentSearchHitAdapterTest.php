@@ -73,7 +73,7 @@ class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
     public function testGetSlice()
     {
         $offset = 20;
-        $limit = 10;
+        $limit = 25;
         $nbResults = 123;
 
         $query = new Query();

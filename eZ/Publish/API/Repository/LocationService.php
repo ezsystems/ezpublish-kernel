@@ -86,7 +86,7 @@ interface LocationService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
-    public function loadLocationChildren(Location $location, $offset = 0, $limit = 10);
+    public function loadLocationChildren(Location $location, $offset = 0, $limit = 25);
 
     /**
      * Returns the number of children which are readable by the current user of a location object.

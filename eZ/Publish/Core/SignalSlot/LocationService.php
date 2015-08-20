@@ -145,7 +145,7 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
-    public function loadLocationChildren(Location $location, $offset = 0, $limit = 10)
+    public function loadLocationChildren(Location $location, $offset = 0, $limit = 25)
     {
         return $this->service->loadLocationChildren($location, $offset, $limit);
     }

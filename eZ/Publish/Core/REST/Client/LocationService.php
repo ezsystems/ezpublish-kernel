@@ -240,7 +240,7 @@ class LocationService implements APILocationService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
-    public function loadLocationChildren(Location $location, $offset = 0, $limit = 10)
+    public function loadLocationChildren(Location $location, $offset = 0, $limit = 25)
     {
         $values = $this->requestParser->parse('location', $location->id);
         $response = $this->client->request(

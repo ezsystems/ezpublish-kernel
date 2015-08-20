@@ -678,7 +678,7 @@ class User extends RestController
     public function loadSubUserGroups($groupPath, Request $request)
     {
         $offset = $request->query->has('offset') ? (int)$request->query->get('offset') : 0;
-        $limit = $request->query->has('limit') ? (int)$request->query->get('limit') : 10;
+        $limit = $request->query->has('limit') ? (int)$request->query->get('limit') : 25;
 
         $userGroupLocation = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath($groupPath)
@@ -691,7 +691,7 @@ class User extends RestController
         $subGroups = $this->userService->loadSubUserGroups(
             $userGroup,
             $offset >= 0 ? $offset : 0,
-            $limit >= 0 ? $limit : 10
+            $limit >= 0 ? $limit : 25
         );
 
         $restUserGroups = array();
@@ -734,13 +734,13 @@ class User extends RestController
     public function loadUserGroupsOfUser($userId, Request $request)
     {
         $offset = $request->query->has('offset') ? (int)$request->query->get('offset') : 0;
-        $limit = $request->query->has('limit') ? (int)$request->query->get('limit') : 10;
+        $limit = $request->query->has('limit') ? (int)$request->query->get('limit') : 25;
 
         $user = $this->userService->loadUser($userId);
         $userGroups = $this->userService->loadUserGroupsOfUser(
             $user,
             $offset >= 0 ? $offset : 0,
-            $limit >= 0 ? $limit : 10
+            $limit >= 0 ? $limit : 25
         );
 
         $restUserGroups = array();
@@ -782,12 +782,12 @@ class User extends RestController
         );
 
         $offset = $request->query->has('offset') ? (int)$request->query->get('offset') : 0;
-        $limit = $request->query->has('limit') ? (int)$request->query->get('limit') : 10;
+        $limit = $request->query->has('limit') ? (int)$request->query->get('limit') : 25;
 
         $users = $this->userService->loadUsersOfUserGroup(
             $userGroup,
             $offset >= 0 ? $offset : 0,
-            $limit >= 0 ? $limit : 10
+            $limit >= 0 ? $limit : 25
         );
 
         $restUsers = array();

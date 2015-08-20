@@ -85,7 +85,7 @@ class Query extends ValueObject
      *
      * @var int
      */
-    public $limit = 10;
+    public $limit = 25;
 
     /**
      * If true spellcheck suggestions are returned.

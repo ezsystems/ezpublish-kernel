@@ -276,7 +276,7 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
-    public function loadLocationChildren(APILocation $location, $offset = 0, $limit = 10)
+    public function loadLocationChildren(APILocation $location, $offset = 0, $limit = 25)
     {
         if (!$this->domainMapper->isValidLocationSortField($location->sortField)) {
             throw new InvalidArgumentValue('sortField', $location->sortField, 'Location');
