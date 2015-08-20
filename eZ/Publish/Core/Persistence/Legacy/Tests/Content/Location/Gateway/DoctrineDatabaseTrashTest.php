@@ -345,7 +345,7 @@ class DoctrineDatabaseTrashTest extends TestCase
                     0,
                     null,
                     array(
-                        new SortClause\LocationPathString(Query::SORT_DESC),
+                        new SortClause\Location\Path(Query::SORT_DESC),
                     )
                 )
             )
@@ -380,8 +380,8 @@ class DoctrineDatabaseTrashTest extends TestCase
                     0,
                     null,
                     array(
-                        new SortClause\LocationDepth(),
-                        new SortClause\LocationPathString(Query::SORT_DESC),
+                        new SortClause\Location\Depth(),
+                        new SortClause\Location\Path(Query::SORT_DESC),
                     )
                 )
             )

@@ -116,7 +116,6 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
                             )
                         ),
-                        'sortClauses' => array(new SortClause\ContentName(), new SortClause\LocationPriority()),
                     )
                 ),
                 1,
@@ -146,7 +145,6 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
                             )
                         ),
-                        'sortClauses' => array(new SortClause\ContentName(Query::SORT_DESC), new SortClause\LocationPriority(), new SortClause\DatePublished()),
                     )
                 ),
                 1,
@@ -191,7 +189,6 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
                             )
                         ),
-                        'sortClauses' => array(new SortClause\ContentName(Query::SORT_DESC), new SortClause\LocationPriority(), new SortClause\DatePublished()),
                     )
                 ),
                 2,
@@ -206,7 +203,6 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
                             )
                         ),
-                        'sortClauses' => array(new SortClause\ContentName(Query::SORT_DESC), new SortClause\LocationPriority(), new SortClause\DatePublished(), new SortClause\ContentId()),
                     )
                 ),
                 2,
@@ -221,7 +217,6 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
                             )
                         ),
-                        'sortClauses' => array(new SortClause\ContentName(), new SortClause\LocationPriority()),
                     )
                 ),
                 0,

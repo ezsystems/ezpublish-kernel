@@ -624,66 +624,6 @@ class SearchServiceTest extends BaseTest
         );
     }
 
-    public function getContentQuerySearchesDeprecated()
-    {
-        $fixtureDir = $this->getFixtureDir();
-
-        return array(
-            array(
-                array(
-                    'criterion' => new Criterion\Depth(Criterion\Operator::EQ, 1),
-                    'sortClauses' => array(new SortClause\ContentId()),
-                ),
-                $fixtureDir . 'Depth.php',
-            ),
-            array(
-                array(
-                    'criterion' => new Criterion\Depth(Criterion\Operator::IN, array(1, 3)),
-                    'sortClauses' => array(new SortClause\ContentId()),
-                ),
-                $fixtureDir . 'DepthIn.php',
-            ),
-            array(
-                array(
-                    'criterion' => new Criterion\Depth(Criterion\Operator::GT, 2),
-                    'sortClauses' => array(new SortClause\ContentId()),
-                ),
-                $fixtureDir . 'DepthGt.php',
-            ),
-            array(
-                array(
-                    'criterion' => new Criterion\Depth(Criterion\Operator::GTE, 2),
-                    'sortClauses' => array(new SortClause\ContentId()),
-                    'limit' => 50,
-                ),
-                $fixtureDir . 'DepthGte.php',
-            ),
-            array(
-                array(
-                    'criterion' => new Criterion\Depth(Criterion\Operator::LT, 2),
-                    'sortClauses' => array(new SortClause\ContentId()),
-                ),
-                $fixtureDir . 'Depth.php',
-            ),
-            array(
-                array(
-                    'criterion' => new Criterion\Depth(Criterion\Operator::LTE, 2),
-                    'sortClauses' => array(new SortClause\ContentId()),
-                    'limit' => 50,
-                ),
-                $fixtureDir . 'DepthLte.php',
-            ),
-            array(
-                array(
-                    'criterion' => new Criterion\Depth(Criterion\Operator::BETWEEN, array(1, 2)),
-                    'sortClauses' => array(new SortClause\ContentId()),
-                    'limit' => 50,
-                ),
-                $fixtureDir . 'DepthLte.php',
-            ),
-        );
-    }
-
     public function getLocationQuerySearches()
     {
         $fixtureDir = $this->getFixtureDir();
@@ -826,20 +766,6 @@ class SearchServiceTest extends BaseTest
     {
         $query = new Query($queryData);
         $this->assertQueryFixture($query, $fixture, $this->getContentInfoFixtureClosure($closure), true);
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @deprecated
-     * @dataProvider getContentQuerySearchesDeprecated
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     */
-    public function testQueryContentDeprecated($queryData, $fixture, $closure = null)
-    {
-        $query = new Query($queryData);
-        $this->assertQueryFixture($query, $fixture, $closure);
     }
 
     /**
@@ -1450,90 +1376,6 @@ class SearchServiceTest extends BaseTest
                     ),
                 ),
                 $fixtureDir . 'SortFieldMultipleTypesSliceReverse.php',
-            ),
-        );
-    }
-
-    public function getSortedContentSearchesDeprecated()
-    {
-        $fixtureDir = $this->getFixtureDir();
-
-        return array(
-            array(
-                array(
-                    'filter' => new Criterion\SectionId(array(2)),
-                    'offset' => 0,
-                    'limit' => 10,
-                    'sortClauses' => array(new SortClause\LocationPathString(Query::SORT_DESC)),
-                ),
-                $fixtureDir . 'SortPathString.php',
-            ),
-            array(
-                array(
-                    'filter' => new Criterion\SectionId(array(2)),
-                    'offset' => 0,
-                    'limit' => 10,
-                    'sortClauses' => array(new SortClause\LocationDepth(Query::SORT_ASC)),
-                ),
-                $fixtureDir . 'SortLocationDepth.php',
-                // Result having the same sort level should be sorted between them to be system independent
-                function (&$data) {
-                    // Result with ids:
-                    //     4 has depth = 1
-                    //     11, 12, 13, 42, 59 have depth = 2
-                    //     10, 14 have depth = 3
-                    $map = array(
-                        4 => 0,
-                        11 => 1,
-                        12 => 2,
-                        13 => 3,
-                        42 => 4,
-                        59 => 5,
-                        10 => 6,
-                        14 => 7,
-                    );
-                    usort(
-                        $data->searchHits,
-                        function ($a, $b) use ($map) {
-                            return ($map[$a->valueObject['id']] < $map[$b->valueObject['id']]) ? -1 : 1;
-                        }
-                    );
-                },
-            ),
-            array(
-                array(
-                    'filter' => new Criterion\SectionId(array(3)),
-                    'offset' => 0,
-                    'limit' => 10,
-                    'sortClauses' => array(
-                        new SortClause\LocationPathString(Query::SORT_DESC),
-                        new SortClause\ContentName(Query::SORT_ASC),
-                    ),
-                ),
-                $fixtureDir . 'SortMultiple.php',
-            ),
-            array(
-                // FIXME: this test is not relevant since all priorities are "0"
-                array(
-                    'filter' => new Criterion\SectionId(array(2)),
-                    'offset' => 0,
-                    'limit' => 10,
-                    'sortClauses' => array(
-                        new SortClause\LocationPriority(Query::SORT_DESC),
-                        new SortClause\ContentId(),
-                    ),
-                ),
-                $fixtureDir . 'SortDesc.php',
-                // Result having the same sort level should be sorted between them to be system independent
-                // Update when above FIXME has been resolved.
-                function (&$data) {
-                    usort(
-                        $data->searchHits,
-                        function ($a, $b) {
-                            return ($a->valueObject['id'] < $b->valueObject['id']) ? -1 : 1;
-                        }
-                    );
-                },
             ),
         );
     }
@@ -2251,20 +2093,6 @@ class SearchServiceTest extends BaseTest
     {
         $query = new Query($queryData);
         $this->assertQueryFixture($query, $fixture, $this->getContentInfoFixtureClosure($closure), true);
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @deprecated
-     * @dataProvider getSortedContentSearchesDeprecated
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     */
-    public function testFindAndSortContentDeprecated($queryData, $fixture, $closure = null)
-    {
-        $query = new Query($queryData);
-        $this->assertQueryFixture($query, $fixture, $closure);
     }
 
     /**
