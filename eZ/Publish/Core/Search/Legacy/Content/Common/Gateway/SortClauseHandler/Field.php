@@ -153,7 +153,7 @@ class Field extends SortClauseHandler
         if ($fieldTarget->languageCode === null) {
             $languageExpression = $query->expr->gt(
                 $query->expr->bitAnd(
-                    $query->expr->bitAnd($this->dbHandler->quoteColumn('language_id', $table), ~1),
+                    $query->expr->bitAnd($this->dbHandler->quoteColumn('language_id', $table), (1 << 30) - 2),
                     $this->dbHandler->quoteColumn('initial_language_id', 'ezcontentobject')
                 ),
                 0
@@ -161,7 +161,7 @@ class Field extends SortClauseHandler
         } else {
             $languageExpression = $query->expr->gt(
                 $query->expr->bitAnd(
-                    $query->expr->bitAnd($this->dbHandler->quoteColumn('language_id', $table), ~1),
+                    $query->expr->bitAnd($this->dbHandler->quoteColumn('language_id', $table), (1 << 30) - 2),
                     $query->bindValue(
                         $this->languageHandler->loadByLanguageCode($fieldTarget->languageCode)->id,
                         null,
