@@ -155,6 +155,9 @@ Changes affecting version compatibility with former or future versions.
   `minFloatValue` and `maxFloatValue`. Use `null` instead of `false` if you want to deactivate these validators.
   Default validator value has been changed accordingly.
 
+* `eZ\Publish\API\Repository\Values\ValueObject\SearchHit` has a new property `$matchedTranslation`,
+  which will hold language code of the Content translation that matched the search query.
+
 ## Deprecations
 
 * `eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger::purge()` is deprecated and will be removed in v6.1.
