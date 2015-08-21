@@ -14,8 +14,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class is used to perform a Content query.
- *
- * @property $criterion Deprecated alias for $query
  */
 class Query extends ValueObject
 {
@@ -100,53 +98,4 @@ class Query extends ValueObject
      * @var bool
      */
     public $performCount = true;
-
-    /**
-     * Wrapper for deprecated $criterion property.
-     *
-     * @param string $property
-     *
-     * @return mixed
-     */
-    public function __get($property)
-    {
-        if ($property === 'criterion') {
-            return $this->query;
-        }
-
-        return parent::__get($property);
-    }
-
-    /**
-     * Wrapper for deprecated $criterion property.
-     *
-     * @param string $property
-     * @param mixed $value
-     */
-    public function __set($property, $value)
-    {
-        if ($property === 'criterion') {
-            $this->query = $value;
-
-            return;
-        }
-
-        return parent::__set($property, $value);
-    }
-
-    /**
-     * Wrapper for deprecated $criterion property.
-     *
-     * @param string $property
-     *
-     * @return bool
-     */
-    public function __isset($property)
-    {
-        if ($property === 'criterion') {
-            return true;
-        }
-
-        return parent::__isset($property);
-    }
 }

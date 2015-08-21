@@ -207,6 +207,9 @@ Changes affecting version compatibility with former or future versions.
     * `eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPathString`
     * `eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPriority`
 
+* Deprecated virtual property `$criterion` on class `eZ\Publish\API\Repository\Values\Content\Query`,
+  is removed.
+
 ## Changes from 2015.01 (6.0.0-alpha1)
 
 * Bundle `EzPublishElasticsearchBundle` has been renamed to `EzPublishElasticsearchSearchEngineBundle`

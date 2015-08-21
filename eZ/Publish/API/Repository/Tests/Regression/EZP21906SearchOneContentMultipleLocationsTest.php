@@ -80,7 +80,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LogicalAnd(
+                        'query' => new Criterion\LogicalAnd(
                             array(
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('feedback_form'),
@@ -94,7 +94,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LogicalAnd(
+                        'query' => new Criterion\LogicalAnd(
                             array(
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('feedback_form'),
@@ -109,7 +109,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LogicalAnd(
+                        'query' => new Criterion\LogicalAnd(
                             array(
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('feedback_form'),
@@ -123,7 +123,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LogicalAnd(
+                        'query' => new Criterion\LogicalAnd(
                             array(
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('feedback_form'),
@@ -138,7 +138,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LogicalAnd(
+                        'query' => new Criterion\LogicalAnd(
                             array(
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('feedback_form'),
@@ -152,7 +152,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LogicalAnd(
+                        'query' => new Criterion\LogicalAnd(
                             array(
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('folder'),
@@ -167,7 +167,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LogicalAnd(
+                        'query' => new Criterion\LogicalAnd(
                             array(
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('folder'),
@@ -182,7 +182,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LogicalAnd(
+                        'query' => new Criterion\LogicalAnd(
                             array(
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('folder'),
@@ -196,7 +196,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LogicalAnd(
+                        'query' => new Criterion\LogicalAnd(
                             array(
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('folder'),
@@ -210,7 +210,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'criterion' => new Criterion\LogicalAnd(
+                        'query' => new Criterion\LogicalAnd(
                             array(
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('product'),

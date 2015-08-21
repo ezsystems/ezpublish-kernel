@@ -47,7 +47,7 @@ class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
     {
         $nbResults = 123;
         $query = new Query();
-        $query->criterion = $this->getMock('eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface');
+        $query->query = $this->getMock('eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface');
         $query->sortClauses = $this
             ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\Query\SortClause')
             ->disableOriginalConstructor()
@@ -77,7 +77,7 @@ class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
         $nbResults = 123;
 
         $query = new Query();
-        $query->criterion = $this->getMock('eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface');
+        $query->query = $this->getMock('eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface');
         $query->sortClauses = $this
             ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\Query\SortClause')
             ->disableOriginalConstructor()

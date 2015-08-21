@@ -37,7 +37,7 @@ class EZP22958SearchSubtreePathstringFormatTest extends BaseTest
 
         $query = new Query(
             array(
-                'criterion' => new Criterion\Subtree($pathString),
+                'filter' => new Criterion\Subtree($pathString),
             )
         );
 
