@@ -579,7 +579,6 @@ abstract class BaseIntegrationTest extends TestCase
         $loader->load('storage_engines/shortcuts.yml');
         $loader->load('storage_engines/legacy.yml');
         $loader->load('search_engines/legacy.yml');
-        $loader->load('search_engines/shortcuts.yml');
         $loader->load('storage_engines/cache.yml');
         $loader->load('settings.yml');
         $loader->load('fieldtype_services.yml');
