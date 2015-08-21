@@ -198,6 +198,15 @@ Changes affecting version compatibility with former or future versions.
   The legacy-bridge requirement introduced in this version isn't included by default. The legacy application, as well
   as the related bundle, libraries and configuration, are no longer shipped by default.
 
+* Following criteria and sort clauses deprecated in 5.3 are removed:
+
+    * `eZ\Publish\API\Repository\Values\Content\Query\Criterion\Depth`
+    * `eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationPriority`
+    * `eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationDepth`
+    * `eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPath`
+    * `eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPathString`
+    * `eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPriority`
+
 ## Changes from 2015.01 (6.0.0-alpha1)
 
 * Bundle `EzPublishElasticsearchBundle` has been renamed to `EzPublishElasticsearchSearchEngineBundle`
