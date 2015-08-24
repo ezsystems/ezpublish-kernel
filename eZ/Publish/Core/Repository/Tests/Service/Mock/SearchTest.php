@@ -755,7 +755,7 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findLocations() method.
      */
-    public function functionFindLocationsWithPermission()
+    public function testFindLocationsWithPermission()
     {
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
