@@ -108,7 +108,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'criterion' => new Criterion\Field(
+                'query' => new Criterion\Field(
                     'countries',
                     Criterion\Operator::CONTAINS,
                     $country
@@ -138,7 +138,7 @@ class SearchServiceLocationTest extends BaseTest
         $this->createMultipleCountriesContent();
         $query = new LocationQuery(
             array(
-                'criterion' => new Criterion\Field(
+                'query' => new Criterion\Field(
                     'countries',
                     Criterion\Operator::CONTAINS,
                     'Netherlands Antilles'
@@ -319,7 +319,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'criterion' => new Criterion\ContentTypeId($contentType->id),
+                'query' => new Criterion\ContentTypeId($contentType->id),
                 'sortClauses' => array(
                     new SortClause\Field('test-type', 'integer', LocationQuery::SORT_DESC, 'eng-GB'),
                     new SortClause\Field('test-type', 'integer', LocationQuery::SORT_ASC, 'ger-DE'),
@@ -379,7 +379,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'criterion' => new Criterion\ContentTypeId($contentType->id),
+                'query' => new Criterion\ContentTypeId($contentType->id),
                 'sortClauses' => array(
                     new SortClause\Field('test-type', 'integer', LocationQuery::SORT_ASC, 'eng-GB'),
                     new SortClause\Field('test-type', 'integer', LocationQuery::SORT_DESC, 'ger-DE'),
@@ -439,7 +439,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'criterion' => new Criterion\ContentTypeId($contentType->id),
+                'query' => new Criterion\ContentTypeId($contentType->id),
                 'sortClauses' => array(
                     new SortClause\Field('test-type', 'integer', LocationQuery::SORT_DESC, 'ger-DE'),
                     new SortClause\Field('test-type', 'integer', LocationQuery::SORT_ASC, 'eng-GB'),
@@ -485,7 +485,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'criterion' => new Criterion\ContentTypeId($contentType->id),
+                'query' => new Criterion\ContentTypeId($contentType->id),
                 'sortClauses' => array(
                     new SortClause\Field('test-type', 'integer', LocationQuery::SORT_ASC),
                 ),
@@ -510,7 +510,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'criterion' => new Criterion\ContentTypeId($contentType->id),
+                'query' => new Criterion\ContentTypeId($contentType->id),
                 'sortClauses' => array(
                     // The main language can change, so no language code allowed on non-translatable field whatsoever
                     new SortClause\Field('test-type', 'integer2', LocationQuery::SORT_ASC, 'eng-GB'),
@@ -550,7 +550,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'criterion' => new Criterion\ContentTypeId($contentType->id),
+                'query' => new Criterion\ContentTypeId($contentType->id),
                 'sortClauses' => array(
                     new SortClause\Field('test-type', 'integer', LocationQuery::SORT_DESC, 'eng-GB'),
                     new SortClause\Field('test-type', 'integer2', LocationQuery::SORT_ASC),
@@ -610,7 +610,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'criterion' => new Criterion\ContentTypeId($contentType->id),
+                'query' => new Criterion\ContentTypeId($contentType->id),
                 'sortClauses' => array(
                     new SortClause\Field('test-type', 'integer', LocationQuery::SORT_ASC, 'eng-GB'),
                     new SortClause\Field('test-type', 'integer2', LocationQuery::SORT_DESC),
@@ -670,7 +670,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'criterion' => new Criterion\ContentTypeId($contentType->id),
+                'query' => new Criterion\ContentTypeId($contentType->id),
                 'sortClauses' => array(
                     new SortClause\Field('test-type', 'integer2', LocationQuery::SORT_DESC),
                     new SortClause\Field('test-type', 'integer', LocationQuery::SORT_DESC, 'ger-DE'),
@@ -730,7 +730,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'criterion' => new Criterion\ContentTypeId($contentType->id),
+                'query' => new Criterion\ContentTypeId($contentType->id),
                 'sortClauses' => array(
                     // "test-type" Content instance do not exist in "eng-US"
                     new SortClause\Field('test-type', 'integer', LocationQuery::SORT_ASC, 'eng-US'),
@@ -772,7 +772,7 @@ class SearchServiceLocationTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'criterion' => new Criterion\ContentTypeId($contentType->id),
+                'query' => new Criterion\ContentTypeId($contentType->id),
                 'sortClauses' => array(
                     // "test-type" Content instance do not exist in "eng-US"
                     new SortClause\Field('test-type', 'integer', LocationQuery::SORT_DESC, 'eng-US'),
