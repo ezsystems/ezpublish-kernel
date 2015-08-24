@@ -155,6 +155,9 @@ Changes affecting version compatibility with former or future versions.
   `minFloatValue` and `maxFloatValue`. Use `null` instead of `false` if you want to deactivate these validators.
   Default validator value has been changed accordingly.
 
+* `eZ\Publish\API\Repository\Values\ValueObject\SearchHit` has a new property `$matchedTranslation`,
+  which will hold language code of the Content translation that matched the search query.
+
 ## Deprecations
 
 * `eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger::purge()` is deprecated and will be removed in v6.1.
@@ -194,6 +197,15 @@ Changes affecting version compatibility with former or future versions.
 * eZ Publish Legacy isn't included by default anymore
   The legacy-bridge requirement introduced in this version isn't included by default. The legacy application, as well
   as the related bundle, libraries and configuration, are no longer shipped by default.
+
+* Following criteria and sort clauses deprecated in 5.3 are removed:
+
+    * `eZ\Publish\API\Repository\Values\Content\Query\Criterion\Depth`
+    * `eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationPriority`
+    * `eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationDepth`
+    * `eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPath`
+    * `eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPathString`
+    * `eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPriority`
 
 ## Changes from 2015.01 (6.0.0-alpha1)
 

@@ -202,6 +202,9 @@ Changes affecting version compatibility with former or future versions.
   Note: Possibility to search across all languages remains, however Field SortClause will
   for instance not work properly in this case, and we plan to start to give warnings about this.
 
+* 5.4.5: `eZ\Publish\API\Repository\Values\ValueObject\SearchHit` has a new property `$matchedTranslation`,
+  which will hold language code of the Content translation that matched the search query.
+
 ## Deprecations
 
 * `imagemagick` siteaccess settings are now deprecated. It is mandatory to remove them.
