@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
+use eZ\Publish\Core\FieldType\XmlText\Type;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -83,7 +84,7 @@ class XmlTextConverter implements Converter
         $fieldDefinition->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
                 'numRows' => $storageDefinition->dataInt1,
-                'tagPreset' => $storageDefinition->dataText2,
+                'tagPreset' => $storageDefinition->dataText2 ? (int)$storageDefinition->dataText2 : Type::TAG_PRESET_DEFAULT,
             )
         );
 
