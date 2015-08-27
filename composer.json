@@ -35,7 +35,6 @@
         "sensio/framework-extra-bundle": "~3.0"
     },
     "require-dev": {
-        "ezsystems/ezpublish-legacy": "*",
         "mikey179/vfsStream": "1.1.0",
         "phpunit/phpunit": "~4.7.0",
         "matthiasnoback/symfony-dependency-injection-test": "0.*",
