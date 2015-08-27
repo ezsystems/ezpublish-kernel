@@ -59,8 +59,9 @@ services:
 
     ezpublish.console_event_listener:
         class: %ezpublish.console_event_listener.class%
+        arguments: [%ezpublish.siteaccess.default.name%, @event_dispatcher]
         calls:
-            - [setContainer, [@service_container]]
+            - [setSiteAccess, [@ezpublish.siteaccess]]
         tags:
             - { name: kernel.event_subscriber }
 

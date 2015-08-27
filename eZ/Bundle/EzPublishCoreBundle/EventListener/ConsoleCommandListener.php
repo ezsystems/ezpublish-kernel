@@ -12,16 +12,43 @@ namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * ConsoleCommandListener match listener.
+ * ConsoleCommandListener event listener.
  */
-class ConsoleCommandListener extends ContainerAware implements EventSubscriberInterface
+class ConsoleCommandListener implements EventSubscriberInterface, SiteAccessAware
 {
+    /**
+     * @var string
+     */
+    private $defaultSiteAccessName;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * @var
+     */
+    private $siteAccess;
+
+    /**
+     * ConsoleCommandListener constructor.
+     */
+    public function __construct($defaultSiteAccessName, EventDispatcherInterface $eventDispatcher)
+    {
+        $this->defaultSiteAccessName = $defaultSiteAccessName;
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
     public static function getSubscribedEvents()
     {
         return [
@@ -35,11 +62,14 @@ class ConsoleCommandListener extends ContainerAware implements EventSubscriberIn
     {
         $siteAccessName = $event->getInput()->getParameterOption('--siteaccess', null);
 
-        $siteAccess = $this->container->get('ezpublish.siteaccess');
-        $siteAccess->name = $siteAccessName ?: $this->container->getParameter('ezpublish.siteaccess.default');
-        $siteAccess->matchingType = 'cli';
+        $this->siteAccess->name = $siteAccessName ?: $this->defaultSiteAccessName;
+        $this->siteAccess->matchingType = 'cli';
 
-        $eventDispatcher = $this->container->get('event_dispatcher');
-        $eventDispatcher->dispatch(MVCEvents::CONFIG_SCOPE_CHANGE, new ScopeChangeEvent($siteAccess));
+        $this->eventDispatcher->dispatch(MVCEvents::CONFIG_SCOPE_CHANGE, new ScopeChangeEvent($this->siteAccess));
+    }
+
+    public function setSiteAccess(SiteAccess $siteAccess = null)
+    {
+        $this->siteAccess = $siteAccess;
     }
 }
