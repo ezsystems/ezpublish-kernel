@@ -35,12 +35,12 @@
         "sensio/framework-extra-bundle": "~3.0"
     },
     "require-dev": {
-        "ezsystems/ezpublish-legacy": "*",
         "mikey179/vfsStream": "1.1.0",
         "phpunit/phpunit": "~4.7.0",
         "matthiasnoback/symfony-dependency-injection-test": "0.*",
         "mockery/mockery": "~0.9.4",
-        "symfony/assetic-bundle": "~2.3"
+        "symfony/assetic-bundle": "~2.3",
+        "zendframework/zend-code": "~2.4.3"
     },
     "replace": {
         "ezsystems/ezpublish": "*",
