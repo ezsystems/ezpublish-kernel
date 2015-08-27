@@ -39,7 +39,8 @@
         "phpunit/phpunit": "~4.7.0",
         "matthiasnoback/symfony-dependency-injection-test": "0.*",
         "mockery/mockery": "~0.9.4",
-        "symfony/assetic-bundle": "~2.3"
+        "symfony/assetic-bundle": "~2.3",
+        "zendframework/zend-code": "~2.4.3"
     },
     "replace": {
         "ezsystems/ezpublish": "*",
