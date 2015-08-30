@@ -513,7 +513,7 @@ CREATE TABLE ezuser (
     email character varying(150) DEFAULT ''::character varying NOT NULL,
     login character varying(150) DEFAULT ''::character varying NOT NULL,
     login_normalized character varying(150) DEFAULT ''::character varying NOT NULL,
-    password_hash character varying(50),
+    password_hash character varying(255),
     password_hash_type integer DEFAULT 1 NOT NULL
 );
 

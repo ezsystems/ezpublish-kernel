@@ -834,17 +834,11 @@ class UserServiceTest extends BaseTest
             array(
                 'login' => 'user',
                 'email' => 'user@example.com',
-                'passwordHash' => $this->createHash(
-                    'user',
-                    'secret',
-                    $user->hashAlgorithm
-                ),
                 'mainLanguageCode' => 'eng-US',
             ),
             array(
                 'login' => $user->login,
                 'email' => $user->email,
-                'passwordHash' => $user->passwordHash,
                 'mainLanguageCode' => $user->contentInfo->mainLanguageCode,
             )
         );
@@ -1426,18 +1420,12 @@ class UserServiceTest extends BaseTest
             array(
                 'login' => 'user',
                 'email' => 'user@example.com',
-                'passwordHash' => $this->createHash(
-                    'user',
-                    'my-new-password',
-                    $user->hashAlgorithm
-                ),
                 'maxLogin' => 42,
                 'enabled' => false,
             ),
             array(
                 'login' => $user->login,
                 'email' => $user->email,
-                'passwordHash' => $user->passwordHash,
                 'maxLogin' => $user->maxLogin,
                 'enabled' => $user->enabled,
             )

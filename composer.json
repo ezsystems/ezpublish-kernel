@@ -31,7 +31,8 @@
         "liip/imagine-bundle": "~1.0",
         "oneup/flysystem-bundle": "~0.4",
         "friendsofsymfony/http-cache-bundle": "~1.2",
-        "sensio/framework-extra-bundle": "~3.0"
+        "sensio/framework-extra-bundle": "~3.0",
+        "ircmaxell/password-compat": "^1.0"
     },
     "require-dev": {
         "mikey179/vfsStream": "1.1.0",
