@@ -18,7 +18,8 @@ services:
         alias: ezpublish.spi.persistence.legacy
 
     ezpublish.spi.search:
-        alias: ezpublish.spi.search_engine
+        #To disable stop watch tracking switch to ezpublish.spi.search_engine
+        alias: ezpublish.search.common.stop_watch_handler
 
     ezpublish.spi.search_engine:
         alias: ezpublish.spi.search.legacy

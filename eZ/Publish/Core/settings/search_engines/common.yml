@@ -21,6 +21,7 @@ parameters:
         ez_currency: 'c'
         ez_geolocation: 'gl'
         ez_document: 'doc'
+    ezpublish.search.common.stop_watch_handler.class: eZ\Publish\Core\Search\Common\StopWatchHandler
 
 services:
     # Note: services tagged with 'ezpublish.fieldType.indexable'
@@ -40,3 +41,9 @@ services:
             - @ezpublish.search.common.field_registry
             - @ezpublish.spi.persistence.content_type_handler
             - @ezpublish.search.common.field_name_generator
+
+    ezpublish.search.common.stop_watch_handler:
+        class: %ezpublish.search.common.stop_watch_handler.class%
+        arguments:
+            - @ezpublish.spi.search_engine
+            - @?debug.stopwatch
