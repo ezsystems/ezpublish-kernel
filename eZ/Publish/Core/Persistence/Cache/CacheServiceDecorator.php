@@ -11,6 +11,7 @@
 namespace eZ\Publish\Core\Persistence\Cache;
 
 use Stash\Interfaces\PoolInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * Class CacheServiceDecorator.
@@ -27,13 +28,20 @@ class CacheServiceDecorator
     protected $cachePool;
 
     /**
+     * @var null|Stopwatch
+     */
+    protected $stopwatch;
+
+    /**
      * Constructs the cache service decorator.
      *
      * @param \Stash\Interfaces\PoolInterface $cachePool
+     * @param null|Stopwatch $stopwatch
      */
-    public function __construct(PoolInterface $cachePool)
+    public function __construct(PoolInterface $cachePool, Stopwatch $stopwatch = null)
     {
         $this->cachePool = $cachePool;
+        $this->stopwatch = $stopwatch;
     }
 
     /**
@@ -46,6 +54,10 @@ class CacheServiceDecorator
      */
     public function getItem()
     {
+        if ($this->stopwatch !== null) {
+            $this->stopwatch->start('getItem', 'ez.spi.cache');
+        }
+
         $args = func_get_args();
 
         // check to see if a single array was used instead of multiple arguments, & check empty in case of empty clear()
@@ -57,7 +69,13 @@ class CacheServiceDecorator
 
         array_unshift($args, self::SPI_CACHE_KEY_PREFIX);
 
-        return $this->cachePool->getItem($args);
+        $item = $this->cachePool->getItem($args);
+
+        if ($this->stopwatch !== null) {
+            $this->stopwatch->stop('getItem');
+        }
+
+        return $item;
     }
 
     /**
@@ -66,10 +84,19 @@ class CacheServiceDecorator
      *
      * @internal param array|null|string $key , $key, $key...
      */
-    public function clear()
+    public function clear($arg1 = null)
     {
-        $item = call_user_func_array(array($this, 'getItem'), func_get_args());
+        if ($this->stopwatch !== null) {
+            $this->stopwatch->start(($arg1 ? 'clearItem' : 'clearAll'), 'ez.spi.cache');
+        }
 
-        return $item->clear();
+        $item = call_user_func_array(array($this, 'getItem'), func_get_args());
+        $return = $item->clear();
+
+        if ($this->stopwatch !== null) {
+            $this->stopwatch->stop(($arg1 ? 'clearItem' : 'clearAll'));
+        }
+
+        return $return;
     }
 }
