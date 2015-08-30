@@ -35,9 +35,14 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     public function create(CreateStruct $struct)
     {
         // Cached on demand when published or loaded
-        $this->logger->logCall(__METHOD__, array('struct' => $struct));
+        $this->logger->startLogCall(__METHOD__, array('struct' => $struct));
 
-        return $this->persistenceHandler->contentHandler()->create($struct);
+        $return = $this->persistenceHandler->contentHandler()->create($struct);
+
+        $this->logger->stopLogCall(__METHOD__);
+
+        return $return;
+
     }
 
     /**
@@ -45,9 +50,13 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function createDraftFromVersion($contentId, $srcVersion, $userId)
     {
-        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $srcVersion, 'user' => $userId));
+        $this->logger->startLogCall(__METHOD__, array('content' => $contentId, 'version' => $srcVersion, 'user' => $userId));
 
-        return $this->persistenceHandler->contentHandler()->createDraftFromVersion($contentId, $srcVersion, $userId);
+        $return = $this->persistenceHandler->contentHandler()->createDraftFromVersion($contentId, $srcVersion, $userId);
+
+        $this->logger->stopLogCall(__METHOD__);
+
+        return $return;
     }
 
     /**
@@ -55,9 +64,13 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function copy($contentId, $versionNo = null)
     {
-        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo));
+        $this->logger->startLogCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo));
 
-        return $this->persistenceHandler->contentHandler()->copy($contentId, $versionNo);
+        $return = $this->persistenceHandler->contentHandler()->copy($contentId, $versionNo);
+
+        $this->logger->stopLogCall(__METHOD__);
+
+        return $return;
     }
 
     /**
@@ -69,9 +82,10 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $cache = $this->cache->getItem('content', $contentId, $version, $translationsKey);
         $content = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $version, 'translations' => $translations));
+            $this->logger->startLogCall(__METHOD__, array('content' => $contentId, 'version' => $version, 'translations' => $translations));
             $content = $this->persistenceHandler->contentHandler()->load($contentId, $version, $translations);
             $cache->set($this->cloneAndSerializeXMLFields($content));
+            $this->logger->stopLogCall(__METHOD__);
         } else {
             $this->unSerializeXMLFields($content);
         }
@@ -87,8 +101,9 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $cache = $this->cache->getItem('content', 'info', $contentId);
         $contentInfo = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('content' => $contentId));
+            $this->logger->startLogCall(__METHOD__, array('content' => $contentId));
             $cache->set($contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($contentId));
+            $this->logger->stopLogCall(__METHOD__);
         }
 
         return $contentInfo;
@@ -102,8 +117,9 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $cache = $this->cache->getItem('content', 'info', 'remoteId', $remoteId);
         $contentInfo = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('content' => $remoteId));
+            $this->logger->startLogCall(__METHOD__, array('content' => $remoteId));
             $cache->set($contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfoByRemoteId($remoteId));
+            $this->logger->stopLogCall(__METHOD__);
         }
 
         return $contentInfo;
@@ -114,9 +130,13 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function loadVersionInfo($contentId, $versionNo)
     {
-        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo));
+        $this->logger->startLogCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo));
 
-        return $this->persistenceHandler->contentHandler()->loadVersionInfo($contentId, $versionNo);
+        $return = $this->persistenceHandler->contentHandler()->loadVersionInfo($contentId, $versionNo);
+
+        $this->logger->stopLogCall(__METHOD__);
+
+        return $return;
     }
 
     /**
@@ -124,9 +144,13 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function loadDraftsForUser($userId)
     {
-        $this->logger->logCall(__METHOD__, array('user' => $userId));
+        $this->logger->startLogCall(__METHOD__, array('user' => $userId));
 
-        return $this->persistenceHandler->contentHandler()->loadDraftsForUser($userId);
+        $return = $this->persistenceHandler->contentHandler()->loadDraftsForUser($userId);
+
+        $this->logger->stopLogCall(__METHOD__);
+
+        return $return;
     }
 
     /**
@@ -134,14 +158,19 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function setStatus($contentId, $status, $version)
     {
-        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'status' => $status, 'version' => $version));
+        $this->logger->startLogCall(__METHOD__, array('content' => $contentId, 'status' => $status, 'version' => $version));
         $return = $this->persistenceHandler->contentHandler()->setStatus($contentId, $status, $version);
+
+        // Add checkpoint
+        $this->logger->lapLogCall(__METHOD__);
 
         $this->cache->clear('content', $contentId, $version);
         if ($status === VersionInfo::STATUS_PUBLISHED) {
             $this->cache->clear('content', 'info', $contentId);
             $this->cache->clear('content', 'info', 'remoteId');
         }
+
+        $this->logger->stopLogCall(__METHOD__);
 
         return $return;
     }
@@ -151,13 +180,17 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function updateMetadata($contentId, MetadataUpdateStruct $struct)
     {
-        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'struct' => $struct));
+        $this->logger->startLogCall(__METHOD__, array('content' => $contentId, 'struct' => $struct));
 
-        $this->cache
-            ->getItem('content', 'info', $contentId)
-            ->set($contentInfo = $this->persistenceHandler->contentHandler()->updateMetadata($contentId, $struct));
+        $contentInfo = $this->persistenceHandler->contentHandler()->updateMetadata($contentId, $struct);
 
+        // Add checkpoint
+        $this->logger->lapLogCall(__METHOD__);
+
+        $this->cache->getItem('content', 'info', $contentId)->set($contentInfo);
         $this->cache->clear('content', $contentId, $contentInfo->currentVersionNo);
+
+        $this->logger->stopLogCall(__METHOD__);
 
         return $contentInfo;
     }
@@ -167,12 +200,18 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function updateContent($contentId, $versionNo, UpdateStruct $struct)
     {
-        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo, 'struct' => $struct));
+        $this->logger->startLogCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo, 'struct' => $struct));
         $content = $this->persistenceHandler->contentHandler()->updateContent($contentId, $versionNo, $struct);
+
+        // Add checkpoint
+        $this->logger->lapLogCall(__METHOD__);
+
         $this->cache->clear('content', $contentId, $versionNo);
         $this->cache
             ->getItem('content', $contentId, $versionNo, self::ALL_TRANSLATIONS_KEY)
             ->set($this->cloneAndSerializeXMLFields($content));
+
+        $this->logger->stopLogCall(__METHOD__);
 
         return $content;
     }
@@ -182,7 +221,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function deleteContent($contentId)
     {
-        $this->logger->logCall(__METHOD__, array('content' => $contentId));
+        $this->logger->startLogCall(__METHOD__, array('content' => $contentId));
 
         // Load reverse field relations first
         $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations(
@@ -191,6 +230,9 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         );
 
         $return = $this->persistenceHandler->contentHandler()->deleteContent($contentId);
+
+        // Add checkpoint
+        $this->logger->lapLogCall(__METHOD__);
 
         // Clear cache of the reversely related Content after main action has executed
         foreach ($reverseRelations as $relation) {
@@ -202,6 +244,8 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $this->cache->clear('content', 'info', 'remoteId');
         $this->cache->clear('location', 'subtree');
 
+        $this->logger->stopLogCall(__METHOD__);
+
         return $return;
     }
 
@@ -210,13 +254,18 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function deleteVersion($contentId, $versionNo)
     {
-        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo));
+        $this->logger->startLogCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo));
         $return = $this->persistenceHandler->contentHandler()->deleteVersion($contentId, $versionNo);
+
+        // Add checkpoint
+        $this->logger->lapLogCall(__METHOD__);
 
         $this->cache->clear('content', $contentId, $versionNo);
         $this->cache->clear('content', 'info', $contentId);
         $this->cache->clear('content', 'info', 'remoteId');
         $this->cache->clear('location', 'subtree');
+
+        $this->logger->stopLogCall(__METHOD__);
 
         return $return;
     }
@@ -226,9 +275,13 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function listVersions($contentId)
     {
-        $this->logger->logCall(__METHOD__, array('content' => $contentId));
+        $this->logger->startLogCall(__METHOD__, array('content' => $contentId));
 
-        return $this->persistenceHandler->contentHandler()->listVersions($contentId);
+        $return = $this->persistenceHandler->contentHandler()->listVersions($contentId);
+
+        $this->logger->stopLogCall(__METHOD__);
+
+        return $return;
     }
 
     /**
@@ -236,9 +289,13 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function addRelation(RelationCreateStruct $relation)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $relation));
+        $this->logger->startLogCall(__METHOD__, array('struct' => $relation));
 
-        return $this->persistenceHandler->contentHandler()->addRelation($relation);
+        $return = $this->persistenceHandler->contentHandler()->addRelation($relation);
+
+        $this->logger->stopLogCall(__METHOD__);
+
+        return $return;
     }
 
     /**
@@ -246,8 +303,9 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function removeRelation($relationId, $type)
     {
-        $this->logger->logCall(__METHOD__, array('relation' => $relationId, 'type' => $type));
+        $this->logger->startLogCall(__METHOD__, array('relation' => $relationId, 'type' => $type));
         $this->persistenceHandler->contentHandler()->removeRelation($relationId, $type);
+        $this->logger->stopLogCall(__METHOD__);
     }
 
     /**
@@ -255,7 +313,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function loadRelations($sourceContentId, $sourceContentVersionNo = null, $type = null)
     {
-        $this->logger->logCall(
+        $this->logger->startLogCall(
             __METHOD__,
             array(
                 'content' => $sourceContentId,
@@ -264,7 +322,11 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
             )
         );
 
-        return $this->persistenceHandler->contentHandler()->loadRelations($sourceContentId, $sourceContentVersionNo, $type);
+        $return = $this->persistenceHandler->contentHandler()->loadRelations($sourceContentId, $sourceContentVersionNo, $type);
+
+        $this->logger->stopLogCall(__METHOD__);
+
+        return $return;
     }
 
     /**
@@ -272,9 +334,13 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function loadReverseRelations($destinationContentId, $type = null)
     {
-        $this->logger->logCall(__METHOD__, array('content' => $destinationContentId, 'type' => $type));
+        $this->logger->startLogCall(__METHOD__, array('content' => $destinationContentId, 'type' => $type));
 
-        return $this->persistenceHandler->contentHandler()->loadReverseRelations($destinationContentId, $type);
+        $return = $this->persistenceHandler->contentHandler()->loadReverseRelations($destinationContentId, $type);
+
+        $this->logger->stopLogCall(__METHOD__);
+
+        return $return;
     }
 
     /**
@@ -282,12 +348,18 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function publish($contentId, $versionNo, MetadataUpdateStruct $struct)
     {
-        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo, 'struct' => $struct));
+        $this->logger->startLogCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo, 'struct' => $struct));
         $content = $this->persistenceHandler->contentHandler()->publish($contentId, $versionNo, $struct);
+
+        // Add checkpoint
+        $this->logger->lapLogCall(__METHOD__);
 
         $this->cache->clear('content', $contentId);
         $this->cache->clear('content', 'info', 'remoteId');
         $this->cache->clear('location', 'subtree');
+
+        // Add checkpoint
+        $this->logger->lapLogCall(__METHOD__);
 
         // warm up cache
         $contentInfo = $content->versionInfo->contentInfo;
@@ -295,6 +367,8 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
             ->getItem('content', $contentInfo->id, $content->versionInfo->versionNo, self::ALL_TRANSLATIONS_KEY)
             ->set($this->cloneAndSerializeXMLFields($content));
         $this->cache->getItem('content', 'info', $contentInfo->id)->set($contentInfo);
+
+        $this->logger->stopLogCall(__METHOD__);
 
         return $content;
     }

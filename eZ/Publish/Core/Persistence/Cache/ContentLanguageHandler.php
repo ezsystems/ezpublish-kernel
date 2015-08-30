@@ -24,9 +24,15 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
      */
     public function create(CreateStruct $struct)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $struct));
+        $this->logger->startLogCall(__METHOD__, array('struct' => $struct));
+
         $language = $this->persistenceHandler->contentLanguageHandler()->create($struct);
+
+        $this->logger->lapLogCall(__METHOD__);
+
         $this->cache->getItem('language', $language->id)->set($language);
+
+        $this->logger->stopLogCall(__METHOD__);
 
         return $language;
     }
@@ -36,10 +42,14 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
      */
     public function update(Language $struct)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $struct));
+        $this->logger->startLogCall(__METHOD__, array('struct' => $struct));
         $return = $this->persistenceHandler->contentLanguageHandler()->update($struct);
 
+        $this->logger->lapLogCall(__METHOD__);
+
         $this->cache->clear('language', $struct->id);
+
+        $this->logger->stopLogCall(__METHOD__);
 
         return $return;
     }
@@ -52,8 +62,9 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
         $cache = $this->cache->getItem('language', $id);
         $language = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('language' => $id));
+            $this->logger->startLogCall(__METHOD__, array('language' => $id));
             $cache->set($language = $this->persistenceHandler->contentLanguageHandler()->load($id));
+            $this->logger->stopLogCall(__METHOD__);
         }
 
         return $language;
@@ -64,9 +75,13 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
      */
     public function loadByLanguageCode($languageCode)
     {
-        $this->logger->logCall(__METHOD__, array('language' => $languageCode));
+        $this->logger->startLogCall(__METHOD__, array('language' => $languageCode));
 
-        return $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($languageCode);
+        $return = $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($languageCode);
+
+        $this->logger->stopLogCall(__METHOD__);
+
+        return $return;
     }
 
     /**
@@ -74,9 +89,13 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
      */
     public function loadAll()
     {
-        $this->logger->logCall(__METHOD__);
+        $this->logger->startLogCall(__METHOD__);
 
-        return $this->persistenceHandler->contentLanguageHandler()->loadAll();
+        $return = $this->persistenceHandler->contentLanguageHandler()->loadAll();
+
+        $this->logger->stopLogCall(__METHOD__);
+
+        return $return;
     }
 
     /**
@@ -84,10 +103,15 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
      */
     public function delete($id)
     {
-        $this->logger->logCall(__METHOD__, array('language' => $id));
+        $this->logger->startLogCall(__METHOD__, array('language' => $id));
+
         $return = $this->persistenceHandler->contentLanguageHandler()->delete($id);
 
+        $this->logger->lapLogCall(__METHOD__);
+
         $this->cache->clear('language', $id);
+
+        $this->logger->stopLogCall(__METHOD__);
 
         return $return;
     }

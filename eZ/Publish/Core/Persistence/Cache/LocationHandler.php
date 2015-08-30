@@ -28,8 +28,9 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $cache = $this->cache->getItem('location', $locationId);
         $location = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('location' => $locationId));
+            $this->logger->startLogCall(__METHOD__, array('location' => $locationId));
             $cache->set($location = $this->persistenceHandler->locationHandler()->load($locationId));
+            $this->logger->stopLogCall(__METHOD__);
         }
 
         return $location;
@@ -44,10 +45,11 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $locationIds = $cache->get();
 
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('location' => $locationId));
+            $this->logger->startLogCall(__METHOD__, array('location' => $locationId));
             $cache->set(
                 $locationIds = $this->persistenceHandler->locationHandler()->loadSubtreeIds($locationId)
             );
+            $this->logger->stopLogCall(__METHOD__);
         }
 
         return $locationIds;
@@ -65,8 +67,11 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         }
         $locationIds = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('content' => $contentId, 'root' => $rootLocationId));
+            $this->logger->startLogCall(__METHOD__, array('content' => $contentId, 'root' => $rootLocationId));
             $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentId, $rootLocationId);
+
+            // Add checkpoint
+            $this->logger->lapLogCall(__METHOD__);
 
             $locationIds = array();
             foreach ($locations as $location) {
@@ -74,6 +79,8 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
             }
 
             $cache->set($locationIds);
+
+            $this->logger->stopLogCall(__METHOD__);
         } else {
             $locations = array();
             foreach ($locationIds as $locationId) {
@@ -92,8 +99,11 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $cache = $this->cache->getItem('content', 'locations', $contentId, 'parentLocationsForDraftContent');
         $locationIds = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('content' => $contentId));
+            $this->logger->startLogCall(__METHOD__, array('content' => $contentId));
             $locations = $this->persistenceHandler->locationHandler()->loadParentLocationsForDraftContent($contentId);
+
+            // Add checkpoint
+            $this->logger->lapLogCall(__METHOD__);
 
             $locationIds = array();
             foreach ($locations as $location) {
@@ -101,6 +111,8 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
             }
 
             $cache->set($locationIds);
+
+            $this->logger->stopLogCall(__METHOD__);
         } else {
             $locations = array();
             foreach ($locationIds as $locationId) {
@@ -116,9 +128,13 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function loadByRemoteId($remoteId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $remoteId));
+        $this->logger->startLogCall(__METHOD__, array('location' => $remoteId));
 
-        return $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId);
+        $return = $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId);
+
+        $this->logger->stopLogCall(__METHOD__);
+
+        return $return;
     }
 
     /**
@@ -126,9 +142,13 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function copySubtree($sourceId, $destinationParentId)
     {
-        $this->logger->logCall(__METHOD__, array('source' => $sourceId, 'destination' => $destinationParentId));
+        $this->logger->startLogCall(__METHOD__, array('source' => $sourceId, 'destination' => $destinationParentId));
 
-        return $this->persistenceHandler->locationHandler()->copySubtree($sourceId, $destinationParentId);
+        $return = $this->persistenceHandler->locationHandler()->copySubtree($sourceId, $destinationParentId);
+
+        $this->logger->stopLogCall(__METHOD__);
+
+        return $return;
     }
 
     /**
@@ -136,11 +156,16 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function move($sourceId, $destinationParentId)
     {
-        $this->logger->logCall(__METHOD__, array('source' => $sourceId, 'destination' => $destinationParentId));
+        $this->logger->startLogCall(__METHOD__, array('source' => $sourceId, 'destination' => $destinationParentId));
         $return = $this->persistenceHandler->locationHandler()->move($sourceId, $destinationParentId);
+
+        // Add checkpoint
+        $this->logger->lapLogCall(__METHOD__);
 
         $this->cache->clear('location');//TIMBER! (path[Identification]String)
         $this->cache->clear('user', 'role', 'assignments', 'byGroup');
+
+        $this->logger->stopLogCall(__METHOD__);
 
         return $return;
     }
@@ -150,8 +175,9 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function markSubtreeModified($locationId, $timestamp = null)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId, 'time' => $timestamp));
+        $this->logger->startLogCall(__METHOD__, array('location' => $locationId, 'time' => $timestamp));
         $this->persistenceHandler->locationHandler()->markSubtreeModified($locationId, $timestamp);
+        $this->logger->stopLogCall(__METHOD__);
     }
 
     /**
@@ -159,10 +185,15 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function hide($locationId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId));
+        $this->logger->startLogCall(__METHOD__, array('location' => $locationId));
         $return = $this->persistenceHandler->locationHandler()->hide($locationId);
 
+        // Add checkpoint
+        $this->logger->lapLogCall(__METHOD__);
+
         $this->cache->clear('location');//TIMBER! (visibility)
+
+        $this->logger->stopLogCall(__METHOD__);
 
         return $return;
     }
@@ -172,10 +203,15 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function unHide($locationId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId));
+        $this->logger->startLogCall(__METHOD__, array('location' => $locationId));
         $return = $this->persistenceHandler->locationHandler()->unHide($locationId);
 
+        // Add checkpoint
+        $this->logger->lapLogCall(__METHOD__);
+
         $this->cache->clear('location');//TIMBER! (visibility)
+
+        $this->logger->stopLogCall(__METHOD__);
 
         return $return;
     }
@@ -185,14 +221,19 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function swap($locationId1, $locationId2)
     {
-        $this->logger->logCall(__METHOD__, array('location1' => $locationId1, 'location2' => $locationId2));
+        $this->logger->startLogCall(__METHOD__, array('location1' => $locationId1, 'location2' => $locationId2));
         $return = $this->persistenceHandler->locationHandler()->swap($locationId1, $locationId2);
+
+        // Add checkpoint
+        $this->logger->lapLogCall(__METHOD__);
 
         $this->cache->clear('location', $locationId1);
         $this->cache->clear('location', $locationId2);
         $this->cache->clear('location', 'subtree');
         $this->cache->clear('content', 'locations');
         $this->cache->clear('user', 'role', 'assignments', 'byGroup');
+
+        $this->logger->stopLogCall(__METHOD__);
 
         return $return;
     }
@@ -202,10 +243,16 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function update(UpdateStruct $struct, $locationId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId, 'struct' => $struct));
+        $this->logger->startLogCall(__METHOD__, array('location' => $locationId, 'struct' => $struct));
         $this->persistenceHandler->locationHandler()->update($struct, $locationId);
+
+        // Add checkpoint
+        $this->logger->lapLogCall(__METHOD__);
+
         $this->cache->clear('location', $locationId);
         $this->cache->clear('location', 'subtree');
+
+        $this->logger->stopLogCall(__METHOD__);
     }
 
     /**
@@ -213,8 +260,11 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function create(CreateStruct $locationStruct)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $locationStruct));
+        $this->logger->startLogCall(__METHOD__, array('struct' => $locationStruct));
         $location = $this->persistenceHandler->locationHandler()->create($locationStruct);
+
+        // Add checkpoint
+        $this->logger->lapLogCall(__METHOD__);
 
         $this->cache->getItem('location', $location->id)->set($location);
         $this->cache->clear('location', 'subtree');
@@ -224,6 +274,8 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $this->cache->clear('user', 'role', 'assignments', 'byGroup', $location->contentId);
         $this->cache->clear('user', 'role', 'assignments', 'byGroup', 'inherited', $location->contentId);
 
+        $this->logger->stopLogCall(__METHOD__);
+
         return $location;
     }
 
@@ -232,12 +284,17 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function removeSubtree($locationId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId));
+        $this->logger->startLogCall(__METHOD__, array('location' => $locationId));
         $return = $this->persistenceHandler->locationHandler()->removeSubtree($locationId);
+
+        // Add checkpoint
+        $this->logger->lapLogCall(__METHOD__);
 
         $this->cache->clear('location');//TIMBER!
         $this->cache->clear('content');//TIMBER!
         $this->cache->clear('user', 'role', 'assignments', 'byGroup');
+
+        $this->logger->stopLogCall(__METHOD__);
 
         return $return;
     }
@@ -247,9 +304,15 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function setSectionForSubtree($locationId, $sectionId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId, 'section' => $sectionId));
+        $this->logger->startLogCall(__METHOD__, array('location' => $locationId, 'section' => $sectionId));
         $this->persistenceHandler->locationHandler()->setSectionForSubtree($locationId, $sectionId);
+
+        // Add checkpoint
+        $this->logger->lapLogCall(__METHOD__);
+
         $this->cache->clear('content');//TIMBER!
+
+        $this->logger->stopLogCall(__METHOD__);
     }
 
     /**
@@ -257,10 +320,16 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function changeMainLocation($contentId, $locationId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId, 'content' => $contentId));
+        $this->logger->startLogCall(__METHOD__, array('location' => $locationId, 'content' => $contentId));
         $this->persistenceHandler->locationHandler()->changeMainLocation($contentId, $locationId);
+
+        // Add checkpoint
+        $this->logger->lapLogCall(__METHOD__);
+
         $this->cache->clear('content', $contentId);
         $this->cache->clear('content', 'info', $contentId);
         $this->cache->clear('content', 'info', 'remoteId');
+
+        $this->logger->stopLogCall(__METHOD__);
     }
 }

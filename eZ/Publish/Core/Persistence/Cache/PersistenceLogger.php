@@ -10,10 +10,10 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use Symfony\Component\Stopwatch\Stopwatch;
+
 /**
  * Log un-cached use of SPI Persistence.
- *
- * Stops logging details when reaching $maxLogCalls to conserve memory use
  */
 class PersistenceLogger
 {
@@ -40,27 +40,83 @@ class PersistenceLogger
     protected $unCachedHandlers = array();
 
     /**
-     * @param bool $logCalls Flag to enable logging of calls or not, should be disabled in prod
+     * @var null|Stopwatch
      */
-    public function __construct($logCalls = true)
+    protected $stopwatch;
+
+    /**
+     * @param bool $logCalls Flag to enable logging of calls or not, should be disabled in prod
+     * @param Stopwatch|null $stopwatch A Stopwatch instance
+     */
+    public function __construct($logCalls = true, Stopwatch $stopwatch = null)
     {
         $this->logCalls = $logCalls;
+        $this->stopwatch = $stopwatch;
     }
 
     /**
-     * Log SPI calls with method name and arguments until $maxLogCalls is reached.
+     * Start Log SPI calls with method name and arguments.
+     *
+     * Starts stopWatch, making it important {@see stopLogCall()} is called as well, and logs the call with arguments.
+     *
+     * @param string $method
+     * @param array $arguments
+     */
+    public function startLogCall($method, array $arguments = array())
+    {
+        if ($this->stopwatch !== null) {
+            $this->stopwatch->start($method, 'ez.spi.persistence');
+        }
+
+        if ($this->logCalls) {
+            $this->logCall($method, $arguments);
+        }
+    }
+
+    /**
+     * Log SPI calls with method name and arguments.
+     *
+     * This should only be used when not using {@see startLogCall}
      *
      * @param string $method
      * @param array $arguments
      */
     public function logCall($method, array $arguments = array())
     {
+        if (!$this->logCalls) {
+            return;
+        }
+
         ++$this->count;
-        if ($this->logCalls) {
-            $this->calls[] = array(
-                'method' => $method,
-                'arguments' => $arguments,
-            );
+        $this->calls[] = array(
+            'method' => $method,
+            'arguments' => $arguments,
+        );
+    }
+
+    /**
+     * Lap log SPI calls with method name.
+     *
+     * Adds a checkpoint, can be used between persistence call and cache clearing, and between cache clearing and cache warming.
+     *
+     * @param string $method
+     */
+    public function lapLogCall($method)
+    {
+        if ($this->stopwatch !== null) {
+            $this->stopwatch->lap($method);
+        }
+    }
+
+    /**
+     * Stop log SPI calls with method name.
+     *
+     * @param string $method
+     */
+    public function stopLogCall($method)
+    {
+        if ($this->stopwatch !== null) {
+            $this->stopwatch->stop($method);
         }
     }
 
@@ -71,6 +127,10 @@ class PersistenceLogger
      */
     public function logUnCachedHandler($handler)
     {
+        if (!$this->logCalls) {
+            return;
+        }
+
         if (!isset($this->unCachedHandlers[$handler])) {
             $this->unCachedHandlers[$handler] = 0;
         }

@@ -41,8 +41,9 @@ class TransactionHandler extends AbstractHandler implements TransactionHandlerIn
      */
     public function commit()
     {
-        $this->logger->logCall(__METHOD__);
+        $this->logger->startLogCall(__METHOD__);
         $this->persistenceHandler->transactionHandler()->commit();
+        $this->logger->stopLogCall(__METHOD__);
     }
 
     /**
@@ -54,9 +55,10 @@ class TransactionHandler extends AbstractHandler implements TransactionHandlerIn
      */
     public function rollback()
     {
-        $this->logger->logCall(__METHOD__);
+        $this->logger->startLogCall(__METHOD__);
         // {@see beginTransaction()}
         $this->cache->clear();
         $this->persistenceHandler->transactionHandler()->rollback();
+        $this->logger->stopLogCall(__METHOD__);
     }
 }

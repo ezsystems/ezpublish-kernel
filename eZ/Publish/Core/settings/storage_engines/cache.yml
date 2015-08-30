@@ -34,6 +34,7 @@ services:
         class: %ezpublish.spi.persistence.cache.persistenceLogger.class%
         arguments:
             - %ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging%
+            - @?debug.stopwatch
 
     ezpublish.spi.persistence.cache.abstractHandler:
         class: %ezpublish.spi.persistence.cache.abstractHandler.class%

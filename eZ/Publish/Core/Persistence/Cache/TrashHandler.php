@@ -23,9 +23,13 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
      */
     public function loadTrashItem($id)
     {
-        $this->logger->logCall(__METHOD__, array('id' => $id));
+        $this->logger->startLogCall(__METHOD__, array('id' => $id));
 
-        return $this->persistenceHandler->trashHandler()->loadTrashItem($id);
+        $return = $this->persistenceHandler->trashHandler()->loadTrashItem($id);
+
+        $this->logger->stopLogCall(__METHOD__);
+
+        return $return;
     }
 
     /**
@@ -33,11 +37,12 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
      */
     public function trashSubtree($locationId)
     {
-        $this->logger->logCall(__METHOD__, array('locationId' => $locationId));
+        $this->logger->startLogCall(__METHOD__, array('locationId' => $locationId));
         $return = $this->persistenceHandler->trashHandler()->trashSubtree($locationId);
         $this->cache->clear('location');//TIMBER!
         $this->cache->clear('content');//TIMBER!
         $this->cache->clear('user', 'role', 'assignments', 'byGroup');
+        $this->logger->stopLogCall(__METHOD__);
 
         return $return;
     }
@@ -47,11 +52,12 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
      */
     public function recover($trashedId, $newParentId)
     {
-        $this->logger->logCall(__METHOD__, array('id' => $trashedId, 'newParentId' => $newParentId));
+        $this->logger->startLogCall(__METHOD__, array('id' => $trashedId, 'newParentId' => $newParentId));
         $return = $this->persistenceHandler->trashHandler()->recover($trashedId, $newParentId);
         $this->cache->clear('location', 'subtree');
         $this->cache->clear('content');//TIMBER!
         $this->cache->clear('user', 'role', 'assignments', 'byGroup');
+        $this->logger->stopLogCall(__METHOD__);
 
         return $return;
     }
@@ -61,9 +67,13 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
      */
     public function findTrashItems(Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null)
     {
-        $this->logger->logCall(__METHOD__, array('criterion' => get_class($criterion)));
+        $this->logger->startLogCall(__METHOD__, array('criterion' => get_class($criterion)));
 
-        return $this->persistenceHandler->trashHandler()->findTrashItems($criterion, $offset, $limit, $sort);
+        $return = $this->persistenceHandler->trashHandler()->findTrashItems($criterion, $offset, $limit, $sort);
+
+        $this->logger->stopLogCall(__METHOD__);
+
+        return $return;
     }
 
     /**
@@ -71,8 +81,9 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
      */
     public function emptyTrash()
     {
-        $this->logger->logCall(__METHOD__, array());
+        $this->logger->startLogCall(__METHOD__, array());
         $this->persistenceHandler->trashHandler()->emptyTrash();
+        $this->logger->stopLogCall(__METHOD__);
     }
 
     /**
@@ -80,7 +91,8 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
      */
     public function deleteTrashItem($trashedId)
     {
-        $this->logger->logCall(__METHOD__, array('id' => $trashedId));
+        $this->logger->startLogCall(__METHOD__, array('id' => $trashedId));
         $this->persistenceHandler->trashHandler()->deleteTrashItem($trashedId);
+        $this->logger->stopLogCall(__METHOD__);
     }
 }
