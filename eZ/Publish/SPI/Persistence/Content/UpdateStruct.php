@@ -18,6 +18,7 @@ class UpdateStruct extends ValueObject
 {
     /**
      * @var string[] Eg. array( 'eng-GB' => "New Article" )
+     * @todo Rename to 'names' for consistency
      */
     public $name = array();
 

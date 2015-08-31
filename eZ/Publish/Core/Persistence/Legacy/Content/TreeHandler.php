@@ -86,9 +86,9 @@ class TreeHandler
      */
     public function loadContentInfo($contentId)
     {
-        return $this->contentMapper->extractContentInfoFromRow(
+        return $this->contentMapper->extractContentInfoFromRows(
             $this->contentGateway->loadContentInfo($contentId)
-        );
+        )[0];
     }
 
     /**

@@ -73,9 +73,7 @@ class Mapper
         $contentInfo->alwaysAvailable = $struct->alwaysAvailable;
         $contentInfo->remoteId = $struct->remoteId;
         $contentInfo->mainLanguageCode = $this->languageHandler->load($struct->initialLanguageId)->languageCode;
-        $contentInfo->name = isset($struct->name[$contentInfo->mainLanguageCode])
-            ? $struct->name[$contentInfo->mainLanguageCode]
-            : '';
+        $contentInfo->names = $struct->name;
         // For drafts published and modified timestamps should be 0
         $contentInfo->publicationDate = 0;
         $contentInfo->modificationDate = 0;
@@ -218,6 +216,7 @@ class Mapper
                 $content->versionInfo = $versionInfo;
                 $content->versionInfo->names = $versionedNameData[$contentId][$versionInfo->versionNo];
                 $content->versionInfo->contentInfo = $contentInfo;
+                $content->versionInfo->contentInfo->names = $versionedNameData[$contentId][$contentInfo->currentVersionNo];
                 $content->fields = array_values($fields[$contentId][$versionId]);
                 $results[] = $content;
             }
@@ -232,14 +231,15 @@ class Mapper
      * @param array $row
      * @param string $prefix Prefix for row keys, which are initially mapped by ezcontentobject fields
      * @param string $treePrefix Prefix for tree row key, which are initially mapped by ezcontentobject_tree_ fields
+     * @param array $names
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
-    public function extractContentInfoFromRow(array $row, $prefix = '', $treePrefix = 'ezcontentobject_tree_')
+    private function extractContentInfoFromRow(array $row, $prefix = '', $treePrefix = 'ezcontentobject_tree_', array $names = array())
     {
         $contentInfo = new ContentInfo();
         $contentInfo->id = (int)$row["{$prefix}id"];
-        $contentInfo->name = $row["{$prefix}name"];
+        $contentInfo->names = $names;
         $contentInfo->contentTypeId = (int)$row["{$prefix}contentclass_id"];
         $contentInfo->sectionId = (int)$row["{$prefix}section_id"];
         $contentInfo->currentVersionNo = (int)$row["{$prefix}current_version"];
@@ -266,12 +266,21 @@ class Mapper
      */
     public function extractContentInfoFromRows(array $rows, $prefix = '', $treePrefix = 'ezcontentobject_tree_')
     {
-        $contentInfoObjects = array();
+        $objects = array();
         foreach ($rows as $row) {
-            $contentInfoObjects[] = $this->extractContentInfoFromRow($row, $prefix, $treePrefix);
+            $id = (int)$row["{$prefix}id"];
+            if (empty($objects[$id])) {
+                $objects[$id] = $this->extractContentInfoFromRow(
+                    $row,
+                    $prefix,
+                    $treePrefix
+                );
+            }
+
+            $objects[$id]->names[$row['ezcontentobject_name_content_translation']] = $row['ezcontentobject_name_name'];
         }
 
-        return $contentInfoObjects;
+        return array_values($objects);
     }
 
     /**
@@ -324,7 +333,6 @@ class Mapper
             if (!isset($versionInfoList[$versionId])) {
                 $versionInfo = new VersionInfo();
                 $versionInfo->id = (int)$row['ezcontentobject_version_id'];
-                $versionInfo->contentInfo = $this->extractContentInfoFromRow($row, 'ezcontentobject_');
                 $versionInfo->versionNo = (int)$row['ezcontentobject_version_version'];
                 $versionInfo->creatorId = (int)$row['ezcontentobject_version_creator_id'];
                 $versionInfo->creationDate = (int)$row['ezcontentobject_version_created'];
@@ -333,6 +341,11 @@ class Mapper
                 $versionInfo->languageIds = $this->extractLanguageIdsFromMask((int)$row['ezcontentobject_version_language_mask']);
                 $versionInfo->status = (int)$row['ezcontentobject_version_status'];
                 $versionInfo->names = $nameData[$versionId];
+
+                $contentInfo = $this->extractContentInfoFromRow($row, 'ezcontentobject_');
+                $contentInfo->names = $nameData[$contentInfo->id.'_'.$contentInfo->currentVersionNo];
+                $versionInfo->contentInfo = $contentInfo;
+
                 $versionInfoList[$versionId] = $versionInfo;
             }
         }

@@ -208,7 +208,7 @@ class DomainMapper
             array(
                 'id' => $spiContentInfo->id,
                 'contentTypeId' => $spiContentInfo->contentTypeId,
-                'name' => $spiContentInfo->name,
+                'name' => $spiContentInfo->names[$spiContentInfo->mainLanguageCode],
                 'sectionId' => $spiContentInfo->sectionId,
                 'currentVersionNo' => $spiContentInfo->currentVersionNo,
                 'published' => $spiContentInfo->isPublished,
@@ -283,6 +283,7 @@ class DomainMapper
                     'sectionId' => 1,
                     'mainLocationId' => 1,
                     'contentTypeId' => 1,
+                    'mainLanguageCode' => 'eng-GB',
                 )
             );
         } else {

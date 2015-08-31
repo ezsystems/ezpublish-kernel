@@ -404,7 +404,7 @@ class DoctrineDatabase extends Gateway
     public function updateAlwaysAvailableFlag($contentId, $newAlwaysAvailable)
     {
         // We will need to know some info on the current language mask to update the flag everywhere needed
-        $contentInfoRow = $this->loadContentInfo($contentId);
+        $contentInfoRow = $this->loadContentInfo($contentId)[0];
 
         // Only update if old and new flags differs
         if ($contentInfoRow['language_mask'] & 1 == $newAlwaysAvailable) {
@@ -805,9 +805,26 @@ class DoctrineDatabase extends Gateway
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             'ezcontentobject.*',
+            // Content object names
+            $this->dbHandler->aliasedColumn($query, 'name', 'ezcontentobject_name'),
+            $this->dbHandler->aliasedColumn($query, 'content_translation', 'ezcontentobject_name'),
+            // Main node id (if there is one)
             $this->dbHandler->aliasedColumn($query, 'main_node_id', 'ezcontentobject_tree')
+
         )->from(
             $this->dbHandler->quoteTable('ezcontentobject')
+        )->innerJoin(
+            $this->dbHandler->quoteTable('ezcontentobject_name'),
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_name'),
+                    $this->dbHandler->quoteColumn('id', 'ezcontentobject')
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('content_version', 'ezcontentobject_name'),
+                    $this->dbHandler->quoteColumn('current_version', 'ezcontentobject')
+                )
+            )
         )->leftJoin(
             $this->dbHandler->quoteTable('ezcontentobject_tree'),
             $query->expr->lAnd(
@@ -828,13 +845,13 @@ class DoctrineDatabase extends Gateway
         );
         $statement = $query->prepare();
         $statement->execute();
-        $row = $statement->fetch(PDO::FETCH_ASSOC);
+        $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        if (empty($row)) {
+        if (empty($rows)) {
             throw new NotFound('content', "$column: $id");
         }
 
-        return $row;
+        return $rows;
     }
     /**
      * Loads info for content identified by $contentId.
@@ -1754,17 +1771,19 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Load name data for set of content id's and corresponding version number.
+     * Load name data for set of content id's, corresponding version number and current version number (if it differs)
      *
      * @param array[] $rows array of hashes with 'id' and 'version' to load names for
+     * @param bool $addCurrentVersionData
      *
      * @return array
      */
-    public function loadVersionedNameData($rows)
+    public function loadVersionedNameData($rows, $addCurrentVersionData = true)
     {
         $query = $this->queryBuilder->createNamesQuery();
         $conditions = array();
         foreach ($rows as $row) {
+            // Get name rows for the version that was asked for
             $conditions[] = $query->expr->lAnd(
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn('contentobject_id'),
@@ -1773,6 +1792,22 @@ class DoctrineDatabase extends Gateway
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn('content_version'),
                     $query->bindValue($row['version'], null, \PDO::PARAM_INT)
+                )
+            );
+
+            if (!$addCurrentVersionData) {
+                continue;
+            }
+
+            // Also make sure we have name data for current version (for ContentInfo)
+            $conditions[] = $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('contentobject_id'),
+                    $query->bindValue($row['id'], null, \PDO::PARAM_INT)
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('content_version'),
+                    $this->dbHandler->quoteColumn('current_version', 'ezcontentobject')
                 )
             );
         }

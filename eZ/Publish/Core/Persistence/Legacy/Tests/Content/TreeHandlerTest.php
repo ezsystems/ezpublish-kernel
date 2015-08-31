@@ -21,7 +21,7 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
  */
 class TreeHandlerTest extends TestCase
 {
-    public function testLoadContentInfoByRemoteId()
+    public function testLoadContentInfo()
     {
         $contentInfoData = array(new ContentInfo());
 
@@ -33,9 +33,9 @@ class TreeHandlerTest extends TestCase
 
         $this->getContentMapperMock()
             ->expects($this->once())
-            ->method('extractContentInfoFromRow')
+            ->method('extractContentInfoFromRows')
             ->with($this->equalTo(array(42)))
-            ->will($this->returnValue($contentInfoData));
+            ->will($this->returnValue([$contentInfoData]));
 
         $this->assertSame(
             $contentInfoData,

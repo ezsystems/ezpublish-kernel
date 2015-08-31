@@ -149,7 +149,14 @@ class QueryBuilder
                 $this->dbHandler->aliasedColumn($query, 'name', 'ezcontentobject_name'),
                 $this->dbHandler->aliasedColumn($query, 'content_translation', 'ezcontentobject_name')
             )
-            ->from($this->dbHandler->quoteTable('ezcontentobject_name'));
+            ->from($this->dbHandler->quoteTable('ezcontentobject_name'))
+            ->innerJoin(
+                $this->dbHandler->quoteTable('ezcontentobject'),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_name'),
+                    $this->dbHandler->quoteColumn('id', 'ezcontentobject')
+                )
+            );
 
         return $query;
     }

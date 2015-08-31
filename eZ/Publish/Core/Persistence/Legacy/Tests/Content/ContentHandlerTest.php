@@ -255,7 +255,7 @@ class ContentHandlerTest extends TestCase
                 $this->equalTo(1),
                 $this->equalTo(null)
             )->will(
-                $this->returnValue(array(42))
+                $this->returnValue([['ezcontentobject_current_version' => 1]])
             );
 
         $gatewayMock->expects($this->once())
@@ -268,7 +268,7 @@ class ContentHandlerTest extends TestCase
 
         $mapperMock->expects($this->once())
             ->method('extractContentFromRows')
-            ->with($this->equalTo(array(42)), $this->equalTo(array(22)))
+            ->with($this->equalTo(array(array('ezcontentobject_current_version' => 1))), $this->equalTo(array(22)))
             ->will($this->returnValue(array($this->getContentFixtureForDraft())));
 
         $fieldHandlerMock->expects($this->once())
@@ -332,7 +332,7 @@ class ContentHandlerTest extends TestCase
                 $this->equalTo(2),
                 $this->equalTo(null)
             )
-            ->will($this->returnValue(array(42)));
+            ->will($this->returnValue([['ezcontentobject_current_version' => 2]]));
 
         $gatewayMock->expects($this->once())
             ->method('loadVersionedNameData')
@@ -344,7 +344,7 @@ class ContentHandlerTest extends TestCase
 
         $mapperMock->expects($this->once())
             ->method('extractContentFromRows')
-            ->with($this->equalTo(array(42)), $this->equalTo(array(22)))
+            ->with($this->equalTo(array(array('ezcontentobject_current_version' => 2))), $this->equalTo(array(22)))
             ->will($this->returnValue(array($this->getContentFixtureForDraft())));
 
         $fieldHandlerMock->expects($this->once())
@@ -483,7 +483,7 @@ class ContentHandlerTest extends TestCase
                 $this->equalTo(2),
                 $this->equalTo(array('eng-GB'))
             )->will(
-                $this->returnValue(array(42))
+                $this->returnValue([['ezcontentobject_current_version' => 2]])
             );
 
         $gatewayMock->expects($this->once())
@@ -496,7 +496,7 @@ class ContentHandlerTest extends TestCase
 
         $mapperMock->expects($this->once())
             ->method('extractContentFromRows')
-            ->with($this->equalTo(array(42)), $this->equalTo(array(22)))
+            ->with($this->equalTo(array(array('ezcontentobject_current_version' => 2))), $this->equalTo(array(22)))
             ->will($this->returnValue(array($this->getContentFixtureForDraft())));
 
         $fieldHandlerMock->expects($this->once())
@@ -526,9 +526,9 @@ class ContentHandlerTest extends TestCase
             );
 
         $this->getMapperMock()->expects($this->once())
-            ->method('extractContentInfoFromRow')
+            ->method('extractContentInfoFromRows')
             ->with($this->equalTo(array(42)))
-            ->will($this->returnValue($contentInfoData));
+            ->will($this->returnValue([$contentInfoData]));
 
         $this->assertSame(
             $contentInfoData,

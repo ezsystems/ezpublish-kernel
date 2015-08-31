@@ -836,6 +836,9 @@ class ContentService implements ContentServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update the content meta data
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the remoteId in $contentMetadataUpdateStruct is set but already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the mainLanguageId in $contentMetadataUpdateStruct
+     *          is not among translations on content object
+     * @todo Impl exception above and reflect on API+tests
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct $contentMetadataUpdateStruct
