@@ -105,7 +105,7 @@ class ConfigurationProcessor
         $scopeNodeName = $this->contextualizer->getSiteAccessNodeName();
         foreach ($config[$scopeNodeName] as $currentScope => &$scopeSettings) {
             if ($mapperCallable) {
-                call_user_func_array($mapper, array($scopeSettings, $currentScope, $this->contextualizer));
+                call_user_func_array($mapper, array(&$scopeSettings, $currentScope, $this->contextualizer));
             } else {
                 $mapper->mapConfig($scopeSettings, $currentScope, $this->contextualizer);
             }
