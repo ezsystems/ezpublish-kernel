@@ -10,14 +10,10 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Console;
 
-use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
-use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application as BaseApplication;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * eZ Publish console application.
@@ -25,35 +21,11 @@ use Symfony\Component\Console\Input\InputOption;
  */
 class Application extends BaseApplication
 {
-    /**
-     * @var string
-     */
-    private $siteAccessName;
-
     public function __construct(KernelInterface $kernel)
     {
         parent::__construct($kernel);
         $this->getDefinition()->addOption(
             new InputOption('--siteaccess', null, InputOption::VALUE_OPTIONAL, 'SiteAccess to use for operations. If not provided, default siteaccess will be used')
         );
-    }
-
-    public function doRun(InputInterface $input, OutputInterface $output)
-    {
-        $this->siteAccessName = $input->getParameterOption('--siteaccess', null);
-
-        return parent::doRun($input, $output);
-    }
-
-    protected function registerCommands()
-    {
-        parent::registerCommands();
-
-        $container = $this->getKernel()->getContainer();
-        $siteAccess = $container->get('ezpublish.siteaccess');
-        $siteAccess->name = $this->siteAccessName ?: $container->getParameter('ezpublish.siteaccess.default');
-        $siteAccess->matchingType = 'cli';
-        $eventDispatcher = $container->get('event_dispatcher');
-        $eventDispatcher->dispatch(MVCEvents::CONFIG_SCOPE_CHANGE, new ScopeChangeEvent($siteAccess));
     }
 }
