@@ -10,16 +10,19 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\Content;
 use eZ\Publish\Core\REST\Server\Values\RestExecutedView;
+use eZ\Publish\Core\Repository\Values\Content as ApiValues;
 
 class RestExecutedViewTest extends ValueObjectVisitorBaseTest
 {
     /**
-     * Test the RestRelation visitor.
+     * Test the RestExecutedView visitor.
      *
      * @return \DOMDocument
      */
@@ -33,17 +36,22 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
         $view = new RestExecutedView(
             array(
                 'identifier' => 'test_view',
-                'searchResults' => new SearchResult(),
+                'searchResults' => new SearchResult([
+                    'searchHits' => [
+                        $this->buildContentSearchHit(),
+                        $this->buildLocationSearchHit(),
+                    ],
+                ]),
             )
         );
 
         $this->addRouteExpectation(
-            'ezpublish_rest_getView',
+            'ezpublish_rest_views_load',
             array('viewId' => $view->identifier),
             "/content/views/{$view->identifier}"
         );
         $this->addRouteExpectation(
-            'ezpublish_rest_loadViewResults',
+            'ezpublish_rest_views_load_results',
             array('viewId' => $view->identifier),
             "/content/views/{$view->identifier}/results"
         );
@@ -128,5 +136,25 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
     public function getContentTypeServiceMock()
     {
         return $this->getMock('eZ\\Publish\\API\\Repository\\ContentTypeService');
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchHit
+     */
+    protected function buildContentSearchHit()
+    {
+        return new SearchHit([
+            'valueObject' => new ApiValues\Content([
+                'versionInfo' => new Content\VersionInfo(['contentInfo' => new ContentInfo()]),
+            ]),
+        ]);
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchHit
+     */
+    protected function buildLocationSearchHit()
+    {
+        return new SearchHit(['valueObject' => new ApiValues\Location()]);
     }
 }
