@@ -31,11 +31,7 @@ class ParsingDispatcherTest extends PHPUnit_Framework_TestCase
     public function testParse()
     {
         $parser = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Input\\Parser');
-        $dispatcher = new Common\Input\ParsingDispatcher(
-            array(
-                'text/html' => $parser,
-            )
-        );
+        $dispatcher = new Common\Input\ParsingDispatcher(['text/html' => $parser]);
 
         $parser
             ->expects($this->at(0))
@@ -52,11 +48,7 @@ class ParsingDispatcherTest extends PHPUnit_Framework_TestCase
     public function testParseStripFormat()
     {
         $parser = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Input\\Parser');
-        $dispatcher = new Common\Input\ParsingDispatcher(
-            array(
-                'text/html' => $parser,
-            )
-        );
+        $dispatcher = new Common\Input\ParsingDispatcher(['text/html' => $parser]);
 
         $parser
             ->expects($this->at(0))
