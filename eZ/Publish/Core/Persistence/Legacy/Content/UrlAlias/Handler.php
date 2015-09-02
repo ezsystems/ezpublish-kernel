@@ -683,6 +683,6 @@ class Handler implements UrlAliasHandlerInterface
      */
     protected function getHash($text)
     {
-        return md5(strtolower($text));
+        return md5(mb_strtolower($text, 'UTF-8'));
     }
 }

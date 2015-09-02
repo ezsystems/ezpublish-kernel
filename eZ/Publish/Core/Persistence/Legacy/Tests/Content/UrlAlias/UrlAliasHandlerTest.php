@@ -933,6 +933,21 @@ class UrlAliasHandlerTest extends TestCase
         );
     }
 
+    /**
+     * Test for the lookup() method with uppercase utf8 characters.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
+     * @depends testLookup
+     */
+    public function testLookupUppercaseIri()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_location_iri.php');
+
+        $urlAlias = $handler->lookup('ŒÄ');
+        self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias', $urlAlias);
+    }
+
     protected function assertVirtualUrlAliasValid(UrlAlias $urlAlias, $id)
     {
         self::assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias', $urlAlias);
