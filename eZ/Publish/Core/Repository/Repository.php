@@ -311,17 +311,18 @@ class Repository implements RepositoryInterface
      *
      *
      * @param \Closure $callback
+     * @param \eZ\Publish\API\Repository\Repository $outerRepository
      *
      * @throws \RuntimeException Thrown on recursive sudo() use.
      * @throws \Exception Re throws exceptions thrown inside $callback
      *
      * @return mixed
      */
-    public function sudo(\Closure $callback)
+    public function sudo(\Closure $callback, RepositoryInterface $outerRepository = null)
     {
         ++$this->sudoNestingLevel;
         try {
-            $returnValue = $callback($this);
+            $returnValue = $callback($outerRepository !== null ? $outerRepository : $this);
         } catch (Exception $e) {
             --$this->sudoNestingLevel;
             throw $e;
