@@ -276,6 +276,7 @@ class DomainMapper
     {
         // TODO: this is hardcoded workaround for missing ContentInfo on root location
         if ($spiLocation->id == 1) {
+            $legacyDateTime = $this->getDateTime(1030968000); //  first known commit of eZ Publish 3.x 
             $contentInfo = new ContentInfo(
                 array(
                     'id' => 0,
@@ -283,6 +284,14 @@ class DomainMapper
                     'sectionId' => 1,
                     'mainLocationId' => 1,
                     'contentTypeId' => 1,
+                    'currentVersionNo' => 1,
+                    'published' => 1,
+                    'ownerId' => 14, // admin user
+                    'modificationDate' => $legacyDateTime,
+                    'publishedDate' => $legacyDateTime,
+                    'alwaysAvailable' => 1,
+                    'remoteId' => null,
+                    'mainLanguageCode' => 'eng-GB',
                 )
             );
         } else {

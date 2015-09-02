@@ -336,6 +336,61 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the loadLocation() method.
      *
+     * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     */
+    public function testLoadLocationRootStructValues()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $location = $locationService->loadLocation($this->generateId('location', 1));
+
+        $legacyDateTime = new \DateTime();
+        $legacyDateTime->setTimestamp(1030968000);
+
+        // $location
+        $this->assertPropertiesCorrect(
+            array(
+                'id' => $this->generateId('location', 1),
+                'status' => 1,
+                'priority' => 0,
+                'hidden' => false,
+                'invisible' => false,
+                'remoteId' => '629709ba256fe317c3ddcee35453a96a',
+                'parentLocationId' => $this->generateId('location', 1),
+                'pathString' => '/1/',
+                'depth' => 0,
+                'sortField' => 1,
+                'sortOrder' => 1,
+            ),
+            $location
+        );
+
+        // $location->contentInfo
+        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo', $location->contentInfo);
+        $this->assertPropertiesCorrect(
+            array(
+                'id' => $this->generateId('content', 0),
+                'name' => 'Top Level Nodes',
+                'sectionId' => 1,
+                'mainLocationId' => 1,
+                'contentTypeId' => 1,
+                'currentVersionNo' => 1,
+                'published' => 1,
+                'ownerId' => 14,
+                'modificationDate' => $legacyDateTime,
+                'publishedDate' => $legacyDateTime,
+                'alwaysAvailable' => 1,
+                'remoteId' => null,
+                'mainLanguageCode' => 'eng-GB',
+            ),
+            $location->contentInfo
+        );
+    }
+
+    /**
+     * Test for the loadLocation() method.
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
      * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
