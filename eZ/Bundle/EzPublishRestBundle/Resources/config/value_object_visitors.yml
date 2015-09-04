@@ -143,6 +143,10 @@ parameters:
     # Limitation
     ezpublish_rest.output.value_object_visitor.Limitation.class: eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\Limitation
 
+    # View
+    ezpublish_rest.output.value_object_visitor.ViewInput.class: eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\ViewInput
+
+
 services:
     ezpublish_rest.output.value_object_visitor.base:
         class: %ezpublish_rest.output.value_object_visitor.base.class%
@@ -807,3 +811,9 @@ services:
             - [setRequestStack, [@request_stack]]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\CachedValue }
+
+    ezpublish_rest.output.value_object_visitor.ViewInput:
+        parent: ezpublish_rest.output.value_object_visitor.base
+        class: %ezpublish_rest.output.value_object_visitor.ViewInput.class%
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Client\Values\ViewInput }

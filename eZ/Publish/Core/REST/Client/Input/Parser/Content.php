@@ -76,7 +76,7 @@ class Content extends BaseParser
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
         $versionInfo = $this->versionInfoParser->parse(
-            $data['VersionInfo'],
+            $data['CurrentVersion']['Version']['VersionInfo'],
             $parsingDispatcher
         );
         $fields = $this->parseFields(

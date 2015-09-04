@@ -10,7 +10,7 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
-use eZ\Publish\Core\REST\Server\Values\ViewInput;
+use eZ\Publish\Core\REST\Client\Values\ViewInput;
 use EzSystems\BehatBundle\Helper\ValueObject as ValueObjectHelper;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\REST\Server\Values\SessionInput;

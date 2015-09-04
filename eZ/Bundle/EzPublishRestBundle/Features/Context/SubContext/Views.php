@@ -5,7 +5,7 @@
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use eZ\Publish\Core\REST\Server\Values\View;
+use eZ\Publish\Core\REST\Client\Values\View;
 use PHPUnit_Framework_Assert as Assertion;
 
 /**
