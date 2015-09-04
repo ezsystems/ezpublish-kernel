@@ -241,6 +241,7 @@ class InstallPlatformCommand extends Command
             $arguments[] = '--php-ini=' . $ini;
         }
 
+        // Pass memory_limit in case this was specified as php argument, if not it will most likely be same as $ini.
         if ($memoryLimit = ini_get('memory_limit')) {
             $arguments[] = '-d memory_limit=' . $memoryLimit;
         }
