@@ -11,7 +11,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Values\Content;
 
-use eZ\Publish\Core\REST\Client\ContentService;
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 
 /**
