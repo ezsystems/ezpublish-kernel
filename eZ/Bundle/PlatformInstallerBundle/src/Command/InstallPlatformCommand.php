@@ -14,6 +14,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 
@@ -34,6 +36,12 @@ class InstallPlatformCommand extends Command
     /** @var string */
     private $cacheDir;
 
+    /** @var string */
+    private $environment;
+
+    /** @var string */
+    private $searchEngine;
+
     /** @var \EzSystems\PlatformInstallerBundle\Installer\Installer[] */
     private $installers = array();
 
@@ -43,13 +51,22 @@ class InstallPlatformCommand extends Command
     const EXIT_UNKNOWN_INSTALL_TYPE = 6;
     const EXIT_MISSING_PERMISSIONS = 7;
 
-    public function __construct(Connection $db, array $installers, CacheClearerInterface $cacheClearer, Filesystem $filesystem, $cacheDir)
-    {
+    public function __construct(
+        Connection $db,
+        array $installers,
+        CacheClearerInterface $cacheClearer,
+        Filesystem $filesystem,
+        $cacheDir,
+        $environment,
+        $searchEngine
+    ) {
         $this->db = $db;
         $this->installers = $installers;
         $this->cacheClearer = $cacheClearer;
         $this->filesystem = $filesystem;
         $this->cacheDir = $cacheDir;
+        $this->environment = $environment;
+        $this->searchEngine = $searchEngine;
         parent::__construct();
     }
 
@@ -84,6 +101,7 @@ class InstallPlatformCommand extends Command
         $installer->importData();
         $installer->importBinaries();
         $this->cacheClear($output);
+        $this->indexData($output);
     }
 
     private function checkPermissions()
@@ -161,6 +179,30 @@ class InstallPlatformCommand extends Command
     }
 
     /**
+     * Calls indexing commands on search engines known to need that.
+     *
+     * @todo This should not be needed once/if the Installer starts using API in the future.
+     *       So temporary measure until it is not raw SQL based for the data itself (as opposed to the schema).
+     *       This is done after cache clearing to make sure no cached data from before sql import is used.
+     *
+     * IMPORTANT: This is done using a command because config has change, so container and all services are different.
+     *
+     * @param OutputInterface $output
+     */
+    private function indexData(OutputInterface $output)
+    {
+        if ($this->searchEngine === 'solr') {
+            $output->writeln('Solr search engine configured, executing command ezplatform:solr_create_index');
+            $this->executeCommand($output, 'ezplatform:solr_create_index');
+        }
+
+        if ($this->searchEngine === 'elasticsearch') {
+            $output->writeln('Elasticsearch search engine configured, executing command ezplatform:elasticsearch_create_index');
+            $this->executeCommand($output, 'ezplatform:elasticsearch_create_index');
+        }
+    }
+
+    /**
      * @param $type
      *
      * @return \EzSystems\PlatformInstallerBundle\Installer\Installer
@@ -172,5 +214,56 @@ class InstallPlatformCommand extends Command
         }
 
         return $this->installers[$type];
+    }
+
+    /**
+     * Executes a Symfony command in separate process.
+     *
+     * Typically usefull when configuration has changed, our you are outside of Symfony context (Composer commands).
+     *
+     * Based on {@see \Sensio\Bundle\DistributionBundle\Composer\ScriptHandler::executeCommand}.
+     *
+     * @param OutputInterface $output
+     * @param string $cmd eZ Platform command to execute, like 'ezplatform:solr_create_index'
+     *               Escape any user provided arguments, like: 'assets:install '.escapeshellarg($webDir)
+     * @param int $timeout
+     */
+    private function executeCommand(OutputInterface $output, $cmd, $timeout = 300)
+    {
+        $phpFinder = new PhpExecutableFinder();
+        if (!$phpPath = $phpFinder->find(false)) {
+            throw new \RuntimeException('The php executable could not be found, add it to your PATH environment variable and try again');
+        }
+
+        // We don't know which php arguments where used so we gather some to be on the safe side
+        $arguments = $phpFinder->findArguments();
+        if (false !== ($ini = php_ini_loaded_file())) {
+            $arguments[] = '--php-ini=' . $ini;
+        }
+
+        if ($memoryLimit = ini_get('memory_limit')) {
+            $arguments[] = '-d memory_limit=' . $memoryLimit;
+        }
+
+        $phpArgs = implode(' ', array_map('escapeshellarg', $arguments));
+        $php = escapeshellarg($phpPath) . ($phpArgs ? ' ' . $phpArgs : '');
+
+        // Make sure to pass along relevant global Symfony options to console command
+        $console = escapeshellarg('ezpublish/console');
+        if ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
+            $console .= ' -' . str_repeat('v', $output->getVerbosity() - 1);
+        }
+
+        if ($output->isDecorated()) {
+            $console .= ' --ansi';
+        }
+
+        $console .= ' --env=' . escapeshellarg($this->environment);
+
+        $process = new Process($php . ' ' . $console . ' ' . $cmd, null, null, null, $timeout);
+        $process->run(function ($type, $buffer) use ($output) { $output->write($buffer, false); });
+        if (!$process->isSuccessful()) {
+            throw new \RuntimeException(sprintf('An error occurred when executing the "%s" command.', escapeshellarg($cmd)));
+        }
     }
 }

@@ -21,7 +21,7 @@ class ElasticsearchCreateIndexCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('ezpublish:elasticsearch_create_index')
+            ->setName('ezplatform:elasticsearch_create_index')
             ->setDescription('Indexes the configured database in configured Elasticsearch index')
             ->addArgument('bulk_count', InputArgument::OPTIONAL, 'Number of Content objects indexed at once', 5)
             ->setHelp(
