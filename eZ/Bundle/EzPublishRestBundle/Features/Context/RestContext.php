@@ -28,6 +28,7 @@ class RestContext extends Context
     use SubContext\Authentication;
     use SubContext\ContentTypeGroup;
     use SubContext\Exception;
+    use SubContext\Views;
 
     const AUTHTYPE_BASICHTTP = 'http_basic';
     const AUTHTYPE_SESSION = 'session';

@@ -10,6 +10,7 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
+use eZ\Publish\Core\REST\Server\Values\ViewInput;
 use EzSystems\BehatBundle\Helper\ValueObject as ValueObjectHelper;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\REST\Server\Values\SessionInput;
@@ -114,6 +115,14 @@ trait EzRest
     }
 
     /**
+     * @When I set field :field to an empty array
+     */
+    public function setFieldToEmptyArray($field)
+    {
+        $this->setFieldToValue($field, array());
+    }
+
+    /**
      * @Then response object has field :field with :value
      */
     public function assertObjectFieldHasValue($field, $value)
@@ -141,6 +150,14 @@ trait EzRest
             $responseObject instanceof $object,
             "Expect body object to be an instance of '$object' but got a '" . get_class($responseObject) . "'"
         );
+    }
+
+    /**
+     * @When I set the Content-Type header to :contentType in version :version
+     */
+    public function iSetTheContentTypeHeaderToInVersion($contentType, $version)
+    {
+        $this->restDriver->setHeader('Content-Type', "$contentType+$this->restBodyType; version=$version");
     }
 
     /**
@@ -328,6 +345,10 @@ trait EzRest
                 $this->requestObject = $repository
                     ->getContentTypeService()
                     ->newContentTypeGroupUpdateStruct();
+                break;
+
+            case 'ViewInput':
+                $this->requestObject = new ViewInput();
                 break;
 
             default:
