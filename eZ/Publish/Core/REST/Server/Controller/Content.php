@@ -620,7 +620,7 @@ class Content extends RestController
                 }
 
                 return new Values\CachedValue(
-                    new Values\LocationList($relation, $request->getPathInfo()),
+                    $relation,
                     array('locationId' => $contentInfo->mainLocationId)
                 );
             }
