@@ -38,13 +38,8 @@ class TestCase extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        if (!$this->httpHost = getenv('EZP_TEST_REST_HOST')) {
-            self::markTestSkipped('Set the EZP_TEST_REST_HOST (api.example.com) to your eZ Publish test instance');
-        }
-
-        if (!$this->httpAuth = getenv('EZP_TEST_REST_AUTH')) {
-            self::markTestSkipped('Set the EZP_TEST_REST_AUTH (admin:publish) to your eZ Publish test instance');
-        }
+        $this->httpHost = getenv('EZP_TEST_REST_HOST') ?: 'localhost';
+        $this->httpAuth = getenv('EZP_TEST_REST_AUTH') ?: 'admin:publish';
 
         $this->httpClient = new \Buzz\Client\Curl();
         $this->httpClient->setVerifyPeer(false);
