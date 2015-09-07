@@ -109,7 +109,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct('roleName');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole($roleCreate);
@@ -137,7 +137,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct('roleName');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRoleDraft($roleCreate);
@@ -166,7 +166,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct('Editor');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         // This call will fail with an InvalidArgumentException, because Editor exists
@@ -191,7 +191,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct('Editor');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         // This call will fail with an InvalidArgumentException, because Editor exists
@@ -216,7 +216,7 @@ class RoleServiceTest extends BaseTest
         // Create new role create struct
         $roleCreate = $roleService->newRoleCreateStruct('Lumberjack');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         // Create new subtree limitation
@@ -255,7 +255,7 @@ class RoleServiceTest extends BaseTest
         // Create new role create struct
         $roleCreate = $roleService->newRoleCreateStruct('Lumberjack');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         // Create new subtree limitation
@@ -296,7 +296,7 @@ class RoleServiceTest extends BaseTest
 
         $roleCreate = $roleService->newRoleCreateStruct('roleName');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $createdRoleId = $roleService->createRole($roleCreate)->id;
@@ -332,7 +332,7 @@ class RoleServiceTest extends BaseTest
 
         $roleCreate = $roleService->newRoleCreateStruct('roleName');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $createdRoleId = $roleService->createRoleDraft($roleCreate)->id;
@@ -365,7 +365,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct('roleName');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleId = $roleService->createRole($roleCreate)->id;
@@ -393,7 +393,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct('roleName');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleId = $roleService->createRoleDraft($roleCreate)->id;
@@ -465,7 +465,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct('roleName');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleService->createRole($roleCreate);
@@ -515,7 +515,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct('roleName');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole($roleCreate);
@@ -601,7 +601,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole($roleCreate);
@@ -633,7 +633,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRoleDraft($roleCreate);
@@ -665,7 +665,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole($roleCreate);
@@ -693,7 +693,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRoleDraft($roleCreate);
@@ -721,7 +721,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole($roleCreate);
@@ -747,7 +747,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRoleDraft($roleCreate);
@@ -813,7 +813,7 @@ class RoleServiceTest extends BaseTest
 
         $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole($roleCreate);
@@ -873,7 +873,7 @@ class RoleServiceTest extends BaseTest
 
         $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRoleDraft($roleCreate);
@@ -934,7 +934,7 @@ class RoleServiceTest extends BaseTest
 
         $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole($roleCreate);
@@ -975,7 +975,7 @@ class RoleServiceTest extends BaseTest
 
         $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRoleDraft($roleCreate);
@@ -1052,7 +1052,7 @@ class RoleServiceTest extends BaseTest
 
         $roleCreate = $roleService->newRoleCreateStruct('Lumberjack');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole($roleCreate);
@@ -1091,7 +1091,7 @@ class RoleServiceTest extends BaseTest
 
         $roleCreate = $roleService->newRoleCreateStruct('Lumberjack');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRoleDraft($roleCreate);
@@ -1129,7 +1129,7 @@ class RoleServiceTest extends BaseTest
         // Instantiate a new create struct
         $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         // Add some role policies
@@ -1186,7 +1186,7 @@ class RoleServiceTest extends BaseTest
         // Instantiate a new create struct
         $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         // Add some role policies
@@ -1278,7 +1278,7 @@ class RoleServiceTest extends BaseTest
         // Instantiate a role create and add the policy create
         $roleCreate = $roleService->newRoleCreateStruct('myRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleCreate->addPolicy($policyCreate);
@@ -1407,7 +1407,7 @@ class RoleServiceTest extends BaseTest
         // Instantiate a role create and add the policy create
         $roleCreate = $roleService->newRoleCreateStruct('myRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleCreate->addPolicy($policyCreate);
@@ -1455,7 +1455,7 @@ class RoleServiceTest extends BaseTest
         // Instantiate a new role create
         $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         // Create a new role with two policies
@@ -1492,7 +1492,7 @@ class RoleServiceTest extends BaseTest
         // Instantiate a new role create
         $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         // Create a new role with two policies
@@ -1530,7 +1530,7 @@ class RoleServiceTest extends BaseTest
         // Instantiate a new role create
         $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         // Create a new role with two policies
@@ -1927,7 +1927,7 @@ class RoleServiceTest extends BaseTest
         // Instantiate a role create and add some policies
         $roleCreate = $roleService->newRoleCreateStruct('Example Role');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleCreate->addPolicy(
@@ -2338,7 +2338,7 @@ class RoleServiceTest extends BaseTest
         // Instantiate a role create and add some policies
         $roleCreate = $roleService->newRoleCreateStruct('Example Role');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleCreate->addPolicy(
@@ -2392,7 +2392,7 @@ class RoleServiceTest extends BaseTest
         // Instantiate a role create and add some policies
         $roleCreate = $roleService->newRoleCreateStruct('User Role');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleCreate->addPolicy(
@@ -2472,7 +2472,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleDraft = $roleService->createRoleDraft($roleCreate);
@@ -2510,7 +2510,7 @@ class RoleServiceTest extends BaseTest
         $roleService = $repository->getRoleService();
         $roleCreate = $roleService->newRoleCreateStruct('newRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleDraft = $roleService->createRoleDraft($roleCreate);

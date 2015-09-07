@@ -104,9 +104,9 @@ class RoleService implements APIRoleService, Sessionable
      * @since 6.0
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists or if limitation of the
-     *                                                                        same type is repeated in the policy create struct or if
-     *                                                                        limitation is not allowed on module/function
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *         if the name of the role already exists or if limitation of the same type
+     *         is repeated in the policy create struct or if limitation is not allowed on module/function
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCreateStruct is not valid
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct

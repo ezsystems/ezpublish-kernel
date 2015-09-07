@@ -45,7 +45,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         // $creatorId is the ID of the administrator user
         $groupCreate->creatorId = $creatorId;
         $groupCreate->creationDate = $this->createDateTime();
-        /* @todo uncomment when support for multilingual names and descriptions is added
+        /* @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         $groupCreate->mainLanguageCode = 'ger-DE';
         $groupCreate->names = array( 'eng-GB' => 'A name.' );
         $groupCreate->descriptions = array( 'eng-GB' => 'A description.' );
@@ -86,7 +86,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         // $modifierId is the ID of a random user
         $groupUpdate->modifierId = $modifierId;
         $groupUpdate->modificationDate = $this->createDateTime();
-        /* @todo uncomment when support for multilingual names and descriptions is added
+        /* @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         $groupUpdate->mainLanguageCode = 'eng-GB';
 
         $groupUpdate->names = array(

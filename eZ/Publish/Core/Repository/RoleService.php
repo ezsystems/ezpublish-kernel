@@ -24,8 +24,6 @@ use eZ\Publish\API\Repository\Values\User\RoleDraft as APIRoleDraft;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
-use eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment;
-use eZ\Publish\API\Repository\Values\User\UserRoleAssignment;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
@@ -131,9 +129,9 @@ class RoleService implements RoleServiceInterface
      * @since 6.0
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists or if limitation of the
-     *                                                                        same type is repeated in the policy create struct or if
-     *                                                                        limitation is not allowed on module/function
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *         if the name of the role already exists or if limitation of the same type
+     *         is repeated in the policy create struct or if limitation is not allowed on module/function
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCreateStruct is not valid
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
@@ -479,45 +477,38 @@ class RoleService implements RoleServiceInterface
      * @since 6.0
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to publish this role
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the role draft cannot be loaded
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the role draft has no policies
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
      */
     public function publishRoleDraft(APIRoleDraft $roleDraft)
     {
-        // Check if the role has been published before
-        try {
-            $loadedRole = $this->loadRole($roleDraft->id);
-        } catch (NotFoundException $e) {
-            $loadedRole = null;
+        if ($this->repository->hasAccess('role', 'update') !== true) {
+            throw new UnauthorizedException('role', 'update');
         }
 
-        $roleAssignments = [];
+        try {
+            $loadedRoleDraft = $this->loadRoleDraft($roleDraft->id);
+        } catch (APINotFoundException $e) {
+            throw new BadStateException(
+                '$roleDraft',
+                'The role does not have a draft.',
+                $e
+            );
+        }
+
+        // TODO: Uncomment when role policy editing is done, see EZP-24711 & EZP-24713
+        /*if (count($loadedRoleDraft->getPolicies()) === 0) {
+            throw new InvalidArgumentException(
+                "\$roleDraft",
+                'The role draft should have at least one policy.'
+            );
+        }*/
+
         $this->repository->beginTransaction();
         try {
-            if ($loadedRole instanceof APIRole) {
-                $roleAssignments = $this->getRoleAssignments($loadedRole);
-                $this->deleteRole($loadedRole);
-            }
-
             $this->userHandler->publishRoleDraft($roleDraft->id);
-            $publishedRole = $this->loadRole($roleDraft->id);
-
-            foreach ($roleAssignments as $roleAssignment) {
-                if ($roleAssignment instanceof UserRoleAssignment) {
-                    $this->assignRoleToUser(
-                        $publishedRole,
-                        $roleAssignment->getUser(),
-                        $roleAssignment->getRoleLimitation()
-                    );
-                } elseif ($roleAssignment instanceof UserGroupRoleAssignment) {
-                    $this->assignRoleToUserGroup(
-                        $publishedRole,
-                        $roleAssignment->getUserGroup(),
-                        $roleAssignment->getRoleLimitation()
-                    );
-                }
-            }
-
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();

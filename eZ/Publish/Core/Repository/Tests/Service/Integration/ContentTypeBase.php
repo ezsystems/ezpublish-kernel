@@ -64,7 +64,7 @@ abstract class ContentTypeBase extends BaseServiceTest
                 'identifier' => 'new-group',
                 'creatorId' => null,
                 'creationDate' => null,
-                // @todo uncomment when support for multilingual names and descriptions is added
+                // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
                 //'mainLanguageCode' => null,
                 //'names' => null,
                 //'descriptions' => null
@@ -90,7 +90,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         );
         $groupCreate->creatorId = $this->repository->getCurrentUser()->id;
         $groupCreate->creationDate = new \DateTime();
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         //$groupCreate->mainLanguageCode = 'eng-GB';
         //$groupCreate->names = array( 'eng-US' => 'A name.' );
         //$groupCreate->descriptions = array( 'eng-US' => 'A description.' );
@@ -153,7 +153,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         );
         $groupCreate->creatorId = $this->repository->getCurrentUser()->id;
         $groupCreate->creationDate = new \DateTime();
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $groupCreate->mainLanguageCode = 'eng-GB';
         // $groupCreate->names = array( 'eng-US' => 'A name.' );
         // $groupCreate->descriptions = array( 'eng-US' => 'A description.' );
@@ -178,7 +178,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         //$groupCreate->names = array( 'eng-GB'=> 'NewGroup' );
         //$groupCreate->descriptions = array();
         $contentTypeService->createContentTypeGroup($groupCreate);
@@ -186,7 +186,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $secondGroupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         //$secondGroupCreate->names = array( 'eng-GB'=> 'NewGroup' );
         //$secondGroupCreate->descriptions = array();
 
@@ -212,7 +212,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         );
         $groupCreate->creatorId = $this->repository->getCurrentUser()->id;
         $groupCreate->creationDate = new \DateTime();
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         //$groupCreate->mainLanguageCode = 'eng-GB';
         //$groupCreate->names = array( 'eng-US' => 'A name.' );
         //$groupCreate->descriptions = array( 'eng-US' => 'A description.' );
@@ -474,7 +474,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $groupUpdate->identifier = 'updated-group';
         $groupUpdate->modifierId = 42;
         $groupUpdate->modificationDate = new \DateTime();
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         //$groupUpdate->mainLanguageCode = 'en_US';
         //$groupUpdate->names = array(
         //    'en_US' => 'A name',
@@ -530,7 +530,7 @@ abstract class ContentTypeBase extends BaseServiceTest
             'modificationDate' => $updateStruct->modificationDate,
             'creatorId' => $originalGroup->creatorId,
             'modifierId' => $updateStruct->modifierId,
-            // @todo uncomment when support for multilingual names and descriptions is added
+            // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
             //'mainLanguageCode' => $updateStruct->mainLanguageCode,
             //'names' => $updateStruct->names,
             //'descriptions' => $updateStruct->descriptions,
@@ -557,7 +557,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         );
         $groupCreate->creatorId = $this->repository->getCurrentUser()->id;
         $groupCreate->creationDate = new \DateTime();
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         //$groupCreate->mainLanguageCode = 'eng-US';
         //$groupCreate->names = array( 'eng-US' => 'Name' );
         //$groupCreate->descriptions = array( 'eng-US' => 'Description' );
@@ -582,7 +582,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $groupUpdate->identifier = 'updated-group';
         $groupUpdate->modifierId = 42;
         $groupUpdate->modificationDate = new \DateTime();
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         /*
         $groupUpdate->mainLanguageCode = 'en_US';
         $groupUpdate->names = array(
@@ -620,7 +620,7 @@ abstract class ContentTypeBase extends BaseServiceTest
             'updated-group'
         );
         $groupCreate->creatorId = $this->repository->getCurrentUser()->id;
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         //$groupCreate->names = array( 'eng-US' => 'Name' );
         //$groupCreate->descriptions = array( 'eng-US' => 'Description' );
         $groupToOverwrite = $contentTypeService->createContentTypeGroup($groupCreate);
@@ -719,7 +719,7 @@ abstract class ContentTypeBase extends BaseServiceTest
             );
             $groupCreate->creatorId = $this->repository->getCurrentUser()->id;
             $groupCreate->creationDate = new \DateTime();
-            // @todo uncomment when support for multilingual names and descriptions is added
+            // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
             //$groupCreate->mainLanguageCode = 'de_DE';
             //$groupCreate->names = array( 'en_US' => 'A name.' );
             //$groupCreate->descriptions = array( 'en_US' => 'A description.' );
@@ -2049,7 +2049,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         );
         $groupCreate->creatorId = $this->repository->getCurrentUser()->id;
         $groupCreate->creationDate = new \DateTime();
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         //$groupCreate->mainLanguageCode = 'ger-DE';
         //$groupCreate->names = array( 'eng-US' => 'A name.' );
         //$groupCreate->descriptions = array( 'eng-US' => 'A description.' );

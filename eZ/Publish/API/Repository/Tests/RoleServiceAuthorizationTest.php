@@ -152,7 +152,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         // Get a new role update struct and set new values
         $roleUpdateStruct = $roleService->newRoleUpdateStruct();
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleUpdateStruct->mainLanguageCode = 'eng-US';
 
         // This call will fail with an "UnauthorizedException"
@@ -612,7 +612,7 @@ class RoleServiceAuthorizationTest extends BaseTest
         // Get a role create struct instance and set properties
         $roleCreate = $roleService->newRoleCreateStruct('testRole');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-GB';
 
         $roleCreate->addPolicy($policyCreate);

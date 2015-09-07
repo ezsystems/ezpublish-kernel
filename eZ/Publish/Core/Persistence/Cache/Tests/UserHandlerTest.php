@@ -697,7 +697,7 @@ class UserHandlerTest extends HandlerTest
 
         $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\User\\Handler');
         $this->persistenceHandlerMock
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('userHandler')
             ->will($this->returnValue($innerHandlerMock));
 
@@ -709,17 +709,36 @@ class UserHandlerTest extends HandlerTest
                 $this->returnValue(true)
             );
 
-        $this->cacheMock
-            ->expects($this->at(0))
-            ->method('clear')
-            ->with('user', 'role', 33)
-            ->will($this->returnValue(true));
+        $this->persistenceHandlerMock
+            ->expects($this->at(1))
+            ->method('userHandler')
+            ->will($this->returnValue($innerHandlerMock));
+
+        $innerHandlerMock
+            ->expects($this->once())
+            ->method('loadRole')
+            ->with(33)
+            ->will(
+                $this->returnValue(new Role())
+            );
 
         $this->cacheMock
-            ->expects($this->at(1))
+            ->expects($this->once())
             ->method('clear')
             ->with('user', 'role', 'assignments')
             ->will($this->returnValue(true));
+
+        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('getItem')
+            ->with('user', 'role', 33)
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('set')
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\Role'));
 
         $handler = $this->persistenceCacheHandler->userHandler();
         $handler->publishRoleDraft(33);

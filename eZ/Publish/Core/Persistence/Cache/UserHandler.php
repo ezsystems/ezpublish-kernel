@@ -253,8 +253,10 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
         $this->logger->logCall(__METHOD__, array('role' => $roleId));
         $return = $this->persistenceHandler->userHandler()->publishRoleDraft($roleId);
 
-        $this->cache->clear('user', 'role', $roleId);
         $this->cache->clear('user', 'role', 'assignments');
+        $this->cache
+            ->getItem('user', 'role', $roleId)
+            ->set($this->persistenceHandler->userHandler()->loadRole($roleId));
 
         return $return;
     }

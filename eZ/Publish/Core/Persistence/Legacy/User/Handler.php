@@ -363,6 +363,29 @@ class Handler implements BaseUserHandler
     {
         $roleDraft = $this->loadRoleDraft($roleId);
 
+        try {
+            $role = $this->loadRole($roleId);
+            $roleAssignments = $this->loadRoleAssignmentsByRoleId($role->id);
+            $this->deleteRole($role->id);
+
+            foreach ($roleAssignments as $roleAssignment) {
+                if (empty($roleAssignment->limitationIdentifier)) {
+                    $this->assignRole(
+                        $roleAssignment->contentId,
+                        $roleId
+                    );
+                } else {
+                    $this->assignRole(
+                        $roleAssignment->contentId,
+                        $roleId,
+                        [$roleAssignment->limitationIdentifier => $roleAssignment->values]
+                    );
+                }
+            }
+        } catch (NotFound $e) {
+            // If no published role is found, no updates are necessary to it
+        }
+
         $this->roleGateway->publishRoleDraft($roleDraft->id);
     }
 
