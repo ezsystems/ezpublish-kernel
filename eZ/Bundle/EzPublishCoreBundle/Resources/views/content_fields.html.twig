@@ -25,17 +25,13 @@
 {% endblock %}
 
 {% block ezxmltext_field %}
-{% spaceless %}
-    {% set field_value = field.value.xml|xmltext_to_html5 %}
+    {%- set field_value = field.value.xml|xmltext_to_html5 -%}
     {{ block( 'simple_block_field' ) }}
-{% endspaceless %}
 {% endblock %}
 
 {% block ezrichtext_field %}
-{% spaceless %}
-    {% set field_value = field.value.xml|richtext_to_html5 %}
+    {%- set field_value = field.value.xml|richtext_to_html5 -%}
     {{ block( 'simple_block_field' ) }}
-{% endspaceless %}
 {% endblock %}
 
 {% block ezauthor_field %}
@@ -450,7 +446,7 @@
         {% set field_value = field.value %}
     {% endif %}
     <div {{ block( 'field_attributes' ) }}>
-        {{ field_value|raw }}
+        {% endspaceless %}{{ field_value|raw }}{% spaceless %}
     </div>
 {% endspaceless %}
 {% endblock %}
