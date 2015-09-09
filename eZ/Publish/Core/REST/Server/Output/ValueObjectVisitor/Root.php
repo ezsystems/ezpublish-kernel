@@ -172,7 +172,7 @@ class Root extends ValueObjectVisitor
 
         // Content views
         $generator->startObjectElement('views', 'RefList');
-        $generator->startAttribute('href', $this->router->generate('ezpublish_rest_createView'));
+        $generator->startAttribute('href', $this->router->generate('ezpublish_rest_views_create'));
         $generator->endAttribute('href');
         $generator->endObjectElement('views');
 

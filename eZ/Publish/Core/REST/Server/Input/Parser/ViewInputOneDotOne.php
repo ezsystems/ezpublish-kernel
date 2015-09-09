@@ -10,16 +10,16 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Server\Input\Parser\Criterion as CriterionParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\REST\Server\Values\RestViewInput;
-use eZ\Publish\Core\REST\Common\Input\BaseParser;
 
 /**
- * Parser for ViewInput.
+ * Parser for ViewInput 1.1.
  */
-class ViewInput extends BaseParser
+class ViewInputOneDotOne extends CriterionParser
 {
     /**
      * Parses input structure to a RestViewInput struct.
@@ -42,11 +42,21 @@ class ViewInput extends BaseParser
         $restViewInput->identifier = $data['identifier'];
 
         // query
-        if (!array_key_exists('Query', $data) || !is_array($data['Query'])) {
-            throw new Exceptions\Parser('Missing <Query> attribute for <ViewInput>.');
+        if (array_key_exists('ContentQuery', $data) && is_array($data['ContentQuery'])) {
+            $queryData = $data['ContentQuery'];
+            $queryMediaType = 'application/vnd.ez.api.internal.ContentQuery';
         }
 
-        $restViewInput->query = $parsingDispatcher->parse($data['Query'], 'application/vnd.ez.api.internal.ContentQuery');
+        if (array_key_exists('LocationQuery', $data) && is_array($data['LocationQuery'])) {
+            $queryData = $data['LocationQuery'];
+            $queryMediaType = 'application/vnd.ez.api.internal.LocationQuery';
+        }
+
+        if (!isset($queryMediaType) || !isset($queryData)) {
+            throw new Exceptions\Parser('Missing <ContentQuery> or <LocationQuery> attribute for <ViewInput>.');
+        }
+
+        $restViewInput->query = $parsingDispatcher->parse($queryData, $queryMediaType);
 
         return $restViewInput;
     }

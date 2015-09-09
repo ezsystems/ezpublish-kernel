@@ -223,31 +223,37 @@ ezpublish_rest_binaryContent_getImageVariation:
 
 # Views
 
-
-ezpublish_rest_createView:
+# Deprecated in favour of /views from Platform 1.0
+ezpublish_rest_createContentView:
     path: /content/views
     defaults:
         _controller: ezpublish_rest.controller.content:createView
     methods: [POST]
 
-ezpublish_rest_listView:
-    path: /content/views
+# Views, Platform 1.0
+ezpublish_rest_views_create:
+    path: /views
     defaults:
-        _controller: ezpublish_rest.controller.content:listView
+        _controller: ezpublish_rest.controller.views:createView
+    methods: [POST]
+
+ezpublish_rest_views_list:
+    path: /views
+    defaults:
+        _controller: ezpublish_rest.controller.views:listView
     methods: [GET]
 
-ezpublish_rest_getView:
-    path : /content/views/{viewId}
+ezpublish_rest_views_load:
+    path : /views/{viewId}
     defaults:
-        _controller: ezpublish_rest.controller.content:getView
+        _controller: ezpublish_rest.controller.views:getView
     methods: [GET]
 
-ezpublish_rest_loadViewResults:
-    path: /content/views/{viewId}/results
+ezpublish_rest_views_load_results:
+    path: /views/{viewId}/results
     defaults:
-        _controller: ezpublish_rest.controller.content:loadViewResults
+        _controller: ezpublish_rest.controller.views:loadViewResults
     methods: [GET]
-
 # Object states
 
 

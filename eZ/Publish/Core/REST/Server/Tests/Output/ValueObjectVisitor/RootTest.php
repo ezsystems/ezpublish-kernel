@@ -81,7 +81,7 @@ class RootTest extends ValueObjectVisitorBaseTest
         );
         $this->addRouteExpectation('ezpublish_rest_loadTrashItems', array(), '/content/trash');
         $this->addRouteExpectation('ezpublish_rest_listSections', array(), '/content/sections');
-        $this->addRouteExpectation('ezpublish_rest_createView', array(), '/content/views');
+        $this->addRouteExpectation('ezpublish_rest_views_create', array(), '/views');
         $this->addRouteExpectation('ezpublish_rest_loadObjectStateGroups', array(), '/content/objectstategroups');
         $this->addTemplatedRouteExpectation(
             'ezpublish_rest_loadObjectStates',
@@ -675,7 +675,7 @@ class RootTest extends ValueObjectVisitorBaseTest
                 'tag' => 'views',
                 'attributes' => array(
                     'media-type' => 'application/vnd.ez.api.RefList+xml',
-                    'href' => '/content/views',
+                    'href' => '/views',
                 ),
             ),
             $result,

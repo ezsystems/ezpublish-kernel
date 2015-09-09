@@ -10,13 +10,15 @@
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\Values\Content as ApiValues;
+use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
-use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
 
 /**
  * Section value object visitor.
@@ -73,7 +75,7 @@ class RestExecutedView extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->router->generate('ezpublish_rest_getView', array('viewId' => $data->identifier))
+            $this->router->generate('ezpublish_rest_views_load', array('viewId' => $data->identifier))
         );
         $generator->endAttribute('href');
 
@@ -89,7 +91,7 @@ class RestExecutedView extends ValueObjectVisitor
         $generator->startObjectElement('Result', 'ViewResult');
         $generator->startAttribute(
             'href',
-            $this->router->generate('ezpublish_rest_loadViewResults', array('viewId' => $data->identifier))
+            $this->router->generate('ezpublish_rest_views_load_results', array('viewId' => $data->identifier))
         );
         $generator->endAttribute('href');
 
@@ -108,16 +110,26 @@ class RestExecutedView extends ValueObjectVisitor
 
             $generator->startObjectElement('value');
 
-            /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo */
-            $contentInfo = $searchHit->valueObject->contentInfo;
-            $restContent = new RestContentValue(
-                $contentInfo,
-                $this->locationService->loadLocation($contentInfo->mainLocationId),
-                $searchHit->valueObject,
-                $this->contentTypeService->loadContentType($contentInfo->contentTypeId),
-                $this->contentService->loadRelations($searchHit->valueObject->getVersionInfo())
-            );
-            $visitor->visitValueObject($restContent);
+            // @todo Refactor
+            if ($searchHit->valueObject instanceof ApiValues\Content) {
+                /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo */
+                $contentInfo = $searchHit->valueObject->contentInfo;
+                $valueObject = new RestContentValue(
+                    $contentInfo,
+                    $this->locationService->loadLocation($contentInfo->mainLocationId),
+                    $searchHit->valueObject,
+                    $this->contentTypeService->loadContentType($contentInfo->contentTypeId),
+                    $this->contentService->loadRelations($searchHit->valueObject->getVersionInfo())
+                );
+            } elseif ($searchHit->valueObject instanceof ApiValues\Location) {
+                $valueObject = $searchHit->valueObject;
+            } elseif ($searchHit->valueObject instanceof ApiValues\ContentInfo) {
+                $valueObject = new RestContentValue($searchHit->valueObject);
+            } else {
+                throw new Exceptions\InvalidArgumentException('Unhandled object type');
+            }
+
+            $visitor->visitValueObject($valueObject);
             $generator->endObjectElement('value');
             $generator->endObjectElement('searchHit');
         }

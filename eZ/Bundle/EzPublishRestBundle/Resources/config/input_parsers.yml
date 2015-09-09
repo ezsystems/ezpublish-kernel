@@ -31,7 +31,10 @@ parameters:
     ezpublish_rest.input.parser.SessionInput.class: eZ\Publish\Core\REST\Server\Input\Parser\SessionInput
     ezpublish_rest.input.parser.VersionUpdate.class: eZ\Publish\Core\REST\Server\Input\Parser\VersionUpdate
     ezpublish_rest.input.parser.ViewInput.class: eZ\Publish\Core\REST\Server\Input\Parser\ViewInput
+    ezpublish_rest.input.parser.ViewInputOneDotOne.class: eZ\Publish\Core\REST\Server\Input\Parser\ViewInputOneDotOne
 
+    ezpublish_rest.input.parser.internal.ContentQuery.class: eZ\Publish\Core\REST\Server\Input\Parser\ContentQuery
+    ezpublish_rest.input.parser.internal.LocationQuery.class: eZ\Publish\Core\REST\Server\Input\Parser\LocationQuery
     ezpublish_rest.input.parser.internal.criterion.ContentId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\ContentId
     ezpublish_rest.input.parser.internal.criterion.ContentRemoteId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\ContentRemoteId
     ezpublish_rest.input.parser.internal.criterion.ContentTypeGroupId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\ContentTypeGroupId
@@ -346,6 +349,12 @@ services:
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ViewInput }
 
+    ezpublish_rest.input.parser.ViewInputOnedotOne:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.ViewInputOneDotOne.class%
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: "application/vnd.ez.api.ViewInput; version=1.1" }
+
     ezpublish_rest.input.parser.VersionUpdate:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.VersionUpdate.class%
@@ -356,6 +365,18 @@ services:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.VersionUpdate }
 
     # internal Media-Types
+    ezpublish_rest.input.parser.internal.criterion.ContentQuery:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.internal.ContentQuery.class%
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.ContentQuery }
+
+    ezpublish_rest.input.parser.internal.criterion.LocationQuery:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.internal.LocationQuery.class%
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.LocationQuery }
+
     ezpublish_rest.input.parser.internal.criterion.ContentId:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.ContentId.class%

@@ -85,6 +85,15 @@ class Dispatcher
         }
 
         $media = $contentTypeParts[0];
+
+        // add version if given
+        if (count($mediaTypeParts) > 1) {
+            $parameters = $this->parseParameters(trim($mediaTypeParts[1]));
+            if (isset($parameters['version'])) {
+                $media .= '; version=' . $parameters['version'];
+            }
+        }
+
         $format = $contentTypeParts[1];
 
         if (!isset($this->handlers[$format])) {
@@ -106,5 +115,16 @@ class Dispatcher
         }
 
         return $this->parsingDispatcher->parse($rootNodeArray, $media);
+    }
+
+    private function parseParameters($mediaTypePart)
+    {
+        $parameters = [];
+        foreach (explode(',', $mediaTypePart) as $parameterString) {
+            list($parameterName, $parameterValue) = explode('=', $parameterString);
+            $parameters[$parameterName] = $parameterValue;
+        }
+
+        return $parameters;
     }
 }

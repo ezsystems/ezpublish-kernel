@@ -24,8 +24,10 @@ class ParsingDispatcher
      *
      * <code>
      *  array(
-     *      <contentType> => <parser>,
-     *      …
+     *      <contentType> => array(
+     *          <version> => <parser>,
+     *          …
+     *      }
      *  )
      * </code>
      *
@@ -40,20 +42,21 @@ class ParsingDispatcher
      */
     public function __construct(array $parsers = array())
     {
-        foreach ($parsers as $contentType => $parser) {
-            $this->addParser($contentType, $parser);
+        foreach ($parsers as $mediaType => $parser) {
+            $this->addParser($mediaType, $parser);
         }
     }
 
     /**
      * Adds another parser for the given Content Type.
      *
-     * @param string $contentType
+     * @param string $mediaType
      * @param \eZ\Publish\Core\REST\Common\Input\Parser $parser
      */
-    public function addParser($contentType, Parser $parser)
+    public function addParser($mediaType, Parser $parser)
     {
-        $this->parsers[$contentType] = $parser;
+        list($mediaType, $version) = $this->parseMediaTypeVersion($mediaType);
+        $this->parsers[$mediaType][$version] = $parser;
     }
 
     /**
@@ -66,15 +69,39 @@ class ParsingDispatcher
      */
     public function parse(array $data, $mediaType)
     {
+        list($mediaType, $version) = $this->parseMediaTypeVersion($mediaType);
+
         // Remove encoding type
         if (($plusPos = strrpos($mediaType, '+')) !== false) {
             $mediaType = substr($mediaType, 0, $plusPos);
         }
 
-        if (!isset($this->parsers[$mediaType])) {
-            throw new Exceptions\Parser("Unknown content type specification: '{$mediaType}'.");
+        if (!isset($this->parsers[$mediaType][$version])) {
+            throw new Exceptions\Parser("Unknown content type specification: '{$mediaType} (version: $version)'.");
         }
 
-        return $this->parsers[$mediaType]->parse($data, $this);
+        return $this->parsers[$mediaType][$version]->parse($data, $this);
+    }
+
+    /**
+     * Parses and returns the version from a MediaType.
+     *
+     * @param string $mediaType Ex: text/html; version=1.1
+     *
+     * @return string An array with the mediatype string, stripped from the version, and the version (1.0 by default)
+     */
+    protected function parseMediaTypeVersion($mediaType)
+    {
+        $version = '1.0';
+        $contentType = explode('; ', $mediaType);
+        if (isset($contentType[1])) {
+            $mediaType = $contentType[0];
+            if (($equalPos = strpos($contentType[1], '=')) === false) {
+                throw new Exceptions\Parser("Unknown media type version specification: '{$contentType[1]}'");
+            }
+            $version = substr($contentType[1], $equalPos + 1);
+        }
+
+        return [$mediaType, $version];
     }
 }

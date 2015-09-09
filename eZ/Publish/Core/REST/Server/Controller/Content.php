@@ -19,10 +19,10 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Exceptions\ContentValidationException;
-use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * Content controller.
@@ -719,52 +719,31 @@ class Content extends RestController
     /**
      * Creates and executes a content view.
      *
+     * @deprecated Since platform 1.0. Forwards the request to the new /views location, but returns a 301.
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\RestExecutedView
      */
-    public function createView(Request $request)
+    public function createView()
     {
-        $viewInput = $this->inputDispatcher->parse(
-            new Message(
-                array('Content-Type' => $request->headers->get('Content-Type')),
-                $request->getContent()
-            )
-        );
+        $response = $this->forward('ezpublish_rest.controller.views:createView');
 
-        return new Values\RestExecutedView(
-            array(
-                'identifier' => $viewInput->identifier,
-                'searchResults' => $this->repository->getSearchService()->findContent($viewInput->query),
-            )
-        );
+        // Add 301 status code and location href
+        $response->setStatusCode(301);
+        $response->headers->set('Location', $this->router->generate('ezpublish_rest_views_create'));
+
+        return $response;
     }
 
     /**
-     * List content views.
+     * @param string $controller
      *
-     * @return NotImplementedException;
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listView()
+    protected function forward($controller)
     {
-        return new NotImplementedException('ezpublish_rest.controller.content:listView');
-    }
+        $path['_controller'] = $controller;
+        $subRequest = $this->container->get('request_stack')->getCurrentRequest()->duplicate(null, null, $path);
 
-    /**
-     * Get a content view.
-     *
-     * @return NotImplementedException;
-     */
-    public function getView()
-    {
-        return new NotImplementedException('ezpublish_rest.controller.content:getView');
-    }
-
-    /**
-     * Get a content view results.
-     *
-     * @return NotImplementedException;
-     */
-    public function loadViewResults()
-    {
-        return new NotImplementedException('ezpublish_rest.controller.content:loadViewResults');
+        return $this->container->get('http_kernel')->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
     }
 }

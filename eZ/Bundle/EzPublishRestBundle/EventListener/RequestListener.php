@@ -14,7 +14,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * REST request listener.
@@ -55,10 +54,6 @@ class RequestListener implements EventSubscriberInterface
     public function onKernelRequest(GetResponseEvent $event)
     {
         $isRestRequest = true;
-
-        if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
-            $isRestRequest = false;
-        }
 
         if (!$this->hasRestPrefix($event->getRequest())) {
             $isRestRequest = false;

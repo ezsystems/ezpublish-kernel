@@ -163,6 +163,10 @@ Changes affecting version compatibility with former or future versions.
 * `eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger::purge()` is deprecated and will be removed in v6.1.
   Use `eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger::purgeForContent()` instead.
 
+* The REST resource `/content/views` is deprecated and will be removed in v6.1.
+  `/views`` replaces it.
+  Until it is removed, POST to `/content/views` will return a 301 instead of a 200, and include location header to the
+  new resource.
 
 ## Removed features
 

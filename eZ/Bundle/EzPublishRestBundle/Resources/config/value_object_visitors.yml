@@ -82,6 +82,7 @@ parameters:
     # Location
     ezpublish_rest.output.value_object_visitor.LocationList.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\LocationList
     ezpublish_rest.output.value_object_visitor.RestLocation.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestLocation
+    ezpublish_rest.output.value_object_visitor.Location.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Location
     ezpublish_rest.output.value_object_visitor.CreatedLocation.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\CreatedLocation
     ezpublish_rest.output.value_object_visitor.LocationCreateStruct.class: eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\LocationCreateStruct
     ezpublish_rest.output.value_object_visitor.LocationUpdateStruct.class: eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\LocationUpdateStruct
@@ -625,6 +626,13 @@ services:
         class: %ezpublish_rest.output.value_object_visitor.RestLocation.class%
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\RestLocation }
+
+    ezpublish_rest.output.value_object_visitor.Location:
+        parent: ezpublish_rest.output.value_object_visitor.base
+        class: %ezpublish_rest.output.value_object_visitor.Location.class%
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Values\Content\Location }
+        arguments: [@ezpublish.api.service.location]
 
     ezpublish_rest.output.value_object_visitor.LocationList:
         parent: ezpublish_rest.output.value_object_visitor.base

@@ -33,7 +33,7 @@ class RequestListenerTest extends EventListenerTest
         $event = $this->getEvent(self::REST_PREFIX . '/', HttpKernelInterface::SUB_REQUEST);
         $this->getEventListener()->onKernelRequest($event);
 
-        self::assertFalse(
+        self::assertTrue(
             $event->getRequest()->attributes->get('is_rest_request')
         );
     }
