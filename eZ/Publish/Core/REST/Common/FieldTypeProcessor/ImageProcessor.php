@@ -49,6 +49,15 @@ class ImageProcessor extends BinaryInputProcessor
         $this->variations = $variations;
     }
 
+    public function preProcessValueHash($incomingValueHash)
+    {
+        if (is_array($incomingValueHash) && array_key_exists('variations', $incomingValueHash)) {
+            unset($incomingValueHash['variations']);
+        }
+
+        return parent::preProcessValueHash($incomingValueHash);
+    }
+
     /**
      * {@inheritdoc}
      */

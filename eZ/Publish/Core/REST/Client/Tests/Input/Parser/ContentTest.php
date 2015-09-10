@@ -43,28 +43,32 @@ class ContentTest extends BaseTest
 
         $inputArray = array(
             '_media-type' => 'application/vnd.ez.api.Version+json',
-            '_href' => '/content/objects/10/versions/2',
-            'VersionInfo' => array(),
-            'Fields' => array(
-                'Field' => array(
-                    0 => array(
-                        'id' => 19,
-                        'fieldDefinitionIdentifier' => 'first_name',
-                        'languageCode' => 'eng-US',
-                        'fieldValue' => 'Anonymous',
-                    ),
-                    1 => array(
-                        'id' => 20,
-                        'fieldDefinitionIdentifier' => 'last_name',
-                        'languageCode' => 'eng-US',
-                        'fieldValue' => 'User',
+            '_href' => '/api/ezp/v2/content/objects/10/versions/2',
+            'CurrentVersion' => array(
+                'Version' => array(
+                    'VersionInfo' => array(),
+                    'Fields' => array(
+                        'field' => array(
+                            0 => array(
+                                'id' => 19,
+                                'fieldDefinitionIdentifier' => 'first_name',
+                                'languageCode' => 'eng-US',
+                                'fieldValue' => 'Anonymous',
+                            ),
+                            1 => array(
+                                'id' => 20,
+                                'fieldDefinitionIdentifier' => 'last_name',
+                                'languageCode' => 'eng-US',
+                                'fieldValue' => 'User',
+                            ),
+                        ),
                     ),
                 ),
             ),
         );
 
         $versionInfoMock = new \stdClass();
-        $versionInfoMock->contentInfoId = '/content/objects/10';
+        $versionInfoMock->contentInfoId = '/api/ezp/v2/content/objects/10';
 
         $this->getVersionInfoParserMock()->expects($this->once())
             ->method('parse')

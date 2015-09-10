@@ -76,10 +76,13 @@ class Content extends BaseParser
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
         $versionInfo = $this->versionInfoParser->parse(
-            $data['VersionInfo'],
+            $data['CurrentVersion']['Version']['VersionInfo'],
             $parsingDispatcher
         );
-        $fields = $this->parseFields($data['Fields'], $versionInfo->contentInfoId);
+        $fields = $this->parseFields(
+            $data['CurrentVersion']['Version']['Fields'],
+            str_replace('/api/ezp/v2/content/objects/', '', $versionInfo->contentInfoId)
+        );
 
         return new Values\Content\Content(
             $this->contentService,
@@ -102,8 +105,8 @@ class Content extends BaseParser
     {
         $fields = array();
 
-        if (isset($rawFieldsData['Field'])) {
-            foreach ($rawFieldsData['Field'] as $rawFieldData) {
+        if (isset($rawFieldsData['field'])) {
+            foreach ($rawFieldsData['field'] as $rawFieldData) {
                 $fields[] = new Field(
                     array(
                         'id' => $rawFieldData['id'],

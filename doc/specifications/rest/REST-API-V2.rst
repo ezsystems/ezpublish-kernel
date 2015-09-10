@@ -791,7 +791,7 @@ List/Search Content
 ```````````````````
 :Resource: /content/objects
 :Method: GET (not implemented)
-:Description: This resource will be used in future for searching content by providing a query string as alternative to posting a view to /views.
+:Description: This resource will be used in the future for searching content by providing a query string as alternative to posting a view to /views.
 
 Load Content by remote id
 `````````````````````````

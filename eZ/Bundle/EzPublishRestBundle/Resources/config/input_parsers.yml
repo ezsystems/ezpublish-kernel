@@ -32,6 +32,9 @@ parameters:
     ezpublish_rest.input.parser.VersionUpdate.class: eZ\Publish\Core\REST\Server\Input\Parser\VersionUpdate
     ezpublish_rest.input.parser.ViewInput.class: eZ\Publish\Core\REST\Server\Input\Parser\ViewInput
     ezpublish_rest.input.parser.ViewInputOneDotOne.class: eZ\Publish\Core\REST\Server\Input\Parser\ViewInputOneDotOne
+    ezpublish_rest.input.parser.internal.View.class: eZ\Publish\Core\REST\Client\Input\Parser\View
+    ezpublish_rest.input.parser.ViewResult.class: eZ\Publish\Core\REST\Client\Input\Parser\ViewResult
+    ezpublish_rest.input.parser.SearchHit.class: eZ\Publish\Core\REST\Client\Input\Parser\SearchHit
 
     ezpublish_rest.input.parser.internal.ContentQuery.class: eZ\Publish\Core\REST\Server\Input\Parser\ContentQuery
     ezpublish_rest.input.parser.internal.LocationQuery.class: eZ\Publish\Core\REST\Server\Input\Parser\LocationQuery
@@ -354,6 +357,25 @@ services:
         class: %ezpublish_rest.input.parser.ViewInputOneDotOne.class%
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: "application/vnd.ez.api.ViewInput; version=1.1" }
+
+    ezpublish_rest.input.parser.View:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.internal.View.class%
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.View }
+
+    ezpublish_rest.input.parser.ViewResult:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.ViewResult.class%
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.ViewResult }
+
+    ezpublish_rest.input.parser.SearchHit:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.SearchHit.class%
+        tags:
+            # The lowercase 's' is on purpose. It's in the specs.
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.searchHit }
 
     ezpublish_rest.input.parser.VersionUpdate:
         parent: ezpublish_rest.input.parser
