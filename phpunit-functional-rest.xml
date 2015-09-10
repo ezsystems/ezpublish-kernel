@@ -8,8 +8,8 @@
   colors="false"
   >
   <testsuites>
-    <testsuite name="eZ\Publish\Core\REST\Server\Tests\Functional">
-      <directory>eZ/Publish/Core/REST/Server/Tests/Functional</directory>
+    <testsuite name="REST API Functional tests">
+      <directory>eZ/Bundle/EzPublishRestBundle/Tests/Functional</directory>
     </testsuite>
   </testsuites>
 </phpunit>

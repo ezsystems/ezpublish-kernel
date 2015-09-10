@@ -101,7 +101,7 @@ XML;
         <value languageCode="eng-GB">Title</value>
       </names>
       <descriptions>
-        <value languageCode="eng-US">This is the title</value>
+        <value languageCode="eng-GB">This is the title</value>
       </descriptions>
     </FieldDefinition>
    </FieldDefinitions>
@@ -190,7 +190,7 @@ XML;
     public function testLoadContentTypeGroupNotFound($contentTypeGroupHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', "{$contentTypeGroupHref}testLoadContentTypeGroupNotFound")
+            $this->createHttpRequest('GET', "{$contentTypeGroupHref}1234")
         );
 
         self::assertHttpResponseCodeEquals($response, 404);
@@ -216,7 +216,7 @@ XML;
     public function testLoadContentTypeNotFound($contentTypeHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', $contentTypeHref . __FUNCTION__)
+            $this->createHttpRequest('GET', "{$contentTypeHref}1234")
         );
 
         self::assertHttpResponseCodeEquals($response, 404);
