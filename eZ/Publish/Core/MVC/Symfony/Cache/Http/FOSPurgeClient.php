@@ -31,6 +31,11 @@ class FOSPurgeClient implements PurgeClientInterface
         $this->cacheManager = $cacheManager;
     }
 
+    public function __destruct()
+    {
+        $this->cacheManager->flush();
+    }
+
     public function purge($locationIds)
     {
         if (empty($locationIds)) {
