@@ -40,7 +40,8 @@
         "matthiasnoback/symfony-dependency-injection-test": "0.*",
         "mockery/mockery": "~0.9.4",
         "symfony/assetic-bundle": "~2.3",
-        "zendframework/zend-code": "~2.4.3"
+        "zendframework/zend-code": "~2.4.3",
+        "ezsystems/behatbundle": "dev-master"
     },
     "replace": {
         "ezsystems/ezpublish": "*",
@@ -49,7 +50,8 @@
     },
     "autoload": {
         "psr-4": {
-            "EzSystems\\PlatformInstallerBundle\\": "eZ/Bundle/PlatformInstallerBundle/src"
+            "EzSystems\\PlatformInstallerBundle\\": "eZ/Bundle/PlatformInstallerBundle/src",
+            "EzSystems\\PlatformBehatBundle\\": "eZ/Bundle/PlatformBehatBundle"
         },
         "psr-0": {
             "eZ": ""

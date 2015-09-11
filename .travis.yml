@@ -28,13 +28,15 @@ matrix:
       env: TEST_CONFIG="phpunit.xml"
     - php: 5.6
       env: TEST_CONFIG="phpunit-integration-legacy.xml"
+    - php: 5.6
+      env: BEHAT_PROFILE="demo" TEST="clean"
+    - php: 5.6
+      env: BEHAT_PROFILE="core" TEST="console"
 # 7.0
     - php: 7.0
       env: REST_TEST_CONFIG="phpunit-functional-rest.xml"
     - php: 7.0
       env: TEST_CONFIG="phpunit.xml"
-    - php: 7.0
-      env: BEHAT_PROFILE="demo" TEST="clean"
     - php: 7.0
       env: BEHAT_PROFILE="rest" TEST="fullJson"
     - php: 7.0
