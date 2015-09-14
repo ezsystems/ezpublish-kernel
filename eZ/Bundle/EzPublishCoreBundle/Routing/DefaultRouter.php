@@ -145,24 +145,6 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
     }
 
     /**
-     * Checks if $routeName can be used in legacy mode.
-     *
-     * @param string $routeName
-     *
-     * @return bool
-     */
-    protected function isLegacyAwareRoute($routeName)
-    {
-        foreach ($this->legacyAwareRoutes as $legacyAwareRoute) {
-            if (strpos($routeName, $legacyAwareRoute) === 0) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Merges context from $simplifiedRequest into a clone of the current context.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $simplifiedRequest
