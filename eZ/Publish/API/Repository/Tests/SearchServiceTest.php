@@ -546,6 +546,21 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
+            array(
+                array(
+                    'filter' => new Criterion\Ancestor(
+                        array(
+                            '/1/5/44/',
+                            '/1/5/44/45/',
+                        )
+                    ),
+                    'sortClauses' => array(
+                        new SortClause\ContentId(),
+                    ),
+                    'limit' => 50,
+                ),
+                $fixtureDir . 'AncestorContent.php',
+            ),
         );
     }
 
@@ -680,6 +695,16 @@ class SearchServiceTest extends BaseTest
                     'limit' => 50,
                 ),
                 $fixtureDir . 'DepthLte.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\Ancestor('/1/5/44/45/'),
+                    'sortClauses' => array(
+                        new SortClause\Location\Depth(),
+                    ),
+                    'limit' => 50,
+                ),
+                $fixtureDir . 'AncestorLocation.php',
             ),
         );
     }
