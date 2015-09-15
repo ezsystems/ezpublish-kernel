@@ -10,22 +10,11 @@
  */
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
-
 /**
  * This class is used for creating a content type group.
  */
-class ContentTypeGroupCreateStruct extends ValueObject
+class ContentTypeGroupCreateStruct extends ContentTypeGroupStruct
 {
-    /**
-     * Readable & unique string identifier of a group.
-     *
-     * @required
-     *
-     * @var string
-     */
-    public $identifier;
-
     /**
      * If set this value overrides the current user as creator.
      *
