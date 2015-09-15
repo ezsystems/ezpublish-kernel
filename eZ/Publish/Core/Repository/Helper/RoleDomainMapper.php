@@ -23,6 +23,7 @@ use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\SPI\Persistence\User\Policy as SPIPolicy;
 use eZ\Publish\SPI\Persistence\User\RoleAssignment as SPIRoleAssignment;
 use eZ\Publish\SPI\Persistence\User\Role as SPIRole;
+use eZ\Publish\SPI\Persistence\User\RoleCreateStruct as SPIRoleCreateStruct;
 
 /**
  * Internal service to map Role objects between API and SPI values.
@@ -67,8 +68,8 @@ class RoleDomainMapper
     }
 
     /**
-     * Builds a ContentTypeDraft domain object from value object returned by persistence
-     * Decorates ContentType.
+     * Builds a RoleDraft domain object from value object returned by persistence
+     * Decorates Role.
      *
      * @param \eZ\Publish\SPI\Persistence\User\Role $spiRole
      *
@@ -167,13 +168,13 @@ class RoleDomainMapper
     }
 
     /**
-     * Creates SPI Role value object from provided API role create struct.
+     * Creates SPI Role create struct from provided API role create struct.
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
      *
-     * @return \eZ\Publish\SPI\Persistence\User\Role
+     * @return \eZ\Publish\SPI\Persistence\User\RoleCreateStruct
      */
-    public function buildPersistenceRoleObject(APIRoleCreateStruct $roleCreateStruct)
+    public function buildPersistenceRoleCreateStruct(APIRoleCreateStruct $roleCreateStruct)
     {
         $policiesToCreate = array();
         foreach ($roleCreateStruct->getPolicies() as $policyCreateStruct) {
@@ -184,9 +185,8 @@ class RoleDomainMapper
             );
         }
 
-        return new SPIRole(
+        return new SPIRoleCreateStruct(
             array(
-                'id' => $roleCreateStruct->id,
                 'identifier' => $roleCreateStruct->identifier,
                 'status' => $roleCreateStruct->status,
                 'policies' => $policiesToCreate,

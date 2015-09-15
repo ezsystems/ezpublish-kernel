@@ -81,11 +81,10 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
      */
-    public function createRoleDraft(RoleCreateStruct $roleCreateStruct)
+    public function createRole(RoleCreateStruct $roleCreateStruct)
     {
-        $returnValue = $this->service->createRoleDraft($roleCreateStruct);
+        $returnValue = $this->service->createRole($roleCreateStruct);
         $this->signalDispatcher->emit(
-            //TODO: CreateRoleDraftSignal? Or skip it altogether?
             new CreateRoleSignal(
                 array(
                     'roleId' => $returnValue->id,
@@ -109,9 +108,9 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
      */
-    public function createRoleDraftByRole(Role $role)
+    public function createRoleDraft(Role $role)
     {
-        $returnValue = $this->service->createRoleDraftByRole($role);
+        $returnValue = $this->service->createRoleDraft($role);
         $this->signalDispatcher->emit(
             //TODO: CreateRoleDraftSignal? Or skip it altogether?
             new CreateRoleSignal(
@@ -292,35 +291,6 @@ class RoleService implements RoleServiceInterface
             new UpdateRoleSignal(
                 array(
                     'roleId' => $roleDraft->id,
-                )
-            )
-        );
-
-        return $returnValue;
-    }
-
-    /**
-     * Creates a new Role.
-     *
-     * @deprecated since 6.0, use {@see createRoleDraft}
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists or if limitation of the
-     *                                                                        same type is repeated in the policy create struct or if
-     *                                                                        limitation is not allowed on module/function
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCreateStruct is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
-    public function createRole(RoleCreateStruct $roleCreateStruct)
-    {
-        $returnValue = $this->service->createRole($roleCreateStruct);
-        $this->signalDispatcher->emit(
-            new CreateRoleSignal(
-                array(
-                    'roleId' => $returnValue->id,
                 )
             )
         );

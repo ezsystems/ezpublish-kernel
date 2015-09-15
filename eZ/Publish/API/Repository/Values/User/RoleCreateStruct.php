@@ -18,13 +18,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 abstract class RoleCreateStruct extends ValueObject
 {
     /**
-     * ID of a role.
-     *
-     * @var int
-     */
-    public $id;
-
-    /**
      * Readable string identifier of a role.
      *
      * @var string

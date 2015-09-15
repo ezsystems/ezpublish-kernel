@@ -117,7 +117,7 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Role',
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleDraft',
             $role
         );
     }
@@ -140,13 +140,16 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $role = $roleService->createRoleDraft($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
+        $newRoleDraft = $roleService->createRoleDraft($role);
 
         /* END: Use Case */
 
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleDraft',
-            $role
+            $newRoleDraft
         );
     }
 
@@ -194,8 +197,13 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        // This call will fail with an InvalidArgumentException, because Editor exists
-        $roleService->createRoleDraft($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
+        $roleService->createRoleDraft($role); // First role draft
+
+        // This call will fail with an InvalidArgumentException, because there is already a draft
+        $roleService->createRoleDraft($role);
 
         /* END: Use Case */
     }
@@ -236,45 +244,6 @@ class RoleServiceTest extends BaseTest
         // This call will fail with an LimitationValidationException, because subtree
         // "/mountain/forest/tree/42/" does not exist
         $roleService->createRole($roleCreate);
-        /* END: Use Case */
-    }
-
-    /**
-     * Test for the createRoleDraft() method.
-     *
-     * @see \eZ\Publish\API\Repository\RoleService::createRoleDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
-     */
-    public function testCreateRoleDraftThrowsLimitationValidationException()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $roleService = $repository->getRoleService();
-
-        // Create new role create struct
-        $roleCreate = $roleService->newRoleCreateStruct('Lumberjack');
-
-        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
-        // $roleCreate->mainLanguageCode = 'eng-US';
-
-        // Create new subtree limitation
-        $limitation = new SubtreeLimitation(
-            array(
-                'limitationValues' => array('/mountain/forest/tree/42/'),
-            )
-        );
-
-        // Create policy create struct and add limitation to it
-        $policyCreate = $roleService->newPolicyCreateStruct('content', 'remove');
-        $policyCreate->addLimitation($limitation);
-
-        // Add policy create struct to role create struct
-        $roleCreate->addPolicy($policyCreate);
-
-        // This call will fail with an LimitationValidationException, because subtree
-        // "/mountain/forest/tree/42/" does not exist
-        $roleService->createRoleDraft($roleCreate);
         /* END: Use Case */
     }
 
@@ -335,7 +304,7 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $createdRoleId = $roleService->createRoleDraft($roleCreate)->id;
+        $createdRoleId = $roleService->createRole($roleCreate)->id;
 
         $repository->rollback();
 
@@ -368,10 +337,11 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $roleId = $roleService->createRole($roleCreate)->id;
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
 
-        // Load the newly create role by its ID
-        $role = $roleService->loadRole($roleId);
+        // Load the newly created role by its ID
+        $role = $roleService->loadRole($roleDraft->id);
 
         /* END: Use Case */
 
@@ -396,10 +366,10 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $roleId = $roleService->createRoleDraft($roleCreate)->id;
+        $roleDraft = $roleService->createRole($roleCreate);
 
-        // Load the newly create role by its ID
-        $role = $roleService->loadRoleDraft($roleId);
+        // Load the newly created role by its ID
+        $role = $roleService->loadRoleDraft($roleDraft->id);
 
         /* END: Use Case */
 
@@ -468,7 +438,8 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $roleService->createRole($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
 
         // Load the newly created role by its identifier
         $role = $roleService->loadRoleByIdentifier('roleName');
@@ -518,7 +489,8 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $role = $roleService->createRole($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
 
         // Now load all available roles
         $roles = $roleService->loadRoles();
@@ -604,7 +576,9 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $role = $roleService->createRole($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
 
         $roleUpdate = $roleService->newRoleUpdateStruct();
         $roleUpdate->identifier = 'updatedRole';
@@ -636,12 +610,12 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $role = $roleService->createRoleDraft($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
 
         $roleUpdate = $roleService->newRoleUpdateStruct();
         $roleUpdate->identifier = 'updatedRole';
 
-        $updatedRole = $roleService->updateRoleDraft($role, $roleUpdate);
+        $updatedRole = $roleService->updateRoleDraft($roleDraft, $roleUpdate);
         /* END: Use Case */
 
         // Now verify that our change was saved
@@ -668,7 +642,9 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $role = $roleService->createRole($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
 
         $roleUpdate = $roleService->newRoleUpdateStruct();
         $roleUpdate->identifier = 'Editor';
@@ -696,13 +672,13 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $role = $roleService->createRoleDraft($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
 
         $roleUpdate = $roleService->newRoleUpdateStruct();
         $roleUpdate->identifier = 'Editor';
 
         // This call will fail with an InvalidArgumentException, because Editor is a predefined role
-        $roleService->updateRoleDraft($role, $roleUpdate);
+        $roleService->updateRoleDraft($roleDraft, $roleUpdate);
         /* END: Use Case */
     }
 
@@ -724,7 +700,9 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $role = $roleService->createRole($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
 
         $roleService->deleteRole($role);
         /* END: Use Case */
@@ -750,9 +728,9 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $role = $roleService->createRoleDraft($roleCreate);
-        $roleID = $role->id;
-        $roleService->deleteRoleDraft($role);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleID = $roleDraft->id;
+        $roleService->deleteRoleDraft($roleDraft);
 
         // This call will fail with a NotFoundException, because the draft no longer exists
         $roleService->loadRoleDraft($roleID);
@@ -816,7 +794,9 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $role = $roleService->createRole($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
 
         $role = $roleService->addPolicy(
             $role,
@@ -876,20 +856,20 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $role = $roleService->createRoleDraft($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
 
-        $role = $roleService->addPolicyByRoleDraft(
-            $role,
+        $roleDraft = $roleService->addPolicyByRoleDraft(
+            $roleDraft,
             $roleService->newPolicyCreateStruct('content', 'delete')
         );
-        $role = $roleService->addPolicyByRoleDraft(
-            $role,
+        $roleDraft = $roleService->addPolicyByRoleDraft(
+            $roleDraft,
             $roleService->newPolicyCreateStruct('content', 'create')
         );
         /* END: Use Case */
 
         $actual = array();
-        foreach ($role->getPolicies() as $policy) {
+        foreach ($roleDraft->getPolicies() as $policy) {
             $actual[] = array(
                 'module' => $policy->module,
                 'function' => $policy->function,
@@ -937,7 +917,9 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $role = $roleService->createRole($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
 
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $role = $roleService->addPolicy($role, $policyCreate);
@@ -978,13 +960,13 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $role = $roleService->createRoleDraft($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
 
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
-        $role = $roleService->addPolicyByRoleDraft($role, $policyCreate);
+        $roleDraft = $roleService->addPolicyByRoleDraft($roleDraft, $policyCreate);
 
         $policy = null;
-        foreach ($role->getPolicies() as $policy) {
+        foreach ($roleDraft->getPolicies() as $policy) {
             if ($policy->module === 'content' && $policy->function === 'create') {
                 break;
             }
@@ -996,7 +978,7 @@ class RoleServiceTest extends BaseTest
             $policy
         );
 
-        return array($role, $policy);
+        return array($roleDraft, $policy);
     }
 
     /**
@@ -1055,7 +1037,9 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $role = $roleService->createRole($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
 
         // Create new subtree limitation
         $limitation = new SubtreeLimitation(
@@ -1094,7 +1078,7 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $role = $roleService->createRoleDraft($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
 
         // Create new subtree limitation
         $limitation = new SubtreeLimitation(
@@ -1109,7 +1093,7 @@ class RoleServiceTest extends BaseTest
 
         // This call will fail with an LimitationValidationException, because subtree
         // "/mountain/forest/tree/42/" does not exist
-        $roleService->addPolicyByRoleDraft($role, $policyCreateStruct);
+        $roleService->addPolicyByRoleDraft($roleDraft, $policyCreateStruct);
         /* END: Use Case */
     }
 
@@ -1147,13 +1131,16 @@ class RoleServiceTest extends BaseTest
         );
 
         // Create new role instance
-        $role = $roleService->createRole($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
 
         $policies = array();
         foreach ($role->getPolicies() as $policy) {
             $policies[] = array('module' => $policy->module, 'function' => $policy->function);
         }
         /* END: Use Case */
+        array_multisort($policies);
 
         $this->assertEquals(
             array(
@@ -1204,10 +1191,10 @@ class RoleServiceTest extends BaseTest
         );
 
         // Create new role instance
-        $role = $roleService->createRoleDraft($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
 
         $policies = array();
-        foreach ($role->getPolicies() as $policy) {
+        foreach ($roleDraft->getPolicies() as $policy) {
             $policies[] = array('module' => $policy->module, 'function' => $policy->function);
         }
         /* END: Use Case */
@@ -1284,7 +1271,9 @@ class RoleServiceTest extends BaseTest
         $roleCreate->addPolicy($policyCreate);
 
         // Create a new role instance.
-        $role = $roleService->createRole($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
 
         // Search for the new policy instance
         $policy = null;
@@ -1413,7 +1402,9 @@ class RoleServiceTest extends BaseTest
         $roleCreate->addPolicy($policyCreate);
 
         // Create a new role instance.
-        $role = $roleService->createRole($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
 
         // Search for the new policy instance
         $policy = null;
@@ -1459,13 +1450,17 @@ class RoleServiceTest extends BaseTest
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         // Create a new role with two policies
-        $role = $roleService->createRole(
-            $roleCreate,
-            array(
-                $roleService->newPolicyCreateStruct('content', 'create'),
-                $roleService->newPolicyCreateStruct('content', 'delete'),
-            )
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $roleService->newPolicyCreateStruct('content', 'create')
         );
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $roleService->newPolicyCreateStruct('content', 'delete')
+        );
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
 
         // Delete all policies from the new role
         foreach ($role->getPolicies() as $policy) {
@@ -1496,21 +1491,23 @@ class RoleServiceTest extends BaseTest
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         // Create a new role with two policies
-        $role = $roleService->createRoleDraft(
-            $roleCreate,
-            array(
-                $roleService->newPolicyCreateStruct('content', 'create'),
-                $roleService->newPolicyCreateStruct('content', 'delete'),
-            )
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $roleService->newPolicyCreateStruct('content', 'create')
+        );
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $roleService->newPolicyCreateStruct('content', 'delete')
         );
 
         // Delete all policies from the new role
-        foreach ($role->getPolicies() as $policy) {
-            $role = $roleService->removePolicyByRoleDraft($role, $policy);
+        foreach ($roleDraft->getPolicies() as $policy) {
+            $roleDraft = $roleService->removePolicyByRoleDraft($roleDraft, $policy);
         }
         /* END: Use Case */
 
-        $this->assertSame(array(), $role->getPolicies());
+        $this->assertSame(array(), $roleDraft->getPolicies());
     }
 
     /**
@@ -1534,13 +1531,17 @@ class RoleServiceTest extends BaseTest
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         // Create a new role with two policies
-        $role = $roleService->createRole(
-            $roleCreate,
-            array(
-                $roleService->newPolicyCreateStruct('content', 'create'),
-                $roleService->newPolicyCreateStruct('content', 'delete'),
-            )
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $roleService->newPolicyCreateStruct('content', 'create')
         );
+        $roleService->addPolicyByRoleDraft(
+            $roleDraft,
+            $roleService->newPolicyCreateStruct('content', 'delete')
+        );
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
 
         // Delete all policies from the new role
         foreach ($role->getPolicies() as $policy) {
@@ -1941,7 +1942,9 @@ class RoleServiceTest extends BaseTest
         );
 
         // Create the new role instance
-        $role = $roleService->createRole($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
 
         // Assign role to new user
         $roleService->assignRoleToUser($role, $user);
@@ -2352,7 +2355,9 @@ class RoleServiceTest extends BaseTest
         );
 
         // Create the new role instance
-        $role = $roleService->createRole($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
 
         // Assign role to new user group
         $roleService->assignRoleToUserGroup($role, $userGroup);
@@ -2406,7 +2411,9 @@ class RoleServiceTest extends BaseTest
         );
 
         // Create the new role instance
-        $role = $roleService->createRole($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
 
         // Assign role to anon user
         $roleService->assignRoleToUser($role, $user);
@@ -2475,7 +2482,7 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $roleDraft = $roleService->createRoleDraft($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
 
         $roleDraft = $roleService->addPolicyByRoleDraft(
             $roleDraft,
@@ -2513,7 +2520,7 @@ class RoleServiceTest extends BaseTest
         // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreate->mainLanguageCode = 'eng-US';
 
-        $roleDraft = $roleService->createRoleDraft($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
 
         $roleDraft = $roleService->addPolicyByRoleDraft(
             $roleDraft,

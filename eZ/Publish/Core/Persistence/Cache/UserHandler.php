@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\Persistence\Cache;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface;
 use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\Role;
+use eZ\Publish\SPI\Persistence\User\RoleCreateStruct;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Policy;
 
@@ -98,63 +99,51 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::createRole
      */
-    public function createRole(Role $struct)
+    public function createRole(RoleCreateStruct $createStruct)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $struct));
-        $role = $this->persistenceHandler->userHandler()->createRole($struct);
+        $this->logger->logCall(__METHOD__, array('struct' => $createStruct));
 
-        // Don't cache draft roles
-        if ($role->status == Role::STATUS_DEFINED) {
-            $this->cache->getItem('user', 'role', $role->id)->set($role);
-        }
-
-        return $role;
+        return $this->persistenceHandler->userHandler()->createRole($createStruct);
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::loadRoleDraft
+     * @see eZ\Publish\SPI\Persistence\User\Handler::createRoleDraft
      */
-    public function loadRoleDraft($roleId)
+    public function createRoleDraft($roleId)
     {
         $this->logger->logCall(__METHOD__, array('role' => $roleId));
 
-        return $this->persistenceHandler->userHandler()->loadRoleDraft($roleId);
+        return $this->persistenceHandler->userHandler()->createRoleDraft($roleId);
     }
 
     /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::loadRole
      */
-    public function loadRole($roleId)
+    public function loadRole($roleId, $status = Role::STATUS_DEFINED)
     {
-        $cache = $this->cache->getItem('user', 'role', $roleId);
-        $role = $cache->get();
-        if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('role' => $roleId));
-            $role = $this->persistenceHandler->userHandler()->loadRole($roleId);
-            $cache->set($role);
+        if ($status === Role::STATUS_DEFINED) {
+            $cache = $this->cache->getItem('user', 'role', $roleId);
+            $role = $cache->get();
+            if ($cache->isMiss()) {
+                $this->logger->logCall(__METHOD__, array('role' => $roleId));
+                $role = $this->persistenceHandler->userHandler()->loadRole($roleId, $status);
+                $cache->set($role);
+            }
+        } else {
+            $role = $this->persistenceHandler->userHandler()->loadRole($roleId, $status);
         }
 
         return $role;
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::loadRoleDraftByIdentifier
-     */
-    public function loadRoleDraftByIdentifier($identifier)
-    {
-        $this->logger->logCall(__METHOD__, array('role' => $identifier));
-
-        return $this->persistenceHandler->userHandler()->loadRoleDraftByIdentifier($identifier);
-    }
-
-    /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::loadRoleByIdentifier
      */
-    public function loadRoleByIdentifier($identifier)
+    public function loadRoleByIdentifier($identifier, $status = Role::STATUS_DEFINED)
     {
         $this->logger->logCall(__METHOD__, array('role' => $identifier));
 
-        return $this->persistenceHandler->userHandler()->loadRoleByIdentifier($identifier);
+        return $this->persistenceHandler->userHandler()->loadRoleByIdentifier($identifier, $status);
     }
 
     /**
@@ -201,46 +190,30 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::updateRoleDraft
-     */
-    public function updateRoleDraft(RoleUpdateStruct $struct)
-    {
-        $this->logger->logCall(__METHOD__, array('struct' => $struct));
-
-        $this->persistenceHandler->userHandler()->updateRoleDraft($struct);
-    }
-
-    /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::updateRole
      */
-    public function updateRole(RoleUpdateStruct $struct)
+    public function updateRole(RoleUpdateStruct $struct, $status = Role::STATUS_DEFINED)
     {
         $this->logger->logCall(__METHOD__, array('struct' => $struct));
-        $this->persistenceHandler->userHandler()->updateRole($struct);
+        $this->persistenceHandler->userHandler()->updateRole($struct, $status);
 
-        $this->cache->clear('user', 'role', $struct->id);
-    }
-
-    /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::deleteRoleDraft
-     */
-    public function deleteRoleDraft($roleId)
-    {
-        $this->logger->logCall(__METHOD__, array('role' => $roleId));
-
-        return $this->persistenceHandler->userHandler()->deleteRoleDraft($roleId);
+        if ($status === Role::STATUS_DEFINED) {
+            $this->cache->clear('user', 'role', $struct->id);
+        }
     }
 
     /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::deleteRole
      */
-    public function deleteRole($roleId)
+    public function deleteRole($roleId, $status = Role::STATUS_DEFINED)
     {
         $this->logger->logCall(__METHOD__, array('role' => $roleId));
-        $return = $this->persistenceHandler->userHandler()->deleteRole($roleId);
+        $return = $this->persistenceHandler->userHandler()->deleteRole($roleId, $status);
 
-        $this->cache->clear('user', 'role', $roleId);
-        $this->cache->clear('user', 'role', 'assignments');
+        if ($status === Role::STATUS_DEFINED) {
+            $this->cache->clear('user', 'role', $roleId);
+            $this->cache->clear('user', 'role', 'assignments');
+        }
 
         return $return;
     }

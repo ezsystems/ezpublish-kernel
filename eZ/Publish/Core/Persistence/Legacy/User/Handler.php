@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\User;
 use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\Handler as BaseUserHandler;
 use eZ\Publish\SPI\Persistence\User\Role;
+use eZ\Publish\SPI\Persistence\User\RoleCreateStruct;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Policy;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway as RoleGateway;
@@ -166,35 +167,80 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Create new role.
+     * Create new role draft.
      *
-     * @param \eZ\Publish\SPI\Persistence\User\Role $role
+     * Sets status to Role::STATUS_DRAFT on the new returned draft.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\RoleCreateStruct $createStruct
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
-    public function createRole(Role $role)
+    public function createRole(RoleCreateStruct $createStruct)
     {
+        return $this->internalCreateRole($createStruct);
+    }
+
+    /**
+     * Creates a draft of existing defined role.
+     *
+     * Sets status to Role::STATUS_DRAFT on the new returned draft.
+     *
+     * @param mixed $roleId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role with defined status is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
+     */
+    public function createRoleDraft($roleId)
+    {
+        $createStruct = $this->mapper->createCreateStructFromRole(
+            $this->loadRole($roleId)
+        );
+        $createStruct->status = Role::STATUS_DRAFT;
+
+        return $this->internalCreateRole($createStruct, $roleId);
+    }
+
+    /**
+     * Internal method for creating Role.
+     *
+     * Used by self::createRole() and self::createRoleDraft()
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\RoleCreateStruct $createStruct
+     * @param mixed|null $roleId Used by self::createRoleDraft() to retain Role id in the draft
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
+     */
+    protected function internalCreateRole(RoleCreateStruct $createStruct, $roleId = null)
+    {
+        $createStruct = clone $createStruct;
+        $role = $this->mapper->createRoleFromCreateStruct(
+            $createStruct
+        );
+        $role->id = $roleId;
+
         $this->roleGateway->createRole($role);
 
         foreach ($role->policies as $policy) {
-            $this->addPolicy($role->id, $policy);
+            $this->addPolicyByRoleDraft($role->id, $policy);
         }
 
         return $role;
     }
 
     /**
-     * Loads a specified role draft by $roleId.
+     * Loads a specified role (draft) by $roleId.
      *
      * @param mixed $roleId
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
-    public function loadRoleDraft($roleId)
+    public function loadRole($roleId, $status = Role::STATUS_DEFINED)
     {
-        $data = $this->roleGateway->loadRole($roleId, Role::STATUS_DRAFT);
+        $data = $this->roleGateway->loadRole($roleId, $status);
 
         if (empty($data)) {
             throw new NotFound('role', $roleId);
@@ -209,67 +255,18 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Loads a specified role by $roleId.
-     *
-     * @param mixed $roleId
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
-     *
-     * @return \eZ\Publish\SPI\Persistence\User\Role
-     */
-    public function loadRole($roleId)
-    {
-        $data = $this->roleGateway->loadRole($roleId);
-
-        if (empty($data)) {
-            throw new NotFound('role', $roleId);
-        }
-
-        $role = $this->mapper->mapRole($data);
-        foreach ($role->policies as $policy) {
-            $this->limitationConverter->toSPI($policy);
-        }
-
-        return $role;
-    }
-
-    /**
-     * Loads a specified role draft by $identifier.
+     * Loads a specified role (draft) by $identifier.
      *
      * @param string $identifier
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
-    public function loadRoleDraftByIdentifier($identifier)
+    public function loadRoleByIdentifier($identifier, $status = Role::STATUS_DEFINED)
     {
-        $data = $this->roleGateway->loadRoleByIdentifier($identifier, Role::STATUS_DRAFT);
-
-        if (empty($data)) {
-            throw new NotFound('role', $identifier);
-        }
-
-        $role = $this->mapper->mapRole($data);
-        foreach ($role->policies as $policy) {
-            $this->limitationConverter->toSPI($policy);
-        }
-
-        return $role;
-    }
-
-    /**
-     * Loads a specified role by $identifier.
-     *
-     * @param string $identifier
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
-     *
-     * @return \eZ\Publish\SPI\Persistence\User\Role
-     */
-    public function loadRoleByIdentifier($identifier)
-    {
-        $data = $this->roleGateway->loadRoleByIdentifier($identifier);
+        $data = $this->roleGateway->loadRoleByIdentifier($identifier, $status);
 
         if (empty($data)) {
             throw new NotFound('role', $identifier);
@@ -303,55 +300,31 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Update role draft.
+     * Update role (draft).
      *
      * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    public function updateRoleDraft(RoleUpdateStruct $role)
+    public function updateRole(RoleUpdateStruct $role, $status = Role::STATUS_DEFINED)
     {
-        $this->roleGateway->updateRole($role, Role::STATUS_DRAFT);
+        $this->roleGateway->updateRole($role, $status);
     }
 
     /**
-     * Update role.
-     *
-     * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
-     */
-    public function updateRole(RoleUpdateStruct $role)
-    {
-        $this->roleGateway->updateRole($role);
-    }
-
-    /**
-     * Delete the specified role draft.
+     * Delete the specified role (draft).
      *
      * @param mixed $roleId
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    public function deleteRoleDraft($roleId)
+    public function deleteRole($roleId, $status = Role::STATUS_DEFINED)
     {
-        $roleDraft = $this->loadRoleDraft($roleId);
-
-        foreach ($roleDraft->policies as $policy) {
-            $this->roleGateway->removePolicy($policy->id, Role::STATUS_DRAFT);
-        }
-
-        $this->roleGateway->deleteRole($roleDraft->id, Role::STATUS_DRAFT);
-    }
-
-    /**
-     * Delete the specified role.
-     *
-     * @param mixed $roleId
-     */
-    public function deleteRole($roleId)
-    {
-        $role = $this->loadRole($roleId);
+        $role = $this->loadRole($roleId, $status);
 
         foreach ($role->policies as $policy) {
             $this->roleGateway->removePolicy($policy->id);
         }
 
-        $this->roleGateway->deleteRole($role->id);
+        $this->roleGateway->deleteRole($role->id, $status);
     }
 
     /**
@@ -361,7 +334,7 @@ class Handler implements BaseUserHandler
      */
     public function publishRoleDraft($roleId)
     {
-        $roleDraft = $this->loadRoleDraft($roleId);
+        $roleDraft = $this->loadRole($roleId, Role::STATUS_DRAFT);
 
         try {
             $role = $this->loadRole($roleId);

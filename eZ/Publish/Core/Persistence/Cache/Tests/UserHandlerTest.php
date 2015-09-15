@@ -481,7 +481,7 @@ class UserHandlerTest extends HandlerTest
         $innerHandlerMock
             ->expects($this->once())
             ->method('createRole')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\Role'))
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\RoleCreateStruct'))
             ->will(
                 $this->returnValue(
                     new Role(
@@ -492,26 +492,23 @@ class UserHandlerTest extends HandlerTest
 
         $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
         $this->cacheMock
-            ->expects($this->once())
-            ->method('getItem')
-            ->with('user', 'role', 33)
-            ->will($this->returnValue($cacheItemMock));
+            ->expects($this->never())
+            ->method('getItem');
 
         $cacheItemMock
-            ->expects($this->once())
-            ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\Role'));
+            ->expects($this->never())
+            ->method('set');
 
         $cacheItemMock
             ->expects($this->never())
             ->method('get');
 
         $handler = $this->persistenceCacheHandler->userHandler();
-        $handler->createRole(new Role());
+        $handler->createRole(new User\RoleCreateStruct());
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::createRole
+     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::createRoleDraft
      */
     public function testCreateRoleDraft()
     {
@@ -525,8 +522,8 @@ class UserHandlerTest extends HandlerTest
 
         $innerHandlerMock
             ->expects($this->once())
-            ->method('createRole')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\Role'))
+            ->method('createRoleDraft')
+            ->with(33)
             ->will(
                 $this->returnValue(
                     new Role(
@@ -549,9 +546,8 @@ class UserHandlerTest extends HandlerTest
             ->method('get');
 
         $handler = $this->persistenceCacheHandler->userHandler();
-        $roleDraft = new Role();
-        $roleDraft->status = Role::STATUS_DRAFT;
-        $handler->createRole($roleDraft);
+        $role = new Role(['id' => 33]);
+        $handler->createRoleDraft($role->id);
     }
 
     /**
@@ -590,7 +586,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::updateRoleDraft
+     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::updateRole
      */
     public function testUpdateRoleDraft()
     {
@@ -604,8 +600,8 @@ class UserHandlerTest extends HandlerTest
 
         $innerHandler
             ->expects($this->once())
-            ->method('updateRoleDraft')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\RoleUpdateStruct'));
+            ->method('updateRole')
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\RoleUpdateStruct'), Role::STATUS_DRAFT);
 
         $roleUpdateStruct = new RoleUpdateStruct();
         $roleUpdateStruct->id = 42;
@@ -619,7 +615,7 @@ class UserHandlerTest extends HandlerTest
             ->method('getItem');
 
         $handler = $this->persistenceCacheHandler->userHandler();
-        $handler->updateRoleDraft($roleUpdateStruct);
+        $handler->updateRole($roleUpdateStruct, Role::STATUS_DRAFT);
     }
 
     /**
@@ -660,7 +656,7 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::deleteRoleDraft
+     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::deleteRole
      */
     public function testDeleteRoleDraft()
     {
@@ -674,8 +670,8 @@ class UserHandlerTest extends HandlerTest
 
         $innerHandlerMock
             ->expects($this->once())
-            ->method('deleteRoleDraft')
-            ->with(33)
+            ->method('deleteRole')
+            ->with(33, Role::STATUS_DRAFT)
             ->will(
                 $this->returnValue(true)
             );
@@ -685,7 +681,7 @@ class UserHandlerTest extends HandlerTest
             ->method('clear');
 
         $handler = $this->persistenceCacheHandler->userHandler();
-        $handler->deleteRoleDraft(33);
+        $handler->deleteRole(33, Role::STATUS_DRAFT);
     }
 
     /**

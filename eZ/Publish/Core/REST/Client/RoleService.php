@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruc
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
+use eZ\Publish\Core\Repository\Values\User\RoleDraft;
 use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
 use eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
 use eZ\Publish\Core\REST\Client\Values\User\PolicyCreateStruct;
@@ -99,26 +100,6 @@ class RoleService implements APIRoleService, Sessionable
     }
 
     /**
-     * Creates a new RoleDraft.
-     *
-     * @since 6.0
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *         if the name of the role already exists or if limitation of the same type
-     *         is repeated in the policy create struct or if limitation is not allowed on module/function
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCreateStruct is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
-     */
-    public function createRoleDraft(APIRoleCreateStruct $roleCreateStruct)
-    {
-        //TODO
-    }
-
-    /**
      * Creates a new RoleDraft for existing Role.
      *
      * @since 6.0
@@ -131,7 +112,7 @@ class RoleService implements APIRoleService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
      */
-    public function createRoleDraftByRole(APIRole $role)
+    public function createRoleDraft(APIRole $role)
     {
         //TODO
     }
@@ -260,9 +241,7 @@ class RoleService implements APIRoleService, Sessionable
     }
 
     /**
-     * Creates a new Role.
-     *
-     * @deprecated since 6.0, use {@see createRoleDraft}
+     * Creates a new Role draft.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists or if limitation of the
@@ -272,7 +251,7 @@ class RoleService implements APIRoleService, Sessionable
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
      */
     public function createRole(APIRoleCreateStruct $roleCreateStruct)
     {
@@ -313,7 +292,7 @@ class RoleService implements APIRoleService, Sessionable
             $createdPolicies[] = $createdPolicy;
         }
 
-        return new Role(
+        return new RoleDraft(
             array(
                 'id' => $createdRole->id,
                 'identifier' => $createdRole->identifier,

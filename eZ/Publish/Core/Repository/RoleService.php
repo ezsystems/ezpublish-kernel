@@ -138,7 +138,7 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
      */
-    public function createRoleDraft(APIRoleCreateStruct $roleCreateStruct)
+    public function createRole(APIRoleCreateStruct $roleCreateStruct)
     {
         if (!is_string($roleCreateStruct->identifier) || empty($roleCreateStruct->identifier)) {
             throw new InvalidArgumentValue('identifier', $roleCreateStruct->identifier, 'RoleCreateStruct');
@@ -149,31 +149,13 @@ class RoleService implements RoleServiceInterface
         }
 
         try {
-            $existingSPIRoleDraft = $this->userHandler->loadRoleDraftByIdentifier($roleCreateStruct->identifier);
-            if ($existingSPIRoleDraft instanceof SPIRole) {
-                // Throw exception, so platformui et al can do conflict management. Follow-up: EZP-24719
-                throw new InvalidArgumentException(
-                    '$roleCreateStruct',
-                    "Cannot create a draft for role '{$roleCreateStruct->identifier}' because another draft exists"
-                );
-            }
-        } catch (APINotFoundException $e) {
-            // Do nothing
-        }
-
-        try {
-            /* Throw exception if:
-             * - A published role with the same identifier exists, AND
-             * - The ID of the two are NOT the same (otherwise it's not an editing conflict)
-            */
             $existingRole = $this->loadRoleByIdentifier($roleCreateStruct->identifier);
-            if ($existingRole instanceof APIRole && $existingRole->id != $roleCreateStruct->id) {
-                throw new InvalidArgumentException(
-                    '$roleCreateStruct',
-                    "Role '{$existingRole->id}' with the specified identifier '{$roleCreateStruct->identifier}' " .
-                    'already exists'
-                );
-            }
+
+            throw new InvalidArgumentException(
+                '$roleCreateStruct',
+                "Role '{$existingRole->id}' with the specified identifier '{$roleCreateStruct->identifier}' " .
+                'already exists'
+            );
         } catch (APINotFoundException $e) {
             // Do nothing
         }
@@ -184,18 +166,18 @@ class RoleService implements RoleServiceInterface
         }
 
         $roleCreateStruct->status = APIRole::STATUS_DRAFT;
-        $spiRole = $this->roleDomainMapper->buildPersistenceRoleObject($roleCreateStruct);
+        $spiRoleCreateStruct = $this->roleDomainMapper->buildPersistenceRoleCreateStruct($roleCreateStruct);
 
         $this->repository->beginTransaction();
         try {
-            $createdRole = $this->userHandler->createRole($spiRole);
+            $spiRole = $this->userHandler->createRole($spiRoleCreateStruct);
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
             throw $e;
         }
 
-        return $this->roleDomainMapper->buildDomainRoleDraftObject($createdRole);
+        return $this->roleDomainMapper->buildDomainRoleDraftObject($spiRole);
     }
 
     /**
@@ -205,48 +187,37 @@ class RoleService implements RoleServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the Role already has a Role Draft that will need to be removed first
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCreateStruct is not valid
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
      */
-    public function createRoleDraftByRole(APIRole $role)
+    public function createRoleDraft(APIRole $role)
     {
-        try {
-            $roleCreateStruct = new RoleCreateStruct([
-                'id' => $role->id,
-                'identifier' => $role->identifier,
-            ]);
-            $roleDraft = $this->createRoleDraft($roleCreateStruct);
-
-            foreach ($role->getPolicies() as $policy) {
-                $policyCreateStruct = new PolicyCreateStruct([
-                    'module' => $policy->module,
-                    'function' => $policy->function,
-                ]);
-                foreach ($policy->getLimitations() as $limitation) {
-                    $policyCreateStruct->addLimitation($limitation);
-                }
-                $this->addPolicyByRoleDraft($roleDraft, $policyCreateStruct);
-            }
-        } catch (UnauthorizedException $e) {
-            return $this->forward('eZPlatformUIBundle:Pjax:accessDenied');
-        } catch (InvalidArgumentException $e) {
-            $this->addErrorMessage('role.error.name_or_limitation');
-
-            return $this->redirect(
-                $this->generateUrl('admin_roleList')
-            );
-        } catch (LimitationValidationException $e) {
-            $this->addErrorMessage('role.error.limitation_validation');
-
-            return $this->redirect(
-                $this->generateUrl('admin_roleList')
-            );
+        if ($this->repository->hasAccess('role', 'create') !== true) {
+            throw new UnauthorizedException('role', 'create');
         }
 
-        return $roleDraft;
+        try {
+            $this->userHandler->loadRole($role->id, Role::STATUS_DRAFT);
+
+            // Throw exception, so platformui et al can do conflict management. Follow-up: EZP-24719
+            throw new InvalidArgumentException(
+                '$role',
+                "Cannot create a draft for role '{$role->identifier}' because another draft exists"
+            );
+        } catch (APINotFoundException $e) {
+            $this->repository->beginTransaction();
+            try {
+                $spiRole = $this->userHandler->createRoleDraft($role->id);
+                $this->repository->commit();
+            } catch (Exception $e) {
+                $this->repository->rollback();
+                throw $e;
+            }
+        }
+
+        return $this->roleDomainMapper->buildDomainRoleDraftObject($spiRole);
     }
 
     /**
@@ -267,7 +238,7 @@ class RoleService implements RoleServiceInterface
             throw new UnauthorizedException('role', 'read');
         }
 
-        $spiRole = $this->userHandler->loadRoleDraft($id);
+        $spiRole = $this->userHandler->loadRole($id, Role::STATUS_DRAFT);
 
         return $this->roleDomainMapper->buildDomainRoleDraftObject($spiRole);
     }
@@ -318,13 +289,14 @@ class RoleService implements RoleServiceInterface
 
         $this->repository->beginTransaction();
         try {
-            $this->userHandler->updateRoleDraft(
+            $this->userHandler->updateRole(
                 new SPIRoleUpdateStruct(
                     array(
                         'id' => $loadedRoleDraft->id,
                         'identifier' => $roleUpdateStruct->identifier ?: $loadedRoleDraft->identifier,
                     )
-                )
+                ),
+                Role::STATUS_DRAFT
             );
             $this->repository->commit();
         } catch (Exception $e) {
@@ -463,7 +435,7 @@ class RoleService implements RoleServiceInterface
 
         $this->repository->beginTransaction();
         try {
-            $this->userHandler->deleteRoleDraft($loadedRoleDraft->id);
+            $this->userHandler->deleteRole($loadedRoleDraft->id, Role::STATUS_DRAFT);
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
@@ -514,60 +486,6 @@ class RoleService implements RoleServiceInterface
             $this->repository->rollback();
             throw $e;
         }
-    }
-
-    /**
-     * Creates a new Role.
-     *
-     * @deprecated since 6.0, use {@see createRoleDraft}
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists or if limitation of the
-     *                                                                        same type is repeated in the policy create struct or if
-     *                                                                        limitation is not allowed on module/function
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCreateStruct is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
-    public function createRole(APIRoleCreateStruct $roleCreateStruct)
-    {
-        if (!is_string($roleCreateStruct->identifier) || empty($roleCreateStruct->identifier)) {
-            throw new InvalidArgumentValue('identifier', $roleCreateStruct->identifier, 'RoleCreateStruct');
-        }
-
-        if ($this->repository->hasAccess('role', 'create') !== true) {
-            throw new UnauthorizedException('role', 'create');
-        }
-
-        try {
-            $existingRole = $this->loadRoleByIdentifier($roleCreateStruct->identifier);
-            if ($existingRole !== null) {
-                throw new InvalidArgumentException('roleCreateStruct', 'role with specified identifier already exists');
-            }
-        } catch (APINotFoundException $e) {
-            // Do nothing
-        }
-
-        $limitationValidationErrors = $this->validateRoleCreateStruct($roleCreateStruct);
-        if (!empty($limitationValidationErrors)) {
-            throw new LimitationValidationException($limitationValidationErrors);
-        }
-
-        $roleCreateStruct->status = APIRole::STATUS_DEFINED;
-        $spiRole = $this->roleDomainMapper->buildPersistenceRoleObject($roleCreateStruct);
-
-        $this->repository->beginTransaction();
-        try {
-            $createdRole = $this->userHandler->createRole($spiRole);
-            $this->repository->commit();
-        } catch (Exception $e) {
-            $this->repository->rollback();
-            throw $e;
-        }
-
-        return $this->roleDomainMapper->buildDomainRoleObject($createdRole);
     }
 
     /**

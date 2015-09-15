@@ -618,7 +618,9 @@ class RoleServiceAuthorizationTest extends BaseTest
         $roleCreate->addPolicy($policyCreate);
 
         // Create a new role instance.
-        $role = $roleService->createRole($roleCreate);
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
+        $role = $roleService->loadRole($roleDraft->id);
         /* END: Inline */
 
         return $role;

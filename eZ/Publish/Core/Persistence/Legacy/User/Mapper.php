@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\User;
 
 use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\Role;
+use eZ\Publish\SPI\Persistence\User\RoleCreateStruct;
 use eZ\Publish\SPI\Persistence\User\Policy;
 use eZ\Publish\SPI\Persistence\User\RoleAssignment;
 
@@ -201,5 +202,41 @@ class Mapper
         );
 
         return $roleAssignments;
+    }
+
+    /**
+     * Creates a create struct from an existing $role.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\Role $role
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\RoleCreateStruct
+     */
+    public function createCreateStructFromRole(Role $role)
+    {
+        $createStruct = new RoleCreateStruct();
+
+        $createStruct->identifier = $role->identifier;
+        $createStruct->status = $role->status;
+        $createStruct->policies = $role->policies;
+
+        return $createStruct;
+    }
+
+    /**
+     * Maps properties from $struct to $role.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\RoleCreateStruct $createStruct
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
+     */
+    public function createRoleFromCreateStruct(RoleCreateStruct $createStruct)
+    {
+        $role = new Role();
+
+        $role->identifier = $createStruct->identifier;
+        $role->status = $createStruct->status;
+        $role->policies = $createStruct->policies;
+
+        return $role;
     }
 }
