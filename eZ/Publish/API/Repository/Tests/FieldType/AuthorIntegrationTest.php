@@ -21,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class AuthorIntegrationTest extends BaseIntegrationTest
+class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
 {
     /**
      * Get name of tested field type.
@@ -399,6 +399,145 @@ class AuthorIntegrationTest extends BaseIntegrationTest
                         ),
                     )
                 ),
+            ),
+        );
+    }
+
+    protected function checkSearchEngineSupport()
+    {
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
+            $this->markTestSkipped(
+                "'ezauthor' field type is not searchable with Legacy Search Engine"
+            );
+        }
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return array(
+            new Author(
+                array(
+                    'id' => 2,
+                    'name' => 'Ferdinand',
+                    'email' => 'ferdinand@example.com',
+                )
+            ),
+        );
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return array(
+            new Author(
+                array(
+                    'id' => 3,
+                    'name' => 'Greta',
+                    'email' => 'greta@example.com',
+                )
+            ),
+        );
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        return 'Ferdinand';
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        return 'Greta';
+    }
+
+    protected function getAdditionallyIndexedFieldData()
+    {
+        return array(
+            array(
+                'id',
+                2,
+                3,
+            ),
+            array(
+                'email',
+                'ferdinand@example.com',
+                'greta@example.com',
+            ),
+            array(
+                'sort_value',
+                'Ferdinand',
+                'Greta',
+            ),
+        );
+    }
+
+    protected function getValidMultivaluedSearchValuesOne()
+    {
+        return array(
+            new Author(
+                array(
+                    'id' => 1,
+                    'name' => 'Antoinette',
+                    'email' => 'antoinette@example.com',
+                )
+            ),
+            new Author(
+                array(
+                    'id' => 2,
+                    'name' => 'Ferdinand',
+                    'email' => 'ferdinand@example.com',
+                )
+            ),
+        );
+    }
+
+    protected function getValidMultivaluedSearchValuesTwo()
+    {
+        return array(
+            new Author(
+                array(
+                    'id' => 3,
+                    'name' => 'Greta',
+                    'email' => 'greta@example.com',
+                )
+            ),
+            new Author(
+                array(
+                    'id' => 4,
+                    'name' => 'Leopold',
+                    'email' => 'leopold@example.com',
+                )
+            ),
+            new Author(
+                array(
+                    'id' => 5,
+                    'name' => 'Maximilian',
+                    'email' => 'maximilian@example.com',
+                )
+            ),
+        );
+    }
+
+    protected function getMultivaluedSearchTargetValuesOne()
+    {
+        return array('Antoinette', 'Ferdinand');
+    }
+
+    protected function getMultivaluedSearchTargetValuesTwo()
+    {
+        return array('Greta', 'Leopold', 'Maximilian');
+    }
+
+    protected function getAdditionallyIndexedMultivaluedFieldData()
+    {
+        return array(
+            array(
+                'id',
+                array(1, 2),
+                array(3, 4, 5),
+            ),
+            array(
+                'email',
+                array('antoinette@example.com', 'ferdinand@example.com'),
+                array('greta@example.com', 'leopold@example.com', 'maximilian@example.com'),
             ),
         );
     }
