@@ -44,6 +44,7 @@ parameters:
     ezpublish_rest.field_type_processor.ezxmltext.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\XmlTextProcessor
     ezpublish_rest.field_type_processor.ezbinaryfile.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryProcessor
     ezpublish_rest.field_type_processor.ezpage.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\PageProcessor
+    ezpublish_rest.field_type_processor.ezfloat.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\FloatProcessor
 
     ezpublish_rest.output.visitor.dispatcher.class: eZ\Publish\Core\REST\Server\View\AcceptHeaderVisitorDispatcher
     ezpublish_rest.output.visitor.class: eZ\Publish\Core\REST\Common\Output\Visitor
@@ -315,6 +316,11 @@ services:
         class: %ezpublish_rest.field_type_processor.ezpage.class%
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezpage }
+
+    ezpublish_rest.field_type_processor.ezfloat:
+        class: %ezpublish_rest.field_type_processor.ezfloat.class%
+        tags:
+            - { name: ezpublish_rest.field_type_processor, alias: ezfloat }
 
     ### OUTPUT
 

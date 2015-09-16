@@ -202,11 +202,8 @@ class Type extends FieldType
      */
     protected function createValueFromInput($inputValue)
     {
-        if (is_int($inputValue)) {
+        if (is_numeric($inputValue)) {
             $inputValue = (float)$inputValue;
-        }
-
-        if (is_float($inputValue)) {
             $inputValue = new Value($inputValue);
         }
 
