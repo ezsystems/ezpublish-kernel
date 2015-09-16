@@ -77,23 +77,27 @@ class LegacyStorage extends Gateway
             return;
         }
 
-        /* @var $linkTagsById \DOMElement[] */
-        $linkIds = array();
         $linkTags = $doc->getElementsByTagName('link');
+
         if ($linkTags->length > 0) {
+            $links = array();
+
             foreach ($linkTags as $link) {
                 $urlId = $link->getAttribute('url_id');
                 if (!empty($urlId)) {
-                    $linkIds[$urlId] = true;
+                    if (!isset($links[$urlId])) {
+                        $links[$urlId] = array();
+                    }
+                    $links[$urlId][] = $link;
                 }
             }
 
-            if (!empty($linkIds)) {
-                $linkIdUrlMap = $this->getIdUrlMap(array_keys($linkIds));
-                foreach ($linkTags as $link) {
-                    $urlId = $link->getAttribute('url_id');
-                    if (!empty($urlId)) {
-                        $link->setAttribute('url', $linkIdUrlMap[$urlId]);
+            if (count($links)) {
+                $linkIdUrlMap = $this->getIdUrlMap(array_keys($links));
+
+                foreach ($linkIdUrlMap as $urlId => $url) {
+                    foreach ($links[$urlId] as $link) {
+                        $link->setAttribute('url', $url);
                         $link->removeAttribute('url_id');
                     }
                 }
