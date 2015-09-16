@@ -11,26 +11,32 @@
 namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
-use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
-use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
+use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
+use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
-use eZ\Publish\API\Repository\Values\User\Policy;
+use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
-use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\CreateRoleSignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdateRoleSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\AddPolicyByRoleDraftSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\AddPolicySignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\RemovePolicySignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdatePolicySignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\DeleteRoleSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\AssignRoleToUserGroupSignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\UnassignRoleFromUserGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\AssignRoleToUserSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\CreateRoleDraftSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\CreateRoleSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\DeleteRoleDraftSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\DeleteRoleSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\PublishRoleDraftSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\RemovePolicyByRoleDraftSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\RemovePolicySignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\UnassignRoleFromUserGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\UnassignRoleFromUserSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdatePolicySignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdateRoleDraftSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdateRoleSignal;
 
 /**
  * RoleService class.
@@ -112,8 +118,7 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->createRoleDraft($role);
         $this->signalDispatcher->emit(
-            //TODO: CreateRoleDraftSignal? Or skip it altogether?
-            new CreateRoleSignal(
+            new CreateRoleDraftSignal(
                 array(
                     'roleId' => $returnValue->id,
                 )
@@ -157,8 +162,7 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->updateRoleDraft($roleDraft, $roleUpdateStruct);
         $this->signalDispatcher->emit(
-            //TODO: UpdateRoleDraftSignal? Or skip it altogether?
-            new UpdateRoleSignal(
+            new UpdateRoleDraftSignal(
                 array(
                     'roleId' => $roleDraft->id,
                 )
@@ -187,8 +191,7 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->addPolicyByRoleDraft($roleDraft, $policyCreateStruct);
         $this->signalDispatcher->emit(
-            //TODO: AddPolicyDraftSignal? Or skip it altogether?
-            new AddPolicySignal(
+            new AddPolicyByRoleDraftSignal(
                 array(
                     'roleId' => $roleDraft->id,
                     'policyId' => $returnValue->id,
@@ -216,8 +219,7 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->removePolicyByRoleDraft($roleDraft, $policy);
         $this->signalDispatcher->emit(
-            //TODO: RemovePolicyDraftSignal? Or skip it altogether?
-            new RemovePolicySignal(
+            new RemovePolicyByRoleDraftSignal(
                 array(
                     'roleId' => $roleDraft->id,
                     'policyId' => $policy->id,
@@ -263,8 +265,7 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->deleteRoleDraft($roleDraft);
         $this->signalDispatcher->emit(
-            //TODO: DeleteRoleDraftSignal? Or skip it altogether?
-            new DeleteRoleSignal(
+            new DeleteRoleDraftSignal(
                 array(
                     'roleId' => $roleDraft->id,
                 )
@@ -287,8 +288,7 @@ class RoleService implements RoleServiceInterface
     {
         $returnValue = $this->service->publishRoleDraft($roleDraft);
         $this->signalDispatcher->emit(
-            // TODO: PublishRoleSignal? Or keep this as is?
-            new UpdateRoleSignal(
+            new PublishRoleDraftSignal(
                 array(
                     'roleId' => $roleDraft->id,
                 )
