@@ -169,6 +169,14 @@ class FloatTest extends FieldTypeTest
                 new FloatValue(23.42),
                 new FloatValue(23.42),
             ),
+            array(
+                '42.23',
+                new FloatValue(42.23),
+            ),
+            array(
+                '23',
+                new FloatValue(23.),
+            ),
         );
     }
 
