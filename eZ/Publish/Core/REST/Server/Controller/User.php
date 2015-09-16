@@ -179,8 +179,25 @@ class User extends RestController
         $user = $this->userService->loadUser($userId);
 
         $userContentInfo = $user->getVersionInfo()->getContentInfo();
-        $userMainLocation = $this->locationService->loadLocation($userContentInfo->mainLocationId);
         $contentType = $this->contentTypeService->loadContentType($userContentInfo->contentTypeId);
+
+        try {
+            $userMainLocation = $this->locationService->loadLocation($userContentInfo->mainLocationId);
+            $relations = $this->contentService->loadRelations($user->getVersionInfo());
+        } catch (UnauthorizedException $e) {
+            // TODO: Hack for special case to allow current logged in user to load him/here self (but not relations)
+            if ($user->id == $this->repository->getCurrentUser()->id) {
+                $userMainLocation = $this->repository->sudo(
+                    function () use ($userContentInfo) {
+                        return $this->locationService->loadLocation($userContentInfo->mainLocationId);
+                    }
+                );
+                // user may not have permissions to read related content, for security reasons do not use sudo().
+                $relations = array();
+            } else {
+                throw $e;
+            }
+        }
 
         return new Values\CachedValue(
             new Values\RestUser(
@@ -188,7 +205,7 @@ class User extends RestController
                 $contentType,
                 $userContentInfo,
                 $userMainLocation,
-                $this->contentService->loadRelations($user->getVersionInfo())
+                $relations
             ),
             array('locationId' => $userContentInfo->mainLocationId)
         );
