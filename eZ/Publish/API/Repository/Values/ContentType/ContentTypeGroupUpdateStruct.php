@@ -10,20 +10,11 @@
  */
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
-
 /**
  * This class is used for updating a content type group.
  */
-class ContentTypeGroupUpdateStruct extends ValueObject
+class ContentTypeGroupUpdateStruct extends ContentTypeGroupStruct
 {
-    /**
-     * Readable and unique string identifier of a group.
-     *
-     * @var string
-     */
-    public $identifier;
-
     /**
      * If set this value overrides the current user as modifier.
      *
