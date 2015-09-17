@@ -38,6 +38,7 @@ parameters:
 
     ezpublish_rest.input.parser.internal.ContentQuery.class: eZ\Publish\Core\REST\Server\Input\Parser\ContentQuery
     ezpublish_rest.input.parser.internal.LocationQuery.class: eZ\Publish\Core\REST\Server\Input\Parser\LocationQuery
+    ezpublish_rest.input.parser.internal.criterion.Ancestor.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Ancestor
     ezpublish_rest.input.parser.internal.criterion.ContentId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\ContentId
     ezpublish_rest.input.parser.internal.criterion.ContentRemoteId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\ContentRemoteId
     ezpublish_rest.input.parser.internal.criterion.ContentTypeGroupId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\ContentTypeGroupId
@@ -398,6 +399,12 @@ services:
         class: %ezpublish_rest.input.parser.internal.LocationQuery.class%
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.LocationQuery }
+
+    ezpublish_rest.input.parser.internal.criterion.Ancestor:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.internal.criterion.Ancestor.class%
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.Ancestor }
 
     ezpublish_rest.input.parser.internal.criterion.ContentId:
         parent: ezpublish_rest.input.parser
