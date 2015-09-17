@@ -59,12 +59,12 @@ interface RoleService
     public function createRoleDraft(Role $role);
 
     /**
-     * Loads a role for the given id.
+     * Loads a RoleDraft for the given id.
      *
      * @since 6.0
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given id was not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a RoleDraft with the given id was not found
      *
      * @param mixed $id
      *
@@ -73,12 +73,12 @@ interface RoleService
     public function loadRoleDraft($id);
 
     /**
-     * Updates the properties of a role draft.
+     * Updates the properties of a RoleDraft.
      *
      * @since 6.0
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the identifier of the role already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the identifier of the RoleDraft already exists
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
      * @param \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct $roleUpdateStruct
@@ -88,7 +88,7 @@ interface RoleService
     public function updateRoleDraft(RoleDraft $roleDraft, RoleUpdateStruct $roleUpdateStruct);
 
     /**
-     * Adds a new policy to the role draft.
+     * Adds a new policy to the RoleDraft.
      *
      * @since 6.0
      *
@@ -105,17 +105,17 @@ interface RoleService
     public function addPolicyByRoleDraft(RoleDraft $roleDraft, PolicyCreateStruct $policyCreateStruct);
 
     /**
-     * Removes a policy from a role draft.
+     * Removes a policy from a RoleDraft.
      *
      * @since 6.0
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given role draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given RoleDraft
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to remove from the role
+     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to remove from the RoleDraft
      *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft the updated role
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft the updated RoleDraft
      */
     public function removePolicyByRoleDraft(RoleDraft $roleDraft, Policy $policy);
 
@@ -139,22 +139,22 @@ interface RoleService
     public function updatePolicyByRoleDraft(RoleDraft $roleDraft, Policy $policy, PolicyUpdateStruct $policyUpdateStruct);
 
     /**
-     * Deletes the given role.
+     * Deletes the given RoleDraft.
      *
      * @since 6.0
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this role
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this RoleDraft
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
      */
     public function deleteRoleDraft(RoleDraft $roleDraft);
 
     /**
-     * Publishes a given Role draft.
+     * Publishes the given RoleDraft.
      *
      * @since 6.0
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this role
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to publish this RoleDraft
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
      */

@@ -26,13 +26,6 @@ class RoleCreateStruct extends ValueObject
     public $identifier;
 
     /**
-     * The status of the role.
-     *
-     * @var int One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
-     */
-    public $status = Role::STATUS_DRAFT;
-
-    /**
      * Contains an array of role policies.
      *
      * @var mixed[]

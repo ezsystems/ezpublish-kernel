@@ -188,7 +188,6 @@ class RoleDomainMapper
         return new SPIRoleCreateStruct(
             array(
                 'identifier' => $roleCreateStruct->identifier,
-                'status' => $roleCreateStruct->status,
                 'policies' => $policiesToCreate,
             )
         );

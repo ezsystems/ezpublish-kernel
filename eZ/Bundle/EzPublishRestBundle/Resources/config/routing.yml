@@ -754,11 +754,35 @@ ezpublish_rest_loadRole:
     requirements:
         roleId: \d+
 
+ezpublish_rest_loadRoleDraft:
+    path: /user/roles/{roleId}/draft
+    defaults:
+        _controller: ezpublish_rest.controller.role:loadRoleDraft
+    methods: [GET]
+    requirements:
+        roleId: \d+
+
 ezpublish_rest_updateRole:
     path: /user/roles/{roleId}
     defaults:
         _controller: ezpublish_rest.controller.role:updateRole
     methods: [PATCH]
+    requirements:
+        roleId: \d+
+
+ezpublish_rest_updateRoleDraft:
+    path: /user/roles/{roleId}/draft
+    defaults:
+        _controller: ezpublish_rest.controller.role:updateRoleDraft
+    methods: [PATCH]
+    requirements:
+        roleId: \d+
+
+ezpublish_rest_publishRoleDraft:
+    path: /user/roles/{roleId}/draft
+    defaults:
+        _controller: ezpublish_rest.controller.role:publishRoleDraft
+    methods: [PUBLISH]
     requirements:
         roleId: \d+
 

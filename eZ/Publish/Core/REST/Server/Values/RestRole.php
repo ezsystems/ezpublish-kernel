@@ -1,30 +1,39 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\Values\User\RoleDraft class.
+ * File containing the RestRole class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\Repository\Values\User;
+namespace eZ\Publish\Core\REST\Server\Values;
 
-use eZ\Publish\API\Repository\Values\User\RoleDraft as APIRoleDraft;
+use eZ\Publish\API\Repository\Values\User\Role;
+use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 /**
- * This class represents a draft of a role.
+ * REST Role, as received by /roles/<ID>.
  */
-class RoleDraft extends APIRoleDraft
+class RestRole extends RestValue
 {
     /**
      * Holds internal role object.
      *
      * @var \eZ\Publish\API\Repository\Values\User\Role
-     *
-     * @todo document
      */
     protected $innerRole;
+
+    /**
+     * Construct.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Role $role
+     */
+    public function __construct(Role $role)
+    {
+        $this->innerRole = $role;
+    }
 
     /**
      * Magic getter for routing get calls to innerRole.
@@ -59,15 +68,5 @@ class RoleDraft extends APIRoleDraft
     public function __isset($property)
     {
         return $this->innerRole->__isset($property);
-    }
-
-    /**
-     * Returns the list of policies of this role.
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
-     */
-    public function getPolicies()
-    {
-        return $this->innerRole->getPolicies();
     }
 }

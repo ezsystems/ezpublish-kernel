@@ -75,26 +75,6 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the newRoleCreateStruct() method.
-     *
-     * @see \eZ\Publish\API\Repository\RoleService::newRoleCreateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewRoleCreateStruct
-     */
-    public function testNewRoleCreateStructIsDraft()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-
-        $roleService = $repository->getRoleService();
-        $roleCreate = $roleService->newRoleCreateStruct('roleName');
-
-        /* END: Use Case */
-
-        $this->assertEquals(Role::STATUS_DRAFT, $roleCreate->status);
-    }
-
-    /**
      * Test for the createRole() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::createRole()
@@ -120,6 +100,114 @@ class RoleServiceTest extends BaseTest
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleDraft',
             $role
         );
+
+        return [
+            'createStruct' => $roleCreate,
+            'role' => $role,
+        ];
+    }
+
+    /**
+     * Test for the createRole() method.
+     *
+     * @see \eZ\Publish\API\Repository\RoleService::createRole()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRole
+     */
+    public function testRoleCreateStructValues(array $data)
+    {
+        $createStruct = $data['createStruct'];
+        $role = $data['role'];
+
+        $this->assertEquals(
+            [
+                'identifier' => $createStruct->identifier,
+                'policies' => $createStruct->policies,
+            ],
+            [
+                'identifier' => $role->identifier,
+                'policies' => $role->policies,
+            ]
+        );
+        $this->assertNotNull($role->id);
+
+        return $data;
+    }
+
+    /**
+     * Test for the createRole() method.
+     *
+     * @see \eZ\Publish\API\Repository\RoleService::createRole()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewRoleCreateStruct
+     */
+    public function testCreateRoleWithPolicy()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+
+        $roleService = $repository->getRoleService();
+        $roleCreate = $roleService->newRoleCreateStruct('roleName');
+
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
+        // $roleCreate->mainLanguageCode = 'eng-US';
+
+        // Create new subtree limitation
+        $limitation = new SubtreeLimitation(
+            array(
+                'limitationValues' => array('/1/2/'),
+            )
+        );
+
+        // Create policy create struct and add limitation to it
+        $policyCreate = $roleService->newPolicyCreateStruct('content', 'read');
+        $policyCreate->addLimitation($limitation);
+
+        // Add policy create struct to role create struct
+        $roleCreate->addPolicy($policyCreate);
+
+        $role = $roleService->createRole($roleCreate);
+
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleDraft',
+            $role
+        );
+
+        return [
+            'createStruct' => $roleCreate,
+            'role' => $role,
+        ];
+    }
+
+    /**
+     * Test for the createRole() method.
+     *
+     * @see \eZ\Publish\API\Repository\RoleService::createRole()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRoleWithPolicy
+     */
+    public function testRoleCreateStructValuesWithPolicy(array $data)
+    {
+        $createStruct = $data['createStruct'];
+        $role = $data['role'];
+
+        $this->assertEquals(
+            [
+                'identifier' => $createStruct->identifier,
+                'policy_module' => $createStruct->policies[0]->module,
+                'policy_function' => $createStruct->policies[0]->function,
+                'policy_limitation' => array_values($createStruct->policies[0]->limitations),
+            ],
+            [
+                'identifier' => $role->identifier,
+                'policy_module' => $role->policies[0]->module,
+                'policy_function' => $role->policies[0]->function,
+                'policy_limitation' => array_values($role->policies[0]->limitations),
+            ]
+        );
+        $this->assertNotNull($role->id);
+
+        return $data;
     }
 
     /**

@@ -11,6 +11,9 @@
 namespace eZ\Publish\Core\REST\Server\Controller;
 
 use eZ\Publish\API\Repository\Exceptions\LimitationValidationException;
+use eZ\Publish\Core\Base\Exceptions\ForbiddenException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
@@ -74,18 +77,40 @@ class Role extends RestController
      */
     public function createRole(Request $request)
     {
-        return new Values\CreatedRole(
-            array(
-                'role' => $this->roleService->createRole(
-                    $this->inputDispatcher->parse(
-                        new Message(
-                            array('Content-Type' => $request->headers->get('Content-Type')),
-                            $request->getContent()
-                        )
+        $publish = ($request->query->has('publish') && $request->query->get('publish') === 'true');
+
+        try {
+            $roleDraft = $this->roleService->createRole(
+                $this->inputDispatcher->parse(
+                    new Message(
+                        [
+                            'Content-Type' => $request->headers->get('Content-Type'),
+                            // @todo Needs refactoring! Temporary solution so parser has access to get parameters
+                            '__publish' => $publish,
+                        ],
+                        $request->getContent()
                     )
-                ),
-            )
-        );
+                )
+            );
+        } catch (InvalidArgumentException $e) {
+            throw new ForbiddenException($e->getMessage());
+        } catch (UnauthorizedException $e) {
+            throw new ForbiddenException($e->getMessage());
+        } catch (LimitationValidationException $e) {
+            throw new BadRequestException($e->getMessage());
+        } catch (Exceptions\Parser $e) {
+            throw new BadRequestException($e->getMessage());
+        }
+
+        if ($publish) {
+            $this->roleService->publishRoleDraft($roleDraft);
+
+            $role = $this->roleService->loadRole($roleDraft->id);
+
+            return new Values\CreatedRole(['role' => new Values\RestRole($role)]);
+        }
+
+        return new Values\CreatedRole(['role' => new Values\RestRole($roleDraft)]);
     }
 
     /**
@@ -130,6 +155,18 @@ class Role extends RestController
     }
 
     /**
+     * Loads role draft.
+     *
+     * @param $roleId
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
+     */
+    public function loadRoleDraft($roleId)
+    {
+        return $this->roleService->loadRoleDraft($roleId);
+    }
+
+    /**
      * Updates a role.
      *
      * @param $roleId
@@ -147,6 +184,48 @@ class Role extends RestController
 
         return $this->roleService->updateRole(
             $this->roleService->loadRole($roleId),
+            $this->mapToUpdateStruct($createStruct)
+        );
+    }
+
+    /**
+     * Updates a role draft.
+     *
+     * @param $roleId
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
+     */
+    public function updateRoleDraft($roleId, Request $request)
+    {
+        $createStruct = $this->inputDispatcher->parse(
+            new Message(
+                array('Content-Type' => $request->headers->get('Content-Type')),
+                $request->getContent()
+            )
+        );
+
+        return $this->roleService->updateRoleDraft(
+            $this->roleService->loadRoleDraft($roleId),
+            $this->mapToUpdateStruct($createStruct)
+        );
+    }
+
+    /**
+     * Publishes a role draft.
+     *
+     * @param $roleId
+     */
+    public function publishRoleDraft($roleId, Request $request)
+    {
+        $createStruct = $this->inputDispatcher->parse(
+            new Message(
+                array('Content-Type' => $request->headers->get('Content-Type')),
+                $request->getContent()
+            )
+        );
+
+        $this->roleService->publishRoleDraft(
+            $this->roleService->loadRoleDraft($roleId),
             $this->mapToUpdateStruct($createStruct)
         );
     }

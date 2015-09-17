@@ -55,34 +55,6 @@ abstract class Role extends ValueObject
     protected $status;
 
     /**
-     * Creation date of the role.
-     *
-     * @var \DateTime
-     */
-    protected $creationDate;
-
-    /**
-     * Modification date of the role.
-     *
-     * @var \DateTime
-     */
-    protected $modificationDate;
-
-    /**
-     * Creator user id of the role.
-     *
-     * @var mixed
-     */
-    protected $creatorId;
-
-    /**
-     * Modifier user id of the role.
-     *
-     * @var mixed
-     */
-    protected $modifierId;
-
-    /**
      * Returns the list of policies of this role.
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy[]

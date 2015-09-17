@@ -128,7 +128,7 @@ class RoleService implements RoleServiceInterface
      *
      * @since 6.0
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a role
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a RoleDraft
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *         if the name of the role already exists or if limitation of the same type
      *         is repeated in the policy create struct or if limitation is not allowed on module/function
@@ -165,7 +165,6 @@ class RoleService implements RoleServiceInterface
             throw new LimitationValidationException($limitationValidationErrors);
         }
 
-        $roleCreateStruct->status = APIRole::STATUS_DRAFT;
         $spiRoleCreateStruct = $this->roleDomainMapper->buildPersistenceRoleCreateStruct($roleCreateStruct);
 
         $this->repository->beginTransaction();
@@ -181,12 +180,12 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Creates a new RoleDraft for existing Role.
+     * Creates a new RoleDraft for an existing Role.
      *
      * @since 6.0
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the Role already has a Role Draft that will need to be removed first
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a RoleDraft
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the Role already has a RoleDraft that will need to be removed first
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      *
@@ -221,12 +220,12 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Loads a role for the given id.
+     * Loads a RoleDraft for the given id.
      *
      * @since 6.0
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given id was not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this RoleDraft
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a RoleDraft with the given id was not found
      *
      * @param mixed $id
      *
@@ -244,12 +243,12 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Updates the properties of a role draft.
+     * Updates the properties of a RoleDraft.
      *
      * @since 6.0
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the identifier of the role already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a RoleDraft
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the identifier of the RoleDraft already exists
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
      * @param \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct $roleUpdateStruct
@@ -275,7 +274,7 @@ class RoleService implements RoleServiceInterface
                  * - The ID of the two are NOT the same (otherwise it's not an editing conflict)
                 */
                 $existingRole = $this->loadRoleByIdentifier($roleUpdateStruct->identifier);
-                if ($existingRole instanceof APIRole && $existingRole->id != $loadedRoleDraft->id) {
+                if ($existingRole->id != $loadedRoleDraft->id) {
                     throw new InvalidArgumentException(
                         '$roleUpdateStruct',
                         "Role '{$existingRole->id}' with the specified identifier '{$roleUpdateStruct->identifier}' " .
@@ -308,7 +307,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Adds a new policy to the role draft.
+     * Adds a new policy to the RoleDraft.
      *
      * @since 6.0
      *
@@ -371,17 +370,17 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Removes a policy from a role draft.
+     * Removes a policy from a RoleDraft.
      *
      * @since 6.0
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given role draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given RoleDraft
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to remove from the role
+     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to remove from the RoleDraft
      *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft the updated role
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft the updated RoleDraft
      */
     public function removePolicyByRoleDraft(APIRoleDraft $roleDraft, APIPolicy $policy)
     {
@@ -421,11 +420,11 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Deletes the given role.
+     * Deletes the given RoleDraft.
      *
      * @since 6.0
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this role
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this RoleDraft
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
      */
@@ -444,11 +443,11 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Publishes a given Role draft.
+     * Publishes a given RoleDraft.
      *
      * @since 6.0
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to publish this role
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to publish this RoleDraft
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the role draft cannot be loaded
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the role draft has no policies
      *
@@ -480,7 +479,7 @@ class RoleService implements RoleServiceInterface
 
         $this->repository->beginTransaction();
         try {
-            $this->userHandler->publishRoleDraft($roleDraft->id);
+            $this->userHandler->publishRoleDraft($loadedRoleDraft->id);
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
@@ -680,8 +679,6 @@ class RoleService implements RoleServiceInterface
     /**
      * Updates the limitations of a policy. The module and function cannot be changed and
      * the limitations are replaced by the ones in $roleUpdateStruct.
-     *
-     * @deprecated since 6.0, use {@link updatePolicyByRoleDraft()} instead.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a policy
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy update

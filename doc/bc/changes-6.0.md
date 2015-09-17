@@ -158,6 +158,13 @@ Changes affecting version compatibility with former or future versions.
 * `eZ\Publish\API\Repository\Values\ValueObject\SearchHit` has a new property `$matchedTranslation`,
   which will hold language code of the Content translation that matched the search query.
 
+* Role draft functionality has been added, which has led to some API changes:
+  `eZ/Publish/API/Repository/RoleService::createRole` now returns a `eZ/Publish/API/Repository/Values/User/RoleDraft`.
+  New methods have been added to `eZ/Publish/API/Repository/RoleService`: `createRoleDraft`, `loadRoleDraft`,
+  `updateRoleDraft`, `addPolicyByRoleDraft`, `removePolicyByRoleDraft`, `deleteRoleDraft`, and `publishRoleDraft`.
+  `eZ/Publish/API/Repository/Values/User/Role` now has a `status` property, which may be one of `Role::STATUS_DEFINED`
+   or `Role::STATUS_DRAFT`.
+
 ## Deprecations
 
 * `eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger::purge()` is deprecated and will be removed in v6.1.
@@ -167,6 +174,9 @@ Changes affecting version compatibility with former or future versions.
   `/views`` replaces it.
   Until it is removed, POST to `/content/views` will return a 301 instead of a 200, and include location header to the
   new resource.
+
+* Some methods have been deprecated in `eZ/Publish/API/Repository/RoleService`: `updateRole`, `addPolicy`,
+  `removePolicy`, `deletePolicy`, and `updatePolicy`. Use the corresponding `*Draft` and `*ByRoleDraft` methods instead.
 
 ## Removed features
 

@@ -12,11 +12,6 @@ namespace eZ\Publish\API\Repository\Values\User;
 
 /**
  * This class represents a draft of a role.
- *
- * @property-read mixed $id the internal id of the role
- * @property-read string $identifier the identifier of the role
- *
- * @property-read array $policies an array of the policies {@link \eZ\Publish\API\Repository\Values\User\Policy} of the role.
  */
 abstract class RoleDraft extends Role
 {

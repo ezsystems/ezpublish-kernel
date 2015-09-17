@@ -80,6 +80,7 @@ class Mapper
                     array(
                         'id' => $row['ezpolicy_id'],
                         'roleId' => $row['ezrole_id'],
+                        'status' => $row['ezpolicy_original_id'],
                         'module' => $row['ezpolicy_module_name'],
                         'function' => $row['ezpolicy_function_name'],
                         'limitations' => '*', // limitations must be '*' if not a non empty array of limitations
@@ -216,7 +217,6 @@ class Mapper
         $createStruct = new RoleCreateStruct();
 
         $createStruct->identifier = $role->identifier;
-        $createStruct->status = $role->status;
         $createStruct->policies = $role->policies;
 
         return $createStruct;
@@ -234,8 +234,8 @@ class Mapper
         $role = new Role();
 
         $role->identifier = $createStruct->identifier;
-        $role->status = $createStruct->status;
         $role->policies = $createStruct->policies;
+        $role->status = Role::STATUS_DRAFT;
 
         return $role;
     }

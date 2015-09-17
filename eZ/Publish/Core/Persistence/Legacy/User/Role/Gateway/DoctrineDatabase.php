@@ -71,9 +71,11 @@ class DoctrineDatabase extends Gateway
             );
         $query->prepare()->execute();
 
-        $role->id = $this->handler->lastInsertId(
-            $this->handler->getSequenceName('ezrole', 'id')
-        );
+        if (!isset($role->id) || (int)$role->id < 1) {
+            $role->id = $this->handler->lastInsertId(
+                $this->handler->getSequenceName('ezrole', 'id')
+            );
+        }
     }
 
     /**
@@ -94,6 +96,7 @@ class DoctrineDatabase extends Gateway
             $this->handler->aliasedColumn($query, 'id', 'ezpolicy'),
             $this->handler->aliasedColumn($query, 'function_name', 'ezpolicy'),
             $this->handler->aliasedColumn($query, 'module_name', 'ezpolicy'),
+            $this->handler->aliasedColumn($query, 'original_id', 'ezpolicy'),
             $this->handler->aliasedColumn($query, 'identifier', 'ezpolicy_limitation'),
             $this->handler->aliasedColumn($query, 'value', 'ezpolicy_limitation_value')
         )->from(
@@ -159,6 +162,7 @@ class DoctrineDatabase extends Gateway
             $this->handler->aliasedColumn($query, 'id', 'ezpolicy'),
             $this->handler->aliasedColumn($query, 'function_name', 'ezpolicy'),
             $this->handler->aliasedColumn($query, 'module_name', 'ezpolicy'),
+            $this->handler->aliasedColumn($query, 'original_id', 'ezpolicy'),
             $this->handler->aliasedColumn($query, 'identifier', 'ezpolicy_limitation'),
             $this->handler->aliasedColumn($query, 'value', 'ezpolicy_limitation_value')
         )->from(
@@ -224,6 +228,7 @@ class DoctrineDatabase extends Gateway
             $this->handler->aliasedColumn($query, 'id', 'ezpolicy'),
             $this->handler->aliasedColumn($query, 'function_name', 'ezpolicy'),
             $this->handler->aliasedColumn($query, 'module_name', 'ezpolicy'),
+            $this->handler->aliasedColumn($query, 'original_id', 'ezpolicy'),
             $this->handler->aliasedColumn($query, 'identifier', 'ezpolicy_limitation'),
             $this->handler->aliasedColumn($query, 'value', 'ezpolicy_limitation_value')
         )->from(
@@ -290,6 +295,7 @@ class DoctrineDatabase extends Gateway
             $this->handler->aliasedColumn($query, 'id', 'ezpolicy'),
             $this->handler->aliasedColumn($query, 'function_name', 'ezpolicy'),
             $this->handler->aliasedColumn($query, 'module_name', 'ezpolicy'),
+            $this->handler->aliasedColumn($query, 'original_id', 'ezpolicy'),
             $this->handler->aliasedColumn($query, 'identifier', 'ezpolicy_limitation'),
             $this->handler->aliasedColumn($query, 'value', 'ezpolicy_limitation_value')
         )->from(
