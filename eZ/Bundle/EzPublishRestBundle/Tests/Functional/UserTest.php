@@ -221,7 +221,7 @@ XML;
             $this->createHttpRequest('GET', '/api/ezp/v2/user/users')
         );
 
-        self::assertHttpResponseCodeEquals($response, 200);
+        self::assertHttpResponseCodeEquals($response, 404);
     }
 
     /**

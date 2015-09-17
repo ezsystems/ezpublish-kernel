@@ -849,6 +849,12 @@ ezpublish_rest_deletePolicy:
 # Users
 
 
+ezpublish_rest_verifyUsers:
+    path: /user/users
+    defaults:
+        _controller: ezpublish_rest.controller.user:verifyUsers
+    methods: [HEAD]
+
 ezpublish_rest_loadUsers:
     path: /user/users
     defaults:

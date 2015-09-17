@@ -23,8 +23,8 @@ use eZ\Publish\API\Repository\SectionService;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\User\UserRoleAssignment;
 use eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
-use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+use eZ\Publish\API\Repository\Values\User\User as RepositoryUser;
+use eZ\Publish\API\Repository\Exceptions as ApiExceptions;
 use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException as RestNotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException;
@@ -281,7 +281,7 @@ class User extends RestController
 
         try {
             $createdUser = $this->userService->createUser($userCreateStruct, array($userGroup));
-        } catch (InvalidArgumentException $e) {
+        } catch (ApiExceptions\InvalidArgumentException $e) {
             throw new ForbiddenException($e->getMessage());
         }
 
@@ -456,12 +456,37 @@ class User extends RestController
     public function loadUsers(Request $request)
     {
         $restUsers = array();
-        if ($request->query->has('roleId')) {
-            $restUsers = $this->loadUsersAssignedToRole($request);
-        } elseif ($request->query->has('remoteId')) {
-            $restUsers = array(
-                $this->loadUserByRemoteId($request),
-            );
+
+        try {
+            if ($request->query->has('roleId')) {
+                $restUsers = $this->loadUsersAssignedToRole(
+                    $this->requestParser->parseHref($request->query->get('roleId'), 'roleId')
+                );
+            } elseif ($request->query->has('remoteId')) {
+                $restUsers = array(
+                    $this->buildRestUserObject(
+                        $this->userService->loadUser(
+                            $this->contentService->loadContentInfoByRemoteId($request->query->get('remoteId'))->id
+                        )
+                    ),
+                );
+            } elseif ($request->query->has('login')) {
+                $restUsers = array(
+                    $this->buildRestUserObject(
+                        $this->userService->loadUserByLogin($request->query->get('login'))
+                    ),
+                );
+            } elseif ($request->query->has('email')) {
+                foreach ($this->userService->loadUsersByEmail($request->query->get('email')) as $user) {
+                    $restUsers[] = $this->buildRestUserObject($user);
+                }
+            }
+        } catch (ApiExceptions\UnauthorizedException $e) {
+            $restUsers = [];
+        }
+
+        if (empty($restUsers)) {
+            throw new NotFoundException('No users were found with the given filter');
         }
 
         if ($this->getMediaType($request) === 'application/vnd.ez.api.userlist') {
@@ -471,34 +496,31 @@ class User extends RestController
         return new Values\UserRefList($restUsers, $request->getPathInfo());
     }
 
+    public function verifyUsers(Request $request)
+    {
+        // We let the NotFoundException loadUsers throws if there are no results pass.
+        $this->loadUsers($request)->users;
+
+        return new Values\OK();
+    }
+
     /**
      * Loads a list of users assigned to role.
      *
+     * @param mixed $roleId
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\RestUser[]
      */
-    public function loadUsersAssignedToRole(Request $request)
+    public function loadUsersAssignedToRole($roleId)
     {
-        $role = $this->roleService->loadRole(
-            $this->requestParser->parseHref($request->query->get('roleId'), 'roleId')
-        );
+        $role = $this->roleService->loadRole($roleId);
         $roleAssignments = $this->roleService->getRoleAssignments($role);
 
         $restUsers = array();
 
         foreach ($roleAssignments as $roleAssignment) {
             if ($roleAssignment instanceof UserRoleAssignment) {
-                $user = $roleAssignment->getUser();
-                $userContentInfo = $user->getVersionInfo()->getContentInfo();
-                $userLocation = $this->locationService->loadLocation($userContentInfo->mainLocationId);
-                $contentType = $this->contentTypeService->loadContentType($userContentInfo->contentTypeId);
-
-                $restUsers[] = new Values\RestUser(
-                    $user,
-                    $contentType,
-                    $userContentInfo,
-                    $userLocation,
-                    $this->contentService->loadRelations($user->getVersionInfo())
-                );
+                $restUsers[] = $this->buildRestUserObject($roleAssignment->getUser());
             }
         }
 
@@ -506,22 +528,15 @@ class User extends RestController
     }
 
     /**
-     * Loads a user by its remote ID.
-     *
-     * @return \eZ\Publish\Core\REST\Server\Values\RestUser
+     * @return Values\RestUser
      */
-    public function loadUserByRemoteId(Request $request)
+    private function buildRestUserObject(RepositoryUser $user)
     {
-        $contentInfo = $this->contentService->loadContentInfoByRemoteId($request->query->get('remoteId'));
-        $user = $this->userService->loadUser($contentInfo->id);
-        $userLocation = $this->locationService->loadLocation($contentInfo->mainLocationId);
-        $contentType = $this->contentTypeService->loadContentType($contentInfo->contentTypeId);
-
         return new Values\RestUser(
             $user,
-            $contentType,
-            $contentInfo,
-            $userLocation,
+            $this->contentTypeService->loadContentType($user->contentInfo->contentTypeId),
+            $user->contentInfo,
+            $this->locationService->loadLocation($user->contentInfo->mainLocationId),
             $this->contentService->loadRelations($user->getVersionInfo())
         );
     }
@@ -550,7 +565,7 @@ class User extends RestController
                 ),
             );
         } elseif ($request->query->has('roleId')) {
-            $restUserGroups = $this->loadUserGroupsAssignedToRole($request);
+            $restUserGroups = $this->loadUserGroupsAssignedToRole($request->query->get('roleId'));
         } elseif ($request->query->has('remoteId')) {
             $restUserGroups = array(
                 $this->loadUserGroupByRemoteId($request),
@@ -588,13 +603,13 @@ class User extends RestController
     /**
      * Loads a list of user groups assigned to role.
      *
+     * @param mixed $roleId
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\RestUserGroup[]
      */
-    public function loadUserGroupsAssignedToRole(Request $request)
+    public function loadUserGroupsAssignedToRole($roleId)
     {
-        $role = $this->roleService->loadRole(
-            $this->requestParser->parseHref($request->query->get('roleId'), 'roleId')
-        );
+        $role = $this->roleService->loadRole($roleId);
         $roleAssignments = $this->roleService->getRoleAssignments($role);
 
         $restUserGroups = array();
@@ -663,13 +678,13 @@ class User extends RestController
             $destinationGroupLocation = $this->locationService->loadLocation(
                 $this->extractLocationIdFromPath($locationPath)
             );
-        } catch (APINotFoundException $e) {
+        } catch (ApiExceptions\NotFoundException $e) {
             throw new Exceptions\ForbiddenException($e->getMessage());
         }
 
         try {
             $destinationGroup = $this->userService->loadUserGroup($destinationGroupLocation->contentId);
-        } catch (APINotFoundException $e) {
+        } catch (ApiExceptions\NotFoundException $e) {
             throw new Exceptions\ForbiddenException($e->getMessage());
         }
 
@@ -856,7 +871,7 @@ class User extends RestController
 
         try {
             $this->userService->unAssignUserFromUserGroup($user, $userGroup);
-        } catch (InvalidArgumentException $e) {
+        } catch (ApiExceptions\InvalidArgumentException $e) {
             // User is not in the group
             throw new Exceptions\ForbiddenException($e->getMessage());
         }
@@ -904,7 +919,7 @@ class User extends RestController
             $userGroupLocation = $this->locationService->loadLocation(
                 $this->extractLocationIdFromPath($request->query->get('group'))
             );
-        } catch (APINotFoundException $e) {
+        } catch (ApiExceptions\NotFoundException $e) {
             throw new Exceptions\ForbiddenException($e->getMessage());
         }
 
@@ -912,13 +927,13 @@ class User extends RestController
             $userGroup = $this->userService->loadUserGroup(
                 $userGroupLocation->contentId
             );
-        } catch (APINotFoundException $e) {
+        } catch (ApiExceptions\NotFoundException $e) {
             throw new Exceptions\ForbiddenException($e->getMessage());
         }
 
         try {
             $this->userService->assignUserToUserGroup($user, $userGroup);
-        } catch (InvalidArgumentException $e) {
+        } catch (ApiExceptions\NotFoundException $e) {
             throw new Exceptions\ForbiddenException($e->getMessage());
         }
 
