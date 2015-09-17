@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class UrlIntegrationTest extends BaseIntegrationTest
+class UrlIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
      * Get name of tested field type.
@@ -329,6 +329,38 @@ class UrlIntegrationTest extends BaseIntegrationTest
             ),
             array(
                 new UrlValue('http://example.com'),
+            ),
+        );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return new UrlValue('http://ample.com', 'Ample');
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return new UrlValue('http://example.com', 'Example');
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        return 'http://ample.com';
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        return 'http://example.com';
+    }
+
+    protected function getAdditionallyIndexedFieldData()
+    {
+        return array(
+            array(
+                'value_text',
+                // ensure case-insensitivity
+                'AMPLE',
+                'EXAMPLE',
             ),
         );
     }
