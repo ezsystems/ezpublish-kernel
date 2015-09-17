@@ -1,4 +1,5 @@
 parameters:
+    ezpublish.fieldType.indexable.ezauthor.class: eZ\Publish\Core\FieldType\Author\SearchField
     ezpublish.fieldType.indexable.ezstring.class: eZ\Publish\Core\FieldType\TextLine\SearchField
     ezpublish.fieldType.indexable.eztext.class: eZ\Publish\Core\FieldType\TextBlock\SearchField
     ezpublish.fieldType.indexable.ezisbn.class: eZ\Publish\Core\FieldType\ISBN\SearchField
@@ -21,6 +22,11 @@ parameters:
     ezpublish.fieldType.indexable.unindexed.class: eZ\Publish\Core\FieldType\Unindexed
 
 services:
+    ezpublish.fieldType.indexable.ezauthor:
+        class: %ezpublish.fieldType.indexable.ezauthor.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezauthor}
+
     ezpublish.fieldType.indexable.ezstring:
         class: %ezpublish.fieldType.indexable.ezstring.class%
         tags:
@@ -137,7 +143,6 @@ services:
             - {name: ezpublish.fieldType.indexable, alias: ezpackage}
             - {name: ezpublish.fieldType.indexable, alias: ezurl}
             - {name: ezpublish.fieldType.indexable, alias: ezmultioption}
-            - {name: ezpublish.fieldType.indexable, alias: ezauthor}
             - {name: ezpublish.fieldType.indexable, alias: ezsrrating}
             - {name: ezpublish.fieldType.indexable, alias: ezsubtreesubscription}
             - {name: ezpublish.fieldType.indexable, alias: ezoption}
