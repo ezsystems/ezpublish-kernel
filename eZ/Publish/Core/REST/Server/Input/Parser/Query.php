@@ -8,15 +8,44 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use eZ\Publish\API\Repository\Values\Content\Query as ApiQuery;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Server\Input\Parser\Criterion as CriterionParser;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as LogicalAndCriterion;
+use eZ\Publish\Core\REST\Common\Exceptions;
 
 /**
  * Content/Location Query Parser.
  */
-abstract class Query extends CriterionParser
+abstract class Query extends BaseParser
 {
+    /**
+     * Builds and returns the Query (Location or Content object).
+     * @return ApiQuery
+     */
+    abstract protected function buildQuery();
+
+    /**
+     * @var array
+     */
+    private $criterionIdMap = array(
+        'AND' => 'LogicalAnd',
+        'OR' => 'LogicalOr',
+        'NOT' => 'LogicalNot',
+    );
+
+    private $sortClauseIdMap = array(
+      'PATH' => 'eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location\Path',
+      'MODIFIED' => 'eZ\Publish\API\Repository\Values\Content\Query\SortClause\DateModified',
+      'CREATED' => '\eZ\Publish\API\Repository\Values\Content\Query\SortClause\DatePublished',
+      'SECTIONIDENTIFER' => 'eZ\Publish\API\Repository\Values\Content\Query\SortClause\SectionIdentifier',
+      'FIELD' => false,
+      'PRIORITY' => 'eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location\Priority',
+      'NAME' => '\eZ\Publish\API\Repository\Values\Content\Query\SortClause\ContentName',
+    );
+
     /**
      * Parses input structure to a Query.
      *
@@ -36,7 +65,10 @@ abstract class Query extends CriterionParser
         if (array_key_exists('Criteria', $data) && is_array($data['Criteria'])) {
             $criteria = array();
             foreach ($data['Criteria'] as $criterionName => $criterionData) {
-                $criteria[] = $this->dispatchCriterion($criterionName, $criterionData, $parsingDispatcher);
+                $criteria[] = $parsingDispatcher->parse(
+                    [$criterionName => $criterionData],
+                    $this->getCriterionMediaType($criterionName)
+                );
             }
 
             if (count($criteria) === 1) {
@@ -59,7 +91,13 @@ abstract class Query extends CriterionParser
         // SortClauses
         // -- SortClause
         // ---- SortField
-        if (array_key_exists('SortClauses', $data)) {
+        if (array_key_exists('SortClauses', $data) && is_array($data['SortClauses'])) {
+            $sortClauses = [];
+            foreach ($data['SortClauses'] as $sortClauseInput) {
+                $direction = isset($sortClauseInput['SortDirection']) ? $sortClauseInput['SortDirection'] : ApiQuery::SORT_ASC;
+                $sortClauses[] = $this->buildSortClause($sortClauseInput['SortField'], $direction);
+            }
+            $query->sortClauses = $sortClauses;
         }
 
         // FacetBuilders
@@ -70,9 +108,26 @@ abstract class Query extends CriterionParser
         return $query;
     }
 
-    /**
-     * Builds and returns the Query (Location or Content object).
-     * @return \eZ\Publish\API\Repository\Values\Content\Query
-     */
-    abstract protected function buildQuery();
+    private function buildSortClause($name, $direction)
+    {
+        if (!isset($this->sortClauseIdMap[$name])) {
+            throw new Exceptions\Parser("Unknown SortClause id $name");
+        }
+
+        if ($this->sortClauseIdMap[$name] === false) {
+            throw new NotImplementedException('Field SortClause parser');
+        }
+
+        return new $this->sortClauseIdMap[$name]($direction);
+    }
+
+    protected function getCriterionMediaType($criterionName)
+    {
+        $criterionName = str_replace('Criterion', '', $criterionName);
+        if (isset($this->criterionIdMap[$criterionName])) {
+            $criterionName = $this->criterionIdMap[$criterionName];
+        }
+
+        return 'application/vnd.ez.api.internal.criterion.' . $criterionName;
+    }
 }
