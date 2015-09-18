@@ -18,8 +18,10 @@ use Exception;
  *
  * @use: throw new BadState( 'nodes', 'array' );
  */
-class BadStateException extends APIBadStateException
+class BadStateException extends APIBadStateException implements TranslatableExceptionInterface
 {
+    use TranslatableException;
+
     /**
      * Generates: "Argument '{$argumentName}' has a bad state: {$whatIsWrong}".
      *
@@ -29,10 +31,8 @@ class BadStateException extends APIBadStateException
      */
     public function __construct($argumentName, $whatIsWrong, Exception $previous = null)
     {
-        parent::__construct(
-            "Argument '{$argumentName}' has a bad state: {$whatIsWrong}",
-            0,
-            $previous
-        );
+        $this->setMessageTemplate("Argument '%argumentName%' has a bad state: %whatIsWrong%");
+        $this->setParameters(['%argumentName%' => $argumentName, '%whatIsWrong%' => $whatIsWrong]);
+        parent::__construct($this->getBaseTranslation(), 0, $previous);
     }
 }

@@ -15,8 +15,10 @@ use eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationExc
 /**
  * This Exception is thrown on create or update content one or more given fields are not valid.
  */
-class ContentTypeFieldDefinitionValidationException extends APIContentTypeFieldDefinitionValidationException
+class ContentTypeFieldDefinitionValidationException extends APIContentTypeFieldDefinitionValidationException implements TranslatableExceptionInterface
 {
+    use TranslatableException;
+
     /**
      * Contains an array of field ValidationError objects indexed with FieldDefinition id and language code.
      *
@@ -40,7 +42,8 @@ class ContentTypeFieldDefinitionValidationException extends APIContentTypeFieldD
     public function __construct(array $errors)
     {
         $this->errors = $errors;
-        parent::__construct('ContentType FieldDefinitions did not validate');
+        $this->setMessageTemplate('ContentType FieldDefinitions did not validate');
+        parent::__construct($this->getBaseTranslation());
     }
 
     /**

@@ -19,8 +19,10 @@ use Exception;
  * Use:
  *   throw new NotFound( 'Content', 42 );
  */
-class NotFoundException extends APINotFoundException implements Httpable
+class NotFoundException extends APINotFoundException implements Httpable, TranslatableExceptionInterface
 {
+    use TranslatableException;
+
     /**
      * Generates: Could not find '{$what}' with identifier '{$identifier}'.
      *
@@ -31,10 +33,8 @@ class NotFoundException extends APINotFoundException implements Httpable
     public function __construct($what, $identifier, Exception $previous = null)
     {
         $identifierStr = is_string($identifier) ? $identifier : var_export($identifier, true);
-        parent::__construct(
-            "Could not find '{$what}' with identifier '{$identifierStr}'",
-            self::NOT_FOUND,
-            $previous
-        );
+        $this->setMessageTemplate("Could not find '%what%' with identifier '%identifier%'");
+        $this->setParameters(['%what%' => $what, '%identifier%' => $identifierStr]);
+        parent::__construct($this->getBaseTranslation(), self::NOT_FOUND, $previous);
     }
 }

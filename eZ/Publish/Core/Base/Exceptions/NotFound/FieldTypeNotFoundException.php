@@ -10,13 +10,17 @@ namespace eZ\Publish\Core\Base\Exceptions\NotFound;
 
 use eZ\Publish\Core\Base\Exceptions\Httpable;
 use Exception;
+use eZ\Publish\Core\Base\Exceptions\TranslatableException;
+use eZ\Publish\Core\Base\Exceptions\TranslatableExceptionInterface;
 use RuntimeException;
 
 /**
  * FieldType Not Found Exception.
  */
-class FieldTypeNotFoundException extends RuntimeException implements Httpable
+class FieldTypeNotFoundException extends RuntimeException implements Httpable, TranslatableExceptionInterface
 {
+    use TranslatableException;
+
     /**
      * Creates a FieldType Not Found exception with info on how to fix.
      *
@@ -25,11 +29,12 @@ class FieldTypeNotFoundException extends RuntimeException implements Httpable
      */
     public function __construct($fieldType, Exception $previous = null)
     {
-        parent::__construct(
-            "FieldType '{$fieldType}' not found, needs to be implemented or configured to use "
-            . 'FieldType\\Null\\Type (%ezpublish.fieldType.eznull.class%)',
-            self::INTERNAL_ERROR,
-            $previous
+        $this->setMessageTemplate(
+            "FieldType '%fieldType%' not found, needs to be implemented or configured to use "
+            . 'FieldType\\Null\\Type (%ezpublish.fieldType.eznull.class%)'
         );
+        $this->setParameters(['%fieldType%' => $fieldType]);
+
+        parent::__construct($this->getBaseTranslation(), self::INTERNAL_ERROR, $previous);
     }
 }

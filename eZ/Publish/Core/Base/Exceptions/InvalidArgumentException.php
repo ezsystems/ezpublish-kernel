@@ -18,8 +18,10 @@ use Exception;
  *
  * @use: throw new InvalidArgumentException( 'nodes', 'array' );
  */
-class InvalidArgumentException extends APIInvalidArgumentException
+class InvalidArgumentException extends APIInvalidArgumentException implements TranslatableExceptionInterface
 {
+    use TranslatableException;
+
     /**
      * Generates: "Argument '{$argumentName}' is invalid: {$whatIsWrong}".
      *
@@ -29,10 +31,8 @@ class InvalidArgumentException extends APIInvalidArgumentException
      */
     public function __construct($argumentName, $whatIsWrong, Exception $previous = null)
     {
-        parent::__construct(
-            "Argument '{$argumentName}' is invalid: {$whatIsWrong}",
-            0,
-            $previous
-        );
+        $this->setMessageTemplate("Argument '%argumentName%' is invalid: %whatIsWrong%");
+        $this->setParameters(['%argumentName%' => $argumentName, '%whatIsWrong%' => $whatIsWrong]);
+        parent::__construct($this->getBaseTranslation(), 0, $previous);
     }
 }

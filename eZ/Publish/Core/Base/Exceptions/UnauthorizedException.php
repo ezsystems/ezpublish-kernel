@@ -19,8 +19,10 @@ use Exception;
  * Use:
  *   throw new UnauthorizedException( 'content', 'read', array( 'contentId' => 42 ) );
  */
-class UnauthorizedException extends APIUnauthorizedException implements Httpable
+class UnauthorizedException extends APIUnauthorizedException implements Httpable, TranslatableExceptionInterface
 {
+    use TranslatableException;
+
     /**
      * Generates: User does not have access to '{$function}' '{$module}'[ with: %property.key% '%property.value%'].
      *
@@ -33,18 +35,19 @@ class UnauthorizedException extends APIUnauthorizedException implements Httpable
      */
     public function __construct($module, $function, array $properties = null, Exception $previous = null)
     {
-        $identificationString = '';
-        if ($properties !== null) {
-            foreach ($properties as $name => $value) {
-                $identificationString .= $identificationString === '' ? ' with:' : ',';
-                $identificationString .= " {$name} '{$value}'";
-            }
-        }
+        $messageTemplate = "User does not have access to '%function%' '%module%'";
+        $this->setParameters(['%module%' => $module, '%function%' => $function]);
 
-        parent::__construct(
-            "User does not have access to '{$function}' '{$module}'" . $identificationString,
-            self::UNAUTHORIZED,
-            $previous
-        );
+        if ($properties) {
+            $messageTemplate .= ' with: %with%';
+            $with = [];
+            foreach ($properties as $name => $value) {
+                $with[] = "{$name} '{$value}'";
+            }
+            $this->addParameter('%with%', implode(', ', $with));
+        }
+        $this->setMessageTemplate($messageTemplate);
+
+        parent::__construct($this->getBaseTranslation(), self::UNAUTHORIZED, $previous);
     }
 }

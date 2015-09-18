@@ -15,8 +15,10 @@ use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException as APIC
 /**
  * This Exception is thrown on create or update content one or more given fields are not valid.
  */
-class ContentFieldValidationException extends APIContentFieldValidationException
+class ContentFieldValidationException extends APIContentFieldValidationException implements TranslatableExceptionInterface
 {
+    use TranslatableException;
+
     /**
      * Contains an array of field ValidationError objects indexed with FieldDefinition id and language code.
      *
@@ -40,7 +42,8 @@ class ContentFieldValidationException extends APIContentFieldValidationException
     public function __construct(array $errors)
     {
         $this->errors = $errors;
-        parent::__construct('Content fields did not validate');
+        $this->setMessageTemplate('Content fields did not validate');
+        parent::__construct($this->getBaseTranslation());
     }
 
     /**

@@ -16,8 +16,10 @@ use eZ\Publish\API\Repository\Exceptions\LimitationValidationException as APILim
  * This Exception is thrown on create, update or assign policy or role
  * when one or more given limitations are not valid.
  */
-class LimitationValidationException extends APILimitationValidationException
+class LimitationValidationException extends APILimitationValidationException implements TranslatableExceptionInterface
 {
+    use TranslatableException;
+
     /**
      * Contains an array of limitation ValidationError objects.
      *
@@ -35,7 +37,8 @@ class LimitationValidationException extends APILimitationValidationException
     public function __construct(array $errors)
     {
         $this->validationErrors = $errors;
-        parent::__construct('Limitations did not validate');
+        $this->setMessageTemplate('Limitations did not validate');
+        parent::__construct($this->getBaseTranslation());
     }
 
     /**
