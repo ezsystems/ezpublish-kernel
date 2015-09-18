@@ -92,7 +92,7 @@ class LegacyStorage extends Gateway
                 }
             }
 
-            if (count($links)) {
+            if (!empty($links)) {
                 $linkIdUrlMap = $this->getIdUrlMap(array_keys($links));
 
                 foreach ($linkIdUrlMap as $urlId => $url) {
