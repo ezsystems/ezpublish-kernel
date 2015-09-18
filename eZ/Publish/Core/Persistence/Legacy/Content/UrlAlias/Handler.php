@@ -345,7 +345,7 @@ class Handler implements UrlAliasHandlerInterface
                 $data
             );
         } else {
-            throw new ForbiddenException("Path '$path' already exists for the given language");
+            throw new ForbiddenException("Path '%path%' already exists for the given language", ['%path%' => $path]);
         }
 
         $data['raw_path_data'] = $this->gateway->loadPathData($id);
