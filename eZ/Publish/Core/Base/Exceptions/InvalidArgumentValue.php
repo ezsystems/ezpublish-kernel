@@ -30,10 +30,18 @@ class InvalidArgumentValue extends InvalidArgumentException
     public function __construct($argumentName, $value, $className = null, Exception $previous = null)
     {
         $valueStr = is_string($value) ? $value : var_export($value, true);
-        parent::__construct(
-            $argumentName,
-            "'{$valueStr}' is wrong value" . ($className ? " in class '{$className}'" : ''),
-            $previous
-        );
+        $parameters = ['%actualValue%' => $valueStr];
+        $whatIsWrong = "'%actualValue%' is wrong value";
+        if ($className) {
+            $whatIsWrong .= " in class '%className%'";
+            $parameters['%className%'] = $className;
+        }
+
+        parent::__construct($argumentName, $whatIsWrong, $previous);
+
+        // Alter the message template & inject new parameters.
+        $this->setMessageTemplate(str_replace('%whatIsWrong%', $whatIsWrong, $this->getMessageTemplate()));
+        $this->addParameters($parameters);
+        $this->message = $this->getBaseTranslation();
     }
 }
