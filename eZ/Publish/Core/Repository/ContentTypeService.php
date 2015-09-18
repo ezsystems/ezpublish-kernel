@@ -769,7 +769,8 @@ class ContentTypeService implements ContentTypeServiceInterface
 
             if ($fieldType->isSingular() && isset($fieldTypeIdentifierSet[$fieldDefinitionCreateStruct->fieldTypeIdentifier])) {
                 throw new ContentTypeValidationException(
-                    "FieldType '{$fieldDefinitionCreateStruct->fieldTypeIdentifier}' is singular and can't be repeated in a ContentType"
+                    "FieldType '%identifier%' is singular and can't be repeated in a ContentType",
+                    ['%identifier%' => $fieldDefinitionCreateStruct->fieldTypeIdentifier]
                 );
             }
 
