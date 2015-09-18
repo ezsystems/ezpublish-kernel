@@ -65,7 +65,7 @@ class ExceptionListener implements EventSubscriberInterface
     {
         $message = $exception->getMessage();
         if ($exception instanceof TranslatableExceptionInterface) {
-            $message = $this->translator->trans($exception->getMessageTemplate(), $exception->getParameters());
+            $message = $this->translator->trans($exception->getMessageTemplate(), $exception->getParameters(), 'repository_exceptions');
         }
 
         return $message;
