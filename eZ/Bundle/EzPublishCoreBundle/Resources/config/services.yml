@@ -172,5 +172,6 @@ services:
 
     ezpublish.exception_listener:
         class: %ezpublish.exception_listener.class%
+        arguments: [@translator]
         tags:
             - { name: kernel.event_subscriber }
