@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
+use eZ\Publish\API\Repository\Exceptions\BadStateException;
 use eZ\Publish\API\Repository\Exceptions\ForbiddenException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
@@ -15,6 +16,7 @@ use eZ\Publish\Core\Base\Exceptions\TranslatableExceptionInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -47,6 +49,8 @@ class ExceptionListener implements EventSubscriberInterface
             $event->setException(new NotFoundHttpException($this->getTranslatedMessage($exception), $exception));
         } elseif ($exception instanceof UnauthorizedException || $exception instanceof ForbiddenException) {
             $event->setException(new AccessDeniedHttpException($this->getTranslatedMessage($exception), $exception));
+        } elseif ($exception instanceof BadStateException) {
+            $event->setException(new BadRequestHttpException($this->getTranslatedMessage($exception), $exception));
         }
     }
 
