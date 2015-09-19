@@ -11,6 +11,7 @@
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use InvalidArgumentException;
 
 /**
@@ -36,7 +37,7 @@ abstract class LogicalOperator extends Criterion
     public function __construct(array $criteria)
     {
         foreach ($criteria as $key => $criterion) {
-            if (!$criterion instanceof Criterion) {
+            if (!$criterion instanceof CriterionInterface) {
                 if ($criterion === null) {
                     $type = 'null';
                 } elseif (is_object($criterion)) {
