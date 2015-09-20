@@ -18,7 +18,7 @@ use InvalidArgumentException;
  * Note that the class should ideally have been in a Logical namespace, but it would have then be named 'And',
  * and 'And' is a PHP reserved word.
  */
-abstract class LogicalOperator extends Criterion
+abstract class LogicalOperator extends Criterion implements CriterionInterface
 {
     /**
      * The set of criteria combined by the logical operator.
@@ -54,5 +54,10 @@ abstract class LogicalOperator extends Criterion
             }
             $this->criteria[] = $criterion;
         }
+    }
+
+    public function getSpecifications()
+    {
+        return [];
     }
 }
