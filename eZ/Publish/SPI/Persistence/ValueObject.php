@@ -13,6 +13,9 @@ namespace eZ\Publish\SPI\Persistence;
 use eZ\Publish\API\Repository\Values\ValueObject as APIValueObject;
 
 /**
+ * Base SPI Value object.
+ *
+ * All properties of SPI\ValueObject *must* be serializable for cache & NoSQL use.
  */
 abstract class ValueObject extends APIValueObject
 {

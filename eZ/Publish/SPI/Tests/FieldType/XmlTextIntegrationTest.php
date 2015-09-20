@@ -15,7 +15,6 @@ use eZ\Publish\Core\FieldType;
 use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
-use DOMDocument;
 use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway\LegacyStorage;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlGateway;
 
@@ -120,8 +119,7 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
      */
     public function getInitialValue()
     {
-        $xml = new DOMDocument();
-        $xml->loadXML('<?xml version="1.0" encoding="utf-8"?><section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Paragraph content…</paragraph></section>');
+        $xml = '<?xml version="1.0" encoding="utf-8"?><section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Paragraph content…</paragraph></section>';
 
         return new FieldValue(
             array(
@@ -141,8 +139,7 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
      */
     public function getUpdatedValue()
     {
-        $xml = new DOMDocument();
-        $xml->loadXML('<?xml version="1.0" encoding="utf-8"?><section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Some different content…</paragraph></section>');
+        $xml = '<?xml version="1.0" encoding="utf-8"?><section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>Some different content…</paragraph></section>';
 
         return new FieldValue(
             array(

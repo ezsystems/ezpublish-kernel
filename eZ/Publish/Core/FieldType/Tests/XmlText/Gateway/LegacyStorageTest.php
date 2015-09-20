@@ -13,7 +13,6 @@ namespace eZ\Publish\Core\FieldType\Tests\XmlText\Gateway;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
-use DOMDocument;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -201,10 +200,8 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
         $expectedReturnValue,
         $expectedResultXML
     ) {
-        $inputDomDocument = new DOMDocument();
-        $inputDomDocument->loadXML($inputXML);
         $versionInfo = new VersionInfo();
-        $field = new Field(array('value' => new FieldValue(array('data' => $inputDomDocument))));
+        $field = new Field(array('value' => new FieldValue(array('data' => $inputXML))));
         $legacyStorage = $this->getPartlyMockedLegacyStorage(array('getUrlIdMap', 'getObjectId', 'insertUrl', 'linkUrl'));
 
         $methodMap = array(
@@ -226,7 +223,7 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
         }
 
         $this->assertEquals($expectedReturnValue, $legacyStorage->storeFieldData($versionInfo, $field));
-        $this->assertEquals($expectedResultXML, $field->value->data->saveXML());
+        $this->assertEquals($expectedResultXML, $field->value->data);
     }
 
     /**
@@ -293,10 +290,8 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
         $getObjectIdData,
         $insertLinkData
     ) {
-        $inputDomDocument = new DOMDocument();
-        $inputDomDocument->loadXML($inputXML);
         $versionInfo = new VersionInfo();
-        $field = new Field(array('value' => new FieldValue(array('data' => $inputDomDocument))));
+        $field = new Field(array('value' => new FieldValue(array('data' => $inputXML))));
         $legacyStorage = $this->getPartlyMockedLegacyStorage(array('getUrlIdMap', 'getObjectId', 'insertUrl'));
 
         $methodMap = array(
@@ -369,9 +364,7 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
         $getLinksUrlData,
         $expectedResultXML
     ) {
-        $inputDomDocument = new DOMDocument();
-        $inputDomDocument->loadXML($inputXML);
-        $field = new Field(array('value' => new FieldValue(array('data' => $inputDomDocument))));
+        $field = new Field(array('value' => new FieldValue(array('data' => $inputXML))));
         $legacyStorage = $this->getPartlyMockedLegacyStorage(array('getIdUrlMap'));
 
         if (empty($getLinksUrlData)) {
@@ -385,6 +378,6 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
         }
 
         $legacyStorage->getFieldData($field);
-        $this->assertEquals($expectedResultXML, $field->value->data->saveXML());
+        $this->assertEquals($expectedResultXML, $field->value->data);
     }
 }

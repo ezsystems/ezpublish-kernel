@@ -68,13 +68,18 @@ class LegacyStorage extends Gateway
      */
     public function getFieldData(Field $field)
     {
-        if (!$field->value->data instanceof DOMDocument) {
+        if ($field->value->data === null) {
+            return;
+        }
+
+        $doc = new DOMDocument();
+        if (!$doc->loadXML($field->value->data)) {
             return;
         }
 
         /* @var $linkTagsById \DOMElement[] */
         $linkIds = array();
-        $linkTags = $field->value->data->getElementsByTagName('link');
+        $linkTags = $doc->getElementsByTagName('link');
         if ($linkTags->length > 0) {
             foreach ($linkTags as $link) {
                 $urlId = $link->getAttribute('url_id');
@@ -92,6 +97,9 @@ class LegacyStorage extends Gateway
                         $link->removeAttribute('url_id');
                     }
                 }
+
+                // Store xml changes back to field
+                $field->value->data = $doc->saveXML();
             }
         }
     }
@@ -106,7 +114,12 @@ class LegacyStorage extends Gateway
      */
     public function storeFieldData(VersionInfo $versionInfo, Field $field)
     {
-        if (!$field->value->data instanceof DOMDocument) {
+        if ($field->value->data === null) {
+            return;
+        }
+
+        $doc = new DOMDocument();
+        if (!$doc->loadXML($field->value->data)) {
             return;
         }
 
@@ -115,7 +128,7 @@ class LegacyStorage extends Gateway
         $remoteIds = array();
         $elements = array();
         foreach (array('link', 'embed', 'embed-inline') as $tagName) {
-            $tags = $field->value->data->getElementsByTagName($tagName);
+            $tags = $doc->getElementsByTagName($tagName);
             if ($tags->length === 0) {
                 continue;
             }
@@ -197,6 +210,9 @@ class LegacyStorage extends Gateway
                     $element->removeAttribute('object_remote_id');
                 }
             }
+
+            // Store xml changes back to field
+            $field->value->data = $doc->saveXML();
         }
 
         // Return true if some elements where changed

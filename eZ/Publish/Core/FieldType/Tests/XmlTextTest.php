@@ -146,8 +146,8 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
 
         $fieldValue = $ft->toPersistenceValue($ft->acceptValue($xmlData));
 
-        self::assertInstanceOf('DOMDocument', $fieldValue->data);
-        self::assertSame($xmlDoc->saveXML(), $fieldValue->data->saveXML());
+        self::assertInternalType('string', $fieldValue->data);
+        self::assertSame($xmlDoc->saveXML(), $fieldValue->data);
     }
 
     public static function providerForTestAcceptValueValidFormat()

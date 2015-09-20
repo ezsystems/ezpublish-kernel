@@ -33,16 +33,16 @@ EOT;
     /**
      * Initializes a new XmlText Value object with $xmlDoc in.
      *
-     * @param \DOMDocument $xmlDoc
+     * @param \DOMDocument|string $xmlDoc
      */
-    public function __construct(DOMDocument $xmlDoc = null)
+    public function __construct($xmlDoc = null)
     {
-        if ($xmlDoc === null) {
-            $xmlDoc = new DOMDocument();
-            $xmlDoc->loadXML(self::EMPTY_VALUE);
+        if ($xmlDoc instanceof DOMDocument) {
+            $this->xml = $xmlDoc;
+        } else {
+            $this->xml = new DOMDocument();
+            $this->xml->loadXML($xmlDoc === null ? self::EMPTY_VALUE : $xmlDoc);
         }
-
-        $this->xml = $xmlDoc;
     }
 
     /**

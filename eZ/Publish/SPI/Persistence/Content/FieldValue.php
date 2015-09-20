@@ -19,19 +19,24 @@ class FieldValue extends ValueObject
     /**
      * Mixed field data.
      *
-     * Either a primitive, an array (map) or an object
+     * Either a scalar (primitive), null or an array (map) of scalar values.
      *
      * @note: For the legacy storage engine we will need adaptors to map them to
      * the existing database fields, like data_int, data_float, data_text.
      *
-     * @var mixed
+     * @var int|float|bool|string|null|array
      */
     public $data;
 
     /**
+     * Mixed external field data.
+     *
      * Data which is not stored in the field but at an external place.
      * This data is processed by the field type storage interface method
-     * storeFieldData.
+     * storeFieldData, if used by the FieldType, otherwise null.
+     *
+     * Either a primitive, an array (map) or an object
+     * If object it *must* be serializable, for instance DOMDocument is not valid object.
      *
      * @var mixed
      */
@@ -43,7 +48,7 @@ class FieldValue extends ValueObject
      * @note: For the "old" storage engine we will need adaptors to map them to
      * the existing database fields, like sort_key_int, sort_key_string
      *
-     * @var mixed
+     * @var int|float|bool|string|null
      */
     public $sortKey;
 }

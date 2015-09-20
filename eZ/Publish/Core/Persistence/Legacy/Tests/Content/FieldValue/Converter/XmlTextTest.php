@@ -14,7 +14,6 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlTextConverter;
 use PHPUnit_Framework_TestCase;
-use DOMDocument;
 
 /**
  * Test case for XmlText converter in Legacy storage.
@@ -57,12 +56,11 @@ EOT;
     public function testToStorageValue()
     {
         $value = new FieldValue();
-        $value->data = new DOMDocument();
-        $value->data->loadXML($this->xmlText);
+        $value->data = $this->xmlText;
         $storageFieldValue = new StorageFieldValue();
 
         $this->converter->toStorageValue($value, $storageFieldValue);
-        self::assertSame($value->data->saveXML(), $storageFieldValue->dataText);
+        self::assertSame($value->data, $storageFieldValue->dataText);
     }
 
     /**
@@ -75,6 +73,6 @@ EOT;
         $fieldValue = new FieldValue();
 
         $this->converter->toFieldValue($storageFieldValue, $fieldValue);
-        self::assertSame($storageFieldValue->dataText, $fieldValue->data->saveXML());
+        self::assertSame($storageFieldValue->dataText, $fieldValue->data);
     }
 }
