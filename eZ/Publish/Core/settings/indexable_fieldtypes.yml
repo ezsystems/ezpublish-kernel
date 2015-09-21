@@ -1,6 +1,8 @@
 parameters:
     ezpublish.fieldType.indexable.ezauthor.class: eZ\Publish\Core\FieldType\Author\SearchField
     ezpublish.fieldType.indexable.ezstring.class: eZ\Publish\Core\FieldType\TextLine\SearchField
+    ezpublish.fieldType.indexable.ezxmltext.class: eZ\Publish\Core\FieldType\XmlText\SearchField
+    ezpublish.fieldType.indexable.ezrichtext.class: eZ\Publish\Core\FieldType\RichText\SearchField
     ezpublish.fieldType.indexable.eztext.class: eZ\Publish\Core\FieldType\TextBlock\SearchField
     ezpublish.fieldType.indexable.ezisbn.class: eZ\Publish\Core\FieldType\ISBN\SearchField
     ezpublish.fieldType.indexable.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\SearchField
@@ -103,15 +105,13 @@ services:
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezdatetime}
 
-    # TODO: define proper type
     ezpublish.fieldType.indexable.ezxmltext:
-        class: %ezpublish.fieldType.indexable.ezstring.class%
+        class: %ezpublish.fieldType.indexable.ezxmltext.class%
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezxmltext}
 
-    # TODO: define proper type
     ezpublish.fieldType.indexable.ezrichtext:
-        class: %ezpublish.fieldType.indexable.ezstring.class%
+        class: %ezpublish.fieldType.indexable.ezrichtext.class%
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezrichtext}
 
