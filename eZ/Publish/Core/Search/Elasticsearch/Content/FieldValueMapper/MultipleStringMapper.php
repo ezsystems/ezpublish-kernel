@@ -10,7 +10,7 @@
  */
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
 
-use eZ\Publish\SPI\Search\FieldType\MultipleStringField;
+use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\SPI\Search\Field;
 
 /**
@@ -27,7 +27,9 @@ class MultipleStringMapper extends StringMapper
      */
     public function canMap(Field $field)
     {
-        return $field->type instanceof MultipleStringField;
+        return
+            $field->type instanceof FieldType\MultipleStringField ||
+            $field->type instanceof FieldType\FullTextField;
     }
 
     /**
