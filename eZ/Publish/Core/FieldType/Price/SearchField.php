@@ -38,6 +38,11 @@ class SearchField implements Indexable
                 $field->value->sortKey['sort_key_int'] / 1000,
                 new Search\FieldType\PriceField()
             ),
+            new Search\Field(
+                'fulltext',
+                $field->value->sortKey['sort_key_int'] / 1000,
+                new Search\FieldType\FullTextField()
+            ),
         );
     }
 

@@ -36,6 +36,11 @@ class SearchField implements Indexable
                 $field->value->data,
                 new Search\FieldType\IntegerField()
             ),
+            new Search\Field(
+                'fulltext',
+                $field->value->data,
+                new Search\FieldType\FullTextField()
+            ),
         );
     }
 
