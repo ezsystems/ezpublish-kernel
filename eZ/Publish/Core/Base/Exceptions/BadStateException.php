@@ -12,15 +12,17 @@ namespace eZ\Publish\Core\Base\Exceptions;
 
 use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException;
 use Exception;
+use eZ\Publish\Core\Base\Translatable;
+use eZ\Publish\Core\Base\TranslatableBase;
 
 /**
  * BadState Exception implementation.
  *
  * @use: throw new BadState( 'nodes', 'array' );
  */
-class BadStateException extends APIBadStateException implements TranslatableExceptionInterface
+class BadStateException extends APIBadStateException implements Translatable
 {
-    use TranslatableException;
+    use TranslatableBase;
 
     /**
      * Generates: "Argument '{$argumentName}' has a bad state: {$whatIsWrong}".

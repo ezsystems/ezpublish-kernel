@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\Base\Exceptions;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use Exception;
+use eZ\Publish\Core\Base\Translatable;
+use eZ\Publish\Core\Base\TranslatableBase;
 
 /**
  * Not Found Exception implementation.
@@ -19,9 +21,9 @@ use Exception;
  * Use:
  *   throw new NotFound( 'Content', 42 );
  */
-class NotFoundException extends APINotFoundException implements Httpable, TranslatableExceptionInterface
+class NotFoundException extends APINotFoundException implements Httpable, Translatable
 {
-    use TranslatableException;
+    use TranslatableBase;
 
     /**
      * Generates: Could not find '{$what}' with identifier '{$identifier}'.

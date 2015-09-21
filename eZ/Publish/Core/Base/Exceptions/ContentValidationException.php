@@ -11,13 +11,15 @@
 namespace eZ\Publish\Core\Base\Exceptions;
 
 use eZ\Publish\API\Repository\Exceptions\ContentValidationException as APIContentValidationException;
+use eZ\Publish\Core\Base\Translatable;
+use eZ\Publish\Core\Base\TranslatableBase;
 
 /**
  * This Exception is thrown on create or update content one or more given fields are not valid.
  */
-class ContentValidationException extends APIContentValidationException implements TranslatableExceptionInterface
+class ContentValidationException extends APIContentValidationException implements Translatable
 {
-    use TranslatableException;
+    use TranslatableBase;
 
     /**
      * @param string $messageTemplate The message template, with placeholders for parameters.

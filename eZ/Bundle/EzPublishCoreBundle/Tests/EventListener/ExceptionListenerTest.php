@@ -121,7 +121,7 @@ class ExceptionListenerTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider badRequestExceptionProvider
      *
-     * @param Exception|\eZ\Publish\Core\Base\Exceptions\TranslatableException $exception
+     * @param Exception|\eZ\Publish\Core\Base\Translatable $exception
      */
     public function testBadRequestException(Exception $exception)
     {
@@ -158,7 +158,7 @@ class ExceptionListenerTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider otherExceptionProvider
      *
-     * @param Exception|\eZ\Publish\Core\Base\Exceptions\TranslatableException $exception
+     * @param Exception|\eZ\Publish\Core\Base\Translatable $exception
      */
     public function testOtherRepositoryException(Exception $exception)
     {

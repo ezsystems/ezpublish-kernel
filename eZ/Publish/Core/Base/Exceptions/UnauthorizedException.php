@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\Base\Exceptions;
 
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
 use Exception;
+use eZ\Publish\Core\Base\Translatable;
+use eZ\Publish\Core\Base\TranslatableBase;
 
 /**
  * UnauthorizedException Exception implementation.
@@ -19,9 +21,9 @@ use Exception;
  * Use:
  *   throw new UnauthorizedException( 'content', 'read', array( 'contentId' => 42 ) );
  */
-class UnauthorizedException extends APIUnauthorizedException implements Httpable, TranslatableExceptionInterface
+class UnauthorizedException extends APIUnauthorizedException implements Httpable, Translatable
 {
-    use TranslatableException;
+    use TranslatableBase;
 
     /**
      * Generates: User does not have access to '{$function}' '{$module}'[ with: %property.key% '%property.value%'].

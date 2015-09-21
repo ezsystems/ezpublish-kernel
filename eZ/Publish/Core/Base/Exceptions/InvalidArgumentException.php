@@ -12,15 +12,17 @@ namespace eZ\Publish\Core\Base\Exceptions;
 
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException as APIInvalidArgumentException;
 use Exception;
+use eZ\Publish\Core\Base\Translatable;
+use eZ\Publish\Core\Base\TranslatableBase;
 
 /**
  * Invalid Argument Type Exception implementation.
  *
  * @use: throw new InvalidArgumentException( 'nodes', 'array' );
  */
-class InvalidArgumentException extends APIInvalidArgumentException implements TranslatableExceptionInterface
+class InvalidArgumentException extends APIInvalidArgumentException implements Translatable
 {
-    use TranslatableException;
+    use TranslatableBase;
 
     /**
      * Generates: "Argument '{$argumentName}' is invalid: {$whatIsWrong}".

@@ -11,13 +11,15 @@
 namespace eZ\Publish\Core\Base\Exceptions;
 
 use eZ\Publish\API\Repository\Exceptions\ForbiddenException as APIForbiddenException;
+use eZ\Publish\Core\Base\Translatable;
+use eZ\Publish\Core\Base\TranslatableBase;
 
 /**
  * Forbidden Exception implementation.
  */
-class ForbiddenException extends APIForbiddenException implements TranslatableExceptionInterface
+class ForbiddenException extends APIForbiddenException implements Translatable
 {
-    use TranslatableException;
+    use TranslatableBase;
 
     /**
      * @param string $messageTemplate The message template, with placeholders for parameters.

@@ -12,7 +12,7 @@ use eZ\Publish\API\Repository\Exceptions\BadStateException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\Base\Exceptions\TranslatableExceptionInterface;
+use eZ\Publish\Core\Base\Translatable;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -53,7 +53,7 @@ class ExceptionListener implements EventSubscriberInterface
             $event->setException(new AccessDeniedHttpException($this->getTranslatedMessage($exception), $exception));
         } elseif ($exception instanceof BadStateException || $exception instanceof InvalidArgumentException) {
             $event->setException(new BadRequestHttpException($this->getTranslatedMessage($exception), $exception));
-        } elseif ($exception instanceof TranslatableExceptionInterface) {
+        } elseif ($exception instanceof Translatable) {
             $event->setException(
                 new HttpException(
                     Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -74,7 +74,7 @@ class ExceptionListener implements EventSubscriberInterface
     private function getTranslatedMessage(Exception $exception)
     {
         $message = $exception->getMessage();
-        if ($exception instanceof TranslatableExceptionInterface) {
+        if ($exception instanceof Translatable) {
             $message = $this->translator->trans($exception->getMessageTemplate(), $exception->getParameters(), 'repository_exceptions');
         }
 

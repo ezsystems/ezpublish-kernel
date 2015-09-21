@@ -10,16 +10,16 @@ namespace eZ\Publish\Core\Base\Exceptions\NotFound;
 
 use eZ\Publish\Core\Base\Exceptions\Httpable;
 use Exception;
-use eZ\Publish\Core\Base\Exceptions\TranslatableException;
-use eZ\Publish\Core\Base\Exceptions\TranslatableExceptionInterface;
+use eZ\Publish\Core\Base\TranslatableBase;
+use eZ\Publish\Core\Base\Translatable;
 use RuntimeException;
 
 /**
  * FieldType Not Found Exception.
  */
-class FieldTypeNotFoundException extends RuntimeException implements Httpable, TranslatableExceptionInterface
+class FieldTypeNotFoundException extends RuntimeException implements Httpable, Translatable
 {
-    use TranslatableException;
+    use TranslatableBase;
 
     /**
      * Creates a FieldType Not Found exception with info on how to fix.

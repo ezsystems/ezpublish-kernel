@@ -11,13 +11,15 @@
 namespace eZ\Publish\Core\Base\Exceptions;
 
 use eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException as APIContentTypeFieldDefinitionValidationException;
+use eZ\Publish\Core\Base\Translatable;
+use eZ\Publish\Core\Base\TranslatableBase;
 
 /**
  * This Exception is thrown on create or update content one or more given fields are not valid.
  */
-class ContentTypeFieldDefinitionValidationException extends APIContentTypeFieldDefinitionValidationException implements TranslatableExceptionInterface
+class ContentTypeFieldDefinitionValidationException extends APIContentTypeFieldDefinitionValidationException implements Translatable
 {
-    use TranslatableException;
+    use TranslatableBase;
 
     /**
      * Contains an array of field ValidationError objects indexed with FieldDefinition id and language code.
