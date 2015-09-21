@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Publish\API\Repository\Exceptions\BadStateException;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Base\Exceptions\TranslatableExceptionInterface;
@@ -50,7 +51,7 @@ class ExceptionListener implements EventSubscriberInterface
             $event->setException(new NotFoundHttpException($this->getTranslatedMessage($exception), $exception));
         } elseif ($exception instanceof UnauthorizedException) {
             $event->setException(new AccessDeniedHttpException($this->getTranslatedMessage($exception), $exception));
-        } elseif ($exception instanceof BadStateException) {
+        } elseif ($exception instanceof BadStateException || $exception instanceof InvalidArgumentException) {
             $event->setException(new BadRequestHttpException($this->getTranslatedMessage($exception), $exception));
         } elseif ($exception instanceof TranslatableExceptionInterface) {
             $event->setException(
