@@ -29,18 +29,19 @@ class InvalidArgumentType extends InvalidArgumentException
      */
     public function __construct($argumentName, $expectedType, $value = null, Exception $previous = null)
     {
-        if ($value === null) {
-            $valueString = '';
-        } elseif (is_object($value)) {
-            $valueString = ", got '" . get_class($value) . "'";
-        } else {
-            $valueString = ", got '" . gettype($value) . "'";
+        $parameters = ['%expectedType%' => $expectedType];
+        $whatIsWrong = "expected value to be of type '%expectedType%'";
+        if ($value) {
+            $whatIsWrong .= ", got '%actualType%'";
+            $actualType = is_object($value) ? get_class($value) : gettype($value);
+            $parameters['%actualType%'] = $actualType;
         }
 
-        parent::__construct(
-            $argumentName,
-            "expected value to be of type '{$expectedType}'" . $valueString,
-            $previous
-        );
+        parent::__construct($argumentName, $whatIsWrong, $previous);
+
+        // Alter the message template & inject new parameters.
+        $this->setMessageTemplate(str_replace('%whatIsWrong%', $whatIsWrong, $this->getMessageTemplate()));
+        $this->addParameters($parameters);
+        $this->message = $this->getBaseTranslation();
     }
 }

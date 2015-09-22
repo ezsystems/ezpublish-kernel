@@ -12,14 +12,18 @@ namespace eZ\Publish\Core\Base\Exceptions;
 
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException as APIInvalidArgumentException;
 use Exception;
+use eZ\Publish\Core\Base\Translatable;
+use eZ\Publish\Core\Base\TranslatableBase;
 
 /**
  * Invalid Argument Type Exception implementation.
  *
  * @use: throw new InvalidArgumentException( 'nodes', 'array' );
  */
-class InvalidArgumentException extends APIInvalidArgumentException
+class InvalidArgumentException extends APIInvalidArgumentException implements Translatable
 {
+    use TranslatableBase;
+
     /**
      * Generates: "Argument '{$argumentName}' is invalid: {$whatIsWrong}".
      *
@@ -29,10 +33,8 @@ class InvalidArgumentException extends APIInvalidArgumentException
      */
     public function __construct($argumentName, $whatIsWrong, Exception $previous = null)
     {
-        parent::__construct(
-            "Argument '{$argumentName}' is invalid: {$whatIsWrong}",
-            0,
-            $previous
-        );
+        $this->setMessageTemplate("Argument '%argumentName%' is invalid: %whatIsWrong%");
+        $this->setParameters(['%argumentName%' => $argumentName, '%whatIsWrong%' => $whatIsWrong]);
+        parent::__construct($this->getBaseTranslation(), 0, $previous);
     }
 }

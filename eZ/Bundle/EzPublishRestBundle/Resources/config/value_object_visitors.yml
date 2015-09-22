@@ -159,35 +159,35 @@ services:
     ezpublish_rest.output.value_object_visitor.InvalidArgumentException:
         parent: ezpublish_rest.output.value_object_visitor.base
         class: %ezpublish_rest.output.value_object_visitor.InvalidArgumentException.class%
-        arguments: [ %kernel.debug% ]
+        arguments: [ %kernel.debug%, @translator ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Exceptions\InvalidArgumentException }
 
     ezpublish_rest.output.value_object_visitor.NotFoundException:
         parent: ezpublish_rest.output.value_object_visitor.base
         class: %ezpublish_rest.output.value_object_visitor.NotFoundException.class%
-        arguments: [ %kernel.debug% ]
+        arguments: [ %kernel.debug%, @translator ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Exceptions\NotFoundException }
 
     ezpublish_rest.output.value_object_visitor.UnauthorizedException:
         parent: ezpublish_rest.output.value_object_visitor.base
         class: %ezpublish_rest.output.value_object_visitor.UnauthorizedException.class%
-        arguments: [ %kernel.debug% ]
+        arguments: [ %kernel.debug%, @translator ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Exceptions\UnauthorizedException }
 
     ezpublish_rest.output.value_object_visitor.BadStateException:
         parent: ezpublish_rest.output.value_object_visitor.base
         class: %ezpublish_rest.output.value_object_visitor.BadStateException.class%
-        arguments: [ %kernel.debug% ]
+        arguments: [ %kernel.debug%, @translator ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Exceptions\BadStateException }
 
     ezpublish_rest.output.value_object_visitor.BadRequestException:
         parent: ezpublish_rest.output.value_object_visitor.base
         class: %ezpublish_rest.output.value_object_visitor.BadRequestException.class%
-        arguments: [ %kernel.debug% ]
+        arguments: [ %kernel.debug%, @translator ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Exceptions\BadRequestException }
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Common\Exceptions\Parser }
@@ -195,21 +195,21 @@ services:
     ezpublish_rest.output.value_object_visitor.ForbiddenException:
         parent: ezpublish_rest.output.value_object_visitor.base
         class: %ezpublish_rest.output.value_object_visitor.ForbiddenException.class%
-        arguments: [ %kernel.debug% ]
+        arguments: [ %kernel.debug%, @translator ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException }
 
     ezpublish_rest.output.value_object_visitor.NotImplementedException:
         parent: ezpublish_rest.output.value_object_visitor.base
         class: %ezpublish_rest.output.value_object_visitor.NotImplementedException.class%
-        arguments: [ %kernel.debug% ]
+        arguments: [ %kernel.debug%, @translator ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Exceptions\NotImplementedException }
 
     ezpublish_rest.output.value_object_visitor.Exception:
         parent: ezpublish_rest.output.value_object_visitor.base
         class: %ezpublish_rest.output.value_object_visitor.Exception.class%
-        arguments: [ %kernel.debug% ]
+        arguments: [ %kernel.debug%, @translator ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: Exception }
 

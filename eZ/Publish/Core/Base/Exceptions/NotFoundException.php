@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\Base\Exceptions;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use Exception;
+use eZ\Publish\Core\Base\Translatable;
+use eZ\Publish\Core\Base\TranslatableBase;
 
 /**
  * Not Found Exception implementation.
@@ -19,8 +21,10 @@ use Exception;
  * Use:
  *   throw new NotFound( 'Content', 42 );
  */
-class NotFoundException extends APINotFoundException implements Httpable
+class NotFoundException extends APINotFoundException implements Httpable, Translatable
 {
+    use TranslatableBase;
+
     /**
      * Generates: Could not find '{$what}' with identifier '{$identifier}'.
      *
@@ -31,10 +35,8 @@ class NotFoundException extends APINotFoundException implements Httpable
     public function __construct($what, $identifier, Exception $previous = null)
     {
         $identifierStr = is_string($identifier) ? $identifier : var_export($identifier, true);
-        parent::__construct(
-            "Could not find '{$what}' with identifier '{$identifierStr}'",
-            self::NOT_FOUND,
-            $previous
-        );
+        $this->setMessageTemplate("Could not find '%what%' with identifier '%identifier%'");
+        $this->setParameters(['%what%' => $what, '%identifier%' => $identifierStr]);
+        parent::__construct($this->getBaseTranslation(), self::NOT_FOUND, $previous);
     }
 }

@@ -11,6 +11,8 @@
 namespace eZ\Publish\Core\Base\Exceptions;
 
 use Exception;
+use eZ\Publish\Core\Base\Translatable;
+use eZ\Publish\Core\Base\TranslatableBase;
 use LogicException;
 
 /**
@@ -21,8 +23,10 @@ use LogicException;
  *
  * @todo Add a exception type in API that uses Logic exception and change this to extend it
  */
-class MissingClass extends LogicException
+class MissingClass extends LogicException implements Translatable
 {
+    use TranslatableBase;
+
     /**
      * Generates: Could not find[ {$classType}] class '{$className}'.
      *
@@ -32,10 +36,14 @@ class MissingClass extends LogicException
      */
     public function __construct($className, $classType = null, Exception $previous = null)
     {
+        $this->setParameters(['%className%' => $className]);
         if ($classType === null) {
-            parent::__construct("Could not find class '{$className}'", 0, $previous);
+            $this->setMessageTemplate("Could not find class '%className%'");
         } else {
-            parent::__construct("Could not find {$classType} class '{$className}'", 0, $previous);
+            $this->setMessageTemplate("Could not find %classType% class '%className%'");
+            $this->addParameter('%classType%', $classType);
         }
+
+        parent::__construct($this->getBaseTranslation(), 0, $previous);
     }
 }

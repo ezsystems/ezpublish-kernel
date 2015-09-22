@@ -12,14 +12,18 @@ namespace eZ\Publish\Core\Base\Exceptions;
 
 use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException;
 use Exception;
+use eZ\Publish\Core\Base\Translatable;
+use eZ\Publish\Core\Base\TranslatableBase;
 
 /**
  * BadState Exception implementation.
  *
  * @use: throw new BadState( 'nodes', 'array' );
  */
-class BadStateException extends APIBadStateException
+class BadStateException extends APIBadStateException implements Translatable
 {
+    use TranslatableBase;
+
     /**
      * Generates: "Argument '{$argumentName}' has a bad state: {$whatIsWrong}".
      *
@@ -29,10 +33,8 @@ class BadStateException extends APIBadStateException
      */
     public function __construct($argumentName, $whatIsWrong, Exception $previous = null)
     {
-        parent::__construct(
-            "Argument '{$argumentName}' has a bad state: {$whatIsWrong}",
-            0,
-            $previous
-        );
+        $this->setMessageTemplate("Argument '%argumentName%' has a bad state: %whatIsWrong%");
+        $this->setParameters(['%argumentName%' => $argumentName, '%whatIsWrong%' => $whatIsWrong]);
+        parent::__construct($this->getBaseTranslation(), 0, $previous);
     }
 }

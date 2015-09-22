@@ -566,7 +566,8 @@ class ContentService implements ContentServiceInterface
                     $isEmptyValue = true;
                     if ($fieldDefinition->isRequired) {
                         throw new ContentValidationException(
-                            "Value for required field definition '{$fieldDefinition->identifier}' with language '{$languageCode}' is empty"
+                            "Value for required field definition '%identifier%' with language '%languageCode%' is empty",
+                            ['%identifier%' => $fieldDefinition->identifier, '%languageCode%' => $languageCode]
                         );
                     }
                 } else {
@@ -741,7 +742,8 @@ class ContentService implements ContentServiceInterface
 
             if ($fieldDefinition === null) {
                 throw new ContentValidationException(
-                    "Field definition '{$field->fieldDefIdentifier}' does not exist in given ContentType"
+                    "Field definition '%identifier%' does not exist in given ContentType",
+                    ['%identifier%' => $field->fieldDefIdentifier]
                 );
             }
 
@@ -754,7 +756,8 @@ class ContentService implements ContentServiceInterface
 
             if (!$fieldDefinition->isTranslatable && ($field->languageCode != $contentCreateStruct->mainLanguageCode)) {
                 throw new ContentValidationException(
-                    "A value is set for non translatable field definition '{$field->fieldDefIdentifier}' with language '{$field->languageCode}'"
+                    "A value is set for non translatable field definition '%identifier%' with language '%languageCode%'",
+                    ['%identifier%' => $field->fieldDefIdentifier, '%languageCode%' => $field->languageCode]
                 );
             }
 
@@ -1210,7 +1213,8 @@ class ContentService implements ContentServiceInterface
                     $isEmpty = true;
                     if ($fieldDefinition->isRequired) {
                         throw new ContentValidationException(
-                            "Value for required field definition '{$fieldDefinition->identifier}' with language '{$languageCode}' is empty"
+                            "Value for required field definition '%identifier%' with language '%languageCode%' is empty",
+                            ['%identifier%' => $fieldDefinition->identifier, '%languageCode%' => $languageCode]
                         );
                     }
                 } else {
@@ -1365,7 +1369,8 @@ class ContentService implements ContentServiceInterface
 
             if ($fieldDefinition === null) {
                 throw new ContentValidationException(
-                    "Field definition '{$field->fieldDefIdentifier}' does not exist in given ContentType"
+                    "Field definition '%identifier%' does not exist in given ContentType",
+                    ['%identifier%' => $field->fieldDefIdentifier]
                 );
             }
 
@@ -1380,7 +1385,8 @@ class ContentService implements ContentServiceInterface
 
             if (!$fieldDefinition->isTranslatable && ($field->languageCode != $mainLanguageCode)) {
                 throw new ContentValidationException(
-                    "A value is set for non translatable field definition '{$field->fieldDefIdentifier}' with language '{$field->languageCode}'"
+                    "A value is set for non translatable field definition '%identifier%' with language '%languageCode%'",
+                    ['%identifier%' => $field->fieldDefIdentifier, '%languageCode%' => $field->languageCode]
                 );
             }
 

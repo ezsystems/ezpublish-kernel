@@ -3296,7 +3296,7 @@ class UrlAliasTest extends BaseServiceMockTest
             $this->equalTo('languageCode'),
             $this->equalTo('alwaysAvailable')
         )->will(
-            $this->throwException(new ForbiddenException())
+            $this->throwException(new ForbiddenException('Forbidden!'))
         );
 
         $urlAliasService->createUrlAlias(
@@ -3437,7 +3437,7 @@ class UrlAliasTest extends BaseServiceMockTest
             $this->equalTo('languageCode'),
             $this->equalTo('alwaysAvailable')
         )->will(
-            $this->throwException(new ForbiddenException())
+            $this->throwException(new ForbiddenException('Forbidden!'))
         );
 
         $urlAliasService->createGlobalUrlAlias(

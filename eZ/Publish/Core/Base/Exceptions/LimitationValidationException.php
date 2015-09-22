@@ -11,13 +11,17 @@
 namespace eZ\Publish\Core\Base\Exceptions;
 
 use eZ\Publish\API\Repository\Exceptions\LimitationValidationException as APILimitationValidationException;
+use eZ\Publish\Core\Base\Translatable;
+use eZ\Publish\Core\Base\TranslatableBase;
 
 /**
  * This Exception is thrown on create, update or assign policy or role
  * when one or more given limitations are not valid.
  */
-class LimitationValidationException extends APILimitationValidationException
+class LimitationValidationException extends APILimitationValidationException implements Translatable
 {
+    use TranslatableBase;
+
     /**
      * Contains an array of limitation ValidationError objects.
      *
@@ -35,7 +39,8 @@ class LimitationValidationException extends APILimitationValidationException
     public function __construct(array $errors)
     {
         $this->validationErrors = $errors;
-        parent::__construct('Limitations did not validate');
+        $this->setMessageTemplate('Limitations did not validate');
+        parent::__construct($this->getBaseTranslation());
     }
 
     /**

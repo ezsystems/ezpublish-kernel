@@ -10,9 +10,11 @@
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
+use eZ\Publish\Core\Base\Translatable;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Exception value object visitor.
@@ -70,13 +72,20 @@ class Exception extends ValueObjectVisitor
     );
 
     /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
      * Construct from debug flag.
      *
      * @param bool $debug
+     * @param TranslatorInterface $translator
      */
-    public function __construct($debug = false)
+    public function __construct($debug = false, TranslatorInterface $translator = null)
     {
         $this->debug = (bool)$debug;
+        $this->translator = $translator;
     }
 
     /**
@@ -110,7 +119,12 @@ class Exception extends ValueObjectVisitor
         $generator->startValueElement('errorMessage', $this->httpStatusCodes[$statusCode]);
         $generator->endValueElement('errorMessage');
 
-        $generator->startValueElement('errorDescription', $data->getMessage());
+        if ($data instanceof Translatable && $this->translator) {
+            $errorDescription = $this->translator->trans($data->getMessageTemplate(), $data->getParameters(), 'repository_exceptions');
+        } else {
+            $errorDescription = $data->getMessage();
+        }
+        $generator->startValueElement('errorDescription', $errorDescription);
         $generator->endValueElement('errorDescription');
 
         if ($this->debug) {
