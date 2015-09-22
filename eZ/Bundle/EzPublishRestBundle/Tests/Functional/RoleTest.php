@@ -34,7 +34,12 @@ class RoleTest extends RESTFunctionalTestCase
   </descriptions>
 </RoleInput>
 XML;
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/user/roles', 'RoleInput+xml', 'Role+json');
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/user/roles?publish=true',
+            'RoleInput+xml',
+            'Role+json'
+        );
         $request->setContent($xml);
         $response = $this->sendHttpRequest($request);
 

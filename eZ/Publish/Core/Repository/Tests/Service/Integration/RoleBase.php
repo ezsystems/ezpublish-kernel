@@ -37,7 +37,7 @@ abstract class RoleBase extends BaseServiceTest
             array(
                 'id' => null,
                 'identifier' => null,
-                // @todo uncomment when support for multilingual names and descriptions is added
+                // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
                 // 'mainLanguageCode' => null,
                 'policies' => array(),
             ),
@@ -157,7 +157,7 @@ abstract class RoleBase extends BaseServiceTest
     {
         $roleService = $this->repository->getRoleService();
         $roleCreateStruct = $roleService->newRoleCreateStruct('ultimate_permissions');
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreateStruct->mainLanguageCode = 'eng-GB';
         // $roleCreateStruct->names = array( 'eng-GB' => 'Ultimate permissions' );
         // $roleCreateStruct->descriptions = array( 'eng-GB' => 'This is a role with ultimate permissions' );
@@ -167,7 +167,7 @@ abstract class RoleBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\Role', $createdRole);
         self::assertGreaterThan(0, $createdRole->id);
 
-        /* @todo uncomment when support for multilingual names and descriptions is added
+        /* @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         self::assertEquals(
             array(
                 'eng-GB' => $roleCreateStruct->names['eng-GB']
@@ -203,7 +203,7 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
         $roleCreateStruct = $roleService->newRoleCreateStruct('Anonymous');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreateStruct->mainLanguageCode = 'eng-GB';
         // $roleCreateStruct->names = array( 'eng-GB' => 'Anonymous' );
         // $roleCreateStruct->descriptions = array( 'eng-GB' => 'Anonymous role' );
@@ -242,7 +242,7 @@ abstract class RoleBase extends BaseServiceTest
 
         $roleCreateStruct = $roleService->newRoleCreateStruct('ultimate_permissions');
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleCreateStruct->mainLanguageCode = 'eng-GB';
         // $roleCreateStruct->names = array( 'eng-GB' => 'Ultimate permissions' );
         // $roleCreateStruct->descriptions = array( 'eng-GB' => 'This is a role with ultimate permissions' );
@@ -255,7 +255,7 @@ abstract class RoleBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\Role', $createdRole);
         self::assertGreaterThan(0, $createdRole->id);
 
-        /* @todo uncomment when support for multilingual names and descriptions is added
+        /* @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         self::assertEquals(
             array(
                 'eng-GB' => $roleCreateStruct->names['eng-GB']
@@ -337,7 +337,7 @@ abstract class RoleBase extends BaseServiceTest
         $roleUpdateStruct = $roleService->newRoleUpdateStruct();
         $roleUpdateStruct->identifier = 'Anonymous 2';
 
-        // @todo uncomment when support for multilingual names and descriptions is added
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
         // $roleUpdateStruct->mainLanguageCode = 'eng-US';
         // $roleUpdateStruct->names['eng-US'] = 'Anonymous 2';
         // $roleUpdateStruct->descriptions['eng-US'] = 'Anonymous 2 role';
@@ -844,7 +844,7 @@ abstract class RoleBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 'identifier' => 'Ultimate permissions',
-                // @todo uncomment when support for multilingual names and descriptions is added
+                // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
                 // 'mainLanguageCode' => null,
                 // 'names' => null,
                 // 'descriptions' => null
@@ -898,7 +898,7 @@ abstract class RoleBase extends BaseServiceTest
         $this->assertPropertiesCorrect(
             array(
                 'identifier' => null,
-                // @todo uncomment when support for multilingual names and descriptions is added
+                // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
                 // 'mainLanguageCode' => null,
                 // 'names' => null,
                 // 'descriptions' => null

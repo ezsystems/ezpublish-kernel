@@ -62,13 +62,14 @@ class ExceptionConversion extends Gateway
      * Loads a specified role by $roleId.
      *
      * @param mixed $roleId
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      *
      * @return array
      */
-    public function loadRole($roleId)
+    public function loadRole($roleId, $status = Role::STATUS_DEFINED)
     {
         try {
-            return $this->innerGateway->loadRole($roleId);
+            return $this->innerGateway->loadRole($roleId, $status);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
@@ -80,13 +81,14 @@ class ExceptionConversion extends Gateway
      * Loads a specified role by $identifier.
      *
      * @param string $identifier
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      *
      * @return array
      */
-    public function loadRoleByIdentifier($identifier)
+    public function loadRoleByIdentifier($identifier, $status = Role::STATUS_DEFINED)
     {
         try {
-            return $this->innerGateway->loadRoleByIdentifier($identifier);
+            return $this->innerGateway->loadRoleByIdentifier($identifier, $status);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
@@ -97,9 +99,11 @@ class ExceptionConversion extends Gateway
     /**
      * Loads all roles.
      *
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
+     *
      * @return array
      */
-    public function loadRoles()
+    public function loadRoles($status = Role::STATUS_DEFINED)
     {
         try {
             return $this->innerGateway->loadRoles();
@@ -114,10 +118,11 @@ class ExceptionConversion extends Gateway
      * Loads all roles associated with the given content objects.
      *
      * @param array $contentIds
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      *
      * @return array
      */
-    public function loadRolesForContentObjects($contentIds)
+    public function loadRolesForContentObjects($contentIds, $status = Role::STATUS_DEFINED)
     {
         try {
             return $this->innerGateway->loadRolesForContentObjects($contentIds);
@@ -184,16 +189,17 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Update role.
+     * Update role (draft).
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      *
      * @param RoleUpdateStruct $role
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    public function updateRole(RoleUpdateStruct $role)
+    public function updateRole(RoleUpdateStruct $role, $status = Role::STATUS_DEFINED)
     {
         try {
-            return $this->innerGateway->updateRole($role);
+            return $this->innerGateway->updateRole($role, $status);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
@@ -202,14 +208,32 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Delete the specified role including all of its assignments.
+     * Delete the specified role (draft).
+     * If it's not a draft, the role assignments will also be deleted.
+     *
+     * @param mixed $roleId
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
+     */
+    public function deleteRole($roleId, $status = Role::STATUS_DEFINED)
+    {
+        try {
+            return $this->innerGateway->deleteRole($roleId, $status);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * Publish the specified role draft.
      *
      * @param mixed $roleId
      */
-    public function deleteRole($roleId)
+    public function publishRoleDraft($roleId)
     {
         try {
-            return $this->innerGateway->deleteRole($roleId);
+            return $this->innerGateway->publishRoleDraft($roleId);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
@@ -222,11 +246,12 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $roleId
      * @param Policy $policy
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    public function addPolicy($roleId, Policy $policy)
+    public function addPolicy($roleId, Policy $policy, $status = Role::STATUS_DEFINED)
     {
         try {
-            return $this->innerGateway->addPolicy($roleId, $policy);
+            return $this->innerGateway->addPolicy($roleId, $policy, $status);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
@@ -255,11 +280,12 @@ class ExceptionConversion extends Gateway
      * Removes a policy from a role.
      *
      * @param mixed $policyId
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    public function removePolicy($policyId)
+    public function removePolicy($policyId, $status = Role::STATUS_DEFINED)
     {
         try {
-            return $this->innerGateway->removePolicy($policyId);
+            return $this->innerGateway->removePolicy($policyId, $status);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

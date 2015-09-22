@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\User;
 
+use eZ\Publish\API\Repository\Values\User\Role as APIRole;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\User;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter;
@@ -235,15 +236,37 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $role = new Persistence\User\Role();
-        $role->identifier = 'Test';
+        $createStruct = new Persistence\User\RoleCreateStruct();
+        $createStruct->identifier = 'Test';
 
-        $handler->createRole($role);
+        $handler->createRole($createStruct);
 
         $this->assertQueryResult(
-            array(array(1, 'Test')),
-            $this->handler->createSelectQuery()->select('id', 'name')->from('ezrole'),
-            'Expected a new role.'
+            array(array(1, 'Test', APIRole::STATUS_DRAFT)),
+            $this->handler->createSelectQuery()->select('id', 'name', 'version')->from('ezrole'),
+            'Expected a new role draft.'
+        );
+    }
+
+    public function testCreateRoleDraftWithoutPolicies()
+    {
+        $handler = $this->getUserHandler();
+
+        $createStruct = new Persistence\User\RoleCreateStruct();
+        $createStruct->identifier = 'Test';
+
+        $roleDraft = $handler->createRole($createStruct);
+        $handler->publishRoleDraft($roleDraft->id);
+
+        $handler->createRoleDraft($roleDraft->id);
+
+        $this->assertQueryResult(
+            [
+                [1, 'Test', APIRole::STATUS_DEFINED],
+                [1, 'Test', APIRole::STATUS_DRAFT],
+            ],
+            $this->handler->createSelectQuery()->select('id', 'name', 'version')->from('ezrole'),
+            'Expected a role and a role draft.'
         );
     }
 
@@ -251,26 +274,28 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $role = new Persistence\User\Role();
-        $role->identifier = 'Test';
+        $createStruct = new Persistence\User\RoleCreateStruct();
+        $createStruct->identifier = 'Test';
 
-        $role = $handler->createRole($role);
+        $roleDraft = $handler->createRole($createStruct);
 
-        $this->assertSame('1', $role->id);
+        $this->assertSame('1', $roleDraft->id);
     }
 
     public function testLoadRole()
     {
         $handler = $this->getUserHandler();
 
-        $role = new Persistence\User\Role();
-        $role->identifier = 'Test';
+        $createStruct = new Persistence\User\RoleCreateStruct();
+        $createStruct->identifier = 'Test';
 
-        $role = $handler->createRole($role);
+        $roleDraft = $handler->createRole($createStruct);
+        $handler->publishRoleDraft($roleDraft->id);
+        $role = $handler->loadRole($roleDraft->id);
 
         $this->assertEquals(
-            $role,
-            $handler->loadRole($role->id)
+            $roleDraft->id,
+            $role->id
         );
     }
 
@@ -278,18 +303,19 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $role = new Persistence\User\Role();
-        $role->identifier = 'Test';
+        $createStruct = new Persistence\User\RoleCreateStruct();
+        $createStruct->identifier = 'Test';
 
-        $role = $handler->createRole($role);
+        $roleDraft = $handler->createRole($createStruct);
 
         $policy = new Persistence\User\Policy();
         $policy->module = 'foo';
         $policy->function = 'bar';
 
-        $handler->addPolicy($role->id, $policy);
+        $handler->addPolicyByRoleDraft($roleDraft->id, $policy);
+        $handler->publishRoleDraft($roleDraft->id);
 
-        $loaded = $handler->loadRole($role->id);
+        $loaded = $handler->loadRole($roleDraft->id);
         $this->assertEquals(
             array(
                 new Persistence\User\Policy(
@@ -299,6 +325,7 @@ class UserHandlerTest extends TestCase
                         'module' => 'foo',
                         'function' => 'bar',
                         'limitations' => '*',
+                        'status' => APIRole::STATUS_DEFINED,
                     )
                 ),
             ),
@@ -310,21 +337,23 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $role = new Persistence\User\Role();
-        $role->identifier = 'Test';
+        $createStruct = new Persistence\User\RoleCreateStruct();
+        $createStruct->identifier = 'Test';
 
-        $role = $handler->createRole($role);
+        $roleDraft = $handler->createRole($createStruct);
 
         $policy = new Persistence\User\Policy();
         $policy->module = 'foo';
         $policy->function = 'bar';
 
-        $handler->addPolicy($role->id, $policy);
+        $handler->addPolicyByRoleDraft($roleDraft->id, $policy);
 
-        $handler->assignRole(23, $role->id);
-        $handler->assignRole(42, $role->id);
+        $handler->assignRole(23, $roleDraft->id);
+        $handler->assignRole(42, $roleDraft->id);
 
-        $loaded = $handler->loadRole($role->id);
+        $handler->publishRoleDraft($roleDraft->id);
+
+        $loaded = $handler->loadRole($roleDraft->id);
         $this->assertEquals(
             array(
                 new Persistence\User\Policy(
@@ -334,6 +363,7 @@ class UserHandlerTest extends TestCase
                         'module' => 'foo',
                         'function' => 'bar',
                         'limitations' => '*',
+                        'status' => APIRole::STATUS_DEFINED,
                     )
                 ),
             ),
@@ -341,14 +371,14 @@ class UserHandlerTest extends TestCase
         );
     }
 
-    public function testLoadRoleWithPoliciyLimitations()
+    public function testLoadRoleWithPolicyLimitations()
     {
         $handler = $this->getUserHandler();
 
-        $role = new Persistence\User\Role();
-        $role->identifier = 'Test';
+        $createStruct = new Persistence\User\RoleCreateStruct();
+        $createStruct->identifier = 'Test';
 
-        $role = $handler->createRole($role);
+        $roleDraft = $handler->createRole($createStruct);
 
         $policy = new Persistence\User\Policy();
         $policy->module = 'foo';
@@ -358,9 +388,10 @@ class UserHandlerTest extends TestCase
             'Foo' => array('Bar'),
         );
 
-        $handler->addPolicy($role->id, $policy);
+        $handler->addPolicy($roleDraft->id, $policy);
+        $handler->publishRoleDraft($roleDraft->id);
 
-        $loaded = $handler->loadRole($role->id);
+        $loaded = $handler->loadRole($roleDraft->id);
         $this->assertEquals(
             array(
                 new Persistence\User\Policy(
@@ -373,6 +404,7 @@ class UserHandlerTest extends TestCase
                             'Subtree' => array('/1', '/1/2'),
                             'Foo' => array('Bar'),
                         ),
+                        'status' => APIRole::STATUS_DEFINED,
                     )
                 ),
             ),
@@ -389,10 +421,12 @@ class UserHandlerTest extends TestCase
             $handler->loadRoles()
         );
 
-        $role = new Persistence\User\Role();
-        $role->identifier = 'Test';
+        $createStruct = new Persistence\User\RoleCreateStruct();
+        $createStruct->identifier = 'Test';
 
-        $role = $handler->createRole($role);
+        $roleDraft = $handler->createRole($createStruct);
+        $handler->publishRoleDraft($roleDraft->id);
+        $role = $handler->loadRole($roleDraft->id);
 
         $this->assertEquals(
             array($role),
@@ -404,10 +438,12 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $role = new Persistence\User\Role();
-        $role->identifier = 'Test';
+        $createStruct = new Persistence\User\RoleCreateStruct();
+        $createStruct->identifier = 'Test';
 
-        $role = $handler->createRole($role);
+        $roleDraft = $handler->createRole($createStruct);
+        $handler->publishRoleDraft($roleDraft->id);
+        $role = $handler->loadRole($roleDraft->id);
 
         $update = new Persistence\User\RoleUpdateStruct();
         $update->id = $role->id;
@@ -449,13 +485,44 @@ class UserHandlerTest extends TestCase
         );
     }
 
+    public function testDeleteRoleDraft()
+    {
+        $this->insertDatabaseFixture(__DIR__ . '/../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php');
+        $handler = $this->getUserHandler();
+
+        // 3 is the ID of Editor role
+        $handler->createRoleDraft(3);
+        $handler->deleteRole(3, APIRole::STATUS_DRAFT);
+
+        $this->assertQueryResult(
+            [['3', APIRole::STATUS_DEFINED]],
+            $this->handler->createSelectQuery()->select('id, version')->from('ezrole')->where('id = 3'),
+            'Expected a published role.'
+        );
+
+        $this->assertQueryResult(
+            [[implode("\n", array_fill(0, 27, '3, ' . APIRole::STATUS_DEFINED))]],
+            $this->handler->createSelectQuery()->select('role_id, original_id')->from('ezpolicy')->where('role_id = 3'),
+            'Expected 27 policies for the published role.'
+        );
+
+        $this->assertQueryResult(
+            [[3], [3]],
+            $this->handler->createSelectQuery()->select('role_id')->from('ezuser_role')->where('role_id = 3'),
+            'Expected that role assignments still exist.'
+        );
+    }
+
     public function testAddPolicyToRoleLimitations()
     {
         $handler = $this->getUserHandler();
 
-        $role = new Persistence\User\Role();
-        $role->identifier = 'Test';
-        $handler->createRole($role);
+        $createStruct = new Persistence\User\RoleCreateStruct();
+        $createStruct->identifier = 'Test';
+
+        $roleDraft = $handler->createRole($createStruct);
+        $handler->publishRoleDraft($roleDraft->id);
+        $role = $handler->loadRole($roleDraft->id);
 
         $policy = new Persistence\User\Policy();
         $policy->module = 'foo';
@@ -474,9 +541,12 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $role = new Persistence\User\Role();
-        $role->identifier = 'Test';
-        $handler->createRole($role);
+        $createStruct = new Persistence\User\RoleCreateStruct();
+        $createStruct->identifier = 'Test';
+
+        $roleDraft = $handler->createRole($createStruct);
+        $handler->publishRoleDraft($roleDraft->id);
+        $role = $handler->loadRole($roleDraft->id);
 
         $policy = new Persistence\User\Policy();
         $policy->module = 'foo';
@@ -491,9 +561,12 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $role = new Persistence\User\Role();
-        $role->identifier = 'Test';
-        $handler->createRole($role);
+        $createStruct = new Persistence\User\RoleCreateStruct();
+        $createStruct->identifier = 'Test';
+
+        $roleDraft = $handler->createRole($createStruct);
+        $handler->publishRoleDraft($roleDraft->id);
+        $role = $handler->loadRole($roleDraft->id);
 
         $policy = new Persistence\User\Policy();
         $policy->module = 'foo';
@@ -519,9 +592,12 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $role = new Persistence\User\Role();
-        $role->identifier = 'Test';
-        $handler->createRole($role);
+        $createStruct = new Persistence\User\RoleCreateStruct();
+        $createStruct->identifier = 'Test';
+
+        $roleDraft = $handler->createRole($createStruct);
+        $handler->publishRoleDraft($roleDraft->id);
+        $role = $handler->loadRole($roleDraft->id);
 
         $policy = new Persistence\User\Policy();
         $policy->module = 'foo';
@@ -563,11 +639,11 @@ class UserHandlerTest extends TestCase
             'Foo' => array('Blubb'),
         );
 
-        $role = new Persistence\User\Role();
-        $role->identifier = 'Test';
-        $role->policies = array($policy1, $policy2);
+        $createStruct = new Persistence\User\RoleCreateStruct();
+        $createStruct->identifier = 'Test';
+        $createStruct->policies = array($policy1, $policy2);
 
-        return $handler->createRole($role);
+        return $handler->createRole($createStruct);
     }
 
     public function testImplicitlyCreatePolicies()
@@ -588,14 +664,15 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $role = $this->createRole();
-        $handler->deletePolicy($role->policies[0]->id);
+        $roleDraft = $this->createRole();
+        $handler->publishRoleDraft($roleDraft->id);
+        $handler->deletePolicy($roleDraft->policies[0]->id);
 
         $this->assertQueryResult(
             array(
                 array(2, 'foo', 'blubb', 1),
             ),
-            $this->handler->createSelectQuery()->select('id', 'module_name', 'function_name', 'role_id')->from('ezpolicy'),
+            $this->handler->createSelectQuery()->select('id', 'module_name', 'function_name', 'role_id')->from('ezpolicy')->where('original_id = 0'),
             'Expected a new policy.'
         );
     }
@@ -604,8 +681,8 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $role = $this->createRole();
-        $handler->deletePolicy($role->policies[0]->id);
+        $roleDraft = $this->createRole();
+        $handler->deletePolicy($roleDraft->policies[0]->id);
 
         $this->assertQueryResult(
             array(array(3, 'Foo', 2)),
@@ -617,8 +694,8 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $role = $this->createRole();
-        $handler->deletePolicy($role->policies[0]->id);
+        $roleDraft = $this->createRole();
+        $handler->deletePolicy($roleDraft->policies[0]->id);
 
         $this->assertQueryResult(
             array(array(4, 3, 'Blubb')),
@@ -630,9 +707,9 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $role = $this->createRole();
+        $roleDraft = $this->createRole();
 
-        $policy = $role->policies[0];
+        $policy = $roleDraft->policies[0];
         $policy->limitations = array(
             'new' => array('something'),
         );
@@ -660,7 +737,9 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $role = $this->createRole();
+        $roleDraft = $this->createRole();
+        $handler->publishRoleDraft($roleDraft->id);
+        $role = $handler->loadRole($roleDraft->id);
         $handler->create($user = $this->getValidUser());
 
         $handler->assignRole($user->id, $role->id, array());
@@ -678,7 +757,9 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $role = $this->createRole();
+        $roleDraft = $this->createRole();
+        $handler->publishRoleDraft($roleDraft->id);
+        $role = $handler->loadRole($roleDraft->id);
         $handler->create($user = $this->getValidUser());
 
         $handler->assignRole(
@@ -702,7 +783,9 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $role = $this->createRole();
+        $roleDraft = $this->createRole();
+        $handler->publishRoleDraft($roleDraft->id);
+        $role = $handler->loadRole($roleDraft->id);
         $handler->create($user = $this->getValidUser());
 
         $handler->assignRole(
@@ -729,7 +812,9 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $role = $this->createRole();
+        $roleDraft = $this->createRole();
+        $handler->publishRoleDraft($roleDraft->id);
+        $role = $handler->loadRole($roleDraft->id);
         $handler->create($user = $this->getValidUser());
 
         $handler->assignRole(

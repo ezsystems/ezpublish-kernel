@@ -394,7 +394,7 @@ CREATE TABLE ezrole (
   name varchar(255) NOT NULL DEFAULT '',
   value char(1) DEFAULT NULL,
   version int(11) DEFAULT 0,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id,version)
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS ezurl;

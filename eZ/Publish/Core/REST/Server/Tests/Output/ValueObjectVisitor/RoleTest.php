@@ -32,7 +32,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
             array(
                 'id' => 42,
                 'identifier' => 'some-role',
-                /* @todo uncomment when support for multilingual names and descriptions is added
+                /* @todo uncomment when support for multilingual names and descriptions is added EZP-24776
                 'mainLanguageCode' => 'eng-GB',
                 'names' => array(
                     'eng-GB' => 'Role name EN',
@@ -136,7 +136,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsMainLanguageCodeValueElement($result)
     {
-        $this->markTestSkipped('@todo uncomment when support for multilingual names and descriptions is added');
+        $this->markTestSkipped('@todo uncomment when support for multilingual names and descriptions is added EZP-24776');
         $this->assertXMLTag(
             array(
                 'tag' => 'mainLanguageCode',
@@ -157,7 +157,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsNamesElement($result)
     {
-        $this->markTestSkipped('@todo uncomment when support for multilingual names and descriptions is added');
+        $this->markTestSkipped('@todo uncomment when support for multilingual names and descriptions is added EZP-24776');
         $this->assertXMLTag(
             array(
                 'tag' => 'names',
@@ -180,7 +180,7 @@ class RoleTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsDescriptionsElement($result)
     {
-        $this->markTestSkipped('@todo uncomment when support for multilingual names and descriptions is added');
+        $this->markTestSkipped('@todo uncomment when support for multilingual names and descriptions is added EZP-24776');
         $this->assertXMLTag(
             array(
                 'tag' => 'descriptions',

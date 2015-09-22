@@ -31,6 +31,15 @@ class Policy extends ValueObject
     public $roleId;
 
     /**
+     * Status of the policy (legacy: "original_id").
+     *
+     * @since 6.0
+     *
+     * @var int One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
+     */
+    public $status;
+
+    /**
      * Name of module, associated with the Policy.
      *
      * Eg: content

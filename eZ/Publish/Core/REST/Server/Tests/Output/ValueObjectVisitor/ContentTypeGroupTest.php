@@ -36,7 +36,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
                 'modificationDate' => new \DateTime('2012-12-31 19:35 Europe/Zagreb'),
                 'creatorId' => 14,
                 'modifierId' => 13,
-                /* @todo uncomment when support for multilingual names and descriptions is added
+                /* @todo uncomment when support for multilingual names and descriptions is added EZP-24776
                 'names' => array(
                     'eng-GB' => 'Group name EN',
                     'eng-US' => 'Group name EN US',

@@ -86,33 +86,48 @@ interface Handler
     /**
      * Create new role.
      *
-     * @param \eZ\Publish\SPI\Persistence\User\Role $role
+     * @param \eZ\Publish\SPI\Persistence\User\RoleCreateStruct $createStruct
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
-    public function createRole(Role $role);
+    public function createRole(RoleCreateStruct $createStruct);
 
     /**
-     * Loads a specified role by $roleId.
+     * Creates a draft of existing defined role.
+     *
+     * Sets status to Role::STATUS_DRAFT on the new returned draft.
      *
      * @param mixed $roleId
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role with defined status is not found
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
-    public function loadRole($roleId);
+    public function createRoleDraft($roleId);
 
     /**
-     * Loads a specified role by $identifier.
+     * Loads a specified role (draft) by $roleId.
      *
-     * @param string $identifier
+     * @param mixed $roleId
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
-    public function loadRoleByIdentifier($identifier);
+    public function loadRole($roleId, $status = Role::STATUS_DEFINED);
+
+    /**
+     * Loads a specified role (draft) by $identifier.
+     *
+     * @param string $identifier
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
+     */
+    public function loadRoleByIdentifier($identifier, $status = Role::STATUS_DEFINED);
 
     /**
      * Loads all roles.
@@ -146,18 +161,41 @@ interface Handler
     public function loadRoleAssignmentsByGroupId($groupId, $inherit = false);
 
     /**
-     * Update role.
+     * Update role (draft).
      *
      * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    public function updateRole(RoleUpdateStruct $role);
+    public function updateRole(RoleUpdateStruct $role, $status = Role::STATUS_DEFINED);
 
     /**
-     * Delete the specified role.
+     * Delete the specified role (draft).
+     *
+     * @param mixed $roleId
+     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
+     */
+    public function deleteRole($roleId, $status = Role::STATUS_DEFINED);
+
+    /**
+     * Publish the specified role draft.
      *
      * @param mixed $roleId
      */
-    public function deleteRole($roleId);
+    public function publishRoleDraft($roleId);
+
+    /**
+     * Adds a policy to a role draft.
+     *
+     * @param mixed $roleId
+     * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Policy
+     *
+     * @todo Throw on invalid Role Id?
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $policy->limitation is empty (null, empty string/array..)
+     */
+    public function addPolicyByRoleDraft($roleId, Policy $policy);
 
     /**
      * Adds a policy to a role.

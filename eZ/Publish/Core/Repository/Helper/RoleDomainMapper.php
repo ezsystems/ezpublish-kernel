@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\Repository\Helper;
 use eZ\Publish\Core\Repository\Values\User\Policy;
 use eZ\Publish\Core\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\Role as APIRole;
+use eZ\Publish\Core\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
 use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
 use eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
@@ -22,6 +23,7 @@ use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\SPI\Persistence\User\Policy as SPIPolicy;
 use eZ\Publish\SPI\Persistence\User\RoleAssignment as SPIRoleAssignment;
 use eZ\Publish\SPI\Persistence\User\Role as SPIRole;
+use eZ\Publish\SPI\Persistence\User\RoleCreateStruct as SPIRoleCreateStruct;
 
 /**
  * Internal service to map Role objects between API and SPI values.
@@ -59,7 +61,25 @@ class RoleDomainMapper
             array(
                 'id' => $role->id,
                 'identifier' => $role->identifier,
+                'status' => $role->status,
                 'policies' => $rolePolicies,
+            )
+        );
+    }
+
+    /**
+     * Builds a RoleDraft domain object from value object returned by persistence
+     * Decorates Role.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\Role $spiRole
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
+     */
+    public function buildDomainRoleDraftObject(SPIRole $spiRole)
+    {
+        return new RoleDraft(
+            array(
+                'innerRole' => $this->buildDomainRoleObject($spiRole),
             )
         );
     }
@@ -148,13 +168,13 @@ class RoleDomainMapper
     }
 
     /**
-     * Creates SPI Role value object from provided API role create struct.
+     * Creates SPI Role create struct from provided API role create struct.
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
      *
-     * @return \eZ\Publish\SPI\Persistence\User\Role
+     * @return \eZ\Publish\SPI\Persistence\User\RoleCreateStruct
      */
-    public function buildPersistenceRoleObject(APIRoleCreateStruct $roleCreateStruct)
+    public function buildPersistenceRoleCreateStruct(APIRoleCreateStruct $roleCreateStruct)
     {
         $policiesToCreate = array();
         foreach ($roleCreateStruct->getPolicies() as $policyCreateStruct) {
@@ -165,7 +185,7 @@ class RoleDomainMapper
             );
         }
 
-        return new SPIRole(
+        return new SPIRoleCreateStruct(
             array(
                 'identifier' => $roleCreateStruct->identifier,
                 'policies' => $policiesToCreate,

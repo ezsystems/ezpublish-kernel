@@ -23,7 +23,17 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 abstract class Role extends ValueObject
 {
     /**
-     * ID of the user rule.
+     * @var int Status constant for defined (aka "published") role
+     */
+    const STATUS_DEFINED = 0;
+
+    /**
+     * @var int Status constant for draft (aka "temporary") role
+     */
+    const STATUS_DRAFT = 1;
+
+    /**
+     * ID of the user role.
      *
      * @var mixed
      */
@@ -36,6 +46,13 @@ abstract class Role extends ValueObject
      * @var string
      */
     protected $identifier;
+
+    /**
+     * The status of the role.
+     *
+     * @var int One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
+     */
+    protected $status;
 
     /**
      * Returns the list of policies of this role.

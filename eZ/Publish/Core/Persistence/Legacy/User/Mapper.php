@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\User;
 
 use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\Role;
+use eZ\Publish\SPI\Persistence\User\RoleCreateStruct;
 use eZ\Publish\SPI\Persistence\User\Policy;
 use eZ\Publish\SPI\Persistence\User\RoleAssignment;
 
@@ -79,6 +80,7 @@ class Mapper
                     array(
                         'id' => $row['ezpolicy_id'],
                         'roleId' => $row['ezrole_id'],
+                        'status' => $row['ezpolicy_original_id'],
                         'module' => $row['ezpolicy_module_name'],
                         'function' => $row['ezpolicy_function_name'],
                         'limitations' => '*', // limitations must be '*' if not a non empty array of limitations
@@ -117,6 +119,7 @@ class Mapper
             if (empty($role->id)) {
                 $role->id = (int)$row['ezrole_id'];
                 $role->identifier = $row['ezrole_name'];
+                $role->status = $row['ezrole_version'];
                 // skip name and description as they don't exist in legacy
             }
         }
@@ -200,5 +203,40 @@ class Mapper
         );
 
         return $roleAssignments;
+    }
+
+    /**
+     * Creates a create struct from an existing $role.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\Role $role
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\RoleCreateStruct
+     */
+    public function createCreateStructFromRole(Role $role)
+    {
+        $createStruct = new RoleCreateStruct();
+
+        $createStruct->identifier = $role->identifier;
+        $createStruct->policies = $role->policies;
+
+        return $createStruct;
+    }
+
+    /**
+     * Maps properties from $struct to $role.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\RoleCreateStruct $createStruct
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
+     */
+    public function createRoleFromCreateStruct(RoleCreateStruct $createStruct)
+    {
+        $role = new Role();
+
+        $role->identifier = $createStruct->identifier;
+        $role->policies = $createStruct->policies;
+        $role->status = Role::STATUS_DRAFT;
+
+        return $role;
     }
 }

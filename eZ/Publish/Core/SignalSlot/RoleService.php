@@ -11,25 +11,32 @@
 namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
-use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
-use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
+use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
-use eZ\Publish\API\Repository\Values\User\Policy;
+use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
+use eZ\Publish\API\Repository\Values\User\RoleDraft;
+use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
-use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\CreateRoleSignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdateRoleSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\AddPolicyByRoleDraftSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\AddPolicySignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\RemovePolicySignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdatePolicySignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\DeleteRoleSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\AssignRoleToUserGroupSignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\UnassignRoleFromUserGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\AssignRoleToUserSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\CreateRoleDraftSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\CreateRoleSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\DeleteRoleDraftSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\DeleteRoleSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\PublishRoleDraftSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\RemovePolicyByRoleDraftSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\RemovePolicySignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\UnassignRoleFromUserGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\UnassignRoleFromUserSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdatePolicySignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdateRoleDraftSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdateRoleSignal;
 
 /**
  * RoleService class.
@@ -66,17 +73,19 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Creates a new Role.
+     * Creates a new RoleDraft.
+     *
+     * @since 6.0
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists or if limitation of the
-     *                                                                        same type is repeated in the policy create struct or if
-     *                                                                        limitation is not allowed on module/function
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *         if the name of the role already exists or if limitation of the same type
+     *         is repeated in the policy create struct or if limitation is not allowed on module/function
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCreateStruct is not valid
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
      */
     public function createRole(RoleCreateStruct $roleCreateStruct)
     {
@@ -93,7 +102,206 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
+     * Creates a new RoleDraft for existing Role.
+     *
+     * @since 6.0
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a role
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the Role already has a Role Draft that will need to be removed first
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCreateStruct is not valid
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Role $role
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
+     */
+    public function createRoleDraft(Role $role)
+    {
+        $returnValue = $this->service->createRoleDraft($role);
+        $this->signalDispatcher->emit(
+            new CreateRoleDraftSignal(
+                array(
+                    'roleId' => $returnValue->id,
+                )
+            )
+        );
+
+        return $returnValue;
+    }
+
+    /**
+     * Loads a role for the given id.
+     *
+     * @since 6.0
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given id was not found
+     *
+     * @param mixed $id
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
+     */
+    public function loadRoleDraft($id)
+    {
+        return $this->service->loadRoleDraft($id);
+    }
+
+    /**
+     * Updates the properties of a role draft.
+     *
+     * @since 6.0
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the identifier of the role already exists
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
+     * @param \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct $roleUpdateStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
+     */
+    public function updateRoleDraft(RoleDraft $roleDraft, RoleUpdateStruct $roleUpdateStruct)
+    {
+        $returnValue = $this->service->updateRoleDraft($roleDraft, $roleUpdateStruct);
+        $this->signalDispatcher->emit(
+            new UpdateRoleDraftSignal(
+                array(
+                    'roleId' => $roleDraft->id,
+                )
+            )
+        );
+
+        return $returnValue;
+    }
+
+    /**
+     * Adds a new policy to the role draft.
+     *
+     * @since 6.0
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to add  a policy
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy create
+     *                                                                        struct or if limitation is not allowed on module/function
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyCreateStruct is not valid
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
+     * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
+     */
+    public function addPolicyByRoleDraft(RoleDraft $roleDraft, PolicyCreateStruct $policyCreateStruct)
+    {
+        $returnValue = $this->service->addPolicyByRoleDraft($roleDraft, $policyCreateStruct);
+        $this->signalDispatcher->emit(
+            new AddPolicyByRoleDraftSignal(
+                array(
+                    'roleId' => $roleDraft->id,
+                    'policyId' => $returnValue->id,
+                )
+            )
+        );
+
+        return $returnValue;
+    }
+
+    /**
+     * Removes a policy from a role draft.
+     *
+     * @since 6.0
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given role draft
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
+     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to remove from the role
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft the updated role
+     */
+    public function removePolicyByRoleDraft(RoleDraft $roleDraft, Policy $policy)
+    {
+        $returnValue = $this->service->removePolicyByRoleDraft($roleDraft, $policy);
+        $this->signalDispatcher->emit(
+            new RemovePolicyByRoleDraftSignal(
+                array(
+                    'roleId' => $roleDraft->id,
+                    'policyId' => $policy->id,
+                )
+            )
+        );
+
+        return $returnValue;
+    }
+
+    /**
+     * Updates the limitations of a policy. The module and function cannot be changed and
+     * the limitations are replaced by the ones in $roleUpdateStruct.
+     *
+     * @since 6.0
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a policy
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy update
+     *                                                                        struct or if limitation is not allowed on module/function
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyUpdateStruct is not valid
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
+     * @param \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct $policyUpdateStruct
+     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Policy
+     */
+    public function updatePolicyByRoleDraft(RoleDraft $roleDraft, Policy $policy, PolicyUpdateStruct $policyUpdateStruct)
+    {
+        //TODO This method doesn't seem to be needed, but keeping it until policy editing is done and we know for sure.
+    }
+
+    /**
+     * Deletes the given role draft.
+     *
+     * @since 6.0
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this role
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
+     */
+    public function deleteRoleDraft(RoleDraft $roleDraft)
+    {
+        $returnValue = $this->service->deleteRoleDraft($roleDraft);
+        $this->signalDispatcher->emit(
+            new DeleteRoleDraftSignal(
+                array(
+                    'roleId' => $roleDraft->id,
+                )
+            )
+        );
+
+        return $returnValue;
+    }
+
+    /**
+     * Publishes a given Role draft.
+     *
+     * @since 6.0
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to publish this role
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
+     */
+    public function publishRoleDraft(RoleDraft $roleDraft)
+    {
+        $returnValue = $this->service->publishRoleDraft($roleDraft);
+        $this->signalDispatcher->emit(
+            new PublishRoleDraftSignal(
+                array(
+                    'roleId' => $roleDraft->id,
+                )
+            )
+        );
+
+        return $returnValue;
+    }
+
+    /**
      * Updates the name of the role.
+     *
+     * @deprecated since 6.0, use {@see updateRoleDraft}
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
@@ -119,6 +327,8 @@ class RoleService implements RoleServiceInterface
 
     /**
      * Adds a new policy to the role.
+     *
+     * @deprecated since 6.0, use {@see addPolicyByRoleDraft}
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to add  a policy
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy create
@@ -146,9 +356,9 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * removes a policy from the role.
+     * Removes a policy from the role.
      *
-     * @deprecated since 5.3, use {@link deletePolicy()} instead.
+     * @deprecated since 5.3, use {@link removePolicyByRoleDraft()} instead.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given role
@@ -176,6 +386,8 @@ class RoleService implements RoleServiceInterface
     /**
      * Delete a policy.
      *
+     * @deprecated since 6.0, use {@link removePolicyByRoleDraft()} instead.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
      *
      * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to delete
@@ -198,6 +410,8 @@ class RoleService implements RoleServiceInterface
     /**
      * Updates the limitations of a policy. The module and function cannot be changed and
      * the limitations are replaced by the ones in $roleUpdateStruct.
+     *
+     * @deprecated since 6.0, use {@link updatePolicyByRoleDraft()} instead.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a policy
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy update

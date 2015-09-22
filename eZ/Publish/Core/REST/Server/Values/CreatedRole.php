@@ -13,14 +13,14 @@ namespace eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * Struct representing a freshly created role.
+ * Struct representing a freshly created Role.
  */
 class CreatedRole extends ValueObject
 {
     /**
      * The created role.
      *
-     * @var \eZ\Publish\API\Repository\Values\User\Role
+     * @var \eZ\Publish\Core\REST\Server\Values\RestRole
      */
     public $role;
 }
