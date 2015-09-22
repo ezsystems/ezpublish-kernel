@@ -339,7 +339,7 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
 
     protected function getValidSearchValueOne()
     {
-        return 'a';
+        return 'aaa';
     }
 
     protected function getSearchTargetValueOne()
@@ -350,12 +350,19 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
 
     protected function getValidSearchValueTwo()
     {
-        return 'b';
+        return 'bbb';
     }
 
     protected function getSearchTargetValueTwo()
     {
         // ensure case-insensitivity
         return strtoupper($this->getValidSearchValueTwo());
+    }
+
+    protected function getFullTextIndexedFieldData()
+    {
+        return array(
+            array('aaa', 'bbb'),
+        );
     }
 }

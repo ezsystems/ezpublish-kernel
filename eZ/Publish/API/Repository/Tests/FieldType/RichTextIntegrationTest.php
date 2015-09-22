@@ -640,4 +640,11 @@ EOT;
         // ensure case-insensitivity
         return strtoupper('truth suffers from too much analysis');
     }
+
+    protected function getFullTextIndexedFieldData()
+    {
+        return array(
+            array('mediocrity', 'analysis'),
+        );
+    }
 }

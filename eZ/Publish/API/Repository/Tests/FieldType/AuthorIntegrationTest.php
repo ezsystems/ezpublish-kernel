@@ -541,4 +541,11 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
             ),
         );
     }
+
+    protected function getFullTextIndexedFieldData()
+    {
+        return array(
+            array('Ferdinand', 'Greta'),
+        );
+    }
 }

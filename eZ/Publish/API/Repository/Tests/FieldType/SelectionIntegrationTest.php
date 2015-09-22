@@ -390,4 +390,11 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
             ),
         );
     }
+
+    protected function getFullTextIndexedFieldData()
+    {
+        return array(
+            array('Bielefeld', 'Sindelfingen'),
+        );
+    }
 }
