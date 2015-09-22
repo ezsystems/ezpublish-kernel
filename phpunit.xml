@@ -58,8 +58,7 @@
     <testsuite name="eZ Publish REST test suite">
         <directory>eZ/Publish/Core/REST</directory>
     </testsuite>
-    <testsuite name="eZ tsuite>
- PI test suite">
+    <testsuite name="eZ Publish SPI test suite">
         <directory>eZ/Publish/SPI</directory>
     </testsuite>
     <testsuite name="eZ Publish SignalSlot test suite">
