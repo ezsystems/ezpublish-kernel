@@ -23,7 +23,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  * @group integration
  * @group field-type
  */
-class XmlTextIntegrationTest extends RelationBaseIntegrationTest
+class XmlTextIntegrationTest extends RelationSearchBaseIntegrationTest
 {
     /**
      * @var \DOMDocument
@@ -598,5 +598,46 @@ EOT
             $test->getField('intro')->value->xml->saveXML(),
             str_replace('[ObjectId]', $object_id, $expected)
         );
+    }
+
+    protected function checkSearchEngineSupport()
+    {
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
+            $this->markTestSkipped(
+                "'ezxmltext' field type is not searchable with Legacy Search Engine"
+            );
+        }
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return <<<EOT
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+    <paragraph>caution is the path to mediocrity</paragraph>
+</section>
+EOT;
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        // ensure case-insensitivity
+        return strtoupper('caution is the path to mediocrity');
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return <<<EOT
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+    <paragraph>truth suffers from too much analysis</paragraph>
+</section>
+EOT;
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        // ensure case-insensitivity
+        return strtoupper('truth suffers from too much analysis');
     }
 }
