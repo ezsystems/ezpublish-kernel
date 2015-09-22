@@ -205,6 +205,12 @@ Changes affecting version compatibility with former or future versions.
 * 5.4.5: `eZ\Publish\API\Repository\Values\ValueObject\SearchHit` has a new property `$matchedTranslation`,
   which will hold language code of the Content translation that matched the search query.
 
+* 5.4.5: Signature of Repository `setCurrentUser()` & `hasAccess()` changed to accept `UserReference`
+  As part of EZP-24834, a new API interface `UserReference` has been introduced that only
+  holds the user id, and can be used to specify current user and avoid having to load the
+  whole User object. User API abstract object has been changed to implement this so there is no BC
+  break for API use, only for custom API implementations.
+
 ## Deprecations
 
 * `imagemagick` siteaccess settings are now deprecated. It is mandatory to remove them.

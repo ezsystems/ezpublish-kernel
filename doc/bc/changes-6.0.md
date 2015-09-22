@@ -165,6 +165,13 @@ Changes affecting version compatibility with former or future versions.
   `eZ/Publish/API/Repository/Values/User/Role` now has a `status` property, which may be one of `Role::STATUS_DEFINED`
    or `Role::STATUS_DRAFT`.
 
+* Signature of Repository `setCurrentUser()` & `hasAccess()` changed to accept `UserReference`
+  As part of EZP-24834, a new API interface `UserReference` has been introduced that only
+  holds the user id, and can be used to specify current user and avoid having to load the
+  whole User object. User API abstract object has been changed to implement this so there is no BC
+  break for API use, only for custom API implementations.
+  Also new `getCurrentUserReference()` method has been added on Repository to get this object.
+
 ## Deprecations
 
 * `eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger::purge()` is deprecated and will be removed in v6.1.
