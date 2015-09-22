@@ -11,6 +11,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
@@ -77,14 +78,9 @@ class RepositoryFactory extends ContainerAware
                     'limitationTypes' => $this->roleLimitations,
                 ),
                 'languages' => $this->configResolver->getParameter('languages'),
-            )
+            ),
+            new UserReference($this->configResolver->getParameter('anonymous_user_id'))
         );
-
-        /* @var \eZ\Publish\API\Repository\Repository $repository */
-        $anonymousUser = $repository->getUserService()->loadUser(
-            $this->configResolver->getParameter('anonymous_user_id')
-        );
-        $repository->setCurrentUser($anonymousUser);
 
         return $repository;
     }

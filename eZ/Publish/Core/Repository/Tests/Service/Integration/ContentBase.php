@@ -67,7 +67,7 @@ abstract class ContentBase extends BaseServiceTest
 
         if ($draft) {
             //$values["id"] = 675;
-            $values['creatorId'] = $this->repository->getCurrentUser()->id;
+            $values['creatorId'] = $this->repository->getCurrentUserReference()->getUserId();
             $values['versionNo'] = 2;
             $values['status'] = VersionInfo::STATUS_DRAFT;
             unset($values['modificationDate']);
@@ -705,7 +705,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentCreate->setField('test_required_empty', 'value for field definition with empty default value');
         $contentCreate->setField('test_translatable', 'and thumbs opposable', 'eng-US');
         $contentCreate->sectionId = 1;
-        $contentCreate->ownerId = $this->repository->getCurrentUser()->id;
+        $contentCreate->ownerId = $this->repository->getCurrentUserReference()->getUserId();
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
@@ -978,7 +978,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentCreate->setField('test_required_empty', 'value for field definition with empty default value');
         $contentCreate->setField('test_translatable', 'and thumbs opposable', 'eng-US');
         $contentCreate->sectionId = 1;
-        $contentCreate->ownerId = $this->repository->getCurrentUser()->id;
+        $contentCreate->ownerId = $this->repository->getCurrentUserReference()->getUserId();
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
@@ -1012,7 +1012,7 @@ abstract class ContentBase extends BaseServiceTest
         $contentCreate->setField('test_required_empty', 'value for field definition with empty default value');
         $contentCreate->setField('test_translatable', 'and thumbs opposable', 'eng-US');
         $contentCreate->sectionId = 1;
-        $contentCreate->ownerId = $this->repository->getCurrentUser()->id;
+        $contentCreate->ownerId = $this->repository->getCurrentUserReference()->getUserId();
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         $contentCreate->alwaysAvailable = true;
 
@@ -2560,7 +2560,7 @@ abstract class ContentBase extends BaseServiceTest
         $typeCreateStruct->names = array('eng-GB' => 'Test type name');
         $typeCreateStruct->descriptions = array('eng-GB' => 'Test type description');
         $typeCreateStruct->remoteId = 'test-type-remoteid';
-        $typeCreateStruct->creatorId = $this->repository->getCurrentUser()->id;
+        $typeCreateStruct->creatorId = $this->repository->getCurrentUserReference()->getUserId();
         $typeCreateStruct->creationDate = $this->getDateTime(0);
         $typeCreateStruct->mainLanguageCode = 'eng-GB';
         $typeCreateStruct->nameSchema = '<test_required_empty>';

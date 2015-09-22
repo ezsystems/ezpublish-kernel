@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\Authentication;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\Repository\Values\User\UserReference;
 use Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider as BaseAnonymousProvider;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
@@ -40,11 +41,7 @@ class AnonymousAuthenticationProvider extends BaseAnonymousProvider
     public function authenticate(TokenInterface $token)
     {
         $token = parent::authenticate($token);
-        $this->repository->setCurrentUser(
-            $this->repository->getUserService()->loadUser(
-                $this->configResolver->getParameter('anonymous_user_id')
-            )
-        );
+        $this->repository->setCurrentUser(new UserReference($this->configResolver->getParameter('anonymous_user_id')));
 
         return $token;
     }

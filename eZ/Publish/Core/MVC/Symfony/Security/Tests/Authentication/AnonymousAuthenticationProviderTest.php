@@ -11,6 +11,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Authentication;
 
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\AnonymousAuthenticationProvider;
+use eZ\Publish\Core\Repository\Values\User\UserReference;
 use PHPUnit_Framework_TestCase;
 
 class AnonymousAuthenticationProviderTest extends PHPUnit_Framework_TestCase
@@ -40,21 +41,11 @@ class AnonymousAuthenticationProviderTest extends PHPUnit_Framework_TestCase
             ->method('getParameter')
             ->with('anonymous_user_id')
             ->will($this->returnValue($anonymousUserId));
-        $userService = $this->getMock('eZ\Publish\API\Repository\UserService');
-        $anonymousUser = $this->getMock('eZ\Publish\API\Repository\Values\User\User');
-        $userService
-            ->expects($this->once())
-            ->method('loadUser')
-            ->with($anonymousUserId)
-            ->will($this->returnValue($anonymousUser));
-        $this->repository
-            ->expects($this->once())
-            ->method('getUserService')
-            ->will($this->returnValue($userService));
+
         $this->repository
             ->expects($this->once())
             ->method('setCurrentUser')
-            ->with($anonymousUser);
+            ->with(new UserReference($anonymousUserId));
 
         $key = 'some_key';
         $authProvider = new AnonymousAuthenticationProvider($key);

@@ -13,9 +13,11 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
@@ -42,11 +44,18 @@ class Repository implements RepositoryInterface
     protected $searchHandler;
 
     /**
-     * Currently logged in user object for permission purposes.
+     * Currently logged in user object if already loaded.
      *
-     * @var \eZ\Publish\API\Repository\Values\User\User
+     * @var \eZ\Publish\API\Repository\Values\User\User|null
      */
     protected $currentUser;
+
+    /**
+     * Currently logged in user reference for permission purposes.
+     *
+     * @var \eZ\Publish\API\Repository\Values\User\UserReference
+     */
+    protected $currentUserRef;
 
     /**
      * Counter for the current sudo nesting level {@see sudo()}.
@@ -225,13 +234,13 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param array $serviceSettings
-     * @param \eZ\Publish\API\Repository\Values\User\User|null $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference|null $user
      */
     public function __construct(
         PersistenceHandler $persistenceHandler,
         SearchHandler $searchHandler,
         array $serviceSettings = array(),
-        User $user = null
+        APIUserReference $user = null
     ) {
         $this->persistenceHandler = $persistenceHandler;
         $this->searchHandler = $searchHandler;
@@ -260,21 +269,28 @@ class Repository implements RepositoryInterface
             $this->serviceSettings['language']['languages'] = $this->serviceSettings['languages'];
         }
 
-        if ($user !== null) {
-            $this->setCurrentUser($user);
+        if ($user instanceof User) {
+            $this->currentUser = $user;
+            $this->currentUserRef = new UserReference($user->getUserId());
+        } elseif ($user instanceof APIUserReference) {
+            $this->currentUserRef = $user;
+        } else {
+            $this->currentUserRef = new UserReference($this->serviceSettings['user']['anonymousUserID']);
         }
     }
 
     /**
      * Get current user.
      *
+     * Loads the full user object if not already loaded, if you only need to know user id use {@see getCurrentUserReference()}
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
     public function getCurrentUser()
     {
-        if (!$this->currentUser instanceof User) {
+        if ($this->currentUser === null) {
             $this->currentUser = $this->getUserService()->loadUser(
-                $this->serviceSettings['user']['anonymousUserID']
+                $this->currentUserRef->getUserId()
             );
         }
 
@@ -282,17 +298,37 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Get current user reference.
+     *
+     * @since 5.4.5
+     * @return \eZ\Publish\API\Repository\Values\User\UserReference
+     */
+    public function getCurrentUserReference()
+    {
+        return $this->currentUserRef;
+    }
+
+    /**
      * Sets the current user to the given $user.
      *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
+     *
+     * @throws InvalidArgumentValue If UserReference does not contain a id
      */
-    public function setCurrentUser(User $user)
+    public function setCurrentUser(APIUserReference $user)
     {
-        if (!$user->id) {
-            throw new InvalidArgumentValue('$user->id', $user->id);
+        $id = $user->getUserId();
+        if (!$id) {
+            throw new InvalidArgumentValue('$user->getUserId()', $id);
         }
 
-        $this->currentUser = $user;
+        if ($user instanceof User) {
+            $this->currentUser = $user;
+            $this->currentUserRef = new UserReference($id);
+        } else {
+            $this->currentUser = null;
+            $this->currentUserRef = $user;
+        }
     }
 
     /**
@@ -340,11 +376,11 @@ class Repository implements RepositoryInterface
      *
      * @param string $module
      * @param string $function
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
      *
      * @return bool|array Bool if user has full or no access, array if limitations if not
      */
-    public function hasAccess($module, $function, User $user = null)
+    public function hasAccess($module, $function, APIUserReference $user = null)
     {
         // Full access if sudo nesting level is set by {@see sudo()}
         if ($this->sudoNestingLevel > 0) {
@@ -352,14 +388,14 @@ class Repository implements RepositoryInterface
         }
 
         if ($user === null) {
-            $user = $this->getCurrentUser();
+            $user = $this->getCurrentUserReference();
         }
 
         // Uses SPI to avoid triggering permission checks in Role/User service
         $permissionSets = array();
         $roleDomainMapper = $this->getRoleDomainMapper();
         $limitationService = $this->getLimitationService();
-        $spiRoleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByGroupId($user->id, true);
+        $spiRoleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByGroupId($user->getUserId(), true);
         foreach ($spiRoleAssignments as $spiRoleAssignment) {
             $permissionSet = array('limitation' => null, 'policies' => array());
 
@@ -440,7 +476,7 @@ class Repository implements RepositoryInterface
         }
 
         $limitationService = $this->getLimitationService();
-        $currentUser = $this->getCurrentUser();
+        $currentUserRef = $this->getCurrentUserReference();
         foreach ($permissionSets as $permissionSet) {
             /**
              * First deal with Role limitation if any.
@@ -452,7 +488,7 @@ class Repository implements RepositoryInterface
              */
             if ($permissionSet['limitation'] instanceof Limitation) {
                 $type = $limitationService->getLimitationType($permissionSet['limitation']->getIdentifier());
-                $accessVote = $type->evaluate($permissionSet['limitation'], $currentUser, $object, $targets);
+                $accessVote = $type->evaluate($permissionSet['limitation'], $currentUserRef, $object, $targets);
                 if ($accessVote === LimitationType::ACCESS_DENIED) {
                     continue;
                 }
@@ -483,7 +519,7 @@ class Repository implements RepositoryInterface
                 $limitationsPass = true;
                 foreach ($limitations as $limitation) {
                     $type = $limitationService->getLimitationType($limitation->getIdentifier());
-                    $accessVote = $type->evaluate($limitation, $currentUser, $object, $targets);
+                    $accessVote = $type->evaluate($limitation, $currentUserRef, $object, $targets);
                     /*
                      * For policy limitation atm only support ACCESS_GRANTED
                      *

@@ -342,7 +342,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
 
         $repositoryMock
             ->expects($this->once())
-            ->method('getCurrentUser')
+            ->method('getCurrentUserReference')
             ->will($this->returnValue($userMock));
 
         return $repositoryMock;

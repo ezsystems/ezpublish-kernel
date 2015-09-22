@@ -12,7 +12,7 @@ namespace eZ\Publish\SPI\Limitation;
 
 use eZ\Publish\API\Repository\Values\ValueObject as APIValueObject;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
-use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 
 /**
  * This interface represent the Limitation Type.
@@ -91,14 +91,14 @@ interface Type
      *         Example if OwnerLimitationValue->limitationValues[0] is not one of: [ 1,  2 ]
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
-     * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
      * @param \eZ\Publish\API\Repository\Values\ValueObject[]|null $targets An array of location, parent or "assignment"
      *                                                                 objects, if null: none where provided by caller
      *
      * @return bool|null Returns one of ACCESS_* constants
      */
-    public function evaluate(APILimitationValue $value, APIUser $currentUser, APIValueObject $object, array $targets = null);
+    public function evaluate(APILimitationValue $value, APIUserReference $currentUser, APIValueObject $object, array $targets = null);
 
     /**
      * Returns Criterion for use in find() query.
@@ -107,11 +107,11 @@ interface Type
      *         being used as a Criterion.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
-     * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
      */
-    public function getCriterion(APILimitationValue $value, APIUser $currentUser);
+    public function getCriterion(APILimitationValue $value, APIUserReference $currentUser);
 
     /**
      * Returns info on valid $limitationValues.

@@ -11,6 +11,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\SPI\Persistence\User\RoleAssignment;
@@ -293,7 +294,7 @@ class RepositoryTest extends BaseServiceMockTest
         );
         $repositoryMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\Repository',
-            array('getRoleDomainMapper', 'getCurrentUser'),
+            array('getRoleDomainMapper', 'getCurrentUserReference'),
             array(
                 $this->getPersistenceMock(),
                 $this->getSPIMockHandler('Search\\Handler'),
@@ -306,8 +307,8 @@ class RepositoryTest extends BaseServiceMockTest
             ->will($this->returnValue($roleDomainMapper));
         $repositoryMock
             ->expects($this->once())
-            ->method('getCurrentUser')
-            ->will($this->returnValue($this->getStubbedUser(14)));
+            ->method('getCurrentUserReference')
+            ->will($this->returnValue(new UserReference(14)));
 
         $userHandlerMock
             ->expects($this->once())
@@ -430,7 +431,7 @@ class RepositoryTest extends BaseServiceMockTest
         );
         $repositoryMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\Repository',
-            array('getRoleDomainMapper', 'getCurrentUser'),
+            array('getRoleDomainMapper', 'getCurrentUserReference'),
             array(
                 $this->getPersistenceMock(),
                 $this->getSPIMockHandler('Search\\Handler'),
@@ -443,8 +444,8 @@ class RepositoryTest extends BaseServiceMockTest
             ->will($this->returnValue($roleDomainMapper));
         $repositoryMock
             ->expects($this->once())
-            ->method('getCurrentUser')
-            ->will($this->returnValue($this->getStubbedUser(14)));
+            ->method('getCurrentUserReference')
+            ->will($this->returnValue(new UserReference(14)));
 
         $userHandlerMock
             ->expects($this->once())
@@ -542,7 +543,7 @@ class RepositoryTest extends BaseServiceMockTest
         $limitationTypeMock = $this->getMock('eZ\\Publish\\SPI\\Limitation\\Type');
         $repositoryMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\Repository',
-            array('getRoleDomainMapper', 'getCurrentUser', 'getLimitationService'),
+            array('getRoleDomainMapper', 'getCurrentUserReference', 'getLimitationService'),
             array(
                 $this->getPersistenceMock(),
                 $this->getSPIMockHandler('Search\\Handler'),
@@ -570,8 +571,8 @@ class RepositoryTest extends BaseServiceMockTest
             ->will($this->returnValue($limitationService));
         $repositoryMock
             ->expects($this->once())
-            ->method('getCurrentUser')
-            ->will($this->returnValue($this->getStubbedUser(14)));
+            ->method('getCurrentUserReference')
+            ->will($this->returnValue(new UserReference(14)));
 
         $userHandlerMock
             ->expects($this->once())
@@ -673,7 +674,7 @@ class RepositoryTest extends BaseServiceMockTest
     {
         $repositoryMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\Repository',
-            array('hasAccess', 'getCurrentUser'),
+            array('hasAccess', 'getCurrentUserReference'),
             array(
                 $this->getPersistenceMock(),
                 $this->getSPIMockHandler('Search\\Handler'),
@@ -707,7 +708,7 @@ class RepositoryTest extends BaseServiceMockTest
     {
         $repositoryMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\Repository',
-            array('hasAccess', 'getCurrentUser'),
+            array('hasAccess', 'getCurrentUserReference'),
             array(
                 $this->getPersistenceMock(),
                 $this->getSPIMockHandler('Search\\Handler'),
@@ -737,11 +738,10 @@ class RepositoryTest extends BaseServiceMockTest
             ->with($this->equalTo('test-module'), $this->equalTo('test-function'))
             ->will($this->returnValue($permissionSets));
 
-        $userMock = $this->getStubbedUser(14);
         $repositoryMock
             ->expects($this->once())
-            ->method('getCurrentUser')
-            ->will($this->returnValue($userMock));
+            ->method('getCurrentUserReference')
+            ->will($this->returnValue(new UserReference(14)));
 
         /** @var $valueObject \eZ\Publish\API\Repository\Values\ValueObject */
         $valueObject = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ValueObject');
@@ -884,7 +884,7 @@ class RepositoryTest extends BaseServiceMockTest
         $valueObject = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\ValueObject');
         $repositoryMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\Repository',
-            array('getCurrentUser', 'hasAccess', 'getLimitationService'),
+            array('getCurrentUserReference', 'hasAccess', 'getLimitationService'),
             array(),
             '',
             false
@@ -921,11 +921,11 @@ class RepositoryTest extends BaseServiceMockTest
             ->with($this->equalTo('test-module'), $this->equalTo('test-function'))
             ->will($this->returnValue($permissionSets));
 
-        $userMock = $this->getStubbedUser(14);
+        $userRef = new UserReference(14);
         $repositoryMock
             ->expects($this->once())
-            ->method('getCurrentUser')
-            ->will($this->returnValue($userMock));
+            ->method('getCurrentUserReference')
+            ->will($this->returnValue(new UserReference(14)));
 
         $invocation = 0;
         for ($i = 0; $i < count($permissionSets); ++$i) {
@@ -933,7 +933,7 @@ class RepositoryTest extends BaseServiceMockTest
             $limitation
                 ->expects($this->once())
                 ->method('evaluate')
-                ->with($permissionSets[$i]['limitation'], $userMock, $valueObject, array($valueObject))
+                ->with($permissionSets[$i]['limitation'], $userRef, $valueObject, array($valueObject))
                 ->will($this->returnValue($roleLimitationEvaluations[$i]));
             $limitationService
                 ->expects($this->at($invocation++))
@@ -955,7 +955,7 @@ class RepositoryTest extends BaseServiceMockTest
                     $limitation
                         ->expects($this->once())
                         ->method('evaluate')
-                        ->with($limitations[$k], $userMock, $valueObject, array($valueObject))
+                        ->with($limitations[$k], $userRef, $valueObject, array($valueObject))
                         ->will($this->returnValue($policyLimitationEvaluations[$i][$j][$k]));
                     $limitationService
                         ->expects($this->at($invocation++))
