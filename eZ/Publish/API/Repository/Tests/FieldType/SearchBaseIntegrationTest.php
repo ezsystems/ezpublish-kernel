@@ -79,6 +79,26 @@ use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
  *  )
  * </code>
  *
+ * In order to test full text search, provide the required data by overriding method:
+ *
+ * - getFullTextIndexedFieldData()
+ *
+ * This method must return an array of search values, consisting of search strings for
+ * value One and value Two, corresponding to the data the field type indexes
+ * for full text search from what is provided by getValidSearchValueOne() and
+ * getValidSearchValueTwo(). By default the method skips tests, you should override
+ * it in the concrete test case as required by the field type. For example:
+ *
+ * <code>
+ *  array(
+ *      array(
+ *          'one',
+ *          'two'
+ *      ),
+ *      ...
+ *  )
+ * </code>
+ *
  * Note: this test case does not concern itself with testing field filters, behaviour
  * of multiple sort clauses or combination with other criteria. These are tested
  * elsewhere as a general field search cases, which enables keeping this test case
@@ -167,6 +187,44 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     protected function getAdditionallyIndexedFieldData()
     {
         return array();
+    }
+
+    /**
+     * Returns tests data for full text search.
+     *
+     * An array of search values is returned, consisting of search strings for
+     * value One and value Two, corresponding to the data the field type indexes
+     * for full text search from what is provided by {@link getValidSearchValueOne()}
+     * and {@link getValidSearchValueTwo()}. By default the tests are skipped here,
+     * override in the concrete test case as required by the field type.
+     * For example:
+     *
+     * <code>
+     *  array(
+     *      array(
+     *          'one',
+     *          'two'
+     *      ),
+     *      ...
+     *  )
+     * </code>
+     *
+     * @return array
+     */
+    protected function getFullTextIndexedFieldData()
+    {
+        $this->markTestSkipped(
+            'Skipped by default, override in the concrete test case as required by the field type.'
+        );
+    }
+
+    public function checkFullTextSupport()
+    {
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
+            $this->markTestSkipped(
+                "'ezrichtext' field type is not searchable with Legacy Search Engine"
+            );
+        }
     }
 
     /**
@@ -1135,6 +1193,55 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         }
 
         $this->assertSortResult($searchResult, $ascending, $contentOneId, $contentTwoId);
+    }
+
+    public function fullTextFindProvider()
+    {
+        $templates = array(
+            array(true, true),
+            array(true, false),
+            array(false, true),
+            array(false, false),
+        );
+
+        $fixture = array();
+
+        foreach ($this->getFullTextIndexedFieldData() as $valueSet) {
+            foreach ($templates as $template) {
+                array_unshift($template, $valueSet[1]);
+                array_unshift($template, $valueSet[0]);
+
+                $fixture[] = $template;
+            }
+        }
+
+        return $fixture;
+    }
+
+    /**
+     * @dataProvider fullTextFindProvider
+     * @depends testCreateTestContent
+     */
+    public function testFullTextFindOne($valueOne, $valueTwo, $filter, $content, array $context)
+    {
+        $this->checkFullTextSupport();
+
+        $criteria = new Criterion\FullText($valueOne);
+
+        $this->assertFindResult($context, $criteria, true, false, $filter, $content, null);
+    }
+
+    /**
+     * @dataProvider fullTextFindProvider
+     * @depends testCreateTestContent
+     */
+    public function testFullTextFindTwo($valueOne, $valueTwo, $filter, $content, array $context)
+    {
+        $this->checkFullTextSupport();
+
+        $criteria = new Criterion\FullText($valueTwo);
+
+        $this->assertFindResult($context, $criteria, false, true, $filter, $content, null);
     }
 
     /**
