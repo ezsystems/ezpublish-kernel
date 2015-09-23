@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="pt" datatype="plaintext" original="file.ext">
+        <body>
+            <!-- BadStateException -->
+            <trans-unit id="c36af808a9305f423a76a5c89e3fac1b">
+                <source>Argument '%argumentName%' has a bad state: %whatIsWrong%</source>
+                <target>O Argumento '%argumentName%' tem um estado incorreto: %whatIsWrong%</target>
+            </trans-unit>
+            <!-- ContentFieldValidationException -->
+            <trans-unit id="b85c8a64f420000f947ca72e0bb90b30">
+                <source>Content fields did not validate</source>
+                <target>Os campos do conteúdo não são válidos</target>
+            </trans-unit>
+            <!-- ContentTypeFieldDefinitionValidationException -->
+            <trans-unit id="ec718ad03ee50c1f9625e5dde3f951db">
+                <source>ContentType FieldDefinitions did not validate</source>
+                <target>ContentType FieldDefinitions não validaram</target>
+            </trans-unit>
+            <!-- ContentTypeValidationException / ContentValidationException -->
+            <trans-unit id="346f9376d36d54af12ac5647e1ce9f09">
+                <source>FieldType '%identifier%' is singular and can't be repeated in a ContentType</source>
+                <target>FieldType '%identifier%' é singular e não pode ser repetido num ContentType</target>
+            </trans-unit>
+            <trans-unit id="52f7b8b813b1e68da2546553a5842865">
+                <source>Value for required field definition '%identifier%' with language '%languageCode%' is empty</source>
+                <target>O valor para a definição do campo com o identificador '%identifier%' e com o idioma '%languageCode%' está vazio</target>
+            </trans-unit>
+            <trans-unit id="87b3fc3a0cf429e53922d1a8f4c9d97f">
+                <source>Field definition '%identifier%' does not exist in given ContentType</source>
+                <target>A definição do campo '%identifier%' não existe neste ContentType</target>
+            </trans-unit>
+            <trans-unit id="4e137a703438f28dfebdb01d679ad7c7">
+                <source>A value is set for non translatable field definition '%identifier%' with language '%languageCode%'</source>
+                <target>Um valor foi atribuido num campo que não é traduzível '%identifier%' com o idioma '%languageCode%'</target>
+            </trans-unit>
+            <trans-unit id="457965eac42d2982fb244579cf0f8f49">
+                <source>Placeholders are not matching with wildcards.</source>
+                <target>Os Placeholders não estão referenciados nos wildcards.</target>
+            </trans-unit>
+            <trans-unit id="de8328511eb071055c84a7c7af4c0168">
+                <source>Provided content type does not contain ezuser field type</source>
+                <target>O content type fornecido não contém um campo do tipo ezuser</target>
+            </trans-unit>
+            <!-- ForbiddenException -->
+            <trans-unit id="8d97a09a1a790ee0df6dee3a29bc36b4">
+                <source>Path '%path%' already exists for the given language</source>
+                <target>O caminho '%path%' já existe para o idioma dado</target>
+            </trans-unit>
+            <!-- InvalidArgumentException -->
+            <trans-unit id="9c52bb86d4985a0b17f13cc2f28451fa">
+                <source>Argument '%argumentName%' is invalid: %whatIsWrong%</source>
+                <target>O argumento '%argumentName%' é inválido: %whatIsWrong%</target>
+            </trans-unit>
+            <!-- InvalidArgumentType -->
+            <trans-unit id="0b423e3ebf4548ca336485f6a3d35849">
+                <source>Argument '%argumentName%' is invalid: expected value to be of type '%expectedType%'</source>
+                <target>O argumento '%argumentName%' é inválido: espera-se que o valor seja do tipo '%expectedType%'</target>
+            </trans-unit>
+            <trans-unit id="cd5b06c35a829471339ff883c7b12ffd">
+                <source>Argument '%argumentName%' is invalid: expected value to be of type '%expectedType%', got '%actualType%'</source>
+                <target>O argumento  '%argumentName%' é inválido: espera-se que o valor seja do tipo '%expectedType%', mas o tipo é '%actualType%'</target>
+            </trans-unit>
+            <!-- InvalidArgumentValue -->
+            <trans-unit id="44e2e51e6f02fec1a67ff85ea2b5a5bb">
+                <source>Argument '%argumentName%' is invalid: '%actualValue%' is wrong value</source>
+                <target>O argumento '%argumentName%' é inválido: '%actualValue%' está errado</target>
+            </trans-unit>
+            <trans-unit id="f956ff7b4e7ca4cca6ae8d1fb74b9c70">
+                <source>Argument '%argumentName%' is invalid: '%actualValue%' is wrong value in class '%className%'</source>
+                <target>O argumento  '%argumentName%' é inválido: '%actualValue%' está errado na classe '%className%'</target>
+            </trans-unit>
+            <!-- LimitationValidationException -->
+            <trans-unit id="f3f16fa96131bd451f91a6c5fa26eae8">
+                <source>Limitations did not validate</source>
+                <target>As limitações não são válidas</target>
+            </trans-unit>
+            <!-- MissingClass -->
+            <trans-unit id="a14e686c14d79800abfe57a8210f2abe">
+                <source>Could not find class '%className%'</source>
+                <target>Não é possível encontrar a classe '%className%'</target>
+            </trans-unit>
+            <trans-unit id="8599d788403d15724373f96826a65f0c">
+                <source>Could not find %classType% class '%className%'</source>
+                <target>Não é possível encontrar a  %classType% classe '%className%'</target>
+            </trans-unit>
+            <!-- NotFoundException -->
+            <trans-unit id="ad3acb293dfd5d85893a49e9b0d69a3b">
+                <source>Could not find '%what%' with identifier '%identifier%'</source>
+                <target>Não é possível encontrar '%what%' com o identificador '%identifier%'</target>
+            </trans-unit>
+            <!-- FieldTypeNotFoundException -->
+            <trans-unit id="71e12d2a6eae4e348b100502950a54bc">
+                <source>FieldType '%fieldType%' not found, needs to be implemented or configured to use FieldType\\Null\\Type (%ezpublish.fieldType.eznull.class%)</source>
+                <target>O FieldType '%fieldType%' não foi encontrado, é necessário implementá-lo ou configura-lo para usar FieldType\\Null\\Type (%ezpublish.fieldType.eznull.class%)</target>
+            </trans-unit>
+            <!-- LimitationNotFoundException -->
+            <trans-unit id="8a75362817e021200bf2d5df8b3d5374">
+                <source>Limitation '%limitation%' not found, needs to be implemented or configured to use Limitation\\BlockingLimitationType (%ezpublish.api.role.limitation_type.blocking.class%)</source>
+                <target>A limitação '%limitation%' não foi encontrada, not found, é necessário implementá-la ou configurá-la para usar Limitation\\BlockingLimitationType (%ezpublish.api.role.limitation_type.blocking.class%)</target>
+            </trans-unit>
+            <!-- UnauthorizedException -->
+            <trans-unit id="cb68b93f274ad087f7188c8745ef5fee">
+                <source>User does not have access to '%function%' '%module%'</source>
+                <target>O utilizador não tem acesso a '%function%' '%module%'</target>
+            </trans-unit>
+            <trans-unit id="56d0fcbf10893da11eea5de147855aea">
+                <source>User does not have access to '%function%' '%module%' with: %with%</source>
+                <target>O utilizador não tem acesso a '%function%' '%module%' com: %with%</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
