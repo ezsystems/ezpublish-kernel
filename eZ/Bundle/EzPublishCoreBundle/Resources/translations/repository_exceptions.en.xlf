@@ -101,12 +101,12 @@
             </trans-unit>
             <!-- UnauthorizedException -->
             <trans-unit id="cb68b93f274ad087f7188c8745ef5fee">
-                <source>User does not have access to '%function%' '%module'</source>
-                <target>User does not have access to '%function%' '%module'</target>
+                <source>User does not have access to '%function%' '%module%'</source>
+                <target>User does not have access to '%function%' '%module%'</target>
             </trans-unit>
             <trans-unit id="56d0fcbf10893da11eea5de147855aea">
-                <source>User does not have access to '%function%' '%module' with: %with%</source>
-                <target>User does not have access to '%function%' '%module' with: %with%</target>
+                <source>User does not have access to '%function%' '%module%' with: %with%</source>
+                <target>User does not have access to '%function%' '%module%' with: %with%</target>
             </trans-unit>
         </body>
     </file>
