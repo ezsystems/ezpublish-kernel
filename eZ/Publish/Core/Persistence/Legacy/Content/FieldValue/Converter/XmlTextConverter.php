@@ -41,7 +41,9 @@ class XmlTextConverter implements Converter
      */
     public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
     {
-        $storageFieldValue->dataText = $value->data;
+        if (!empty($value->data)) {
+            $storageFieldValue->dataText = $value->data;
+        }
     }
 
     /**
@@ -67,7 +69,10 @@ class XmlTextConverter implements Converter
         $storageDefinition->dataText2 = $fieldDefinition->fieldTypeConstraints->fieldSettings['tagPreset'];
 
         if (!empty($fieldDefinition->defaultValue->data)) {
-            $storageDefinition->dataText1 = $fieldDefinition->defaultValue->data;
+            $xmlValue = trim($fieldDefinition->defaultValue->data);
+            if ($xmlValue !== Value::EMPTY_VALUE) {
+                $storageDefinition->dataText1 = $fieldDefinition->defaultValue->data;
+            }
         }
     }
 
