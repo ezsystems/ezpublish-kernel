@@ -15,6 +15,8 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAw
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorAwareInterface;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Formatter\YamlSuggestionFormatter;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\PoliciesConfigBuilder;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\PolicyProviderInterface;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -36,6 +38,11 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface
      */
     private $configParser;
+
+    /**
+     * @var PolicyProviderInterface[]
+     */
+    private $policyProviders = [];
 
     public function __construct(array $configParsers = array())
     {
@@ -114,6 +121,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         }
 
         $this->handleSiteAccessesRelation($container);
+        $this->buildPolicyMap($container);
     }
 
     /**
@@ -401,6 +409,14 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $loader->load('image.yml');
     }
 
+    private function buildPolicyMap(ContainerBuilder $container)
+    {
+        $policiesBuilder = new PoliciesConfigBuilder($container);
+        foreach ($this->policyProviders as $provider) {
+            $provider->addPolicies($policiesBuilder);
+        }
+    }
+
     public function prepend(ContainerBuilder $container)
     {
         // Default settings for FOSHttpCacheBundle
@@ -408,5 +424,26 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $config = Yaml::parse(file_get_contents($configFile));
         $container->prependExtensionConfig('fos_http_cache', $config);
         $container->addResource(new FileResource($configFile));
+    }
+
+    /**
+     * Adds a new policy provider to the internal collection.
+     * One can call this method from a bundle `build()` method.
+     *
+     * ```php
+     * public function build(ContainerBuilder $container)
+     * {
+     *     $ezExtension = $container->getExtension('ezpublish');
+     *     $ezExtension->addPolicyProvider($myPolicyProvider);
+     * }
+     * ```
+     *
+     * @since 6.0
+     *
+     * @param PolicyProviderInterface $policyProvider
+     */
+    public function addPolicyProvider(PolicyProviderInterface $policyProvider)
+    {
+        $this->policyProviders[] = $policyProvider;
     }
 }

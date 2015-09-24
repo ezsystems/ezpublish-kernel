@@ -1,0 +1,6 @@
+custom_module2:
+    custom_function_3: ~
+    custom_function_4: ['CustomLimitation2', 'CustomLimitation3']
+
+helloworld:
+    some: ['thingy', 'thing', 'but', 'wait']

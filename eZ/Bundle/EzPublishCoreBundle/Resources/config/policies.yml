@@ -1,0 +1,53 @@
+content:
+    read: [Class, Section, Owner, Group, Node, Subtree, State]
+    diff: [Class, Section, Owner, Node, Subtree]
+    view_embed: [Class, Section, Owner, Node, Subtree]
+    create: [Class, Section, ParentOwner, ParentGroup, ParentClass, ParentDepth, Node, Subtree, Language]
+    edit: [Class, Section, Owner, Group, Node, Subtree, Language, State]
+    manage_locations: [Class, Section, Owner, Subtree]
+    hide: [Class, Section, Owner, Group, Node, Subtree, Language]
+    reverserelatedlist: ~
+    translate: [Class, Section, Owner, Node, Subtree, Language]
+    remove: [Class, Section, Owner, Node, Subtree, State]
+    versionread: [Class, Section, Owner, Node, Subtree]
+    versionremove: [Class, Section, Owner, Node, Subtree]
+    translations: ~
+    urltranslator: ~
+    pendinglist: ~
+    restore: ~
+    cleantrash: ~
+
+class:
+    update: ~
+    create: ~
+    delete: ~
+
+state:
+    assign: [Class, Section, Owner, Group, Node, Subtree, NewState]
+    administrate: ~
+
+role:
+    assign: ~
+    update: ~
+    create: ~
+    delete: ~
+    read: ~
+
+section:
+    assign: [Class, Section, Owner, NewSection]
+    edit: ~
+    view: ~
+
+setup:
+    administrate: ~
+    install: ~
+    setup: ~
+    system_info: ~
+
+user:
+    login: [SiteAccess]
+    password: ~
+    preferences: ~
+    register: ~
+    selfedit: ~
+    activation: ~

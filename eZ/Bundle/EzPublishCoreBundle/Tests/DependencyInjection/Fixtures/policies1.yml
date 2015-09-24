@@ -1,0 +1,7 @@
+custom_module:
+    custom_function_1: ~
+    custom_function_2:  ['CustomLimitation']
+
+helloworld:
+    foo: ['bar']
+    baz: ~
