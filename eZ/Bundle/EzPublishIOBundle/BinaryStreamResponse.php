@@ -72,7 +72,7 @@ class BinaryStreamResponse extends Response
      */
     public function setFile($file, $contentDisposition = null, $autoLastModified = true)
     {
-        if ( !$file instanceof BinaryFile ) {
+        if (!$file instanceof BinaryFile) {
             return $this;
         }
         if ($autoLastModified) {
