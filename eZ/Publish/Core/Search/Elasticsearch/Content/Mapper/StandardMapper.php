@@ -328,10 +328,7 @@ class StandardMapper implements MapperInterface
                             $indexField->type
                         );
 
-                        if (
-                            $indexField->type instanceof FieldType\StringField ||
-                            $indexField->type instanceof FieldType\MultipleStringField
-                        ) {
+                        if ($indexField->type instanceof FieldType\FullTextField) {
                             $fields[] = new Field(
                                 $name . '_meta_all_' . str_replace('-', '_', $languageCode),
                                 $indexField->value,

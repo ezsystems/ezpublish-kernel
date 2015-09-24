@@ -43,8 +43,13 @@ class SearchField implements Indexable
             ),
             new Search\Field(
                 'value_text',
-                isset($field->value->data['text']) ? $field->value->data['text'] : '',
+                $text = (isset($field->value->data['text']) ? $field->value->data['text'] : ''),
                 new Search\FieldType\StringField()
+            ),
+            new Search\Field(
+                'fulltext',
+                $text,
+                new Search\FieldType\FullTextField()
             ),
         );
     }

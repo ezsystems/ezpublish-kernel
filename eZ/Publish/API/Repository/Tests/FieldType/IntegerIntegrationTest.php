@@ -343,4 +343,11 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
     {
         return 26;
     }
+
+    protected function getFullTextIndexedFieldData()
+    {
+        return array(
+            array('25', '26'),
+        );
+    }
 }

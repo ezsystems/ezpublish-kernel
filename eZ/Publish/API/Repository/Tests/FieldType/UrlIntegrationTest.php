@@ -364,4 +364,11 @@ class UrlIntegrationTest extends SearchBaseIntegrationTest
             ),
         );
     }
+
+    protected function getFullTextIndexedFieldData()
+    {
+        return array(
+            array('ample', 'example'),
+        );
+    }
 }

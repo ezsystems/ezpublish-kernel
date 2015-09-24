@@ -64,6 +64,11 @@ class SearchField implements Indexable
                 implode('-', $indexes),
                 new Search\FieldType\StringField()
             ),
+            new Search\Field(
+                'fulltext',
+                $values,
+                new Search\FieldType\FullTextField()
+            ),
         );
     }
 

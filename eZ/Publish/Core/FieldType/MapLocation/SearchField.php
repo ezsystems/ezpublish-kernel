@@ -44,6 +44,11 @@ class SearchField implements Indexable
                 ),
                 new Search\FieldType\GeoLocationField()
             ),
+            new Search\Field(
+                'fulltext',
+                $field->value->externalData['address'],
+                new Search\FieldType\FullTextField()
+            ),
         );
     }
 

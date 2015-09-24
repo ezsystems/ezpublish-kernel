@@ -344,4 +344,11 @@ class FloatIntegrationTest extends SearchBaseIntegrationTest
     {
         return 25.59;
     }
+
+    protected function getFullTextIndexedFieldData()
+    {
+        return array(
+            array('25.519', '25.59'),
+        );
+    }
 }

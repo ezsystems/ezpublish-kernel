@@ -33,7 +33,7 @@ class SearchField implements Indexable
         return array(
             new Search\Field(
                 'value',
-                $field->value->data,
+                reset($field->value->data),
                 new Search\FieldType\StringField()
             ),
         );

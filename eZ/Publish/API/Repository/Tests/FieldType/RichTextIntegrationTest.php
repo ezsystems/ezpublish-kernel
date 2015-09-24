@@ -22,7 +22,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  * @group integration
  * @group field-type
  */
-class RichTextIntegrationTest extends RelationBaseIntegrationTest
+class RichTextIntegrationTest extends RelationSearchBaseIntegrationTest
 {
     /**
      * @var \DOMDocument
@@ -597,6 +597,54 @@ EOT;
         $this->assertEquals(
             str_replace('[ObjectId]', $objectId, $expected),
             $test->getField('description')->value->xml->saveXML()
+        );
+    }
+
+    protected function checkSearchEngineSupport()
+    {
+        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
+            $this->markTestSkipped(
+                "'ezrichtext' field type is not searchable with Legacy Search Engine"
+            );
+        }
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return <<<EOT
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+    <para>caution is the path to mediocrity</para>
+</section>
+EOT;
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        // ensure case-insensitivity
+        return strtoupper('caution is the path to mediocrity');
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return <<<EOT
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+    <para>truth suffers from too much analysis</para>
+</section>
+EOT;
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        // ensure case-insensitivity
+        return strtoupper('truth suffers from too much analysis');
+    }
+
+    protected function getFullTextIndexedFieldData()
+    {
+        return array(
+            array('mediocrity', 'analysis'),
         );
     }
 }

@@ -1,20 +1,24 @@
 <?php
+
 /**
  * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
+ *
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\FieldType\Author;
+namespace eZ\Publish\Core\FieldType\XmlText;
 
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\FieldType\Indexable;
 use eZ\Publish\SPI\Search;
+use DOMDocument;
+use DOMNode;
 
 /**
- * Indexable definition for Author field type.
+ * Indexable definition for XmlText field type.
  */
 class SearchField implements Indexable
 {
@@ -28,48 +32,70 @@ class SearchField implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
-        $name = array();
-        $id = array();
-        $email = array();
-
-        foreach ($field->value->data as $author) {
-            $name[] = $author['name'];
-            $id[] = $author['id'];
-            $email[] = $author['email'];
-        }
+        $document = new DOMDocument();
+        $document->loadXML($field->value->data);
 
         return array(
             new Search\Field(
-                'name',
-                $name,
-                new Search\FieldType\MultipleStringField()
-            ),
-            new Search\Field(
-                'id',
-                $id,
-                new Search\FieldType\MultipleIntegerField()
-            ),
-            new Search\Field(
-                'email',
-                $email,
-                new Search\FieldType\MultipleStringField()
-            ),
-            new Search\Field(
-                'count',
-                count($field->value->data),
-                new Search\FieldType\IntegerField()
-            ),
-            new Search\Field(
-                'sort_value',
-                implode('-', $name),
+                'value',
+                $this->extractShortText($document),
                 new Search\FieldType\StringField()
             ),
             new Search\Field(
                 'fulltext',
-                $name,
+                $this->extractText($document->documentElement),
                 new Search\FieldType\FullTextField()
             ),
         );
+    }
+
+    /**
+     * Extracts text content of the given $node.
+     *
+     * @param \DOMNode $node
+     *
+     * @return string
+     */
+    private function extractText(DOMNode $node)
+    {
+        $text = '';
+
+        if ($node->childNodes) {
+            foreach ($node->childNodes as $child) {
+                $text .= $this->extractText($child);
+            }
+        } else {
+            $text .= $node->nodeValue . ' ';
+        }
+
+        return $text;
+    }
+
+    /**
+     * Extracts short text content of the given $document.
+     *
+     * @param \DOMDocument $document
+     *
+     * @return string
+     */
+    private function extractShortText(DOMDocument $document)
+    {
+        $result = null;
+        if ($section = $document->documentElement->firstChild) {
+            $textDom = $section->firstChild;
+
+            if ($textDom && $textDom->hasChildNodes()) {
+                $result = $textDom->firstChild->textContent;
+            } elseif ($textDom) {
+                $result = $textDom->textContent;
+            }
+        }
+
+        if ($result === null) {
+            $result = $document->documentElement->textContent;
+        }
+
+        return trim($result);
     }
 
     /**
@@ -80,11 +106,7 @@ class SearchField implements Indexable
     public function getIndexDefinition()
     {
         return array(
-            'name' => new Search\FieldType\MultipleStringField(),
-            'id' => new Search\FieldType\MultipleIntegerField(),
-            'email' => new Search\FieldType\MultipleStringField(),
-            'count' => new Search\FieldType\IntegerField(),
-            'sort_value' => new Search\FieldType\StringField(),
+            'value' => new Search\FieldType\StringField(),
         );
     }
 
@@ -99,7 +121,7 @@ class SearchField implements Indexable
      */
     public function getDefaultMatchField()
     {
-        return 'name';
+        return 'value';
     }
 
     /**
@@ -113,6 +135,6 @@ class SearchField implements Indexable
      */
     public function getDefaultSortField()
     {
-        return 'sort_value';
+        return $this->getDefaultMatchField();
     }
 }

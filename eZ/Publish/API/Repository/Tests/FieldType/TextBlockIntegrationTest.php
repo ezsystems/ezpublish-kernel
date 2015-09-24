@@ -341,4 +341,11 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
         // ensure case-insensitivity
         return strtoupper($this->getValidSearchValueTwo());
     }
+
+    protected function getFullTextIndexedFieldData()
+    {
+        return array(
+            array('path', 'analysis'),
+        );
+    }
 }
