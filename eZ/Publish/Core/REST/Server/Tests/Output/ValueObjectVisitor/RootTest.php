@@ -53,6 +53,11 @@ class RootTest extends ValueObjectVisitorBaseTest
             '/content/typegroups?{&identifier}'
         );
         $this->addRouteExpectation('ezpublish_rest_loadUsers', array(), '/user/users');
+        $this->addTemplatedRouteExpectation('ezpublish_rest_loadUsers', array('roleId' => '{roleId}'), '/user/users{?roleId}');
+        $this->addTemplatedRouteExpectation('ezpublish_rest_loadUsers', array('remoteId' => '{remoteId}'), '/user/users{?remoteId}');
+        $this->addTemplatedRouteExpectation('ezpublish_rest_loadUsers', array('email' => '{email}'), '/user/users{?email}');
+        $this->addTemplatedRouteExpectation('ezpublish_rest_loadUsers', array('login' => '{login}'), '/user/users{?login}');
+
         $this->addRouteExpectation('ezpublish_rest_listRoles', array(), '/user/roles');
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocation',

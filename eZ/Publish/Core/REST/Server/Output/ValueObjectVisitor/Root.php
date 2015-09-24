@@ -106,6 +106,30 @@ class Root extends ValueObjectVisitor
         $generator->endAttribute('href');
         $generator->endObjectElement('users');
 
+        // Users by role id
+        $generator->startObjectElement('usersByRoleId', 'UserRefList');
+        $generator->startAttribute('href', $this->templateRouter->generate('ezpublish_rest_loadUsers', ['roleId' => '{roleId}']));
+        $generator->endAttribute('href');
+        $generator->endObjectElement('usersByRoleId');
+
+        // Users by remote id
+        $generator->startObjectElement('usersByRemoteId', 'UserRefList');
+        $generator->startAttribute('href', $this->templateRouter->generate('ezpublish_rest_loadUsers', ['remoteId' => '{remoteId}']));
+        $generator->endAttribute('href');
+        $generator->endObjectElement('usersByRemoteId');
+
+        // Users by email
+        $generator->startObjectElement('usersByEmail', 'UserRefList');
+        $generator->startAttribute('href', $this->templateRouter->generate('ezpublish_rest_loadUsers', ['email' => '{email}']));
+        $generator->endAttribute('href');
+        $generator->endObjectElement('usersByEmail');
+
+        // Users by login
+        $generator->startObjectElement('usersByLogin', 'UserRefList');
+        $generator->startAttribute('href', $this->templateRouter->generate('ezpublish_rest_loadUsers', ['login' => '{login}']));
+        $generator->endAttribute('href');
+        $generator->endObjectElement('usersByLogin');
+
         // Roles
         $generator->startObjectElement('roles', 'RoleList');
         $generator->startAttribute('href', $this->router->generate('ezpublish_rest_listRoles'));
