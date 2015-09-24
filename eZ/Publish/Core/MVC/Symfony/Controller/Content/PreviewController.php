@@ -129,7 +129,7 @@ class PreviewController
             array(
                 '_controller' => 'ez_content:viewLocation',
                 // specify a route for RouteReference generator
-                '_route' => UrlAliasGenerator::INTERNAL_LOCATION_ROUTE,
+                '_route' => UrlAliasGenerator::INTERNAL_CONTENT_VIEW_ROUTE,
                 '_route_params' => array(
                     'locationId' => $location->id,
                 ),

@@ -11,7 +11,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\Repository\Values\Content\Location;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use PHPUnit_Framework_TestCase;
@@ -169,10 +171,11 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(null));
 
         $this->event
-            ->expects($this->never())
+            ->expects($this->once())
             ->method('setController');
 
         $this->assertNull($this->controllerListener->getController($this->event));
+        $this->assertEquals('ez_content:viewContent', $this->request->attributes->get('_controller'));
     }
 
     public function testGetControllerLocationId()
@@ -223,10 +226,8 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
     public function testGetControllerLocation()
     {
         $id = 123;
-        $location = $this
-            ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\Location')
-            ->setConstructorArgs(array(array('id' => $id)))
-            ->getMockForAbstractClass();
+        $contentId = 456;
+        $location = new Location(['id' => $id, 'contentInfo' => new ContentInfo(['id' => $contentId])]);
         $viewType = 'full';
         $this->request->attributes->add(
             array(

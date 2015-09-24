@@ -36,6 +36,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     const URL_ALIAS_ROUTE_NAME = 'ez_urlalias';
 
     const LOCATION_VIEW_CONTROLLER = 'ez_content:viewLocation';
+    const CONTENT_VIEW_CONTROLLER = 'ez_content:viewContent';
 
     /**
      * @var \Symfony\Component\Routing\RequestContext
@@ -128,8 +129,10 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
             );
             switch ($urlAlias->type) {
                 case URLAlias::LOCATION:
+                    $location = $this->generator->loadLocation($urlAlias->destination);
                     $params += array(
-                        '_controller' => static::LOCATION_VIEW_CONTROLLER,
+                        '_controller' => static::CONTENT_VIEW_CONTROLLER,
+                        'contentId' => $location->contentId,
                         'locationId' => $urlAlias->destination,
                         'viewType' => ViewManager::VIEW_TYPE_FULL,
                         'layout' => true,
@@ -142,12 +145,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                     // 2. alias is custom with forward flag true
                     // 3. requested URL is not case-sensitive equal with the one loaded
                     if ($urlAlias->isHistory === true || ($urlAlias->isCustom === true && $urlAlias->forward === true)) {
-                        $request->attributes->set(
-                            'semanticPathinfo',
-                            $this->generate(
-                                $this->generator->loadLocation($urlAlias->destination)
-                            )
-                        );
+                        $request->attributes->set('semanticPathinfo', $this->generate($location));
                         $request->attributes->set('needsRedirect', true);
                         // Specify not to prepend siteaccess while redirecting when applicable since it would be already present (see UrlAliasGenerator::doGenerate())
                         $request->attributes->set('prependSiteaccessOnRedirect', false);

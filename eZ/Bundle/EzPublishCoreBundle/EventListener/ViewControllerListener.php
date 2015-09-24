@@ -81,9 +81,11 @@ class ViewControllerListener implements EventSubscriberInterface
                 $valueObject = $this->repository->getLocationService()->loadLocation(
                     $request->attributes->get('locationId')
                 );
+                $request->attributes->set('contentId', $valueObject->contentId);
             } elseif ($request->attributes->get('location') instanceof Location) {
                 $valueObject = $request->attributes->get('location');
                 $request->attributes->set('locationId', $valueObject->id);
+                $request->attributes->set('contentId', $valueObject->contentId);
             } elseif ($request->attributes->has('contentId')) {
                 $valueObject = $this->repository->sudo(
                     function (Repository $repository) use ($request) {
@@ -111,11 +113,18 @@ class ViewControllerListener implements EventSubscriberInterface
             $request->attributes->get('viewType')
         );
 
-        if (!$controllerReference instanceof ControllerReference) {
-            return;
+        if ($controllerReference instanceof ControllerReference) {
+            $request->attributes->set('_controller', $controllerReference->controller);
+            $event->setController($this->controllerResolver->getController($request));
+        } else {
+            if ($request->attributes->get('_controller') === 'ez_content:viewLocation') {
+                $request->attributes->set('_controller', 'ez_content:viewContent');
+                $event->setController($this->controllerResolver->getController($request));
+            }
+            if ($request->attributes->get('_controller') === 'ez_content:embedLocation') {
+                $request->attributes->set('_controller', 'ez_content:embedContent');
+                $event->setController($this->controllerResolver->getController($request));
+            }
         }
-
-        $request->attributes->set('_controller', $controllerReference->controller);
-        $event->setController($this->controllerResolver->getController($request));
     }
 }

@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
@@ -297,7 +298,7 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
 
     public function testDoGenerateNoUrlAlias()
     {
-        $location = new Location(array('id' => 123));
+        $location = new Location(array('id' => 123, 'contentInfo' => new ContentInfo(array('id' => 456))));
         $uri = "/content/location/$location->id";
         $this->urlAliasService
             ->expects($this->once())
@@ -308,8 +309,8 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('generate')
             ->with(
-                UrlAliasGenerator::INTERNAL_LOCATION_ROUTE,
-                array('locationId' => $location->id)
+                UrlAliasGenerator::INTERNAL_CONTENT_VIEW_ROUTE,
+                array('contentId' => $location->contentId, 'locationId' => $location->id)
             )
             ->will($this->returnValue($uri));
 
