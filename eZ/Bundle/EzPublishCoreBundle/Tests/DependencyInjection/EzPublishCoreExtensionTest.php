@@ -13,6 +13,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Common;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Content;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
+use eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\StubPolicyProvider;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Yaml\Yaml;
@@ -589,5 +590,53 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
         $this->assertContainerBuilderHasParameter('ezsettings.ezdemo_site3.related_siteaccesses', $relatedSiteAccesses3);
         $this->assertContainerBuilderHasParameter('ezsettings.fre3.related_siteaccesses', $relatedSiteAccesses3);
+    }
+
+    public function testRegisteredPolicies()
+    {
+        $policies1 = [
+            'custom_module' => [
+                'custom_function_1' => null,
+                'custom_function_2' => ['CustomLimitation'],
+            ],
+            'helloworld' => [
+                'foo' => ['bar'],
+                'baz' => null,
+            ],
+        ];
+        $this->extension->addPolicyProvider(new StubPolicyProvider($policies1));
+
+        $policies2 = [
+            'custom_module2' => [
+                'custom_function_3' => null,
+                'custom_function_4' => ['CustomLimitation2', 'CustomLimitation3'],
+            ],
+            'helloworld' => [
+                'foo' => ['additional_limitation'],
+                'some' => ['thingy', 'thing', 'but', 'wait'],
+            ],
+        ];
+        $this->extension->addPolicyProvider(new StubPolicyProvider($policies2));
+
+        $expectedPolicies = [
+            'custom_module' => [
+                'custom_function_1' => null,
+                'custom_function_2' => ['CustomLimitation'],
+            ],
+            'helloworld' => [
+                'foo' => ['bar', 'additional_limitation'],
+                'baz' => null,
+                'some' => ['thingy', 'thing', 'but', 'wait'],
+            ],
+            'custom_module2' => [
+                'custom_function_3' => null,
+                'custom_function_4' => ['CustomLimitation2', 'CustomLimitation3'],
+            ],
+        ];
+
+        $this->load();
+
+        self::assertContainerBuilderHasParameter('ezpublish.api.role.policy_map');
+        self::assertEquals($expectedPolicies, $this->container->getParameter('ezpublish.api.role.policy_map'));
     }
 }
