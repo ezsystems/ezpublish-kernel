@@ -136,6 +136,11 @@ class DomainMapper
 
         $fields = array();
         foreach ($spiFields as $spiField) {
+            // We ignore fields in content not part of the content type
+            if (!isset($fieldIdentifierMap[$spiField->fieldDefinitionId])) {
+                continue;
+            }
+
             $fields[] = new Field(
                 array(
                     'id' => $spiField->id,
