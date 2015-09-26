@@ -16,7 +16,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAw
 class LocationView extends View
 {
     const NODE_KEY = 'location_view';
-    const INFO = 'Template selection settings when displaying a location';
+    const INFO = 'Template selection settings when displaying a location. Deprecated from 5.4.5/2015.09, use content_view instead.';
 
     public function preMap(array $config, ContextualizerInterface $contextualizer)
     {
@@ -31,8 +31,8 @@ class LocationView extends View
                 continue;
             }
 
-            $locationViewConfig =& $config[$contextualizer->getSiteAccessNodeName()][$scope][static::NODE_KEY];
-            $contentViewConfig =& $config[$contextualizer->getSiteAccessNodeName()][$scope][ContentView::NODE_KEY];
+            $locationViewConfig = &$config[$contextualizer->getSiteAccessNodeName()][$scope][static::NODE_KEY];
+            $contentViewConfig = &$config[$contextualizer->getSiteAccessNodeName()][$scope][ContentView::NODE_KEY];
 
             // view rules without a custom controller are moved from $locationViewConfig to $contentViewConfig
             foreach ($locationViewConfig as $viewIdentifier => $viewRules) {

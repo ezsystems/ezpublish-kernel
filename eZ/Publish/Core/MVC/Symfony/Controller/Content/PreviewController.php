@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Helper\ContentPreviewHelper;
 use eZ\Publish\Core\Helper\PreviewLocationProvider;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
@@ -28,6 +29,8 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class PreviewController
 {
+    const INTERNAL_LOCATION_VIEW_ROUTE = '_ezpublishLocation';
+
     /**
      * @var \eZ\Publish\API\Repository\ContentService
      */
@@ -123,27 +126,69 @@ class PreviewController
      */
     protected function getForwardRequest(Location $location, Content $content, SiteAccess $previewSiteAccess, Request $request)
     {
+        $forwardRequestParameters = array(
+            '_controller' => 'ez_content:viewContent',
+            // specify a route for RouteReference generator
+            '_route' => UrlAliasGenerator::INTERNAL_CONTENT_VIEW_ROUTE,
+            '_route_params' => array(
+                'contentId' => $content->id,
+                'locationId' => $location->id,
+            ),
+            'location' => $location,
+            'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
+            'layout' => true,
+            'params' => array(
+                'content' => $content,
+                'location' => $location,
+                'isPreview' => true,
+            ),
+            'siteaccess' => $previewSiteAccess,
+            'semanticPathinfo' => $request->attributes->get('semanticPathinfo'),
+        );
+
+        if ($this->usesCustomController($location)) {
+            $forwardRequestParameters = [
+                '_controller' => 'ez_content:viewLocation',
+                '_route' => self::INTERNAL_LOCATION_VIEW_ROUTE,
+            ] + $forwardRequestParameters;
+        }
+
         return $request->duplicate(
             null,
             null,
-            array(
-                '_controller' => 'ez_content:viewLocation',
-                // specify a route for RouteReference generator
-                '_route' => UrlAliasGenerator::INTERNAL_CONTENT_VIEW_ROUTE,
-                '_route_params' => array(
-                    'locationId' => $location->id,
-                ),
-                'location' => $location,
-                'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
-                'layout' => true,
-                'params' => array(
-                    'content' => $content,
-                    'location' => $location,
-                    'isPreview' => true,
-                ),
-                'siteaccess' => $previewSiteAccess,
-                'semanticPathinfo' => $request->attributes->get('semanticPathinfo'),
-            )
+            $forwardRequestParameters
         );
+    }
+
+    /**
+     * @param $viewProviders \eZ\Publish\Core\MVC\Symfony\View\Provider\Location[]
+     */
+    public function addLocationViewProviders(array $viewProviders)
+    {
+        $this->viewProviders = $viewProviders;
+    }
+
+    /**
+     * Tests if $location has match a view that uses a custom controller.
+     *
+     * @since 5.4.5
+     *
+     * @param $location Location
+     *
+     * @return bool
+     */
+    private function usesCustomController(Location $location)
+    {
+        foreach ($this->viewProviders as $viewProvider) {
+            $view = $viewProvider->getView($location, 'full');
+            if ($view instanceof ContentViewInterface) {
+                $configHash = $view->getConfigHash();
+                if (isset($configHash['controller'])) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
