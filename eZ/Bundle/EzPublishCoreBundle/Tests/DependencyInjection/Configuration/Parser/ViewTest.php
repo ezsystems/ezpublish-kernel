@@ -36,6 +36,11 @@ class ViewTest extends AbstractParserTestCase
     {
         $this->load();
         $expectedLocationView = $this->config['system']['ezdemo_frontend_group']['location_view'];
+
+        // Items that don't use a custom controller got converted to content view (location view depreciation)
+        unset($expectedLocationView['full']['frontpage']);
+        unset($expectedLocationView['line']['article']);
+
         foreach ($expectedLocationView as &$rulesets) {
             foreach ($rulesets as &$config) {
                 if (!isset($config['params'])) {
