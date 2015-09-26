@@ -45,8 +45,10 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
      */
     protected $authorizationChecker;
 
-    /** @var PreviewLocationProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PreviewLocationProvider|\PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\Symfony\View\CustomLocationControllerChecker */
     protected $locationProvider;
+
+    private $controllerChecker;
 
     protected function setUp()
     {
@@ -63,6 +65,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->getMockBuilder('eZ\Publish\Core\Helper\PreviewLocationProvider')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->controllerChecker = $this->getMock('eZ\Publish\Core\MVC\Symfony\View\CustomLocationControllerChecker');
     }
 
     /**
@@ -75,7 +78,8 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             $this->httpKernel,
             $this->previewHelper,
             $this->authorizationChecker,
-            $this->locationProvider
+            $this->locationProvider,
+            $this->controllerChecker
         );
 
         return $controller;
