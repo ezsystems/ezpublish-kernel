@@ -11,13 +11,14 @@
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use InvalidArgumentException;
 
 /**
  * Note that the class should ideally have been in a Logical namespace, but it would have then be named 'And',
  * and 'And' is a PHP reserved word.
  */
-abstract class LogicalOperator extends Criterion
+abstract class LogicalOperator extends Criterion implements CriterionInterface
 {
     /**
      * The set of criteria combined by the logical operator.
@@ -36,7 +37,7 @@ abstract class LogicalOperator extends Criterion
     public function __construct(array $criteria)
     {
         foreach ($criteria as $key => $criterion) {
-            if (!$criterion instanceof Criterion) {
+            if (!$criterion instanceof CriterionInterface) {
                 if ($criterion === null) {
                     $type = 'null';
                 } elseif (is_object($criterion)) {
@@ -53,5 +54,10 @@ abstract class LogicalOperator extends Criterion
             }
             $this->criteria[] = $criterion;
         }
+    }
+
+    public function getSpecifications()
+    {
+        return [];
     }
 }
