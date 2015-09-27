@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
+use Exception;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
@@ -101,10 +102,24 @@ class PreviewController
             $siteAccess = $this->previewHelper->changeConfigScope($siteAccessName);
         }
 
-        $response = $this->kernel->handle(
-            $this->getForwardRequest($location, $content, $siteAccess, $request),
-            HttpKernelInterface::SUB_REQUEST
-        );
+        try {
+            $response = $this->kernel->handle(
+                $this->getForwardRequest($location, $content, $siteAccess, $request),
+                HttpKernelInterface::SUB_REQUEST,
+                false
+            );
+        } catch (\Exception $e) {
+            if ($location->isDraft() && $this->usesCustomController($location)) {
+                // @todo This should probably be an exception that embeds the original one
+                return new Response(<<<EOF
+<p>The view that rendered this location draft uses a custom controller, and resulted in a fatal error.</p>
+<p>Location View is deprecated, as it causes issues with preview, such as an empty location id when previewing the first version of a content.</p>
+EOF
+                );
+            } else {
+                throw $e;
+            }
+        }
         $response->headers->remove('cache-control');
         $response->headers->remove('expires');
 
