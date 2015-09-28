@@ -4260,30 +4260,30 @@ User Management
 Overview
 --------
 
-============================================= ===================== ===================== ===================== =======================
-Resource                                      POST                  GET                   PUT                   DELETE
---------------------------------------------- --------------------- --------------------- --------------------- -----------------------
-/user/groups                                  .                     load all topl. groups .                     .
-/user/groups/root                             .                     redirect to root      .                     .
-/user/groups/<path>                           .                     load user group       update user group     delete user group
-/user/groups/<path>/users                     .                     load users of group   .                     .
-/user/groups/<path>/subgroups                 create user group     load sub groups       .                     remove all sub groups
-/user/groups/<path>/roles                     assign role to group  load roles of group   .                     .
-/user/groups/<path>/roles/<ID>                .                     .                     .                     unassign role from group
-/user/users                                   create user           list users            .                     .
-/user/users/<ID>                              update user           load user             .                     delete user
-/user/users/<ID>/groups                       .                     load groups of user   add to group          .
-/user/users/<ID>/drafts                       .                     list all drafts owned .                     .
-                                                                    by the user
-/user/users/<ID>/roles                        assign role to user   load roles of group   .                     .
-/user/users/<ID>/roles/<ID>                   .                     load roleassignment   .                     unassign role from user
-/user/roles                                   create new role       load all roles        .                     .
-/user/roles/<ID>                              .                     load role             update role           delete role
-/user/roles/<ID>/policies                     create policy         load policies         .                     delete all policies from role
-/user/roles/<ID>/policies/<ID>                .                     load policy           update policy         delete policy
-/user/sessions                                create session        .                     .                     .
-/user/sessions/<sessionID>                    .                     .                     .                     delete session
-============================================= ===================== ===================== ===================== =======================
+============================================= ===================== ===================== ===================== ============================= =============
+Resource                                      POST                  GET                   PUT                   DELETE                        HEAD
+--------------------------------------------- --------------------- --------------------- --------------------- ----------------------------- -------------
+/user/groups                                  .                     load all topl. groups .                     .                             .
+/user/groups/root                             .                     redirect to root      .                     .                             .
+/user/groups/<path>                           .                     load user group       update user group     delete user group             .
+/user/groups/<path>/users                     .                     load users of group   .                     .                             .
+/user/groups/<path>/subgroups                 create user group     load sub groups       .                     remove all sub groups         .
+/user/groups/<path>/roles                     assign role to group  load roles of group   .                     .                             .
+/user/groups/<path>/roles/<ID>                .                     .                     .                     unassign role from group      .
+/user/users                                   create user           list users            .                     .                             Verify users
+/user/users/<ID>                              update user           load user             .                     delete user                   .
+/user/users/<ID>/groups                       .                     load groups of user   add to group          .                             .
+/user/users/<ID>/drafts                       .                     list all drafts owned .                     .                             .
+                                                                    by the user                                                               .
+/user/users/<ID>/roles                        assign role to user   load roles of group   .                     .                             .
+/user/users/<ID>/roles/<ID>                   .                     load roleassignment   .                     unassign role from user       .
+/user/roles                                   create new role       load all roles        .                     .                             .
+/user/roles/<ID>                              .                     load role             update role           delete role                   .
+/user/roles/<ID>/policies                     create policy         load policies         .                     delete all policies from role .
+/user/roles/<ID>/policies/<ID>                .                     load policy           update policy         delete policy                 .
+/user/sessions                                create session        .                     .                     .                             .
+/user/sessions/<sessionID>                    .                     .                     .                     delete session                .
+============================================= ===================== ===================== ===================== ============================= =============
 
 
 Managing Users and Groups
@@ -4871,6 +4871,8 @@ List Users
 :Parameters:
     :roleId: lists users assigned to the given role (ex: ``GET /user/users?roleId=/user/roles/1``)
     :remoteId: retrieves the user for the given remoteId (ex: ``GET /user/users?remoteId=55dd9713db75145f374bbd0b4f60ad29``)
+    :login: retrieves the user for the given login (ex: ``GET /user/users?login=editor``)
+    :email: lists users with the given email (ex: ``GET /user/users?email=editor@example.com``)
 :Headers:
     :Accept:
          :application/vnd.ez.api.UserList+xml:  if set the user list returned in xml format (see User_)
@@ -4888,7 +4890,28 @@ List Users
           User_
 
 :Error Codes:
-    :401: If the user has no permission to read users
+    :404: If there are no visibile users matching the filter
+
+Verify users
+````````````
+:Resource: /user/users
+:Method: HEAD
+:Description: Verifies if there are users matching the given filter.
+:Parameters:
+    :roleId: lists users assigned to the given role (ex: ``GET /user/users?roleId=/user/roles/1``)
+    :remoteId: retrieves the user for the given remoteId (ex: ``GET /user/users?remoteId=55dd9713db75145f374bbd0b4f60ad29``)
+    :login: retrieves the user for the given login (ex: ``GET /user/users?login=editor``)
+    :email: lists users with the given email (ex: ``GET /user/users?email=editor@example.com``)
+:Headers:
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          Content-Length: 0
+
+:Error Codes:
+    :404: If there are no users visible to the current user matching the given filter
 
 Load User
 `````````

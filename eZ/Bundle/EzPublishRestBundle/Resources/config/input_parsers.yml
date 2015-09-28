@@ -95,6 +95,8 @@ parameters:
     ezpublish_rest.input.parser.SectionList.class: eZ\Publish\Core\REST\Client\Input\Parser\SectionList
     ezpublish_rest.input.parser.VersionInfo.class: eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo
     ezpublish_rest.input.parser.Session.class: eZ\Publish\Core\REST\Client\Input\Parser\Session
+    ezpublish_rest.input.parser.UserList.class: eZ\Publish\Core\REST\Client\Input\Parser\UserList
+    ezpublish_rest.input.parser.UserRefList.class: eZ\Publish\Core\REST\Client\Input\Parser\UserRefList
 
 services:
     ezpublish_rest.input.parser:
@@ -804,3 +806,21 @@ services:
             - @ezpublish.api.service.user
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.Session }
+
+    ezpublish_rest.input.parser.UserRefList:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.UserRefList.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+            - @ezpublish.api.service.user
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.UserRefList }
+
+    ezpublish_rest.input.parser.UserList:
+        parent: ezpublish_rest.input.parser
+        class: %ezpublish_rest.input.parser.UserList.class%
+        arguments:
+            - @ezpublish_rest.parser_tools
+            - @ezpublish.api.service.user
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.UserList }
