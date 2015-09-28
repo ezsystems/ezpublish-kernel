@@ -158,3 +158,6 @@ services:
         tags:
             - { name: twig.extension }
 
+
+    ezpublish.view.location_view_rule_thingie:
+        class: eZ\Publish\Core\MVC\Symfony\View\LocationViewRulesThingie
