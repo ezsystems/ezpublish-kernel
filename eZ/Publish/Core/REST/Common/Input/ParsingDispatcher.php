@@ -94,12 +94,18 @@ class ParsingDispatcher
     {
         $version = '1.0';
         $contentType = explode('; ', $mediaType);
-        if (isset($contentType[1])) {
+        if (count($contentType) > 1) {
             $mediaType = $contentType[0];
-            if (($equalPos = strpos($contentType[1], '=')) === false) {
-                throw new Exceptions\Parser("Unknown media type version specification: '{$contentType[1]}'");
+            foreach (array_slice($contentType, 1) as $parameterString) {
+                if (($equalPos = strpos($contentType[1], '=')) === false) {
+                    throw new Exceptions\Parser("Unknown parameter format: '{$parameterString}'");
+                }
+                list($parameterName, $parameterValue) = explode('=', $parameterString);
+                if (trim($parameterName) === 'version') {
+                    $version = trim($parameterValue);
+                    break;
+                }
             }
-            $version = substr($contentType[1], $equalPos + 1);
         }
 
         return [$mediaType, $version];
