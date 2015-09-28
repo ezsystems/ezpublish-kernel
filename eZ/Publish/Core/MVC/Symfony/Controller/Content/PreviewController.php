@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Helper\ContentPreviewHelper;
 use eZ\Publish\Core\Helper\PreviewLocationProvider;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface;
+use eZ\Publish\Core\MVC\Symfony\View\LocationViewRulesThingie;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
@@ -53,22 +53,24 @@ class PreviewController
     private $authorizationChecker;
 
     /**
-     * @var \eZ\Publish\Core\Helper\PreviewLocationProvider
+     * @var \eZ\Publish\Core\MVC\Symfony\View\LocationViewRulesThingie
      */
-    private $locationProvider;
+    private $locationViewRulesThingie;
 
     public function __construct(
         ContentService $contentService,
         HttpKernelInterface $kernel,
         ContentPreviewHelper $previewHelper,
         AuthorizationCheckerInterface $authorizationChecker,
-        PreviewLocationProvider $locationProvider
+        PreviewLocationProvider $locationProvider,
+        LocationViewRulesThingie $locationViewRulesThingie
     ) {
         $this->contentService = $contentService;
         $this->kernel = $kernel;
         $this->previewHelper = $previewHelper;
         $this->authorizationChecker = $authorizationChecker;
         $this->locationProvider = $locationProvider;
+        $this->locationViewRulesThingie = $locationViewRulesThingie;
     }
 
     /**
@@ -109,13 +111,14 @@ class PreviewController
                 false
             );
         } catch (\Exception $e) {
-            if ($location->isDraft() && $this->usesCustomController($location)) {
+            if ($location->isDraft() && $this->locationViewRulesThingie->usesCustomController($location)) {
                 // @todo This should probably be an exception that embeds the original one
-                return new Response(<<<EOF
+                $message = <<<EOF
 <p>The view that rendered this location draft uses a custom controller, and resulted in a fatal error.</p>
 <p>Location View is deprecated, as it causes issues with preview, such as an empty location id when previewing the first version of a content.</p>
-EOF
-                );
+EOF;
+
+                throw new Exception($message, 0, $e);
             } else {
                 throw $e;
             }
@@ -161,7 +164,7 @@ EOF
             'semanticPathinfo' => $request->attributes->get('semanticPathinfo'),
         );
 
-        if ($this->usesCustomController($location)) {
+        if ($this->locationViewRulesThingie->usesCustomController($location)) {
             $forwardRequestParameters = [
                 '_controller' => 'ez_content:viewLocation',
                 '_route' => self::INTERNAL_LOCATION_VIEW_ROUTE,
@@ -173,37 +176,5 @@ EOF
             null,
             $forwardRequestParameters
         );
-    }
-
-    /**
-     * @param $viewProviders \eZ\Publish\Core\MVC\Symfony\View\Provider\Location[]
-     */
-    public function addLocationViewProviders(array $viewProviders)
-    {
-        $this->viewProviders = $viewProviders;
-    }
-
-    /**
-     * Tests if $location has match a view that uses a custom controller.
-     *
-     * @since 5.4.5
-     *
-     * @param $location Location
-     *
-     * @return bool
-     */
-    private function usesCustomController(Location $location)
-    {
-        foreach ($this->viewProviders as $viewProvider) {
-            $view = $viewProvider->getView($location, 'full');
-            if ($view instanceof ContentViewInterface) {
-                $configHash = $view->getConfigHash();
-                if (isset($configHash['controller'])) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 }
