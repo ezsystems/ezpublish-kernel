@@ -139,4 +139,34 @@ class DispatcherTest extends PHPUnit_Framework_TestCase
             $dispatcher->parse($message)
         );
     }
+
+    /**
+     *
+     */
+    public function testParseMediaTypeCharset()
+    {
+        $message = new Common\Message(
+            array(
+                'Content-Type' => 'text/html+format; version=1.1; charset=UTF-8',
+                'Url' => '/foo/bar',
+            ),
+            'Hello world!'
+        );
+
+        $parsingDispatcher = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher');
+        $parsingDispatcher
+            ->expects($this->any())
+            ->method('parse')
+            ->with($this->anything(), 'text/html; version=1.1');
+
+        $handler = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Input\\Handler');
+        $handler
+            ->expects($this->any())
+            ->method('convert')
+            ->will($this->returnValue(array()));
+
+        $dispatcher = new Common\Input\Dispatcher($parsingDispatcher, array('format' => $handler));
+
+        $dispatcher->parse($message);
+    }
 }
