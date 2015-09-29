@@ -340,7 +340,7 @@ class DoctrineDatabase extends Gateway
         $q->prepare()->execute();
 
         // Handle alwaysAvailable flag update separately as it's a more complex task and has impact on several tables
-        if (isset($struct->alwaysAvailable)) {
+        if (isset($struct->alwaysAvailable) || isset($struct->mainLanguageId)) {
             $this->updateAlwaysAvailableFlag($contentId, $struct->alwaysAvailable);
         }
     }
@@ -396,19 +396,19 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Updates "always available" flag for content identified by $contentId, in respect to $alwaysAvailable.
+     * Updates "always available" flag for Content identified by $contentId, in respect to
+     * Content's current main language and optionally new $alwaysAvailable state.
      *
      * @param int $contentId
-     * @param bool $newAlwaysAvailable New "always available" value
+     * @param bool|null $alwaysAvailable New "always available" value or null if not defined
      */
-    public function updateAlwaysAvailableFlag($contentId, $newAlwaysAvailable)
+    public function updateAlwaysAvailableFlag($contentId, $alwaysAvailable = null)
     {
-        // We will need to know some info on the current language mask to update the flag everywhere needed
+        // We will need to know some info on the current language mask to update the flag
+        // everywhere needed
         $contentInfoRow = $this->loadContentInfo($contentId);
-
-        // Only update if old and new flags differs
-        if ($contentInfoRow['language_mask'] & 1 == $newAlwaysAvailable) {
-            return;
+        if (!isset($alwaysAvailable)) {
+            $alwaysAvailable = (bool)$contentInfoRow['language_mask'] & 1;
         }
 
         /** @var $q \eZ\Publish\Core\Persistence\Database\UpdateQuery */
@@ -417,7 +417,7 @@ class DoctrineDatabase extends Gateway
             ->update($this->dbHandler->quoteTable('ezcontentobject'))
             ->set(
                 $this->dbHandler->quoteColumn('language_mask'),
-                $newAlwaysAvailable ?
+                $alwaysAvailable ?
                     $q->expr->bitOr($this->dbHandler->quoteColumn('language_mask'), 1) :
                     $q->expr->bitAnd($this->dbHandler->quoteColumn('language_mask'), -2)
             )
@@ -436,7 +436,7 @@ class DoctrineDatabase extends Gateway
             ->update($this->dbHandler->quoteTable('ezcontentobject_name'))
             ->set(
                 $this->dbHandler->quoteColumn('language_id'),
-                $newAlwaysAvailable ?
+                $alwaysAvailable ?
                     $qName->expr->bitOr($this->dbHandler->quoteColumn('language_id'), 1) :
                     $qName->expr->bitAnd($this->dbHandler->quoteColumn('language_id'), -2)
             )
@@ -459,16 +459,11 @@ class DoctrineDatabase extends Gateway
         $qName->prepare()->execute();
 
         // Now update ezcontentobject_attribute for current version
+        // Create update query that will be reused
         /** @var $qAttr \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $qAttr = $this->dbHandler->createUpdateQuery();
         $qAttr
             ->update($this->dbHandler->quoteTable('ezcontentobject_attribute'))
-            ->set(
-                $this->dbHandler->quoteColumn('language_id'),
-                $newAlwaysAvailable ?
-                    $qAttr->expr->bitOr($this->dbHandler->quoteColumn('language_id'), 1) :
-                    $qAttr->expr->bitAnd($this->dbHandler->quoteColumn('language_id'), -2)
-            )
             ->where(
                 $qAttr->expr->lAnd(
                     $qAttr->expr->eq(
@@ -485,7 +480,45 @@ class DoctrineDatabase extends Gateway
                     )
                 )
             );
+
+        // If there is only a single language, update all fields and return
+        if (!$this->languageMaskGenerator->isLanguageMaskComposite($contentInfoRow['language_mask'])) {
+            $qAttr->set(
+                $this->dbHandler->quoteColumn('language_id'),
+                $alwaysAvailable ?
+                    $qAttr->expr->bitOr($this->dbHandler->quoteColumn('language_id'), 1) :
+                    $qAttr->expr->bitAnd($this->dbHandler->quoteColumn('language_id'), -2)
+            );
+            $qAttr->prepare()->execute();
+
+            return;
+        }
+
+        // Otherwise:
+        // 1. Remove always available flag on all fields
+        $qAttr->set(
+            $this->dbHandler->quoteColumn('language_id'),
+            $qAttr->expr->bitAnd($this->dbHandler->quoteColumn('language_id'), -2)
+        );
         $qAttr->prepare()->execute();
+
+        // 2. If Content is always available set the flag only on fields in main language
+        if ($alwaysAvailable) {
+            $qAttr->set(
+                $this->dbHandler->quoteColumn('language_id'),
+                $qAttr->expr->bitOr($this->dbHandler->quoteColumn('language_id'), 1)
+            );
+            $qAttr->where(
+                $qAttr->expr->gt(
+                    $qAttr->expr->bitAnd(
+                        $this->dbHandler->quoteColumn('language_id'),
+                        $qAttr->bindValue($contentInfoRow['initial_language_id'], null, PDO::PARAM_INT)
+                    ),
+                    $qAttr->bindValue(0, null, PDO::PARAM_INT)
+                )
+            );
+            $qAttr->prepare()->execute();
+        }
     }
 
     /**
@@ -611,14 +644,12 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Inserts $field with $newFieldId or not.
+     * Sets field (ezcontentobject_attribute) values to the given query.
      *
+     * @param \eZ\Publish\Core\Persistence\Database\InsertQuery $q
      * @param Content $content
      * @param Field $field
      * @param StorageFieldValue $value
-     * @param mixed $newFieldId
-     *
-     * @return int|null Maybe a new field ID
      */
     protected function setInsertFieldValues(InsertQuery $q, Content $content, Field $field, StorageFieldValue $value)
     {
@@ -659,11 +690,27 @@ class DoctrineDatabase extends Gateway
             $q->bindValue(
                 $this->languageMaskGenerator->generateLanguageIndicator(
                     $field->languageCode,
-                    $content->versionInfo->contentInfo->alwaysAvailable
+                    $this->isLanguageAlwaysAvailable($content, $field->languageCode)
                 ),
                 null,
                 \PDO::PARAM_INT
             )
+        );
+    }
+
+    /**
+     * Checks if $languageCode is always available in $content.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param string $languageCode
+     *
+     * @return bool
+     */
+    protected function isLanguageAlwaysAvailable(Content $content, $languageCode)
+    {
+        return (
+            $content->versionInfo->contentInfo->alwaysAvailable &&
+            $content->versionInfo->contentInfo->mainLanguageCode === $languageCode
         );
     }
 
