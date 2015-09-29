@@ -149,4 +149,25 @@ class MaskGenerator
 
         return $languageCodes;
     }
+
+    /**
+     * Checks if given $languageMask consists of multiple languages.
+     *
+     * @param int $languageMask
+     *
+     * @return bool
+     */
+    public function isLanguageMaskComposite($languageMask)
+    {
+        // Ignore first bit
+        $languageMask = $this->removeAlwaysAvailableFlag($languageMask);
+
+        // Special case
+        if ($languageMask === 0) {
+            return false;
+        }
+
+        // Return false if power of 2
+        return (bool)($languageMask & ($languageMask - 1));
+    }
 }
