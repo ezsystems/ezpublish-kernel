@@ -53,14 +53,18 @@ class CriteriaConverter
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param array $languageSettings
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function convertCriteria(SelectQuery $query, Criterion $criterion)
-    {
+    public function convertCriteria(
+        SelectQuery $query,
+        Criterion $criterion,
+        array $languageSettings
+    ) {
         foreach ($this->handlers as $handler) {
             if ($handler->accept($criterion)) {
-                return $handler->handle($this, $query, $criterion);
+                return $handler->handle($this, $query, $criterion, $languageSettings);
             }
         }
 

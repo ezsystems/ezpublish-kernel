@@ -56,6 +56,7 @@ matrix:
 branches:
   only:
     - master
+    - fix-EZP-24882-field-always-available
 
 # setup requirements for running unit/integration/behat tests
 before_script:

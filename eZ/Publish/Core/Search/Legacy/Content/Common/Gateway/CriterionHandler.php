@@ -66,11 +66,13 @@ abstract class CriterionHandler
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param array $languageSettings
      */
     abstract public function handle(
         CriteriaConverter $converter,
         SelectQuery $query,
-        Criterion $criterion
+        Criterion $criterion,
+        array $languageSettings
     );
 
     /**

@@ -86,7 +86,7 @@ class MapLocationDistance extends FieldBase
             '_geo_distance' => array(
                 'nested_path' => 'fields_doc',
                 'nested_filter' => array(
-                    'term' => $this->getNestedFilterTerm($target->languageCode),
+                    'term' => $this->getNestedFilterTerm(null),
                 ),
                 'order' => $this->getDirection($sortClause),
                 "fields_doc.{$fieldName}" => array(

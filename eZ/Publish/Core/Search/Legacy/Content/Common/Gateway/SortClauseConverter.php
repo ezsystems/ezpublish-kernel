@@ -91,13 +91,14 @@ class SortClauseConverter
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     * @param array $languageSettings
      */
-    public function applyJoin(SelectQuery $query, array $sortClauses)
+    public function applyJoin(SelectQuery $query, array $sortClauses, array $languageSettings)
     {
         foreach ($sortClauses as $nr => $sortClause) {
             foreach ($this->handlers as $handler) {
                 if ($handler->accept($sortClause)) {
-                    $handler->applyJoin($query, $sortClause, $nr);
+                    $handler->applyJoin($query, $sortClause, $nr, $languageSettings);
                     continue 2;
                 }
             }

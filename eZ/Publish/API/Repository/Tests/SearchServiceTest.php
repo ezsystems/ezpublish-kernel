@@ -38,7 +38,7 @@ class SearchServiceTest extends BaseTest
         $fixtureDir = $this->getFixtureDir();
 
         return array(
-            array(
+            0 => array(
                 array(
                     'filter' => new Criterion\ContentId(
                         array(1, 4, 10)
@@ -47,7 +47,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'ContentId.php',
             ),
-            array(
+            1 => array(
                 array(
                     'filter' => new Criterion\LogicalAnd(
                         array(
@@ -63,7 +63,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'LogicalAnd.php',
             ),
-            array(
+            2 => array(
                 array(
                     'filter' => new Criterion\LogicalOr(
                         array(
@@ -79,7 +79,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'LogicalOr.php',
             ),
-            array(
+            3 => array(
                 array(
                     'filter' => new Criterion\LogicalAnd(
                         array(
@@ -97,7 +97,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'LogicalNot.php',
             ),
-            array(
+            4 => array(
                 array(
                     'filter' => new Criterion\LogicalAnd(
                         array(
@@ -119,7 +119,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'LogicalNot.php',
             ),
-            array(
+            5 => array(
                 array(
                     'filter' => new Criterion\ContentTypeId(
                         4
@@ -128,7 +128,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'ContentTypeId.php',
             ),
-            array(
+            6 => array(
                 array(
                     'filter' => new Criterion\ContentTypeIdentifier(
                         'user'
@@ -137,14 +137,14 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'ContentTypeId.php',
             ),
-            array(
+            7 => array(
                 array(
                     'filter' => new Criterion\MatchNone(),
                     'sortClauses' => array(new SortClause\ContentId()),
                 ),
                 $fixtureDir . 'MatchNone.php',
             ),
-            array(
+            8 => array(
                 array(
                     'filter' => new Criterion\ContentTypeGroupId(
                         2
@@ -153,7 +153,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'ContentTypeGroupId.php',
             ),
-            array(
+            9 => array(
                 array(
                     'filter' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
@@ -164,7 +164,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'DateMetadataGt.php',
             ),
-            array(
+            10 => array(
                 array(
                     'filter' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
@@ -175,7 +175,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'DateMetadataGte.php',
             ),
-            array(
+            11 => array(
                 array(
                     'filter' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
@@ -187,7 +187,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'DateMetadataLte.php',
             ),
-            array(
+            12 => array(
                 array(
                     'filter' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
@@ -198,7 +198,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'DateMetadataIn.php',
             ),
-            array(
+            13 => array(
                 array(
                     'filter' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
@@ -209,7 +209,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'DateMetadataBetween.php',
             ),
-            array(
+            14 => array(
                 array(
                     'filter' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::CREATED,
@@ -220,7 +220,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'DateMetadataCreated.php',
             ),
-            array(
+            15 => array(
                 array(
                     'filter' => new Criterion\CustomField(
                         'user_group_name_value_s',
@@ -231,7 +231,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'Field.php',
             ),
-            array(
+            16 => array(
                 array(
                     'filter' => new Criterion\CustomField(
                         'user_group_name_value_s',
@@ -242,7 +242,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'Field.php',
             ),
-            array(
+            17 => array(
                 array(
                     'filter' => new Criterion\CustomField(
                         'user_group_name_value_s',
@@ -253,7 +253,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'CustomFieldLt.php',
             ),
-            array(
+            18 => array(
                 array(
                     'filter' => new Criterion\CustomField(
                         'user_group_name_value_s',
@@ -264,7 +264,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'CustomFieldLte.php',
             ),
-            array(
+            19 => array(
                 array(
                     'filter' => new Criterion\CustomField(
                         'user_group_name_value_s',
@@ -275,7 +275,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'CustomFieldGt.php',
             ),
-            array(
+            20 => array(
                 array(
                     'filter' => new Criterion\CustomField(
                         'user_group_name_value_s',
@@ -286,7 +286,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'CustomFieldGte.php',
             ),
-            array(
+            21 => array(
                 array(
                     'filter' => new Criterion\CustomField(
                         'user_group_name_value_s',
@@ -297,7 +297,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'CustomFieldBetween.php',
             ),
-            array(
+            22 => array(
                 array(
                     'filter' => new Criterion\RemoteId(
                         array('f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca')
@@ -306,7 +306,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'RemoteId.php',
             ),
-            array(
+            23 => array(
                 array(
                     'filter' => new Criterion\SectionId(
                         array(2)
@@ -315,7 +315,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'SectionId.php',
             ),
-            array(
+            24 => array(
                 array(
                     'filter' => new Criterion\Field(
                         'name',
@@ -326,7 +326,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'Field.php',
             ),
-            array(
+            25 => array(
                 array(
                     'filter' => new Criterion\Field(
                         'name',
@@ -337,7 +337,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'FieldIn.php',
             ),
-            array(
+            26 => array(
                 array(
                     'filter' => new Criterion\DateMetadata(
                         Criterion\DateMetadata::MODIFIED,
@@ -348,7 +348,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'FieldBetween.php',
             ),
-            array(
+            27 => array(
                 array(
                     'filter' => new Criterion\LogicalOr(
                         array(
@@ -368,7 +368,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'FieldOr.php',
             ),
-            array(
+            28 => array(
                 array(
                     'filter' => new Criterion\Subtree(
                         '/1/5/'
@@ -377,7 +377,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'Subtree.php',
             ),
-            array(
+            29 => array(
                 array(
                     'filter' => new Criterion\LocationId(
                         array(1, 2, 5)
@@ -386,7 +386,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'LocationId.php',
             ),
-            array(
+            30 => array(
                 array(
                     'filter' => new Criterion\ParentLocationId(
                         array(1)
@@ -395,7 +395,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'ParentLocationId.php',
             ),
-            array(
+            31 => array(
                 array(
                     'filter' => new Criterion\LocationRemoteId(
                         array('3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983')
@@ -404,7 +404,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'LocationRemoteId.php',
             ),
-            array(
+            32 => array(
                 array(
                     // There is no Status Criterion anymore, this should match all published as well
                     'filter' => new Criterion\Subtree(
@@ -434,7 +434,7 @@ class SearchServiceTest extends BaseTest
                     );
                 },
             ),
-            array(
+            33 => array(
                 array(
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::MODIFIER,
@@ -448,7 +448,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
-            array(
+            34 => array(
                 array(
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::MODIFIER,
@@ -462,7 +462,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
-            array(
+            35 => array(
                 array(
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::OWNER,
@@ -476,7 +476,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
-            array(
+            36 => array(
                 array(
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::OWNER,
@@ -490,7 +490,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
-            array(
+            37 => array(
                 array(
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::GROUP,
@@ -504,7 +504,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
-            array(
+            38 => array(
                 array(
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::GROUP,
@@ -518,7 +518,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
-            array(
+            39 => array(
                 array(
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::GROUP,
@@ -532,7 +532,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
-            array(
+            40 => array(
                 array(
                     'filter' => new Criterion\UserMetadata(
                         Criterion\UserMetadata::GROUP,
@@ -546,7 +546,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'UserMetadata.php',
             ),
-            array(
+            41 => array(
                 array(
                     'filter' => new Criterion\Ancestor(
                         array(
@@ -1262,7 +1262,7 @@ class SearchServiceTest extends BaseTest
         $fixtureDir = $this->getFixtureDir();
 
         return array(
-            array(
+            0 => array(
                 array(
                     'filter' => new Criterion\SectionId(array(2)),
                     'offset' => 0,
@@ -1280,7 +1280,7 @@ class SearchServiceTest extends BaseTest
                     );
                 },
             ),
-            array(
+            1 => array(
                 array(
                     'filter' => new Criterion\SectionId(array(2)),
                     'offset' => 0,
@@ -1292,7 +1292,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'SortDatePublished.php',
             ),
-            array(
+            2 => array(
                 array(
                     'filter' => new Criterion\SectionId(array(2)),
                     'offset' => 0,
@@ -1304,7 +1304,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'SortDateModified.php',
             ),
-            array(
+            3 => array(
                 array(
                     'filter' => new Criterion\SectionId(array(4, 2, 6, 3)),
                     'offset' => 0,
@@ -1316,7 +1316,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'SortSectionIdentifier.php',
             ),
-            array(
+            4 => array(
                 array(
                     'filter' => new Criterion\SectionId(array(4, 2, 6, 3)),
                     'offset' => 0,
@@ -1328,7 +1328,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'SortSectionName.php',
             ),
-            array(
+            5 => array(
                 array(
                     'filter' => new Criterion\SectionId(array(2, 3)),
                     'offset' => 0,
@@ -1340,63 +1340,63 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'SortContentName.php',
             ),
-            array(
+            6 => array(
                 array(
                     'filter' => new Criterion\ContentTypeId(1),
                     'offset' => 0,
                     'limit' => 50,
                     'sortClauses' => array(
-                        new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-US'),
+                        new SortClause\Field('folder', 'name', Query::SORT_ASC),
                         new SortClause\ContentId(),
                     ),
                 ),
                 $fixtureDir . 'SortFolderName.php',
             ),
-            array(
+            7 => array(
                 array(
                     'filter' => new Criterion\ContentTypeId(array(1, 3)),
                     'offset' => 0,
                     'limit' => 50,
                     'sortClauses' => array(
-                        new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-US'),
+                        new SortClause\Field('folder', 'name', Query::SORT_ASC),
                         new SortClause\ContentId(),
                     ),
                 ),
                 $fixtureDir . 'SortFieldMultipleTypes.php',
             ),
-            array(
+            8 => array(
                 array(
                     'filter' => new Criterion\ContentTypeId(array(1, 3)),
                     'offset' => 0,
                     'limit' => 50,
                     'sortClauses' => array(
-                        new SortClause\Field('folder', 'name', Query::SORT_DESC, 'eng-US'),
+                        new SortClause\Field('folder', 'name', Query::SORT_DESC),
                         new SortClause\ContentId(),
                     ),
                 ),
                 $fixtureDir . 'SortFieldMultipleTypesReverse.php',
             ),
-            array(
+            9 => array(
                 array(
                     'filter' => new Criterion\ContentTypeId(array(1, 3)),
                     'offset' => 3,
                     'limit' => 5,
                     'sortClauses' => array(
-                        new SortClause\Field('folder', 'name', Query::SORT_ASC, 'eng-US'),
-                        new SortClause\Field('user', 'first_name', Query::SORT_ASC, 'eng-US'),
+                        new SortClause\Field('folder', 'name', Query::SORT_ASC),
+                        new SortClause\Field('user', 'first_name', Query::SORT_ASC),
                         new SortClause\ContentId(),
                     ),
                 ),
                 $fixtureDir . 'SortFieldMultipleTypesSlice.php',
             ),
-            array(
+            10 => array(
                 array(
                     'filter' => new Criterion\ContentTypeId(array(1, 3)),
                     'offset' => 3,
                     'limit' => 5,
                     'sortClauses' => array(
-                        new SortClause\Field('folder', 'name', Query::SORT_DESC, 'eng-US'),
-                        new SortClause\Field('user', 'first_name', Query::SORT_ASC, 'eng-US'),
+                        new SortClause\Field('folder', 'name', Query::SORT_DESC),
+                        new SortClause\Field('user', 'first_name', Query::SORT_ASC),
                         new SortClause\ContentId(),
                     ),
                 ),
@@ -1535,27 +1535,34 @@ class SearchServiceTest extends BaseTest
      * @param int $fieldValue12 Value for translatable field in second language
      * @param int $fieldValue2 Value for non translatable field
      * @param string $mainLanguageCode
+     * @param bool $alwaysAvailable
      *
      * @return Content
      */
     protected function createMultilingualContent(
         $contentType,
-        $fieldValue11,
-        $fieldValue12,
+        $fieldValue11 = null,
+        $fieldValue12 = null,
         $fieldValue2 = null,
-        $mainLanguageCode = 'eng-GB'
+        $mainLanguageCode = 'eng-GB',
+        $alwaysAvailable = false
     ) {
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
         $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
-        $createStruct->alwaysAvailable = false;
+        $createStruct->alwaysAvailable = $alwaysAvailable;
         $createStruct->mainLanguageCode = $mainLanguageCode;
-        $createStruct->setField('integer', $fieldValue11, 'eng-GB');
-        $createStruct->setField('integer', $fieldValue12, 'ger-DE');
+        if ($fieldValue11) {
+            $createStruct->setField('integer', $fieldValue11, 'eng-GB');
+        }
+        if ($fieldValue12) {
+            $createStruct->setField('integer', $fieldValue12, 'ger-DE');
+        }
         $createStruct->setField('integer2', $fieldValue2, $mainLanguageCode);
 
-        $draft = $contentService->createContent($createStruct);
+        $locationCreateStruct = $repository->getLocationService()->newLocationCreateStruct(2);
+        $draft = $contentService->createContent($createStruct, array($locationCreateStruct));
         $content = $contentService->publishVersion($draft->getVersionInfo());
 
         $this->refreshSearch($repository);
@@ -1563,521 +1570,742 @@ class SearchServiceTest extends BaseTest
         return $content;
     }
 
-    /**
-     * Test for the findContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     */
-    public function testMultilingualFieldSort()
+    protected function checkPrioritizedLanguagesSupport()
     {
         $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacySolr) {
-            $this->markTestIncomplete("Multicore Solr search engine can't target language with Field sort clause");
+        if ($setupFactory instanceof LegacyElasticsearch) {
+            $this->markTestIncomplete('Prioritized languages are not supported with Elasticsearch engine');
         }
-
-        $contentType = $this->createTestContentType();
-
-        // Create a draft to account for behaviour with ContentType in different states
-        $repository = $this->getRepository();
-        $contentTypeService = $repository->getContentTypeService();
-        $contentTypeService->createContentTypeDraft($contentType);
-
-        $contentIdList = array();
-        $contentIdList[1] = $this->createMultilingualContent($contentType, 1, 2)->id;
-        $contentIdList[2] = $this->createMultilingualContent($contentType, 2, 4)->id;
-        $contentIdList[3] = $this->createMultilingualContent($contentType, 2, 3)->id;
-        $contentIdList[4] = $this->createMultilingualContent($contentType, 1, 1)->id;
-
-        $query = new Query(
-            array(
-                'query' => new Criterion\ContentTypeId($contentType->id),
-                'sortClauses' => array(
-                    new SortClause\Field('test-type', 'integer', Query::SORT_DESC, 'eng-GB'),
-                    new SortClause\Field('test-type', 'integer', Query::SORT_ASC, 'ger-DE'),
-                ),
-            )
-        );
-
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findContent($query);
-
-        $this->assertEquals(4, $result->totalCount);
-
-        /*
-         * Expected order, Value eng-GB, Value ger-DE
-         *
-         * Content 3, 2, 3
-         * Content 2, 2, 4
-         * Content 4, 1, 1
-         * Content 1, 1, 2
-         */
-
-        $this->assertEquals(
-            array(
-                $contentIdList[3],
-                $contentIdList[2],
-                $contentIdList[4],
-                $contentIdList[1],
-            ),
-            $this->mapResultContentIds($result)
-        );
     }
 
-    /**
-     * Test for the findContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     */
-    public function testMultilingualFieldSortVariant2()
+    public function providerForTestMultilingualFieldSort()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacySolr) {
-            $this->markTestIncomplete("Multicore Solr search engine can't target language with Field sort clause");
-        }
-
-        $contentType = $this->createTestContentType();
-
-        // Create a draft to account for behaviour with ContentType in different states
-        $repository = $this->getRepository();
-        $contentTypeService = $repository->getContentTypeService();
-        $contentTypeService->createContentTypeDraft($contentType);
-
-        $contentIdList = array();
-        $contentIdList[1] = $this->createMultilingualContent($contentType, 1, 2)->id;
-        $contentIdList[2] = $this->createMultilingualContent($contentType, 2, 4)->id;
-        $contentIdList[3] = $this->createMultilingualContent($contentType, 2, 3)->id;
-        $contentIdList[4] = $this->createMultilingualContent($contentType, 1, 1)->id;
-
-        $query = new Query(
-            array(
-                'query' => new Criterion\ContentTypeId($contentType->id),
-                'sortClauses' => array(
-                    new SortClause\Field('test-type', 'integer', Query::SORT_ASC, 'eng-GB'),
-                    new SortClause\Field('test-type', 'integer', Query::SORT_DESC, 'ger-DE'),
+        return array(
+            0 => array(
+                array(
+                    1 => array(1, 2, 1),
+                    2 => array(2, 1, 2),
+                    3 => array(2, 1, 3),
+                    4 => array(1, 2, 4),
                 ),
-            )
-        );
-
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findContent($query);
-
-        $this->assertEquals(4, $result->totalCount);
-
-        /*
-         * Expected order, Value eng-GB, Value ger-DE
-         *
-         * Content 1, 1, 2
-         * Content 4, 1, 1
-         * Content 2, 2, 4
-         * Content 3, 2, 3
-         */
-
-        $this->assertEquals(
-            array(
-                $contentIdList[1],
-                $contentIdList[4],
-                $contentIdList[2],
-                $contentIdList[3],
-            ),
-            $this->mapResultContentIds($result)
-        );
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depe_nds eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
-     * @group asdf
-     */
-    public function testMultilingualFieldSortVariant3()
-    {
-        $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacySolr) {
-            $this->markTestIncomplete("Multicore Solr search engine can't target language with Field sort clause");
-        }
-
-        $contentType = $this->createTestContentType();
-
-        // Create a draft to account for behaviour with ContentType in different states
-        $repository = $this->getRepository();
-        $contentTypeService = $repository->getContentTypeService();
-        $contentTypeService->createContentTypeDraft($contentType);
-
-        $contentIdList = array();
-        $contentIdList[1] = $this->createMultilingualContent($contentType, 1, 2)->id;
-        $contentIdList[2] = $this->createMultilingualContent($contentType, 2, 4)->id;
-        $contentIdList[3] = $this->createMultilingualContent($contentType, 2, 3)->id;
-        $contentIdList[4] = $this->createMultilingualContent($contentType, 1, 1)->id;
-
-        $query = new Query(
-            array(
-                'query' => new Criterion\ContentTypeId($contentType->id),
-                'sortClauses' => array(
-                    new SortClause\Field('test-type', 'integer', Query::SORT_DESC, 'ger-DE'),
-                    new SortClause\Field('test-type', 'integer', Query::SORT_ASC, 'eng-GB'),
+                array(
+                    'languages' => array(
+                        'eng-GB',
+                        'ger-DE',
+                    ),
                 ),
-            )
-        );
-
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findContent($query);
-
-        $this->assertEquals(4, $result->totalCount);
-
-        /*
-         * Expected order, Value eng-GB, Value ger-DE
-         *
-         * Content 2, 2, 4
-         * Content 3, 2, 3
-         * Content 1, 1, 2
-         * Content 4, 1, 1
-         */
-
-        $this->assertEquals(
-            array(
-                $contentIdList[2],
-                $contentIdList[3],
-                $contentIdList[1],
-                $contentIdList[4],
+                array(
+                    new SortClause\Field('test-type', 'integer', Query::SORT_ASC),
+                    new SortClause\Field('test-type', 'integer2', Query::SORT_DESC),
+                ),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 4, 1, 2, 4
+                 * Content 1, 1, 2, 1
+                 * Content 3, 2, 1, 3
+                 * Content 2, 2, 1, 2
+                 */
+                array(4, 1, 3, 2),
             ),
-            $this->mapResultContentIds($result)
-        );
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testSearchWithFieldSortThrowsInvalidArgumentExceptionTranslatableField()
-    {
-        $contentType = $this->createTestContentType();
-        $this->createMultilingualContent($contentType, 1, 2);
-
-        $query = new Query(
-            array(
-                'query' => new Criterion\ContentTypeId($contentType->id),
-                'sortClauses' => array(
+            1 => array(
+                array(
+                    1 => array(1, 2, 1),
+                    2 => array(2, 1, 2),
+                    3 => array(2, 1, 3),
+                    4 => array(1, 2, 4),
+                ),
+                array(
+                    'languages' => array(
+                        'ger-DE',
+                        'eng-GB',
+                    ),
+                ),
+                array(
+                    new SortClause\Field('test-type', 'integer', Query::SORT_ASC),
+                    new SortClause\Field('test-type', 'integer2', Query::SORT_DESC),
+                ),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 3, 2, 1, 3
+                 * Content 2, 2, 1, 2
+                 * Content 4, 1, 2, 4
+                 * Content 1, 1, 2, 1
+                 */
+                array(3, 2, 4, 1),
+            ),
+            2 => array(
+                array(
+                    1 => array(null, 2, null, 'ger-DE'),
+                    2 => array(3, null, null, 'eng-GB'),
+                    3 => array(4, null, null, 'eng-GB'),
+                    4 => array(null, 1, null, 'ger-DE'),
+                ),
+                array(
+                    'languages' => array(
+                        'eng-GB',
+                    ),
+                ),
+                array(
+                    new SortClause\Field('test-type', 'integer', Query::SORT_DESC),
+                ),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 3, 4, -
+                 * Content 2, 3, -
+                 */
+                array(3, 2),
+            ),
+            3 => array(
+                array(
+                    1 => array(null, 2, null, 'ger-DE'),
+                    2 => array(3, null, null, 'eng-GB'),
+                    3 => array(4, null, null, 'eng-GB'),
+                    4 => array(null, 1, null, 'ger-DE'),
+                ),
+                array(
+                    'languages' => array(
+                        'ger-DE',
+                    ),
+                ),
+                array(
+                    new SortClause\Field('test-type', 'integer', Query::SORT_DESC),
+                ),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 1, -, 2
+                 * Content 4, -, 1
+                 */
+                array(1, 4),
+            ),
+            4 => array(
+                array(
+                    1 => array(null, 2, null, 'ger-DE'),
+                    2 => array(3, null, null, 'eng-GB'),
+                    3 => array(4, null, null, 'eng-GB'),
+                    4 => array(null, 1, null, 'ger-DE'),
+                ),
+                array(
+                    'languages' => array(
+                        'eng-GB',
+                        'ger-DE',
+                    ),
+                ),
+                array(
+                    new SortClause\Field('test-type', 'integer', Query::SORT_DESC),
+                ),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 3, 4, -
+                 * Content 2, 3, -
+                 * Content 1, -, 2
+                 * Content 4, -, 1
+                 */
+                array(3, 2, 1, 4),
+            ),
+            5 => array(
+                array(
+                    1 => array(null, 2, null, 'ger-DE'),
+                    2 => array(3, null, null, 'eng-GB'),
+                    3 => array(4, null, null, 'eng-GB'),
+                    4 => array(null, 1, null, 'ger-DE'),
+                ),
+                array(
+                    'languages' => array(
+                        'ger-DE',
+                        'eng-GB',
+                    ),
+                ),
+                array(
+                    new SortClause\Field('test-type', 'integer', Query::SORT_DESC),
+                ),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 3, 4, -
+                 * Content 2, 3, -
+                 * Content 1, -, 2
+                 * Content 4, -, 1
+                 */
+                array(3, 2, 1, 4),
+            ),
+            6 => array(
+                array(
+                    1 => array(null, 2, null, 'ger-DE'),
+                    2 => array(3, 4, null, 'eng-GB'),
+                    3 => array(4, 3, null, 'eng-GB'),
+                    4 => array(null, 1, null, 'ger-DE'),
+                ),
+                array(
+                    'languages' => array(
+                        'eng-GB',
+                        'ger-DE',
+                    ),
+                ),
+                array(
+                    new SortClause\Field('test-type', 'integer', Query::SORT_DESC),
+                ),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 3, 4, 3
+                 * Content 2, 3, 4
+                 * Content 1, -, 2
+                 * Content 4, -, 1
+                 */
+                array(3, 2, 1, 4),
+            ),
+            7 => array(
+                array(
+                    1 => array(null, 2, null, 'ger-DE'),
+                    2 => array(3, 4, null, 'eng-GB'),
+                    3 => array(4, 3, null, 'eng-GB'),
+                    4 => array(null, 1, null, 'ger-DE'),
+                ),
+                array(
+                    'languages' => array(
+                        'ger-DE',
+                        'eng-GB',
+                    ),
+                ),
+                array(
+                    new SortClause\Field('test-type', 'integer', Query::SORT_DESC),
+                ),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 2, 3, 4
+                 * Content 3, 4, 3
+                 * Content 1, -, 2
+                 * Content 4, -, 1
+                 */
+                array(2, 3, 1, 4),
+            ),
+            8 => array(
+                array(
+                    1 => array(null, 1, null, 'ger-DE', true),
+                    2 => array(4, null, null, 'eng-GB', true),
+                    3 => array(3, null, null, 'eng-GB', false),
+                    4 => array(null, 2, null, 'ger-DE', false),
+                ),
+                array(
+                    'languages' => array(
+                        'eng-GB',
+                    ),
+                ),
+                array(
                     new SortClause\Field('test-type', 'integer', Query::SORT_ASC),
                 ),
-            )
-        );
-
-        $repository = $this->getRepository();
-        $searchService = $repository->getSearchService();
-        $searchService->findContent($query);
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     */
-    public function testSearchWithFieldSortThrowsInvalidArgumentExceptionNonTranslatableField()
-    {
-        $contentType = $this->createTestContentType();
-        $this->createMultilingualContent($contentType, 1, 2, 3, 'eng-GB');
-
-        $query = new Query(
-            array(
-                'query' => new Criterion\ContentTypeId($contentType->id),
-                'sortClauses' => array(
-                    // The main language can change, so no language code allowed on non-translatable field whatsoever
-                    new SortClause\Field('test-type', 'integer2', Query::SORT_ASC, 'eng-GB'),
-                ),
-            )
-        );
-
-        $repository = $this->getRepository();
-        $searchService = $repository->getSearchService();
-        $searchService->findContent($query);
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     */
-    public function testMultilingualFieldSortWithNonTranslatableField()
-    {
-        $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacySolr) {
-            $this->markTestIncomplete("Multicore Solr search engine can't target language with Field sort clause");
-        }
-
-        $contentType = $this->createTestContentType();
-
-        // Create a draft to account for behaviour with ContentType in different states
-        $repository = $this->getRepository();
-        $contentTypeService = $repository->getContentTypeService();
-        $contentTypeService->createContentTypeDraft($contentType);
-
-        $contentIdList = array();
-        $contentIdList[1] = $this->createMultilingualContent($contentType, 1, 2, 1, 'ger-DE')->id;
-        $contentIdList[2] = $this->createMultilingualContent($contentType, 2, 4, 3, 'ger-DE')->id;
-        $contentIdList[3] = $this->createMultilingualContent($contentType, 2, 3, 4, 'ger-DE')->id;
-        $contentIdList[4] = $this->createMultilingualContent($contentType, 1, 1, 2, 'ger-DE')->id;
-
-        $query = new Query(
-            array(
-                'query' => new Criterion\ContentTypeId($contentType->id),
-                'sortClauses' => array(
-                    new SortClause\Field('test-type', 'integer', Query::SORT_DESC, 'eng-GB'),
-                    new SortClause\Field('test-type', 'integer2', Query::SORT_ASC),
-                ),
-            )
-        );
-
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findContent($query);
-
-        $this->assertEquals(4, $result->totalCount);
-
-        /*
-         * Expected order, Value eng-GB, Value non-translatable
-         *
-         * Content 2, 2, 3
-         * Content 3, 2, 4
-         * Content 1, 1, 1
-         * Content 4, 1, 2
-         */
-
-        $this->assertEquals(
-            array(
-                $contentIdList[2],
-                $contentIdList[3],
-                $contentIdList[1],
-                $contentIdList[4],
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 1, -, 1
+                 * Content 3, 3, -
+                 * Content 2, 4, -
+                 */
+                array(1, 3, 2),
             ),
-            $this->mapResultContentIds($result)
-        );
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     */
-    public function testMultilingualFieldSortWithDefaultLanguage()
-    {
-        $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacySolr) {
-            $this->markTestIncomplete("Multicore Solr search engine can't target language with Field sort clause");
-        }
-
-        $contentType = $this->createTestContentType();
-
-        // Create a draft to account for behaviour with ContentType in different states
-        $repository = $this->getRepository();
-        $contentTypeService = $repository->getContentTypeService();
-        $contentTypeService->createContentTypeDraft($contentType);
-
-        $contentIdList = array();
-        $contentIdList[1] = $this->createMultilingualContent($contentType, 1, 2, 1, 'ger-DE')->id;
-        $contentIdList[2] = $this->createMultilingualContent($contentType, 2, 4, 3, 'ger-DE')->id;
-        $contentIdList[3] = $this->createMultilingualContent($contentType, 2, 3, 4, 'ger-DE')->id;
-        $contentIdList[4] = $this->createMultilingualContent($contentType, 1, 1, 2, 'ger-DE')->id;
-
-        $query = new Query(
-            array(
-                'query' => new Criterion\ContentTypeId($contentType->id),
-                'sortClauses' => array(
-                    new SortClause\Field('test-type', 'integer', Query::SORT_ASC, 'eng-GB'),
-                    new SortClause\Field('test-type', 'integer2', Query::SORT_DESC),
+            9 => array(
+                array(
+                    1 => array(null, 1, null, 'ger-DE', true),
+                    2 => array(4, null, null, 'eng-GB', true),
+                    3 => array(3, null, null, 'eng-GB', false),
+                    4 => array(null, 2, null, 'ger-DE', false),
                 ),
-            )
-        );
-
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findContent($query);
-
-        $this->assertEquals(4, $result->totalCount);
-
-        /*
-         * Expected order, Value eng-GB, Value non-translatable
-         *
-         * Content 4, 1, 2
-         * Content 1, 1, 1
-         * Content 3, 2, 4
-         * Content 2, 2, 3
-         */
-
-        $this->assertEquals(
-            array(
-                $contentIdList[4],
-                $contentIdList[1],
-                $contentIdList[3],
-                $contentIdList[2],
+                array(
+                    'languages' => array(
+                        'ger-DE',
+                    ),
+                ),
+                array(
+                    new SortClause\Field('test-type', 'integer', Query::SORT_DESC),
+                ),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 2, 4, -
+                 * Content 4, -, 2
+                 * Content 1, -, 1
+                 */
+                array(2, 4, 1),
             ),
-            $this->mapResultContentIds($result)
-        );
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     */
-    public function testMultilingualFieldSortWithDefaultLanguageVariant2()
-    {
-        $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacySolr) {
-            $this->markTestIncomplete("Multicore Solr search engine can't target language with Field sort clause");
-        }
-
-        $contentType = $this->createTestContentType();
-
-        // Create a draft to account for behaviour with ContentType in different states
-        $repository = $this->getRepository();
-        $contentTypeService = $repository->getContentTypeService();
-        $contentTypeService->createContentTypeDraft($contentType);
-
-        $contentIdList = array();
-        $contentIdList[1] = $this->createMultilingualContent($contentType, 1, 2, 1, 'eng-GB')->id;
-        $contentIdList[2] = $this->createMultilingualContent($contentType, 2, 4, 3, 'eng-GB')->id;
-        $contentIdList[3] = $this->createMultilingualContent($contentType, 2, 3, 4, 'ger-DE')->id;
-        $contentIdList[4] = $this->createMultilingualContent($contentType, 1, 1, 2, 'ger-DE')->id;
-
-        $query = new Query(
-            array(
-                'query' => new Criterion\ContentTypeId($contentType->id),
-                'sortClauses' => array(
-                    new SortClause\Field('test-type', 'integer2', Query::SORT_DESC),
-                    new SortClause\Field('test-type', 'integer', Query::SORT_DESC, 'ger-DE'),
+            10 => array(
+                array(
+                    1 => array(null, 1, null, 'ger-DE', true),
+                    2 => array(4, null, null, 'eng-GB', true),
+                    3 => array(3, null, null, 'eng-GB', false),
+                    4 => array(null, 2, null, 'ger-DE', false),
                 ),
-            )
-        );
-
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findContent($query);
-
-        $this->assertEquals(4, $result->totalCount);
-
-        /*
-         * Expected order, Value non-translatable, Value ger-DE
-         *
-         * Content 3, 4, 3
-         * Content 2, 3, 4
-         * Content 4, 2, 1
-         * Content 1, 1, 2
-         */
-
-        $this->assertEquals(
-            array(
-                $contentIdList[3],
-                $contentIdList[2],
-                $contentIdList[4],
-                $contentIdList[1],
+                array(
+                    'languages' => array(
+                        'eng-GB',
+                    ),
+                    'useAlwaysAvailable' => false,
+                ),
+                array(
+                    new SortClause\Field('test-type', 'integer', Query::SORT_ASC),
+                ),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 3, 3, -
+                 * Content 2, 4, -
+                 */
+                array(3, 2),
             ),
-            $this->mapResultContentIds($result)
-        );
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     */
-    public function testMultilingualFieldSortUnusedLanguageDoesNotFilterResultSet()
-    {
-        $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacySolr) {
-            $this->markTestIncomplete("Multicore Solr search engine can't target language with Field sort clause");
-        }
-
-        $contentType = $this->createTestContentType();
-
-        // Create a draft to account for behaviour with ContentType in different states
-        $repository = $this->getRepository();
-        $contentTypeService = $repository->getContentTypeService();
-        $contentTypeService->createContentTypeDraft($contentType);
-
-        $contentIdList = array();
-        $contentIdList[1] = $this->createMultilingualContent($contentType, 1, 2)->id;
-        $contentIdList[2] = $this->createMultilingualContent($contentType, 2, 4)->id;
-        $contentIdList[3] = $this->createMultilingualContent($contentType, 2, 3)->id;
-        $contentIdList[4] = $this->createMultilingualContent($contentType, 1, 1)->id;
-
-        $query = new Query(
-            array(
-                'query' => new Criterion\ContentTypeId($contentType->id),
-                'sortClauses' => array(
-                    // "test-type" Content instance do not exist in "eng-US"
-                    new SortClause\Field('test-type', 'integer', Query::SORT_ASC, 'eng-US'),
+            11 => array(
+                array(
+                    1 => array(null, 1, null, 'ger-DE', true),
+                    2 => array(4, null, null, 'eng-GB', true),
+                    3 => array(3, null, null, 'eng-GB', false),
+                    4 => array(null, 2, null, 'ger-DE', false),
                 ),
-            )
-        );
-
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findContent($query);
-
-        $this->assertEquals(4, $result->totalCount);
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testMultilingualFieldSortUnusedLanguageDoesNotFilterResultSet
-     */
-    public function testMultilingualFieldSortUnusedLanguageDoesNotChangeSort()
-    {
-        $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacySolr) {
-            $this->markTestIncomplete("Multicore Solr search engine can't target language with Field sort clause");
-        }
-
-        $contentType = $this->createTestContentType();
-
-        // Create a draft to account for behaviour with ContentType in different states
-        $repository = $this->getRepository();
-        $contentTypeService = $repository->getContentTypeService();
-        $contentTypeService->createContentTypeDraft($contentType);
-
-        $contentIdList = array();
-        $contentIdList[1] = $this->createMultilingualContent($contentType, 1, 2, 1, 'eng-GB')->id;
-        $contentIdList[2] = $this->createMultilingualContent($contentType, 2, 4, 3, 'eng-GB')->id;
-        $contentIdList[3] = $this->createMultilingualContent($contentType, 2, 3, 4, 'ger-DE')->id;
-        $contentIdList[4] = $this->createMultilingualContent($contentType, 1, 1, 2, 'ger-DE')->id;
-
-        $query = new Query(
-            array(
-                'query' => new Criterion\ContentTypeId($contentType->id),
-                'sortClauses' => array(
-                    // "test-type" Content instance do not exist in "eng-US"
-                    new SortClause\Field('test-type', 'integer', Query::SORT_DESC, 'eng-US'),
-                    new SortClause\Field('test-type', 'integer', Query::SORT_ASC, 'eng-GB'),
-                    new SortClause\Field('test-type', 'integer2', Query::SORT_ASC),
+                array(
+                    'languages' => array(
+                        'ger-DE',
+                    ),
+                    'useAlwaysAvailable' => false,
                 ),
-            )
-        );
-
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findContent($query);
-
-        $this->assertEquals(4, $result->totalCount);
-
-        /*
-         * Expected order, Value eng-GB, Value non-translatable
-         *
-         * Content 1, 1, 1
-         * Content 4, 1, 2
-         * Content 2, 2, 3
-         * Content 3, 2, 4
-         */
-
-        $this->assertEquals(
-            array(
-                $contentIdList[1],
-                $contentIdList[4],
-                $contentIdList[2],
-                $contentIdList[3],
+                array(
+                    new SortClause\Field('test-type', 'integer', Query::SORT_DESC),
+                ),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 4, -, 2
+                 * Content 1, -, 1
+                 */
+                array(4, 1),
             ),
-            $this->mapResultContentIds($result)
         );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @group rrr
+     * @dataProvider providerForTestMultilingualFieldSort
+     *
+     * @param array $contentDataList
+     * @param array $languageSettings
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     * @param array $expected
+     */
+    public function testMultilingualFieldSortContent(
+        array $contentDataList,
+        $languageSettings,
+        array $sortClauses,
+        $expected
+    ) {
+        $this->assertMultilingualFieldSort(
+            $contentDataList,
+            $languageSettings,
+            $sortClauses,
+            $expected
+        );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @group rrr
+     * @dataProvider providerForTestMultilingualFieldSort
+     *
+     * @param array $contentDataList
+     * @param array $languageSettings
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     * @param array $expected
+     */
+    public function testMultilingualFieldSortLocation(
+        array $contentDataList,
+        $languageSettings,
+        array $sortClauses,
+        $expected
+    ) {
+        $this->assertMultilingualFieldSort(
+            $contentDataList,
+            $languageSettings,
+            $sortClauses,
+            $expected,
+            false
+        );
+    }
+
+    /**
+     * @param array $contentDataList
+     * @param array $languageSettings
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     * @param array $expected
+     * @param bool $contentSearch
+     */
+    protected function assertMultilingualFieldSort(
+        array $contentDataList,
+        $languageSettings,
+        array $sortClauses,
+        $expected,
+        $contentSearch = true
+    ) {
+        $this->checkPrioritizedLanguagesSupport();
+        $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft($contentType);
+
+        $defaults = array(null, null, null, 'eng-GB', false);
+        $contentIdList = array();
+        foreach ($contentDataList as $key => $contentData) {
+            $contentData = $contentData + $defaults;
+            list(
+                $fieldValue11,
+                $fieldValue12,
+                $fieldValue2,
+                $mainLanguageCode,
+                $alwaysAvailable
+            ) = $contentData;
+
+            $contentIdList[$key] = $this->createMultilingualContent(
+                $contentType,
+                $fieldValue11,
+                $fieldValue12,
+                $fieldValue2,
+                $mainLanguageCode,
+                $alwaysAvailable
+            )->id;
+        }
+
+        // "article" type Content is not matched, this ensures that non-matched
+        // field does not affect sort
+        $dummySortClause = new SortClause\Field('article', 'title', Query::SORT_ASC);
+        array_unshift($sortClauses, $dummySortClause);
+        array_push($sortClauses, $dummySortClause);
+
+        $searchService = $repository->getSearchService();
+        if ($contentSearch) {
+            $query = new Query(
+                array(
+                    'query' => new Criterion\ContentTypeId($contentType->id),
+                    'sortClauses' => $sortClauses,
+                )
+            );
+            $result = $searchService->findContent($query, $languageSettings);
+        } else {
+            $query = new LocationQuery(
+                array(
+                    'query' => new Criterion\ContentTypeId($contentType->id),
+                    'sortClauses' => $sortClauses,
+                )
+            );
+            $result = $searchService->findLocations($query, $languageSettings);
+        }
+
+        $this->assertEquals(count($expected), $result->totalCount);
+
+        $expectedIdList = array();
+        foreach ($expected as $contentNumber) {
+            $expectedIdList[] = $contentIdList[$contentNumber];
+        }
+
+        $this->assertEquals($expectedIdList, $this->mapResultContentIds($result));
+    }
+
+    public function providerForTestMultilingualFieldFilter()
+    {
+        return array(
+            0 => array(
+                $fixture = array(
+                    1 => array(null, 1, null, 'ger-DE', true),
+                    2 => array(4, null, null, 'eng-GB', true),
+                    3 => array(3, null, null, 'eng-GB', false),
+                    4 => array(null, 2, null, 'ger-DE', false),
+                    5 => array(5, null, null, 'eng-GB', true),
+                ),
+                $languageSettings = array(
+                    'languages' => array(
+                        'ger-DE',
+                    ),
+                ),
+                new Criterion\Field('integer', Criterion\Operator::LT, 5),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 2, 4, -
+                 * Content 4, -, 2
+                 * Content 1, -, 1
+                 */
+                array(2, 4, 1),
+            ),
+            1 => array(
+                $fixture,
+                array(
+                    'languages' => array(
+                        'ger-DE',
+                    ),
+                    'useAlwaysAvailable' => false,
+                ),
+                new Criterion\Field('integer', Criterion\Operator::LT, 2),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 1, -, 1
+                 */
+                array(1),
+            ),
+            2 => array(
+                $fixture,
+                array(
+                    'languages' => array(
+                        'eng-GB',
+                    ),
+                ),
+                new Criterion\Field('integer', Criterion\Operator::LTE, 4),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 5, 5, -
+                 * Content 2, 4, -
+                 * Content 3, 3, -
+                 * Content 1, -, 1
+                 */
+                array(2, 3, 1),
+            ),
+            3 => array(
+                $fixture,
+                array(
+                    'languages' => array(
+                        'eng-GB',
+                    ),
+                    'useAlwaysAvailable' => false,
+                ),
+                new Criterion\Field('integer', Criterion\Operator::LTE, 4),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 2, 4, -
+                 * Content 3, 3, -
+                 */
+                array(2, 3),
+            ),
+            4 => array(
+                $fixture,
+                $languageSettings,
+                new Criterion\Field('integer', Criterion\Operator::LTE, 4),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 2, 4, -
+                 * Content 4, -, 2
+                 * Content 1, -, 1
+                 */
+                array(2, 4, 1),
+            ),
+            5 => array(
+                $fixture,
+                $languageSettings,
+                new Criterion\Field('integer', Criterion\Operator::GT, 1),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 5, 5, -
+                 * Content 2, 4, -
+                 * Content 4, -, 2
+                 */
+                array(5, 2, 4),
+            ),
+            6 => array(
+                $fixture,
+                $languageSettings,
+                new Criterion\Field('integer', Criterion\Operator::GTE, 2),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 5, 5, -
+                 * Content 2, 4, -
+                 * Content 4, -, 2
+                 */
+                array(5, 2, 4),
+            ),
+            7 => array(
+                $fixture,
+                $languageSettings,
+                new Criterion\Field('integer', Criterion\Operator::BETWEEN, array(2, 4)),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 2, 4, -
+                 * Content 4, -, 2
+                 */
+                array(2, 4),
+            ),
+            8 => array(
+                $fixture,
+                $languageSettings,
+                new Criterion\Field('integer', Criterion\Operator::BETWEEN, array(4, 2)),
+                array(),
+            ),
+            9 => array(
+                $fixture,
+                $languageSettings,
+                new Criterion\Field('integer', Criterion\Operator::EQ, 4),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 4, -, 2
+                 */
+                array(2),
+            ),
+            10 => array(
+                $fixture,
+                $languageSettings,
+                new Criterion\Field('integer', Criterion\Operator::EQ, 2),
+                /**
+                 * Expected order, Value eng-GB, Value ger-DE.
+                 *
+                 * Content 2, 4, -
+                 */
+                array(4),
+            ),
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @group ttt
+     * @dataProvider providerForTestMultilingualFieldFilter
+     *
+     * @param array $contentDataList
+     * @param array $languageSettings
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param array $expected
+     */
+    public function testMultilingualFieldFilterContent(
+        array $contentDataList,
+        $languageSettings,
+        Criterion $criterion,
+        $expected
+    ) {
+        $this->assertMultilingualFieldFilter(
+            $contentDataList,
+            $languageSettings,
+            $criterion,
+            $expected
+        );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @group ttt
+     * @dataProvider providerForTestMultilingualFieldFilter
+     *
+     * @param array $contentDataList
+     * @param array $languageSettings
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param array $expected
+     */
+    public function testMultilingualFieldFilterLocation(
+        array $contentDataList,
+        $languageSettings,
+        Criterion $criterion,
+        $expected
+    ) {
+        $this->assertMultilingualFieldFilter(
+            $contentDataList,
+            $languageSettings,
+            $criterion,
+            $expected,
+            false
+        );
+    }
+
+    /**
+     * @param array $contentDataList
+     * @param array $languageSettings
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param array $expected
+     * @param bool $contentSearch
+     */
+    protected function assertMultilingualFieldFilter(
+        array $contentDataList,
+        $languageSettings,
+        Criterion $criterion,
+        $expected,
+        $contentSearch = true
+    ) {
+        $this->checkPrioritizedLanguagesSupport();
+        $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft($contentType);
+
+        $defaults = array(null, null, null, 'eng-GB', false);
+        $contentIdList = array();
+        foreach ($contentDataList as $key => $contentData) {
+            $contentData = $contentData + $defaults;
+            list(
+                $fieldValue11,
+                $fieldValue12,
+                $fieldValue2,
+                $mainLanguageCode,
+                $alwaysAvailable
+            ) = $contentData;
+
+            $contentIdList[$key] = $this->createMultilingualContent(
+                $contentType,
+                $fieldValue11,
+                $fieldValue12,
+                $fieldValue2,
+                $mainLanguageCode,
+                $alwaysAvailable
+            )->id;
+        }
+
+        $sortClause = new SortClause\Field('test-type', 'integer', Query::SORT_DESC);
+        $searchService = $repository->getSearchService();
+        if ($contentSearch) {
+            $query = new Query(
+                array(
+                    'query' => new Criterion\LogicalAnd(
+                        array(
+                            new Criterion\ContentTypeId($contentType->id),
+                            $criterion,
+                        )
+                    ),
+                    'sortClauses' => array($sortClause),
+                )
+            );
+            $result = $searchService->findContent($query, $languageSettings);
+        } else {
+            $query = new LocationQuery(
+                array(
+                    'query' => new Criterion\LogicalAnd(
+                        array(
+                            new Criterion\ContentTypeId($contentType->id),
+                            $criterion,
+                        )
+                    ),
+                    'sortClauses' => array($sortClause),
+                )
+            );
+            $result = $searchService->findLocations($query, $languageSettings);
+        }
+
+        $this->assertEquals(count($expected), $result->totalCount);
+
+        $expectedIdList = array();
+        foreach ($expected as $contentNumber) {
+            $expectedIdList[] = $contentIdList[$contentNumber];
+        }
+
+        $this->assertEquals($expectedIdList, $this->mapResultContentIds($result));
     }
 
     /**
@@ -2089,6 +2317,10 @@ class SearchServiceTest extends BaseTest
     {
         return array_map(
             function (SearchHit $searchHit) {
+                if ($searchHit->valueObject instanceof Location) {
+                    return $searchHit->valueObject->contentInfo->id;
+                }
+
                 return $searchHit->valueObject->id;
             },
             $result->searchHits
@@ -2492,7 +2724,7 @@ class SearchServiceTest extends BaseTest
             );
         }
 
-        $sortClause = new SortClause\Field('folder', 'short_name', Query::SORT_ASC, 'eng-US');
+        $sortClause = new SortClause\Field('folder', 'short_name', Query::SORT_ASC);
         $sortClause->setCustomField('folder', 'short_name', 'folder_name_value_s');
 
         $query = new Query(
@@ -3545,330 +3777,6 @@ class SearchServiceTest extends BaseTest
         );
     }
 
-    /**
-     * Test for the findContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     */
-    public function testFieldLt()
-    {
-        $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacySolr) {
-            $this->markTestIncomplete("Multicore Solr search engine can't target language with Field sort clause");
-        }
-
-        $contentType = $this->createTestContentType();
-
-        // Create a draft to account for behaviour with ContentType in different states
-        $repository = $this->getRepository();
-        $contentTypeService = $repository->getContentTypeService();
-        $contentTypeService->createContentTypeDraft($contentType);
-
-        $contentIdList = array();
-        $contentIdList[1] = $this->createMultilingualContent($contentType, 1, 4)->id;
-        $contentIdList[2] = $this->createMultilingualContent($contentType, 2, 3)->id;
-        $contentIdList[3] = $this->createMultilingualContent($contentType, 3, 2)->id;
-        $contentIdList[4] = $this->createMultilingualContent($contentType, 4, 1)->id;
-
-        $query = new Query(
-            array(
-                'filter' => new Criterion\LogicalAnd(
-                    array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\Field(
-                            'integer',
-                            Criterion\Operator::LT,
-                            2
-                        ),
-                    )
-                ),
-                'sortClauses' => array(
-                    new SortClause\Field('test-type', 'integer', Query::SORT_ASC, 'eng-GB'),
-                ),
-            )
-        );
-
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findContent($query);
-
-        $this->assertEquals(2, $result->totalCount);
-
-        /*
-         * Expected order, Value eng-GB, Value ger-DE
-         *
-         * Content 1, 1, 4
-         * Content 4, 4, 1
-         */
-
-        $this->assertEquals(
-            array(
-                $contentIdList[1],
-                $contentIdList[4],
-            ),
-            $this->mapResultContentIds($result)
-        );
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     */
-    public function testFieldLte()
-    {
-        $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacySolr) {
-            $this->markTestIncomplete("Multicore Solr search engine can't target language with Field sort clause");
-        }
-
-        $contentType = $this->createTestContentType();
-
-        // Create a draft to account for behaviour with ContentType in different states
-        $repository = $this->getRepository();
-        $contentTypeService = $repository->getContentTypeService();
-        $contentTypeService->createContentTypeDraft($contentType);
-
-        $contentIdList = array();
-        $contentIdList[1] = $this->createMultilingualContent($contentType, 4, 4)->id;
-        $contentIdList[2] = $this->createMultilingualContent($contentType, 2, 3)->id;
-        $contentIdList[3] = $this->createMultilingualContent($contentType, 3, 4)->id;
-        $contentIdList[4] = $this->createMultilingualContent($contentType, 4, 1)->id;
-
-        $query = new Query(
-            array(
-                'filter' => new Criterion\LogicalAnd(
-                    array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\Field(
-                            'integer',
-                            Criterion\Operator::LTE,
-                            2
-                        ),
-                    )
-                ),
-                'sortClauses' => array(
-                    new SortClause\Field('test-type', 'integer', Query::SORT_ASC, 'eng-GB'),
-                ),
-            )
-        );
-
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findContent($query);
-
-        $this->assertEquals(2, $result->totalCount);
-
-        /*
-         * Expected order, Value eng-GB, Value ger-DE
-         *
-         * Content 2, 2, 3
-         * Content 4, 4, 1
-         */
-
-        $this->assertEquals(
-            array(
-                $contentIdList[2],
-                $contentIdList[4],
-            ),
-            $this->mapResultContentIds($result)
-        );
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     */
-    public function testFieldGt()
-    {
-        $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacySolr) {
-            $this->markTestIncomplete("Multicore Solr search engine can't target language with Field sort clause");
-        }
-
-        $contentType = $this->createTestContentType();
-
-        // Create a draft to account for behaviour with ContentType in different states
-        $repository = $this->getRepository();
-        $contentTypeService = $repository->getContentTypeService();
-        $contentTypeService->createContentTypeDraft($contentType);
-
-        $contentIdList = array();
-        $contentIdList[1] = $this->createMultilingualContent($contentType, 1, 3)->id;
-        $contentIdList[2] = $this->createMultilingualContent($contentType, 2, 4)->id;
-        $contentIdList[3] = $this->createMultilingualContent($contentType, 4, 2)->id;
-        $contentIdList[4] = $this->createMultilingualContent($contentType, 3, 1)->id;
-
-        $query = new Query(
-            array(
-                'filter' => new Criterion\LogicalAnd(
-                    array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\Field(
-                            'integer',
-                            Criterion\Operator::GT,
-                            3
-                        ),
-                    )
-                ),
-                'sortClauses' => array(
-                    new SortClause\Field('test-type', 'integer', Query::SORT_ASC, 'eng-GB'),
-                ),
-            )
-        );
-
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findContent($query);
-
-        $this->assertEquals(2, $result->totalCount);
-
-        /*
-         * Expected order, Value eng-GB, Value ger-DE
-         *
-         * Content 2, 2, 4
-         * Content 3, 4, 2
-         */
-
-        $this->assertEquals(
-            array(
-                $contentIdList[2],
-                $contentIdList[3],
-            ),
-            $this->mapResultContentIds($result)
-        );
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     */
-    public function testFieldGte()
-    {
-        $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacySolr) {
-            $this->markTestIncomplete("Multicore Solr search engine can't target language with Field sort clause");
-        }
-
-        $contentType = $this->createTestContentType();
-
-        // Create a draft to account for behaviour with ContentType in different states
-        $repository = $this->getRepository();
-        $contentTypeService = $repository->getContentTypeService();
-        $contentTypeService->createContentTypeDraft($contentType);
-
-        $contentIdList = array();
-        $contentIdList[1] = $this->createMultilingualContent($contentType, 1, 3)->id;
-        $contentIdList[2] = $this->createMultilingualContent($contentType, 2, 4)->id;
-        $contentIdList[3] = $this->createMultilingualContent($contentType, 1, 2)->id;
-        $contentIdList[4] = $this->createMultilingualContent($contentType, 3, 1)->id;
-
-        $query = new Query(
-            array(
-                'filter' => new Criterion\LogicalAnd(
-                    array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\Field(
-                            'integer',
-                            Criterion\Operator::GTE,
-                            3
-                        ),
-                    )
-                ),
-                'sortClauses' => array(
-                    new SortClause\Field('test-type', 'integer', Query::SORT_ASC, 'eng-GB'),
-                ),
-            )
-        );
-
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findContent($query);
-
-        $this->assertEquals(3, $result->totalCount);
-
-        /*
-         * Expected order, Value eng-GB, Value ger-DE
-         *
-         * Content 1, 1, 3
-         * Content 2, 2, 4
-         * Content 4, 3, 1
-         */
-
-        $this->assertEquals(
-            array(
-                $contentIdList[1],
-                $contentIdList[2],
-                $contentIdList[4],
-            ),
-            $this->mapResultContentIds($result)
-        );
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     */
-    public function testFieldBetween()
-    {
-        $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacySolr) {
-            $this->markTestIncomplete("Multicore Solr search engine can't target language with Field sort clause");
-        }
-
-        $contentType = $this->createTestContentType();
-
-        // Create a draft to account for behaviour with ContentType in different states
-        $repository = $this->getRepository();
-        $contentTypeService = $repository->getContentTypeService();
-        $contentTypeService->createContentTypeDraft($contentType);
-
-        $contentIdList = array();
-        $contentIdList[1] = $this->createMultilingualContent($contentType, 1, 4)->id;
-        $contentIdList[2] = $this->createMultilingualContent($contentType, 2, 3)->id;
-        $contentIdList[3] = $this->createMultilingualContent($contentType, 3, 4)->id;
-        $contentIdList[4] = $this->createMultilingualContent($contentType, 4, 3)->id;
-
-        $query = new Query(
-            array(
-                'filter' => new Criterion\LogicalAnd(
-                    array(
-                        new Criterion\ContentTypeId($contentType->id),
-                        new Criterion\Field(
-                            'integer',
-                            Criterion\Operator::BETWEEN,
-                            array(2, 3)
-                        ),
-                    )
-                ),
-                'sortClauses' => array(
-                    new SortClause\Field('test-type', 'integer', Query::SORT_DESC, 'eng-GB'),
-                ),
-            )
-        );
-
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findContent($query);
-
-        $this->assertEquals(3, $result->totalCount);
-
-        /*
-         * Expected order, Value eng-GB, Value ger-DE
-         *
-         * Content 2, 2, 3
-         * Content 3, 3, 4
-         * Content 4, 1, 3
-         */
-
-        $this->assertEquals(
-            array(
-                $contentIdList[4],
-                $contentIdList[3],
-                $contentIdList[2],
-            ),
-            $this->mapResultContentIds($result)
-        );
-    }
-
     protected function createContentForTestUserMetadataGroupHorizontal()
     {
         $repository = $this->getRepository();
@@ -4360,6 +4268,16 @@ class SearchServiceTest extends BaseTest
         }
 
         foreach ($result->searchHits as $hit) {
+            $property = new \ReflectionProperty(get_class($hit), 'index');
+            $property->setAccessible(true);
+            $property->setValue($hit, null);
+
+            $property = new \ReflectionProperty(get_class($hit), 'matchedTranslation');
+            $property->setAccessible(true);
+            $property->setValue($hit, null);
+        }
+
+        foreach ($fixture->searchHits as $hit) {
             $property = new \ReflectionProperty(get_class($hit), 'index');
             $property->setAccessible(true);
             $property->setValue($hit, null);
