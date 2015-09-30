@@ -103,8 +103,7 @@ class MapLocationDistance extends Field
         SortClause $sortClause,
         $number,
         array $languageSettings
-    )
-    {
+    ) {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $fieldTarget */
         $fieldTarget = $sortClause->targetData;
         $fieldMap = $this->contentTypeHandler->getSearchableFieldMap();

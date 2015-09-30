@@ -115,8 +115,7 @@ abstract class FieldBase extends CriterionHandler
                 $factorTerm = ' << ' . $shift;
                 $addToLeftSide .= $factorTerm;
                 $addToRightSide .= $factorTerm;
-            }
-            else if ($multiplier < $languageId) {
+            } elseif ($multiplier < $languageId) {
                 $factor = $languageId / $multiplier;
                 for ($shift = 0; $factor > 1; $factor = $factor / 2, $shift++);
                 $factorTerm = ' >> ' . $shift;
