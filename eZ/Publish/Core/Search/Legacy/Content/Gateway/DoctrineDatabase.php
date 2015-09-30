@@ -18,6 +18,7 @@ use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 
 /**
  * Content locator gateway implementation using the Doctrine database.
@@ -46,20 +47,30 @@ class DoctrineDatabase extends Gateway
     protected $sortClauseConverter;
 
     /**
+     * Language handler.
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
+     */
+    protected $languageHandler;
+
+    /**
      * Construct from handler handler.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $criteriaConverter
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter $sortClauseConverter
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      */
     public function __construct(
         DatabaseHandler $handler,
         CriteriaConverter $criteriaConverter,
-        SortClauseConverter $sortClauseConverter
+        SortClauseConverter $sortClauseConverter,
+        LanguageHandler $languageHandler
     ) {
         $this->handler = $handler;
         $this->criteriaConverter = $criteriaConverter;
         $this->sortClauseConverter = $sortClauseConverter;
+        $this->languageHandler = $languageHandler;
     }
 
     /**
@@ -100,6 +111,27 @@ class DoctrineDatabase extends Gateway
             'count' => $count,
             'rows' => $contentInfoList,
         );
+    }
+
+    /**
+     * Generates a language mask from the given $languageSettings.
+     *
+     * @param array $languageSettings
+     *
+     * @return int
+     */
+    protected function getLanguageMask(array $languageSettings)
+    {
+        $mask = 0;
+        if ($languageSettings['useAlwaysAvailable']) {
+            $mask |= 1;
+        }
+
+        foreach ($languageSettings['languages'] as $languageCode) {
+            $mask |= $this->languageHandler->loadByLanguageCode($languageCode)->id;
+        }
+
+        return $mask;
     }
 
     /**
