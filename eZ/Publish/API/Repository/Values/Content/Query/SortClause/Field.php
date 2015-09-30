@@ -41,14 +41,13 @@ class Field extends SortClause implements CustomFieldInterface
      * @param string $typeIdentifier
      * @param string $fieldIdentifier
      * @param string $sortDirection
-     * @param null|string $languageCode
      */
-    public function __construct($typeIdentifier, $fieldIdentifier, $sortDirection = Query::SORT_ASC, $languageCode = null)
+    public function __construct($typeIdentifier, $fieldIdentifier, $sortDirection = Query::SORT_ASC)
     {
         parent::__construct(
             'field',
             $sortDirection,
-            new FieldTarget($typeIdentifier, $fieldIdentifier, $languageCode)
+            new FieldTarget($typeIdentifier, $fieldIdentifier)
         );
     }
 

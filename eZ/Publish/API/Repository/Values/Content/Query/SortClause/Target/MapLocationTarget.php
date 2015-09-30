@@ -46,30 +46,20 @@ class MapLocationTarget extends Target
     public $fieldIdentifier;
 
     /**
-     * Language code of the targeted Field.
-     *
-     * @var null|string
-     */
-    public $languageCode;
-
-    /**
      * @param float $latitude
      * @param float $longitude
      * @param string $typeIdentifier
      * @param string $fieldIdentifier
-     * @param null|string $languageCode
      */
     public function __construct(
         $latitude,
         $longitude,
         $typeIdentifier,
-        $fieldIdentifier,
-        $languageCode
+        $fieldIdentifier
     ) {
         $this->latitude = $latitude;
         $this->longitude = $longitude;
         $this->typeIdentifier = $typeIdentifier;
         $this->fieldIdentifier = $fieldIdentifier;
-        $this->languageCode = $languageCode;
     }
 }
