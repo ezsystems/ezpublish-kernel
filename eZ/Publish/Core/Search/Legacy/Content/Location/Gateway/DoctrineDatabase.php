@@ -94,7 +94,7 @@ class DoctrineDatabase extends Gateway
         array $languageFilter = array(),
         $doCount = true
     ) {
-        $count = $doCount ? $this->getTotalCount($criterion) : null;
+        $count = $doCount ? $this->getTotalCount($criterion, $languageFilter) : null;
 
         if (!$doCount && $limit === 0) {
             throw new \RuntimeException('Invalid query, can not disable count and request 0 items at the same time');
@@ -129,11 +129,11 @@ class DoctrineDatabase extends Gateway
             );
 
         if ($sortClauses !== null) {
-            $this->sortClauseConverter->applyJoin($selectQuery, $sortClauses);
+            $this->sortClauseConverter->applyJoin($selectQuery, $sortClauses, $languageFilter);
         }
 
         $selectQuery->where(
-            $this->criteriaConverter->convertCriteria($selectQuery, $criterion),
+            $this->criteriaConverter->convertCriteria($selectQuery, $criterion, $languageFilter),
             $selectQuery->expr->eq(
                 'ezcontentobject.status',
                 //ContentInfo::STATUS_PUBLISHED
@@ -169,10 +169,11 @@ class DoctrineDatabase extends Gateway
      * Returns total results count for $criterion and $sortClauses.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param array $languageFilter
      *
      * @return array
      */
-    protected function getTotalCount(Criterion $criterion)
+    protected function getTotalCount(Criterion $criterion, array $languageFilter)
     {
         $query = $this->handler->createSelectQuery();
         $query
@@ -190,7 +191,7 @@ class DoctrineDatabase extends Gateway
             );
 
         $query->where(
-            $this->criteriaConverter->convertCriteria($query, $criterion),
+            $this->criteriaConverter->convertCriteria($query, $criterion, $languageFilter),
             $query->expr->eq(
                 'ezcontentobject.status',
                 //ContentInfo::STATUS_PUBLISHED

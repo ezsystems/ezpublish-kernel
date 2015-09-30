@@ -132,9 +132,14 @@ class Field extends SortClauseHandler
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
+     * @param array $languageSettings
      */
-    public function applyJoin(SelectQuery $query, SortClause $sortClause, $number)
-    {
+    public function applyJoin(
+        SelectQuery $query,
+        SortClause $sortClause,
+        $number,
+        array $languageSettings
+    ) {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $fieldTarget */
         $fieldTarget = $sortClause->targetData;
         $fieldMap = $this->contentTypeHandler->getSearchableFieldMap();
