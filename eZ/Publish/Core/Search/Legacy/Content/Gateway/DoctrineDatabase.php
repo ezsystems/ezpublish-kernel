@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
+use PDO;
 
 /**
  * Content locator gateway implementation using the Doctrine database.
@@ -160,6 +161,24 @@ class DoctrineDatabase extends Gateway
             )
         );
 
+        // If not main-languages query
+        if (!empty($languageFilter['languages'])) {
+            $condition = $query->expr->lAnd(
+                $condition,
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->handler->quoteColumn('language_mask', 'ezcontentobject'),
+                        $query->bindValue(
+                            $this->getLanguageMask($languageFilter),
+                            null,
+                            PDO::PARAM_INT
+                        )
+                    ),
+                    $query->bindValue(0, null, PDO::PARAM_INT)
+                )
+            );
+        }
+
         return $condition;
     }
 
@@ -263,6 +282,6 @@ class DoctrineDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 }

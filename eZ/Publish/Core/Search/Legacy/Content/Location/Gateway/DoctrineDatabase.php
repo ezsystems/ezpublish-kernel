@@ -150,6 +150,23 @@ class DoctrineDatabase extends Gateway
             )
         );
 
+        // If not main-languages query
+        if (!empty($languageFilter['languages'])) {
+            $selectQuery->where(
+                $selectQuery->expr->gt(
+                    $selectQuery->expr->bitAnd(
+                        $this->handler->quoteColumn('language_mask', 'ezcontentobject'),
+                        $selectQuery->bindValue(
+                            $this->getLanguageMask($languageFilter),
+                            null,
+                            PDO::PARAM_INT
+                        )
+                    ),
+                    $selectQuery->bindValue(0, null, PDO::PARAM_INT)
+                )
+            );
+        }
+
         if ($sortClauses !== null) {
             $this->sortClauseConverter->applyOrderBy($selectQuery);
         }
@@ -207,6 +224,23 @@ class DoctrineDatabase extends Gateway
                 $query->bindValue(0, null, PDO::PARAM_INT)
             )
         );
+
+        // If not main-languages query
+        if (!empty($languageFilter['languages'])) {
+            $query->where(
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->handler->quoteColumn('language_mask', 'ezcontentobject'),
+                        $query->bindValue(
+                            $this->getLanguageMask($languageFilter),
+                            null,
+                            PDO::PARAM_INT
+                        )
+                    ),
+                    $query->bindValue(0, null, PDO::PARAM_INT)
+                )
+            );
+        }
 
         $statement = $query->prepare();
         $statement->execute();
