@@ -111,6 +111,14 @@ class Handler implements SearchHandlerInterface
      */
     public function findContent(Query $query, array $languageFilter = array())
     {
+        if (!isset($languageFilter['languages'])) {
+            $languageFilter['languages'] = array();
+        }
+
+        if (!isset($languageFilter['useAlwaysAvailable'])) {
+            $languageFilter['useAlwaysAvailable'] = true;
+        }
+
         $start = microtime(true);
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
@@ -163,6 +171,14 @@ class Handler implements SearchHandlerInterface
      */
     public function findSingle(Criterion $filter, array $languageFilter = array())
     {
+        if (!isset($languageFilter['languages'])) {
+            $languageFilter['languages'] = array();
+        }
+
+        if (!isset($languageFilter['useAlwaysAvailable'])) {
+            $languageFilter['useAlwaysAvailable'] = true;
+        }
+
         $searchQuery = new Query();
         $searchQuery->filter = $filter;
         $searchQuery->query = new Criterion\MatchAll();
@@ -188,6 +204,14 @@ class Handler implements SearchHandlerInterface
      */
     public function findLocations(LocationQuery $query, array $languageFilter = array())
     {
+        if (!isset($languageFilter['languages'])) {
+            $languageFilter['languages'] = array();
+        }
+
+        if (!isset($languageFilter['useAlwaysAvailable'])) {
+            $languageFilter['useAlwaysAvailable'] = true;
+        }
+
         $start = microtime(true);
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
