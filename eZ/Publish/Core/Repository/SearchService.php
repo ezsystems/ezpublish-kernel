@@ -179,7 +179,6 @@ class SearchService implements SearchServiceInterface
         $this->validateContentCriteria(array($query->query), '$query');
         $this->validateContentCriteria(array($query->filter), '$query');
         $this->validateContentSortClauses($query);
-        $this->validateSortClauses($query);
 
         if ($filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion($query->filter)) {
             return new SearchResult(array('time' => 0, 'totalCount' => 0));
@@ -223,46 +222,6 @@ class SearchService implements SearchServiceInterface
         foreach ($query->sortClauses as $sortClause) {
             if ($sortClause instanceof LocationSortClause) {
                 throw new InvalidArgumentException('$query', 'Location sort clauses cannot be used in Content search');
-            }
-        }
-    }
-
-    /**
-     * Validates sort clauses of a given $query.
-     *
-     * For the moment this validates only Field sort clauses.
-     * Valid Field sort clause provides $languageCode if targeted field is translatable,
-     * and the same in reverse - it does not provide $languageCode for non-translatable field.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If sort clauses are not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     */
-    protected function validateSortClauses(Query $query)
-    {
-        foreach ($query->sortClauses as $key => $sortClause) {
-            if (!$sortClause instanceof SortClause\Field && !$sortClause instanceof SortClause\MapLocationDistance) {
-                continue;
-            }
-
-            /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget|\eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\MapLocationTarget $fieldTarget */
-            $fieldTarget = $sortClause->targetData;
-            $contentType = $this->repository->getContentTypeService()->loadContentTypeByIdentifier(
-                $fieldTarget->typeIdentifier
-            );
-
-            if ($contentType->getFieldDefinition($fieldTarget->fieldIdentifier)->isTranslatable) {
-                if ($fieldTarget->languageCode === null) {
-                    throw new InvalidArgumentException(
-                        "\$query->sortClauses[{$key}]",
-                        'No language is specified for translatable field'
-                    );
-                }
-            } elseif ($fieldTarget->languageCode !== null) {
-                throw new InvalidArgumentException(
-                    "\$query->sortClauses[{$key}]",
-                    'Language is specified for non-translatable field, null should be used instead'
-                );
             }
         }
     }
@@ -346,8 +305,6 @@ class SearchService implements SearchServiceInterface
 
         $query = clone $query;
         $query->filter = $query->filter ?: new Criterion\MatchAll();
-
-        $this->validateSortClauses($query);
 
         if ($filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion($query->filter)) {
             return new SearchResult(array('time' => 0, 'totalCount' => 0));
