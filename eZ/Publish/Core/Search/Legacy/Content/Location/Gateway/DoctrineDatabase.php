@@ -94,7 +94,11 @@ class DoctrineDatabase extends Gateway
         }
 
         $selectQuery = $this->handler->createSelectQuery();
-        $selectQuery->select('ezcontentobject_tree.*');
+        $selectQuery->select(
+            'ezcontentobject_tree.*',
+            $this->handler->quoteColumn('language_mask', 'ezcontentobject'),
+            $this->handler->quoteColumn('initial_language_id', 'ezcontentobject')
+        );
 
         if ($sortClauses !== null) {
             $this->sortClauseConverter->applySelect($selectQuery, $sortClauses);
