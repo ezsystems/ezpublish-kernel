@@ -10,9 +10,6 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler;
 
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
-use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\SPI\Persistence\Content\Type;
@@ -23,40 +20,8 @@ use PDO;
 /**
  * Content locator gateway implementation using the DoctrineDatabase.
  */
-class MapLocationDistance extends SortClauseHandler
+class MapLocationDistance extends Field
 {
-    /**
-     * Language handler.
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
-     */
-    protected $languageHandler;
-
-    /**
-     * Content Type handler.
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
-     */
-    protected $contentTypeHandler;
-
-    /**
-     * Creates a new Field sort clause handler.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     */
-    public function __construct(
-        DatabaseHandler $dbHandler,
-        LanguageHandler $languageHandler,
-        ContentTypeHandler $contentTypeHandler
-    ) {
-        $this->languageHandler = $languageHandler;
-        $this->contentTypeHandler = $contentTypeHandler;
-
-        parent::__construct($dbHandler);
-    }
-
     /**
      * Check if this sort clause handler accepts to handle the given sort clause.
      *
@@ -156,28 +121,6 @@ class MapLocationDistance extends SortClauseHandler
         $table = $this->getSortTableName($number);
         $externalTable = $this->getSortTableName($number, 'ezgmaplocation');
 
-        if ($fieldTarget->languageCode === null) {
-            $languageExpression = $query->expr->gt(
-                $query->expr->bitAnd(
-                    $query->expr->bitAnd($this->dbHandler->quoteColumn('language_id', $table), ~1),
-                    $this->dbHandler->quoteColumn('initial_language_id', 'ezcontentobject')
-                ),
-                0
-            );
-        } else {
-            $languageExpression = $query->expr->gt(
-                $query->expr->bitAnd(
-                    $query->expr->bitAnd($this->dbHandler->quoteColumn('language_id', $table), ~1),
-                    $query->bindValue(
-                        $this->languageHandler->loadByLanguageCode($fieldTarget->languageCode)->id,
-                        null,
-                        PDO::PARAM_INT
-                    )
-                ),
-                0
-            );
-        }
-
         $query
             ->leftJoin(
                 $query->alias(
@@ -197,7 +140,7 @@ class MapLocationDistance extends SortClauseHandler
                         $this->dbHandler->quoteColumn('version', $table),
                         $this->dbHandler->quoteColumn('current_version', 'ezcontentobject')
                     ),
-                    $languageExpression
+                    $this->getFieldCondition($query, $languageSettings, $table)
                 )
             )
             ->leftJoin(
