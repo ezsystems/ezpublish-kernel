@@ -58,13 +58,10 @@ class Field extends FieldBase
             );
         }
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $target */
-        $target = $sortClause->targetData;
-
         return array(
             "fields_doc.{$fieldName}" => array(
                 'nested_filter' => array(
-                    'term' => $this->getNestedFilterTerm($target->languageCode),
+                    'term' => $this->getNestedFilterTerm(null),
                 ),
                 'order' => $this->getDirection($sortClause),
             ),
