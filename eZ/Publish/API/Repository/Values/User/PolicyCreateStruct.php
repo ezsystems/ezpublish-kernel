@@ -10,12 +10,10 @@
  */
 namespace eZ\Publish\API\Repository\Values\User;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
-
 /**
  * This class is used to create a policy.
  */
-abstract class PolicyCreateStruct extends ValueObject
+abstract class PolicyCreateStruct extends PolicyStruct
 {
     /**
      * Name of module, associated with the Policy.
@@ -34,18 +32,4 @@ abstract class PolicyCreateStruct extends ValueObject
      * @var string
      */
     public $function;
-
-    /**
-     * Returns list of limitations added to policy.
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
-     */
-    abstract public function getLimitations();
-
-    /**
-     * Adds a limitation with the given identifier and list of values.
-     *
-     * @param Limitation $limitation
-     */
-    abstract public function addLimitation(Limitation $limitation);
 }
