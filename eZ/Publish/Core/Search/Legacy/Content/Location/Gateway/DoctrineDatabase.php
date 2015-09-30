@@ -16,6 +16,7 @@ use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use PDO;
 
 /**
@@ -47,20 +48,30 @@ class DoctrineDatabase extends Gateway
     private $sortClauseConverter;
 
     /**
+     * Language handler.
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
+     */
+    protected $languageHandler;
+
+    /**
      * Construct from database handler.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $criteriaConverter
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter $sortClauseConverter
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      */
     public function __construct(
         DatabaseHandler $handler,
         CriteriaConverter $criteriaConverter,
-        SortClauseConverter $sortClauseConverter
+        SortClauseConverter $sortClauseConverter,
+        LanguageHandler $languageHandler
     ) {
         $this->handler = $handler;
         $this->criteriaConverter = $criteriaConverter;
         $this->sortClauseConverter = $sortClauseConverter;
+        $this->languageHandler = $languageHandler;
     }
 
     /**
@@ -202,5 +213,34 @@ class DoctrineDatabase extends Gateway
         $res = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return (int)$res[0]['count'];
+    }
+
+    /**
+     * Generates a language mask from the given $languageFilter.
+     *
+     * @param array $languageFilter
+     *
+     * @return int
+     */
+    protected function getLanguageMask(array $languageFilter)
+    {
+        if (!isset($languageFilter['languages'])) {
+            $languageFilter['languages'] = array();
+        }
+
+        if (!isset($languageFilter['useAlwaysAvailable'])) {
+            $languageFilter['useAlwaysAvailable'] = true;
+        }
+
+        $mask = 0;
+        if ($languageFilter['useAlwaysAvailable']) {
+            $mask |= 1;
+        }
+
+        foreach ($languageFilter['languages'] as $languageCode) {
+            $mask |= $this->languageHandler->loadByLanguageCode($languageCode)->id;
+        }
+
+        return $mask;
     }
 }
