@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\MVC\Symfony\View\Provider;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\MatcherFactoryInterface;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
-use InvalidArgumentException;
 
 /**
  * Base for View Providers.
@@ -37,18 +36,15 @@ abstract class Configured
      *
      * @param array $viewConfig
      *
-     * @throws \InvalidArgumentException
-     *
      * @return ContentView
      */
     protected function buildContentView(array $viewConfig)
     {
-        if (!isset($viewConfig['template'])) {
-            throw new InvalidArgumentException('$viewConfig must contain the template identifier in order to correctly generate the ContentView object');
-        }
-
-        $view = new ContentView($viewConfig['template']);
+        $view = new ContentView();
         $view->setConfigHash($viewConfig);
+        if (isset($viewConfig['template'])) {
+            $view->setTemplateIdentifier($viewConfig['template']);
+        }
 
         return $view;
     }
