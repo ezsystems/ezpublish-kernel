@@ -38,6 +38,7 @@ services:
         arguments:
             - @ezpublish.api.storage_engine.legacy.dbhandler
             - @ezpublish.spi.persistence.content_type_handler
+            - @ezpublish.spi.persistence.language_handler
 
     ezpublish.search.legacy.gateway.criterion_field_value_handler.base:
         abstract: true
@@ -89,6 +90,7 @@ services:
         arguments:
             - @ezpublish.api.storage_engine.legacy.dbhandler
             - @ezpublish.spi.persistence.content_type_handler
+            - @ezpublish.spi.persistence.language_handler
             - @ezpublish.persistence.legacy.field_value_converter.registry
             - @ezpublish.search.legacy.gateway.criterion_field_value_converter
             - @ezpublish.api.storage_engine.transformation_processor
