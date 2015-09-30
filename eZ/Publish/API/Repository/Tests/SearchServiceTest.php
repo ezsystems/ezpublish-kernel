@@ -1545,8 +1545,12 @@ class SearchServiceTest extends BaseTest
         $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
         $createStruct->alwaysAvailable = $alwaysAvailable;
         $createStruct->mainLanguageCode = $mainLanguageCode;
-        if ($fieldValue11) $createStruct->setField('integer', $fieldValue11, 'eng-GB');
-        if ($fieldValue12) $createStruct->setField('integer', $fieldValue12, 'ger-DE');
+        if ($fieldValue11) {
+            $createStruct->setField('integer', $fieldValue11, 'eng-GB');
+        }
+        if ($fieldValue12) {
+            $createStruct->setField('integer', $fieldValue12, 'ger-DE');
+        }
         $createStruct->setField('integer2', $fieldValue2, $mainLanguageCode);
 
         $locationCreateStruct = $repository->getLocationService()->newLocationCreateStruct(2);
@@ -1587,7 +1591,7 @@ class SearchServiceTest extends BaseTest
                     new SortClause\Field('test-type', 'integer2', Query::SORT_DESC),
                 ),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 4, 1, 2, 4
                  * Content 1, 1, 2, 1
@@ -1614,7 +1618,7 @@ class SearchServiceTest extends BaseTest
                     new SortClause\Field('test-type', 'integer2', Query::SORT_DESC),
                 ),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 3, 2, 1, 3
                  * Content 2, 2, 1, 2
@@ -1639,7 +1643,7 @@ class SearchServiceTest extends BaseTest
                     new SortClause\Field('test-type', 'integer', Query::SORT_DESC),
                 ),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 3, 4, -
                  * Content 2, 3, -
@@ -1662,7 +1666,7 @@ class SearchServiceTest extends BaseTest
                     new SortClause\Field('test-type', 'integer', Query::SORT_DESC),
                 ),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 1, -, 2
                  * Content 4, -, 1
@@ -1686,7 +1690,7 @@ class SearchServiceTest extends BaseTest
                     new SortClause\Field('test-type', 'integer', Query::SORT_DESC),
                 ),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 3, 4, -
                  * Content 2, 3, -
@@ -1712,7 +1716,7 @@ class SearchServiceTest extends BaseTest
                     new SortClause\Field('test-type', 'integer', Query::SORT_DESC),
                 ),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 3, 4, -
                  * Content 2, 3, -
@@ -1738,7 +1742,7 @@ class SearchServiceTest extends BaseTest
                     new SortClause\Field('test-type', 'integer', Query::SORT_DESC),
                 ),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 3, 4, 3
                  * Content 2, 3, 4
@@ -1764,7 +1768,7 @@ class SearchServiceTest extends BaseTest
                     new SortClause\Field('test-type', 'integer', Query::SORT_DESC),
                 ),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 2, 3, 4
                  * Content 3, 4, 3
@@ -1789,7 +1793,7 @@ class SearchServiceTest extends BaseTest
                     new SortClause\Field('test-type', 'integer', Query::SORT_ASC),
                 ),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 1, -, 1
                  * Content 3, 3, -
@@ -1813,7 +1817,7 @@ class SearchServiceTest extends BaseTest
                     new SortClause\Field('test-type', 'integer', Query::SORT_DESC),
                 ),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 2, 4, -
                  * Content 4, -, 2
@@ -1838,7 +1842,7 @@ class SearchServiceTest extends BaseTest
                     new SortClause\Field('test-type', 'integer', Query::SORT_ASC),
                 ),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 3, 3, -
                  * Content 2, 4, -
@@ -1862,7 +1866,7 @@ class SearchServiceTest extends BaseTest
                     new SortClause\Field('test-type', 'integer', Query::SORT_DESC),
                 ),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 4, -, 2
                  * Content 1, -, 1
@@ -1970,7 +1974,7 @@ class SearchServiceTest extends BaseTest
         // "article" type Content is not matched, this ensures that non-matched
         // field does not affect sort
         $dummySortClause = new SortClause\Field('article', 'title', Query::SORT_ASC);
-        array_unshift( $sortClauses, $dummySortClause);
+        array_unshift($sortClauses, $dummySortClause);
         array_push($sortClauses, $dummySortClause);
 
         $searchService = $repository->getSearchService();
@@ -2020,7 +2024,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 new Criterion\Field('integer', Criterion\Operator::LT, 5),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 2, 4, -
                  * Content 4, -, 2
@@ -2038,7 +2042,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 new Criterion\Field('integer', Criterion\Operator::LT, 2),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 1, -, 1
                  */
@@ -2053,7 +2057,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 new Criterion\Field('integer', Criterion\Operator::LTE, 4),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 5, 5, -
                  * Content 2, 4, -
@@ -2072,7 +2076,7 @@ class SearchServiceTest extends BaseTest
                 ),
                 new Criterion\Field('integer', Criterion\Operator::LTE, 4),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 2, 4, -
                  * Content 3, 3, -
@@ -2084,7 +2088,7 @@ class SearchServiceTest extends BaseTest
                 $languageSettings,
                 new Criterion\Field('integer', Criterion\Operator::LTE, 4),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 2, 4, -
                  * Content 4, -, 2
@@ -2097,7 +2101,7 @@ class SearchServiceTest extends BaseTest
                 $languageSettings,
                 new Criterion\Field('integer', Criterion\Operator::GT, 1),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 5, 5, -
                  * Content 2, 4, -
@@ -2110,7 +2114,7 @@ class SearchServiceTest extends BaseTest
                 $languageSettings,
                 new Criterion\Field('integer', Criterion\Operator::GTE, 2),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 5, 5, -
                  * Content 2, 4, -
@@ -2123,7 +2127,7 @@ class SearchServiceTest extends BaseTest
                 $languageSettings,
                 new Criterion\Field('integer', Criterion\Operator::BETWEEN, array(2, 4)),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 2, 4, -
                  * Content 4, -, 2
@@ -2141,7 +2145,7 @@ class SearchServiceTest extends BaseTest
                 $languageSettings,
                 new Criterion\Field('integer', Criterion\Operator::EQ, 4),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 4, -, 2
                  */
@@ -2152,7 +2156,7 @@ class SearchServiceTest extends BaseTest
                 $languageSettings,
                 new Criterion\Field('integer', Criterion\Operator::EQ, 2),
                 /**
-                 * Expected order, Value eng-GB, Value ger-DE
+                 * Expected order, Value eng-GB, Value ger-DE.
                  *
                  * Content 2, 4, -
                  */
@@ -2308,6 +2312,7 @@ class SearchServiceTest extends BaseTest
                 if ($searchHit->valueObject instanceof Location) {
                     return $searchHit->valueObject->contentInfo->id;
                 }
+
                 return $searchHit->valueObject->id;
             },
             $result->searchHits
