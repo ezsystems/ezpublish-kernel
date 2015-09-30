@@ -245,9 +245,7 @@ class DoctrineDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        $res = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        return (int)$res[0]['count'];
+        return (int)$statement->fetchColumn();
     }
 
     /**
