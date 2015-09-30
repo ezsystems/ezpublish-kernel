@@ -120,10 +120,12 @@ class HandlerLocationSortTest extends LanguageAwareTestCase
                             $this->getContentTypeHandler()
                         ),
                     )
-                )
+                ),
+                $this->getLanguageHandler()
             ),
             $this->getMockBuilder('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper')->disableOriginalConstructor()->getMock(),
-            $this->getLocationMapperMock()
+            $this->getLocationMapperMock(),
+            $this->getLanguageHandler()
         );
     }
 

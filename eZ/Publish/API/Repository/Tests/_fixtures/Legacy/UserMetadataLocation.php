@@ -16,6 +16,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-GB',
     )),
     1 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
@@ -27,6 +28,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-US',
     )),
     2 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
@@ -38,6 +40,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-US',
     )),
     3 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
@@ -49,6 +52,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-US',
     )),
     4 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
@@ -60,6 +64,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-US',
     )),
     5 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
@@ -71,6 +76,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-US',
     )),
     6 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
@@ -82,6 +88,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-US',
     )),
     7 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
@@ -93,6 +100,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-US',
     )),
     8 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
@@ -104,6 +112,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-US',
     )),
     9 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
@@ -115,6 +124,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-US',
     )),
     10 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
@@ -126,6 +136,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-US',
     )),
     11 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
@@ -137,6 +148,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-US',
     )),
     12 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
@@ -148,6 +160,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-US',
     )),
     13 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
@@ -159,6 +172,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-US',
     )),
     14 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
@@ -170,6 +184,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-US',
     )),
     15 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
@@ -181,6 +196,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-US',
     )),
     16 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
@@ -192,6 +208,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-GB',
     )),
     17 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
@@ -203,6 +220,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'score' => null,
        'index' => null,
        'highlight' => null,
+       'matchedTranslation' => 'eng-US',
     )),
   ),
    'spellSuggestion' => null,

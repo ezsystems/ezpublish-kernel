@@ -166,6 +166,7 @@ class HandlerContentTest extends LanguageAwareTestCase
                         new Content\Common\Gateway\CriterionHandler\Field(
                             $this->getDatabaseHandler(),
                             $this->getContentTypeHandler(),
+                            $this->getLanguageHandler(),
                             $this->getConverterRegistry(),
                             new Content\Common\Gateway\CriterionHandler\FieldValue\Converter(
                                 new Content\Common\Gateway\CriterionHandler\FieldValue\HandlerRegistry(
@@ -204,7 +205,8 @@ class HandlerContentTest extends LanguageAwareTestCase
                         ),
                         new Content\Common\Gateway\CriterionHandler\FieldRelation(
                             $this->getDatabaseHandler(),
-                            $this->getContentTypeHandler()
+                            $this->getContentTypeHandler(),
+                            $this->getLanguageHandler()
                         ),
                     )
                 ),
@@ -212,11 +214,13 @@ class HandlerContentTest extends LanguageAwareTestCase
                     array(
                         new Content\Common\Gateway\SortClauseHandler\ContentId($this->getDatabaseHandler()),
                     )
-                )
+                ),
+                $this->getLanguageHandler()
             ),
             $this->getMock('eZ\\Publish\\Core\\Search\\Legacy\\Content\\Location\\Gateway'),
             $this->getContentMapperMock(),
-            $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper')
+            $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper'),
+            $this->getLanguageHandler()
         );
     }
 
