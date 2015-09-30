@@ -155,28 +155,6 @@ class Field extends SortClauseHandler
         $fieldDefinitionId = $fieldMap[$fieldTarget->typeIdentifier][$fieldTarget->fieldIdentifier]['field_definition_id'];
         $table = $this->getSortTableName($number);
 
-        if ($fieldTarget->languageCode === null) {
-            $languageExpression = $query->expr->gt(
-                $query->expr->bitAnd(
-                    $query->expr->bitAnd($this->dbHandler->quoteColumn('language_id', $table), ~1),
-                    $this->dbHandler->quoteColumn('initial_language_id', 'ezcontentobject')
-                ),
-                0
-            );
-        } else {
-            $languageExpression = $query->expr->gt(
-                $query->expr->bitAnd(
-                    $query->expr->bitAnd($this->dbHandler->quoteColumn('language_id', $table), ~1),
-                    $query->bindValue(
-                        $this->languageHandler->loadByLanguageCode($fieldTarget->languageCode)->id,
-                        null,
-                        \PDO::PARAM_INT
-                    )
-                ),
-                0
-            );
-        }
-
         $query
             ->leftJoin(
                 $query->alias(
@@ -196,7 +174,7 @@ class Field extends SortClauseHandler
                         $this->dbHandler->quoteColumn('version', $table),
                         $this->dbHandler->quoteColumn('current_version', 'ezcontentobject')
                     ),
-                    $languageExpression
+                    $this->getFieldCondition($query, $languageSettings, $table)
                 )
             );
     }

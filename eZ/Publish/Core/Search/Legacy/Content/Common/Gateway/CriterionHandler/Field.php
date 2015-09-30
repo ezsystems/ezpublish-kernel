@@ -21,6 +21,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 
 /**
  * Field criterion handler.
@@ -53,6 +54,7 @@ class Field extends FieldBase
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $fieldConverterRegistry
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Converter $fieldValueConverter
      * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
@@ -60,11 +62,12 @@ class Field extends FieldBase
     public function __construct(
         DatabaseHandler $dbHandler,
         ContentTypeHandler $contentTypeHandler,
+        LanguageHandler $languageHandler,
         Registry $fieldConverterRegistry,
         FieldValueConverter $fieldValueConverter,
         TransformationProcessor $transformationProcessor
     ) {
-        parent::__construct($dbHandler, $contentTypeHandler);
+        parent::__construct($dbHandler, $contentTypeHandler, $languageHandler);
 
         $this->fieldConverterRegistry = $fieldConverterRegistry;
         $this->fieldValueConverter = $fieldValueConverter;
@@ -186,7 +189,8 @@ class Field extends FieldBase
                     $this->dbHandler->quoteColumn('current_version', 'ezcontentobject')
                 ),
                 // Join conditions with a logical OR if several conditions exist
-                count($whereExpressions) > 1 ? $subSelect->expr->lOr($whereExpressions) : $whereExpressions[0]
+                count($whereExpressions) > 1 ? $subSelect->expr->lOr($whereExpressions) : $whereExpressions[0],
+                $this->getFieldCondition($subSelect, $languageSettings)
             )
         );
 
