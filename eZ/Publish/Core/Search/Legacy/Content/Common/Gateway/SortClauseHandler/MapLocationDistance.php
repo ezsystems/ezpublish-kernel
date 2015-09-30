@@ -10,9 +10,7 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler;
 
-use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use PDO;
