@@ -1553,8 +1553,12 @@ class SearchServiceTest extends BaseTest
         $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
         $createStruct->alwaysAvailable = $alwaysAvailable;
         $createStruct->mainLanguageCode = $mainLanguageCode;
-        if ($fieldValue11) $createStruct->setField('integer', $fieldValue11, 'eng-GB');
-        if ($fieldValue12) $createStruct->setField('integer', $fieldValue12, 'ger-DE');
+        if ($fieldValue11) {
+            $createStruct->setField('integer', $fieldValue11, 'eng-GB');
+        }
+        if ($fieldValue12) {
+            $createStruct->setField('integer', $fieldValue12, 'ger-DE');
+        }
         $createStruct->setField('integer2', $fieldValue2, $mainLanguageCode);
 
         $locationCreateStruct = $repository->getLocationService()->newLocationCreateStruct(2);
@@ -1978,7 +1982,7 @@ class SearchServiceTest extends BaseTest
         // "article" type Content is not matched, this ensures that non-matched
         // field does not affect sort
         $dummySortClause = new SortClause\Field('article', 'title', Query::SORT_ASC);
-        array_unshift( $sortClauses, $dummySortClause);
+        array_unshift($sortClauses, $dummySortClause);
         array_push($sortClauses, $dummySortClause);
 
         $searchService = $repository->getSearchService();

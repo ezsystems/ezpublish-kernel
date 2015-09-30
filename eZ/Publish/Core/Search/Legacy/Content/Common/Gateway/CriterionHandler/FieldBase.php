@@ -54,7 +54,7 @@ abstract class FieldBase extends CriterionHandler
     }
 
     /**
-     *
+     * Returns a field language join condition for the given $languageSettings.
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param array $languageSettings
