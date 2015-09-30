@@ -12,8 +12,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Converter;
 
 use eZ\Bundle\EzPublishCoreBundle\Converter\LocationParamConverter;
 use Symfony\Component\HttpFoundation\Request;
-use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 class LocationParamConverterTest extends AbstractParamConverterTest
 {
@@ -64,38 +62,6 @@ class LocationParamConverterTest extends AbstractParamConverterTest
         $this->converter->apply($request, $config);
 
         $this->assertInstanceOf(self::LOCATION_CLASS, $request->attributes->get('location'));
-    }
-
-    public function testApplyLocationNotFound404Exception()
-    {
-        $id = 42;
-        $request = new Request([], [], [self::PROPERTY_NAME => $id]);
-        $config = $this->createConfiguration(self::LOCATION_CLASS, 'location');
-
-        $this->locationServiceMock
-            ->expects($this->once())
-            ->method('loadLocation')
-            ->with($id)
-            ->will($this->throwException(new NotFoundException('', '')));
-
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'Requested values not found');
-        $this->converter->apply($request, $config);
-    }
-
-    public function testApplyLocationUnauthorized403Exception()
-    {
-        $id = 42;
-        $request = new Request([], [], [self::PROPERTY_NAME => $id]);
-        $config = $this->createConfiguration(self::LOCATION_CLASS, 'location');
-
-        $this->locationServiceMock
-            ->expects($this->once())
-            ->method('loadLocation')
-            ->with($id)
-            ->will($this->throwException(new UnauthorizedException('', '')));
-
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException', 'Access to values denied');
-        $this->converter->apply($request, $config);
     }
 
     public function testApplyLocationOptionalWithEmptyAttribute()
