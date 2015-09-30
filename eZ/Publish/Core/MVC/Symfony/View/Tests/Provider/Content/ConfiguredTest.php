@@ -50,29 +50,6 @@ class ConfiguredTest extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Configured::__construct
      * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Configured::buildContentView
      * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured::getView
-     *
-     * @expectedException InvalidArgumentException
-     */
-    public function testGetViewContentNoTemplate()
-    {
-        $this->matcherFactoryMock
-            ->expects($this->once())
-            ->method('match')
-            ->will($this->returnValue(array('match' => array())));
-
-        $cvp = new ContentViewProvider($this->matcherFactoryMock);
-        $this->assertNull(
-            $cvp->getView(
-                $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo'),
-                'full'
-            )
-        );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Configured::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Configured::buildContentView
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured::getView
      */
     public function testGetViewContent()
     {

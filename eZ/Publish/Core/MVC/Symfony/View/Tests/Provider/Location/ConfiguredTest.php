@@ -50,29 +50,6 @@ class ConfiguredTest extends PHPUnit_Framework_TestCase
      * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Configured::__construct
      * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Configured::buildContentView
      * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Location\Configured::getView
-     *
-     * @expectedException InvalidArgumentException
-     */
-    public function testGetViewLocationNoTemplate()
-    {
-        $this->matcherFactoryMock
-            ->expects($this->once())
-            ->method('match')
-            ->will($this->returnValue(array('match' => array())));
-
-        $lvp = new LocationViewProvider($this->matcherFactoryMock);
-        $this->assertNull(
-            $lvp->getView(
-                $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location'),
-                'full'
-            )
-        );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Configured::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Configured::buildContentView
-     * @covers \eZ\Publish\Core\MVC\Symfony\View\Provider\Location\Configured::getView
      */
     public function testGetViewLocation()
     {
