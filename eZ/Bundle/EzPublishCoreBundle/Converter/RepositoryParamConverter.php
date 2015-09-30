@@ -13,8 +13,8 @@ use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 abstract class RepositoryParamConverter implements ParamConverterInterface
 {
@@ -40,7 +40,7 @@ abstract class RepositoryParamConverter implements ParamConverterInterface
      * @param ParamConverter $configuration
      *
      * @throws NotFoundHttpException if value object was not found
-     * @throws AccessDeniedHttpException if user is not allowed to load the value object
+     * @throws AccessDeniedException if user is not allowed to load the value object
      *
      * @return bool
      */
@@ -55,14 +55,8 @@ abstract class RepositoryParamConverter implements ParamConverterInterface
             return false;
         }
 
-        try {
-            $request->attributes->set($configuration->getName(), $this->loadValueObject($valueObjectId));
+        $request->attributes->set($configuration->getName(), $this->loadValueObject($valueObjectId));
 
-            return true;
-        } catch (NotFoundException $e) {
-            throw new NotFoundHttpException('Requested values not found', $e);
-        } catch (UnauthorizedException $e) {
-            throw new AccessDeniedHttpException('Access to values denied', $e);
-        }
+        return true;
     }
 }
