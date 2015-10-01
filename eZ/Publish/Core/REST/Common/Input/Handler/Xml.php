@@ -54,6 +54,9 @@ class Xml extends Handler
         'FieldDefinitions' => array(
             'FieldDefinition',
         ),
+        'UserList' => array(
+            'User',
+        ),
         'names' => array(
             'value',
         ),
