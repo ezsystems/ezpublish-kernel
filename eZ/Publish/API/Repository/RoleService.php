@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
+use eZ\Publish\API\Repository\Values\User\RoleAssignment;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
@@ -315,6 +316,16 @@ interface RoleService
     public function assignRoleToUserGroup(Role $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null);
 
     /**
+     * Removes the given role assignment.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role assignment
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment was not found
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\RoleAssignment $roleAssignment
+     */
+    public function unassignRoleByAssignment(RoleAssignment $roleAssignment);
+
+    /**
      * removes a role from the given user group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
@@ -348,6 +359,30 @@ interface RoleService
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      */
     public function unassignRoleFromUser(Role $role, User $user);
+
+    /**
+     * Loads a user group role assignment for the given id.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment, role or user group was not found
+     *
+     * @param mixed $assignmentId
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment
+     */
+    public function loadUserGroupRoleAssignment($assignmentId);
+
+    /**
+     * Loads a user role assignment for the given id.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment, role or user was not found
+     *
+     * @param mixed $assignmentId
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment
+     */
+    public function loadUserRoleAssignment($assignmentId);
 
     /**
      * Returns the assigned user and user groups to this role.

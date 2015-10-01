@@ -510,9 +510,37 @@ class Handler implements BaseUserHandler
      * @param mixed $contentId The user or user group Id to un-assign the role from.
      * @param mixed $roleId
      */
-    public function unAssignRole($contentId, $roleId)
+    public function unassignRole($contentId, $roleId)
     {
         $this->userGateway->removeRole($contentId, $roleId);
+    }
+
+    /**
+     * Un-assign a role by assignment ID.
+     *
+     * @param mixed $assignmentId The assignment ID.
+     */
+    public function unassignRoleByAssignmentId($assignmentId)
+    {
+        $this->userGateway->removeRoleByAssignmentId($assignmentId);
+    }
+
+    /**
+     * Loads role assignment for specified assignment ID.
+     *
+     * @param mixed $assignmentId
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment
+     */
+    public function loadRoleAssignment($assignmentId)
+    {
+        $data = $this->roleGateway->loadRoleAssignment($assignmentId);
+
+        if (empty($data)) {
+            return array();
+        }
+
+        return $this->mapper->mapRoleAssignments([$data])[0];
     }
 
     /**

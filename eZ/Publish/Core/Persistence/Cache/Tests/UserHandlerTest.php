@@ -49,7 +49,7 @@ class UserHandlerTest extends HandlerTest
             //array( 'deletePolicy', array( 22, 66 ) ),
             array('loadPoliciesByUserId', array(14)),
             //array( 'assignRole', array( 44, 22, array( 42 ) ) ),
-            //array( 'unAssignRole', array( 44, 22 ) ),
+            //array( 'unassignRole', array( 44, 22 ) ),
         );
     }
 
@@ -953,9 +953,9 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::unAssignRole
+     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::unassignRole
      */
-    public function testUnAssignRole()
+    public function testUnassignRole()
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
@@ -967,7 +967,7 @@ class UserHandlerTest extends HandlerTest
 
         $innerHandlerMock
             ->expects($this->once())
-            ->method('unAssignRole')
+            ->method('unassignRole')
             ->with(33, 22)
             ->will(
                 $this->returnValue(true)
@@ -992,6 +992,6 @@ class UserHandlerTest extends HandlerTest
             ->will($this->returnValue(true));
 
         $handler = $this->persistenceCacheHandler->userHandler();
-        $handler->unAssignRole(33, 22);
+        $handler->unassignRole(33, 22);
     }
 }

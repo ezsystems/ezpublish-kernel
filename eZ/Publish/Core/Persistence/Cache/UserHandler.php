@@ -168,6 +168,16 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
+     * @see eZ\Publish\SPI\Persistence\User\Handler::loadRoleAssignment
+     */
+    public function loadRoleAssignment($assignmentId)
+    {
+        $this->logger->logCall(__METHOD__, array('assignment' => $assignmentId));
+
+        return $this->persistenceHandler->userHandler()->loadRoleAssignment($assignmentId);
+    }
+
+    /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::loadRoleAssignmentsByRoleId
      */
     public function loadRoleAssignmentsByRoleId($roleId)
@@ -326,16 +336,32 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::unAssignRole
+     * @see eZ\Publish\SPI\Persistence\User\Handler::unassignRole
      */
-    public function unAssignRole($contentId, $roleId)
+    public function unassignRole($contentId, $roleId)
     {
         $this->logger->logCall(__METHOD__, array('group' => $contentId, 'role' => $roleId));
-        $return = $this->persistenceHandler->userHandler()->unAssignRole($contentId, $roleId);
+        $return = $this->persistenceHandler->userHandler()->unassignRole($contentId, $roleId);
 
         $this->cache->clear('user', 'role', $roleId);
         $this->cache->clear('user', 'role', 'assignments', 'byGroup', $contentId);
         $this->cache->clear('user', 'role', 'assignments', 'byGroup', 'inherited');
+
+        return $return;
+    }
+
+    /**
+     * @see eZ\Publish\SPI\Persistence\User\Handler::unassignRoleByAssignmentId
+     */
+    public function unassignRoleByAssignmentId($assignmentId)
+    {
+        $this->logger->logCall(__METHOD__, array('assignment' => $assignmentId));
+        $return = $this->persistenceHandler->userHandler()->unassignRoleByAssignmentId($assignmentId);
+
+        $this->cache->clear('user', 'role', $roleId);
+        // We don't know the contentId, so clear all assignment cache.
+        // TODO: fetch contentId to avoid this?
+        $this->cache->clear('user', 'role', 'assignments');
 
         return $return;
     }

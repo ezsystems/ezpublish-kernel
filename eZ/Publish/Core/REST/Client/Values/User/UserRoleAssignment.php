@@ -22,6 +22,13 @@ use eZ\Publish\API\Repository\Values\User\UserRoleAssignment as APIUserRoleAssig
 class UserRoleAssignment extends APIUserRoleAssignment
 {
     /**
+     * The role assignment id.
+     *
+     * @var mixed
+     */
+    protected $id;
+
+    /**
      * @var \eZ\Publish\API\Repository\Values\User\Role
      */
     protected $role;

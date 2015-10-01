@@ -334,4 +334,23 @@ class DoctrineDatabase extends Gateway
             );
         $query->prepare()->execute();
     }
+
+    /**
+     * Remove role from user or user group, by assignment ID.
+     *
+     * @param mixed $assignmentId
+     */
+    public function removeRoleByAssignmentId($assignmentId)
+    {
+        $query = $this->handler->createDeleteQuery();
+        $query
+            ->deleteFrom($this->handler->quoteTable('ezuser_role'))
+            ->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn('id'),
+                    $query->bindValue($assignmentId, null, \PDO::PARAM_INT)
+                )
+            );
+        $query->prepare()->execute();
+    }
 }

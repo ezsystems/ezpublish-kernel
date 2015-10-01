@@ -77,6 +77,15 @@ abstract class Gateway
     abstract public function loadRolesForContentObjects($contentIds, $status = Role::STATUS_DEFINED);
 
     /**
+     * Loads role assignment for specified assignment ID.
+     *
+     * @param mixed $assignmentId
+     *
+     * @return array
+     */
+    abstract public function loadRoleAssignment($assignmentId);
+
+    /**
      * Loads role assignments for specified content ID.
      *
      * @param mixed $groupId

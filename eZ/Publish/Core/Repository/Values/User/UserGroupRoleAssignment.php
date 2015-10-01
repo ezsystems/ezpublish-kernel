@@ -18,6 +18,13 @@ use eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment as APIUserGrou
 class UserGroupRoleAssignment extends APIUserGroupRoleAssignment
 {
     /**
+     * The role assignment id.
+     *
+     * @var mixed
+     */
+    protected $id;
+
+    /**
      * the limitation of this role assignment.
      *
      * @var \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation|null

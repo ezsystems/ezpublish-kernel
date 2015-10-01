@@ -827,7 +827,7 @@ class UserHandlerTest extends TestCase
             )
         );
 
-        $handler->unAssignRole($user->id, $role->id);
+        $handler->unassignRole($user->id, $role->id);
 
         $this->assertQueryResult(
             array(),
