@@ -435,7 +435,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     {
         $content = $this->getContentFixture();
         $content->versionInfo->contentInfo->id = 2342;
-        // $content->versionInfo->versionNo = 3;
 
         $field = $this->getFieldFixture();
         $value = $this->getStorageValueFixture();
@@ -457,7 +456,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'sort_key_int' => '23',
                     'sort_key_string' => 'Test',
                     'version' => '1',
-                    'language_id' => '5',
                 ),
             ),
             $this->getDatabaseHandler()
@@ -475,7 +473,58 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                         'sort_key_int',
                         'sort_key_string',
                         'version',
+                    )
+                )->from('ezcontentobject_attribute')
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertNewField
+     */
+    public function testInsertNewAlwaysAvailableField()
+    {
+        $content = $this->getContentFixture();
+        $content->versionInfo->contentInfo->id = 2342;
+        // Set main language to the one used in the field fixture
+        $content->versionInfo->contentInfo->mainLanguageCode = 'eng-GB';
+
+        $field = $this->getFieldFixture();
+        $value = $this->getStorageValueFixture();
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->insertNewField($content, $field, $value);
+
+        $this->assertQueryResult(
+            array(
+                array(
+                    'contentclassattribute_id' => '231',
+                    'contentobject_id' => '2342',
+                    'data_float' => '24.42',
+                    'data_int' => '42',
+                    'data_text' => 'Test text',
+                    'data_type_string' => 'ezstring',
+                    'language_code' => 'eng-GB',
+                    'language_id' => '5',
+                    'sort_key_int' => '23',
+                    'sort_key_string' => 'Test',
+                    'version' => '1',
+                ),
+            ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select(
+                    array(
+                        'contentclassattribute_id',
+                        'contentobject_id',
+                        'data_float',
+                        'data_int',
+                        'data_text',
+                        'data_type_string',
+                        'language_code',
                         'language_id',
+                        'sort_key_int',
+                        'sort_key_string',
+                        'version',
                     )
                 )->from('ezcontentobject_attribute')
         );
@@ -1502,7 +1551,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::updateAlwaysAvailableFlag
      */
-    public function testUpdateAlwaysAvailableFlag()
+    public function testUpdateAlwaysAvailableFlagRemove()
     {
         $this->insertDatabaseFixture(
             __DIR__ . '/../_fixtures/contentobjects.php'
@@ -1552,6 +1601,200 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     $query->expr->eq('version', 1)
                 )
             )
+        );
+    }
+
+    /**
+     * Test for the updateAlwaysAvailableFlag() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::updateAlwaysAvailableFlag
+     */
+    public function testUpdateAlwaysAvailableFlagAdd()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->updateAlwaysAvailableFlag(102, true);
+
+        $this->assertQueryResult(
+            array(array('id' => 3)),
+            $this->getDatabaseHandler()->createSelectQuery()->select(
+                array('language_mask')
+            )->from(
+                'ezcontentobject'
+            )->where(
+                'id = 102'
+            )
+        );
+
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $this->assertQueryResult(
+            array(array('language_id' => 3)),
+            $query->select(
+                array('language_id')
+            )->from(
+                'ezcontentobject_name'
+            )->where(
+                $query->expr->lAnd(
+                    $query->expr->eq('contentobject_id', 102),
+                    $query->expr->eq('content_version', 1)
+                )
+            )
+        );
+
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array('language_id' => 3),
+            ),
+            $query->selectDistinct(
+                array('language_id')
+            )->from(
+                'ezcontentobject_attribute'
+            )->where(
+                $query->expr->lAnd(
+                    $query->expr->eq('contentobject_id', 102),
+                    $query->expr->eq('version', 1)
+                )
+            )
+        );
+    }
+
+    /**
+     * Test for the updateAlwaysAvailableFlag() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::updateAlwaysAvailableFlag
+     */
+    public function testUpdateContentAddAlwaysAvailableFlagMultilingual()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects_multilingual.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $contentMetadataUpdateStruct = new MetadataUpdateStruct(
+            array(
+                'mainLanguageId' => 4,
+                'alwaysAvailable' => true,
+            )
+        );
+        $gateway->updateContent(4, $contentMetadataUpdateStruct);
+
+        $this->assertQueryResult(
+            array(array('id' => 7)),
+            $this->getDatabaseHandler()->createSelectQuery()->select(
+                array('language_mask')
+            )->from(
+                'ezcontentobject'
+            )->where(
+                'id = 4'
+            )
+        );
+
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array('id' => '7', 'language_id' => 2),
+                array('id' => '8', 'language_id' => 5),
+            ),
+            $query->selectDistinct(
+                array('id', 'language_id')
+            )->from(
+                'ezcontentobject_attribute'
+            )->where(
+                $query->expr->lAnd(
+                    $query->expr->eq('contentobject_id', 4),
+                    $query->expr->eq('version', 2)
+                )
+            )->orderBy('id')
+        );
+
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array('id' => '7', 'language_id' => 2),
+                array('id' => '8', 'language_id' => 5),
+            ),
+            $query->selectDistinct(
+                array('id', 'language_id')
+            )->from(
+                'ezcontentobject_attribute'
+            )->where(
+                $query->expr->lAnd(
+                    $query->expr->eq('contentobject_id', 4),
+                    $query->expr->eq('version', 1)
+                )
+            )->orderBy('id')
+        );
+    }
+
+    /**
+     * Test for the updateAlwaysAvailableFlag() method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::updateAlwaysAvailableFlag
+     */
+    public function testUpdateContentRemoveAlwaysAvailableFlagMultilingual()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects_multilingual.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $contentMetadataUpdateStruct = new MetadataUpdateStruct(
+            array(
+                'mainLanguageId' => 4,
+                'alwaysAvailable' => false,
+            )
+        );
+        $gateway->updateContent(4, $contentMetadataUpdateStruct);
+
+        $this->assertQueryResult(
+            array(array('id' => 6)),
+            $this->getDatabaseHandler()->createSelectQuery()->select(
+                array('language_mask')
+            )->from(
+                'ezcontentobject'
+            )->where(
+                'id = 4'
+            )
+        );
+
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array('id' => '7', 'language_id' => 2),
+                array('id' => '8', 'language_id' => 4),
+            ),
+            $query->selectDistinct(
+                array('id', 'language_id')
+            )->from(
+                'ezcontentobject_attribute'
+            )->where(
+                $query->expr->lAnd(
+                    $query->expr->eq('contentobject_id', 4),
+                    $query->expr->eq('version', 2)
+                )
+            )->orderBy('id')
+        );
+
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array('id' => '7', 'language_id' => 2),
+                array('id' => '8', 'language_id' => 5),
+            ),
+            $query->selectDistinct(
+                array('id', 'language_id')
+            )->from(
+                'ezcontentobject_attribute'
+            )->where(
+                $query->expr->lAnd(
+                    $query->expr->eq('contentobject_id', 4),
+                    $query->expr->eq('version', 1)
+                )
+            )->orderBy('id')
         );
     }
 
