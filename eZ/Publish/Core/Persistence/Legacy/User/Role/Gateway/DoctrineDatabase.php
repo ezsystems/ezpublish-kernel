@@ -89,6 +89,18 @@ class DoctrineDatabase extends Gateway
     public function loadRole($roleId, $status = Role::STATUS_DEFINED)
     {
         $query = $this->handler->createSelectQuery();
+        if ($status === Role::STATUS_DEFINED) {
+            $policyCondition = $query->expr->eq(
+                $this->handler->quoteColumn('original_id', 'ezpolicy'),
+                $query->bindValue(0, null, \PDO::PARAM_INT)
+            );
+        } else {
+            $policyCondition = $query->expr->gt(
+                $this->handler->quoteColumn('original_id', 'ezpolicy'),
+                $query->bindValue(0, null, \PDO::PARAM_INT)
+            );
+        }
+
         $query->select(
             $this->handler->aliasedColumn($query, 'id', 'ezrole'),
             $this->handler->aliasedColumn($query, 'name', 'ezrole'),
@@ -108,10 +120,7 @@ class DoctrineDatabase extends Gateway
                     $this->handler->quoteColumn('role_id', 'ezpolicy'),
                     $this->handler->quoteColumn('id', 'ezrole')
                 ),
-                $query->expr->eq(
-                    $this->handler->quoteColumn('original_id', 'ezpolicy'),
-                    $query->bindValue($status, null, \PDO::PARAM_INT)
-                )
+                $policyCondition
             )
         )->leftJoin(
             $this->handler->quoteTable('ezpolicy_limitation'),
@@ -155,6 +164,18 @@ class DoctrineDatabase extends Gateway
     public function loadRoleByIdentifier($identifier, $status = Role::STATUS_DEFINED)
     {
         $query = $this->handler->createSelectQuery();
+        if ($status === Role::STATUS_DEFINED) {
+            $policyCondition = $query->expr->eq(
+                $this->handler->quoteColumn('original_id', 'ezpolicy'),
+                $query->bindValue(0, null, \PDO::PARAM_INT)
+            );
+        } else {
+            $policyCondition = $query->expr->gt(
+                $this->handler->quoteColumn('original_id', 'ezpolicy'),
+                $query->bindValue(0, null, \PDO::PARAM_INT)
+            );
+        }
+
         $query->select(
             $this->handler->aliasedColumn($query, 'id', 'ezrole'),
             $this->handler->aliasedColumn($query, 'name', 'ezrole'),
@@ -174,10 +195,7 @@ class DoctrineDatabase extends Gateway
                     $this->handler->quoteColumn('role_id', 'ezpolicy'),
                     $this->handler->quoteColumn('id', 'ezrole')
                 ),
-                $query->expr->eq(
-                    $this->handler->quoteColumn('original_id', 'ezpolicy'),
-                    $query->bindValue($status, null, \PDO::PARAM_INT)
-                )
+                $policyCondition
             )
         )->leftJoin(
             $this->handler->quoteTable('ezpolicy_limitation'),
@@ -220,6 +238,18 @@ class DoctrineDatabase extends Gateway
     public function loadRoles($status = Role::STATUS_DEFINED)
     {
         $query = $this->handler->createSelectQuery();
+        if ($status === Role::STATUS_DEFINED) {
+            $policyCondition = $query->expr->eq(
+                $this->handler->quoteColumn('original_id', 'ezpolicy'),
+                $query->bindValue(0, null, \PDO::PARAM_INT)
+            );
+        } else {
+            $policyCondition = $query->expr->gt(
+                $this->handler->quoteColumn('original_id', 'ezpolicy'),
+                $query->bindValue(0, null, \PDO::PARAM_INT)
+            );
+        }
+
         $query->select(
             $this->handler->aliasedColumn($query, 'id', 'ezrole'),
             $this->handler->aliasedColumn($query, 'name', 'ezrole'),
@@ -246,10 +276,7 @@ class DoctrineDatabase extends Gateway
                     $this->handler->quoteColumn('role_id', 'ezpolicy'),
                     $this->handler->quoteColumn('id', 'ezrole')
                 ),
-                $query->expr->eq(
-                    $this->handler->quoteColumn('original_id', 'ezpolicy'),
-                    $query->bindValue($status, null, \PDO::PARAM_INT)
-                )
+                $policyCondition
             )
         )->leftJoin(
             $this->handler->quoteTable('ezpolicy_limitation'),
@@ -287,6 +314,18 @@ class DoctrineDatabase extends Gateway
     public function loadRolesForContentObjects($contentIds, $status = Role::STATUS_DEFINED)
     {
         $query = $this->handler->createSelectQuery();
+        if ($status === Role::STATUS_DEFINED) {
+            $policyCondition = $query->expr->eq(
+                $this->handler->quoteColumn('original_id', 'ezpolicy'),
+                $query->bindValue(0, null, \PDO::PARAM_INT)
+            );
+        } else {
+            $policyCondition = $query->expr->gt(
+                $this->handler->quoteColumn('original_id', 'ezpolicy'),
+                $query->bindValue(0, null, \PDO::PARAM_INT)
+            );
+        }
+
         $query->select(
             $this->handler->aliasedColumn($query, 'contentobject_id', 'ezuser_role'),
             $this->handler->aliasedColumn($query, 'id', 'ezrole'),
@@ -328,10 +367,7 @@ class DoctrineDatabase extends Gateway
                     $this->handler->quoteColumn('role_id', 'ezpolicy'),
                     $this->handler->quoteColumn('id', 'ezrole')
                 ),
-                $query->expr->eq(
-                    $this->handler->quoteColumn('original_id', 'ezpolicy'),
-                    $query->bindValue($status, null, \PDO::PARAM_INT)
-                )
+                $policyCondition
             )
         )->leftJoin(
             $this->handler->quoteTable('ezpolicy_limitation'),
@@ -627,17 +663,11 @@ class DoctrineDatabase extends Gateway
             ->update($this->handler->quoteTable('ezpolicy'))
             ->set(
                 $this->handler->quoteColumn('original_id'),
-                $policyQuery->bindValue(Role::STATUS_DEFINED, null, \PDO::PARAM_INT)
+                $policyQuery->bindValue(0, null, \PDO::PARAM_INT)
             )->where(
-                $policyQuery->expr->lAnd(
-                    $policyQuery->expr->eq(
-                        $this->handler->quoteColumn('role_id'),
-                        $policyQuery->bindValue($roleId, null, \PDO::PARAM_INT)
-                    ),
-                    $policyQuery->expr->eq(
-                        $this->handler->quoteColumn('original_id'),
-                        $policyQuery->bindValue(Role::STATUS_DRAFT, null, \PDO::PARAM_INT)
-                    )
+                $policyQuery->expr->eq(
+                    $this->handler->quoteColumn('role_id'),
+                    $policyQuery->bindValue($roleId, null, \PDO::PARAM_INT)
                 )
             );
         $queryStatement = $policyQuery->prepare();
@@ -649,9 +679,10 @@ class DoctrineDatabase extends Gateway
      *
      * @param mixed $roleId
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
+     *
+     * @return Policy
      */
-    public function addPolicy($roleId, Policy $policy, $status = Role::STATUS_DEFINED)
+    public function addPolicy($roleId, Policy $policy)
     {
         $query = $this->handler->createInsertQuery();
         $query
@@ -667,7 +698,7 @@ class DoctrineDatabase extends Gateway
                 $query->bindValue($policy->module)
             )->set(
                 $this->handler->quoteColumn('original_id'),
-                $query->bindValue($status, null, \PDO::PARAM_INT)
+                $query->bindValue($policy->originalId ?: 0, null, \PDO::PARAM_INT)
             )->set(
                 $this->handler->quoteColumn('role_id'),
                 $query->bindValue($roleId, null, \PDO::PARAM_INT)
@@ -748,6 +779,18 @@ class DoctrineDatabase extends Gateway
         $this->removePolicyLimitations($policyId);
 
         $query = $this->handler->createDeleteQuery();
+        if ($status === Role::STATUS_DEFINED) {
+            $policyCondition = $query->expr->eq(
+                $this->handler->quoteColumn('original_id', 'ezpolicy'),
+                $query->bindValue(0, null, \PDO::PARAM_INT)
+            );
+        } else {
+            $policyCondition = $query->expr->gt(
+                $this->handler->quoteColumn('original_id', 'ezpolicy'),
+                $query->bindValue(0, null, \PDO::PARAM_INT)
+            );
+        }
+
         $query
             ->deleteFrom($this->handler->quoteTable('ezpolicy'))
             ->where(
@@ -756,10 +799,7 @@ class DoctrineDatabase extends Gateway
                         $this->handler->quoteColumn('id'),
                         $query->bindValue($policyId, null, \PDO::PARAM_INT)
                     ),
-                    $query->expr->eq(
-                        $this->handler->quoteColumn('original_id'),
-                        $query->bindValue($status, null, \PDO::PARAM_INT)
-                    )
+                    $policyCondition
                 )
             );
         $query->prepare()->execute();

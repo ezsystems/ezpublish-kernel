@@ -246,12 +246,11 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $roleId
      * @param Policy $policy
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    public function addPolicy($roleId, Policy $policy, $status = Role::STATUS_DEFINED)
+    public function addPolicy($roleId, Policy $policy)
     {
         try {
-            return $this->innerGateway->addPolicy($roleId, $policy, $status);
+            return $this->innerGateway->addPolicy($roleId, $policy);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

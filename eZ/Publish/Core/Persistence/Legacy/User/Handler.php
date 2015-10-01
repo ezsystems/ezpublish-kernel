@@ -374,10 +374,12 @@ class Handler implements BaseUserHandler
     public function addPolicyByRoleDraft($roleId, Policy $policy)
     {
         $legacyPolicy = clone $policy;
+        $legacyPolicy->originalId = $policy->id;
         $this->limitationConverter->toLegacy($legacyPolicy);
 
-        $this->roleGateway->addPolicy($roleId, $legacyPolicy, Role::STATUS_DRAFT);
+        $this->roleGateway->addPolicy($roleId, $legacyPolicy);
         $policy->id = $legacyPolicy->id;
+        $policy->originalId = $legacyPolicy->originalId;
         $policy->roleId = $legacyPolicy->roleId;
 
         return $policy;

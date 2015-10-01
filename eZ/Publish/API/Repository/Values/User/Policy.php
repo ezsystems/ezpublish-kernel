@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read mixed $roleId the role id this policy belongs to
  * @property-read string $module Name of module, associated with the Policy
  * @property-read string $function  Name of the module function Or all functions with '*'
+ * @property-read mixed $originalId Original policy ID the policy was created from.
  * @property-read array $limitations an array of \eZ\Publish\API\Repository\Values\User\Limitation
  */
 abstract class Policy extends ValueObject
@@ -54,6 +55,14 @@ abstract class Policy extends ValueObject
      * @var string
      */
     protected $function;
+
+    /**
+     * Original policy ID the policy was created from.
+     * Mostly used when role status is Role::STATUS_DRAFT.
+     *
+     * @var mixed
+     */
+    protected $originalId;
 
     /**
      * @return \eZ\Publish\API\Repository\Values\User\Limitation[]

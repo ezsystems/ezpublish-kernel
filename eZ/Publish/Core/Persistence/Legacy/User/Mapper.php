@@ -80,7 +80,7 @@ class Mapper
                     array(
                         'id' => $row['ezpolicy_id'],
                         'roleId' => $row['ezrole_id'],
-                        'status' => $row['ezpolicy_original_id'],
+                        'originalId' => $row['ezpolicy_original_id'] ?: null,
                         'module' => $row['ezpolicy_module_name'],
                         'function' => $row['ezpolicy_function_name'],
                         'limitations' => '*', // limitations must be '*' if not a non empty array of limitations

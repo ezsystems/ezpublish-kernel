@@ -126,9 +126,8 @@ abstract class Gateway
      *
      * @param mixed $roleId
      * @param Policy $policy
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    abstract public function addPolicy($roleId, Policy $policy, $status = Role::STATUS_DEFINED);
+    abstract public function addPolicy($roleId, Policy $policy);
 
     /**
      * Adds limitations to an existing policy.

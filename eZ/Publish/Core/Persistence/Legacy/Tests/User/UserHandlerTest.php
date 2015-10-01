@@ -325,7 +325,7 @@ class UserHandlerTest extends TestCase
                         'module' => 'foo',
                         'function' => 'bar',
                         'limitations' => '*',
-                        'status' => APIRole::STATUS_DEFINED,
+                        'originalId' => null,
                     )
                 ),
             ),
@@ -363,7 +363,7 @@ class UserHandlerTest extends TestCase
                         'module' => 'foo',
                         'function' => 'bar',
                         'limitations' => '*',
-                        'status' => APIRole::STATUS_DEFINED,
+                        'originalId' => null,
                     )
                 ),
             ),
@@ -404,7 +404,7 @@ class UserHandlerTest extends TestCase
                             'Subtree' => array('/1', '/1/2'),
                             'Foo' => array('Bar'),
                         ),
-                        'status' => APIRole::STATUS_DEFINED,
+                        'originalId' => null,
                     )
                 ),
             ),

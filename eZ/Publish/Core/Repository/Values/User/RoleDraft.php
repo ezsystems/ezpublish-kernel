@@ -64,7 +64,7 @@ class RoleDraft extends APIRoleDraft
     /**
      * Returns the list of policies of this role.
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
+     * @return \eZ\Publish\Core\Repository\Values\User\PolicyDraft[]
      */
     public function getPolicies()
     {
