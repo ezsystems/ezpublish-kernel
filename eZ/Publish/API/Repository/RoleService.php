@@ -318,7 +318,7 @@ interface RoleService
     /**
      * Removes a role from the given user group.
      *
-     * @deprecated since 6.0, use {@see removeRoleAssignment} instead.
+     * @deprecated since 6.0, use {@see unassignRoleByAssignment} instead.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException  If the role is not assigned to the given user group
@@ -344,7 +344,7 @@ interface RoleService
     /**
      * Removes a role from the given user.
      *
-     * @deprecated since 6.0, use {@see removeRoleAssignment} instead.
+     * @deprecated since 6.0, use {@see unassignRoleByAssignment} instead.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the role is not assigned to the user
@@ -417,13 +417,16 @@ interface RoleService
     public function getRoleAssignmentsForUserGroup(UserGroup $userGroup);
 
     /**
-     * Removes a role assignment
+     * Removes the given role assignment.
      *
      * i.e. unassigns a user or a user group from a role with the given limitations
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role assignment
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment was not found
+     *
      * @param \eZ\Publish\API\Repository\Values\User\RoleAssignment $roleAssignment
      */
-    public function removeRoleAssignment(RoleAssignment $roleAssignment);
+    public function unassignRoleByAssignment(RoleAssignment $roleAssignment);
 
     /**
      *  Instantiates a role create class.
