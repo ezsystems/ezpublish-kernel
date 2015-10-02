@@ -160,8 +160,8 @@ class Type extends FieldType
                 $errors = $this->inputValidatorDispatcher->dispatch($inputValue);
                 if (!empty($errors)) {
                     throw new InvalidArgumentException(
-                        "\$inputValue",
-                        "Validation of XML content failed: " . join("\n", $errors)
+                        '$inputValue',
+                        'Validation of XML content failed: ' . implode("\n", $errors)
                     );
                 }
             }
@@ -227,7 +227,7 @@ class Type extends FieldType
     }
 
     /**
-     * Validates a field based on the validators in the field definition
+     * Validates a field based on the validators in the field definition.
      *
      * This is a base implementation, returning an empty array() that indicates
      * that no validation errors occurred. Overwrite in derived types, if
@@ -248,7 +248,7 @@ class Type extends FieldType
 
         if (!empty($errors)) {
             $validationErrors[] = new ValidationError(
-                "Validation of XML content failed:\n" . join("\n", $errors)
+                "Validation of XML content failed:\n" . implode("\n", $errors)
             );
         }
 
@@ -256,7 +256,7 @@ class Type extends FieldType
     }
 
     /**
-     * Returns sortKey information
+     * Returns sortKey information.
      *
      * @see \eZ\Publish\Core\FieldType
      *

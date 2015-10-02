@@ -36,12 +36,12 @@ class RichTextTest extends PHPUnit_Framework_TestCase
         $fieldType = new RichTextType(
             new Validator(
                 array(
-                    $this->getAbsolutePath("eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng"),
-                    $this->getAbsolutePath("eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl"),
+                    $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng'),
+                    $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl'),
                 )
             ),
-            new ConverterDispatcher(array("http://docbook.org/ns/docbook" => null)),
-            new ValidatorDispatcher(array("http://docbook.org/ns/docbook" => null))
+            new ConverterDispatcher(array('http://docbook.org/ns/docbook' => null)),
+            new ValidatorDispatcher(array('http://docbook.org/ns/docbook' => null))
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
@@ -117,7 +117,7 @@ class RichTextTest extends PHPUnit_Framework_TestCase
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
   <h1>This is not valid, but acceptValue() will not validate it.</h1>
-</section>'
+</section>',
             ),
         );
     }
@@ -184,8 +184,8 @@ class RichTextTest extends PHPUnit_Framework_TestCase
                 array(
                     new ValidationError(
                         "Validation of XML content failed:\n" .
-                        "Error in 3:0: Element section has extra content: h1"
-                    )
+                        'Error in 3:0: Element section has extra content: h1'
+                    ),
                 ),
             ),
             array(
@@ -197,7 +197,7 @@ class RichTextTest extends PHPUnit_Framework_TestCase
                     new ValidationError(
                         "Validation of XML content failed:\n" .
                         "/*[local-name()='section' and namespace-uri()='http://docbook.org/ns/docbook']: The root element must have a version attribute."
-                    )
+                    ),
                 ),
             ),
         );
@@ -216,7 +216,7 @@ class RichTextTest extends PHPUnit_Framework_TestCase
 
         /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|\PHPUnit_Framework_MockObject_MockObject $fieldDefinitionMock */
         $fieldDefinitionMock = $this->getMock(
-            "eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition"
+            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition'
         );
 
         $validationErrors = $fieldType->validate($fieldDefinitionMock, $value);
