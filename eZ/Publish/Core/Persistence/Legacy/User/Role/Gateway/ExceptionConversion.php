@@ -97,6 +97,24 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Loads a role draft by the original role ID.
+     *
+     * @param mixed $roleId ID of the role the draft was created from.
+     *
+     * @return array
+     */
+    public function loadRoleDraftByRoleId($roleId)
+    {
+        try {
+            return $this->innerGateway->loadRoleDraftByRoleId($roleId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
      * Loads all roles.
      *
      * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT

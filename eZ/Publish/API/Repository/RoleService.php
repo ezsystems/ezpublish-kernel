@@ -73,6 +73,18 @@ interface RoleService
     public function loadRoleDraft($id);
 
     /**
+     * Loads a RoleDraft by the ID of the role it was created from.
+     *
+     * @param mixed $roleId ID of the role the draft was created from.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a RoleDraft with the given id was not found
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
+     */
+    public function loadRoleDraftByRoleId($roleId);
+
+    /**
      * Updates the properties of a RoleDraft.
      *
      * @since 6.0

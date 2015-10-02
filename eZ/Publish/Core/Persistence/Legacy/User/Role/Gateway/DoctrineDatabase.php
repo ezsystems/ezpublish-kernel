@@ -223,6 +223,53 @@ class DoctrineDatabase extends Gateway
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    /**
+     * Loads a role draft by the original role ID.
+     *
+     * @param mixed $roleId ID of the role the draft was created from.
+     *
+     * @return array
+     */
+    public function loadRoleDraftByRoleId($roleId)
+    {
+        $query = $this->handler->createSelectQuery();
+        $query->select(
+            $this->handler->aliasedColumn($query, 'id', 'ezrole'),
+            $this->handler->aliasedColumn($query, 'name', 'ezrole'),
+            $this->handler->aliasedColumn($query, 'version', 'ezrole'),
+            $this->handler->aliasedColumn($query, 'id', 'ezpolicy'),
+            $this->handler->aliasedColumn($query, 'function_name', 'ezpolicy'),
+            $this->handler->aliasedColumn($query, 'module_name', 'ezpolicy'),
+            $this->handler->aliasedColumn($query, 'original_id', 'ezpolicy'),
+            $this->handler->aliasedColumn($query, 'identifier', 'ezpolicy_limitation'),
+            $this->handler->aliasedColumn($query, 'value', 'ezpolicy_limitation_value')
+        )->from(
+            $this->handler->quoteTable('ezrole')
+        )->leftJoin(
+            $this->handler->quoteTable('ezpolicy'),
+            $query->expr->eq(
+                $this->handler->quoteColumn('role_id', 'ezpolicy'),
+                $this->handler->quoteColumn('id', 'ezrole')
+            )
+        )->leftJoin(
+            $this->handler->quoteTable('ezpolicy_limitation'),
+            $query->expr->eq(
+                $this->handler->quoteColumn('policy_id', 'ezpolicy_limitation'),
+                $this->handler->quoteColumn('id', 'ezpolicy')
+            )
+        )->leftJoin(
+            $this->handler->quoteTable('ezpolicy_limitation_value'),
+            $query->expr->eq(
+                $this->handler->quoteColumn('limitation_id', 'ezpolicy_limitation_value'),
+                $this->handler->quoteColumn('id', 'ezpolicy_limitation')
+            )
+        )->where(
+            $query->expr->eq(
+                // Column name "version" is misleading as it stores originalId when creating a draft from an existing role.
+                // But hey, this is legacy! :-)
+                $this->handler->quoteColumn('version', 'ezrole'),
+                $query->bindValue($roleId, null, \PDO::PARAM_STR)
             )
         );
 

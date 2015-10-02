@@ -282,6 +282,31 @@ class Handler implements BaseUserHandler
     }
 
     /**
+     * Loads a role draft by the original role ID.
+     *
+     * @param mixed $roleId ID of the role the draft was created from.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
+     */
+    public function loadRoleDraftByRoleId($roleId)
+    {
+        $data = $this->roleGateway->loadRoleDraftByRoleId($roleId);
+
+        if (empty($data)) {
+            throw new RoleNotFound($roleId, Role::STATUS_DRAFT);
+        }
+
+        $role = $this->mapper->mapRole($data);
+        foreach ($role->policies as $policy) {
+            $this->limitationConverter->toSPI($policy);
+        }
+
+        return $role;
+    }
+
+    /**
      * Loads all roles.
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role[]

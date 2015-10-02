@@ -147,6 +147,16 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
+     * @see eZ\Publish\SPI\Persistence\User\Handler::loadRoleDraftByRoleId
+     */
+    public function loadRoleDraftByRoleId($roleId)
+    {
+        $this->logger->logCall(__METHOD__, array('role' => $roleId));
+
+        return $this->persistenceHandler->userHandler()->loadRoleDraftByRoleId($roleId);
+    }
+
+    /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::loadRoles
      */
     public function loadRoles()

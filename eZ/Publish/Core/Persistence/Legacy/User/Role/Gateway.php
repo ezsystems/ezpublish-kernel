@@ -49,6 +49,15 @@ abstract class Gateway
     abstract public function loadRoleByIdentifier($identifier, $status = Role::STATUS_DEFINED);
 
     /**
+     * Loads a role draft by the original role ID.
+     *
+     * @param mixed $roleId ID of the role the draft was created from.
+     *
+     * @return array
+     */
+    abstract public function loadRoleDraftByRoleId($roleId);
+
+    /**
      * Loads all roles.
      *
      * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
