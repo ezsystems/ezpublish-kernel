@@ -14,6 +14,8 @@ use eZ\Publish\Core\FieldType\Page\PageService;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\Symfony\Controller\ManagerInterface as ControllerManagerInterface;
+use eZ\Publish\Core\MVC\Symfony\View\BlockView;
+use eZ\Publish\Core\MVC\Symfony\View\Configurator;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
@@ -44,16 +46,23 @@ class PageControllerListener implements EventSubscriberInterface
      */
     private $logger;
 
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\View\Configurator
+     */
+    private $viewConfigurator;
+
     public function __construct(
         ControllerResolverInterface $controllerResolver,
         ControllerManagerInterface $controllerManager,
         PageService $pageService,
+        Configurator $viewConfigurator,
         LoggerInterface $logger
     ) {
         $this->controllerManager = $controllerManager;
         $this->controllerResolver = $controllerResolver;
         $this->pageService = $pageService;
         $this->logger = $logger;
+        $this->viewConfigurator = $viewConfigurator;
     }
 
     public static function getSubscribedEvents()
@@ -95,16 +104,16 @@ class PageControllerListener implements EventSubscriberInterface
             return;
         }
 
-        $controllerReference = $this->controllerManager->getControllerReference(
-            $valueObject,
-            'block'
-        );
+        $view = new BlockView();
+        $view->setBlock($valueObject);
+        $this->viewConfigurator->configure($view);
+        $request->attributes->set('view', $view);
 
-        if (!$controllerReference instanceof ControllerReference) {
+        if (!$view->getControllerReference() instanceof ControllerReference) {
             return;
         }
 
-        $request->attributes->set('_controller', $controllerReference->controller);
+        $request->attributes->set('_controller', $view->getControllerReference()->controller);
         $event->setController($this->controllerResolver->getController($request));
     }
 }
