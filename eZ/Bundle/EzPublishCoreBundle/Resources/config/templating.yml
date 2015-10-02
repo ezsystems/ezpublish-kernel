@@ -165,3 +165,6 @@ services:
 
     ezpublish.view.custom_location_controller_checker:
         class: %ezpublish.view.custom_location_controller_checker.class%
+
+    ezpublish.view_provider.registry:
+        class: eZ\Publish\Core\MVC\Symfony\View\Provider\Registry

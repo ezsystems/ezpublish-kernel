@@ -51,9 +51,9 @@ class ViewProvidersPass implements CompilerPassInterface
             }
         }
 
-        if ($container->hasDefinition('ezpublish.view.type_provider_registry')) {
-            $container->getDefinition('ezpublish.view.type_provider_registry')->addMethodCall(
-                'addViewProviders',
+        if ($container->hasDefinition('ezpublish.view_provider.registry')) {
+            $container->getDefinition('ezpublish.view_provider.registry')->addMethodCall(
+                'setViewProviders',
                 [$viewProviders]
             );
         }

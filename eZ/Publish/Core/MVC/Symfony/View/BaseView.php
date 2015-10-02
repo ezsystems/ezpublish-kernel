@@ -179,7 +179,6 @@ abstract class BaseView implements View
         return $this->configHash;
     }
 
-
     public function setViewType($viewType)
     {
         $this->viewType = $viewType;
@@ -202,7 +201,6 @@ abstract class BaseView implements View
     {
         return $this->controllerReference;
     }
-
 
     /**
      * Override to return internal parameters that will be added to the ones returned by getParameter().
