@@ -10,7 +10,9 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\View;
 
-interface ContentViewInterface
+use Symfony\Component\HttpKernel\Controller\ControllerReference;
+
+interface View
 {
     /**
      * Sets $templateIdentifier to the content view.
@@ -92,4 +94,15 @@ interface ContentViewInterface
      * @return array|null
      */
     public function getConfigHash();
+
+    public function setViewType($viewType);
+
+    public function getViewType();
+
+    public function setControllerReference(ControllerReference $controllerReference);
+
+    /**
+     * @return ControllerReference
+     */
+    public function getControllerReference();
 }
