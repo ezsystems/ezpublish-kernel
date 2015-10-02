@@ -76,5 +76,5 @@ interface ViewManagerInterface
      *
      * @return string
      */
-    public function renderContentView(ContentViewInterface $view, array $defaultParams = array());
+    public function renderContentView(View $view, array $defaultParams = array());
 }
