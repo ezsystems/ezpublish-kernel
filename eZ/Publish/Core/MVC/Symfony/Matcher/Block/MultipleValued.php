@@ -15,7 +15,7 @@ use eZ\Publish\Core\MVC\RepositoryAware;
 /**
  * Abstract class for basic matchers, accepting multiple values to match against.
  */
-abstract class MultipleValued extends RepositoryAware implements MatcherInterface
+abstract class MultipleValued extends RepositoryAware implements ViewMatcherInterface
 {
     /**
      * @var array Values to test against with isset(). Key is the actual value.

@@ -11,12 +11,11 @@
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Block;
 
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
-use eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface as BaseMatcherInterface;
 
 /**
  * Main interface for block matchers.
  */
-interface MatcherInterface extends BaseMatcherInterface
+interface ViewMatcherInterface extends MatcherInterface
 {
     /**
      * Checks if a Block object matches.
