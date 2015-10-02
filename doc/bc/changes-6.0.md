@@ -211,6 +211,12 @@ Changes affecting version compatibility with former or future versions.
   Those need to be changed to custom content view controllers, that use a contentId instead of a locationId as an
   argument. The location is available in the `$parameters` array.
 
+* The `eZ\Publish\Core\MVC\Symfony\View\MatcherInterface` interface is deprecated.
+  Matchers that use it will stop working until they implement `eZ\Publish\Core\MVC\Symfony\View\ViewMatcherInterface`
+  instead. This interface exposes a single `match()` method that expects an `eZ\Publish\Core\MVC\Symfony\View\View`
+  as its argument. Implementations should check the type of value the View contains, depending on what it is matching
+  against (`LocationValueView`, `ContentValueView`, `BlockValueView`.
+
 ## Removed features
 
 * `getLegacyKernel()` shorthand method in `eZ\Bundle\EzPublishCoreBundle\Controller` has been removed.

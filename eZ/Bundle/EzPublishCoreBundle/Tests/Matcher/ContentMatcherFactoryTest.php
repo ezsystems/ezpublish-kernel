@@ -37,7 +37,11 @@ class ContentMatcherFactoryTest extends BaseMatcherFactoryTest
             ->will(
                 $this->returnValueMap(
                     array(
-                        array($matcherServiceIdentifier, ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\ContentBased\\MatcherInterface')),
+                        array(
+                            $matcherServiceIdentifier,
+                            ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE,
+                            $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\ViewMatcherInterface'),
+                        ),
                     )
                 )
             );
