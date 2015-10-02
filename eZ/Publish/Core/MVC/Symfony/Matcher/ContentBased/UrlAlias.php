@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\View;
 
 class UrlAlias extends MultipleValued
 {
@@ -69,5 +70,10 @@ class UrlAlias extends MultipleValued
         );
 
         parent::setMatchingConfig($matchingConfig);
+    }
+
+    public function match(View $view)
+    {
+        // TODO: Implement match() method.
     }
 }

@@ -14,6 +14,8 @@ use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\LocationValueView;
+use eZ\Publish\Core\MVC\Symfony\View\View;
 
 class ParentLocation extends MultipleValued
 {
@@ -45,5 +47,14 @@ class ParentLocation extends MultipleValued
         );
 
         return isset($this->values[$location->parentLocationId]);
+    }
+
+    public function match(View $view)
+    {
+        if (!$view instanceof LocationValueView) {
+            return false;
+        }
+
+        return isset($this->values[$view->getLocation()->parentLocationId]);
     }
 }

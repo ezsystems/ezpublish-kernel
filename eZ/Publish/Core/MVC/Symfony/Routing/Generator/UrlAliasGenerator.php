@@ -22,7 +22,7 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class UrlAliasGenerator extends Generator
 {
-    const INTERNAL_LOCATION_ROUTE = '_ezpublishLocation';
+    const INTERNAL_CONTENT_VIEW_ROUTE = '_ez_content_view';
 
     /**
      * @var \eZ\Publish\Core\Repository\Repository
@@ -124,8 +124,8 @@ class UrlAliasGenerator extends Generator
             }
         } else {
             $path = $this->defaultRouter->generate(
-                self::INTERNAL_LOCATION_ROUTE,
-                array('locationId' => $location->id)
+                self::INTERNAL_CONTENT_VIEW_ROUTE,
+                array('contentId' => $location->contentId, 'locationId' => $location->id)
             );
         }
 

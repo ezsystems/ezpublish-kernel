@@ -14,6 +14,9 @@ use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\ContentValueView;
+use eZ\Publish\Core\MVC\Symfony\View\LocationValueView;
+use eZ\Publish\Core\MVC\Symfony\View\View;
 
 class ParentContentType extends MultipleValued
 {
@@ -51,5 +54,29 @@ class ParentContentType extends MultipleValued
         );
 
         return $this->matchLocation($location);
+    }
+
+    public function match(View $view)
+    {
+        if (!$view instanceof LocationValueView) {
+            return false;
+        }
+        $parent = $this->loadParentLocation(
+            $view->getLocation()->parentLocationId
+        );
+
+        return isset($this->values[$parent->getContentInfo()->contentTypeId]);
+    }
+
+    /**
+     * @return Location
+     */
+    private function loadParentLocation($locationId)
+    {
+        return $this->repository->sudo(
+            function (Repository $repository) use ($locationId) {
+                return $repository->getLocationService()->loadLocation($locationId);
+            }
+        );
     }
 }

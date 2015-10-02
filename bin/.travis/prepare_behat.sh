@@ -9,8 +9,10 @@ export TRAVIS_BUILD_DIR="$HOME/build/ezplatform"
 cd "$HOME/build"
 
 # Checkout meta repo, change the branch and/or remote to use a different ezpublish branch/distro
-git clone --depth 1 --single-branch --branch master https://github.com/ezsystems/ezplatform.git
+git clone --depth 1 --single-branch --branch ezp24869-viewContent_deprecation https://github.com/ezsystems/ezplatform.git
 cd ezplatform
+
+composer require --no-update ezsystems/behatbundle:dev-ezp24869-viewContent_deprecation
 
 # Install everything needed for behat testing, using our local branch of this repo
 ./bin/.travis/setup_from_external_repo.sh $BRANCH_BUILD_DIR "ezsystems/ezpublish-kernel:dev-tmp_travis_branch as 6.0"

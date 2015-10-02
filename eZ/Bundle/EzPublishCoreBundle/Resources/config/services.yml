@@ -87,6 +87,7 @@ services:
             - @ezpublish.content_preview_helper
             - @security.authorization_checker
             - @ezpublish.content_preview.location_provider
+            - @ezpublish.view.location_view_rule_thingie
 
     ezpublish.controller.content.preview:
         alias: ezpublish.controller.content.preview.core
@@ -131,13 +132,19 @@ services:
 
     ezpublish.controller_listener:
         class: %ezpublish.controller_listener.class%
-        arguments: [@controller_resolver, @ezpublish.controller_manager, @ezpublish.api.repository, @logger]
+        arguments:
+            - @controller_resolver
+            - @ezpublish.controller_manager
+            - @ezpublish.api.repository
+            - @logger
+            - @ezpublish.view.configurator
+            - @security.authorization_checker
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.page_controller_listener:
         class: %ezpublish.page_controller_listener.class%
-        arguments: [@controller_resolver, @ezpublish.controller_manager, @ezpublish.fieldType.ezpage.pageService, @logger]
+        arguments: [@controller_resolver, @ezpublish.controller_manager, @ezpublish.fieldType.ezpage.pageService, @ezpublish.view.configurator, @logger]
         tags:
             - { name: kernel.event_subscriber }
 

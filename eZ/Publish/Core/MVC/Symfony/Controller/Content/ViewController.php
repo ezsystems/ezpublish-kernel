@@ -99,6 +99,8 @@ class ViewController extends Controller
      * @throws \Exception
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @deprecated Since 1.0-beta1, location view is deprecated, and should be replaced with content_view
      */
     public function viewLocation($locationId, $viewType, $layout = false, array $params = array())
     {
@@ -151,6 +153,8 @@ class ViewController extends Controller
      * @throws \Exception
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @deprecated Since 1.0-beta1, location view is deprecated, and should be replaced with content_view
      */
     public function embedLocation($locationId, $viewType, $layout = false, array $params = array())
     {
@@ -244,6 +248,9 @@ class ViewController extends Controller
                 return $response;
             }
 
+            if (!isset($params['location']) && !isset($params['locationId'])) {
+                $params['location'] = $this->getRepository()->getLocationService()->loadLocation($content->contentInfo->mainLocationId);
+            }
             $response->headers->set('X-Location-Id', $content->contentInfo->mainLocationId);
             $response->setContent(
                 $this->renderContent($content, $viewType, $layout, $params)

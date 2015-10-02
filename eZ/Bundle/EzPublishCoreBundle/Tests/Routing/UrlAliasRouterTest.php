@@ -13,6 +13,8 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Routing;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Repository\Values\Content\Location;
 use Symfony\Component\Routing\RequestContext;
 use eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
@@ -120,11 +122,16 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
             ->method('lookup')
             ->with($prefix . $path)
             ->will($this->returnValue($urlAlias));
+        $this->locationService
+            ->expects($this->once())
+            ->method('loadLocation')
+            ->will($this->returnValue(new Location(array('contentInfo' => new ContentInfo(array('id' => 456))))));
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-            '_controller' => UrlAliasRouter::LOCATION_VIEW_CONTROLLER,
+            '_controller' => UrlAliasRouter::CONTENT_VIEW_CONTROLLER,
             'locationId' => $locationId,
+            'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
             'layout' => true,
         );
@@ -155,6 +162,10 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
             ->method('getPathPrefixByRootLocationId')
             ->with($rootLocationId)
             ->will($this->returnValue($prefix));
+        $this->locationService
+            ->expects($this->once())
+            ->method('loadLocation')
+            ->will($this->returnValue(new Location(array('contentInfo' => new ContentInfo(array('id' => 456))))));
 
         $locationId = 789;
         $path = '/foo/bar';
@@ -175,8 +186,9 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-            '_controller' => UrlAliasRouter::LOCATION_VIEW_CONTROLLER,
+            '_controller' => UrlAliasRouter::CONTENT_VIEW_CONTROLLER,
             'locationId' => $locationId,
+            'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
             'layout' => true,
         );
@@ -226,11 +238,16 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
             ->method('lookup')
             ->with($requestedPath)
             ->will($this->returnValue($urlAlias));
+        $this->locationService
+            ->expects($this->once())
+            ->method('loadLocation')
+            ->will($this->returnValue(new Location(array('contentInfo' => new ContentInfo(array('id' => 456))))));
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-            '_controller' => UrlAliasRouter::LOCATION_VIEW_CONTROLLER,
+            '_controller' => UrlAliasRouter::CONTENT_VIEW_CONTROLLER,
             'locationId' => $locationId,
+            'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
             'layout' => true,
         );
@@ -374,11 +391,16 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
             ->method('lookup')
             ->with($pathInfo)
             ->will($this->returnValue($urlAlias));
+        $this->locationService
+            ->expects($this->once())
+            ->method('loadLocation')
+            ->will($this->returnValue(new Location(array('contentInfo' => new ContentInfo(array('id' => 456))))));
 
         $expected = array(
             '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-            '_controller' => UrlAliasRouter::LOCATION_VIEW_CONTROLLER,
+            '_controller' => UrlAliasRouter::CONTENT_VIEW_CONTROLLER,
             'locationId' => $destinationId,
+            'contentId' => 456,
             'viewType' => ViewManager::VIEW_TYPE_FULL,
             'layout' => true,
         );

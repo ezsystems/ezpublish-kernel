@@ -16,6 +16,7 @@ use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Helper\PreviewLocationProvider;
 use eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\View\LocationViewRulesThingie;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use PHPUnit_Framework_TestCase;
@@ -45,8 +46,10 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
      */
     protected $authorizationChecker;
 
-    /** @var PreviewLocationProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PreviewLocationProvider|\PHPUnit_Framework_MockObject_MockObject|LocationViewRulesThingie */
     protected $locationProvider;
+
+    private $locationViewRulesThingie;
 
     protected function setUp()
     {
@@ -63,6 +66,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->getMockBuilder('eZ\Publish\Core\Helper\PreviewLocationProvider')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->locationViewRulesThingie = $this->getMock('eZ\Publish\Core\MVC\Symfony\View\LocationViewRulesThingie');
     }
 
     /**
@@ -75,7 +79,8 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             $this->httpKernel,
             $this->previewHelper,
             $this->authorizationChecker,
-            $this->locationProvider
+            $this->locationProvider,
+            $this->locationViewRulesThingie
         );
 
         return $controller;

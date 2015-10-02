@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
+use Exception;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
@@ -18,6 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Helper\ContentPreviewHelper;
 use eZ\Publish\Core\Helper\PreviewLocationProvider;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\View\LocationViewRulesThingie;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
@@ -28,6 +30,8 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class PreviewController
 {
+    const INTERNAL_LOCATION_VIEW_ROUTE = '_ezpublishLocation';
+
     /**
      * @var \eZ\Publish\API\Repository\ContentService
      */
@@ -49,22 +53,24 @@ class PreviewController
     private $authorizationChecker;
 
     /**
-     * @var \eZ\Publish\Core\Helper\PreviewLocationProvider
+     * @var \eZ\Publish\Core\MVC\Symfony\View\LocationViewRulesThingie
      */
-    private $locationProvider;
+    private $locationViewRulesThingie;
 
     public function __construct(
         ContentService $contentService,
         HttpKernelInterface $kernel,
         ContentPreviewHelper $previewHelper,
         AuthorizationCheckerInterface $authorizationChecker,
-        PreviewLocationProvider $locationProvider
+        PreviewLocationProvider $locationProvider,
+        LocationViewRulesThingie $locationViewRulesThingie
     ) {
         $this->contentService = $contentService;
         $this->kernel = $kernel;
         $this->previewHelper = $previewHelper;
         $this->authorizationChecker = $authorizationChecker;
         $this->locationProvider = $locationProvider;
+        $this->locationViewRulesThingie = $locationViewRulesThingie;
     }
 
     /**
@@ -98,10 +104,25 @@ class PreviewController
             $siteAccess = $this->previewHelper->changeConfigScope($siteAccessName);
         }
 
-        $response = $this->kernel->handle(
-            $this->getForwardRequest($location, $content, $siteAccess, $request),
-            HttpKernelInterface::SUB_REQUEST
-        );
+        try {
+            $response = $this->kernel->handle(
+                $this->getForwardRequest($location, $content, $siteAccess, $request),
+                HttpKernelInterface::SUB_REQUEST,
+                false
+            );
+        } catch (\Exception $e) {
+            if ($location->isDraft() && $this->locationViewRulesThingie->usesCustomController($location)) {
+                // @todo This should probably be an exception that embeds the original one
+                $message = <<<EOF
+<p>The view that rendered this location draft uses a custom controller, and resulted in a fatal error.</p>
+<p>Location View is deprecated, as it causes issues with preview, such as an empty location id when previewing the first version of a content.</p>
+EOF;
+
+                throw new Exception($message, 0, $e);
+            } else {
+                throw $e;
+            }
+        }
         $response->headers->remove('cache-control');
         $response->headers->remove('expires');
 
@@ -123,27 +144,37 @@ class PreviewController
      */
     protected function getForwardRequest(Location $location, Content $content, SiteAccess $previewSiteAccess, Request $request)
     {
+        $forwardRequestParameters = array(
+            '_controller' => 'ez_content:viewContent',
+            // specify a route for RouteReference generator
+            '_route' => UrlAliasGenerator::INTERNAL_CONTENT_VIEW_ROUTE,
+            '_route_params' => array(
+                'contentId' => $content->id,
+                'locationId' => $location->id,
+            ),
+            'location' => $location,
+            'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
+            'layout' => true,
+            'params' => array(
+                'content' => $content,
+                'location' => $location,
+                'isPreview' => true,
+            ),
+            'siteaccess' => $previewSiteAccess,
+            'semanticPathinfo' => $request->attributes->get('semanticPathinfo'),
+        );
+
+        if ($this->locationViewRulesThingie->usesCustomController($location)) {
+            $forwardRequestParameters = [
+                '_controller' => 'ez_content:viewLocation',
+                '_route' => self::INTERNAL_LOCATION_VIEW_ROUTE,
+            ] + $forwardRequestParameters;
+        }
+
         return $request->duplicate(
             null,
             null,
-            array(
-                '_controller' => 'ez_content:viewLocation',
-                // specify a route for RouteReference generator
-                '_route' => UrlAliasGenerator::INTERNAL_LOCATION_ROUTE,
-                '_route_params' => array(
-                    'locationId' => $location->id,
-                ),
-                'location' => $location,
-                'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
-                'layout' => true,
-                'params' => array(
-                    'content' => $content,
-                    'location' => $location,
-                    'isPreview' => true,
-                ),
-                'siteaccess' => $previewSiteAccess,
-                'semanticPathinfo' => $request->attributes->get('semanticPathinfo'),
-            )
+            $forwardRequestParameters
         );
     }
 }
