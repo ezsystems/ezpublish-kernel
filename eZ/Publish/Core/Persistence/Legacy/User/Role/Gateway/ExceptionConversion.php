@@ -194,12 +194,11 @@ class ExceptionConversion extends Gateway
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      *
      * @param RoleUpdateStruct $role
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    public function updateRole(RoleUpdateStruct $role, $status = Role::STATUS_DEFINED)
+    public function updateRole(RoleUpdateStruct $role)
     {
         try {
-            return $this->innerGateway->updateRole($role, $status);
+            return $this->innerGateway->updateRole($role);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

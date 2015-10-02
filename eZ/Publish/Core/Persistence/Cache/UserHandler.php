@@ -192,14 +192,12 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::updateRole
      */
-    public function updateRole(RoleUpdateStruct $struct, $status = Role::STATUS_DEFINED)
+    public function updateRole(RoleUpdateStruct $struct)
     {
         $this->logger->logCall(__METHOD__, array('struct' => $struct));
-        $this->persistenceHandler->userHandler()->updateRole($struct, $status);
+        $this->persistenceHandler->userHandler()->updateRole($struct);
 
-        if ($status === Role::STATUS_DEFINED) {
-            $this->cache->clear('user', 'role', $struct->id);
-        }
+        $this->cache->clear('user', 'role', $struct->id);
     }
 
     /**

@@ -91,20 +91,6 @@ class SqliteConnectionHandler extends ConnectionHandler
             return $this->lastInsertedIds['ezcontentclass_attribute.id'];
         }
 
-        if (($table === 'ezrole') && ($column === 'id')) {
-            // This is a @HACK -- since this table has a multi-column key with
-            // auto-increment, which is not easy to simulate in SQLite. This
-            // solves it for now.
-            $q = $this->createSelectQuery();
-            $q->select($q->expr->max('id'))->from('ezrole');
-            $statement = $q->prepare();
-            $statement->execute();
-
-            $this->lastInsertedIds['ezrole.id'] = (int)$statement->fetchColumn() + 1;
-
-            return $this->lastInsertedIds['ezrole.id'];
-        }
-
         return 'NULL';
     }
 

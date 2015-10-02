@@ -164,9 +164,8 @@ interface Handler
      * Update role (draft).
      *
      * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    public function updateRole(RoleUpdateStruct $role, $status = Role::STATUS_DEFINED);
+    public function updateRole(RoleUpdateStruct $role);
 
     /**
      * Delete the specified role (draft).

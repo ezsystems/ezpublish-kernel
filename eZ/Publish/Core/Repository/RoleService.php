@@ -294,8 +294,7 @@ class RoleService implements RoleServiceInterface
                         'id' => $loadedRoleDraft->id,
                         'identifier' => $roleUpdateStruct->identifier ?: $loadedRoleDraft->identifier,
                     )
-                ),
-                Role::STATUS_DRAFT
+                )
             );
             $this->repository->commit();
         } catch (Exception $e) {

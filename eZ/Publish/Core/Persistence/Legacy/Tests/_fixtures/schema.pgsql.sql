@@ -826,7 +826,7 @@ ALTER TABLE ONLY ezpolicy_limitation_value
     ADD CONSTRAINT ezpolicy_limitation_value_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY ezrole
-    ADD CONSTRAINT ezrole_pkey PRIMARY KEY (id, version);
+    ADD CONSTRAINT ezrole_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY ezsearch_object_word_link
     ADD CONSTRAINT ezsearch_object_word_link_pkey PRIMARY KEY (id);

@@ -101,9 +101,8 @@ abstract class Gateway
      * Will not throw anything if location id is invalid.
      *
      * @param RoleUpdateStruct $role
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    abstract public function updateRole(RoleUpdateStruct $role, $status = Role::STATUS_DEFINED);
+    abstract public function updateRole(RoleUpdateStruct $role);
 
     /**
      * Delete the specified role (draft).
