@@ -11,6 +11,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Matcher;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\Core\MVC\Symfony\View\View;
 
 interface MatcherFactoryInterface
 {
@@ -20,10 +21,9 @@ interface MatcherFactoryInterface
      *
      * $valueObject can be for example a Location or a Content object.
      *
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $valueObject
-     * @param string $viewType
+     * @param \eZ\Publish\Core\MVC\Symfony\View\View $view
      *
      * @return array|null The matched configuration as a hash, containing template or controller to use, or null if not matched.
      */
-    public function match(ValueObject $valueObject, $viewType);
+    public function match(View $view);
 }
