@@ -100,7 +100,7 @@ abstract class BaseView implements View
      */
     public function getParameters()
     {
-        return $this->parameters;
+        return $this->getInternalParameters() + $this->parameters;
     }
 
     /**
@@ -202,5 +202,16 @@ abstract class BaseView implements View
     public function getControllerReference()
     {
         return $this->controllerReference;
+    }
+
+
+    /**
+     * Override to return internal parameters that will be added to the ones returned by getParameter().
+     *
+     * @return array
+     */
+    protected function getInternalParameters()
+    {
+        return [];
     }
 }
