@@ -164,3 +164,6 @@ services:
 
     ezpublish.view.location_view_rule_thingie:
         class: eZ\Publish\Core\MVC\Symfony\View\LocationViewRulesThingie
+
+    ezpublish.view_provider.registry:
+        class: eZ\Publish\Core\MVC\Symfony\View\Provider\Registry
