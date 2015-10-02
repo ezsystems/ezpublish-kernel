@@ -21,18 +21,18 @@
         </tr>
       </table>
     </ezcontent>
-    <ezconfig>
-      <ezvalue key="title">Factoids</ezvalue>
-    </ezconfig>
+    <span data-ezelement="ezconfig">
+      <span data-ezelement="ezvalue" data-ezvalue-key="title">Factoids</span>
+    </span>
   </eztemplate>
   <eztemplate data-ezname="externalimage" class="templateClass2" data-ezalign="right">
-    <ezconfig>
-      <ezvalue key="src">http://upload.wikimedia.org/wikipedia/commons/c/c6/R-S_mk2.gif</ezvalue>
-      <ezvalue key="height">365</ezvalue>
-      <ezvalue key="width">500</ezvalue>
-      <ezvalue key="alt">flip-flop</ezvalue>
-      <ezvalue key="caption">bistable multivibrator</ezvalue>
-    </ezconfig>
+    <span data-ezelement="ezconfig">
+      <span data-ezelement="ezvalue" data-ezvalue-key="src">http://upload.wikimedia.org/wikipedia/commons/c/c6/R-S_mk2.gif</span>
+      <span data-ezelement="ezvalue" data-ezvalue-key="height">365</span>
+      <span data-ezelement="ezvalue" data-ezvalue-key="width">500</span>
+      <span data-ezelement="ezvalue" data-ezvalue-key="alt">flip-flop</span>
+      <span data-ezelement="ezvalue" data-ezvalue-key="caption">bistable multivibrator</span>
+    </span>
   </eztemplate>
   <eztemplate data-ezname="factoidbox" class="templateClass3" data-ezalign="center">
     <ezcontent>It is widely known that the bistable multivibrator hums z's in the middle octave key of E.</ezcontent>

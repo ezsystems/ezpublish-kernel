@@ -977,9 +977,19 @@
 
   <xs:complexType name="ezpublishEmbed">
     <xs:all>
-      <xs:element name="ezlink" type="ezlink" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="ezconfig" type="ezconfig" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="a" type="ezlink" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="span" type="ezconfig" minOccurs="0" maxOccurs="1"/>
     </xs:all>
+    <xs:attribute name="data-ezelement" type="token" use="required" fixed="ezembed"/>
+    <xs:attributeGroup ref="ezembedAttributeGroup"/>
+  </xs:complexType>
+
+  <xs:complexType name="ezpublishEmbedInline">
+    <xs:all>
+      <xs:element name="a" type="ezlink" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="span" type="ezconfig" minOccurs="0" maxOccurs="1"/>
+    </xs:all>
+    <xs:attribute name="data-ezelement" type="token" use="required" fixed="ezembedinline"/>
     <xs:attributeGroup ref="ezembedAttributeGroup"/>
   </xs:complexType>
 
@@ -1000,6 +1010,7 @@
   </xs:attributeGroup>
 
   <xs:complexType name="ezlink" mixed="false">
+    <xs:attribute name="data-ezelement" type="token" use="required" fixed="ezlink"/>
     <xs:attribute name="id">
       <xs:simpleType>
         <xs:restriction base="xs:token">
@@ -1018,7 +1029,7 @@
   <xs:complexType name="ezpublishTemplate">
     <xs:sequence>
       <xs:element name="ezcontent" type="ezcontent" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="ezconfig" type="ezconfig" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="span" type="ezconfig" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
     <xs:attributeGroup ref="eztemplateAttributeGroup"/>
   </xs:complexType>
@@ -1026,7 +1037,7 @@
   <xs:complexType name="ezpublishTemplateInline">
     <xs:sequence>
       <xs:element name="ezcontent" type="ezcontentinline" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="ezconfig" type="ezconfig" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="span" type="ezconfig" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
     <xs:attributeGroup ref="eztemplateInlineAttributeGroup"/>
   </xs:complexType>
@@ -1058,16 +1069,18 @@
 
   <xs:complexType name="ezconfig" mixed="false">
     <xs:sequence>
-      <xs:element name="ezvalue" type="ezvalue" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="span" type="ezvalue" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="key" type="token"/>
+    <xs:attribute name="data-ezelement" type="token" use="required" fixed="ezconfig"/>
   </xs:complexType>
 
   <xs:complexType name="ezvalue" mixed="true">
     <xs:sequence>
-      <xs:element name="ezvalue" type="ezvalue" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="span" type="ezvalue" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="key" type="token"/>
+    <xs:attribute name="data-ezvalue-key" type="token"/>
+    <xs:attribute name="data-ezelement" type="token" use="required" fixed="ezvalue"/>
   </xs:complexType>
 
   <!-- Common content models ============================================= -->
@@ -1112,7 +1125,7 @@
       <xs:element ref="table"/>
       <!--xs:element name="canvas" type="canvasFlow"/-->
       <!--xs:element ref="details"/-->
-      <xs:element name="ezembed" type="ezpublishEmbed"/>
+      <xs:element name="div" type="ezpublishEmbed"/>
       <xs:element name="eztemplate" type="ezpublishTemplate"/>
     </xs:choice>
   </xs:group>
@@ -1152,7 +1165,7 @@
               processContents="skip"/-->
       <!--xs:any namespace="http://www.w3.org/1998/Math/MathML"
               processContents="skip"/-->
-      <xs:element name="ezembedinline" type="ezpublishEmbed"/>
+      <xs:element name="span" type="ezpublishEmbedInline"/>
       <xs:element name="eztemplateinline" type="ezpublishTemplateInline"/>
     </xs:choice>
   </xs:group>

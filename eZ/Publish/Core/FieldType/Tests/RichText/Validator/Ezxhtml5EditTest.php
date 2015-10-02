@@ -22,14 +22,14 @@ class Ezxhtml5EditTest extends PHPUnit_Framework_TestCase
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5/edit">
-  <p>Some <a href="ezcontent://601">linked <ezembedinline id="id3" href="ezcontent://601" data-ezview="embed-inline-custom" class="embedClass" data-ezalign="left">
-    <ezlink href="ezcontent://106" id="id4" target="_blank" title="Link title" class="linkClass"/>
-  </ezembedinline> linked</a> embeds.</p>
+  <p>Some <a href="ezcontent://601">linked <span data-ezelement="ezembedinline" id="id3" href="ezcontent://601" data-ezview="embed-inline-custom" class="embedClass" data-ezalign="left">
+    <a href="http://ez.no" id="id4" target="_blank" title="Link title" class="linkClass"/>
+  </span> linked</a> embeds.</p>
 </section>
 
 ',
                 array(
-                    'ezlink must not occur in the descendants of a',
+                    "The attribute 'data-ezelement' is required but missing.",
                 ),
             ),
         );

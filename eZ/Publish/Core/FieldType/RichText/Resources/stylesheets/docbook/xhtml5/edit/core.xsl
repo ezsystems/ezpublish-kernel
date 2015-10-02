@@ -436,39 +436,59 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="docbook:ezembed | docbook:ezembedinline">
-    <xsl:element name="{local-name()}" namespace="{$outputNamespace}">
-      <xsl:if test="@xlink:href">
-        <xsl:attribute name="href">
-          <xsl:value-of select="@xlink:href"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:if test="@xml:id">
-        <xsl:attribute name="id">
-          <xsl:value-of select="@xml:id"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:if test="@view">
-        <xsl:attribute name="data-ezview">
-          <xsl:value-of select="@view"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:if test="@ezxhtml:class">
-        <xsl:attribute name="class">
-          <xsl:value-of select="@ezxhtml:class"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:if test="@ezxhtml:align">
-        <xsl:attribute name="data-ezalign">
-          <xsl:value-of select="@ezxhtml:align"/>
-        </xsl:attribute>
-      </xsl:if>
+  <xsl:template match="docbook:ezembed">
+    <xsl:element name="div" namespace="{$outputNamespace}">
+      <xsl:attribute name="data-ezelement">
+        <xsl:value-of select="'ezembed'"/>
+      </xsl:attribute>
+      <xsl:call-template name="addCommonEmbedAttributes"/>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="docbook:ezembedinline">
+    <xsl:element name="span" namespace="{$outputNamespace}">
+      <xsl:attribute name="data-ezelement">
+        <xsl:value-of select="'ezembedinline'"/>
+      </xsl:attribute>
+      <xsl:call-template name="addCommonEmbedAttributes"/>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template name="addCommonEmbedAttributes">
+    <xsl:if test="@xlink:href">
+      <xsl:attribute name="href">
+        <xsl:value-of select="@xlink:href"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@xml:id">
+      <xsl:attribute name="id">
+        <xsl:value-of select="@xml:id"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@view">
+      <xsl:attribute name="data-ezview">
+        <xsl:value-of select="@view"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@ezxhtml:class">
+      <xsl:attribute name="class">
+        <xsl:value-of select="@ezxhtml:class"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@ezxhtml:align">
+      <xsl:attribute name="data-ezalign">
+        <xsl:value-of select="@ezxhtml:align"/>
+      </xsl:attribute>
+    </xsl:if>
+  </xsl:template>
+
   <xsl:template match="docbook:ezembed/docbook:ezlink | docbook:ezembedinline/docbook:ezlink">
-    <xsl:element name="ezlink" namespace="{$outputNamespace}">
+    <xsl:element name="a" namespace="{$outputNamespace}">
+      <xsl:attribute name="data-ezelement">
+        <xsl:value-of select="'ezlink'"/>
+      </xsl:attribute>
       <xsl:attribute name="href">
         <xsl:value-of select="@xlink:href"/>
       </xsl:attribute>
@@ -493,14 +513,25 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="docbook:ezembed//* | docbook:ezembedinline//*">
-    <xsl:element name="{local-name()}" namespace="{$outputNamespace}">
-      <xsl:apply-templates select="node()|@*"/>
+  <xsl:template match="docbook:ezconfig">
+    <xsl:element name="span" namespace="{$outputNamespace}">
+      <xsl:attribute name="data-ezelement">
+        <xsl:value-of select="'ezconfig'"/>
+      </xsl:attribute>
+      <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="docbook:ezembed//@* | docbook:ezembedinline//@*">
-    <xsl:copy/>
+  <xsl:template match="docbook:ezvalue">
+    <xsl:element name="span" namespace="{$outputNamespace}">
+      <xsl:attribute name="data-ezelement">
+        <xsl:value-of select="'ezvalue'"/>
+      </xsl:attribute>
+      <xsl:attribute name="data-ezvalue-key">
+        <xsl:value-of select="@key"/>
+      </xsl:attribute>
+      <xsl:apply-templates/>
+    </xsl:element>
   </xsl:template>
 
   <xsl:template match="docbook:eztemplate | docbook:eztemplateinline">
@@ -528,22 +559,6 @@
     <xsl:element name="{local-name()}" namespace="{$outputNamespace}">
       <xsl:apply-templates select="node()|@*"/>
     </xsl:element>
-  </xsl:template>
-
-  <xsl:template match="docbook:eztemplate/docbook:ezconfig | docbook:eztemplateinline/docbook:ezconfig">
-    <xsl:element name="{local-name()}" namespace="{$outputNamespace}">
-      <xsl:apply-templates select="node()|@*"/>
-    </xsl:element>
-  </xsl:template>
-
-  <xsl:template match="docbook:eztemplate/docbook:ezconfig//* | docbook:eztemplateinline/docbook:ezconfig//*">
-    <xsl:element name="{local-name()}" namespace="{$outputNamespace}">
-      <xsl:apply-templates select="node()|@*"/>
-    </xsl:element>
-  </xsl:template>
-
-  <xsl:template match="docbook:eztemplate/docbook:ezconfig//@* | docbook:eztemplateinline/docbook:ezconfig//@*">
-    <xsl:copy/>
   </xsl:template>
 
   <xsl:template name="extractStyleValue">
