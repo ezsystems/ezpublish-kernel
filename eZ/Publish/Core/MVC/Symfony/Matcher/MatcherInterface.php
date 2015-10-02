@@ -10,6 +10,8 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher;
 
+use eZ\Publish\Core\MVC\Symfony\View\View;
+
 /**
  * Base interface for matchers.
  */
@@ -24,4 +26,6 @@ interface MatcherInterface
      * @throws \InvalidArgumentException Should be thrown if $matchingConfig is not valid.
      */
     public function setMatchingConfig($matchingConfig);
+
+    public function match(View $view);
 }

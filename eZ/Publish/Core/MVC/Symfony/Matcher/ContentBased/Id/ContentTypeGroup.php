@@ -13,6 +13,8 @@ namespace eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\Symfony\View\ContentValueView;
+use eZ\Publish\Core\MVC\Symfony\View\View;
 
 class ContentTypeGroup extends MultipleValued
 {
@@ -25,7 +27,7 @@ class ContentTypeGroup extends MultipleValued
      */
     public function matchLocation(APILocation $location)
     {
-        return $this->matchContentInfo($location->getContentInfo());
+        return $this->matchContentTypeId($location->getContentInfo()->contentTypeId);
     }
 
     /**
@@ -37,9 +39,26 @@ class ContentTypeGroup extends MultipleValued
      */
     public function matchContentInfo(ContentInfo $contentInfo)
     {
+        return $this->matchContentTypeId($contentInfo->contentTypeId);
+    }
+
+    public function match(View $view)
+    {
+        if (!$view instanceof ContentValueView) {
+            return false;
+        }
+
+        return $this->matchContentTypeId($view->getContent()->contentInfo->contentTypeId);
+    }
+
+    /**
+     * @return bool
+     */
+    private function matchContentTypeId($contentTypeId)
+    {
         $contentTypeGroups = $this->repository
             ->getContentTypeService()
-            ->loadContentType($contentInfo->contentTypeId)
+            ->loadContentType($contentTypeId)
             ->getContentTypeGroups();
 
         foreach ($contentTypeGroups as $group) {
