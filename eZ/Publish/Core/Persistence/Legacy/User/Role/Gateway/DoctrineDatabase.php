@@ -433,11 +433,11 @@ class DoctrineDatabase extends Gateway
     /**
      * Loads role assignment for specified assignment ID.
      *
-     * @param mixed $assignmentId
+     * @param mixed $roleAssignmentId
      *
      * @return array
      */
-    public function loadRoleAssignment($assignmentId)
+    public function loadRoleAssignment($roleAssignmentId)
     {
         $query = $this->handler->createSelectQuery();
         $query->select(
@@ -451,7 +451,7 @@ class DoctrineDatabase extends Gateway
         )->where(
             $query->expr->eq(
                 $this->handler->quoteColumn('id'),
-                $query->bindValue($assignmentId, null, \PDO::PARAM_INT)
+                $query->bindValue($roleAssignmentId, null, \PDO::PARAM_INT)
             )
         );
 

@@ -87,7 +87,7 @@ abstract class Gateway
     /**
      * Remove role from user or user group, by assignment ID.
      *
-     * @param mixed $assignmentId
+     * @param mixed $roleAssignmentId
      */
-    abstract public function removeRoleByAssignmentId($assignmentId);
+    abstract public function removeRoleAssignmentById($roleAssignmentId);
 }

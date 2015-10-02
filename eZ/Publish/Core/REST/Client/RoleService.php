@@ -758,41 +758,25 @@ class RoleService implements APIRoleService, Sessionable
      * Removes the given role assignment.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role assignment
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment was not found
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleAssignment $roleAssignment
      */
-    public function unassignRoleByAssignment(APIRoleAssignment $roleAssignment)
+    public function removeRoleAssignment(APIRoleAssignment $roleAssignment)
     {
         throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Loads a user group role assignment for the given id.
+     * Loads a user assignment for the given id.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment, role or user group was not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment was not found
      *
-     * @param mixed $assignmentId
+     * @param mixed $roleAssignmentId
      *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment
      */
-    public function loadUserGroupRoleAssignment($assignmentId)
-    {
-        throw new \Exception('@todo: Implement.');
-    }
-
-    /**
-     * Loads a user role assignment for the given id.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment, role or user was not found
-     *
-     * @param mixed $assignmentId
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment
-     */
-    public function loadUserRoleAssignment($assignmentId)
+    public function loadRoleAssignment($roleAssignmentId)
     {
         throw new \Exception('@todo: Implement.');
     }

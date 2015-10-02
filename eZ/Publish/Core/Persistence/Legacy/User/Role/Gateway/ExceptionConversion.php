@@ -154,14 +154,14 @@ class ExceptionConversion extends Gateway
     /**
      * Loads role assignment for specified assignment ID.
      *
-     * @param mixed $assignmentId
+     * @param mixed $roleAssignmentId
      *
      * @return array
      */
-    public function loadRoleAssignment($assignmentId)
+    public function loadRoleAssignment($roleAssignmentId)
     {
         try {
-            return $this->innerGateway->loadRoleAssignment($assignmentId);
+            return $this->innerGateway->loadRoleAssignment($roleAssignmentId);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

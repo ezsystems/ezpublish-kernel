@@ -41,7 +41,6 @@ use eZ\Publish\Core\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\Core\Repository\Values\User\RoleDraft;
 use eZ\Publish\SPI\Persistence\User\Handler;
 use eZ\Publish\SPI\Persistence\User\Role as SPIRole;
-use eZ\Publish\SPI\Persistence\User\RoleAssignment as SPIRoleAssignment;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct as SPIRoleUpdateStruct;
 use Exception;
 
@@ -1058,25 +1057,20 @@ class RoleService implements RoleServiceInterface
      * Removes the given role assignment.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role assignment
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment was not found
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleAssignment $roleAssignment
      */
-    public function unassignRoleByAssignment(RoleAssignment $roleAssignment)
+    public function removeRoleAssignment(RoleAssignment $roleAssignment)
     {
-        //TODO verify if this permission check actually works
         if ($this->repository->canUser('role', 'assign', $roleAssignment) !== true) {
             throw new UnauthorizedException('role', 'assign');
         }
 
         $spiRoleAssignment = $this->userHandler->loadRoleAssignment($roleAssignment->id);
-        if (!$spiRoleAssignment instanceof RoleAssignment) {
-            throw new NotFoundException('roleAssignment', $roleAssignment->id);
-        }
 
         $this->repository->beginTransaction();
         try {
-            $this->userHandler->unassignRoleByAssignmentId($spiRoleAssignment->id);
+            $this->userHandler->removeRoleAssignment($spiRoleAssignment->id);
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
@@ -1085,57 +1079,49 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Loads a user group role assignment for the given id.
+     * Loads a role assignment for the given id.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment, role or user group was not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment was not found
      *
-     * @param mixed $assignmentId
+     * @param mixed $roleAssignmentId
      *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment
      */
-    public function loadUserGroupRoleAssignment($assignmentId)
+    public function loadRoleAssignment($roleAssignmentId)
     {
         if ($this->repository->hasAccess('role', 'read') !== true) {
             throw new UnauthorizedException('role', 'read');
         }
 
-        $spiRoleAssignment = $this->userHandler->loadRoleAssignment($assignmentId);
-        if (!$spiRoleAssignment instanceof SPIRoleAssignment) {
-            throw new NotFoundException('roleAssignment', $assignmentId);
-        }
-
+        $spiRoleAssignment = $this->userHandler->loadRoleAssignment($roleAssignmentId);
+        $userService = $this->repository->getUserService();
         $role = $this->loadRole($spiRoleAssignment->roleId);
-        $userGroup = $this->repository->getUserService()->loadUserGroup($spiRoleAssignment->contentId);
+        $roleAssignment = null;
 
-        return $this->roleDomainMapper->buildDomainUserGroupRoleAssignmentObject($spiRoleAssignment, $userGroup, $role);
-    }
-
-    /**
-     * Loads a user role assignment for the given id.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment, role or user was not found
-     *
-     * @param mixed $assignmentId
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment
-     */
-    public function loadUserRoleAssignment($assignmentId)
-    {
-        if ($this->repository->hasAccess('role', 'read') !== true) {
-            throw new UnauthorizedException('role', 'read');
+        // First check if the Role is assigned to a User
+        // If no User is found, see if it belongs to a UserGroup
+        try {
+            $user = $userService->loadUser($spiRoleAssignment->contentId);
+            $roleAssignment = $this->roleDomainMapper->buildDomainUserRoleAssignmentObject(
+                $spiRoleAssignment,
+                $user,
+                $role
+            );
+        } catch (APINotFoundException $e) {
+            try {
+                $userGroup = $userService->loadUserGroup($spiRoleAssignment->contentId);
+                $roleAssignment = $this->roleDomainMapper->buildDomainUserGroupRoleAssignmentObject(
+                    $spiRoleAssignment,
+                    $userGroup,
+                    $role
+                );
+            } catch (APINotFoundException $e) {
+                // Do nothing
+            }
         }
 
-        $spiRoleAssignment = $this->userHandler->loadRoleAssignment($assignmentId);
-        if (!$spiRoleAssignment instanceof SPIRoleAssignment) {
-            throw new NotFoundException('roleAssignment', $assignmentId);
-        }
-
-        $role = $this->loadRole($spiRoleAssignment->roleId);
-        $user = $this->repository->getUserService()->loadUser($spiRoleAssignment->contentId);
-
-        return $this->roleDomainMapper->buildDomainUserRoleAssignmentObject($spiRoleAssignment, $user, $role);
+        return $roleAssignment;
     }
 
     /**

@@ -1,0 +1,113 @@
+<?php
+
+return array(
+    'ezrole' => array(
+        array(
+            'id' => '1',
+            'is_new' => '0',
+            'name' => 'Anonymous',
+            'value' => ' ',
+            'version' => '0',
+        ),
+        array(
+            'id' => '2',
+            'is_new' => '0',
+            'name' => 'Administrator',
+            'value' => '*',
+            'version' => '0',
+        ),
+        array(
+            'id' => '3',
+            'is_new' => '0',
+            'name' => 'Editor',
+            'value' => ' ',
+            'version' => '0',
+        ),
+        array(
+            'id' => '4',
+            'is_new' => '0',
+            'name' => 'Partner',
+            'value' => null,
+            'version' => '0',
+        ),
+        array(
+            'id' => '5',
+            'is_new' => '0',
+            'name' => 'Member',
+            'value' => null,
+            'version' => '0',
+        ),
+    ),
+    'ezuser_role' => array(
+        array(
+            'contentobject_id' => '12',
+            'id' => '25',
+            'limit_identifier' => '',
+            'limit_value' => '',
+            'role_id' => '2',
+        ),
+        array(
+            'contentobject_id' => '11',
+            'id' => '28',
+            'limit_identifier' => '',
+            'limit_value' => '',
+            'role_id' => '1',
+        ),
+        array(
+            'contentobject_id' => '42',
+            'id' => '31',
+            'limit_identifier' => '',
+            'limit_value' => '',
+            'role_id' => '1',
+        ),
+        array(
+            'contentobject_id' => '13',
+            'id' => '32',
+            'limit_identifier' => 'Subtree',
+            'limit_value' => '/1/2/',
+            'role_id' => '3',
+        ),
+        array(
+            'contentobject_id' => '13',
+            'id' => '33',
+            'limit_identifier' => 'Subtree',
+            'limit_value' => '/1/43/',
+            'role_id' => '3',
+        ),
+        array(
+            'contentobject_id' => '11',
+            'id' => '34',
+            'limit_identifier' => '',
+            'limit_value' => '',
+            'role_id' => '5',
+        ),
+        array(
+            'contentobject_id' => '59',
+            'id' => '35',
+            'limit_identifier' => '',
+            'limit_value' => '',
+            'role_id' => '4',
+        ),
+        array(
+            'contentobject_id' => '59',
+            'id' => '36',
+            'limit_identifier' => '',
+            'limit_value' => '',
+            'role_id' => '5',
+        ),
+        array(
+            'contentobject_id' => '59',
+            'id' => '37',
+            'limit_identifier' => '',
+            'limit_value' => '',
+            'role_id' => '1',
+        ),
+        array(
+            'contentobject_id' => '13',
+            'id' => '38',
+            'limit_identifier' => '',
+            'limit_value' => '',
+            'role_id' => '5',
+        ),
+    ),
+);

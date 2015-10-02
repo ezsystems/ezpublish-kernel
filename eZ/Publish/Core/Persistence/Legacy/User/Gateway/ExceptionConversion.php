@@ -180,12 +180,12 @@ class ExceptionConversion extends Gateway
     /**
      * Remove role from user or user group, by assignment ID.
      *
-     * @param mixed $assignmentId
+     * @param mixed $roleAssignmentId
      */
-    public function removeRoleByAssignmentId($assignmentId)
+    public function removeRoleAssignmentById($roleAssignmentId)
     {
         try {
-            return $this->innerGateway->removeRoleByAssignmentId($assignmentId);
+            return $this->innerGateway->removeRoleAssignmentById($roleAssignmentId);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

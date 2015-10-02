@@ -150,11 +150,13 @@ interface Handler
     /**
      * Loads role assignment for specified assignment ID.
      *
-     * @param mixed $assignmentId
+     * @param mixed $roleAssignmentId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role assignment is not found
      *
      * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment
      */
-    public function loadRoleAssignment($assignmentId);
+    public function loadRoleAssignment($roleAssignmentId);
 
     /**
      * Loads roles assignments Role.
@@ -295,7 +297,7 @@ interface Handler
     /**
      * Un-assign a role, by assignment ID.
      *
-     * @param mixed $assignmentId The assignment ID.
+     * @param mixed $roleAssignmentId The assignment ID.
      */
-    public function unassignRoleByAssignmentId($assignmentId);
+    public function removeRoleAssignment($roleAssignmentId);
 }

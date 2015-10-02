@@ -34,7 +34,7 @@ use eZ\Publish\Core\SignalSlot\Signal\RoleService\DeleteRoleSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\PublishRoleDraftSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\RemovePolicyByRoleDraftSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\RemovePolicySignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\UnassignRoleByAssignmentSignal;
+use eZ\Publish\Core\SignalSlot\Signal\RoleService\RemoveRoleAssignmentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\UnassignRoleFromUserGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\UnassignRoleFromUserSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdatePolicySignal;
@@ -635,16 +635,15 @@ class RoleService implements RoleServiceInterface
      * Removes the given role assignment.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role assignment
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment was not found
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleAssignment $roleAssignment
      */
-    public function unassignRoleByAssignment(RoleAssignment $roleAssignment)
+    public function removeRoleAssignment(RoleAssignment $roleAssignment)
     {
-        $returnValue = $this->service->unassignRoleByAssignment($roleAssignment);
+        $returnValue = $this->service->removeRoleAssignment($roleAssignment);
         $this->signalDispatcher->emit(
-            new UnassignRoleByAssignmentSignal([
-                'assignmentId' => $roleAssignment->id,
+            new RemoveRoleAssignmentSignal([
+                'roleAssignmentId' => $roleAssignment->id,
             ])
         );
 
@@ -652,33 +651,18 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Loads a user group role assignment for the given id.
+     * Loads a role assignment for the given id.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment, role or user group was not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment was not found
      *
-     * @param mixed $assignmentId
+     * @param mixed $roleAssignmentId
      *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment
+     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment
      */
-    public function loadUserGroupRoleAssignment($assignmentId)
+    public function loadRoleAssignment($roleAssignmentId)
     {
-        return $this->service->loadUserGroupRoleAssignment($assignmentId);
-    }
-
-    /**
-     * Loads a user role assignment for the given id.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment, role or user was not found
-     *
-     * @param mixed $assignmentId
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment
-     */
-    public function loadUserRoleAssignment($assignmentId)
-    {
-        return $this->service->loadUserRoleAssignment($assignmentId);
+        return $this->service->loadRoleAssignment($roleAssignmentId);
     }
 
     /**

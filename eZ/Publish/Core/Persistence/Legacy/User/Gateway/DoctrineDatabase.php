@@ -338,9 +338,9 @@ class DoctrineDatabase extends Gateway
     /**
      * Remove role from user or user group, by assignment ID.
      *
-     * @param mixed $assignmentId
+     * @param mixed $roleAssignmentId
      */
-    public function removeRoleByAssignmentId($assignmentId)
+    public function removeRoleAssignmentById($roleAssignmentId)
     {
         $query = $this->handler->createDeleteQuery();
         $query
@@ -348,7 +348,7 @@ class DoctrineDatabase extends Gateway
             ->where(
                 $query->expr->eq(
                     $this->handler->quoteColumn('id'),
-                    $query->bindValue($assignmentId, null, \PDO::PARAM_INT)
+                    $query->bindValue($roleAssignmentId, null, \PDO::PARAM_INT)
                 )
             );
         $query->prepare()->execute();

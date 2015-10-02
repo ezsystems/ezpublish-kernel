@@ -170,11 +170,11 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::loadRoleAssignment
      */
-    public function loadRoleAssignment($assignmentId)
+    public function loadRoleAssignment($roleAssignmentId)
     {
-        $this->logger->logCall(__METHOD__, array('assignment' => $assignmentId));
+        $this->logger->logCall(__METHOD__, array('assignment' => $roleAssignmentId));
 
-        return $this->persistenceHandler->userHandler()->loadRoleAssignment($assignmentId);
+        return $this->persistenceHandler->userHandler()->loadRoleAssignment($roleAssignmentId);
     }
 
     /**
@@ -351,17 +351,15 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::unassignRoleByAssignmentId
+     * @see eZ\Publish\SPI\Persistence\User\Handler::removeRoleAssignment
      */
-    public function unassignRoleByAssignmentId($assignmentId)
+    public function removeRoleAssignment($roleAssignmentId)
     {
-        $this->logger->logCall(__METHOD__, array('assignment' => $assignmentId));
-        $return = $this->persistenceHandler->userHandler()->unassignRoleByAssignmentId($assignmentId);
+        $this->logger->logCall(__METHOD__, array('assignment' => $roleAssignmentId));
+        $return = $this->persistenceHandler->userHandler()->removeRoleAssignment($roleAssignmentId);
 
-        $this->cache->clear('user', 'role', $roleId);
         // We don't know the contentId, so clear all assignment cache.
-        // TODO: fetch contentId to avoid this?
-        $this->cache->clear('user', 'role', 'assignments');
+        $this->cache->clear('user', 'role', 'assignments'); //TIMBER!
 
         return $return;
     }

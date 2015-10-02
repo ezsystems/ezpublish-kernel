@@ -79,11 +79,11 @@ abstract class Gateway
     /**
      * Loads role assignment for specified assignment ID.
      *
-     * @param mixed $assignmentId
+     * @param mixed $roleAssignmentId
      *
      * @return array
      */
-    abstract public function loadRoleAssignment($assignmentId);
+    abstract public function loadRoleAssignment($roleAssignmentId);
 
     /**
      * Loads role assignments for specified content ID.

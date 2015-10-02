@@ -91,6 +91,8 @@ class Handler implements BaseUserHandler
      *
      * @param mixed $userId
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user is not found
+     *
      * @return \eZ\Publish\SPI\Persistence\User
      */
     public function load($userId)
@@ -518,29 +520,31 @@ class Handler implements BaseUserHandler
     /**
      * Un-assign a role by assignment ID.
      *
-     * @param mixed $assignmentId The assignment ID.
+     * @param mixed $roleAssignmentId The assignment ID.
      */
-    public function unassignRoleByAssignmentId($assignmentId)
+    public function removeRoleAssignment($roleAssignmentId)
     {
-        $this->userGateway->removeRoleByAssignmentId($assignmentId);
+        $this->userGateway->removeRoleAssignmentById($roleAssignmentId);
     }
 
     /**
      * Loads role assignment for specified assignment ID.
      *
-     * @param mixed $assignmentId
+     * @param mixed $roleAssignmentId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role assignment is not found
      *
      * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment
      */
-    public function loadRoleAssignment($assignmentId)
+    public function loadRoleAssignment($roleAssignmentId)
     {
-        $data = $this->roleGateway->loadRoleAssignment($assignmentId);
+        $data = $this->roleGateway->loadRoleAssignment($roleAssignmentId);
 
         if (empty($data)) {
-            return array();
+            throw new NotFound('roleAssignment', $roleAssignmentId);
         }
 
-        return $this->mapper->mapRoleAssignments([$data])[0];
+        return $this->mapper->mapRoleAssignments($data)[0];
     }
 
     /**

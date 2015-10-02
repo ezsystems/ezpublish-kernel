@@ -174,19 +174,15 @@ class Mapper
 
             $limitIdentifier = $row['limit_identifier'];
             if (!empty($limitIdentifier)) {
-                if (!isset($roleAssignmentData[$roleId][$contentId][$limitIdentifier])) {
-                    $roleAssignmentData[$roleId][$contentId][$limitIdentifier] = new RoleAssignment(
-                        array(
-                            'id' => $id,
-                            'roleId' => $roleId,
-                            'contentId' => $contentId,
-                            'limitationIdentifier' => $limitIdentifier,
-                            'values' => array($row['limit_value']),
-                        )
-                    );
-                } else {
-                    $roleAssignmentData[$roleId][$contentId][$limitIdentifier]->values[] = $row['limit_value'];
-                }
+                $roleAssignmentData[$roleId][$contentId][$limitIdentifier][$id] = new RoleAssignment(
+                    array(
+                        'id' => $id,
+                        'roleId' => $roleId,
+                        'contentId' => $contentId,
+                        'limitationIdentifier' => $limitIdentifier,
+                        'values' => array($row['limit_value']),
+                    )
+                );
             } else {
                 $roleAssignmentData[$roleId][$contentId] = new RoleAssignment(
                     array(
