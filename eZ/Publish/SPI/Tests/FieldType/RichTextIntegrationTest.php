@@ -58,17 +58,14 @@ class RichTextIntegrationTest extends BaseIntegrationTest
     public function getCustomHandler()
     {
         $fieldType = new FieldType\RichText\Type(
-            new FieldType\RichText\ConverterDispatcher(array()),
-            new FieldType\RichText\ValidatorDispatcher(
+            new FieldType\RichText\Validator(
                 array(
-                    'http://docbook.org/ns/docbook' => new FieldType\RichText\Validator(
-                        array(
-                            $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng'),
-                            $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl'),
-                        )
-                    ),
+                    $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng'),
+                    $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl'),
                 )
-            )
+            ),
+            new FieldType\RichText\ConverterDispatcher(array()),
+            new FieldType\RichText\ValidatorDispatcher(array('http://docbook.org/ns/docbook' => null))
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 

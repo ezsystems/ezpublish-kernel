@@ -18,6 +18,7 @@ use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use DOMDocument;
 use RuntimeException;
 
@@ -41,23 +42,33 @@ class Type extends FieldType
     );
 
     /**
+     * @var \eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
+     */
+    protected $internalFormatValidator;
+
+    /**
      * @var \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher
      */
     protected $inputConverterDispatcher;
 
     /**
-     * @var \eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
+     * @var null|\eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
      */
-    protected $validatorDispatcher;
+    protected $inputValidatorDispatcher;
 
     /**
+     * @param \eZ\Publish\Core\FieldType\RichText\Validator $internalFormatValidator
      * @param \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher $inputConverterDispatcher
-     * @param \eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher $validatorDispatcher
+     * @param null|\eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher $inputValidatorDispatcher
      */
-    public function __construct(ConverterDispatcher $inputConverterDispatcher, ValidatorDispatcher $validatorDispatcher)
-    {
+    public function __construct(
+        Validator $internalFormatValidator,
+        ConverterDispatcher $inputConverterDispatcher,
+        ValidatorDispatcher $inputValidatorDispatcher = null
+    ) {
+        $this->internalFormatValidator = $internalFormatValidator;
         $this->inputConverterDispatcher = $inputConverterDispatcher;
-        $this->validatorDispatcher = $validatorDispatcher;
+        $this->inputValidatorDispatcher = $inputValidatorDispatcher;
     }
 
     /**
@@ -145,25 +156,19 @@ class Type extends FieldType
         }
 
         if ($inputValue instanceof DOMDocument) {
-            $errors = $this->validatorDispatcher->dispatch($inputValue);
-            if (!empty($errors)) {
-                throw new InvalidArgumentException(
-                    '$inputValue',
-                    'Validation of XML content failed: ' . implode("\n", $errors)
-                );
+            if ($this->inputValidatorDispatcher !== null) {
+                $errors = $this->inputValidatorDispatcher->dispatch($inputValue);
+                if (!empty($errors)) {
+                    throw new InvalidArgumentException(
+                        '$inputValue',
+                        'Validation of XML content failed: ' . implode("\n", $errors)
+                    );
+                }
             }
 
-            $inputValue = $this->inputConverterDispatcher->dispatch($inputValue);
-
-            $errors = $this->validatorDispatcher->dispatch($inputValue);
-            if (!empty($errors)) {
-                throw new InvalidArgumentException(
-                    '$inputValue',
-                    'Validation of XML content failed: ' . implode("\n", $errors)
-                );
-            }
-
-            $inputValue = new Value($inputValue);
+            $inputValue = new Value(
+                $this->inputConverterDispatcher->dispatch($inputValue)
+            );
         }
 
         return $inputValue;
@@ -219,6 +224,35 @@ class Type extends FieldType
                 $value
             );
         }
+    }
+
+    /**
+     * Validates a field based on the validators in the field definition.
+     *
+     * This is a base implementation, returning an empty array() that indicates
+     * that no validation errors occurred. Overwrite in derived types, if
+     * validation is supported.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
+     * @param \eZ\Publish\Core\FieldType\RichText\Value $value The field value for which an action is performed
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $value)
+    {
+        $validationErrors = array();
+
+        $errors = $this->internalFormatValidator->validate($value->xml);
+
+        if (!empty($errors)) {
+            $validationErrors[] = new ValidationError(
+                "Validation of XML content failed:\n" . implode("\n", $errors)
+            );
+        }
+
+        return $validationErrors;
     }
 
     /**
