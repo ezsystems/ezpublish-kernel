@@ -17,12 +17,12 @@ abstract class BaseView implements View
     /**
      * @var array
      */
-    protected $parameters;
+    protected $parameters = [];
 
     /**
      * @var array
      */
-    protected $configHash;
+    protected $configHash = [];
 
     /**
      * @var string
