@@ -168,3 +168,7 @@ services:
 
     ezpublish.view_provider.registry:
         class: eZ\Publish\Core\MVC\Symfony\View\Provider\Registry
+
+    ezpublish.view.configurator:
+        class: eZ\Publish\Core\MVC\Symfony\View\Configurator\ViewProvider
+        arguments: [@ezpublish.view_provider.registry]
