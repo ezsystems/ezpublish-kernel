@@ -12,11 +12,13 @@ namespace eZ\Publish\Core\MVC\Symfony\View\Provider;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\MatcherFactoryInterface;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZ\Publish\Core\MVC\Symfony\View\View;
+use eZ\Publish\Core\MVC\Symfony\View\ViewProvider;
 
 /**
  * Base for View Providers.
  */
-abstract class Configured
+class Configured implements ViewProvider
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherFactoryInterface
@@ -29,6 +31,11 @@ abstract class Configured
     public function __construct(MatcherFactoryInterface $matcherFactory)
     {
         $this->matcherFactory = $matcherFactory;
+    }
+
+    public function getView(View $view)
+    {
+        return $this->matcherFactory->match($view);
     }
 
     /**
