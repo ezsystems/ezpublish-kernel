@@ -237,14 +237,16 @@ class Manager implements ViewManagerInterface
      */
     public function renderContent(Content $content, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array())
     {
-        $contentInfo = $content->getVersionInfo()->getContentInfo();
-        foreach ($this->getAllContentViewProviders() as $viewProvider) {
-            $view = $viewProvider->getView($contentInfo, $viewType);
-            if ($view instanceof ContentViewInterface) {
-                $parameters['content'] = $content;
+        $view = new ContentView(null, $parameters, $viewType);
+        $view->setContent($content);
+        if (isset($parameters['location'])) {
+            $view->setLocation($parameters['location']);
+        }
 
-                return $this->renderContentView($view, $parameters);
-            }
+        $this->viewConfigurator->configure($view);
+
+        if ($view->getTemplateIdentifier() === null) {
+            throw new RuntimeException('Unable to find a template for #' . $content->contentInfo->id);
         }
 
         throw new RuntimeException("Unable to find a template for #$contentInfo->id");
@@ -302,16 +304,12 @@ class Manager implements ViewManagerInterface
      */
     public function renderBlock(Block $block, $parameters = array())
     {
-        foreach ($this->getAllBlockViewProviders() as $viewProvider) {
-            $view = $viewProvider->getView($block);
-            if ($view instanceof ContentViewInterface) {
-                $parameters['block'] = $block;
+        $view = new BlockView(null, $parameters);
+        $view->setBlock($block);
 
-                return $this->renderContentView($view, $parameters);
-            }
-        }
+        $this->viewConfigurator->configure($view);
 
-        throw new RuntimeException("Unable to find a view for location #$block->id");
+        return $this->renderContentView($view, $parameters);
     }
 
     /**

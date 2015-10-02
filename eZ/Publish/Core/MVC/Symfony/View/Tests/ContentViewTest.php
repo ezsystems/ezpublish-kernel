@@ -19,6 +19,12 @@ use PHPUnit_Framework_TestCase;
 class ContentViewTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * Params that are always returned by this view.
+     * @var array
+     */
+    private $valueParams = ['location' => null, 'content' => null];
+
+    /**
      * @dataProvider constructProvider
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::__construct
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getTemplateIdentifier
@@ -28,7 +34,7 @@ class ContentViewTest extends PHPUnit_Framework_TestCase
     {
         $contentView = new ContentView($templateIdentifier, $params);
         self::assertSame($templateIdentifier, $contentView->getTemplateIdentifier());
-        self::assertSame($params, $contentView->getParameters());
+        self::assertSame($this->valueParams + $params, $contentView->getParameters());
     }
 
     public function constructProvider()
@@ -81,7 +87,7 @@ class ContentViewTest extends PHPUnit_Framework_TestCase
         $params = array('bar' => 'baz', 'fruit' => 'apple');
         $contentView = new ContentView('foo');
         $contentView->setParameters($params);
-        self::assertSame($params, $contentView->getParameters());
+        self::assertSame($this->valueParams + $params, $contentView->getParameters());
     }
 
     /**
@@ -96,7 +102,7 @@ class ContentViewTest extends PHPUnit_Framework_TestCase
 
         $additionalParams = array('truc' => 'muche', 'laurel' => 'hardy');
         $contentView->addParameters($additionalParams);
-        self::assertSame($params + $additionalParams, $contentView->getParameters());
+        self::assertSame($this->valueParams + $params + $additionalParams, $contentView->getParameters());
     }
 
     /**

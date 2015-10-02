@@ -10,7 +10,8 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\View;
 
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
  * Main object to be rendered by the View Manager when viewing a content.
@@ -39,139 +40,50 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
  * }
  * </code>
  */
-class ContentView implements ContentViewInterface
+class ContentView extends BaseView implements View, ContentValueView, LocationValueView
 {
-    /**
-     * @var string|\Closure
-     */
-    protected $templateIdentifier;
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content */
+    private $content;
+
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location|null */
+    private $location;
 
     /**
-     * @var array
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      */
-    protected $parameters;
-
-    /**
-     * @var array
-     */
-    protected $configHash;
-
-    /**
-     * @param string|\Closure $templateIdentifier Valid path to the template. Can also be a closure.
-     * @param array $parameters Hash of parameters to pass to the template/closure.
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
-     */
-    public function __construct($templateIdentifier = null, array $parameters = array())
+    public function setContent(Content $content)
     {
-        if (isset($templateIdentifier) && !is_string($templateIdentifier) && !$templateIdentifier instanceof \Closure) {
-            throw new InvalidArgumentType('templateIdentifier', 'string or \Closure', $templateIdentifier);
-        }
-
-        $this->templateIdentifier = $templateIdentifier;
-        $this->parameters = $parameters;
+        $this->content = $content;
     }
 
     /**
-     * @param array $parameters Hash of parameters to pass to the template/closure
+     * Returns the Content.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function setParameters(array $parameters)
+    public function getContent()
     {
-        $this->parameters = $parameters;
+        return $this->content;
     }
 
     /**
-     * Adds a hash of parameters to the existing parameters.
-     *
-     * @param array $parameters
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      */
-    public function addParameters(array $parameters)
+    public function setLocation(Location $location)
     {
-        $this->parameters += $parameters;
+        $this->location = $location;
     }
 
     /**
-     * @return array
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function getParameters()
+    public function getLocation()
     {
-        return $this->parameters;
+        return $this->location;
     }
 
-    /**
-     * Checks if $parameterName exists.
-     *
-     * @param string $parameterName
-     *
-     * @return bool
-     */
-    public function hasParameter($parameterName)
+    protected function getInternalParameters()
     {
-        return isset($this->parameters[$parameterName]);
-    }
-
-    /**
-     * Returns parameter value by $parameterName.
-     * Throws an \InvalidArgumentException if $parameterName is not set.
-     *
-     * @param string $parameterName
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return mixed
-     */
-    public function getParameter($parameterName)
-    {
-        if ($this->hasParameter($parameterName)) {
-            return $this->parameters[$parameterName];
-        }
-
-        throw new \InvalidArgumentException("Parameter '$parameterName' is not set.");
-    }
-
-    /**
-     * @param string|\Closure $templateIdentifier
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
-     */
-    public function setTemplateIdentifier($templateIdentifier)
-    {
-        if (!is_string($templateIdentifier) && !$templateIdentifier instanceof \Closure) {
-            throw new InvalidArgumentType('templateIdentifier', 'string or \Closure', $templateIdentifier);
-        }
-
-        $this->templateIdentifier = $templateIdentifier;
-    }
-
-    /**
-     * @return string|\Closure
-     */
-    public function getTemplateIdentifier()
-    {
-        return $this->templateIdentifier;
-    }
-
-    /**
-     * Injects the config hash that was used to match and generate the current view.
-     * Typically, the hash would have as keys:
-     *  - template : The template that has been matched
-     *  - match : The matching configuration, including the matcher "identifier" and what has been passed to it.
-     *  - matcher : The matcher object.
-     *
-     * @param array $config
-     */
-    public function setConfigHash(array $config)
-    {
-        $this->configHash = $config;
-    }
-
-    /**
-     * Returns the config hash.
-     *
-     * @return array|null
-     */
-    public function getConfigHash()
-    {
-        return $this->configHash;
+        return ['location' => $this->location, 'content' => $this->content];
     }
 }
