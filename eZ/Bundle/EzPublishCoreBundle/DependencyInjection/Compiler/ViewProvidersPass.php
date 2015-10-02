@@ -63,7 +63,7 @@ class ViewProvidersPass implements CompilerPassInterface
             $container->getDefinition('ezpublish.view.location_view_rule_thingie')->addMethodCall(
                 'addViewProviders',
                 // ...obviously
-                [$viewProviders['eZ\Publish\API\Repository\Values\Content\Location']]
+                [$viewProviders['eZ\Publish\Core\MVC\Symfony\View\ContentView']]
             );
         }
     }
