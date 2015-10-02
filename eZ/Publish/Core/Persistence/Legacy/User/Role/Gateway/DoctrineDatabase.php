@@ -24,7 +24,7 @@ class DoctrineDatabase extends Gateway
     /**
      * Database handler.
      *
-     * @var \DatabaseHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $handler;
 
