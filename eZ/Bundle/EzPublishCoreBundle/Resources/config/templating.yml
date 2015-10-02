@@ -57,7 +57,7 @@ services:
         arguments: [@ezpublish.content_view.matcher_factory]
         tags:
             - {name: ezpublish.content_view_provider, priority: 10}
-            - {name: ezpublish.view_provider, type: 'eZ\Publish\API\Repository\Values\Content', priority: 10}
+            - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\ContentView', priority: 10}
 
     ezpublish.content_view.matcher_factory:
         class: %ezpublish.content_view.matcher_factory.class%
@@ -70,7 +70,7 @@ services:
         arguments: [@ezpublish.location_view.matcher_factory]
         tags:
             - {name: ezpublish.location_view_provider, priority: 10}
-            - {name: ezpublish.view_provider, type: 'eZ\Publish\API\Repository\Values\Content\Location', priority: 10}
+            - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\ContentView', priority: 10}
 
     ezpublish.location_view.matcher_factory:
         class: %ezpublish.location_view.matcher_factory.class%
@@ -83,7 +83,7 @@ services:
         arguments: [@ezpublish.block_view.matcher_factory]
         tags:
             - {name: ezpublish.block_view_provider, priority: 10}
-            - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\FieldType\Page\Parts\Block', priority: 10}
+            - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\BlockView', priority: 10}
 
     ezpublish.block_view.matcher_factory:
         class: %ezpublish.block_view.matcher_factory.class%
