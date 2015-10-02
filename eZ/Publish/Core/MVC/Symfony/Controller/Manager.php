@@ -16,6 +16,10 @@ use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBasedMatcherFactory;
 use eZ\Publish\Core\MVC\Symfony\Matcher\BlockMatcherFactory;
+use eZ\Publish\Core\MVC\Symfony\View\BlockValueView;
+use eZ\Publish\Core\MVC\Symfony\View\ContentValueView;
+use eZ\Publish\Core\MVC\Symfony\View\LocationValueView;
+use eZ\Publish\Core\MVC\Symfony\View\View;
 use Psr\Log\LoggerInterface;
 use InvalidArgumentException;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
@@ -60,28 +64,28 @@ class Manager implements ManagerInterface
      *
      * @return \Symfony\Component\HttpKernel\Controller\ControllerReference|null
      */
-    public function getControllerReference(ValueObject $valueObject, $viewType)
+    public function getControllerReference(View $view)
     {
         $matchedType = null;
-        if ($valueObject instanceof Location) {
+        if ($view instanceof LocationValueView && !$view instanceof ContentValueView) {
             $matcherProp = 'locationMatcherFactory';
             $matchedType = 'Location';
-        } elseif ($valueObject instanceof ContentInfo) {
+        } elseif ($view instanceof ContentValueView) {
             $matcherProp = 'contentMatcherFactory';
             $matchedType = 'Content';
-        } elseif ($valueObject instanceof Block) {
+        } elseif ($view instanceof BlockValueView) {
             $matcherProp = 'blockMatcherFactory';
             $matchedType = 'Block';
         } else {
-            throw new InvalidArgumentException('Unsupported value object to match against');
+            throw new InvalidArgumentException('Unsupported View type to match against');
         }
 
-        $configHash = $this->$matcherProp->match($valueObject, $viewType);
+        $configHash = $this->$matcherProp->match($view);
         if (!is_array($configHash) || !isset($configHash['controller'])) {
-            return;
+            return null;
         }
 
-        $this->logger->debug("Matched custom controller '{$configHash['controller']}' for $matchedType #$valueObject->id");
+        $this->logger->debug("Matched custom controller '{$configHash['controller']}' for $matchedType #TODO");
 
         return new ControllerReference($configHash['controller']);
     }

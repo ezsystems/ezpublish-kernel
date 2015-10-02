@@ -50,6 +50,7 @@ services:
           - @ezpublish.api.repository
           - @ezpublish.config.resolver
           - %ezpublish.content_view.viewbase_layout%
+          - @ezpublish.view.configurator
           - @?logger
 
     ezpublish.content_view_provider.configured:
