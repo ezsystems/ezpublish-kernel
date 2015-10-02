@@ -11,6 +11,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Controller;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\Core\MVC\Symfony\View\View;
 
 interface ManagerInterface
 {
@@ -22,5 +23,5 @@ interface ManagerInterface
      *
      * @return \Symfony\Component\HttpKernel\Controller\ControllerReference|null
      */
-    public function getControllerReference(ValueObject $valueObject, $viewType);
+    public function getControllerReference(View $view);
 }
