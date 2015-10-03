@@ -45,7 +45,7 @@ class ViewManager implements ViewManagerInterface, SiteAccessAware
     {
     }
 
-    public function renderContentView(ContentViewInterface $view, array $defaultParams = array())
+    public function renderContentView(View $view, array $defaultParams = array())
     {
     }
 }

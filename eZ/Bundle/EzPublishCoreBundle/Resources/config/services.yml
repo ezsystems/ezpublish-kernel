@@ -26,8 +26,7 @@ parameters:
     ezpublish.fragment_listener.factory.class: eZ\Bundle\EzPublishCoreBundle\Fragment\FragmentListenerFactory
 
     ezpublish.controller_manager.class: eZ\Publish\Core\MVC\Symfony\Controller\Manager
-    ezpublish.controller_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener
-    ezpublish.page_controller_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\PageControllerListener
+    ezpublish.view_controller_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener
     ezpublish.exception_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ExceptionListener
 
 services:
@@ -130,21 +129,13 @@ services:
         class: %ezpublish.controller_manager.class%
         arguments: [@ezpublish.location_view.matcher_factory, @ezpublish.content_view.matcher_factory, @ezpublish.block_view.matcher_factory, @logger]
 
-    ezpublish.controller_listener:
-        class: %ezpublish.controller_listener.class%
+    ezpublish.view_controller_listener:
+        class: %ezpublish.view_controller_listener.class%
         arguments:
             - @controller_resolver
-            - @ezpublish.controller_manager
-            - @ezpublish.api.repository
-            - @logger
             - @ezpublish.view.configurator
-            - @security.authorization_checker
-        tags:
-            - { name: kernel.event_subscriber }
-
-    ezpublish.page_controller_listener:
-        class: %ezpublish.page_controller_listener.class%
-        arguments: [@controller_resolver, @ezpublish.controller_manager, @ezpublish.fieldType.ezpage.pageService, @ezpublish.view.configurator, @logger]
+            - @ezpublish.view_builder.registry
+            - @logger
         tags:
             - { name: kernel.event_subscriber }
 
