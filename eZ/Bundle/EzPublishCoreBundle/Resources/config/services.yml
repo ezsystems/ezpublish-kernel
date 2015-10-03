@@ -25,7 +25,6 @@ parameters:
     ezpublish.decorated_fragment_renderer.class: eZ\Bundle\EzPublishCoreBundle\Fragment\DecoratedFragmentRenderer
     ezpublish.fragment_listener.factory.class: eZ\Bundle\EzPublishCoreBundle\Fragment\FragmentListenerFactory
 
-    ezpublish.controller_manager.class: eZ\Publish\Core\MVC\Symfony\Controller\Manager
     ezpublish.view_controller_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener
     ezpublish.exception_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ExceptionListener
 
@@ -124,10 +123,6 @@ services:
     # {{ render( controller( "ez_page:viewBlock", {'block': myBlock} ) ) }}
     ez_page:
         alias: ezpublish.controller.page.view
-
-    ezpublish.controller_manager:
-        class: %ezpublish.controller_manager.class%
-        arguments: [@ezpublish.location_view.matcher_factory, @ezpublish.content_view.matcher_factory, @ezpublish.block_view.matcher_factory, @logger]
 
     ezpublish.view_controller_listener:
         class: %ezpublish.view_controller_listener.class%
