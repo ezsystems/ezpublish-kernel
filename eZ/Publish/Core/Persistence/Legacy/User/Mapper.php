@@ -119,7 +119,8 @@ class Mapper
             if (empty($role->id)) {
                 $role->id = (int)$row['ezrole_id'];
                 $role->identifier = $row['ezrole_name'];
-                $role->status = $row['ezrole_version'];
+                $role->status = $row['ezrole_version'] != 0 ? Role::STATUS_DRAFT : Role::STATUS_DEFINED;
+                $role->originalId = $row['ezrole_version'] ? (int)$row['ezrole_version'] : Role::STATUS_DEFINED;
                 // skip name and description as they don't exist in legacy
             }
         }

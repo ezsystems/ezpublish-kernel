@@ -34,6 +34,17 @@ class Role extends ValueObject
     public $id;
 
     /**
+     * Only used when the role's status, is Role::STATUS_DRAFT.
+     * Original role ID the draft was created from, or -1 if it's a new role.
+     * Will be null if role's status is Role::STATUS_DEFINED.
+     *
+     * @since 6.0
+     *
+     * @var int|null
+     */
+    public $originalId;
+
+    /**
      * Identifier of the role.
      *
      * Legacy note: Maps to name in 4.x.

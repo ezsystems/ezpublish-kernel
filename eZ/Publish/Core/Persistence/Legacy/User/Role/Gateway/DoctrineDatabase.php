@@ -51,8 +51,11 @@ class DoctrineDatabase extends Gateway
         if ($role->status === Role::STATUS_DRAFT && $role->id) {
             $roleOriginalId = $role->id;
         } elseif ($role->status === Role::STATUS_DRAFT) {
+            // Not using a constant here as this is legacy storage engine specific.
+            // -1 means "Newly created role".
             $roleOriginalId = -1;
         } else {
+            // Role::STATUS_DEFINED value is 0, which is the expected value for version column for this status.
             $roleOriginalId = Role::STATUS_DEFINED;
         }
 
@@ -84,6 +87,8 @@ class DoctrineDatabase extends Gateway
                 $this->handler->getSequenceName('ezrole', 'id')
             );
         }
+
+        $role->originalId = $roleOriginalId;
     }
 
     /**
