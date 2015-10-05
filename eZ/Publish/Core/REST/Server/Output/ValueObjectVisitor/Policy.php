@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
@@ -24,12 +25,12 @@ class Policy extends ValueObjectVisitor
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $data
+     * @param Policy|PolicyDraft $data
      */
     public function visit(Visitor $visitor, Generator $generator, $data)
     {
         $generator->startObjectElement('Policy');
-        $visitor->setHeader('Content-Type', $generator->getMediaType('Policy'));
+        $visitor->setHeader('Content-Type', $generator->getMediaType($data instanceof PolicyDraft ? 'PolicyDraft' : 'Policy'));
         $visitor->setHeader('Accept-Patch', $generator->getMediaType('PolicyUpdate'));
 
         $generator->startAttribute(
@@ -40,6 +41,11 @@ class Policy extends ValueObjectVisitor
 
         $generator->startValueElement('id', $data->id);
         $generator->endValueElement('id');
+
+        if ($data instanceof PolicyDraft) {
+            $generator->startValueElement('originalId', $data->originalId);
+            $generator->endValueElement('originalId');
+        }
 
         $generator->startValueElement('module', $data->module);
         $generator->endValueElement('module');
