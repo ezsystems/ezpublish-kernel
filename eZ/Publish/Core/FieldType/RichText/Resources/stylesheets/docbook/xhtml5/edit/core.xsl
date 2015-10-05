@@ -438,9 +438,7 @@
 
   <xsl:template match="docbook:ezembed">
     <xsl:element name="div" namespace="{$outputNamespace}">
-      <xsl:attribute name="data-ezelement">
-        <xsl:value-of select="'ezembed'"/>
-      </xsl:attribute>
+      <xsl:attribute name="data-ezelement">ezembed</xsl:attribute>
       <xsl:call-template name="addCommonEmbedAttributes"/>
       <xsl:apply-templates/>
     </xsl:element>
@@ -448,9 +446,7 @@
 
   <xsl:template match="docbook:ezembedinline">
     <xsl:element name="span" namespace="{$outputNamespace}">
-      <xsl:attribute name="data-ezelement">
-        <xsl:value-of select="'ezembedinline'"/>
-      </xsl:attribute>
+      <xsl:attribute name="data-ezelement">ezembedinline</xsl:attribute>
       <xsl:call-template name="addCommonEmbedAttributes"/>
       <xsl:apply-templates/>
     </xsl:element>
@@ -486,9 +482,7 @@
 
   <xsl:template match="docbook:ezembed/docbook:ezlink | docbook:ezembedinline/docbook:ezlink">
     <xsl:element name="a" namespace="{$outputNamespace}">
-      <xsl:attribute name="data-ezelement">
-        <xsl:value-of select="'ezlink'"/>
-      </xsl:attribute>
+      <xsl:attribute name="data-ezelement">ezlink</xsl:attribute>
       <xsl:attribute name="href">
         <xsl:value-of select="@xlink:href"/>
       </xsl:attribute>
@@ -515,18 +509,14 @@
 
   <xsl:template match="docbook:ezconfig">
     <xsl:element name="span" namespace="{$outputNamespace}">
-      <xsl:attribute name="data-ezelement">
-        <xsl:value-of select="'ezconfig'"/>
-      </xsl:attribute>
+      <xsl:attribute name="data-ezelement">ezconfig</xsl:attribute>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
 
   <xsl:template match="docbook:ezvalue">
     <xsl:element name="span" namespace="{$outputNamespace}">
-      <xsl:attribute name="data-ezelement">
-        <xsl:value-of select="'ezvalue'"/>
-      </xsl:attribute>
+      <xsl:attribute name="data-ezelement">ezvalue</xsl:attribute>
       <xsl:attribute name="data-ezvalue-key">
         <xsl:value-of select="@key"/>
       </xsl:attribute>
