@@ -242,7 +242,7 @@ class UserHandlerTest extends TestCase
         $handler->createRole($createStruct);
 
         $this->assertQueryResult(
-            array(array(1, 'Test', APIRole::STATUS_DRAFT)),
+            array(array(1, 'Test', -1)),
             $this->handler->createSelectQuery()->select('id', 'name', 'version')->from('ezrole'),
             'Expected a new role draft.'
         );
@@ -260,10 +260,11 @@ class UserHandlerTest extends TestCase
 
         $handler->createRoleDraft($roleDraft->id);
 
+        $publishedRoleId = 1;
         $this->assertQueryResult(
             [
-                [1, 'Test', APIRole::STATUS_DEFINED],
-                [1, 'Test', APIRole::STATUS_DRAFT],
+                [$publishedRoleId, 'Test', APIRole::STATUS_DEFINED],
+                [2, 'Test', $publishedRoleId],
             ],
             $this->handler->createSelectQuery()->select('id', 'name', 'version')->from('ezrole'),
             'Expected a role and a role draft.'
@@ -325,7 +326,7 @@ class UserHandlerTest extends TestCase
                         'module' => 'foo',
                         'function' => 'bar',
                         'limitations' => '*',
-                        'status' => APIRole::STATUS_DEFINED,
+                        'originalId' => null,
                     )
                 ),
             ),
@@ -363,7 +364,7 @@ class UserHandlerTest extends TestCase
                         'module' => 'foo',
                         'function' => 'bar',
                         'limitations' => '*',
-                        'status' => APIRole::STATUS_DEFINED,
+                        'originalId' => null,
                     )
                 ),
             ),
@@ -388,7 +389,7 @@ class UserHandlerTest extends TestCase
             'Foo' => array('Bar'),
         );
 
-        $handler->addPolicy($roleDraft->id, $policy);
+        $handler->addPolicyByRoleDraft($roleDraft->id, $policy);
         $handler->publishRoleDraft($roleDraft->id);
 
         $loaded = $handler->loadRole($roleDraft->id);
@@ -404,7 +405,7 @@ class UserHandlerTest extends TestCase
                             'Subtree' => array('/1', '/1/2'),
                             'Foo' => array('Bar'),
                         ),
-                        'status' => APIRole::STATUS_DEFINED,
+                        'originalId' => null,
                     )
                 ),
             ),
@@ -491,8 +492,8 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         // 3 is the ID of Editor role
-        $handler->createRoleDraft(3);
-        $handler->deleteRole(3, APIRole::STATUS_DRAFT);
+        $roleDraft = $handler->createRoleDraft(3);
+        $handler->deleteRole($roleDraft->id, APIRole::STATUS_DRAFT);
 
         $this->assertQueryResult(
             [['3', APIRole::STATUS_DEFINED]],
@@ -993,5 +994,18 @@ class UserHandlerTest extends TestCase
             ),
             $handler->loadRoleAssignmentsByRoleId(1)
         );
+    }
+
+    public function testLoadRoleDraftByRoleId()
+    {
+        $this->insertDatabaseFixture(__DIR__ . '/../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php');
+        $handler = $this->getUserHandler();
+
+        // 3 is the ID of Editor role
+        $originalRoleId = 3;
+        $draft = $handler->createRoleDraft($originalRoleId);
+        $loadedDraft = $handler->loadRoleDraftByRoleId($originalRoleId);
+        self::assertSame($loadedDraft->originalId, $originalRoleId);
+        self::assertEquals($draft, $loadedDraft);
     }
 }

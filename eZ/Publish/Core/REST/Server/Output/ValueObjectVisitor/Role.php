@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
@@ -24,12 +25,12 @@ class Role extends ValueObjectVisitor
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
      * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
-     * @param \eZ\Publish\API\Repository\Values\User\Role $data
+     * @param Role|RoleDraft $data
      */
     public function visit(Visitor $visitor, Generator $generator, $data)
     {
         $generator->startObjectElement('Role');
-        $visitor->setHeader('Content-Type', $generator->getMediaType('Role'));
+        $visitor->setHeader('Content-Type', $generator->getMediaType($data instanceof RoleDraft ? 'RoleDraft' : 'Role'));
         $visitor->setHeader('Accept-Patch', $generator->getMediaType('RoleInput'));
 
         $generator->startAttribute(

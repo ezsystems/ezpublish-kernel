@@ -464,6 +464,32 @@ class RoleServiceTest extends BaseTest
         $this->assertEquals('roleName', $role->identifier);
     }
 
+    public function testLoadRoleDraftByRoleId()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+
+        $roleService = $repository->getRoleService();
+        $roleCreate = $roleService->newRoleCreateStruct('roleName');
+
+        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
+        // $roleCreate->mainLanguageCode = 'eng-US';
+
+        $role = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($role);
+
+        // Now create a new draft based on the role
+        $newDraft = $roleService->createRoleDraft($role);
+        $loadedRoleDraft = $roleService->loadRoleDraftByRoleId($role->id);
+
+        /* END: Use Case */
+
+        self::assertEquals('roleName', $role->identifier);
+        self::assertInstanceOf('eZ\Publish\API\Repository\Values\User\RoleDraft', $loadedRoleDraft);
+        self::assertEquals($newDraft, $loadedRoleDraft);
+    }
+
     /**
      * Test for the loadRole() method.
      *
@@ -504,6 +530,24 @@ class RoleServiceTest extends BaseTest
 
         // This call will fail with a NotFoundException, because no such role exists.
         $roleService->loadRoleDraft($nonExistingRoleId);
+
+        /* END: Use Case */
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadRoleDraftByRoleIdThrowsNotFoundException()
+    {
+        $repository = $this->getRepository();
+
+        $nonExistingRoleId = $this->generateId('role', self::DB_INT_MAX);
+        /* BEGIN: Use Case */
+
+        $roleService = $repository->getRoleService();
+
+        // This call will fail with a NotFoundException, because no such role exists.
+        $roleService->loadRoleDraftByRoleId($nonExistingRoleId);
 
         /* END: Use Case */
     }

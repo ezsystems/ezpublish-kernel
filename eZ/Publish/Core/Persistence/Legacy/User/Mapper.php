@@ -78,9 +78,9 @@ class Mapper
                  ($policyId !== null)) {
                 $policies[$policyId] = new Policy(
                     array(
-                        'id' => $row['ezpolicy_id'],
-                        'roleId' => $row['ezrole_id'],
-                        'status' => $row['ezpolicy_original_id'],
+                        'id' => (int)$row['ezpolicy_id'],
+                        'roleId' => (int)$row['ezrole_id'],
+                        'originalId' => $row['ezpolicy_original_id'] ? (int)$row['ezpolicy_original_id'] : null,
                         'module' => $row['ezpolicy_module_name'],
                         'function' => $row['ezpolicy_function_name'],
                         'limitations' => '*', // limitations must be '*' if not a non empty array of limitations
@@ -119,7 +119,8 @@ class Mapper
             if (empty($role->id)) {
                 $role->id = (int)$row['ezrole_id'];
                 $role->identifier = $row['ezrole_name'];
-                $role->status = $row['ezrole_version'];
+                $role->status = $row['ezrole_version'] != 0 ? Role::STATUS_DRAFT : Role::STATUS_DEFINED;
+                $role->originalId = $row['ezrole_version'] ? (int)$row['ezrole_version'] : Role::STATUS_DEFINED;
                 // skip name and description as they don't exist in legacy
             }
         }

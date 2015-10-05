@@ -351,12 +351,11 @@ CREATE INDEX ezpolicy_limitation_value_val ON ezpolicy_limitation_value (value);
 CREATE INDEX ezpolicy_limitation_value_limitation_id ON ezpolicy_limitation_value (limitation_id);
 
 CREATE TABLE ezrole (
-  id integer NOT NULL,
+  id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
   is_new integer NOT NULL DEFAULT 0,
   name text(255) NOT NULL,
   value text(1),
-  version integer DEFAULT 0,
-  PRIMARY KEY (id,version)
+  version integer DEFAULT 0
 );
 
 CREATE TABLE ezurl (

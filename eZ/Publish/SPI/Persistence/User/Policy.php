@@ -31,13 +31,15 @@ class Policy extends ValueObject
     public $roleId;
 
     /**
-     * Status of the policy (legacy: "original_id").
+     * Only used when the role's status, current policy belongs to, is Role::STATUS_DRAFT.
+     * Original policy ID the draft was created from.
+     * In other cases, will be null.
      *
      * @since 6.0
      *
-     * @var int One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
+     * @var int|null
      */
-    public $status;
+    public $originalId;
 
     /**
      * Name of module, associated with the Policy.

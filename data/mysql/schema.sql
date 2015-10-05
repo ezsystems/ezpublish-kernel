@@ -1766,7 +1766,7 @@ CREATE TABLE `ezrole` (
   `name` varchar(255) NOT NULL DEFAULT '',
   `value` char(1) DEFAULT NULL,
   `version` int(11) DEFAULT '0',
-  PRIMARY KEY (`id`,`version`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

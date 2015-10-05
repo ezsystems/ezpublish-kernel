@@ -49,6 +49,15 @@ abstract class Gateway
     abstract public function loadRoleByIdentifier($identifier, $status = Role::STATUS_DEFINED);
 
     /**
+     * Loads a role draft by the original role ID.
+     *
+     * @param mixed $roleId ID of the role the draft was created from.
+     *
+     * @return array
+     */
+    abstract public function loadRoleDraftByRoleId($roleId);
+
+    /**
      * Loads all roles.
      *
      * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
@@ -101,9 +110,8 @@ abstract class Gateway
      * Will not throw anything if location id is invalid.
      *
      * @param RoleUpdateStruct $role
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    abstract public function updateRole(RoleUpdateStruct $role, $status = Role::STATUS_DEFINED);
+    abstract public function updateRole(RoleUpdateStruct $role);
 
     /**
      * Delete the specified role (draft).
@@ -126,9 +134,8 @@ abstract class Gateway
      *
      * @param mixed $roleId
      * @param Policy $policy
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    abstract public function addPolicy($roleId, Policy $policy, $status = Role::STATUS_DEFINED);
+    abstract public function addPolicy($roleId, Policy $policy);
 
     /**
      * Adds limitations to an existing policy.

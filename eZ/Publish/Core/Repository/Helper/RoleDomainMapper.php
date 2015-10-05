@@ -11,6 +11,7 @@
 namespace eZ\Publish\Core\Repository\Helper;
 
 use eZ\Publish\Core\Repository\Values\User\Policy;
+use eZ\Publish\Core\Repository\Values\User\PolicyDraft;
 use eZ\Publish\Core\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\Role as APIRole;
 use eZ\Publish\Core\Repository\Values\User\RoleDraft;
@@ -87,28 +88,35 @@ class RoleDomainMapper
     /**
      * Maps provided SPI Policy value object to API Policy value object.
      *
-     * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
+     * @param \eZ\Publish\SPI\Persistence\User\Policy $spiPolicy
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy
+     * @return \eZ\Publish\API\Repository\Values\User\Policy|\eZ\Publish\API\Repository\Values\User\PolicyDraft
      */
-    public function buildDomainPolicyObject(SPIPolicy $policy)
+    public function buildDomainPolicyObject(SPIPolicy $spiPolicy)
     {
         $policyLimitations = array();
-        if ($policy->module !== '*' && $policy->function !== '*' && $policy->limitations !== '*') {
-            foreach ($policy->limitations as $identifier => $values) {
+        if ($spiPolicy->module !== '*' && $spiPolicy->function !== '*' && $spiPolicy->limitations !== '*') {
+            foreach ($spiPolicy->limitations as $identifier => $values) {
                 $policyLimitations[] = $this->limitationService->getLimitationType($identifier)->buildValue($values);
             }
         }
 
-        return new Policy(
+        $policy = new Policy(
             array(
-                'id' => $policy->id,
-                'roleId' => $policy->roleId,
-                'module' => $policy->module,
-                'function' => $policy->function,
+                'id' => $spiPolicy->id,
+                'roleId' => $spiPolicy->roleId,
+                'module' => $spiPolicy->module,
+                'function' => $spiPolicy->function,
                 'limitations' => $policyLimitations,
             )
         );
+
+        // Original ID is set on SPI policy, which means that it's a draft.
+        if ($spiPolicy->originalId) {
+            $policy = new PolicyDraft(['innerPolicy' => $policy, 'originalId' => $spiPolicy->originalId]);
+        }
+
+        return $policy;
     }
 
     /**

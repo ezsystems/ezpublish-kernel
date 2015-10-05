@@ -601,21 +601,23 @@ class UserHandlerTest extends HandlerTest
         $innerHandler
             ->expects($this->once())
             ->method('updateRole')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\RoleUpdateStruct'), Role::STATUS_DRAFT);
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\RoleUpdateStruct'));
 
         $roleUpdateStruct = new RoleUpdateStruct();
         $roleUpdateStruct->id = 42;
 
         $this->cacheMock
-            ->expects($this->never())
-            ->method('clear');
+            ->expects($this->once())
+            ->method('clear')
+            ->with('user', 'role', $roleUpdateStruct->id)
+            ->will($this->returnValue(true));
 
         $this->cacheMock
             ->expects($this->never())
             ->method('getItem');
 
         $handler = $this->persistenceCacheHandler->userHandler();
-        $handler->updateRole($roleUpdateStruct, Role::STATUS_DRAFT);
+        $handler->updateRole($roleUpdateStruct);
     }
 
     /**

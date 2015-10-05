@@ -130,6 +130,17 @@ interface Handler
     public function loadRoleByIdentifier($identifier, $status = Role::STATUS_DEFINED);
 
     /**
+     * Loads a role draft by the original role ID.
+     *
+     * @param mixed $roleId ID of the role the draft was created from.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Role
+     */
+    public function loadRoleDraftByRoleId($roleId);
+
+    /**
      * Loads all roles.
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role[]
@@ -164,9 +175,8 @@ interface Handler
      * Update role (draft).
      *
      * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    public function updateRole(RoleUpdateStruct $role, $status = Role::STATUS_DEFINED);
+    public function updateRole(RoleUpdateStruct $role);
 
     /**
      * Delete the specified role (draft).

@@ -4260,30 +4260,31 @@ User Management
 Overview
 --------
 
-============================================= ===================== ===================== ===================== ============================= =============
-Resource                                      POST                  GET                   PUT                   DELETE                        HEAD
---------------------------------------------- --------------------- --------------------- --------------------- ----------------------------- -------------
-/user/groups                                  .                     load all topl. groups .                     .                             .
-/user/groups/root                             .                     redirect to root      .                     .                             .
-/user/groups/<path>                           .                     load user group       update user group     delete user group             .
-/user/groups/<path>/users                     .                     load users of group   .                     .                             .
-/user/groups/<path>/subgroups                 create user group     load sub groups       .                     remove all sub groups         .
-/user/groups/<path>/roles                     assign role to group  load roles of group   .                     .                             .
-/user/groups/<path>/roles/<ID>                .                     .                     .                     unassign role from group      .
-/user/users                                   create user           list users            .                     .                             Verify users
-/user/users/<ID>                              update user           load user             .                     delete user                   .
-/user/users/<ID>/groups                       .                     load groups of user   add to group          .                             .
-/user/users/<ID>/drafts                       .                     list all drafts owned .                     .                             .
-                                                                    by the user                                                               .
-/user/users/<ID>/roles                        assign role to user   load roles of group   .                     .                             .
-/user/users/<ID>/roles/<ID>                   .                     load roleassignment   .                     unassign role from user       .
-/user/roles                                   create new role       load all roles        .                     .                             .
-/user/roles/<ID>                              .                     load role             update role           delete role                   .
-/user/roles/<ID>/policies                     create policy         load policies         .                     delete all policies from role .
-/user/roles/<ID>/policies/<ID>                .                     load policy           update policy         delete policy                 .
-/user/sessions                                create session        .                     .                     .                             .
-/user/sessions/<sessionID>                    .                     .                     .                     delete session                .
-============================================= ===================== ===================== ===================== ============================= =============
+============================================= ===================== ===================== ===================== ============================= ============= =====================
+Resource                                      POST                  GET                   PUT                   DELETE                        HEAD          PUBLISH
+--------------------------------------------- --------------------- --------------------- --------------------- ----------------------------- ------------- ---------------------
+/user/groups                                  .                     load all topl. groups .                     .                             .             .
+/user/groups/root                             .                     redirect to root      .                     .                             .             .
+/user/groups/<path>                           .                     load user group       update user group     delete user group             .             .
+/user/groups/<path>/users                     .                     load users of group   .                     .                             .             .
+/user/groups/<path>/subgroups                 create user group     load sub groups       .                     remove all sub groups         .             .
+/user/groups/<path>/roles                     assign role to group  load roles of group   .                     .                             .             .
+/user/groups/<path>/roles/<ID>                .                     .                     .                     unassign role from group      .             .
+/user/users                                   create user           list users            .                     .                             Verify users  .
+/user/users/<ID>                              update user           load user             .                     delete user                   .             .
+/user/users/<ID>/groups                       .                     load groups of user   add to group          .                             .             .
+/user/users/<ID>/drafts                       .                     list all drafts owned .                     .                             .             .
+                                                                    by the user                                                               .             .
+/user/users/<ID>/roles                        assign role to user   load roles of group   .                     .                             .             .
+/user/users/<ID>/roles/<ID>                   .                     load roleassignment   .                     unassign role from user       .             .
+/user/roles                                   create new role       load all roles        .                     .                             .             .
+/user/roles/<ID>                              .                     load role             update role           delete role                   .             .
+/user/roles/<ID>/draft                        .                     load draft for role   update role draft     .                             .             publish a role draft
+/user/roles/<ID>/policies                     create policy         load policies         .                     delete all policies from role .             .
+/user/roles/<ID>/policies/<ID>                .                     load policy           update policy         delete policy                 .             .
+/user/sessions                                create session        .                     .                     .                             .             .
+/user/sessions/<sessionID>                    .                     .                     .                     delete session                .             .
+============================================= ===================== ===================== ===================== ============================= ============= =====================
 
 
 Managing Users and Groups
@@ -5370,6 +5371,33 @@ Load Role
     :401: If the user has no permission to read roles
     :404: If the role does not exist
 
+Load Role draft
+```````````````
+:Resource: /user/roles/<ID>/draft
+:Method: GET
+:Description: loads a role draft by original role <ID>.
+:Headers:
+        :Accept:
+             :application/vnd.ez.api.Role+xml:  if set the user list returned in xml format (see Role_)
+         :application/vnd.ez.api.Role+json:  if set the user list is returned in json format (see Role_)
+    :If-None-Match: <etag>
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          Accept-Patch:  application/vnd.ez.api.RoleInput+(json|xml)
+          ETag: "<Etag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+
+.. parsed-literal::
+Role_
+
+:Error Codes:
+    :401: If the user has no permission to read roles
+    :404: If there is no draft or role with the given ID
+
 Update Role
 ```````````
 :Resource: /user/roles/<ID>
@@ -5399,6 +5427,57 @@ Update Role
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to update the role
     :412: If the current ETag does not match with the provided one in the If-Match header
+
+Update Role draft
+`````````````````
+:Resource: /user/roles/<ID>/draft
+:Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
+:Description: Updates a role draft
+:Headers:
+        :Accept:
+             :application/vnd.ez.api.Role+xml:  if set the updated role is returned in xml format (see Role_)
+             :application/vnd.ez.api.Role+json:  if set the updated role is returned in json format (see Role_)
+    :Content-Type:
+             :application/vnd.ez.api.RoleInput+json: the RoleInput  schema encoded in json
+             :application/vnd.ez.api.RoleInput+xml: the RoleInput  schema encoded in xml
+        :If-Match: <etag> Causes to patch only if the specified etag is the current one. Otherwise a 412 is returned.
+:Response:
+
+.. code:: xml
+
+          HTTP/1.1 200 OK
+          Accept-Patch:  application/vnd.ez.api.RoleInput+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+Role_
+
+:Error Codes:
+    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :401: If the user is not authorized to update the role
+    :404: If there is no draft or role with the given ID
+    :412: If the current ETag does not match with the provided one in the If-Match header
+
+Publish Role draft
+``````````````````
+:Resource: /user/roles/<ID/draft
+:Method: PUBLISH or POST with header X-HTTP-Method-Override: PUBLISH
+:Description: Publishes a role draft
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+Role_
+
+:Error Codes:
+    :401: If the user is not authorized to publish this content type draft
+    :403: If the content type draft is not complete e.g. there is no field definition provided
+    :404: If there is no draft or role with the given ID
 
 Delete Role
 ```````````

@@ -546,12 +546,14 @@ services:
         class: %ezpublish_rest.output.value_object_visitor.Role.class%
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Values\User\Role }
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Values\User\RoleDraft }
 
     ezpublish_rest.output.value_object_visitor.Policy:
         parent: ezpublish_rest.output.value_object_visitor.base
         class: %ezpublish_rest.output.value_object_visitor.Policy.class%
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Values\User\Policy }
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Values\User\PolicyDraft }
 
     ezpublish_rest.output.value_object_visitor.CreatedPolicy:
         parent: ezpublish_rest.output.value_object_visitor.base

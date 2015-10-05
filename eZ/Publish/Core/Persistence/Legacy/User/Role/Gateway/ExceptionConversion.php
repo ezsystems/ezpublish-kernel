@@ -97,6 +97,24 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Loads a role draft by the original role ID.
+     *
+     * @param mixed $roleId ID of the role the draft was created from.
+     *
+     * @return array
+     */
+    public function loadRoleDraftByRoleId($roleId)
+    {
+        try {
+            return $this->innerGateway->loadRoleDraftByRoleId($roleId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
      * Loads all roles.
      *
      * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
@@ -194,12 +212,11 @@ class ExceptionConversion extends Gateway
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      *
      * @param RoleUpdateStruct $role
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    public function updateRole(RoleUpdateStruct $role, $status = Role::STATUS_DEFINED)
+    public function updateRole(RoleUpdateStruct $role)
     {
         try {
-            return $this->innerGateway->updateRole($role, $status);
+            return $this->innerGateway->updateRole($role);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
@@ -246,12 +263,11 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $roleId
      * @param Policy $policy
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    public function addPolicy($roleId, Policy $policy, $status = Role::STATUS_DEFINED)
+    public function addPolicy($roleId, Policy $policy)
     {
         try {
-            return $this->innerGateway->addPolicy($roleId, $policy, $status);
+            return $this->innerGateway->addPolicy($roleId, $policy);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
