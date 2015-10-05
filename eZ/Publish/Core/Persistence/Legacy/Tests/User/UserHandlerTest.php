@@ -995,4 +995,17 @@ class UserHandlerTest extends TestCase
             $handler->loadRoleAssignmentsByRoleId(1)
         );
     }
+
+    public function testLoadRoleDraftByRoleId()
+    {
+        $this->insertDatabaseFixture(__DIR__ . '/../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php');
+        $handler = $this->getUserHandler();
+
+        // 3 is the ID of Editor role
+        $originalRoleId = 3;
+        $draft = $handler->createRoleDraft($originalRoleId);
+        $loadedDraft = $handler->loadRoleDraftByRoleId($originalRoleId);
+        self::assertSame($loadedDraft->originalId, $originalRoleId);
+        self::assertEquals($draft, $loadedDraft);
+    }
 }
