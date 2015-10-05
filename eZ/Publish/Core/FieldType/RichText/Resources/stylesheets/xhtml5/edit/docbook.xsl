@@ -484,7 +484,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="ezxhtml5:div[@data-ezelement='ezembed']/ezxhtml5:a[@data-ezelement='ezlink'] | ezxhtml5:span[@data-ezelement='ezembedinline']/ezxhtml5:a[@data-ezelement='ezlink']">
+  <xsl:template match="ezxhtml5:div[@data-ezelement='ezembed']/ezxhtml5:link[@data-ezelement='ezlink'] | ezxhtml5:span[@data-ezelement='ezembedinline']/ezxhtml5:link[@data-ezelement='ezlink']">
     <xsl:element name="ezlink" namespace="http://docbook.org/ns/docbook">
       <xsl:attribute name="xlink:href">
         <xsl:value-of select="@href"/>

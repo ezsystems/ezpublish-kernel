@@ -453,6 +453,9 @@
   </xsl:template>
 
   <xsl:template name="addCommonEmbedAttributes">
+    <xsl:if test="./docbook:ezlink">
+      <xsl:attribute name="itemscope">itemscope</xsl:attribute>
+    </xsl:if>
     <xsl:if test="@xlink:href">
       <xsl:attribute name="href">
         <xsl:value-of select="@xlink:href"/>
@@ -481,7 +484,8 @@
   </xsl:template>
 
   <xsl:template match="docbook:ezembed/docbook:ezlink | docbook:ezembedinline/docbook:ezlink">
-    <xsl:element name="a" namespace="{$outputNamespace}">
+    <xsl:element name="link" namespace="{$outputNamespace}">
+      <xsl:attribute name="itemprop">url</xsl:attribute>
       <xsl:attribute name="data-ezelement">ezlink</xsl:attribute>
       <xsl:attribute name="href">
         <xsl:value-of select="@xlink:href"/>
