@@ -11,6 +11,7 @@
 namespace eZ\Publish\Core\Repository\Helper;
 
 use eZ\Publish\Core\Repository\Values\User\Policy;
+use eZ\Publish\Core\Repository\Values\User\PolicyDraft;
 use eZ\Publish\Core\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\Role as APIRole;
 use eZ\Publish\Core\Repository\Values\User\RoleDraft;
@@ -106,10 +107,14 @@ class RoleDomainMapper
                 'roleId' => $spiPolicy->roleId,
                 'module' => $spiPolicy->module,
                 'function' => $spiPolicy->function,
-                'originalId' => $spiPolicy->originalId,
                 'limitations' => $policyLimitations,
             )
         );
+
+        // Original ID is set on SPI policy, which means that it's a draft.
+        if ($spiPolicy->originalId) {
+            $policy = new PolicyDraft(['innerPolicy' => $policy, 'originalId' => $spiPolicy->originalId]);
+        }
 
         return $policy;
     }

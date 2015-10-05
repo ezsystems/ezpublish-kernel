@@ -57,14 +57,6 @@ abstract class Policy extends ValueObject
     protected $function;
 
     /**
-     * Original policy ID the policy was created from.
-     * Mostly used when role status is Role::STATUS_DRAFT.
-     *
-     * @var mixed
-     */
-    protected $originalId;
-
-    /**
      * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
     abstract public function getLimitations();
