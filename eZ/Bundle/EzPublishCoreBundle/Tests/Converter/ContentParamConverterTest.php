@@ -12,8 +12,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Converter;
 
 use eZ\Bundle\EzPublishCoreBundle\Converter\ContentParamConverter;
 use Symfony\Component\HttpFoundation\Request;
-use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 class ContentParamConverterTest extends AbstractParamConverterTest
 {
@@ -64,38 +62,6 @@ class ContentParamConverterTest extends AbstractParamConverterTest
         $this->converter->apply($request, $config);
 
         $this->assertInstanceOf(self::CONTENT_CLASS, $request->attributes->get('content'));
-    }
-
-    public function testApplyContentNotFound404Exception()
-    {
-        $id = 42;
-        $request = new Request([], [], [self::PROPERTY_NAME => $id]);
-        $config = $this->createConfiguration(self::CONTENT_CLASS, 'content');
-
-        $this->contentServiceMock
-            ->expects($this->once())
-            ->method('loadContent')
-            ->with($id)
-            ->will($this->throwException(new NotFoundException('', '')));
-
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'Requested values not found');
-        $this->converter->apply($request, $config);
-    }
-
-    public function testApplyContentUnauthorized403Exception()
-    {
-        $id = 42;
-        $request = new Request([], [], [self::PROPERTY_NAME => $id]);
-        $config = $this->createConfiguration(self::CONTENT_CLASS, 'content');
-
-        $this->contentServiceMock
-            ->expects($this->once())
-            ->method('loadContent')
-            ->with($id)
-            ->will($this->throwException(new UnauthorizedException('', '')));
-
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException', 'Access to values denied');
-        $this->converter->apply($request, $config);
     }
 
     public function testApplyContentOptionalWithEmptyAttribute()

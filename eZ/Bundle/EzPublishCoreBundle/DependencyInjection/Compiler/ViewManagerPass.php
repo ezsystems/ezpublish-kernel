@@ -20,8 +20,10 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @see \eZ\Publish\Core\MVC\Symfony\View\Manager
  * @see \eZ\Publish\Core\MVC\Symfony\View\ContentViewProvider
+ *
+ * @deprecated since 6.0
  */
-abstract class ViewPass implements CompilerPassInterface
+abstract class ViewManagerPass implements CompilerPassInterface
 {
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
