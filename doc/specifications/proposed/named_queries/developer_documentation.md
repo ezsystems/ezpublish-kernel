@@ -144,26 +144,25 @@ The implementations should use Symfony's `OptionsResolver` for parameters handli
 
 ### QueryType example: latest content
 This QueryType returns a LocationQuery that searches for the 10 last published content, order by reverse
-publishing date. It accepts an optional `type` parameter, that can be set to a ContentType identifier.
-identifier:
+publishing date. It accepts an optional `type` parameter, that can be set to a ContentType identifier:
 
 ```php
-namespace AcmeBundle\Ez\QueryType;
+namespace Acme\AcmeBundle\QueryType;
 
+use eZ\Publish\Core\QueryType\QueryType;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LatestContentQueryType implements QueryType
 {
-    protected function getQuery(array $parameters = [])
+    public function getQuery(array $parameters = [])
     {
-        $criteria[] = new Query\Criterion\Visibility( Query\Criterion\Visibility::VISIBLE );
+        $criteria[] = new Query\Criterion\Visibility(Query\Criterion\Visibility::VISIBLE);
         if (isset($parameters['type'])) {
             $criteria[] = new Query\Criterion\ContentTypeIdentifier($parameters['type']);
         }
 
         return new Query([
-            'criterion' => new Query\Criterion\LogicalAnd($criteria),
+            'filter' => new Query\Criterion\LogicalAnd($criteria),
             'sortClauses' => [new Query\SortClause\DatePublished()],
             'limit' => isset($parameters['limit']) ? $parameters['limit'] : 10,
         ]);
@@ -174,6 +173,14 @@ class LatestContentQueryType implements QueryType
         return 'AcmeBundle:LatestContent';
     }
 
+    /**
+     * Returns an array listing the parameters supported by the QueryType.
+     * @return array
+     */
+    public function getSupportedParameters()
+    {
+        return ['type'];
+    }
 }
 ```
 
