@@ -185,6 +185,30 @@ Changes affecting version compatibility with former or future versions.
 * Some methods have been deprecated in `eZ/Publish/API/Repository/RoleService`: `updateRole`, `addPolicy`,
   `removePolicy`, `deletePolicy`, and `updatePolicy`. Use the corresponding `*Draft` and `*ByRoleDraft` methods instead.
 
+* The `viewLocation` and `embedLocation` controller actions are deprecated. `viewContent` and `embedContent` can be used
+  instead, with the location as an extra parameter.
+  The corresponding `location_view` configuration is also deprecated. It will transparently be converted to `content_view`,
+  but you should update your configuration:
+  ```
+  location_view:
+    full:
+      article:
+        match:
+          Identifier\ContentType: [article]
+  ```
+  becomes:
+  ```
+  content_view:
+    full:
+      article:
+        match:
+          Identifier\ContentType: [article]
+  ```
+
+  Rules that use a custom location view controller can't be transparently changed.
+  Those need to be changed to custom content view controllers, that use a contentId instead of a locationId as an
+  argument. The location is available in the `$parameters` array.
+
 ## Removed features
 
 * `getLegacyKernel()` shorthand method in `eZ\Bundle\EzPublishCoreBundle\Controller` has been removed.
