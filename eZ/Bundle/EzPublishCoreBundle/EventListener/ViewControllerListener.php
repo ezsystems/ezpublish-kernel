@@ -119,6 +119,15 @@ class ViewControllerListener implements EventSubscriberInterface
             $request->attributes->get('viewType')
         );
 
+        if ($valueObject instanceof Location && !$controllerReference instanceof ControllerReference) {
+            // If value object is a location and location view rules did not match a controller
+            // we should try matching with content view rules
+            $controllerReference = $this->controllerManager->getControllerReference(
+                $valueObject->contentInfo,
+                $request->attributes->get('viewType')
+            );
+        }
+
         if ($controllerReference instanceof ControllerReference) {
             $request->attributes->set('_controller', $controllerReference->controller);
             $event->setController($this->controllerResolver->getController($request));
