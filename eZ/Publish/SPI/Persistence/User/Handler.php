@@ -189,9 +189,9 @@ interface Handler
     /**
      * Publish the specified role draft.
      *
-     * @param mixed $roleId
+     * @param mixed $roleDraftId
      */
-    public function publishRoleDraft($roleId);
+    public function publishRoleDraft($roleDraftId);
 
     /**
      * Adds a policy to a role draft.

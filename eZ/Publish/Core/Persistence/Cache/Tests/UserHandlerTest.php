@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\Role;
 use eZ\Publish\SPI\Persistence\User\RoleAssignment;
@@ -686,39 +687,29 @@ class UserHandlerTest extends HandlerTest
         $handler->deleteRole(33, Role::STATUS_DRAFT);
     }
 
-    /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::publishRoleDraft
-     */
-    public function testPublishRoleDraft()
+    public function testPublishRoleDraftFromExistingRole()
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
         $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\User\\Handler');
         $this->persistenceHandlerMock
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('userHandler')
-            ->will($this->returnValue($innerHandlerMock));
+            ->willReturn($innerHandlerMock);
 
+        $roleDraftId = 33;
+        $originalRoleId = 30;
+        $innerHandlerMock
+            ->expects($this->exactly(2))
+            ->method('loadRole')
+            ->willReturnMap([
+                [$roleDraftId, Role::STATUS_DRAFT, new Role(['originalId' => $originalRoleId])],
+                [$originalRoleId, Role::STATUS_DEFINED, new Role(['id' => $originalRoleId])],
+            ]);
         $innerHandlerMock
             ->expects($this->once())
             ->method('publishRoleDraft')
-            ->with(33)
-            ->will(
-                $this->returnValue(true)
-            );
-
-        $this->persistenceHandlerMock
-            ->expects($this->at(1))
-            ->method('userHandler')
-            ->will($this->returnValue($innerHandlerMock));
-
-        $innerHandlerMock
-            ->expects($this->once())
-            ->method('loadRole')
-            ->with(33)
-            ->will(
-                $this->returnValue(new Role())
-            );
+            ->with($roleDraftId);
 
         $this->cacheMock
             ->expects($this->once())
@@ -730,7 +721,7 @@ class UserHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
-            ->with('user', 'role', 33)
+            ->with('user', 'role', $originalRoleId)
             ->will($this->returnValue($cacheItemMock));
 
         $cacheItemMock
@@ -739,7 +730,61 @@ class UserHandlerTest extends HandlerTest
             ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\Role'));
 
         $handler = $this->persistenceCacheHandler->userHandler();
-        $handler->publishRoleDraft(33);
+        $handler->publishRoleDraft($roleDraftId);
+    }
+
+    public function testPublishNewRoleDraft()
+    {
+        $this->loggerMock->expects($this->once())->method('logCall');
+
+        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\User\\Handler');
+        $this->persistenceHandlerMock
+            ->expects($this->once())
+            ->method('userHandler')
+            ->willReturn($innerHandlerMock);
+
+        $roleDraftId = 33;
+        $originalRoleId = -1;
+        $innerHandlerMock
+            ->expects($this->at(0))
+            ->method('loadRole')
+            ->with($roleDraftId, Role::STATUS_DRAFT)
+            ->willReturn(new Role(['originalId' => $originalRoleId]));
+        $innerHandlerMock
+            ->expects($this->at(1))
+            ->method('publishRoleDraft')
+            ->with($roleDraftId);
+        $innerHandlerMock
+            ->expects($this->at(2))
+            ->method('loadRole')
+            ->with($originalRoleId, Role::STATUS_DEFINED)
+            ->willThrowException(new NotFoundException('foo', 'bar'));
+        $innerHandlerMock
+            ->expects($this->at(3))
+            ->method('loadRole')
+            ->with($roleDraftId, Role::STATUS_DEFINED)
+            ->willReturn(new Role(['id' => $roleDraftId]));
+
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('clear')
+            ->with('user', 'role', 'assignments')
+            ->will($this->returnValue(true));
+
+        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('getItem')
+            ->with('user', 'role', $roleDraftId)
+            ->will($this->returnValue($cacheItemMock));
+
+        $cacheItemMock
+            ->expects($this->once())
+            ->method('set')
+            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\Role'));
+
+        $handler = $this->persistenceCacheHandler->userHandler();
+        $handler->publishRoleDraft($roleDraftId);
     }
 
     /**
