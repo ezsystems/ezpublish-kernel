@@ -252,6 +252,7 @@ services:
 
     ezpublish_rest.field_type_processor_registry:
         class: %ezpublish_rest.field_type_processor_registry.class%
+        lazy: true
 
     ezpublish_rest.field_type_processor.ezimage:
         class: %ezpublish_rest.field_type_processor.ezimage.class%
