@@ -108,6 +108,12 @@ class ViewControllerListener implements EventSubscriberInterface
             return;
         }
 
+        $requestParams = $request->attributes->get('params', []);
+        if ($valueObject instanceof Location && !isset($requestParams['location'])) {
+            $requestParams += ['location' => $valueObject];
+            $request->attributes->set('params', $requestParams);
+        }
+
         $controllerReference = $this->controllerManager->getControllerReference(
             $valueObject,
             $request->attributes->get('viewType')
