@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface;
 use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\Role;
@@ -229,15 +230,25 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::publishRoleDraft
      */
-    public function publishRoleDraft($roleId)
+    public function publishRoleDraft($roleDraftId)
     {
-        $this->logger->logCall(__METHOD__, array('role' => $roleId));
-        $return = $this->persistenceHandler->userHandler()->publishRoleDraft($roleId);
+        $this->logger->logCall(__METHOD__, array('role' => $roleDraftId));
+        $userHandler = $this->persistenceHandler->userHandler();
+        $roleDraft = $userHandler->loadRole($roleDraftId, Role::STATUS_DRAFT);
+        $return = $userHandler->publishRoleDraft($roleDraftId);
 
         $this->cache->clear('user', 'role', 'assignments');
+        // Get right published role to cache it.
+        try {
+            // Role draft created from existing role.
+            $publishedRole = $userHandler->loadRole($roleDraft->originalId);
+        } catch (NotFoundException $e) {
+            // Completely new role.
+            $publishedRole = $userHandler->loadRole($roleDraftId);
+        }
         $this->cache
-            ->getItem('user', 'role', $roleId)
-            ->set($this->persistenceHandler->userHandler()->loadRole($roleId));
+            ->getItem('user', 'role', $publishedRole->id)
+            ->set($publishedRole);
 
         return $return;
     }

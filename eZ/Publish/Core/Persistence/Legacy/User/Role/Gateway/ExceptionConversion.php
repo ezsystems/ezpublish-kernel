@@ -244,13 +244,15 @@ class ExceptionConversion extends Gateway
 
     /**
      * Publish the specified role draft.
+     * If the draft was created from an existing role, published version will take the original role ID.
      *
-     * @param mixed $roleId
+     * @param mixed $roleDraftId
+     * @param mixed|null $originalRoleId ID of role the draft was created from. Will be null if the role draft was completely new.
      */
-    public function publishRoleDraft($roleId)
+    public function publishRoleDraft($roleDraftId, $originalRoleId = null)
     {
         try {
-            return $this->innerGateway->publishRoleDraft($roleId);
+            return $this->innerGateway->publishRoleDraft($roleDraftId, $originalRoleId);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
