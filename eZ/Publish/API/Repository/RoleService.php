@@ -10,6 +10,7 @@
  */
 namespace  eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
@@ -125,11 +126,10 @@ interface RoleService
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given RoleDraft
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to remove from the RoleDraft
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft the updated RoleDraft
+     * @param PolicyDraft $policyDraft the policy to remove from the RoleDraft
+     * @return RoleDraft if the authenticated user is not allowed to remove a policy
      */
-    public function removePolicyByRoleDraft(RoleDraft $roleDraft, Policy $policy);
+    public function removePolicyByRoleDraft(RoleDraft $roleDraft, PolicyDraft $policyDraft);
 
     /**
      * Updates the limitations of a policy. The module and function cannot be changed and
