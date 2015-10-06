@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router as SiteAccessRouter;
+use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
@@ -95,6 +96,7 @@ class SiteAccessMatchListener implements EventSubscriberInterface
         if ($siteaccess instanceof SiteAccess) {
             $siteAccessEvent = new PostSiteAccessMatchEvent($siteaccess, $request, $event->getRequestType());
             $this->eventDispatcher->dispatch(MVCEvents::SITEACCESS, $siteAccessEvent);
+            $this->eventDispatcher->dispatch(MVCEvents::CONFIG_SCOPE_CHANGE, new ScopeChangeEvent($siteaccess));
         }
     }
 
