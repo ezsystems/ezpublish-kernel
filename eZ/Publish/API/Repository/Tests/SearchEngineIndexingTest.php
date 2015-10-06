@@ -11,7 +11,9 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
+use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use DateTime;
 
 /**
  * Test case for indexing operations with a search engine.
@@ -108,5 +110,62 @@ class SearchEngineIndexingTest extends BaseTest
         $query = new LocationQuery(array('filter' => $criterion));
         $result = $searchService->findLocations($query);
         $this->assertEquals(0, $result->totalCount);
+    }
+
+    /**
+     * Testing that content is indexed even when containing only fields with values
+     * considered to be empty by the search engine.
+     */
+    public function testIndexContentWithNullField()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $searchService = $repository->getSearchService();
+
+        $createStruct = $contentTypeService->newContentTypeCreateStruct('test-type');
+        $createStruct->mainLanguageCode = 'eng-GB';
+        $createStruct->names = array('eng-GB' => 'Test type');
+        $createStruct->creatorId = 14;
+        $createStruct->creationDate = new DateTime();
+
+        $translatableFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'integer',
+            'ezinteger'
+        );
+        $translatableFieldCreate->names = array('eng-GB' => 'Simple translatable integer field');
+        $translatableFieldCreate->fieldGroup = 'main';
+        $translatableFieldCreate->position = 1;
+        $translatableFieldCreate->isTranslatable = true;
+        $translatableFieldCreate->isSearchable = true;
+
+        $createStruct->addFieldDefinition($translatableFieldCreate);
+
+        $contentGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Content');
+        $contentTypeDraft = $contentTypeService->createContentType(
+            $createStruct,
+            array($contentGroup)
+        );
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+        $contentType = $contentTypeService->loadContentType($contentTypeDraft->id);
+
+        $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = 'eng-GB';
+
+        $draft = $contentService->createContent($createStruct);
+        $content = $contentService->publishVersion($draft->getVersionInfo());
+
+        $this->refreshSearch($repository);
+
+        // Found
+        $criterion = new Criterion\ContentId($content->id);
+        $query = new Query(array('filter' => $criterion));
+        $result = $searchService->findContent($query);
+        $this->assertEquals(1, $result->totalCount);
+        $this->assertEquals(
+            $content->id,
+            $result->searchHits[0]->valueObject->id
+        );
     }
 }
