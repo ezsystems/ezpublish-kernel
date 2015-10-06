@@ -155,7 +155,7 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
         );
 
         $locationServiceMock = $this->getMock('eZ\\Publish\\API\\Repository\\LocationService');
-        $valueObject = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
+        $valueObject = new Location(['contentInfo' => new ContentInfo()]);
         $locationServiceMock
             ->expects($this->once())
             ->method('loadLocation')
@@ -166,8 +166,13 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
             ->method('getLocationService')
             ->will($this->returnValue($locationServiceMock));
         $this->controllerManager
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('getControllerReference')
+            ->will($this->returnValue(null));
+        $this->controllerManager
+            ->expects($this->at(1))
+            ->method('getControllerReference')
+            ->with($this->isInstanceOf('eZ\Publish\API\Repository\Values\Content\ContentInfo'))
             ->will($this->returnValue(null));
 
         $this->event
