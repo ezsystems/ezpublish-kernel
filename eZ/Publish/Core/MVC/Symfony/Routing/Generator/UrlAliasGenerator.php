@@ -105,6 +105,7 @@ class UrlAliasGenerator extends Generator
         }
 
         $queryString = '';
+        unset($parameters['language'], $parameters['contentId']);
         if (!empty($parameters)) {
             $queryString = '?' . http_build_query($parameters, '', '&');
         }
