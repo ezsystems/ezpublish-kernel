@@ -69,7 +69,7 @@ class DynamicSettingsListener implements EventSubscriberInterface
             return;
         }
 
-        $this->resetDynamicSettings();
+        $this->container->get('event_dispatcher')->dispatch(MVCEvents::CONFIG_SCOPE_CHANGE, new ScopeChangeEvent($event->getSiteAccess()));
     }
 
     public function onConfigScopeChange(ScopeChangeEvent $event)
