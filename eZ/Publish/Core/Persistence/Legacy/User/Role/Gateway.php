@@ -151,9 +151,8 @@ abstract class Gateway
      * Removes a policy from a role.
      *
      * @param mixed $policyId
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    abstract public function removePolicy($policyId, $status = Role::STATUS_DEFINED);
+    abstract public function removePolicy($policyId);
 
     /**
      * Removes a policy from a role.

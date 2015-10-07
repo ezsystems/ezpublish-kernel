@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\RoleService as APIRoleService;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
+use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\Role as APIRole;
 use eZ\Publish\API\Repository\Values\User\RoleDraft as APIRoleDraft;
@@ -192,15 +193,12 @@ class RoleService implements APIRoleService, Sessionable
      *
      * @since 6.0
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given role draft
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to remove from the role
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft the updated role
+     * @param PolicyDraft $policyDraft the policy to remove from the role
+     * @return APIRoleDraft if the authenticated user is not allowed to remove a policy
      */
-    public function removePolicyByRoleDraft(APIRoleDraft $roleDraft, APIPolicy $policy)
+    public function removePolicyByRoleDraft(APIRoleDraft $roleDraft, PolicyDraft $policyDraft)
     {
         //TODO
     }

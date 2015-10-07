@@ -10,6 +10,7 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use eZ\Publish\Core\Repository\Values\User\PolicyDraft;
 use eZ\Publish\Core\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use eZ\Publish\Core\Repository\Values\User\PolicyCreateStruct;
@@ -58,6 +59,7 @@ class RoleServiceTest extends ServiceTest
                 'roleId' => $roleId,
             )
         );
+        $policyDraft = new PolicyDraft(['innerPolicy' => $policy]);
         $roleCreateStruct = new RoleCreateStruct();
         $roleUpdateStruct = new RoleUpdateStruct();
         $policyCreateStruct = new PolicyCreateStruct();
@@ -156,7 +158,7 @@ class RoleServiceTest extends ServiceTest
             ),
             array(
                 'removePolicyByRoleDraft',
-                array($roleDraft, $policy),
+                array($roleDraft, $policyDraft),
                 $roleDraft,
                 1,
                 'eZ\Publish\Core\SignalSlot\Signal\RoleService\RemovePolicyByRoleDraftSignal',

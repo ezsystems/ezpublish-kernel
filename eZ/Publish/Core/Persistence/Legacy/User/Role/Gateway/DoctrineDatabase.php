@@ -828,34 +828,18 @@ class DoctrineDatabase extends Gateway
      * Removes a policy from a role.
      *
      * @param mixed $policyId
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    public function removePolicy($policyId, $status = Role::STATUS_DEFINED)
+    public function removePolicy($policyId)
     {
         $this->removePolicyLimitations($policyId);
 
         $query = $this->handler->createDeleteQuery();
-        if ($status === Role::STATUS_DEFINED) {
-            $policyCondition = $query->expr->eq(
-                $this->handler->quoteColumn('original_id', 'ezpolicy'),
-                $query->bindValue(0, null, \PDO::PARAM_INT)
-            );
-        } else {
-            $policyCondition = $query->expr->neq(
-                $this->handler->quoteColumn('original_id', 'ezpolicy'),
-                $query->bindValue(0, null, \PDO::PARAM_INT)
-            );
-        }
-
         $query
             ->deleteFrom($this->handler->quoteTable('ezpolicy'))
             ->where(
-                $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->handler->quoteColumn('id'),
-                        $query->bindValue($policyId, null, \PDO::PARAM_INT)
-                    ),
-                    $policyCondition
+                $query->expr->eq(
+                    $this->handler->quoteColumn('id'),
+                    $query->bindValue($policyId, null, \PDO::PARAM_INT)
                 )
             );
         $query->prepare()->execute();

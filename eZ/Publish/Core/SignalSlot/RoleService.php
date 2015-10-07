@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
+use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
@@ -223,21 +224,20 @@ class RoleService implements RoleServiceInterface
      * @since 6.0
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given role draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given RoleDraft
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to remove from the role
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft the updated role
+     * @param PolicyDraft $policyDraft the policy to remove from the role
+     * @return RoleDraft if the authenticated user is not allowed to remove a policy
      */
-    public function removePolicyByRoleDraft(RoleDraft $roleDraft, Policy $policy)
+    public function removePolicyByRoleDraft(RoleDraft $roleDraft, PolicyDraft $policyDraft)
     {
-        $returnValue = $this->service->removePolicyByRoleDraft($roleDraft, $policy);
+        $returnValue = $this->service->removePolicyByRoleDraft($roleDraft, $policyDraft);
         $this->signalDispatcher->emit(
             new RemovePolicyByRoleDraftSignal(
                 array(
                     'roleId' => $roleDraft->id,
-                    'policyId' => $policy->id,
+                    'policyId' => $policyDraft->id,
                 )
             )
         );

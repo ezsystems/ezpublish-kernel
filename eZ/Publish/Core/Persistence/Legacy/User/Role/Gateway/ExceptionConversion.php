@@ -298,12 +298,11 @@ class ExceptionConversion extends Gateway
      * Removes a policy from a role.
      *
      * @param mixed $policyId
-     * @param int $status One of Role::STATUS_DEFINED|Role::STATUS_DRAFT
      */
-    public function removePolicy($policyId, $status = Role::STATUS_DEFINED)
+    public function removePolicy($policyId)
     {
         try {
-            return $this->innerGateway->removePolicy($policyId, $status);
+            return $this->innerGateway->removePolicy($policyId);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

@@ -346,7 +346,7 @@ class Handler implements BaseUserHandler
         $role = $this->loadRole($roleId, $status);
 
         foreach ($role->policies as $policy) {
-            $this->roleGateway->removePolicy($policy->id, $status);
+            $this->roleGateway->removePolicy($policy->id);
         }
 
         $this->roleGateway->deleteRole($role->id, $status);
