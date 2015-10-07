@@ -41,6 +41,7 @@ class ConfiguredTest extends PHPUnit_Framework_TestCase
         $this->assertNull(
             $cvp->getView(
                 $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo'),
+                $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location'),
                 'full'
             )
         );
@@ -66,6 +67,7 @@ class ConfiguredTest extends PHPUnit_Framework_TestCase
         $cvp = new ContentViewProvider($this->matcherFactoryMock);
         $view = $cvp->getView(
             $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo'),
+            $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location'),
             'full'
         );
         $this->assertInstanceOf('eZ\\Publish\\Core\\MVC\\Symfony\\View\\ContentView', $view);

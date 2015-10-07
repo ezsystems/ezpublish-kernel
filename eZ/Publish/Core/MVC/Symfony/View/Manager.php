@@ -239,7 +239,11 @@ class Manager implements ViewManagerInterface
     {
         $contentInfo = $content->getVersionInfo()->getContentInfo();
         foreach ($this->getAllContentViewProviders() as $viewProvider) {
-            $view = $viewProvider->getView($contentInfo, $viewType);
+            $view = $viewProvider->getView(
+                $contentInfo,
+                isset($parameters['location']) ? $parameters['location'] : null,
+                $viewType
+            );
             if ($view instanceof ContentViewInterface) {
                 $parameters['content'] = $content;
 

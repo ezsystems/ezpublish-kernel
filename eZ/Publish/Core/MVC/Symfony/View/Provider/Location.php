@@ -11,6 +11,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\View\Provider;
 
 use eZ\Publish\API\Repository\Values\Content\Location as APIContentLocation;
+use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 
 /**
  * Interface for location view providers.
@@ -27,5 +28,5 @@ interface Location
      *
      * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|null
      */
-    public function getView(APIContentLocation $location, $viewType);
+    public function getView(APIContentLocation $location, $viewType = ViewManagerInterface::VIEW_TYPE_FULL);
 }

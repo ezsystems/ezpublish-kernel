@@ -11,6 +11,8 @@
 namespace eZ\Publish\Core\MVC\Symfony\View\Provider;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Location as APIContentLocation;
+use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 
 /**
  * Interface for content view providers.
@@ -23,9 +25,10 @@ interface Content
      * Returns a ContentView object corresponding to $contentInfo, or null if not applicable.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $viewType Variation of display for your content
      *
      * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView|null
      */
-    public function getView(ContentInfo $contentInfo, $viewType);
+    public function getView(ContentInfo $contentInfo, APIContentLocation $location = null, $viewType = ViewManagerInterface::VIEW_TYPE_FULL);
 }
